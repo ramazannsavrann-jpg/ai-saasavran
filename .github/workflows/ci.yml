@@ -1,0 +1,41 @@
+name: CI
+on:
+  push:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm ci
+      - name: Gizli bilgi taraması
+        run: npm run scan:secrets
+      - name: Motor testleri
+        run: npm test
+      - name: Veritabanı + RLS + kota testleri
+        run: npm run test:db
+      - name: Paket maliyet tablosu
+        run: npm run pricing
+
+  gemini-smoke:
+    needs: test
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm ci
+      - name: Gerçek Gemini bağlantı testi (anahtar yoksa atlanır)
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_TIER: free
+          ALLOW_PAID_API: "false"
+        run: npm run smoke:gemini

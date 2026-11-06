@@ -1,0 +1,23 @@
+{
+  "_note": "SENTETİK TEST VERİSİ: Gemini generateContent cevap şemasına göre elle hazırlandı, gerçek API çıktısı değildir.",
+  "candidates": [
+    {
+      "content": {
+        "role": "model",
+        "parts": [
+          { "text": "Antalya'da sık önerilen döner noktaları:\n1. Kebapçı Halil – geniş menü\n2. Ali Usta Döner – uygun fiyat\n\nŞirin Döner ise son yorumlara göre önerilmez." }
+        ]
+      },
+      "finishReason": "STOP",
+      "groundingMetadata": {
+        "webSearchQueries": ["antalya en iyi döner"],
+        "groundingChunks": [
+          { "web": { "uri": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AbC123", "title": "aliusta-demo.com" } },
+          { "web": { "uri": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/DeF456", "title": "tripadvisor.com.tr" } },
+          { "web": { "uri": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/GhI789", "title": "Antalya Rehberi" } }
+        ]
+      }
+    }
+  ],
+  "usageMetadata": { "promptTokenCount": 12, "candidatesTokenCount": 85, "totalTokenCount": 97 }
+}
