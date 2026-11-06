@@ -68,6 +68,9 @@ test("Müşteri akışı: kayıt → marka → rakip → soru → ölçüm → r
 
   // Kayıt
   await page.getByRole("link", { name: "Hesap oluştur" }).click();
+  await expect(page.getByRole("heading", { name: "Hesap oluşturun" })).toBeVisible();
+  await page.getByRole("button", { name: "Hesap oluştur" }).click();
+  await expect(page.getByRole("alert")).toContainText("Geçerli bir e-posta");
   await page.getByLabel("E-posta").fill("ayse@ornek.test");
   await page.getByLabel("Şifre").fill("kisa");
   await page.getByRole("button", { name: "Hesap oluştur" }).click();
@@ -164,6 +167,7 @@ test("Müşteri akışı: kayıt → marka → rakip → soru → ölçüm → r
 
 test("İzolasyon arayüzde: ikinci müşteri ilk müşterinin markasını göremez", async ({ page }) => {
   await page.goto("/kayit");
+  await expect(page.getByRole("heading", { name: "Hesap oluşturun" })).toBeVisible();
   await page.getByLabel("E-posta").fill("baska@ornek.test");
   await page.getByLabel("Şifre").fill("Guclu-Sifre-2026");
   await page.getByRole("checkbox").check();
@@ -177,6 +181,7 @@ test("İzolasyon arayüzde: ikinci müşteri ilk müşterinin markasını görem
 test("Demo Lab: simülasyon açıkça etiketli ve müşteriden ayrı", async ({ page }) => {
   // Platform yöneticisi + demo çalışma alanı (yalnızca sunucu tarafında oluşturulabilir)
   await page.goto("/kayit");
+  await expect(page.getByRole("heading", { name: "Hesap oluşturun" })).toBeVisible();
   await page.getByLabel("E-posta").fill("yonetici@ornek.test");
   await page.getByLabel("Şifre").fill("Guclu-Sifre-2026");
   await page.getByRole("checkbox").check();

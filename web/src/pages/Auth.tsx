@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { sb, friendlyError } from "../lib/supabase";
+import { sb, friendlyError, isEmail } from "../lib/supabase";
 import { t } from "../lib/i18n";
 import { Button, ErrorBox, Field } from "../components/ui";
 
@@ -25,8 +25,11 @@ export function Login() {
   async function submit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const f = new FormData(e.currentTarget);
+    const email = String(f.get("email")).trim();
+    if (!isEmail(email)) { setErr("Geçerli bir e-posta adresi girin."); return; }
+    if (!String(f.get("password"))) { setErr("Şifrenizi girin."); return; }
     setBusy(true); setErr(null);
-    const { error } = await sb().auth.signInWithPassword({ email: String(f.get("email")), password: String(f.get("password")) });
+    const { error } = await sb().auth.signInWithPassword({ email, password: String(f.get("password")) });
     setBusy(false);
     if (error) setErr(friendlyError(error)); else nav("/panel");
   }
@@ -52,11 +55,13 @@ export function Signup() {
   async function submit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const f = new FormData(e.currentTarget);
+    const email = String(f.get("email")).trim();
     const password = String(f.get("password"));
+    if (!isEmail(email)) { setErr("Geçerli bir e-posta adresi girin."); return; }
     if (password.length < 8) { setErr("Şifre en az 8 karakter olmalı."); return; }
     if (!f.get("kvkk")) { setErr("Devam etmek için aydınlatma metnini onaylayın."); return; }
     setBusy(true); setErr(null);
-    const { data, error } = await sb().auth.signUp({ email: String(f.get("email")), password, options: { emailRedirectTo: `${location.origin}/panel` } });
+    const { data, error } = await sb().auth.signUp({ email, password, options: { emailRedirectTo: `${location.origin}/panel` } });
     setBusy(false);
     if (error) setErr(friendlyError(error));
     else if (data.session) nav("/calisma-alani/yeni");
@@ -88,7 +93,8 @@ export function Forgot() {
   const [err, setErr] = useState<string | null>(null);
   async function submit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const email = String(new FormData(e.currentTarget).get("email"));
+    const email = String(new FormData(e.currentTarget).get("email")).trim();
+    if (!isEmail(email)) { setErr("Geçerli bir e-posta adresi girin."); return; }
     setBusy(true); setErr(null);
     const { error } = await sb().auth.resetPasswordForEmail(email, { redirectTo: `${location.origin}/hesap` });
     setBusy(false);

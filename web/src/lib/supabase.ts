@@ -26,6 +26,7 @@ export function runtimeConfig() { return config; }
 export function friendlyError(e: unknown): string {
   const m = (e as { message?: string })?.message ?? String(e);
   if (/Invalid login credentials/i.test(m)) return "E-posta veya şifre hatalı.";
+  if (/Anonymous sign-ins are disabled|missing email|email.*(invalid|required)/i.test(m)) return "Geçerli bir e-posta adresi girin.";
   if (/User already registered/i.test(m)) return "Bu e-posta ile zaten bir hesap var. Giriş yapmayı deneyin.";
   if (/Password should be at least/i.test(m)) return "Şifre en az 8 karakter olmalı.";
   if (/Email not confirmed/i.test(m)) return "E-posta adresiniz henüz doğrulanmadı. Gelen kutunuzu kontrol edin.";
@@ -35,3 +36,5 @@ export function friendlyError(e: unknown): string {
   // Veritabanı kurallarımız zaten Türkçe mesaj döndürür
   return m.replace(/^.*?ERROR:\s*/, "");
 }
+
+export const isEmail = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim());
