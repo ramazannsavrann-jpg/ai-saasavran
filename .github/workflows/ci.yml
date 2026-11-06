@@ -4,8 +4,13 @@ on:
   workflow_dispatch:
 permissions:
   contents: read
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   test:
+    name: Birim + veritabanı + arayüz derleme
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -14,16 +19,64 @@ jobs:
         with:
           node-version: 22
       - run: npm ci
+      - run: npm ci --prefix web
       - name: Gizli bilgi taraması
         run: npm run scan:secrets
       - name: Motor testleri
         run: npm test
-      - name: Veritabanı + RLS + kota testleri
+      - name: Veritabanı + RLS + kota testleri (PGlite)
         run: npm run test:db
       - name: Paket maliyet tablosu
         run: npm run pricing
+      - name: Arayüz tip kontrolü ve derleme
+        run: npm run build --prefix web
+
+  integration:
+    name: Entegrasyon (gerçek Postgres + Supabase Auth + PostgREST)
+    needs: test
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm ci
+      - name: Postgres 16 ikilileri
+        run: ls /usr/lib/postgresql/16/bin/initdb && psql --version
+      - name: Entegrasyon testleri
+        run: npm run test:integration
+
+  e2e:
+    name: Mobil uçtan uca test (gerçek Gemini, aramasız, ücretsiz)
+    needs: integration
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm ci
+      - run: npm ci --prefix web
+      - run: npm run build --prefix web
+      - run: npx playwright install --with-deps chromium
+      - name: Uçtan uca testler
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: npx playwright test
+      - name: Ekran görüntüleri
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ekran-goruntuleri
+          path: |
+            e2e/screenshots/
+            test-results/
+          retention-days: 14
 
   gemini-smoke:
+    name: Gerçek Gemini bağlantı testi
     needs: test
     runs-on: ubuntu-latest
     timeout-minutes: 5

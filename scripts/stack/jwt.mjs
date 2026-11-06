@@ -11,7 +11,7 @@ export function signJwt(payload, secret) {
 }
 
 export function devKeys(secret) {
-  const exp = Math.floor(Date.now() / 1000) + 10 * 365 * 24 * 3600;
+  const exp = 2_000_000_000; // sabit: anahtarlar her başlatmada aynı kalır (yalnızca test ortamı)
   return {
     anonKey: signJwt({ role: "anon", iss: "supabase-local", exp }, secret),
     serviceKey: signJwt({ role: "service_role", iss: "supabase-local", exp }, secret),

@@ -12,7 +12,25 @@ Tek dil (TypeScript), tek veritabanı (Supabase Postgres). Mikroservis yok.
         └─► engine/pipeline ──► providers/{gemini, openai, perplexity}
 ```
 
-Arayüz ve zamanlanmış iş henüz yazılmadı.
+Arayüz ve işçi yazıldı. Bulutta: Supabase (Auth + Postgres + PostgREST), arayüz statik dosya olarak (ör. Cloudflare Pages), işçi GitHub Actions'ta. Arayüz bağlantı bilgisini çalışma anında `/config.json`'dan okur.
+
+## Veri türleri
+
+| Tür | Kaynak | Grafikte |
+|---|---|---|
+| `live_search` | Sağlayıcı API'si, web araması açık | düz çizgi |
+| `model_knowledge` | Sağlayıcı API'si, web araması kapalı | kesik çizgi |
+| `simulated` | Demo Lab simülasyonu, dış çağrı yok | noktalı çizgi + taralı bant |
+
+Tür, ölçüm isteğinde sunucu tarafından belirlenir (istemci seçemez). Rapor fonksiyonu türü zorunlu parametre olarak alır; türler aynı grafikte veya hesapta birleşemez. Veritabanı kısıtı, türün yöntem ve veri kaynağıyla tutarlı olmasını zorunlu kılar.
+
+## Hata sınıfları
+
+`unsupported_feature`, `quota_exceeded`, `auth_error`, `model_not_found`, `transient`, `invalid_request`. Yalnızca `transient` en fazla 2 kez tekrar denenir; diğerlerinde akış durur ya da soru atlanır. Arka arkaya 3 başarısız soruda akış durur. Ücretsiz katmanda hiçbir hata ücretli katmana geçişe yol açmaz.
+
+## Test ortamı
+
+`scripts/stack/stack.mjs` Docker olmadan gerçek Postgres 16, Supabase Auth (GoTrue) ve PostgREST ikililerini çalıştırır. Supabase bulutunun rol ve varsayılan yetkilerini (`anon`, `authenticated`, `service_role`, public şemada tüm tablolara erişim) birebir kopyalar; böylece testler en riskli varsayılanlar altında yapılır. Aynı betik CI'da da çalışır.
 
 ## Ölçüm akışı
 

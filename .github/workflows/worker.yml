@@ -1,0 +1,29 @@
+# Ölçüm işçisi. Supabase projesi bağlanana kadar her çalıştırmada "ATLANDI" der.
+# Supabase bağlanınca buraya saatlik "schedule" eklenecek (GitHub Actions dakika kotası hesaba katılarak).
+name: Ölçüm işçisi
+on:
+  push:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: worker
+  cancel-in-progress: false
+jobs:
+  work:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm ci
+      - name: Kuyruğu işle
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_TIER: free
+          ALLOW_PAID_API: "false"
+        run: npm run worker

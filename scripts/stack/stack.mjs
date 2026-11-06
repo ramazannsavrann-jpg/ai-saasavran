@@ -72,8 +72,12 @@ export function sqlQuery(sql) {
 
 const MIME = { ".html": "text/html; charset=utf-8", ".js": "text/javascript", ".css": "text/css", ".svg": "image/svg+xml", ".json": "application/json", ".png": "image/png", ".ico": "image/x-icon", ".woff2": "font/woff2" };
 
-function startGateway(webDir) {
+function startGateway(webDir, runtimeConfig) {
   const server = createServer((req, res) => {
+    if (req.url.split("?")[0] === "/config.json") {
+      res.writeHead(200, { "content-type": "application/json", "cache-control": "no-store" });
+      res.end(JSON.stringify(runtimeConfig)); return;
+    }
     const route = req.url.startsWith("/auth/v1/") ? { port: PORTS.auth, path: req.url.slice(8) }
       : req.url.startsWith("/rest/v1/") ? { port: PORTS.rest, path: req.url.slice(8) }
       : null;
@@ -164,9 +168,9 @@ export async function startStack({ quiet = true, webDir = join(ROOT, "web", "dis
 
   step("gateway");
   // 5) Ağ geçidi
-  const gateway = await startGateway(webDir);
   const url = `http://127.0.0.1:${PORTS.gateway}`;
   const keys = devKeys(JWT_SECRET);
+  const gateway = await startGateway(webDir, { supabaseUrl: url, supabaseAnonKey: keys.anonKey, environment: "test" });
   writeFileSync(join(tmpdir(), "saasavran-stack.json"), JSON.stringify({ url, ...keys }));
 
   return {

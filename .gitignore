@@ -4,3 +4,7 @@ node_modules/
 !.env.example
 *.pem
 *.key
+web/dist/
+e2e/screenshots/
+test-results/
+playwright-report/

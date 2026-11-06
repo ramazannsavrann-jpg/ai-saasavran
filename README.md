@@ -2,7 +2,7 @@
 
 Markaların ChatGPT, Gemini ve Perplexity cevaplarında ne kadar görünür olduğunu ölçen self-service SaaS. İlk pazar Türkiye; işletmeler ve ajanslar.
 
-**Sürüm:** v0.2 · **Durum:** çekirdek motor ve veritabanı hazır; web arayüzü yok. Ayrıntı: [docs/STATUS.md](docs/STATUS.md)
+**Sürüm:** v0.3 · **Durum:** MVP arayüzü ve ölçüm akışı test ortamında çalışıyor; bulut ortamı kurulmadı; canlı web araması yok. Gerçek müşteri kullanımına hazır değildir. Ayrıntı: [docs/STATUS.md](docs/STATUS.md)
 
 ## Temel kurallar (kodla zorlanır)
 
@@ -24,9 +24,13 @@ engine/src/pipeline.ts       Ölçüm akışı (önbellek → kilit → kota →
 engine/src/usage.ts          Müşteri kotası ve maliyet tavanı
 engine/src/report.ts         Rapor etiketleme kuralları
 engine/src/pricing.ts        Paket maliyet hesabı
-engine/src/providers/        gemini · openai · perplexity · mock · registry
-supabase/migrations/         Veritabanı şeması (0001 temel, 0002 kota/ücret)
-scripts/                     DB testleri, gizli bilgi taraması, Gemini bağlantı testi, fiyat raporu
+engine/src/providers/        gemini, openai, perplexity, simulated, mock, registry
+engine/src/worker.ts         Ölçüm işçisi (kuyruk → sağlayıcı → kota → kayıt)
+supabase/migrations/         0001 temel, 0002 kota/ücret, 0003 MVP çekirdeği
+web/                         Arayüz (Vite + React + Supabase JS), Türkçe, mobil öncelikli
+scripts/stack/               Docker'sız test ortamı: Postgres 16 + Supabase Auth + PostgREST
+e2e/                         Mobil uçtan uca testler (Playwright)
+scripts/                     İşçi, DB testleri, gizli bilgi taraması, Gemini testi, fiyat raporu
 docs/                        Mimari, fiyatlandırma, durum
 ```
 
@@ -34,7 +38,9 @@ docs/                        Mimari, fiyatlandırma, durum
 
 ```
 npm ci
-npm run test:all      # gizli bilgi taraması + motor testleri + DB testleri
+npm run test:all      # gizli bilgi + motor + DB + entegrasyon (gerçek yığın)
+npx playwright test   # mobil uçtan uca (önce: npm run build --prefix web)
+npm run stack         # test ortamını başlatır: http://127.0.0.1:54321
 npm run pricing       # paket maliyet tablosu
 npm run smoke:gemini  # gerçek Gemini çağrısı (GEMINI_API_KEY gerekir, 1 ücretsiz çağrı)
 ```

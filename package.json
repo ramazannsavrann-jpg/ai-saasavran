@@ -17,7 +17,8 @@
     "worker": "node scripts/worker.ts"
   },
   "devDependencies": {
-    "@electric-sql/pglite": "^0.3.0"
+    "@electric-sql/pglite": "^0.3.0",
+    "@playwright/test": "^1.56.1"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.119.0"
