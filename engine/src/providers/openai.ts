@@ -1,5 +1,5 @@
 // OpenAI Responses API + web_search aracı adaptörü.
-// DURUM: Yazıldı, birim testi kayıtlı örnek cevapla yapıldı, GERÇEK API İLE TEST EDİLMEDİ.
+// DURUM: Birim testi kayıtlı örnek cevapla yapıldı; ilk gerçek test 7 Kasım 2026'da (3 $ tavanlı, yalnız Growth Lab).
 // OpenAI'ın ücretsiz katmanı yok → billing "paid"; ALLOW_PAID_API=true olmadan kayıt defteri bunu açmaz.
 
 import {
@@ -7,18 +7,22 @@ import {
   ProviderError, estimateCost, classifyHttpError, networkError,
 } from "./types.ts";
 
+/** Bir soruda en fazla bu kadar web araması (maliyet üst sınırı). */
+export const OPENAI_MAX_SEARCHES = 2;
+
 export const OPENAI_DEFAULT: ProviderConfig = {
   provider: "openai",
-  model: "gpt-5.4-nano", // web_search desteği gerçek çağrıyla doğrulanmalı
+  model: "gpt-6-luna", // en ucuz güncel model; Responses API'de web_search destekli (model sayfası, 2026-11-07)
   billing: "paid",
   useSearch: true,
-  // Arama içeriği girdi token olarak ücretlenir; arama çağrısı 1.000'de 10 $.
+  // Arama içeriği (akıl yürüten modellerde) girdi token olarak ücretlenir; arama çağrısı 1.000'de 10 $.
   price: {
-    inputPerMTok: 0.20, outputPerMTok: 1.25, perCall: 0.01,
-    source: "https://developer.puter.com/tutorials/openai-api-pricing/ (resmi sayfayla teyit edilecek)",
-    checkedOn: "2026-11-06",
+    inputPerMTok: 0.10, outputPerMTok: 0.50, perCall: 0.01,
+    source: "https://developers.openai.com/api/docs/pricing + /models/gpt-6-luna",
+    checkedOn: "2026-11-07",
   },
-  worstCaseTokens: { input: 12_000, output: 2_000 },
+  worstCaseTokens: { input: 40_000, output: 3_000 },
+  worstCaseToolCalls: OPENAI_MAX_SEARCHES,
 };
 
 interface OpenAIResponse {
@@ -67,7 +71,11 @@ export class OpenAIProvider implements Provider {
         body: JSON.stringify({
           model: this.config.model,
           input: prompt,
-          ...(this.config.useSearch ? { tools: [{ type: "web_search" }] } : {}),
+          ...(this.config.useSearch ? {
+            tools: [{ type: "web_search", user_location: { type: "approximate", country: "TR", timezone: "Europe/Istanbul" } }],
+            max_tool_calls: OPENAI_MAX_SEARCHES,
+          } : {}),
+          reasoning: { effort: "low" },
           max_output_tokens: this.config.worstCaseTokens.output,
         }),
         signal: signal ?? AbortSignal.timeout(90_000),

@@ -13,7 +13,9 @@ export type Denial =
   | "workspace_paused"
   | "monthly_call_quota"
   | "monthly_cost_cap"
-  | "provider_free_daily_limit";
+  | "provider_free_daily_limit"
+  | "paid_not_allowed"
+  | "global_paid_cap";
 
 export interface Reservation { ok: true }
 export interface Rejection { ok: false; reason: Denial; message: string }

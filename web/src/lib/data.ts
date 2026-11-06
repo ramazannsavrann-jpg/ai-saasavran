@@ -4,7 +4,7 @@ import { sb } from "./supabase";
 export type MeasurementType = "live_search" | "model_knowledge" | "simulated";
 export type WorkspaceKind = "business" | "agency" | "demo_lab" | "growth_lab";
 
-export interface Workspace { id: string; name: string; kind: WorkspaceKind; plan: string; status: "active" | "paused"; paused_reason: string | null }
+export interface Workspace { id: string; name: string; kind: WorkspaceKind; plan: string; status: "active" | "paused"; paused_reason: string | null; paid_live_allowed: boolean }
 export interface Brand {
   id: string; workspace_id: string; name: string; aliases: string[]; website: string | null;
   sector: string | null; city: string | null; is_competitor: boolean; owner_brand_id: string | null; data_origin: string;
@@ -52,7 +52,7 @@ function must<T>(r: { data: T | null; error: { message: string } | null }): T {
 
 export const api = {
   async workspaces(): Promise<Workspace[]> {
-    return must(await sb().from("workspaces").select("id,name,kind,plan,status,paused_reason").order("created_at"));
+    return must(await sb().from("workspaces").select("id,name,kind,plan,status,paused_reason,paid_live_allowed").order("created_at"));
   },
   async createWorkspace(name: string, kind: "business" | "agency"): Promise<string> {
     return must(await sb().rpc("create_workspace", { p_name: name, p_kind: kind }));
@@ -86,15 +86,19 @@ export const api = {
   async setPromptActive(id: string, active: boolean) { must(await sb().from("prompts").update({ active }).eq("id", id)); },
   async updatePrompt(id: string, patch: { text?: string; intent?: Intent }) { must(await sb().from("prompts").update(patch).eq("id", id)); },
   /** Bir ölçümdeki ham yapay zekâ cevapları (soru başına). */
-  async answers(runId: string): Promise<{ prompt_id: string; repetition: number; answer_text: string; model: string }[]> {
-    return must(await sb().from("responses").select("prompt_id,repetition,answer_text,model").eq("run_id", runId).order("repetition"));
+  async answers(runId: string): Promise<{ prompt_id: string; repetition: number; answer_text: string; model: string; provider: string; cited_urls: string[] }[]> {
+    return must(await sb().from("responses").select("prompt_id,repetition,answer_text,model,provider,cited_urls").eq("run_id", runId).order("repetition"));
   },
   async deletePrompt(id: string) { must(await sb().from("prompts").delete().eq("id", id)); },
   async runs(brandId: string): Promise<Run[]> {
     return must(await sb().from("runs").select("*").eq("brand_id", brandId).order("created_at", { ascending: false }).limit(30));
   },
-  async requestRun(brandId: string): Promise<string> {
-    return must(await sb().rpc("request_run", { p_brand: brandId }));
+  async requestRun(brandId: string, live = false): Promise<string> {
+    return must(await sb().rpc("request_run", { p_brand: brandId, p_live: live }));
+  },
+  async paidBudget(ws: string): Promise<{ allowed: boolean; cap_usd: number; spent_usd: number } | null> {
+    const rows = must(await sb().rpc("paid_budget", { p_workspace: ws })) as { allowed: boolean; cap_usd: number; spent_usd: number }[];
+    return rows[0] ?? null;
   },
   async visibility(brandId: string, type: MeasurementType): Promise<VisRow[]> {
     return must(await sb().rpc("brand_visibility", { p_brand: brandId, p_type: type }));

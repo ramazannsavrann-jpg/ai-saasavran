@@ -106,6 +106,16 @@ else {
 // --- Gemini (yalnızca var mı)
 add("GEMINI_API_KEY", !!env.GEMINI_API_KEY, env.GEMINI_API_KEY ? "Var" : "Eksik");
 
+// --- OpenAI (isteğe bağlı; ücretsiz model listesi çağrısıyla anahtar doğrulanır, ücret çıkmaz)
+if (env.OPENAI_API_KEY) {
+  const k = env.OPENAI_API_KEY.trim();
+  if (!k.startsWith("sk-")) add("OPENAI_API_KEY", false, "Biçim yanlış (sk- ile başlamalı)");
+  else {
+    const s = await http("https://api.openai.com/v1/models/gpt-6-luna", { authorization: `Bearer ${k}` });
+    add("OPENAI_API_KEY", s === 200, s === 200 ? "OpenAI kabul etti, gpt-6-luna erişilebilir" : s === 404 ? "Anahtar geçerli olabilir ama gpt-6-luna modeli bu hesapta yok (404)" : `OpenAI kabul etmedi (${s})`);
+  }
+}
+
 const lines = rows.map((r) => `${r.ok ? "✅" : "❌"} ${r.name}: ${r.msg}`);
 console.log(lines.join("\n"));
 if (env.GITHUB_STEP_SUMMARY) appendFileSync(env.GITHUB_STEP_SUMMARY, `## Ayar kontrolü\n\n${lines.map((l) => `- ${l}`).join("\n")}\n`);

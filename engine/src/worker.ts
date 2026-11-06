@@ -31,7 +31,7 @@ export interface WorkerResult {
   failed: number;
 }
 
-const BUDGET_STOPS = new Set(["monthly_call_quota", "monthly_cost_cap", "workspace_paused", "provider_free_daily_limit", "run_budget"]);
+const BUDGET_STOPS = new Set(["monthly_call_quota", "monthly_cost_cap", "workspace_paused", "provider_free_daily_limit", "run_budget", "paid_not_allowed", "global_paid_cap"]);
 
 function must<T>(r: { data: T | null; error: { message: string } | null }, what: string): T {
   if (r.error) throw new Error(`${what}: ${r.error.message}`);
@@ -74,8 +74,12 @@ export function chooseProvider(type: MeasurementType, env: Record<string, string
   if (type === "simulated") return new SimulatedProvider(brandNames, seed);
   const search = type === "live_search" ? "true" : "false";
   const { providers } = buildProviders({ ...env, GEMINI_SEARCH: search }, fetchFn);
-  // Ölçüm türüyle uyumlu ilk sağlayıcı (bugün yalnız Gemini açık olabilir)
-  return providers.find((p) => p.config.useSearch === (type === "live_search")) ?? null;
+  if (type === "live_search") {
+    // Ücretsiz Gemini'de arama yok; canlı aramada ücretli sağlayıcı (önce OpenAI) seçilir
+    return providers.find((p) => p.config.provider === "openai")
+      ?? providers.find((p) => p.config.useSearch && p.config.billing === "paid") ?? null;
+  }
+  return providers.find((p) => !p.config.useSearch && p.config.provider === "gemini") ?? null;
 }
 
 export async function processNextRun(deps: WorkerDeps): Promise<WorkerResult | null> {

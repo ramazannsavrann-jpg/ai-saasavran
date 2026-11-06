@@ -5,7 +5,7 @@ import { useApp, useLoad } from "../lib/app";
 import { api, INTENT_LABEL, type Brand, type Intent, type MeasurementType, type Prompt, type Run } from "../lib/data";
 import { friendlyError } from "../lib/supabase";
 import { ERROR_CLASS_TEXT, STOP_TEXT, runStatusText } from "../lib/messages";
-import { competitorsInRun, formatDateTime, MIN_SAMPLE, numLoc, pct, providerLabel, rangeText, series } from "../lib/report";
+import { competitorsInRun, formatDateTime, MIN_SAMPLE, numLoc, pct, providerLabel, rangeText, series, topDomains, usd } from "../lib/report";
 import { Button, Confirm, DataNotice, Empty, ErrorBox, Field, Loading, Select, TypeBadge } from "../components/ui";
 import { CompareBars, TrendChart } from "../components/Chart";
 import { buildRecommendations } from "../../../engine/src/recommendations.ts";
@@ -27,7 +27,11 @@ export function BrandPage() {
   if (brand.loading) return <Loading />;
   if (brand.error || !brand.data) return <ErrorBox message="Marka bulunamadı veya bu markayı görme yetkiniz yok." />;
   const b = brand.data;
-  const type: MeasurementType = current?.kind === "demo_lab" ? "simulated" : "model_knowledge";
+  const runList = runs.data ?? [];
+  const hasLive = runList.some((r) => r.measurement_type === "live_search" && r.status === "done");
+  const view = params.get("tur") === "canli" && hasLive ? "live_search" : null;
+  const type: MeasurementType = current?.kind === "demo_lab" ? "simulated" : view ?? "model_knowledge";
+  const setView = (v: "canli" | "aramasiz") => { const n = new URLSearchParams(params); n.set("tur", v); setParams(n, { replace: true }); };
 
   return (
     <div className="stack">
@@ -42,15 +46,21 @@ export function BrandPage() {
               {[b.sector, b.city, b.website].filter(Boolean).join(", ") || "Ayrıntı girilmedi"}
               <button className="link-btn" onClick={() => setEditing(true)}>Düzenle</button>
             </p>
-            <RunControl brand={b} runs={runs.data ?? []} onChange={runs.reload} />
+            <RunControl brand={b} runs={runList} onChange={runs.reload} paidAllowed={!!current?.paid_live_allowed} workspaceId={current?.id ?? ""} />
           </>
         )}
       </header>
       <nav className="tabs" role="tablist" aria-label="Marka bölümleri">
         {TABS.map(([k, label]) => (
-          <button key={k} role="tab" aria-selected={tab === k} className={tab === k ? "on" : ""} onClick={() => setParams({ sekme: k }, { replace: true })}>{label}</button>
+          <button key={k} role="tab" aria-selected={tab === k} className={tab === k ? "on" : ""} onClick={() => { const n = new URLSearchParams(params); n.set("sekme", k); setParams(n, { replace: true }); }}>{label}</button>
         ))}
       </nav>
+      {hasLive && current?.kind !== "demo_lab" && (tab === "rapor" || tab === "oneriler") && (
+        <div className="seg type-switch" role="group" aria-label="Ölçüm türü">
+          <button aria-pressed={type === "model_knowledge"} onClick={() => setView("aramasiz")}>Aramasız (Gemini)</button>
+          <button aria-pressed={type === "live_search"} onClick={() => setView("canli")}>Canlı aramalı (ChatGPT)</button>
+        </div>
+      )}
       {tab === "rapor" && <Report brand={b} type={type} />}
       {tab === "oneriler" && <Advice brand={b} type={type} runs={runs.data ?? []} onBrandChange={brand.reload} />}
       {tab === "rakipler" && <Competitors brand={b} />}
@@ -160,14 +170,17 @@ function nextWeekly(runs: Run[]): string | null {
   return d < new Date() ? "bir saat içinde" : d.toLocaleDateString("tr-TR", { day: "numeric", month: "long", weekday: "long" });
 }
 
-function RunControl({ brand, runs, onChange }: { brand: Brand; runs: Run[]; onChange: () => void }) {
-  const [busy, setBusy] = useState(false);
+function RunControl({ brand, runs, onChange, paidAllowed, workspaceId }: { brand: Brand; runs: Run[]; onChange: () => void; paidAllowed: boolean; workspaceId: string }) {
+  const [busy, setBusy] = useState<"free" | "live" | null>(null);
   const [err, setErr] = useState<string | null>(null);
+  const budget = useLoad(() => (paidAllowed ? api.paidBudget(workspaceId) : Promise.resolve(null)), [paidAllowed, workspaceId, runs.length]);
   const pending = runs.find((r) => r.status === "queued" || r.status === "running");
-  async function start() {
-    setBusy(true); setErr(null);
-    try { await api.requestRun(brand.id); onChange(); } catch (e) { setErr(friendlyError(e)); } finally { setBusy(false); }
+  async function start(live: boolean) {
+    setBusy(live ? "live" : "free"); setErr(null);
+    try { await api.requestRun(brand.id, live); onChange(); } catch (e) { setErr(friendlyError(e)); } finally { setBusy(null); }
   }
+  const b = budget.data;
+  const left = b ? Math.max(Number(b.cap_usd) - Number(b.spent_usd), 0) : 0;
   return (
     <div className="run-control">
       {pending ? (
@@ -175,8 +188,14 @@ function RunControl({ brand, runs, onChange }: { brand: Brand; runs: Run[]; onCh
           Ölçüm {pending.status === "queued" ? "sırada" : "çalışıyor"} ({formatDateTime(pending.created_at)}). Ölçümler sunucuda sırayla işlenir; sonuç gelince bu sayfa güncellenir.
           <button className="link-btn" onClick={onChange}>Yenile</button>
         </p>
+      ) : paidAllowed && brand.data_origin !== "simulated" ? (
+        <div className="run-buttons">
+          <Button busy={busy === "free"} disabled={!!busy} onClick={() => start(false)}>Ölçüm başlat (aramasız, ücretsiz)</Button>
+          <Button variant="quiet" busy={busy === "live"} disabled={!!busy || left < 0.05} onClick={() => start(true)}>Canlı aramalı ölçüm (ChatGPT, ücretli)</Button>
+          {b && <p className="muted paid-note">Ücretli deneme bütçesi: {usd(Number(b.spent_usd))} / {usd(Number(b.cap_usd))} kullanıldı. Bir ölçüm yaklaşık {usd(0.012 * 2 * Math.max(runs[0]?.prompts_total ?? 10, 1))} tutar. Tavana gelince kendiliğinden durur.</p>}
+        </div>
       ) : (
-        <Button busy={busy} onClick={start}>Ölçüm başlat</Button>
+        <Button busy={busy === "free"} onClick={() => start(false)}>Ölçüm başlat</Button>
       )}
       {brand.data_origin !== "simulated" && (
         <p className="muted weekly-note">
@@ -195,6 +214,9 @@ function Report({ brand, type }: { brand: Brand; type: MeasurementType }) {
   const last = pts[pts.length - 1];
   const prompts = useLoad(() => (last ? api.promptResults(last.runId) : Promise.resolve([])), [last?.runId]);
   const answers = useLoad(() => (last ? api.answers(last.runId) : Promise.resolve([])), [last?.runId]);
+  const live = type === "live_search";
+  const engine = type === "simulated" ? "Simülasyonda" : live ? "ChatGPT (canlı web aramasıyla)" : "Gemini";
+  const domains = live ? topDomains((answers.data ?? []).flatMap((a) => a.cited_urls ?? [])) : [];
   const [open, setOpen] = useState<string | null>(null);
 
   if (vis.loading) return <Loading />;
@@ -212,13 +234,15 @@ function Report({ brand, type }: { brand: Brand; type: MeasurementType }) {
           <section className="panel lead-result">
             <div className="lead-meta"><TypeBadge type={type} /><span className="muted">{formatDateTime(last.at)}, {last.providers.map(providerLabel).join(", ")}</span></div>
             <p className="lead-sentence">
-              {type === "simulated" ? "Simülasyonda" : "Gemini"}, <strong>{last.recommend.n}</strong> cevabın <strong>{numLoc(last.recommend.k)}</strong> {brand.name} markasını önerdi.
+              {engine}, <strong>{last.recommend.n}</strong> cevabın <strong>{numLoc(last.recommend.k)}</strong> {brand.name} markasını önerdi.
             </p>
             <dl className="metrics">
               <div><dt>Önerilme</dt><dd className="num">{pct(last.recommend.value)}</dd><dd className="range">aralık {rangeText(last.recommend)}</dd></div>
               <div><dt>Anılma</dt><dd className="num">{pct(last.mention.value)}</dd><dd className="range">aralık {rangeText(last.mention)}</dd></div>
               <div><dt>Önerilerdeki payınız</dt><dd className="num">{pct(last.share)}</dd><dd className="range">rakiplerle birlikte</dd></div>
-              <div><dt>Kaynak gösterilme</dt><dd className="num na">Ölçülmedi</dd><dd className="range">yalnızca canlı aramada vardır</dd></div>
+              {live
+                ? <div><dt>Sitenizin kaynak gösterilmesi</dt><dd className="num">{pct(last.cite.value)}</dd><dd className="range">{last.cite.k}/{last.cite.n} cevapta</dd></div>
+                : <div><dt>Kaynak gösterilme</dt><dd className="num na">Ölçülmedi</dd><dd className="range">yalnızca canlı aramada vardır</dd></div>}
             </dl>
             {last.recommend.n < MIN_SAMPLE && (
               <p className="caution">Örneklem küçük ({last.recommend.n} cevap). Oranları kesin sonuç gibi okumayın; aralıklar geniştir. Daha fazla soru ekleyip tekrar ölçün.</p>
@@ -246,6 +270,18 @@ function Report({ brand, type }: { brand: Brand; type: MeasurementType }) {
             }))} />
           </section>
 
+          {live && (
+            <section className="panel">
+              <h2>Yapay zekânın kaynak gösterdiği siteler</h2>
+              <p className="muted">ChatGPT bu cevapları verirken internette bu sitelere baktı. Rakibinizi öneren sitelerde yer almak görünürlüğünüzü artırır.</p>
+              {answers.loading ? <Loading /> : domains.length === 0 ? <p>Bu ölçümde kaynak gösterilmedi.</p> : (
+                <ol className="domains">
+                  {domains.map((d) => <li key={d.domain}><span>{d.domain}</span><span className="num muted">{d.count} kez</span></li>)}
+                </ol>
+              )}
+            </section>
+          )}
+
           <section className="panel">
             <h2>Soru bazında sonuç</h2>
             {prompts.loading ? <Loading /> : (
@@ -266,8 +302,11 @@ function Report({ brand, type }: { brand: Brand; type: MeasurementType }) {
                       <div className="answers">
                         {(answers.data ?? []).filter((a) => a.prompt_id === p.prompt_id).map((a) => (
                           <blockquote key={a.repetition} className="answer">
-                            <p className="answer-meta">{type === "simulated" ? "Simülasyon cevabı" : `Gemini cevabı (${a.model}, aramasız)`}{(answers.data ?? []).filter((x) => x.prompt_id === p.prompt_id).length > 1 && `, tekrar ${a.repetition}`}</p>
+                            <p className="answer-meta">{type === "simulated" ? "Simülasyon cevabı" : live ? `ChatGPT cevabı (${a.model}, canlı arama)` : `Gemini cevabı (${a.model}, aramasız)`}{(answers.data ?? []).filter((x) => x.prompt_id === p.prompt_id).length > 1 && `, tekrar ${a.repetition}`}</p>
                             <Highlighted text={a.answer_text} names={[brand.name, ...brand.aliases]} />
+                            {live && (a.cited_urls ?? []).length > 0 && (
+                              <ul className="answer-sources">{a.cited_urls.map((u) => <li key={u}><a href={u} target="_blank" rel="noopener noreferrer nofollow">{(() => { try { return new URL(u).hostname.replace(/^www\./, ""); } catch { return u; } })()}</a></li>)}</ul>
+                            )}
                           </blockquote>
                         ))}
                       </div>

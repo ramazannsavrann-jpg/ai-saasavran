@@ -133,7 +133,7 @@ test("OpenAI: Responses API cevabı ayrıştırılır, arama çağrısı başın
     usage: { input_tokens: 5000, output_tokens: 500 },
   }, "p1", OPENAI_DEFAULT);
   assert.equal(r.billing, "paid");
-  assert.ok(Math.abs(r.costUsd - (0.001 + 0.000625 + 0.01)) < 1e-9);
+  assert.ok(Math.abs(r.costUsd - (0.0005 + 0.00025 + 0.01)) < 1e-9);
   assert.deepEqual(r.citedUrls, ["https://aliusta-demo.com/"]);
 });
 
@@ -355,4 +355,23 @@ test("Öneriler: site hataları ve görünmediği sorular önceliğe göre sıra
   assert.ok(!ids.includes("audit_llms_txt"), "bilgi düzeyindeki kontrol öneri olmamalı");
   assert.match(recs.find((r) => r.id === "absent_prompts")!.why, /Kebapçı Halil/);
   assert.ok(ids.indexOf("audit_faq") > ids.indexOf("audit_ai_bots"));
+});
+
+test("Canlı aramada sağlayıcı seçimi: ücretli kilit açıksa OpenAI, kapalıysa hiçbiri; aramasızda Gemini", async () => {
+  const { chooseProvider } = await import("../src/worker.ts");
+  const base = { GEMINI_API_KEY: "g", GEMINI_TIER: "free", OPENAI_API_KEY: "sk-x" };
+  assert.equal(chooseProvider("live_search", { ...base, ALLOW_PAID_API: "true" }, ["A"], "s")?.config.provider, "openai");
+  assert.equal(chooseProvider("live_search", { ...base, ALLOW_PAID_API: "false" }, ["A"], "s"), null);
+  const mk = chooseProvider("model_knowledge", { ...base, ALLOW_PAID_API: "true" }, ["A"], "s");
+  assert.equal(mk?.config.provider, "gemini");
+  assert.equal(mk?.config.useSearch, false);
+  assert.equal(mk?.config.billing, "free");
+});
+
+test("OpenAI en kötü durum maliyeti arama sınırını hesaba katar", () => {
+  const worst = OPENAI_DEFAULT.price.perCall * (OPENAI_DEFAULT.worstCaseToolCalls ?? 1)
+    + OPENAI_DEFAULT.worstCaseTokens.input / 1e6 * OPENAI_DEFAULT.price.inputPerMTok
+    + OPENAI_DEFAULT.worstCaseTokens.output / 1e6 * OPENAI_DEFAULT.price.outputPerMTok;
+  assert.ok(worst > 0.02 && worst < 0.03, String(worst));
+  assert.equal(OPENAI_DEFAULT.model, "gpt-6-luna");
 });

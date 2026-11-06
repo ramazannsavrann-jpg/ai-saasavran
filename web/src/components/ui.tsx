@@ -58,7 +58,12 @@ export function TypeBadge({ type }: { type: MeasurementType }) {
 
 /** Canlı arama yapılmadığını / simülasyon olduğunu belirten zorunlu uyarı. */
 export function DataNotice({ type }: { type: MeasurementType }) {
-  if (type === "live_search") return null;
+  if (type === "live_search") return (
+    <aside className="notice notice-live" role="note">
+      <strong>Canlı web aramalı ölçüm</strong>
+      <p>Bu sonuçlar ChatGPT'ye (OpenAI API) internette arama açıkken sorulan sorulardan geliyor. Cevaplar aramanın yapıldığı ana göre değişebilir; tek ölçümü kesin sonuç gibi okumayın.</p>
+    </aside>
+  );
   const sim = type === "simulated";
   return (
     <aside className={`notice ${sim ? "notice-sim" : "notice-nolive"}`} role="note">

@@ -53,6 +53,19 @@ export const GROWTH = {
   ] as [string, Intent][],
 };
 
+/** Canlı arama ile aramasız sonucu karşılaştırmak için tanınmış bir test markası (Growth Lab içinde). */
+export const GROWTH_TEST = {
+  brand: { name: "Garanti BBVA", aliases: ["Garanti", "Garanti Bankası"], website: "garantibbva.com.tr", sector: "Banka / finans" },
+  competitors: ["Akbank", "İş Bankası", "Yapı Kredi", "Ziraat Bankası", "Enpara.com"],
+  prompts: [
+    ["Türkiye'de en iyi mobil bankacılık uygulaması hangisi?", "comparison"],
+    ["Kredi kartı almak için hangi bankayı önerirsin?", "purchase"],
+    ["Türkiye'de müşteri hizmetleri en iyi banka hangisi?", "comparison"],
+    ["Yeni hesap açmak için en avantajlı banka hangisi?", "purchase"],
+    ["Türkiye'de en güvenilir bankalar hangileri?", "informational"],
+  ] as [string, Intent][],
+};
+
 function must<T>(r: { data: T | null; error: { message: string } | null }, what: string): T {
   if (r.error) throw new Error(`${what}: ${r.error.message}`);
   return r.data as T;
@@ -119,6 +132,8 @@ export async function seedLabs(db: SupabaseClient, adminEmail: string, log: (m: 
   log(`Demo Lab: ${DEMO_BRANDS.length} marka (${seeded} yeni, 6 haftalık simülasyon).`);
 
   const growth = await ensureWorkspace(db, GROWTH.workspace, "growth_lab", "pro", uid);
+  // Ücretli canlı ölçüm yalnız bu alanda açılabilir (veritabanı kısıtı: yalnız growth_lab)
+  must(await db.from("workspaces").update({ paid_live_allowed: true }).eq("id", growth), "ücretli izin");
   const g = await ensureBrand(db, growth, GROWTH.brand, "live_api", GROWTH.competitors, GROWTH.prompts);
   if (g.created) {
     // Web sitesi kontrolü işçinin bir sonraki çalışmasında otomatik yapılır (pending_site_audits).
@@ -129,6 +144,26 @@ export async function seedLabs(db: SupabaseClient, adminEmail: string, log: (m: 
     // Web sitesi adresi değiştiyse güncelle (ör. pages.dev → kendi alan adı)
     must(await db.from("brands").update({ website: GROWTH.brand.website }).eq("id", g.id).neq("website", GROWTH.brand.website), "web sitesi güncelle");
     log("Growth Lab: zaten var.");
+  }
+  const gt = await ensureBrand(db, growth, GROWTH_TEST.brand, "live_api", GROWTH_TEST.competitors, GROWTH_TEST.prompts);
+  if (gt.created) {
+    // Test markası haftalık ücretsiz ölçüme dahil olmasın; yalnız elle ölçülür
+    must(await db.from("brands").update({ auto_weekly: false }).eq("id", gt.id), "test markası");
+    log("Growth Lab: karşılaştırma için Garanti BBVA test markası eklendi.");
+  }
+  // İlk canlı aramalı (ücretli) deneme ölçümü: Growth Lab'de hiç yoksa iki marka için birer kez sıraya alınır.
+  // Toplam harcama veritabanındaki tavanla (app_settings.paid_total_cap_usd) sınırlıdır.
+  const liveRuns = must(await db.from("runs").select("id").eq("workspace_id", growth).eq("measurement_type", "live_search").limit(1), "canlı ölçüm ara") as unknown[];
+  const settings = must(await db.from("app_settings").select("paid_total_cap_usd").single(), "ayarlar") as { paid_total_cap_usd: number };
+  if (liveRuns.length === 0 && Number(settings.paid_total_cap_usd) > 0) {
+    for (const id of [g.id, gt.id]) {
+      const n = (must(await db.from("prompts").select("id").eq("brand_id", id).eq("active", true), "sorular") as unknown[]).length;
+      const busy = must(await db.from("runs").select("id").eq("brand_id", id).in("status", ["queued", "running"]), "bekleyen") as unknown[];
+      if (n > 0 && busy.length === 0) {
+        must(await db.from("runs").insert({ workspace_id: growth, brand_id: id, status: "queued", data_origin: "live_api", measurement_type: "live_search", max_cost_usd: 1, prompts_total: n, trigger: "seed" }), "canlı ölçüm");
+      }
+    }
+    log("Growth Lab: ilk canlı aramalı deneme ölçümleri sıraya alındı.");
   }
   return { ok: true, demo, growth };
 }

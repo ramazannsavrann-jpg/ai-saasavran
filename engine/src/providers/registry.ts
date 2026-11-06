@@ -46,7 +46,7 @@ export function buildProviders(env: Record<string, string | undefined>, fetchFn?
   else if (!allowPaid) status.push({ provider: "openai", enabled: false, reason: "ücretli; ALLOW_PAID_API kapalı" });
   else {
     providers.push(new OpenAIProvider(env.OPENAI_API_KEY, { ...OPENAI_DEFAULT, model: env.OPENAI_MODEL || OPENAI_DEFAULT.model }, fetchFn));
-    status.push({ provider: "openai", enabled: true, reason: "ücretli, gerçek API ile test edilmedi" });
+    status.push({ provider: "openai", enabled: true, reason: `${env.OPENAI_MODEL || OPENAI_DEFAULT.model}, ücretli, web araması açık` });
   }
 
   // Perplexity — adaptör henüz yok

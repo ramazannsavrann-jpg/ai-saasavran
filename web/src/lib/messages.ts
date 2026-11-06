@@ -36,6 +36,8 @@ export const STOP_TEXT: Record<string, string> = {
   provider_free_daily_limit: "Platformun günlük ücretsiz kotası doldu; yarın tekrar deneyin",
   run_budget: "Ölçüm başına maliyet tavanına ulaşıldı",
   paid_api_blocked: "Ücretli API kullanımı kapalı",
+  paid_not_allowed: "Bu hesapta ücretli ölçüm kapalı",
+  global_paid_cap: "Toplam ücretli kullanım tavanına ulaşıldı; ölçüm durduruldu",
   too_many_failures: "Arka arkaya çok fazla hata; ölçüm durduruldu",
   provider_not_configured: "Ölçüm sağlayıcısı henüz yapılandırılmadı",
   worker_error: "Beklenmeyen sistem hatası",

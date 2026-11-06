@@ -176,7 +176,7 @@ test("Hata sınıfları uçtan uca: model yok / yetki hatası / anahtar yok", as
   assert.equal(none?.stop, "provider_not_configured");
 });
 
-test("Ücretli kilit: canlı arama açılsa bile OpenAI çağrılmaz; ücretsiz aramalı istek 'desteklenmeyen özellik' olur", async () => {
+test("Ücretli kilit: canlı arama açılsa bile ALLOW_PAID_API kapalıyken OpenAI çağrılmaz; ücretsiz Gemini'de arama olmadığı için sağlayıcı yok", async () => {
   stack.sql(`update app_settings set live_search_enabled = true`);
   try {
     const runId = ok(await A.c.rpc("request_run", { p_brand: brandA })) as string;
@@ -186,8 +186,8 @@ test("Ücretli kilit: canlı arama açılsa bile OpenAI çağrılmaz; ücretsiz 
       fetchFn: fakeGemini('{"error":{"code":429,"status":"RESOURCE_EXHAUSTED"}}', 429, calls) as any,
     });
     assert.equal(r?.runId, runId);
-    assert.equal(r?.errorClass, "unsupported_feature");
-    assert.ok(!calls.some((u) => u.includes("openai")), "Ücretli API'ye istek gitti!");
+    assert.equal(r?.stop, "provider_not_configured");
+    assert.equal(calls.length, 0, "Hiçbir sağlayıcıya istek gitmemeli");
     assert.equal(stack.sql(`select measurement_type from runs where id = '${runId}'`), "live_search");
     assert.equal(stack.sql(`select count(*) from responses where run_id = '${runId}'`), "0");
   } finally {
@@ -248,7 +248,7 @@ test("Migration çalıştırıcı: boş veritabanına uygular, ikinci kez uygula
   });
   const first = run();
   assert.equal(first.status, 0, first.stderr);
-  assert.match(first.stdout, /4 migration uygulandı/);
+  assert.match(first.stdout, /5 migration uygulandı/);
   const second = run();
   assert.equal(second.status, 0, second.stderr);
   assert.match(second.stdout, /güncel/);
@@ -338,12 +338,84 @@ test("Laboratuvarlar: yönetici atanır, Demo Lab 10 hayali marka + 6 haftalık 
   assert.ok(demoBrands.every((x) => x.data_origin === "simulated"));
   const series = ok(await L.c.rpc("brand_visibility", { p_brand: demoBrands[0].id, p_type: "simulated" })) as any[];
   assert.equal(new Set(series.map((x) => x.run_id)).size, 6);
-  const growthRun = ok(await L.c.from("runs").select("status,measurement_type").eq("workspace_id", r.growth)) as any[];
-  assert.deepEqual(growthRun.map((x) => [x.status, x.measurement_type]), [["queued", "model_knowledge"]]);
+  const growthRuns = ok(await L.c.from("runs").select("status,measurement_type,brand_id,brands(name)").eq("workspace_id", r.growth)) as any[];
+  const byName = (n: string) => growthRuns.filter((x) => x.brands.name === n).map((x) => [x.status, x.measurement_type]);
+  assert.deepEqual(byName("AI SaaSavran"), [["queued", "model_knowledge"]]);
+  assert.deepEqual(byName("Garanti BBVA"), [["queued", "live_search"]], "test markası için tek seferlik canlı deneme");
+  const gws = ok(await L.c.from("workspaces").select("paid_live_allowed").eq("id", r.growth).single()) as any;
+  assert.equal(gws.paid_live_allowed, true);
   // Tekrar çalıştır: çoğaltma yok
   await seedLabs(svc, "kurucu@test.local", () => {});
   assert.equal((ok(await L.c.from("brands").select("id").eq("workspace_id", r.demo).eq("is_competitor", false).in("name", names)) as any[]).length, 10);
-  assert.equal(stack.sql(`select count(*) from runs where workspace_id='${r.growth}'`), "1");
+  assert.equal(stack.sql(`select count(*) from runs where workspace_id='${r.growth}'`), "2", "tekrar çalışınca yeni ölçüm eklenmemeli");
   // Müşteri Demo Lab'i ve Growth Lab'i göremez
   assert.equal((ok(await A.c.from("workspaces").select("id").in("id", [r.demo, r.growth])) as any[]).length, 0);
+});
+
+/** Sahte OpenAI Responses cevabı (web_search ile). YALNIZCA testte. */
+function fakeOpenAI(text: string, urls: string[], calls: { url: string; body: any }[] = []) {
+  return async (url: string, init?: RequestInit) => {
+    calls.push({ url, body: init?.body ? JSON.parse(String(init.body)) : null });
+    return new Response(JSON.stringify({
+      output: [
+        { type: "web_search_call", action: { query: "en iyi banka" } },
+        { type: "message", content: [{ type: "output_text", text, annotations: urls.map((u) => ({ type: "url_citation", url: u })) }] },
+      ],
+      usage: { input_tokens: 8000, output_tokens: 400 },
+    }), { status: 200 });
+  };
+}
+
+test("Ücretli canlı ölçüm: müşteri alanında imkânsız, Growth Lab'de çalışır, toplam tavanda durur", async () => {
+  const PAID_ENV = { ...ENV, OPENAI_API_KEY: "sk-test", ALLOW_PAID_API: "true" };
+  stack.sql(`update runs set status='failed' where status in ('queued','running')`);
+  stack.sql(`update workspaces set status='active', paused_reason=null where id='${wsA}'`);
+  // Müşteri: istek reddedilir, izin bayrağı müşteri alanına konulamaz
+  assert.match((await A.c.rpc("request_run", { p_brand: brandA, p_live: true })).error?.message ?? "", /kapalı/);
+  assert.ok((await svc.from("workspaces").update({ paid_live_allowed: true }).eq("id", wsA)).error, "müşteri alanına ücretli izin verilememeli");
+  // İstemci bayrağı kendisi değiştiremez
+  const G = await user("growth@test.local");
+  const gws = ok(await svc.from("workspaces").insert({ name: "Growth Test", kind: "growth_lab", plan: "pro", paid_live_allowed: true }).select("id").single()) as any;
+  ok(await svc.from("workspace_members").insert({ workspace_id: gws.id, user_id: G.id, role: "owner" }));
+  const gb = ok(await G.c.from("brands").insert({ workspace_id: gws.id, name: "Garanti BBVA", website: "garantibbva.com.tr" }).select("id").single()) as any;
+  ok(await G.c.from("brands").insert({ workspace_id: gws.id, name: "Akbank", is_competitor: true, owner_brand_id: gb.id }));
+  ok(await G.c.from("prompts").insert([{ workspace_id: gws.id, brand_id: gb.id, text: "Hangi bankayı önerirsin?", intent: "purchase" }]));
+  const bud = ok(await G.c.rpc("paid_budget", { p_workspace: gws.id })) as any[];
+  assert.equal(bud[0].allowed, true);
+  assert.equal(Number(bud[0].cap_usd), 3);
+  // Canlı ölçüm: OpenAI seçilir, kaynaklar kaydedilir, maliyet "paid" olarak yazılır
+  const runId = ok(await G.c.rpc("request_run", { p_brand: gb.id, p_live: true })) as string;
+  assert.equal(stack.sql(`select measurement_type from runs where id='${runId}'`), "live_search");
+  const calls: { url: string; body: any }[] = [];
+  const r = await processNextRun({ db: svc, env: PAID_ENV, sleep: noSleep,
+    fetchFn: fakeOpenAI("1. Garanti BBVA\n2. Akbank", ["https://www.garantibbva.com.tr/kart", "https://www.sikayetvar.com/x"], calls) as any });
+  assert.equal(r?.status, "done", JSON.stringify(r));
+  assert.ok(calls.every((c) => c.url === "https://api.openai.com/v1/responses"));
+  assert.equal(calls[0].body.model, "gpt-6-luna");
+  assert.equal(calls[0].body.tools[0].type, "web_search");
+  assert.equal(calls[0].body.max_tool_calls, 2);
+  const resp = ok(await G.c.from("responses").select("provider,cited_urls,measurement_type,billing").eq("run_id", runId)) as any[];
+  assert.ok(resp.length >= 1 && resp.every((x) => x.provider === "openai" && x.billing === "paid" && x.measurement_type === "live_search"));
+  assert.equal(resp[0].cited_urls.length, 2);
+  const cited = stack.sql(`select bool_or(m.cited) from mentions m join responses rr on rr.id=m.response_id where rr.run_id='${runId}' and m.brand_id='${gb.id}'`);
+  assert.equal(cited, "t", "markanın sitesi kaynak gösterildi olarak işaretlenmeli");
+  const spent = Number(stack.sql(`select sum(cost_usd) from cost_ledger where billing='paid'`));
+  assert.ok(spent > 0 && spent < 0.1, `harcama ${spent}`);
+  // Toplam tavan: kalan bütçeyi bitir → yeni canlı istek reddedilir; işçi de ücretli çağrı yapmaz
+  stack.sql(`update app_settings set paid_total_cap_usd = ${spent + 0.01}`);
+  assert.match((await G.c.rpc("request_run", { p_brand: gb.id, p_live: true })).error?.message ?? "", /tavan/);
+  stack.sql(`update app_settings set paid_total_cap_usd = 3`);
+  const run2 = ok(await G.c.rpc("request_run", { p_brand: gb.id, p_live: true })) as string;
+  stack.sql(`update app_settings set paid_total_cap_usd = ${spent + 0.01}`); // en kötü durum çağrı maliyetinden az kaldı
+  const calls2: { url: string; body: any }[] = [];
+  const r2 = await processNextRun({ db: svc, env: PAID_ENV, sleep: noSleep, fetchFn: fakeOpenAI("x", [], calls2) as any });
+  assert.equal(r2?.runId, run2);
+  assert.equal(r2?.stop, "global_paid_cap");
+  assert.equal(calls2.length, 0, "tavan aşılacaksa ücretli çağrı hiç yapılmamalı");
+  assert.equal(stack.sql(`select status from workspaces where id='${gws.id}'`), "active", "toplam tavan alanı durdurmaz");
+  // ALLOW_PAID_API kapalıysa canlı ölçümde sağlayıcı yok
+  stack.sql(`update app_settings set paid_total_cap_usd = 3`);
+  ok(await G.c.rpc("request_run", { p_brand: gb.id, p_live: true }));
+  const r3 = await processNextRun({ db: svc, env: { ...PAID_ENV, ALLOW_PAID_API: "false" }, sleep: noSleep });
+  assert.equal(r3?.stop, "provider_not_configured");
 });

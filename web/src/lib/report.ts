@@ -68,4 +68,13 @@ export function numLoc(n: number): string {
 }
 
 export const usd = (v: number) => `${v.toLocaleString("tr-TR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} $`;
-export const providerLabel = (p: string) => (p === "mock" ? "simülasyon" : p === "gemini" ? "Gemini" : p);
+export const providerLabel = (p: string) => (p === "mock" ? "simülasyon" : p === "gemini" ? "Gemini" : p === "openai" ? "ChatGPT (OpenAI)" : p);
+
+/** Cevaplarda kaynak gösterilen alan adları, en çok gösterilenden aza. */
+export function topDomains(urls: string[], limit = 10): { domain: string; count: number }[] {
+  const m = new Map<string, number>();
+  for (const u of urls) {
+    try { const d = new URL(u).hostname.replace(/^www\./, ""); m.set(d, (m.get(d) ?? 0) + 1); } catch { /* geçersiz adres */ }
+  }
+  return [...m.entries()].map(([domain, count]) => ({ domain, count })).sort((a, b) => b.count - a.count).slice(0, limit);
+}

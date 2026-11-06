@@ -143,6 +143,7 @@ form > .btn, .stack > .btn { width: 100%; }
 .notice p { margin: 4px 0 6px; font-size: .94rem; }
 .notice a { font-weight: 600; font-size: .92rem; }
 .notice-nolive { background: var(--surface); border-color: var(--primary); border-style: dashed; border-width: 2px; }
+.notice-live { background: var(--surface); border-color: var(--primary); border-width: 2px; }
 .notice-sim { background: repeating-linear-gradient(135deg, var(--sim-tint) 0 10px, var(--surface) 10px 20px); border-color: var(--sim); border-width: 2px; }
 
 /* ---------- Veri türü rozeti ---------- */
@@ -351,3 +352,11 @@ form > .btn, .stack > .btn { width: 100%; }
 .checks .bad .check-mark { background: var(--danger-tint); color: var(--danger); }
 .checks .sev-info .check-mark, .checks .sev-low .check-mark { background: var(--sim-tint); color: var(--sim); }
 .sev { font-style: normal; font-size: .75rem; font-weight: 700; margin-left: 8px; color: var(--muted); }
+
+/* Canlı aramalı ölçüm */
+.run-buttons { display: grid; gap: .6rem; }
+.paid-note { font-size: .875rem; margin: 0; }
+.type-switch { justify-self: start; }
+.domains { margin: 0; padding-left: 1.4rem; display: grid; gap: .35rem; }
+.domains li { display: flex; justify-content: space-between; gap: 1rem; }
+.answer-sources { list-style: none; padding: 0; margin: .6rem 0 0; display: flex; flex-wrap: wrap; gap: .4rem .8rem; font-size: .875rem; }

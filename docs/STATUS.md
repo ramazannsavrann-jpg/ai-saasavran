@@ -37,6 +37,8 @@
 | Öneriler sekmesi (kural tabanlı, yapay zekâ ile üretilmez) | ✅ | Birim + E2E |
 | Demo Lab: 10 hayali marka, 6 haftalık simülasyon geçmişi | ✅ | Entegrasyon; canlıda kuruldu |
 | Growth Lab: AI SaaSavran'ın kendi görünürlüğü, gerçek aramasız ölçüm | ✅ | Canlıda ilk ölçüm tamamlandı (20/20 cevap) |
+| Ücretli canlı aramalı ölçüm (ChatGPT, OpenAI `gpt-6-luna` + web araması) | 🧪 Deneme | Yalnız Growth Lab'de; toplam 3 $ tavanı veritabanında; müşteri alanlarında veritabanı kısıtıyla imkânsız. Kullanıcı izni 7 Kasım 2026. |
+| Kaynak (citation) analizi: yapay zekânın baktığı siteler | 🧪 Deneme | Yalnız canlı aramalı ölçümde |
 | Mobil uyum (yatay taşma yok, 48 px dokunma alanları) | ✅ | E2E her ekranda taşma kontrolü |
 | Ürün durumu sayfası (çalışan / kısmen / yok) | ✅ | E2E |
 
@@ -57,7 +59,7 @@
 
 ## Henüz yok
 
-- Canlı web araması (ücretsiz katmanda yok; ücretli kullanım kapalı)
+- Müşteriler için canlı web araması (yalnız Growth Lab'de 3 $ tavanlı deneme açık)
 - ChatGPT, Perplexity
 - Kaynak (citation) analizi, içerik taslakları
 - PDF rapor, yönetici maliyet paneli

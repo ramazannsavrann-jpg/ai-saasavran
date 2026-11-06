@@ -19,6 +19,7 @@ export type StopReason =
   | "completed"
   | "run_budget"
   | "monthly_call_quota" | "monthly_cost_cap" | "workspace_paused" | "provider_free_daily_limit"
+  | "paid_not_allowed" | "global_paid_cap"
   | "paid_api_blocked"
   | "too_many_failures"
   | ApiErrorClass;
@@ -61,7 +62,7 @@ export async function runPrompts(opts: {
   const maxRetries = Math.min(opts.maxRetries ?? 2, 2); // sabit üst sınır
   const sleep = opts.sleep ?? ((ms) => new Promise((r) => setTimeout(r, ms)));
   const cfg = provider.config;
-  const worst = estimateCost(cfg.price, cfg.worstCaseTokens.input, cfg.worstCaseTokens.output);
+  const worst = estimateCost({ ...cfg.price, perCall: cfg.price.perCall * (cfg.worstCaseToolCalls ?? 1) }, cfg.worstCaseTokens.input, cfg.worstCaseTokens.output);
   const total = prompts.length * repetitions;
   const out: RunOutcome = { items: [], results: [], stop: "completed", skipped: 0, errors: [], cacheHits: 0 };
   const stop = (reason: StopReason, msg: string, done: number, kind?: ApiErrorClass): RunOutcome => {
