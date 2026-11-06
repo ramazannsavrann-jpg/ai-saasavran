@@ -214,7 +214,7 @@ jobs:
     needs: deploy-web
     if: needs.deploy-web.result == 'success'
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4

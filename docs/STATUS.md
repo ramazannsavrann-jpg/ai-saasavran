@@ -1,6 +1,6 @@
 # Gerçek durum raporu
 
-**Son güncelleme:** 2026-11-06 · v0.4 (sektörler, düzenleme, Google ile giriş, yasal taslaklar)
+**Son güncelleme:** 2026-11-06 · v0.5 (haftalık otomatik ölçüm, site kontrolü ve öneriler, Demo Lab ve Growth Lab dolu)
 
 **Canlı adres:** https://ai-saasavran.pages.dev (Cloudflare Pages + Supabase, ücretsiz katmanlar)
 
@@ -32,12 +32,17 @@
 | Müşteri izolasyonu (RLS) | ✅ | Entegrasyon + E2E (başka müşterinin markası açılamıyor) |
 | Maliyet koruması: ücretli kilit, aylık kota, otomatik durdurma | ✅ | Birim + veritabanı + entegrasyon |
 | Demo Lab: yalnız platform yöneticisi, yalnız simülasyon, müşteriden ayrı | ✅ | Entegrasyon + E2E |
+| Haftalık otomatik ölçüm (marka başına açılıp kapanır; kota yetmezse atlanır, alan durdurulmaz) | ✅ | Entegrasyon |
+| Web sitesi kontrolü (AI botlarına izin, başlık, açıklama, schema.org, SSS, site haritası…) | ✅ | Birim + entegrasyon |
+| Öneriler sekmesi (kural tabanlı, yapay zekâ ile üretilmez) | ✅ | Birim + E2E |
+| Demo Lab: 10 hayali marka, 6 haftalık simülasyon geçmişi | ✅ | Entegrasyon; canlıda kuruldu |
+| Growth Lab: AI SaaSavran'ın kendi görünürlüğü, gerçek aramasız ölçüm | ✅ | Canlıda ilk ölçüm tamamlandı (20/20 cevap) |
 | Mobil uyum (yatay taşma yok, 48 px dokunma alanları) | ✅ | E2E her ekranda taşma kontrolü |
 | Ürün durumu sayfası (çalışan / kısmen / yok) | ✅ | E2E |
 
 ## Test özeti (CI, her push'ta)
 
-26 motor testi · 16 veritabanı kontrolü · 11 entegrasyon testi (gerçek Postgres + Supabase Auth + PostgREST) · 3 mobil uçtan uca test · gizli bilgi taraması · gerçek Gemini bağlantı testi.
+31 motor testi · 16 veritabanı kontrolü · 15 entegrasyon testi (gerçek Postgres + Supabase Auth + PostgREST) · 6 mobil uçtan uca test · gizli bilgi taraması · gerçek Gemini bağlantı testi.
 
 ## Kısmen
 
@@ -54,10 +59,10 @@
 
 - Canlı web araması (ücretsiz katmanda yok; ücretli kullanım kapalı)
 - ChatGPT, Perplexity
-- Kaynak (citation) analizi, iyileştirme önerileri, içerik taslakları
-- Haftalık otomatik ölçüm, PDF rapor, yönetici maliyet paneli
+- Kaynak (citation) analizi, içerik taslakları
+- PDF rapor, yönetici maliyet paneli
 - Ödeme, paket yükseltme, ekip daveti
-- KVKK aydınlatma metni ve gizlilik politikası (hukuki metin)
+- Gizlilik ve koşullar metinleri yalnız taslak; hukuki inceleme yapılmadı
 
 ## Gerçek API testleri (GitHub Actions)
 
