@@ -70,6 +70,26 @@ export function numLoc(n: number): string {
 export const usd = (v: number) => `${v.toLocaleString("tr-TR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} $`;
 export const providerLabel = (p: string) => (p === "mock" ? "simülasyon" : p === "gemini" ? "Gemini" : p === "openai" ? "ChatGPT (OpenAI)" : p);
 
+/**
+ * Kaynak fırsatları: rakip önerilirken sizin önerilmediğiniz cevaplarda yapay zekânın baktığı siteler.
+ * Rakiplerin kendi siteleri ayrı tutulur (orada yer alamazsınız); geri kalanı içerik/tanıtım fırsatıdır.
+ */
+export function sourceOpportunities(
+  answers: { id: string; cited_urls: string[] }[],
+  mentions: { response_id: string; brand_id: string; recommended: boolean }[],
+  targetId: string,
+  brandDomains: string[],
+): { domain: string; count: number; own: boolean }[] {
+  const byResp = new Map<string, { target: boolean; comp: boolean }>();
+  for (const m of mentions) {
+    const v = byResp.get(m.response_id) ?? { target: false, comp: false };
+    if (m.recommended) { if (m.brand_id === targetId) v.target = true; else v.comp = true; }
+    byResp.set(m.response_id, v);
+  }
+  const urls = answers.filter((a) => { const v = byResp.get(a.id); return v && v.comp && !v.target; }).flatMap((a) => a.cited_urls ?? []);
+  return topDomains(urls, 12).map((d) => ({ ...d, own: brandDomains.some((b) => d.domain === b || d.domain.endsWith("." + b)) }));
+}
+
 /** Cevaplarda kaynak gösterilen alan adları, en çok gösterilenden aza. */
 export function topDomains(urls: string[], limit = 10): { domain: string; count: number }[] {
   const m = new Map<string, number>();

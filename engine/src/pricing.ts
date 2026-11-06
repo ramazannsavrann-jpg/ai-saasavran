@@ -86,7 +86,8 @@ export function freeTierCapacity(plan: PlanSpec, dailyLimit = GEMINI_FREE_DEFAUL
 // ---- Varsayılan paketler ve senaryolar ----
 const typical = {
   gemini: { inputTokens: 150, outputTokens: 700, searchCalls: 1 },
-  openai: { inputTokens: 6_000, outputTokens: 700, searchCalls: 1 }, // arama içeriği girdi token sayılır
+  // GERÇEK ÖLÇÜM (7 Kasım 2026, 30 canlı cevap, gpt-6-luna): ort. 17.400 girdi / 670 çıktı token, ~1,7 arama → 0,0194 $/cevap
+  openai: { inputTokens: 17_400, outputTokens: 670, searchCalls: 1.7 },
   perplexity: { inputTokens: 150, outputTokens: 700, searchCalls: 1 },
 };
 
@@ -97,7 +98,7 @@ export const SCENARIOS: Scenario[] = [
   },
   {
     name: "Kötü durum", geminiGroundingCharged: true,
-    calls: { ...typical, openai: { inputTokens: 12_000, outputTokens: 1_200, searchCalls: 2 } },
+    calls: { ...typical, openai: { inputTokens: 40_000, outputTokens: 3_000, searchCalls: 2 } },
     overheadPerBrandUsd: 1.0, infraPerCustomerUsd: 2.5, paymentFeeRate: 0.04,
   },
 ];
@@ -105,6 +106,7 @@ export const SCENARIOS: Scenario[] = [
 export const PLANS: PlanSpec[] = [
   { name: "Starter (eski öneri: 50 soru, 3 tekrar)", priceUsd: 29, brands: 1, promptsPerBrand: 50, repetitions: 3, runsPerMonth: WEEKS_PER_MONTH, engines: ["gemini", "openai", "perplexity"] },
   { name: "Starter (yeni: 25 soru, 2 tekrar)", priceUsd: 29, brands: 1, promptsPerBrand: 25, repetitions: 2, runsPerMonth: WEEKS_PER_MONTH, engines: ["gemini", "openai", "perplexity"] },
+  { name: "Starter önerisi (ChatGPT + Gemini, 20 soru, 2 tekrar)", priceUsd: 29, brands: 1, promptsPerBrand: 20, repetitions: 2, runsPerMonth: WEEKS_PER_MONTH, engines: ["gemini", "openai"] },
   { name: "Starter — sadece Gemini (bugünkü durum)", priceUsd: 29, brands: 1, promptsPerBrand: 25, repetitions: 2, runsPerMonth: WEEKS_PER_MONTH, engines: ["gemini"] },
   { name: "Pro (eski: 3 marka, 50 soru, 3 tekrar)", priceUsd: 79, brands: 3, promptsPerBrand: 50, repetitions: 3, runsPerMonth: WEEKS_PER_MONTH, engines: ["gemini", "openai", "perplexity"] },
   { name: "Pro (yeni: 3 marka, 30 soru, 2 tekrar)", priceUsd: 79, brands: 3, promptsPerBrand: 30, repetitions: 2, runsPerMonth: WEEKS_PER_MONTH, engines: ["gemini", "openai", "perplexity"] },

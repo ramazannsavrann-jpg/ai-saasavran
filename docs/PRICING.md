@@ -1,23 +1,28 @@
 # Paket maliyet hesabı
 
-Bu tablo `npm run pricing` ile fiyat kartlarından üretilir (fiyatlar 2026-11-06'da kontrol edildi). Her CI çalışmasında yeniden hesaplanır.
+Bu tablo `npm run pricing` ile fiyat kartlarından üretilir (fiyatlar 2026-11-07'de kontrol edildi; OpenAI değerleri gerçek ölçümden). Her CI çalışmasında yeniden hesaplanır.
 
 ## Sonuç
 
 | Paket | Fiyat | Çağrı/ay | Tipik: maliyet / brüt marj | Kötü durum: maliyet / brüt marj |
 |---|---|---|---|---|
-| Starter (eski öneri: 50 soru, 3 tekrar) | $29.00 | 1950 | $15.73 / %46 | $34.26 / %-18 |
-| Starter (yeni: 25 soru, 2 tekrar) | $29.00 | 650 | $7.18 / %75 | $14.53 / %50 |
+| Starter (eski öneri: 50 soru, 3 tekrar) | $29.00 | 1950 | $20.28 / %30 | $35.30 / %-22 |
+| Starter (yeni: 25 soru, 2 tekrar) | $29.00 | 650 | $8.70 / %70 | $14.87 / %49 |
+| Starter önerisi (ChatGPT + Gemini, 20 soru, 2 tekrar) | $29.00 | 347 | $6.53 / %77 | $11.82 / %59 |
 | Starter — sadece Gemini (bugünkü durum) | $29.00 | 217 | $3.30 / %89 | $8.08 / %72 |
-| Pro (eski: 3 marka, 50 soru, 3 tekrar) | $79.00 | 5850 | $44.36 / %44 | $97.47 / %-23 |
-| Pro (yeni: 3 marka, 30 soru, 2 tekrar) | $79.00 | 2340 | $21.29 / %73 | $44.19 / %44 |
-| Agency (yeni: 10 marka, 30 soru, 2 tekrar) | $199.00 | 7800 | $65.48 / %67 | $138.88 / %30 |
+| Pro (eski: 3 marka, 50 soru, 3 tekrar) | $79.00 | 5850 | $58.01 / %27 | $100.59 / %-27 |
+| Pro (yeni: 3 marka, 30 soru, 2 tekrar) | $79.00 | 2340 | $26.75 / %66 | $45.43 / %42 |
+| Agency (yeni: 10 marka, 30 soru, 2 tekrar) | $199.00 | 7800 | $83.68 / %58 | $143.04 / %28 |
 
 Çağrı başı API maliyeti:
-- Tipik: gemini $0.0018, openai $0.0121, perplexity $0.0059
-- Kötü durum: gemini $0.0158, openai $0.0239, perplexity $0.0059
+- Tipik: gemini $0.0018, openai $0.0191, perplexity $0.0059
+- Kötü durum: gemini $0.0158, openai $0.0255, perplexity $0.0059
 
 Ücretsiz Gemini kotasıyla (günde 450 çağrı) izlenebilecek "Starter yeni" marka sayısı: 62
+
+**Gerçek ölçüm (7 Kasım 2026):** ChatGPT (gpt-6-luna + web araması) ile 30 canlı cevap toplam 0,58 $ tuttu: cevap başına ortalama **0,0194 $** (ort. 17.400 girdi / 670 çıktı token, ~1,7 arama). İlk tahmin 0,012 $ idi; arama içeriği token sayısı beklenenden yüksek çıktı. Tablo bu gerçek değerle yeniden hesaplandı.
+
+**Fiyat kararı bekliyor (kullanıcı):** ChatGPT analizinin önerisi "Starter 29 $: 1 marka, 20 soru, ChatGPT + Gemini, haftalık" bu hesapla tipik ~6,5 $, kötü durumda ~11,8 $ maliyet (%77 / %59 brüt marj).
 
 ## Yorum
 

@@ -5,7 +5,7 @@ import { useApp, useLoad } from "../lib/app";
 import { api, INTENT_LABEL, type Brand, type Intent, type MeasurementType, type Prompt, type Run } from "../lib/data";
 import { friendlyError } from "../lib/supabase";
 import { ERROR_CLASS_TEXT, STOP_TEXT, runStatusText } from "../lib/messages";
-import { competitorsInRun, formatDateTime, MIN_SAMPLE, numLoc, pct, providerLabel, rangeText, series, topDomains, usd } from "../lib/report";
+import { competitorsInRun, formatDateTime, MIN_SAMPLE, numLoc, pct, providerLabel, rangeText, series, sourceOpportunities, topDomains, usd } from "../lib/report";
 import { Button, Confirm, DataNotice, Empty, ErrorBox, Field, Loading, Select, TypeBadge } from "../components/ui";
 import { CompareBars, TrendChart } from "../components/Chart";
 import { buildRecommendations } from "../../../engine/src/recommendations.ts";
@@ -217,6 +217,12 @@ function Report({ brand, type }: { brand: Brand; type: MeasurementType }) {
   const live = type === "live_search";
   const engine = type === "simulated" ? "Simülasyonda" : live ? "ChatGPT (canlı web aramasıyla)" : "Gemini";
   const domains = live ? topDomains((answers.data ?? []).flatMap((a) => a.cited_urls ?? [])) : [];
+  const comps = useLoad(() => (live ? api.competitors(brand.id) : Promise.resolve([])), [brand.id, live]);
+  const ments = useLoad(() => (live && answers.data ? api.mentionsFor(answers.data.map((a) => a.id)) : Promise.resolve([])), [live, answers.data]);
+  const host = (w: string | null) => (w ? w.replace(/^https?:\/\//, "").replace(/^www\./, "").split("/")[0].toLowerCase() : "");
+  const opps = live && answers.data && ments.data
+    ? sourceOpportunities(answers.data, ments.data, brand.id, [brand.website, ...(comps.data ?? []).map((c) => c.website)].map(host).filter(Boolean))
+    : [];
   const [open, setOpen] = useState<string | null>(null);
 
   if (vis.loading) return <Loading />;
@@ -277,6 +283,18 @@ function Report({ brand, type }: { brand: Brand; type: MeasurementType }) {
               {answers.loading ? <Loading /> : domains.length === 0 ? <p>Bu ölçümde kaynak gösterilmedi.</p> : (
                 <ol className="domains">
                   {domains.map((d) => <li key={d.domain}><span>{d.domain}</span><span className="num muted">{d.count} kez</span></li>)}
+                </ol>
+              )}
+            </section>
+          )}
+
+          {live && (
+            <section className="panel">
+              <h2>Kaynak fırsatları</h2>
+              <p className="muted">Rakibiniz önerilirken sizin önerilmediğiniz cevaplarda ChatGPT'nin baktığı siteler. Rakiplerin kendi siteleri ayrıca işaretlendi; diğerleri, yer almaya çalışabileceğiniz yerlerdir (içerik, liste, inceleme, basın).</p>
+              {ments.loading || comps.loading ? <Loading /> : opps.length === 0 ? <p>Bu ölçümde böyle bir cevap yok.</p> : (
+                <ol className="domains">
+                  {opps.map((d) => <li key={d.domain}><span>{d.domain}{d.own && <span className="muted"> (rakibin kendi sitesi)</span>}</span><span className="num muted">{d.count} kez</span></li>)}
                 </ol>
               )}
             </section>
