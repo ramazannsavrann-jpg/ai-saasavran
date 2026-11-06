@@ -15,6 +15,7 @@ import { Forgot, Login, Signup } from "./pages/Auth";
 import { Dashboard, NewBrand, NewWorkspace } from "./pages/Dashboard";
 import { BrandPage } from "./pages/Brand";
 import { Account, DemoLab, ProductStatus } from "./pages/Misc";
+import { Privacy, Terms } from "./pages/Legal";
 
 function Private({ children }: { children: React.ReactNode }) {
   const { session, loading } = useApp();
@@ -41,6 +42,8 @@ function App() {
       <Route path="/kayit" element={<PublicOnly><Signup /></PublicOnly>} />
       <Route path="/sifre" element={<PublicOnly><Forgot /></PublicOnly>} />
       <Route path="/durum" element={<StatusRoute />} />
+      <Route path="/gizlilik" element={<Privacy />} />
+      <Route path="/kosullar" element={<Terms />} />
       <Route element={<Private><Shell /></Private>}>
         <Route path="/panel" element={<Dashboard />} />
         <Route path="/durum-ic" element={<ProductStatus />} />

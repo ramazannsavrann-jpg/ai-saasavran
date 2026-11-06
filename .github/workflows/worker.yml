@@ -3,7 +3,9 @@
 # Özel depoda GitHub Actions ücretsiz kotası ayda 2.000 dakikadır; bu iş ~500 dakika kullanır.
 name: Ölçüm işçisi
 on:
+  # Yalnızca ana dal: taslak dallardaki kod gerçek veritabanına dokunmasın
   push:
+    branches: [main]
   workflow_dispatch:
   schedule:
     - cron: "17 5-20 * * *"

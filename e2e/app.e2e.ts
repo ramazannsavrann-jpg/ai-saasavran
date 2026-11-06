@@ -78,6 +78,7 @@ test("Müşteri akışı: kayıt → marka → rakip → soru → ölçüm → r
   await page.getByLabel("Şifre").fill("Guclu-Sifre-2026");
   await page.getByRole("button", { name: "Hesap oluştur" }).click();
   await expect(page.getByRole("alert")).toContainText("aydınlatma metnini");
+  await expect(page.getByRole("link", { name: "Aydınlatma metnini", exact: true })).toHaveAttribute("href", "/gizlilik");
   await page.getByRole("checkbox").check();
   await page.getByRole("button", { name: "Hesap oluştur" }).click();
 
@@ -271,6 +272,18 @@ test("Banka sektörü: hazır sorular, örnek rakipler, düzenleme, gerçek sır
   const track = await page.locator(".bar-target .bar-track").first().evaluate((el) => getComputedStyle(el).backgroundColor);
   expect(fill).not.toBe(track);
   await shot(page, "15-rapor-karanlik");
+});
+
+test("Gizlilik ve koşullar sayfaları herkese açık, iletişim adresi ve taslak uyarısı var", async ({ page }) => {
+  for (const [path, title] of [["/gizlilik", "Gizlilik politikası ve aydınlatma metni"], ["/kosullar", "Kullanım koşulları"]]) {
+    await page.goto(path);
+    await expect(page.getByRole("heading", { name: title, level: 1 })).toBeVisible();
+    await expect(page.getByText("Taslak metin")).toBeVisible();
+    await expect(page.getByRole("link", { name: "aisaasavran@gmail.com" }).first()).toBeVisible();
+  }
+  await page.goto("/gizlilik");
+  await expect(page.getByText("Google bu içerikleri kendi ürünlerini geliştirmek için kullanabilir")).toBeVisible();
+  await shot(page, "16-gizlilik");
 });
 
 test("İzolasyon arayüzde: ikinci müşteri ilk müşterinin markasını göremez", async ({ page }) => {

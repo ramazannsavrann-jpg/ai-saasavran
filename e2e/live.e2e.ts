@@ -21,6 +21,9 @@ test("Canlı site: açılıyor, doğru yapılandırılmış, güvenlik başlıkl
   expect(h["content-security-policy"], "CSP başlığı yok").toContain("default-src 'self'");
   expect(h["x-frame-options"]).toBe("DENY");
 
+  // Google "Publish app" için gereken sayfalar
+  for (const path of ["/gizlilik", "/kosullar"]) expect((await request.get(`${base}${path}`)).status()).toBe(200);
+
   // Doğrudan alt sayfa adresi (SPA yönlendirmesi) çalışıyor mu?
   expect((await request.get(`${base}/marka/olmayan-bir-marka`)).status()).toBe(200);
 

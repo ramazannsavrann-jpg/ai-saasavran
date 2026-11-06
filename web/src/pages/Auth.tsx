@@ -27,7 +27,7 @@ function GoogleButton({ signup }: { signup?: boolean }) {
         </svg>
         {busy ? "Google'a yönlendiriliyor…" : "Google ile devam et"}
       </button>
-      {signup && <p className="field-hint">Google ile devam ederek kişisel verilerinizin hesap ve ölçüm hizmeti için işlenmesine ilişkin aydınlatma metnini kabul etmiş olursunuz.</p>}
+      {signup && <p className="field-hint">Google ile devam ederek <Link to="/gizlilik" target="_blank">aydınlatma metnini</Link> okuduğunuzu ve <Link to="/kosullar" target="_blank">kullanım koşullarını</Link> kabul ettiğinizi onaylarsınız.</p>}
       <ErrorBox message={err} />
       <p className="or" aria-hidden><span>veya e-posta ile</span></p>
     </div>
@@ -43,7 +43,7 @@ function AuthLayout({ title, lead, children }: { title: string; lead: string; ch
         <p>{lead}</p>
       </div>
       <div className="auth-card">{children}</div>
-      <p className="auth-foot"><Link to="/durum">Ürünün şu anki durumu</Link></p>
+      <p className="auth-foot"><Link to="/durum">Ürünün şu anki durumu</Link> · <Link to="/gizlilik">Gizlilik</Link> · <Link to="/kosullar">Koşullar</Link></p>
     </div>
   );
 }
@@ -108,7 +108,7 @@ export function Signup() {
           <Field label={t("auth.password")} name="password" type="password" autoComplete="new-password" hint={t("auth.passwordHint")} minLength={8} required />
           <label className="check">
             <input type="checkbox" name="kvkk" />
-            <span>Kişisel verilerimin hesap ve ölçüm hizmeti için işlenmesine ilişkin aydınlatma metnini okudum. <em>(Metin yayına almadan önce hukuki olarak hazırlanacak.)</em></span>
+            <span><Link to="/gizlilik" target="_blank">Aydınlatma metnini</Link> okudum, <Link to="/kosullar" target="_blank">kullanım koşullarını</Link> kabul ediyorum.</span>
           </label>
           <ErrorBox message={err} />
           <Button type="submit" busy={busy}>{t("auth.signup")}</Button>

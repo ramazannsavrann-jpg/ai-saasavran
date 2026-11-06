@@ -100,6 +100,10 @@ export function Account() {
         <h2>Dil</h2>
         <p className="muted">Arayüz Türkçe. İngilizce çeviri altyapısı hazır, metinler henüz çevrilmedi.</p>
       </section>
+      <section className="panel">
+        <h2>Verileriniz</h2>
+        <p className="muted">Hesabınızın ve verilerinizin silinmesini istemek için kayıtlı e-postanızdan <a href="mailto:aisaasavran@gmail.com">aisaasavran@gmail.com</a> adresine yazın. <Link to="/gizlilik">Gizlilik politikası</Link> · <Link to="/kosullar">Kullanım koşulları</Link></p>
+      </section>
       <Button variant="quiet" onClick={async () => { await sb().auth.signOut(); nav("/giris"); }}>Çıkış yap</Button>
     </div>
   );

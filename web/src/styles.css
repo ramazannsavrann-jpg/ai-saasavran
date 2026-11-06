@@ -323,3 +323,9 @@ form > .btn, .stack > .btn { width: 100%; }
 .answer-meta { font-size: .8rem; color: var(--muted); margin-bottom: 6px; }
 .answer-text { white-space: pre-wrap; font-size: .92rem; line-height: 1.5; }
 .answer mark { background: var(--tint); color: var(--primary-ink); font-weight: 700; padding: 0 2px; border-radius: 3px; }
+
+/* Hukuki sayfalar */
+.legal { max-width: 70ch; }
+.legal > * + * { margin-top: 14px; }
+.legal h2 { margin-top: 28px; }
+.legal hr { border: 0; border-top: 1px solid var(--line); margin: 32px 0 12px; }
