@@ -1,10 +1,12 @@
 # Gerçek durum raporu
 
-**Son güncelleme:** 2026-11-06 · v0.3 (MVP arayüzü)
+**Son güncelleme:** 2026-11-06 · v0.3.1 (ilk bulut yayını)
+
+**Canlı adres:** https://ai-saasavran.pages.dev (Cloudflare Pages + Supabase, ücretsiz katmanlar)
 
 > **Bu sürüm gerçek müşteri kullanımına hazır değildir.** Canlı web araması yapılmıyor; ölçümler Gemini'nin
 > aramasız model bilgisini gösterir ve Gemini uygulamasının güncel cevaplarını temsil etmez.
-> Ayrıca bulut ortamı (Supabase + barındırma) henüz kurulmadı; uygulama yalnızca test ortamında çalışıyor.
+> Bulut ortamı kuruldu (2026-11-06); her yayından sonra canlı site otomatik kontrol ediliyor.
 
 ## Çalışan ve test edilen
 
@@ -36,7 +38,7 @@
 - **Şifre sıfırlama, e-posta doğrulama:** akış hazır; e-posta gönderimi bulutta yapılandırılınca çalışacak.
 - **Önerilme tespiti:** kural tabanlı; belirsiz cümleler için yapay zekâ kontrolü yok.
 - **İngilizce arayüz:** çeviri altyapısı var, metinler çevrilmedi.
-- **Ölçüm işçisi:** kod ve GitHub Actions iş akışı hazır; Supabase bağlanmadığı için çalıştırıldığında "atlandı" der.
+- **Ölçüm işçisi:** GitHub Actions'ta İstanbul 08–23 arası saatlik çalışır; ölçüm sonucu en geç ~1 saatte gelir.
 
 ## Henüz yok
 
@@ -46,7 +48,6 @@
 - Haftalık otomatik ölçüm, PDF rapor, yönetici maliyet paneli
 - Ödeme, paket yükseltme, ekip daveti
 - KVKK aydınlatma metni ve gizlilik politikası (hukuki metin)
-- **Bulut ortamı:** Supabase projesi + arayüz barındırma
 
 ## Gerçek API testleri (GitHub Actions)
 
