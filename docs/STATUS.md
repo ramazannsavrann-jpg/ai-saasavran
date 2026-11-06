@@ -27,6 +27,10 @@
 | Mobil uyum (yatay taşma yok, 48 px dokunma alanları) | ✅ | E2E her ekranda taşma kontrolü |
 | Ürün durumu sayfası (çalışan / kısmen / yok) | ✅ | E2E |
 
+## Test özeti (CI, her push'ta)
+
+26 motor testi · 16 veritabanı kontrolü · 11 entegrasyon testi (gerçek Postgres + Supabase Auth + PostgREST) · 3 mobil uçtan uca test · gizli bilgi taraması · gerçek Gemini bağlantı testi.
+
 ## Kısmen
 
 - **Şifre sıfırlama, e-posta doğrulama:** akış hazır; e-posta gönderimi bulutta yapılandırılınca çalışacak.
@@ -51,6 +55,7 @@
 | `gemini-2.5-flash-lite` | ❌ HTTP 404, yeni kullanıcılara kapalı → `model_not_found` |
 | `gemini-3.5-flash-lite`, arama açık, ücretsiz | ❌ HTTP 429 → `unsupported_feature` |
 | `gemini-3.5-flash-lite`, arama kapalı, ücretsiz | ✅ çalışıyor, maliyet 0 $ |
+| Mobil uçtan uca test, gerçek Gemini ile (kayıt → ölçüm → rapor) | ✅ CI'da geçti (2026-11-06) |
 
 ## Canlı aramayı sonradan açmak için (mimari hazır)
 
