@@ -86,7 +86,7 @@ test("Gemini: kayıtlı cevap ayrıştırılır, ücretsiz katmanda maliyet 0, �
   assert.equal(r.dataOrigin, "live_api");
   assert.equal(r.billing, "free");
   assert.equal(r.costUsd, 0);
-  assert.ok(r.paidEquivalentUsd > 0.035 && r.paidEquivalentUsd < 0.036);
+  assert.ok(r.paidEquivalentUsd > 0.0142 && r.paidEquivalentUsd < 0.0143);
   assert.deepEqual(r.citedUrls, ["https://aliusta-demo.com", "https://tripadvisor.com.tr"]);
   assert.deepEqual(r.searchQueries, ["antalya en iyi döner"]);
   const us = analyzeResponse(r, brands).find((h) => h.brandId === "us")!;
@@ -101,7 +101,7 @@ test("Gemini: istek doğru uç noktaya, anahtar başlıkta, arama aracı açık 
     return new Response(JSON.stringify(json), { status: 200 });
   });
   await ok.ask("p1", "Antalya en iyi döner?");
-  assert.equal(seen!.url, "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent");
+  assert.equal(seen!.url, "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite:generateContent");
   assert.equal((seen!.init.headers as Record<string, string>)["x-goog-api-key"], "KEY123");
   assert.ok(!seen!.url.includes("KEY123"), "anahtar URL'de olmamalı");
   assert.deepEqual(JSON.parse(seen!.init.body as string).tools, [{ google_search: {} }]);

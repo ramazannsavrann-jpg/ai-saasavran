@@ -1,8 +1,9 @@
 // Gemini Developer API (Google AI Studio anahtarı) adaptörü.
 // Uç nokta: POST https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent
 // Arama dayanağı: tools: [{ google_search: {} }]
-// Not: Ücretsiz katmanda arama dayanağı yalnızca 2.5 Flash / Flash-Lite'ta var (günde 500 istek, ikisi ortak).
-// Gemini 3.x modellerinde ücretsiz katmanda arama dayanağı YOK (fiyat sayfası, 2026-11-06).
+// 2026-11-06 gerçek test: gemini-2.5-flash-lite yeni kullanıcılara kapalı (HTTP 404); Google 3.5 Flash-Lite'ı öneriyor.
+// Fiyat sayfasına göre Gemini 3.x'te ücretsiz katmanda arama dayanağı YOK; ücretli katmanda ayda 5.000 ücretsiz,
+// sonra 1.000 dayanaklı istek 14 $.
 
 import {
   type FetchLike, type Provider, type ProviderConfig, type ProviderResult,
@@ -14,15 +15,15 @@ const GROUNDING_REDIRECT_HOST = "vertexaisearch.cloud.google.com";
 
 export const GEMINI_FREE_DEFAULT: ProviderConfig = {
   provider: "gemini",
-  model: "gemini-2.5-flash-lite",
+  model: "gemini-3.5-flash-lite",
   billing: "free",
   useSearch: true,
-  // Ücretli eşdeğer: $0.10 / $0.40 per 1M; ücretsiz günlük kota aşılınca 1.000 dayanaklı istek 35 $.
+  // Ücretli eşdeğer: $0.30 / $2.50 per 1M; aylık 5.000 ücretsiz dayanaktan sonra 1.000 istek 14 $.
   price: {
-    inputPerMTok: 0.10, outputPerMTok: 0.40, perCall: 0.035,
+    inputPerMTok: 0.30, outputPerMTok: 2.50, perCall: 0.014,
     source: "https://aistudio.google.com/docs/pricing", checkedOn: "2026-11-06",
   },
-  freeDailyCallLimit: 450, // sağlayıcı sınırı 500; %10 pay bırakıldı
+  freeDailyCallLimit: 450, // Google ücretsiz sınırları artık yayımlamıyor; AI Studio'dan teyit edilecek. Kendi güvenli tavanımız.
   worstCaseTokens: { input: 1_000, output: 2_000 },
 };
 

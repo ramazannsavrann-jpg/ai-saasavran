@@ -30,9 +30,14 @@ export function buildProviders(env: Record<string, string | undefined>, fetchFn?
     if (tier === "paid" && !allowPaid) {
       status.push({ provider: "gemini", enabled: false, reason: "GEMINI_TIER=paid ama ALLOW_PAID_API kapalı" });
     } else {
-      const cfg = { ...GEMINI_FREE_DEFAULT, billing: tier as "free" | "paid", model: env.GEMINI_MODEL || GEMINI_FREE_DEFAULT.model };
+      const cfg = {
+        ...GEMINI_FREE_DEFAULT,
+        billing: tier as "free" | "paid",
+        model: env.GEMINI_MODEL || GEMINI_FREE_DEFAULT.model,
+        useSearch: env.GEMINI_SEARCH !== "false",
+      };
       providers.push(new GeminiProvider(env.GEMINI_API_KEY, cfg, fetchFn));
-      status.push({ provider: "gemini", enabled: true, reason: `${cfg.model}, ${tier} katman` });
+      status.push({ provider: "gemini", enabled: true, reason: `${cfg.model}, ${tier} katman, arama ${cfg.useSearch ? "açık" : "kapalı"}` });
     }
   }
 
