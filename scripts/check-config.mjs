@@ -47,6 +47,28 @@ if (ak === "missing") add("SUPABASE_ANON_KEY", false, "Eksik");
 else if (ak === "publishable" || ak === "anon") {
   const s = base ? await http(`${base}/auth/v1/settings`, { apikey: env.SUPABASE_ANON_KEY }) : "URL olmadan test edilemedi";
   add("SUPABASE_ANON_KEY", s === 200, s === 200 ? `${KIND_TEXT[ak]}, Supabase kabul etti` : `${KIND_TEXT[ak]}, ama Supabase kabul etmedi (${s})`);
+  if (s === 200) {
+    try {
+      const st = await (await fetch(`${base}/auth/v1/settings`, { headers: { apikey: env.SUPABASE_ANON_KEY } })).json();
+      add("Supabase: Google ile giriş", !!st.external?.google, st.external?.google ? "Açık" : "Kapalı (Supabase → Authentication → Providers → Google)");
+      add("Supabase: e-posta doğrulaması", !st.mailer_autoconfirm, st.mailer_autoconfirm ? "KAPALI (herkes doğrulamasız kayıt olabilir)" : "Açık");
+      // Google gerçekten bu istemciyi tanıyor mu? Yönlendirmeyi izlemeden Google'ın cevabına bak.
+      if (st.external?.google) {
+        const r = await fetch(`${base}/auth/v1/authorize?provider=google`, { redirect: "manual", headers: { apikey: env.SUPABASE_ANON_KEY } });
+        const loc = r.headers.get("location") || "";
+        if (!loc.includes("accounts.google.com")) add("Google istemcisi", false, `Supabase Google'a yönlendirmedi (${r.status})`);
+        else {
+          const cid = new URL(loc).searchParams.get("client_id") || "";
+          const g = await fetch(loc, { redirect: "manual" });
+          const gloc = g.headers.get("location") || "";
+          const bad = /error|invalid_client/i.test(gloc) || g.status >= 400;
+          add("Google istemcisi", cid.endsWith(".apps.googleusercontent.com") && !bad,
+            !cid.endsWith(".apps.googleusercontent.com") ? "Client ID biçimi yanlış (.apps.googleusercontent.com ile bitmeli)"
+            : bad ? "Google bu istemciyi veya geri dönüş adresini kabul etmedi" : "Google istemciyi tanıdı");
+        }
+      }
+    } catch (e) { add("Supabase giriş ayarları", false, `okunamadı (${e.name})`); }
+  }
 } else add("SUPABASE_ANON_KEY", false, `YANLIŞ: buraya ${KIND_TEXT[ak] ?? ak} girilmiş. Publishable (sb_publishable_) veya anon anahtarı olmalı.`);
 
 // --- SUPABASE_SERVICE_ROLE_KEY
