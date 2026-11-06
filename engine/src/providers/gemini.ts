@@ -7,7 +7,7 @@
 
 import {
   type FetchLike, type Provider, type ProviderConfig, type ProviderResult,
-  ProviderError, estimateCost,
+  ProviderError, estimateCost, classifyHttpError, networkError,
 } from "./types.ts";
 
 const BASE = "https://generativelanguage.googleapis.com/v1beta/models";
@@ -56,11 +56,11 @@ export function resolveGroundingUrl(uri: string | undefined, title: string | und
 
 export function parseGeminiResponse(json: GeminiResponse, promptId: string, cfg: ProviderConfig): ProviderResult {
   if (json.promptFeedback?.blockReason) {
-    throw new ProviderError(`Gemini isteği engelledi: ${json.promptFeedback.blockReason}`, { retryable: false });
+    throw new ProviderError(`Gemini isteği engelledi: ${json.promptFeedback.blockReason}`, { kind: "invalid_request" });
   }
   const cand = json.candidates?.[0];
   const text = (cand?.content?.parts ?? []).map((p) => p.text ?? "").join("").trim();
-  if (!text) throw new ProviderError(`Gemini boş cevap döndü (finishReason=${cand?.finishReason ?? "?"})`, { retryable: true });
+  if (!text) throw new ProviderError(`Gemini boş cevap döndü (finishReason=${cand?.finishReason ?? "?"})`, { kind: "transient" });
 
   const gm = cand?.groundingMetadata;
   const urls = (gm?.groundingChunks ?? [])
@@ -108,18 +108,21 @@ export class GeminiProvider implements Provider {
       ...(this.config.useSearch ? { tools: [{ google_search: {} }] } : {}),
       generationConfig: { maxOutputTokens: this.config.worstCaseTokens.output, temperature: 1 },
     };
-    const res = await this.fetchFn(`${BASE}/${encodeURIComponent(this.config.model)}:generateContent`, {
-      method: "POST",
-      headers: { "content-type": "application/json", "x-goog-api-key": this.apiKey },
-      body: JSON.stringify(body),
-      signal: signal ?? AbortSignal.timeout(60_000),
-    });
-    if (!res.ok) {
-      const detail = (await res.text()).slice(0, 300).replace(this.apiKey, "***");
-      throw new ProviderError(`Gemini HTTP ${res.status}: ${detail}`, {
-        status: res.status,
-        retryable: res.status === 429 || res.status >= 500,
+    let res: Response;
+    try {
+      res = await this.fetchFn(`${BASE}/${encodeURIComponent(this.config.model)}:generateContent`, {
+        method: "POST",
+        headers: { "content-type": "application/json", "x-goog-api-key": this.apiKey },
+        body: JSON.stringify(body),
+        signal: signal ?? AbortSignal.timeout(60_000),
       });
+    } catch (e) {
+      throw networkError("Gemini", e);
+    }
+    if (!res.ok) {
+      const raw = (await res.text()).split(this.apiKey).join("***");
+      const kind = classifyHttpError(res.status, raw, { searchRequested: this.config.useSearch, freeTier: this.config.billing === "free" });
+      throw new ProviderError(`Gemini HTTP ${res.status} [${kind}]: ${raw.slice(0, 600)}`, { kind, status: res.status });
     }
     return parseGeminiResponse((await res.json()) as GeminiResponse, promptId, this.config);
   }

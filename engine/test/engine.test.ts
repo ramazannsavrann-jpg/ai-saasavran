@@ -8,7 +8,7 @@ import { GeminiProvider, parseGeminiResponse, resolveGroundingUrl, GEMINI_FREE_D
 import { parseOpenAIResponse, OPENAI_DEFAULT } from "../src/providers/openai.ts";
 import { PerplexityProvider } from "../src/providers/perplexity.ts";
 import { buildProviders, assertBillingAllowed, PaidApiBlocked } from "../src/providers/registry.ts";
-import type { ProviderResult } from "../src/providers/types.ts";
+import { type ProviderResult, classifyHttpError } from "../src/providers/types.ts";
 import { runPrompts } from "../src/pipeline.ts";
 import { InMemoryUsageGate } from "../src/usage.ts";
 import { buildReportHeader, MixedOriginError } from "../src/report.ts";
@@ -202,13 +202,54 @@ test("Ücretsiz katman: günlük sağlayıcı sınırı dolunca durur; ücretsiz
   assert.deepEqual([snap.freeCalls, snap.paidUsd, snap.paused], [2, 0, null]);
 });
 
-test("Ücretsiz katmanda 429: tekrar denemeden durur (kota yakılmaz, ücretliye geçilmez)", async () => {
+test("Ücretsiz katmanda arama + 429 → desteklenmeyen özellik; tekrar denemeden durur", async () => {
   let calls = 0;
-  const provider = new GeminiProvider("k", GEMINI_FREE_DEFAULT, async () => { calls++; return new Response("quota", { status: 429 }); });
+  const provider = new GeminiProvider("k", GEMINI_FREE_DEFAULT, async () => { calls++; return new Response('{"error":{"code":429,"status":"RESOURCE_EXHAUSTED"}}', { status: 429 }); });
   const out = await runPrompts({ workspaceId: "w", provider, prompts: [{ id: "p", text: "x" }, { id: "q", text: "y" }], repetitions: 1,
     guard: new BudgetGuard(1), cache: cache(), gate: gateWith(), env: {}, day: DAY, sleep: async () => {} });
-  assert.equal(out.stop, "provider_free_daily_limit");
+  assert.equal(out.stop, "unsupported_feature");
+  assert.equal(out.errorClass, "unsupported_feature");
   assert.equal(calls, 1);
+});
+
+test("Ücretsiz katmanda aramasız 429 → kota aşımı; ücretliye geçmeden durur", async () => {
+  let calls = 0;
+  const provider = new GeminiProvider("k", { ...GEMINI_FREE_DEFAULT, useSearch: false }, async () => { calls++; return new Response("quota", { status: 429 }); });
+  const out = await runPrompts({ workspaceId: "w", provider, prompts: [{ id: "p", text: "x" }, { id: "q", text: "y" }], repetitions: 1,
+    guard: new BudgetGuard(1), cache: cache(), gate: gateWith(), env: {}, day: DAY, sleep: async () => {} });
+  assert.equal(out.stop, "quota_exceeded");
+  assert.equal(calls, 1);
+});
+
+test("Hata sınıflandırması: 5 sınıf + geçersiz istek", () => {
+  const free = { searchRequested: false, freeTier: true };
+  assert.equal(classifyHttpError(400, '{"error":{"message":"API key not valid. Please pass a valid API key.","status":"INVALID_ARGUMENT"}}', free), "auth_error");
+  assert.equal(classifyHttpError(403, '{"error":{"status":"PERMISSION_DENIED"}}', free), "auth_error");
+  assert.equal(classifyHttpError(404, '{"error":{"message":"This model models/gemini-2.5-flash-lite is no longer available to new users."}}', free), "model_not_found");
+  assert.equal(classifyHttpError(429, "Quota exceeded for metric: x, limit: 0, model: y", free), "unsupported_feature");
+  assert.equal(classifyHttpError(429, "Quota exceeded, limit: 500", free), "quota_exceeded");
+  assert.equal(classifyHttpError(400, "Search Grounding is not supported for this model", free), "unsupported_feature");
+  assert.equal(classifyHttpError(503, "overloaded", free), "transient");
+  assert.equal(classifyHttpError(400, "bad json", free), "invalid_request");
+});
+
+test("Ağ hatası (fetch patlar) → geçici; sınırlı tekrar", async () => {
+  let calls = 0;
+  const provider = new GeminiProvider("k", GEMINI_FREE_DEFAULT, async () => { calls++; throw new TypeError("fetch failed"); });
+  const out = await runPrompts({ workspaceId: "w", provider, prompts: [{ id: "p", text: "x" }], repetitions: 1,
+    guard: new BudgetGuard(1), cache: cache(), gate: gateWith(), env: {}, day: DAY, sleep: async () => {} });
+  assert.equal(calls, 3);
+  assert.equal(out.errors[0].kind, "transient");
+});
+
+test("Arka arkaya 3 başarısız soru → akış durur (kontrolsüz deneme yok)", async () => {
+  let calls = 0;
+  const provider = new GeminiProvider("k", GEMINI_FREE_DEFAULT, async () => { calls++; return new Response("bad", { status: 400 }); });
+  const prompts = Array.from({ length: 10 }, (_, i) => ({ id: `p${i}`, text: `s${i}` }));
+  const out = await runPrompts({ workspaceId: "w", provider, prompts, repetitions: 1,
+    guard: new BudgetGuard(1), cache: cache(), gate: gateWith(), env: {}, day: DAY, sleep: async () => {} });
+  assert.equal(out.stop, "too_many_failures");
+  assert.equal(calls, 3);
 });
 
 test("Geçici hata (5xx): sınırlı tekrar dener, sonsuz döngü yok", async () => {

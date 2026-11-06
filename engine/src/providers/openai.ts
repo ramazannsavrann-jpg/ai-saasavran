@@ -4,7 +4,7 @@
 
 import {
   type FetchLike, type Provider, type ProviderConfig, type ProviderResult,
-  ProviderError, estimateCost,
+  ProviderError, estimateCost, classifyHttpError, networkError,
 } from "./types.ts";
 
 export const OPENAI_DEFAULT: ProviderConfig = {
@@ -34,7 +34,7 @@ export function parseOpenAIResponse(json: OpenAIResponse, promptId: string, cfg:
   const out = json.output ?? [];
   const msgParts = out.filter((o) => o.type === "message").flatMap((o) => o.content ?? []);
   const text = msgParts.filter((c) => c.type === "output_text").map((c) => c.text ?? "").join("").trim();
-  if (!text) throw new ProviderError("OpenAI boş cevap döndü", { retryable: true });
+  if (!text) throw new ProviderError("OpenAI boş cevap döndü", { kind: "transient" });
   const urls = msgParts.flatMap((c) => c.annotations ?? []).filter((a) => a.type === "url_citation" && a.url).map((a) => a.url!);
   const searchCalls = out.filter((o) => o.type === "web_search_call");
   const inputTokens = json.usage?.input_tokens ?? 0;
@@ -59,21 +59,26 @@ export class OpenAIProvider implements Provider {
     this.apiKey = apiKey; this.config = config; this.fetchFn = fetchFn;
   }
   async ask(promptId: string, prompt: string, signal?: AbortSignal): Promise<ProviderResult> {
-    const res = await this.fetchFn("https://api.openai.com/v1/responses", {
-      method: "POST",
-      headers: { "content-type": "application/json", authorization: `Bearer ${this.apiKey}` },
-      body: JSON.stringify({
-        model: this.config.model,
-        input: prompt,
-        ...(this.config.useSearch ? { tools: [{ type: "web_search" }] } : {}),
-        max_output_tokens: this.config.worstCaseTokens.output,
-      }),
-      signal: signal ?? AbortSignal.timeout(90_000),
-    });
-    if (!res.ok) {
-      throw new ProviderError(`OpenAI HTTP ${res.status}: ${(await res.text()).slice(0, 300)}`, {
-        status: res.status, retryable: res.status === 429 || res.status >= 500,
+    let res: Response;
+    try {
+      res = await this.fetchFn("https://api.openai.com/v1/responses", {
+        method: "POST",
+        headers: { "content-type": "application/json", authorization: `Bearer ${this.apiKey}` },
+        body: JSON.stringify({
+          model: this.config.model,
+          input: prompt,
+          ...(this.config.useSearch ? { tools: [{ type: "web_search" }] } : {}),
+          max_output_tokens: this.config.worstCaseTokens.output,
+        }),
+        signal: signal ?? AbortSignal.timeout(90_000),
       });
+    } catch (e) {
+      throw networkError("OpenAI", e);
+    }
+    if (!res.ok) {
+      const raw = (await res.text()).split(this.apiKey).join("***");
+      const kind = classifyHttpError(res.status, raw, { searchRequested: this.config.useSearch, freeTier: false });
+      throw new ProviderError(`OpenAI HTTP ${res.status} [${kind}]: ${raw.slice(0, 600)}`, { kind, status: res.status });
     }
     return parseOpenAIResponse((await res.json()) as OpenAIResponse, promptId, this.config);
   }

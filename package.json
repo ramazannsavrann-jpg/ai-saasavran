@@ -8,12 +8,18 @@
   "scripts": {
     "test": "node --test \"engine/test/*.test.ts\"",
     "test:db": "node scripts/check-migrations.mjs",
-    "test:all": "npm run scan:secrets && npm test && npm run test:db",
+    "test:all": "npm run scan:secrets && npm test && npm run test:db && npm run test:integration",
     "pricing": "node scripts/pricing-report.ts",
     "smoke:gemini": "node scripts/gemini-smoke.ts",
-    "scan:secrets": "node scripts/scan-secrets.mjs"
+    "scan:secrets": "node scripts/scan-secrets.mjs",
+    "test:integration": "node --test --test-concurrency=1 \"engine/test-integration/*.test.ts\"",
+    "stack": "node scripts/stack/stack.mjs",
+    "worker": "node scripts/worker.ts"
   },
   "devDependencies": {
     "@electric-sql/pglite": "^0.3.0"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.119.0"
   }
 }

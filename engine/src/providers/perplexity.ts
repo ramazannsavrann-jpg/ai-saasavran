@@ -21,6 +21,6 @@ export const PERPLEXITY_DEFAULT: ProviderConfig = {
 export class PerplexityProvider implements Provider {
   readonly config = PERPLEXITY_DEFAULT;
   async ask(): Promise<ProviderResult> {
-    throw new ProviderError("Perplexity adaptörü henüz yok: Agent API şeması doğrulanmadı", { retryable: false });
+    throw new ProviderError("Perplexity adaptörü henüz yok: Agent API şeması doğrulanmadı", { kind: "unsupported_feature" });
   }
 }

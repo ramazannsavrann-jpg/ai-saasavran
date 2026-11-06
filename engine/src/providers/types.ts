@@ -46,14 +46,58 @@ export interface Provider {
   ask(promptId: string, prompt: string, signal?: AbortSignal): Promise<ProviderResult>;
 }
 
+/** API hata sınıfları — veritabanındaki api_error_class ile birebir aynı. */
+export type ApiErrorClass =
+  | "unsupported_feature" // istenen özellik bu model/katmanda yok (ör. ücretsiz katmanda arama)
+  | "quota_exceeded"      // kota/oran sınırı doldu
+  | "auth_error"          // anahtar geçersiz / yetki yok
+  | "model_not_found"     // model yok veya kullanıcıya kapalı
+  | "transient"           // geçici bağlantı/sunucu hatası, tekrar denenebilir
+  | "invalid_request";    // istek biçimi hatalı
+
+export const RETRYABLE: Record<ApiErrorClass, boolean> = {
+  unsupported_feature: false, quota_exceeded: false, auth_error: false,
+  model_not_found: false, transient: true, invalid_request: false,
+};
+
 export class ProviderError extends Error {
-  readonly retryable: boolean;
+  readonly kind: ApiErrorClass;
   readonly status?: number;
-  constructor(message: string, opts: { retryable: boolean; status?: number }) {
+  constructor(message: string, opts: { kind: ApiErrorClass; status?: number }) {
     super(message);
-    this.retryable = opts.retryable;
+    this.kind = opts.kind;
     this.status = opts.status;
   }
+  get retryable() { return RETRYABLE[this.kind]; }
+}
+
+/**
+ * HTTP hatasını sınıflandırır. Sağlayıcıya özgü ipuçları (Google "status" alanı, "limit: 0" gibi)
+ * metin içinde aranır; emin olunamayan 4xx → invalid_request, 5xx → transient.
+ */
+export function classifyHttpError(status: number, body: string, ctx: { searchRequested: boolean; freeTier: boolean }): ApiErrorClass {
+  const b = body.toLowerCase();
+  if (status === 401 || b.includes("api key not valid") || b.includes("api_key_invalid") || b.includes("unauthenticated") || b.includes("invalid api key")) return "auth_error";
+  if (status === 403 || b.includes("permission_denied")) {
+    return b.includes("not supported") || b.includes("not available") ? "unsupported_feature" : "auth_error";
+  }
+  if (status === 404 || b.includes("no longer available") || (b.includes("model") && b.includes("not found"))) return "model_not_found";
+  if (status === 429 || b.includes("resource_exhausted")) {
+    // Ücretsiz katmanda sıfır kota = özellik bu katmanda hiç yok
+    if (/limit:\s*0\b/.test(b) || /"quotavalue":\s*"0"/.test(b)) return "unsupported_feature";
+    // Gemini 3.x ücretsiz katmanında arama dayanağı yok (fiyat sayfası; 2026-11-06 gerçek testte 429 döndü).
+    if (ctx.searchRequested && ctx.freeTier) return "unsupported_feature";
+    return "quota_exceeded";
+  }
+  if (status === 400 && (b.includes("not supported") || b.includes("is not available") || b.includes("unsupported"))) return "unsupported_feature";
+  if (status === 408 || status >= 500) return "transient";
+  return "invalid_request";
+}
+
+/** fetch'in kendisi patlarsa (ağ, zaman aşımı) → geçici hata. */
+export function networkError(provider: string, e: unknown): ProviderError {
+  const msg = e instanceof Error ? `${e.name}: ${e.message}` : String(e);
+  return new ProviderError(`${provider} bağlantı hatası: ${msg}`, { kind: "transient" });
 }
 
 export function estimateCost(p: PriceCard, inTok: number, outTok: number): number {
