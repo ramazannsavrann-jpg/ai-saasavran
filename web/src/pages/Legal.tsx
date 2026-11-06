@@ -1,7 +1,7 @@
 // Gizlilik politikası ve kullanım koşulları — TASLAK. Gerçek müşteri kullanımından önce hukuki inceleme gerekir.
 import { Link } from "react-router-dom";
 
-export const CONTACT_EMAIL = "aisaasavran@gmail.com";
+export const CONTACT_EMAIL = "info@aisaasavran.com";
 const UPDATED = "6 Kasım 2026";
 
 function DraftNotice() {

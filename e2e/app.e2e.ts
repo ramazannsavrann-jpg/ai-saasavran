@@ -291,7 +291,7 @@ test("Gizlilik ve koşullar sayfaları herkese açık, iletişim adresi ve tasla
     await page.goto(path);
     await expect(page.getByRole("heading", { name: title, level: 1 })).toBeVisible();
     await expect(page.getByText("Taslak metin")).toBeVisible();
-    await expect(page.getByRole("link", { name: "aisaasavran@gmail.com" }).first()).toBeVisible();
+    await expect(page.getByRole("link", { name: "info@aisaasavran.com" }).first()).toBeVisible();
   }
   await page.goto("/gizlilik");
   await expect(page.getByText("Google bu içerikleri kendi ürünlerini geliştirmek için kullanabilir")).toBeVisible();
