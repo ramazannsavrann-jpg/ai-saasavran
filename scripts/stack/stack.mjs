@@ -164,7 +164,7 @@ export async function startStack({ quiet = true, webDir = join(ROOT, "web", "dis
     `server-host = "127.0.0.1"`, `server-port = ${PORTS.rest}`, `db-pool = 5`, `log-level = "warn"`,
   ].join("\n"));
   const rest = log(spawn(join(BIN, "postgrest"), [restConf]), "postgrest");
-  await waitFor(`http://127.0.0.1:${PORTS.rest}/`, "PostgREST").catch((e) => { throw new Error(e.message + "\n" + rest.logs()); });
+  await waitFor(`http://127.0.0.1:${PORTS.rest}/`, "PostgREST", 90_000).catch((e) => { throw new Error(e.message + "\n" + rest.logs()); });
 
   step("gateway");
   // 5) Ağ geçidi
