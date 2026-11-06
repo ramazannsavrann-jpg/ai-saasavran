@@ -1,6 +1,6 @@
 # Gerçek durum raporu
 
-**Son güncelleme:** 2026-11-06 · v0.2
+**Son güncelleme:** 2026-11-06 · v0.2.1
 
 ## Çalışan ve test edilen
 
@@ -16,9 +16,21 @@
 | Veritabanı şeması, RLS, kota/durdurma fonksiyonları | 15 kontrol (gerçek Postgres, PGlite) |
 | Gizli bilgi taraması | CI'da her push |
 
+## Gerçek API testi (GitHub Actions, 2026-11-06)
+
+| Deneme | Sonuç |
+|---|---|
+| `gemini-2.5-flash-lite` | ❌ HTTP 404 — yeni kullanıcılara kapalı |
+| `gemini-3.5-flash-lite`, arama **açık**, ücretsiz anahtar | ❌ HTTP 429 — ücretsiz katmanda arama dayanağı kotası yok |
+| `gemini-3.5-flash-lite`, arama **kapalı**, ücretsiz anahtar | ✅ Çalıştı: 2,1 sn, 24/194 token, maliyet 0 $ (ücretli eşdeğeri 0,0005 $) |
+
+**Sonuç:** 0 $ ile gerçek Gemini ölçümü yalnızca **aramasız** yapılabiliyor. Bu, modelin eğitim verisinden bildiğini ölçer; Gemini uygulamasının canlı web aramalı cevaplarını temsil etmez. Bu tür sonuçlar `api_no_search` olarak etiketlenir ve raporda ayrıca belirtilmelidir.
+
+**Bilinen eksik:** Akış, ücretsiz katmandaki her 429'u "günlük kota doldu" olarak yorumluyor. Arama dayanağının hiç olmadığı durum ayrı bir neden olarak ayrılmalı.
+
 ## Yazıldı ama gerçek ortamda test EDİLMEDİ
 
-- **Gemini gerçek bağlantısı** — `GEMINI_API_KEY` GitHub'a eklenince CI'daki `gemini-smoke` işi test edecek.
+- **Gemini arama dayanaklı ölçüm** — Google faturalandırması açılmadan mümkün değil.
 - **OpenAI gerçek bağlantısı** — ücretli; izin verilmedi.
 
 ## Henüz yok
