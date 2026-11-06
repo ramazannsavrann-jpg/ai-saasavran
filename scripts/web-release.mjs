@@ -24,11 +24,12 @@ writeFileSync("web/dist/config.json", JSON.stringify({
 
 const csp = [
   "default-src 'self'",
-  `connect-src 'self' ${url.origin} ${url.origin.replace("https://", "wss://")}`,
+  // Cloudflare Web Analytics (çerezsiz ziyaret sayımı) alan adına otomatik eklenir
+  `connect-src 'self' ${url.origin} ${url.origin.replace("https://", "wss://")} https://cloudflareinsights.com`,
   "img-src 'self' data:",
   "style-src 'self' 'unsafe-inline'", // React satır içi genişlik stilleri (grafik çubukları)
   "font-src 'self'",
-  "script-src 'self'",
+  "script-src 'self' https://static.cloudflareinsights.com",
   "frame-ancestors 'none'",
   "base-uri 'self'",
   "form-action 'self'",

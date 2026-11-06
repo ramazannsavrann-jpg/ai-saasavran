@@ -43,7 +43,7 @@ export function Privacy() {
         <li><strong>Ölçüm sonuçları:</strong> sorularınıza yapay zekâ servislerinden gelen cevaplar ve bunlardan hesaplanan oranlar.</li>
         <li><strong>Kullanım kayıtları:</strong> ölçüm sayısı, hata kayıtları ve maliyet hesapları (kota ve güvenlik için).</li>
       </ul>
-      <p>Reklam veya analiz amaçlı çerez kullanmıyoruz. Tarayıcınızda yalnızca oturumunuzu açık tutmak ve seçtiğiniz çalışma alanını hatırlamak için gerekli bilgiler saklanır.</p>
+      <p>Reklam veya analiz amaçlı çerez kullanmıyoruz. Ziyaretçi sayısını görmek için Cloudflare'ın çerez kullanmayan, kişiyi tanımlamayan sayfa görüntüleme sayımı (Cloudflare Web Analytics) açıktır. Tarayıcınızda yalnızca oturumunuzu açık tutmak ve seçtiğiniz çalışma alanını hatırlamak için gerekli bilgiler saklanır.</p>
 
       <h2>Neden işliyoruz (hukuki sebep)</h2>
       <ul className="plain">
@@ -56,7 +56,7 @@ export function Privacy() {
       <p>Hizmeti sunmak için aşağıdaki hizmet sağlayıcıları kullanıyoruz. Bu sağlayıcıların sunucuları Türkiye dışında olduğundan verileriniz yurt dışına aktarılır:</p>
       <ul className="plain">
         <li><strong>Supabase</strong> (veritabanı ve giriş sistemi; sunucu: Frankfurt, Almanya).</li>
-        <li><strong>Cloudflare</strong> (web sitesinin barındırılması).</li>
+        <li><strong>Cloudflare</strong> (web sitesinin barındırılması, alan adı ve çerezsiz ziyaret sayımı).</li>
         <li><strong>Google</strong> (Gemini yapay zekâ servisi ve Google ile giriş). Ölçüm yaparken yazdığınız sorular Gemini'ye gönderilir. Ücretsiz katmanı kullandığımız için <strong>Google bu içerikleri kendi ürünlerini geliştirmek için kullanabilir</strong>. Bu nedenle sorulara kişisel veri (ad, telefon, adres vb.) yazmayın.</li>
         <li><strong>GitHub</strong> (ölçümleri çalıştıran otomasyon altyapısı).</li>
       </ul>
