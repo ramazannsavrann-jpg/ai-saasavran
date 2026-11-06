@@ -165,6 +165,29 @@ test("Müşteri akışı: kayıt → marka → rakip → soru → ölçüm → r
   await shot(page, "10-urun-durumu");
 });
 
+test("Google ile giriş: düğme görünür ve doğru Google yetkilendirme adresine yönlendirir", async ({ page }) => {
+  let googleUrl = "";
+  let blockedByNetwork = false;
+  await page.route("https://accounts.google.com/**", (route) => { googleUrl = route.request().url(); return route.abort(); });
+  page.on("response", async (r) => {
+    if (r.url().includes("/auth/v1/authorize") && r.status() === 400 && (await r.text().catch(() => "")).includes("openid-configuration")) blockedByNetwork = true;
+  });
+  await page.goto("/giris");
+  await page.getByRole("button", { name: "Google ile devam et" }).click();
+  await expect.poll(() => googleUrl || (blockedByNetwork ? "blocked" : ""), { timeout: 15_000 }).not.toBe("");
+  // Bazı geliştirme ortamları Google'a erişemez (giriş sunucusu Google ayarını indiremez); CI'da tam çalışır.
+  test.skip(blockedByNetwork && !process.env.CI, "Bu ortamdan accounts.google.com erişilemiyor");
+  expect(googleUrl).toContain("accounts.google.com");
+  const u = new URL(googleUrl);
+  expect(u.searchParams.get("client_id")).toBe("test-google-client-id");
+  expect(u.searchParams.get("redirect_uri")).toBe("http://127.0.0.1:54321/auth/v1/callback");
+  expect(u.searchParams.get("scope")).toContain("email");
+  await page.goto("/kayit");
+  await expect(page.getByRole("button", { name: "Google ile devam et" })).toBeVisible();
+  await expect(page.getByText("Google ile devam ederek")).toBeVisible();
+  await shot(page, "12-kayit-google");
+});
+
 test("İzolasyon arayüzde: ikinci müşteri ilk müşterinin markasını göremez", async ({ page }) => {
   await page.goto("/kayit");
   await expect(page.getByRole("heading", { name: "Hesap oluşturun" })).toBeVisible();

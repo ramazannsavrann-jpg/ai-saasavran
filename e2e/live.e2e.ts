@@ -28,7 +28,7 @@ test("Canlı site: açılıyor, doğru yapılandırılmış, güvenlik başlıkl
   const auth = await request.get(`${cfg.supabaseUrl}/auth/v1/settings`, { headers: { apikey: cfg.supabaseAnonKey } });
   expect(auth.status()).toBe(200);
   const settings = await auth.json();
-  console.log(`E-posta doğrulaması: ${settings.mailer_autoconfirm ? "KAPALI" : "açık"}; e-posta ile kayıt: ${settings.external?.email ? "açık" : "KAPALI"}`);
+  console.log(`E-posta doğrulaması: ${settings.mailer_autoconfirm ? "KAPALI" : "açık"}; e-posta ile kayıt: ${settings.external?.email ? "açık" : "KAPALI"}; Google ile giriş: ${settings.external?.google ? "açık" : "kapalı (Supabase'de ayarlanmadı)"}`);
 
   // Tarayıcıda gerçekten açılıyor mu (CSP uygulamayı bozuyor mu)?
   const errors: string[] = [];

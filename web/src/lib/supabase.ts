@@ -22,6 +22,18 @@ export function sb(): SupabaseClient {
 }
 export function runtimeConfig() { return config; }
 
+/** Giriş sunucusunda hangi giriş yöntemleri açık? (Google ayarı yapılmadan düğme gösterilmez.) */
+let providers: Promise<{ google: boolean }> | null = null;
+export function authProviders(): Promise<{ google: boolean }> {
+  if (!providers) {
+    providers = fetch(`${config!.supabaseUrl}/auth/v1/settings`, { headers: { apikey: config!.supabaseAnonKey } })
+      .then((r) => (r.ok ? r.json() : {}))
+      .then((j: { external?: Record<string, boolean> }) => ({ google: !!j.external?.google }))
+      .catch(() => ({ google: false }));
+  }
+  return providers;
+}
+
 /** Supabase/Postgres hatalarını kullanıcıya gösterilecek Türkçe metne çevirir. */
 export function friendlyError(e: unknown): string {
   const m = (e as { message?: string })?.message ?? String(e);
@@ -33,6 +45,7 @@ export function friendlyError(e: unknown): string {
   if (/rate limit/i.test(m)) return "Çok fazla deneme yapıldı. Birkaç dakika sonra tekrar deneyin.";
   if (/Failed to fetch|NetworkError/i.test(m)) return "Sunucuya ulaşılamadı. İnternet bağlantınızı kontrol edin.";
   if (/duplicate key/i.test(m)) return "Bu kayıt zaten var.";
+  if (/provider is not enabled|Unsupported provider/i.test(m)) return "Google ile giriş henüz açık değil.";
   // Veritabanı kurallarımız zaten Türkçe mesaj döndürür
   return m.replace(/^.*?ERROR:\s*/, "");
 }

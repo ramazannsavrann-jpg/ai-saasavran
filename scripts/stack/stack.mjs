@@ -145,6 +145,12 @@ export async function startStack({ quiet = true, webDir = join(ROOT, "web", "dis
     GOTRUE_DISABLE_SIGNUP: "false", GOTRUE_EXTERNAL_EMAIL_ENABLED: "true",
     GOTRUE_MAILER_AUTOCONFIRM: "true", // test ortamında e-posta doğrulaması atlanır; bulutta açık olacak
     GOTRUE_PASSWORD_MIN_LENGTH: "8",
+    // Google ile giriş: test ortamında sahte istemci bilgisiyle açık; yönlendirme testte yakalanır, Google'a gidilmez.
+    GOTRUE_EXTERNAL_GOOGLE_ENABLED: "true",
+    GOTRUE_EXTERNAL_GOOGLE_CLIENT_ID: "test-google-client-id",
+    GOTRUE_EXTERNAL_GOOGLE_SECRET: "test-google-secret",
+    GOTRUE_EXTERNAL_GOOGLE_REDIRECT_URI: `http://127.0.0.1:${PORTS.gateway}/auth/v1/callback`,
+    GOTRUE_URI_ALLOW_LIST: `http://127.0.0.1:${PORTS.gateway}/**`,
     GOTRUE_RATE_LIMIT_HEADER: "", GOTRUE_LOG_LEVEL: "warn",
   };
   const auth = log(spawn(join(BIN, "auth"), [], { env: authEnv, cwd: BIN }), "auth");

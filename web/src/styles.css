@@ -301,3 +301,10 @@ form > .btn, .stack > .btn { width: 100%; }
   .auth { grid-template-columns: 1.1fr 1fr; align-items: center; column-gap: 56px; }
   .auth-foot { grid-column: 2; }
 }
+
+/* Google ile giriş */
+.oauth > * + * { margin-top: 10px; }
+.btn-google { width: 100%; background: var(--surface); color: var(--ink); border-color: var(--line); gap: 10px; }
+.btn-google:hover { border-color: var(--muted); }
+.or { display: flex; align-items: center; gap: 12px; color: var(--muted); font-size: .88rem; }
+.or::before, .or::after { content: ""; flex: 1; border-top: 1px solid var(--line); }
