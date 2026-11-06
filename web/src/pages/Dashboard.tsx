@@ -35,7 +35,12 @@ function WorkspaceView() {
         <p className="error-box" role="alert">{PAUSE_TEXT[ws.paused_reason ?? ""] ?? "Bu çalışma alanı durduruldu."}</p>
       )}
 
-      <DataNotice type={type} />
+      {ws.paid_live_allowed ? (
+        <aside className="notice notice-live" role="note">
+          <strong>Bu alanda iki tür ölçüm var</strong>
+          <p><b>Aramasız (Gemini, ücretsiz):</b> yapay zekânın internete bakmadan bildiği. <b>Canlı aramalı (ChatGPT, ücretli deneme):</b> internete bakarak verdiği cevap; müşterinin gerçekte gördüğüne en yakın olan budur.</p>
+        </aside>
+      ) : <DataNotice type={type} />}
 
       <section className="panel">
         <div className="panel-head">
@@ -48,7 +53,7 @@ function WorkspaceView() {
             <Link className="btn btn-primary" to="/marka/yeni">İlk markayı ekle</Link>
           </Empty>
         ) : (
-          <ul className="brand-list">{own.map((b) => <BrandRow key={b.id} brand={b} type={type} />)}</ul>
+          <ul className="brand-list">{own.map((b) => <BrandRow key={b.id} brand={b} type={type} live={ws.paid_live_allowed} />)}</ul>
         )}
       </section>
 
@@ -59,8 +64,8 @@ function WorkspaceView() {
           <Meter label="Marka" used={u.brands_used} limit={u.brand_limit} warn={false} />
           <dl className="facts">
             <div><dt>Ücretsiz katman sorgusu</dt><dd className="num">{u.free_calls}</dd></div>
-            <div><dt>Ücretli API harcaması</dt><dd className="num">{usd(Number(u.paid_cost_usd))}<span className="muted dd-note">Ücretli kullanım kapalı</span></dd></div>
-            <div><dt>Canlı web araması</dt><dd>{u.live_search_enabled ? "Açık" : "Kapalı"}</dd></div>
+            <div><dt>Ücretli API harcaması</dt><dd className="num">{usd(Number(u.paid_cost_usd))}<span className="muted dd-note">{ws.paid_live_allowed ? "Deneme bütçesinden (toplam üst sınır 3 $)" : "Ücretli kullanım kapalı"}</span></dd></div>
+            <div><dt>Canlı web araması</dt><dd>{u.live_search_enabled ? "Açık" : ws.paid_live_allowed ? "Yalnız elle, deneme" : "Kapalı"}</dd></div>
           </dl>
         </section>
       )}
@@ -68,19 +73,26 @@ function WorkspaceView() {
   );
 }
 
-function BrandRow({ brand, type }: { brand: Brand; type: MeasurementType }) {
+function BrandRow({ brand, type, live }: { brand: Brand; type: MeasurementType; live: boolean }) {
   const vis = useLoad(() => api.visibility(brand.id, type), [brand.id, type]);
+  const lv = useLoad(() => (live ? api.visibility(brand.id, "live_search") : Promise.resolve([])), [brand.id, live]);
   const pts = series(vis.data ?? []);
   const last = pts[pts.length - 1];
+  const lpts = series(lv.data ?? []);
+  const llast = lpts[lpts.length - 1];
+  const line = (p: typeof last, label: string) => <>{label}: {p.recommend.n} cevabın {numLoc(p.recommend.k)} önerildi ({pct(p.recommend.value)})</>;
   return (
     <li>
-      <Link to={`/marka/${brand.id}`} className="brand-row">
+      <Link to={`/marka/${brand.id}${llast && !last ? "?tur=canli" : ""}`} className="brand-row">
         <span className="brand-row-name">{brand.name}</span>
         <span className="brand-row-meta">{[brand.sector, brand.city].filter(Boolean).join(", ") || "Sektör ve şehir girilmedi"}</span>
-        <span className="brand-row-result">
-          {vis.loading ? "…" : last ? <>Son ölçümde {last.recommend.n} cevabın {numLoc(last.recommend.k)} önerildi ({pct(last.recommend.value)})</> : "Henüz ölçüm yok"}
-        </span>
-        {last && <TypeBadge type={type} />}
+        {vis.loading || lv.loading ? <span className="brand-row-result">…</span> : !last && !llast ? <span className="brand-row-result">Henüz ölçüm yok</span> : (
+          <>
+            {last && <span className="brand-row-result">{line(last, live ? "Aramasız (Gemini)" : "Son ölçümde")}</span>}
+            {llast && <span className="brand-row-result">{line(llast, "Canlı aramalı (ChatGPT)")}</span>}
+          </>
+        )}
+        {last && !live && <TypeBadge type={type} />}
       </Link>
     </li>
   );
