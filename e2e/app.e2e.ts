@@ -165,23 +165,34 @@ test("Müşteri akışı: kayıt → marka → rakip → soru → ölçüm → r
   await shot(page, "10-urun-durumu");
 });
 
-test("Google ile giriş: düğme görünür ve doğru Google yetkilendirme adresine yönlendirir", async ({ page }) => {
-  let googleUrl = "";
-  let blockedByNetwork = false;
-  await page.route("https://accounts.google.com/**", (route) => { googleUrl = route.request().url(); return route.abort(); });
-  page.on("response", async (r) => {
-    if (r.url().includes("/auth/v1/authorize") && r.status() === 400 && (await r.text().catch(() => "")).includes("openid-configuration")) blockedByNetwork = true;
+test("Google ile giriş: düğme görünür ve doğru Google yetkilendirme adresine yönlendirir", async ({ page, request }) => {
+  // 1) Düğme, giriş sunucusunun Google yetkilendirme adresine doğru parametrelerle gider (Google'a gidilmez)
+  let authorizeUrl = "";
+  await page.route("**/auth/v1/authorize**", (route) => {
+    authorizeUrl = route.request().url();
+    return route.fulfill({ status: 200, contentType: "text/html", body: "<p>yakalandı</p>" });
   });
   await page.goto("/giris");
   await page.getByRole("button", { name: "Google ile devam et" }).click();
-  await expect.poll(() => googleUrl || (blockedByNetwork ? "blocked" : ""), { timeout: 15_000 }).not.toBe("");
+  await expect.poll(() => authorizeUrl, { timeout: 15_000 }).not.toBe("");
+  const a = new URL(authorizeUrl);
+  expect(a.searchParams.get("provider")).toBe("google");
+  expect(a.searchParams.get("redirect_to")).toBe("http://127.0.0.1:54321/panel");
+
+  // 2) Giriş sunucusu Google'a doğru istemci ve geri dönüş adresiyle yönlendiriyor mu? (yönlendirme izlenmez)
+  const res = await request.get(`/auth/v1/authorize?provider=google&redirect_to=${encodeURIComponent("http://127.0.0.1:54321/panel")}`, { maxRedirects: 0 });
+  const body = res.status() >= 400 ? await res.text() : "";
   // Bazı geliştirme ortamları Google'a erişemez (giriş sunucusu Google ayarını indiremez); CI'da tam çalışır.
-  test.skip(blockedByNetwork && !process.env.CI, "Bu ortamdan accounts.google.com erişilemiyor");
-  expect(googleUrl).toContain("accounts.google.com");
-  const u = new URL(googleUrl);
-  expect(u.searchParams.get("client_id")).toBe("test-google-client-id");
-  expect(u.searchParams.get("redirect_uri")).toBe("http://127.0.0.1:54321/auth/v1/callback");
-  expect(u.searchParams.get("scope")).toContain("email");
+  test.skip(body.includes("openid-configuration") && !process.env.CI, "Bu ortamdan accounts.google.com erişilemiyor");
+  expect(res.status(), body).toBe(302);
+  const g = new URL(res.headers()["location"]);
+  expect(g.hostname).toBe("accounts.google.com");
+  expect(g.searchParams.get("client_id")).toBe("test-google-client-id");
+  expect(g.searchParams.get("redirect_uri")).toBe("http://127.0.0.1:54321/auth/v1/callback");
+  expect(g.searchParams.get("scope")).toContain("email");
+
+  // 3) Kayıt sayfasında da var ve aydınlatma metni notu görünüyor
+  await page.unroute("**/auth/v1/authorize**");
   await page.goto("/kayit");
   await expect(page.getByRole("button", { name: "Google ile devam et" })).toBeVisible();
   await expect(page.getByText("Google ile devam ederek")).toBeVisible();
