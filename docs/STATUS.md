@@ -2,7 +2,7 @@
 
 **Son güncelleme:** 2026-11-06 · v0.5 (haftalık otomatik ölçüm, site kontrolü ve öneriler, Demo Lab ve Growth Lab dolu)
 
-**Canlı adres:** https://ai-saasavran.pages.dev (Cloudflare Pages + Supabase, ücretsiz katmanlar)
+**Canlı adres:** https://aisaasavran.com (yedek: https://ai-saasavran.pages.dev, Türkiye'de erişime kapalı) (Cloudflare Pages + Supabase, ücretsiz katmanlar)
 
 > **Bu sürüm gerçek müşteri kullanımına hazır değildir.** Canlı web araması yapılmıyor; ölçümler Gemini'nin
 > aramasız model bilgisini gösterir ve Gemini uygulamasının güncel cevaplarını temsil etmez.
@@ -53,7 +53,7 @@
 
 ## Bilinen engel
 
-- **`pages.dev` Türkiye'de erişime kapalı** (TFF kararı, Kasım 2025). Türkiye'den yalnızca özel DNS ile açılıyor. Müşteriye açmadan önce kendi alan adı gerekli (~10–12 $/yıl).
+- **`pages.dev` Türkiye'de erişime kapalı** (TFF kararı, Kasım 2025). Çözüm: kendi alan adımız `aisaasavran.com` alındı (Cloudflare, 6 Kasım 2026) ve siteye bağlanıyor.
 
 ## Henüz yok
 

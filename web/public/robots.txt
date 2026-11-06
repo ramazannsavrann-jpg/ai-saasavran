@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /panel
+Disallow: /marka/
+Disallow: /hesap
+Disallow: /demo-lab
+
+Sitemap: https://aisaasavran.com/sitemap.xml

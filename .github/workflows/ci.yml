@@ -224,7 +224,7 @@ jobs:
       - run: npx playwright install --with-deps chromium
       - name: Canlı siteyi kontrol et
         env:
-          LIVE_URL: https://ai-saasavran.pages.dev
+          LIVE_URL: https://aisaasavran.com
         run: |
           sleep 20  # Cloudflare'in yeni sürümü dağıtması için kısa bekleme
           npx playwright test e2e/live.e2e.ts

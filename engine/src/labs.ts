@@ -37,7 +37,7 @@ export const DEMO_BRANDS: DemoBrand[] = [
 
 export const GROWTH = {
   workspace: "AI SaaSavran (Growth Lab)",
-  brand: { name: "AI SaaSavran", aliases: ["SaaSavran", "AI Savran"], website: "ai-saasavran.pages.dev", sector: "Yazılım / dijital hizmet" },
+  brand: { name: "AI SaaSavran", aliases: ["SaaSavran", "AI Savran"], website: "aisaasavran.com", sector: "Yazılım / dijital hizmet" },
   competitors: ["Profound", "Peec AI", "Otterly.AI", "Semrush", "Ahrefs"],
   prompts: [
     ["Markamın ChatGPT'de ne kadar görünür olduğunu nasıl ölçerim?", "informational"],
@@ -125,6 +125,10 @@ export async function seedLabs(db: SupabaseClient, adminEmail: string, log: (m: 
     const prompts = GROWTH.prompts.length;
     must(await db.from("runs").insert({ workspace_id: growth, brand_id: g.id, status: "queued", data_origin: "live_api", measurement_type: "model_knowledge", max_cost_usd: 1, prompts_total: prompts, trigger: "manual" }), "ilk ölçüm");
     log("Growth Lab: AI SaaSavran markası oluşturuldu, ilk gerçek ölçüm sıraya alındı.");
-  } else log("Growth Lab: zaten var.");
+  } else {
+    // Web sitesi adresi değiştiyse güncelle (ör. pages.dev → kendi alan adı)
+    must(await db.from("brands").update({ website: GROWTH.brand.website }).eq("id", g.id).neq("website", GROWTH.brand.website), "web sitesi güncelle");
+    log("Growth Lab: zaten var.");
+  }
   return { ok: true, demo, growth };
 }

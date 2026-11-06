@@ -97,7 +97,7 @@ export async function auditSite(website: string, brandNames: string[], fetchFn: 
   const base = normalizeUrl(website);
   const get = async (path: string) => {
     try {
-      const r = await fetchFn(base + path, { headers: { "user-agent": "AI-SaaSavran-SiteCheck/1.0 (+https://ai-saasavran.pages.dev)" }, redirect: "follow", signal: AbortSignal.timeout(15_000) });
+      const r = await fetchFn(base + path, { headers: { "user-agent": "AI-SaaSavran-SiteCheck/1.0 (+https://aisaasavran.com)" }, redirect: "follow", signal: AbortSignal.timeout(15_000) });
       return { status: r.status, text: r.status < 400 ? (await r.text()).slice(0, 2_000_000) : "", finalUrl: r.url || base + path };
     } catch { return { status: 0, text: "", finalUrl: base + path }; }
   };
