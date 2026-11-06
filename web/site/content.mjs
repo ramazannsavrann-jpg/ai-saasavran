@@ -1,0 +1,224 @@
+// Herkese açık sayfaların içeriği (statik HTML olarak üretilir; JavaScript gerektirmez, arama motorları ve yapay zekâ botları okuyabilir).
+// Kural: Burada yazan her sayı ve iddia gerçek veriye dayanır. Ölçüm sonuçları Growth Lab'in gerçek ölçümleridir (7 Kasım 2026).
+
+export const SITE = {
+  name: "AI SaaSavran",
+  url: "https://aisaasavran.com",
+  email: "info@aisaasavran.com",
+  updated: "2026-11-07",
+};
+
+// Rehberler: müşterilerin yapay zekâya sorduğu sorulara doğrudan cevap veren sayfalar.
+export const GUIDES = [
+  {
+    slug: "chatgpt-marka-gorunurlugu-olcme",
+    title: "ChatGPT'de markanızın görünürlüğünü nasıl ölçersiniz?",
+    short: "ChatGPT'de görünürlük nasıl ölçülür",
+    description: "ChatGPT ve Gemini cevaplarında markanızın ne sıklıkla anıldığını ve önerildiğini ölçmenin adım adım yöntemi: soru seti, tekrar, canlı arama ve güven aralığı.",
+    body: `
+<p class="lede">Kısa cevap: Müşterilerinizin yapay zekâya soracağı 10–30 soruyu yazın, her soruyu birkaç kez sorun ve cevaplarda markanızın <b>anılma</b>, <b>önerilme</b> ve <b>kaynak gösterilme</b> oranını sayın. Tek bir soruya tek bir cevaba bakarak karar vermeyin; yapay zekâ aynı soruya her seferinde farklı cevap verebilir.</p>
+
+<h2>1. Müşterinin ağzından soru seti yazın</h2>
+<p>Markanızın adını içeren sorular ("X iyi mi?") yanıltıcı olur, çünkü yapay zekâ adını duyduğu markadan bahseder. Asıl önemli olan, müşterinin markasız sorduğu sorulardır:</p>
+<ul>
+  <li><b>Yerel arama:</b> "Antalya'da aileyle gidilecek döner salonu önerir misin?"</li>
+  <li><b>Karşılaştırma:</b> "Türkiye'de en iyi mobil bankacılık uygulaması hangisi?"</li>
+  <li><b>Satın alma:</b> "Kredi kartı almak için hangi bankayı önerirsin?"</li>
+  <li><b>Bilgi arama:</b> "Yapay zekâ cevaplarında marka görünürlüğü nasıl ölçülür?"</li>
+</ul>
+<p>Soruların çoğu markasız olsun. Sektörünüze göre hazır soru şablonları <a href="/kayit">AI SaaSavran'da</a> ücretsiz pakette bile var.</p>
+
+<h2>2. Her soruyu birden fazla kez sorun</h2>
+<p>Büyük dil modelleri olasılıksal çalışır: aynı soruya bir seferinde sizi, bir sonrakinde rakibinizi önerebilir. Bu yüzden her soruyu en az 2 kez sormak ve sonucu oran olarak okumak gerekir. 20 cevabın 8'inde önerilmek, tek cevapta önerilmekten çok daha güvenilir bir bilgidir.</p>
+
+<h2>3. Üç ölçüyü ayrı ayrı sayın</h2>
+<dl class="defs">
+  <dt>Anılma</dt><dd>Cevapta markanızın adı geçiyor mu?</dd>
+  <dt>Önerilme</dt><dd>Adınız bir öneri listesinde ya da "öneririm", "en iyi seçenek" gibi bir ifadeyle mi geçiyor? "X önerilmez" gibi olumsuz bağlamlar öneri sayılmaz.</dd>
+  <dt>Kaynak gösterilme</dt><dd>Yapay zekâ cevabı verirken sizin web sitenizi kaynak olarak gösterdi mi? Bu yalnızca internete bakan (canlı aramalı) cevaplarda ölçülebilir.</dd>
+</dl>
+
+<h2>4. Canlı arama ile aramasız cevabı karıştırmayın</h2>
+<p>Yapay zekâ iki şekilde cevap verebilir: internete bakmadan yalnızca eğitim verisinden ya da internette arayarak. İki sonuç çok farklı çıkabilir. Kendi ölçümümüzde aynı 10 soruda Peec AI, internete bakmayan Gemini'de 20 cevabın 2'sinde önerildi, internette arayan ChatGPT'de 8'inde. Raporunuzda hangi türün ölçüldüğü açıkça yazmalı.</p>
+
+<h2>5. Sonucu aralıkla okuyun</h2>
+<p>20 cevapta %40 önerilme, gerçekte yaklaşık %22–61 arasında bir değere karşılık gelir (Wilson güven aralığı). Küçük örneklemde "geçen hafta %30'du, bu hafta %40 oldu" demek çoğu zaman yanlış alarmdır. Eğilime birkaç ölçüm üst üste bakın.</p>
+
+<h2>Gerçek bir örnek: kendi markamız</h2>
+<p>AI SaaSavran'ı kendi ürünümüzle ölçtük (10 soru, her biri 2 kez, ChatGPT canlı web aramasıyla, 7 Kasım 2026):</p>
+<table>
+  <thead><tr><th>Marka</th><th>Önerildiği cevap</th><th>Sitesi kaynak gösterildi</th></tr></thead>
+  <tbody>
+    <tr><td>Peec AI</td><td>8 / 20</td><td>7 / 20</td></tr>
+    <tr><td>Otterly.AI</td><td>7 / 20</td><td>6 / 20</td></tr>
+    <tr><td>Semrush</td><td>7 / 20</td><td>6 / 20</td></tr>
+    <tr><td>Profound</td><td>6 / 20</td><td>1 / 20</td></tr>
+    <tr><td>Ahrefs</td><td>5 / 20</td><td>5 / 20</td></tr>
+    <tr class="us"><td>AI SaaSavran</td><td>0 / 20</td><td>0 / 20</td></tr>
+  </tbody>
+</table>
+<p>Yeni bir marka olarak sıfırdan başlıyoruz. Bu rehberi yazmamızın sebebi de bu: öne çıkan markalar, kendi sitelerindeki rehber ve yardım sayfalarıyla kaynak gösteriliyor.</p>
+`,
+    faq: [
+      ["ChatGPT'de markamın görünürlüğünü ücretsiz ölçebilir miyim?", "Evet. Soruları elle ChatGPT'ye sorup sonuçları bir tabloya yazabilirsiniz. AI SaaSavran'ın ücretsiz paketi bu işi Gemini ile (aramasız) otomatik yapar."],
+      ["Kaç soru yeterli?", "Başlangıç için 10 markasız soru ve her soru için en az 2 cevap. 20 cevabın altındaki sonuçları kesin kabul etmeyin."],
+      ["Yapay zekâ neden her seferinde farklı cevap veriyor?", "Dil modelleri olasılıksal çalışır ve canlı arama yapıldığında bulunan sayfalar da değişir. Bu yüzden ölçüm tek cevapla değil, oranla yapılır."],
+    ],
+  },
+  {
+    slug: "yapay-zeka-gorunurluk-araclari",
+    title: "Yapay zekâ görünürlüğü ölçen araçlar: Türkçe karşılaştırma",
+    short: "Görünürlük araçları karşılaştırması",
+    description: "Profound, Peec AI, Otterly.AI, Semrush ve Ahrefs gibi yapay zekâ görünürlüğü (GEO/AEO) araçları kime uygun, neyi ölçer? Türkiye'deki işletmeler için tarafsız özet.",
+    body: `
+<p class="lede">Yapay zekâ görünürlüğü araçları, markanızın ChatGPT, Gemini, Perplexity gibi asistanların cevaplarında ne sıklıkla geçtiğini ölçer. Çoğu yurt dışı merkezli ve İngilizce arayüzlüdür. Aşağıdaki özet, araçların herkese açık tanıtımlarına ve bağımsız karşılaştırmalara dayanır; fiyatlar sık değiştiği için güncel fiyatı her aracın kendi sitesinden kontrol edin.</p>
+<p class="disclosure">Not: Bu sayfayı AI SaaSavran ekibi yazdı. Kendi aracımızı da listeye ekledik ve eksiklerini açıkça yazdık.</p>
+
+<h2>Araçlar kime uygun?</h2>
+<table>
+  <thead><tr><th>Araç</th><th>Kime uygun</th><th>Öne çıkan</th></tr></thead>
+  <tbody>
+    <tr><td>Profound</td><td>Büyük şirketler ve kurumsal pazarlama ekipleri</td><td>Birçok yapay zekâ motorunda soru takibi, sektör sıralamaları, içerik üretim akışları</td></tr>
+    <tr><td>Peec AI</td><td>Orta ölçekli ekipler, özellikle Avrupalı markalar</td><td>Soru araştırması, marka izleme, öneri motoru</td></tr>
+    <tr><td>Otterly.AI</td><td>KOBİ'ler ve orta ölçekli ekipler</td><td>Soru bazında takip, duygu (olumlu/olumsuz) analizi</td></tr>
+    <tr><td>Semrush</td><td>Zaten Semrush kullanan SEO ekipleri</td><td>SEO platformuna eklenen yapay zekâ görünürlüğü modülleri</td></tr>
+    <tr><td>Ahrefs (Brand Radar)</td><td>Ahrefs kullanan SEO ekipleri</td><td>Yapay zekâ cevaplarında marka izleme ve keşif</td></tr>
+    <tr class="us"><td>AI SaaSavran</td><td>Türkiye'deki işletmeler ve ajanslar</td><td>Türkçe arayüz, sektöre göre Türkçe soru şablonları, ücretsiz başlangıç paketi</td></tr>
+  </tbody>
+</table>
+
+<h2>Seçerken nelere bakmalı?</h2>
+<ul>
+  <li><b>Canlı arama mı, model bilgisi mi?</b> Araç, yapay zekânın internete bakarak verdiği cevabı mı ölçüyor yoksa eğitim verisinden bildiğini mi? Raporda bu açıkça yazmalı.</li>
+  <li><b>Tekrar ve güven aralığı:</b> Her soru birden fazla kez soruluyor mu? Tek cevaba dayanan oranlar yanıltır.</li>
+  <li><b>Kaynak analizi:</b> Yapay zekânın hangi sitelere baktığını gösteriyor mu? Ne yapmanız gerektiğini en iyi bu söyler.</li>
+  <li><b>Dil ve pazar:</b> Türkçe sorular ve yerel rakipler doğru tanınıyor mu? "İşCep" gibi ürün adlarının markaya bağlanması bunun bir örneği.</li>
+  <li><b>Maliyet sınırı:</b> Ücretli ölçümlerde aylık harcama tavanı var mı?</li>
+</ul>
+
+<h2>AI SaaSavran'ın bugünkü durumu (dürüst özet)</h2>
+<ul>
+  <li>Çalışan: Türkçe arayüz, marka/rakip/soru yönetimi, Gemini ile aramasız ölçüm, haftalık otomatik ölçüm, web sitesi kontrolü, kural tabanlı öneriler.</li>
+  <li>Deneme aşamasında: ChatGPT ile canlı aramalı ölçüm ve kaynak analizi (henüz müşterilere açık değil).</li>
+  <li>Henüz yok: Perplexity, PDF rapor, ödeme. Ürün erken erişim aşamasındadır.</li>
+</ul>
+<p>Güncel liste her zaman <a href="/durum">ürün durumu sayfasında</a>.</p>
+`,
+    faq: [
+      ["En ucuz yapay zekâ görünürlüğü aracı hangisi?", "Fiyatlar sık değişiyor; her aracın kendi sitesinden güncel fiyata bakın. AI SaaSavran'ın ücretsiz paketiyle maliyetsiz başlayabilirsiniz."],
+      ["Türkçe destekleyen bir araç var mı?", "AI SaaSavran Türkçe arayüzlü ve Türkçe soru şablonlarıyla çalışır. Diğer araçların çoğu İngilizce arayüzlüdür; Türkçe soruları takip edip edemediklerini denemeden önce kontrol edin."],
+      ["Profound'un uygun fiyatlı alternatifleri neler?", "Bağımsız karşılaştırmalarda Peec AI ve Otterly.AI orta ölçekli ekipler için sık anılan alternatiflerdir. Türkiye odaklı ve ücretsiz başlamak isteyenler için AI SaaSavran bir seçenektir."],
+    ],
+  },
+  {
+    slug: "geo-nedir",
+    title: "GEO (Generative Engine Optimization) nedir? İşletmeler için kısa rehber",
+    short: "GEO nedir",
+    description: "GEO, markanızın ChatGPT, Gemini gibi yapay zekâ asistanlarının cevaplarında yer alması için yapılan çalışmadır. SEO'dan farkı, nasıl ölçüldüğü ve ilk adımlar.",
+    body: `
+<p class="lede">GEO (Generative Engine Optimization, üretken motor optimizasyonu), markanızın ChatGPT, Gemini, Perplexity gibi yapay zekâ asistanlarının cevaplarında anılması ve önerilmesi için yapılan çalışmalardır. Benzer anlamda AEO (Answer Engine Optimization) terimi de kullanılır.</p>
+
+<h2>SEO'dan farkı ne?</h2>
+<table>
+  <thead><tr><th></th><th>SEO</th><th>GEO</th></tr></thead>
+  <tbody>
+    <tr><td>Hedef</td><td>Google sonuç sayfasında üst sıralar</td><td>Yapay zekâ cevabının içinde anılmak ve önerilmek</td></tr>
+    <tr><td>Kullanıcı ne görür?</td><td>10 bağlantı</td><td>Tek bir cevap, çoğu zaman 3–5 öneri</td></tr>
+    <tr><td>Nasıl ölçülür?</td><td>Sıralama, tıklama</td><td>Anılma, önerilme ve kaynak gösterilme oranı</td></tr>
+  </tbody>
+</table>
+<p>İkisi birbirinin rakibi değildir: canlı arama yapan asistanlar, cevap verirken internetteki sayfalara bakar. İyi SEO, GEO'nun da temelidir.</p>
+
+<h2>Yapay zekâ neye bakarak öneriyor?</h2>
+<p>Canlı aramalı ölçümlerimizde ChatGPT'nin en çok şu tür kaynakları gösterdiğini gördük:</p>
+<ul>
+  <li>Markaların kendi sitelerindeki rehber, blog ve yardım sayfaları (örneğin semrush.com, peec.ai, help.ahrefs.com)</li>
+  <li>Resmî kurumlar ve raporlar (bankacılık sorularında BDDK, TMSF, KPMG raporları)</li>
+  <li>Karşılaştırma ve inceleme siteleri</li>
+</ul>
+
+<h2>İlk 5 adım</h2>
+<ol>
+  <li>Müşterinizin yapay zekâya soracağı 10 markasız soruyu yazın ve bugünkü durumunuzu ölçün.</li>
+  <li>Web sitenizde yapay zekâ botlarını engellemediğinizden emin olun (robots.txt'te GPTBot, OAI-SearchBot, PerplexityBot, Google-Extended).</li>
+  <li>Bu soruların cevabını doğrudan veren, açık başlıklı sayfalar yazın (sık sorulan sorular, rehberler).</li>
+  <li>Sizi rakiplerden ayıran somut bilgileri (fiyat aralığı, hizmet bölgesi, uzmanlık, ödüller) sitenizde açıkça yazın.</li>
+  <li>Birkaç hafta sonra aynı soruları yeniden ölçün ve değişime bakın.</li>
+</ol>
+`,
+    faq: [
+      ["GEO ile SEO aynı şey mi?", "Hayır ama bağlantılılar. SEO arama sonuçlarında sıralamayı, GEO yapay zekâ cevabının içinde yer almayı hedefler. Canlı arama yapan asistanlar internetteki sayfalara baktığı için iyi SEO GEO'ya da yardım eder."],
+      ["GEO sonuç vermesi ne kadar sürer?", "Canlı arama yapan asistanlarda sitenizdeki değişiklik birkaç hafta içinde görülebilir. İnternete bakmayan model bilgisindeki değişim ise yeni model eğitimlerini bekler ve aylar sürebilir."],
+    ],
+  },
+  {
+    slug: "yerel-isletme-yapay-zeka",
+    title: "Yerel işletmeler ChatGPT ve Gemini'de nasıl öne çıkar?",
+    short: "Yerel işletmeler için yapay zekâ",
+    description: "Restoran, klinik, oto servis, emlak gibi yerel işletmelerin yapay zekâ asistanlarının önerilerinde yer alması için pratik kontrol listesi.",
+    body: `
+<p class="lede">Müşterileriniz artık "Kadıköy'de iyi bir diş kliniği önerir misin?" gibi soruları yapay zekâya soruyor. Yapay zekâ bu soruya 3–5 işletme adı verir. Bu listede olmak için yapabilecekleriniz:</p>
+
+<h2>Kontrol listesi</h2>
+<ol>
+  <li><b>Google İşletme Profili:</b> Adınız, adresiniz, telefonunuz ve çalışma saatleriniz eksiksiz ve güncel olsun. Canlı arama yapan asistanlar bu bilgilere sık başvurur.</li>
+  <li><b>Her yerde aynı bilgi:</b> Sitenizde, haritalarda ve rehber sitelerde işletme adınız ve adresiniz aynı yazılsın.</li>
+  <li><b>Web sitesinde şehir ve hizmet:</b> Ana sayfanızda hangi şehir ve ilçede, hangi hizmeti verdiğinizi düz cümleyle yazın. "Antalya Muratpaşa'da aile işletmesi döner salonu" gibi.</li>
+  <li><b>Sık sorulan sorular sayfası:</b> Müşterilerin gerçekten sorduğu soruları (fiyat aralığı, rezervasyon, otopark, paket servis) cevaplayın.</li>
+  <li><b>Yorumlar:</b> Memnun müşterilerden yorum isteyin. Yapay zekâ cevaplarında "yorumları olumlu" ifadesi sık geçer.</li>
+  <li><b>Yapay zekâ botlarına izin:</b> Sitenizin robots.txt dosyası GPTBot, OAI-SearchBot ve PerplexityBot'u engellemesin.</li>
+  <li><b>Yapılandırılmış veri:</b> Sitenize LocalBusiness türünde schema.org bilgisi ekleyin (adres, telefon, saatler).</li>
+</ol>
+<p>AI SaaSavran'ın web sitesi kontrolü bu maddelerin bir kısmını otomatik kontrol eder ve eksikleri "Öneriler" sekmesinde listeler.</p>
+
+<h2>Ölçmeden başlamayın</h2>
+<p>Önce bugünkü durumunuzu görün: hangi sorularda anılıyorsunuz, hangilerinde sizin yerinize rakibiniz öneriliyor? Değişiklik yaptıktan birkaç hafta sonra aynı soruları tekrar ölçün.</p>
+`,
+    faq: [
+      ["Küçük bir işletme için yapay zekâ görünürlüğü önemli mi?", "Evet. Yapay zekâ asistanları çoğu soruda yalnızca birkaç işletme önerir; listede olmamak, o müşteriyi hiç görmemek demektir."],
+      ["Reklam vererek yapay zekâda çıkabilir miyim?", "Yapay zekâ cevaplarındaki öneriler ücretli değildir; internetteki bilgilere ve modelin bildiklerine dayanır. Bu yüzden doğru ve tutarlı bilgi en önemli etkendir."],
+    ],
+  },
+  {
+    slug: "rakip-neden-oneriliyor",
+    title: "Rakibiniz ChatGPT'de neden öneriliyor? Kaynak analiziyle öğrenin",
+    short: "Rakip neden öneriliyor",
+    description: "ChatGPT canlı web aramasıyla cevap verirken hangi sitelere baktığını gösterir. Bu kaynakları incelemek, rakibinizin neden önerildiğini anlamanın en hızlı yoludur.",
+    body: `
+<p class="lede">ChatGPT internette arayarak cevap verdiğinde, baktığı sayfaları kaynak olarak gösterir. Rakibinizin önerildiği cevaplardaki kaynaklara bakmak, onun neden önerildiğini anlamanın en hızlı yoludur.</p>
+
+<h2>Gerçek bir örnek: bankacılık</h2>
+<p>"Türkiye'de en iyi mobil bankacılık uygulaması hangisi?" gibi 5 soruyu ChatGPT'ye canlı web aramasıyla ikişer kez sorduk (7 Kasım 2026, toplam 10 cevap):</p>
+<table>
+  <thead><tr><th>Banka</th><th>Önerildiği cevap</th></tr></thead>
+  <tbody>
+    <tr><td>İş Bankası</td><td>6 / 10</td></tr>
+    <tr><td>Enpara.com</td><td>5 / 10</td></tr>
+    <tr><td>Akbank</td><td>3 / 10</td></tr>
+    <tr><td>Yapı Kredi</td><td>2 / 10</td></tr>
+    <tr><td>Garanti BBVA</td><td>1 / 10</td></tr>
+  </tbody>
+</table>
+<p>En çok gösterilen kaynaklar: enpara.com, isbank.com.tr, bddk.gov.tr, tmsf.org.tr ve bir KPMG raporu. İş Bankası örneğinde ChatGPT, bankanın kendi sitesindeki "uygulamamız art arda ödül aldı" sayfasını kaynak gösterip "İşCep" uygulamasını önerdi.</p>
+<p>Çıkarılacak ders: Yapay zekâ, <b>doğrulanabilir ve güncel iddiaları</b> (ödül, rapor, resmî veri) kendi sitesinde açıkça yazan markayı öne çıkarıyor. Bu ölçüm tek seferliktir ve az sayıda cevaba dayanır; kesin bir sıralama olarak okunmamalıdır.</p>
+
+<h2>Kendi rakip analiziniz için 4 adım</h2>
+<ol>
+  <li>Rakibinizin önerildiği soruları belirleyin.</li>
+  <li>Bu cevaplarda gösterilen kaynak siteleri listeleyin.</li>
+  <li>Kaynaklar rakibin kendi sitesiyse: o sayfada ne yazdığına bakın (hangi soruya cevap veriyor, hangi kanıtı sunuyor). Kaynak bir rehber ya da karşılaştırma sitesiyse: orada yer almanın yolunu arayın.</li>
+  <li>Kendi sitenizde aynı soruya daha net ve kanıtlı cevap veren bir sayfa hazırlayın.</li>
+</ol>
+`,
+    faq: [
+      ["ChatGPT'nin hangi sitelere baktığını nasıl görürüm?", "ChatGPT internette aradığında cevabın altında ya da içinde kaynak bağlantıları gösterir. AI SaaSavran canlı aramalı ölçümde bu kaynakları her cevap için kaydeder ve en çok gösterilen siteleri listeler."],
+    ],
+  },
+];
+
+export const HOME_FAQ = [
+  ["AI SaaSavran ne işe yarar?", "Markanızın ChatGPT ve Gemini gibi yapay zekâ asistanlarının cevaplarında ne sıklıkla anıldığını ve önerildiğini ölçer, rakiplerinizle karşılaştırır ve ne yapmanız gerektiğini önerir."],
+  ["Ücretsiz mi?", "Ücretsiz paketle 1 marka, 10 soru ve ayda 40 ölçümle başlayabilirsiniz. Ücretsiz pakette ölçümler Gemini ile, internete bakmadan (model bilgisiyle) yapılır ve raporda bu açıkça yazar."],
+  ["Hangi yapay zekâlar ölçülüyor?", "Bugün Gemini (aramasız). ChatGPT ile canlı web aramalı ölçüm deneme aşamasında; henüz müşterilere açık değil. Perplexity henüz yok."],
+  ["Ürün hazır mı?", "Erken erişim aşamasındayız. Neyin çalıştığını, neyin denemede olduğunu ürün durumu sayfasında açıkça yazıyoruz."],
+];

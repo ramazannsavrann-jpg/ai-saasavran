@@ -92,8 +92,10 @@ function startGateway(webDir, runtimeConfig) {
     }
     // Statik uygulama + SPA geri dönüşü
     const clean = decodeURIComponent(req.url.split("?")[0]).replace(/\.\.+/g, "");
+    // Cloudflare Pages ile aynı davranış: dizin → index.html; bilinmeyen adres → uygulama (/app/)
     let file = join(webDir, clean);
-    if (!existsSync(file) || statSync(file).isDirectory()) file = join(webDir, "index.html");
+    if (existsSync(file) && statSync(file).isDirectory()) file = join(file, "index.html");
+    if (!existsSync(file)) file = existsSync(join(webDir, "app", "index.html")) ? join(webDir, "app", "index.html") : join(webDir, "index.html");
     if (!existsSync(file)) { res.writeHead(404); res.end("web/dist yok — önce: npm run web:build"); return; }
     res.writeHead(200, { "content-type": MIME[extname(file)] || "application/octet-stream" });
     res.end(readFileSync(file));

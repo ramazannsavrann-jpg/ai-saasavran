@@ -24,6 +24,14 @@ test("Canlı site: açılıyor, doğru yapılandırılmış, güvenlik başlıkl
   // Google "Publish app" için gereken sayfalar
   for (const path of ["/gizlilik", "/kosullar"]) expect((await request.get(`${base}${path}`)).status()).toBe(200);
 
+  // Herkese açık statik sayfalar (JavaScript'siz okunabilir) ve bot dosyaları
+  const landing = await (await request.get(`${base}/`)).text();
+  expect(landing).toContain("Müşteriniz yapay zekâya sorduğunda");
+  expect(landing).not.toContain('id="root"');
+  for (const path of ["/rehber/", "/rehber/geo-nedir/", "/llms.txt", "/sitemap.xml", "/robots.txt"]) expect((await request.get(`${base}${path}`)).status(), path).toBe(200);
+  // Uygulama adresleri uygulamayı döndürür
+  expect(await (await request.get(`${base}/panel`)).text()).toContain('id="root"');
+
   // Doğrudan alt sayfa adresi (SPA yönlendirmesi) çalışıyor mu?
   expect((await request.get(`${base}/marka/olmayan-bir-marka`)).status()).toBe(200);
 
@@ -44,5 +52,8 @@ test("Canlı site: açılıyor, doğru yapılandırılmış, güvenlik başlıkl
   await page.screenshot({ path: "e2e/screenshots/canli-durum.png", fullPage: true });
   await page.goto(`${base}/giris`);
   await page.screenshot({ path: "e2e/screenshots/canli-giris.png", fullPage: true });
+  await page.goto(`${base}/`);
+  await expect(page.getByRole("heading", { level: 1 })).toContainText("Müşteriniz yapay zekâya");
+  await page.screenshot({ path: "e2e/screenshots/canli-anasayfa.png", fullPage: true });
   expect(errors, `Tarayıcı hataları:\n${errors.join("\n")}`).toEqual([]);
 });

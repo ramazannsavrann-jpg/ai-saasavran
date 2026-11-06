@@ -4,7 +4,7 @@
 import { writeFileSync, existsSync } from "node:fs";
 
 const { SUPABASE_URL, SUPABASE_ANON_KEY } = process.env;
-if (!existsSync("web/dist/index.html")) throw new Error("Önce arayüzü derleyin: npm run build --prefix web");
+if (!existsSync("web/dist/index.html") || !existsSync("web/dist/app/index.html")) throw new Error("Önce arayüzü derleyin: npm run build --prefix web");
 if (!SUPABASE_URL || !SUPABASE_ANON_KEY) throw new Error("SUPABASE_URL ve SUPABASE_ANON_KEY gerekli");
 if (/service_role|sb_secret_/.test(SUPABASE_ANON_KEY) || JSON.stringify(SUPABASE_ANON_KEY).includes('"role":"service_role"')) {
   throw new Error("SUPABASE_ANON_KEY yerine gizli anahtar girilmiş. Herkese açık (anon / publishable) anahtarı kullanın.");
