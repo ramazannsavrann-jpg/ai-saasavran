@@ -1,0 +1,21 @@
+name: Growth Lab raporu
+on:
+  push:
+    branches: [main]
+    paths: [scripts/live-report.ts, .github/workflows/report.yml]
+  workflow_dispatch:
+permissions: { contents: read }
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: npm }
+      - run: npm ci
+      - name: Özet (salt okunur)
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: node scripts/live-report.ts | tee -a "$GITHUB_STEP_SUMMARY"
