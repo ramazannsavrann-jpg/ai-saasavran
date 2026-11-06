@@ -399,3 +399,17 @@ test("rules_v2: düz paragrafta yalnızca anılan marka öneri sayılmaz", () =>
   assert.equal(h[0].mentioned, true);
   assert.equal(h[0].recommended, false);
 });
+
+test("Marka adının ilk kelimesi tek başına geçince yakalanır (Garanti Bonus); yaygın kelime ve küçük harf yakalanmaz", () => {
+  const brands = [{ id: "g", name: "Garanti BBVA", aliases: [] }, { id: "u", name: "Usta Eller Oto", aliases: [] }];
+  const r = (t: string) => Object.fromEntries(analyzeResponse({ promptId: "p", provider: "x", answerText: t, citedUrls: [] }, brands).map((h) => [h.brandId, h]));
+  assert.equal(r("Kampanyalar için Garanti Bonus, Yapı Kredi World gibi kartları karşılaştırın.").g.mentioned, true);
+  assert.equal(r("Garanti'nin mobil uygulaması hızlıdır.").g.mentioned, true);
+  assert.equal(r("Ürünün iki yıl garanti süresi var.").g.mentioned, false, "küçük harfli sıradan kelime marka değil");
+  assert.equal(r("Usta bir tamirci bulun.").u.mentioned, false, "yaygın ilk kelime tek başına sayılmaz");
+});
+
+test("rules_v2: 'Tek bir kart önereceksem ... X derim' öneri sayılır", () => {
+  const h = analyzeResponse({ promptId: "p", provider: "x", answerText: "Tek bir kart önereceksem, yıllık aidat ödemek istemiyorsan Enpara Kredi Kartı derim.", citedUrls: [] }, [{ id: "e", name: "Enpara.com", aliases: ["Enpara"] }]);
+  assert.equal(h[0].recommended, true);
+});

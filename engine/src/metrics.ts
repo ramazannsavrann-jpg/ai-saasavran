@@ -57,9 +57,26 @@ const LIST_LINE = /^\s*(\d+[.)]|[-*•]\s|\*\*|#{2,4}\s)/;
 // Öneri ifadeleri (rules_v2): aynı cümlede marka + bu ifade → öneri sayılır
 const RECOMMEND_CUES = [
   "oneririm", "oneriyorum", "oneririz", "tavsiye ederim", "tavsiye ediyorum", "tek bir isim", "tek isim",
+  "onereceksem", "onerecek olsam", "tavsiyem", "onerim", "derim", "secerdim", "tercih ederdim",
   "en iyi secenek", "en iyi tercih", "en guclu secenek", "ilk tercih", "one cikiyor", "one cikan", "en cok onerilen",
   "i recommend", "i d recommend", "best option", "top pick", "my pick",
 ];
+
+// Marka adının ilk kelimesi tek başına geçtiğinde de (büyük harfle) markayı yakala: "Garanti Bonus" → Garanti BBVA.
+// Yaygın kelimeler hariç (yanlış eşleşmeyi önlemek için).
+const COMMON_FIRST_WORDS = new Set([
+  "yeni", "usta", "büyük", "küçük", "merkez", "türk", "türkiye", "ilk", "en", "iyi", "ana", "hızlı", "güzel", "altın", "yıldız",
+  "best", "the", "new", "first", "smart", "super", "global", "best", "open", "google",
+]);
+function firstWordPattern(name: string): RegExp | null {
+  const words = name.trim().split(/\s+/);
+  if (words.length < 2) return null;
+  const w = words[0];
+  if (w.length < 4 || COMMON_FIRST_WORDS.has(w.toLocaleLowerCase("tr-TR"))) return null;
+  if (w[0] !== w[0].toLocaleUpperCase("tr-TR")) return null;
+  const esc = w.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  return new RegExp(`(^|[^\\p{L}\\p{N}])${esc}(?=$|[^\\p{L}\\p{N}]|'|’)`, "u");
+}
 
 function sentences(line: string): string[] {
   return line.split(/(?<=[!?])\s+|(?<=[a-zçğıöşü)\]*][.])\s+/i).filter(Boolean);
@@ -70,9 +87,10 @@ export function analyzeResponse(resp: AIResponse, brands: BrandRef[]): BrandHit[
 
   const hits = brands.map((b): BrandHit => {
     const needles = [b.name, ...b.aliases].map(normalize).filter((n) => n.length >= 2);
+    const first = firstWordPattern(b.name);
     const containsBrand = (text: string) => {
       const t = ` ${normalize(text)} `;
-      return needles.some((n) => t.includes(` ${n} `) || t.includes(` ${n}`));
+      return needles.some((n) => t.includes(` ${n} `) || t.includes(` ${n}`)) || (!!first && first.test(text));
     };
 
     const mentionLines = lines.filter(containsBrand);
@@ -110,7 +128,8 @@ export function analyzeResponse(resp: AIResponse, brands: BrandRef[]): BrandHit[
     if (!h.recommended) continue;
     const b = brands.find((x) => x.id === h.brandId)!;
     const n = [b.name, ...b.aliases].map(normalize).filter((x) => x.length >= 2);
-    const i = items.findIndex((line) => n.some((x) => ` ${normalize(line)} `.includes(` ${x}`)));
+    const fw = firstWordPattern(b.name);
+    const i = items.findIndex((line) => n.some((x) => ` ${normalize(line)} `.includes(` ${x}`)) || (!!fw && fw.test(line)));
     h.rank = i >= 0 ? i + 1 : null;
   }
   return hits;

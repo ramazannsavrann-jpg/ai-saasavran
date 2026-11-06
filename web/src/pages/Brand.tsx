@@ -321,7 +321,7 @@ function Report({ brand, type }: { brand: Brand; type: MeasurementType }) {
                         {(answers.data ?? []).filter((a) => a.prompt_id === p.prompt_id).map((a) => (
                           <blockquote key={a.repetition} className="answer">
                             <p className="answer-meta">{type === "simulated" ? "Simülasyon cevabı" : live ? `ChatGPT cevabı (${a.model}, canlı arama)` : `Gemini cevabı (${a.model}, aramasız)`}{(answers.data ?? []).filter((x) => x.prompt_id === p.prompt_id).length > 1 && `, tekrar ${a.repetition}`}</p>
-                            <Highlighted text={a.answer_text} names={[brand.name, ...brand.aliases]} />
+                            <Highlighted text={a.answer_text} names={[brand.name, ...brand.aliases, ...(brand.name.split(/\s+/).length > 1 && brand.name.split(/\s+/)[0].length >= 4 ? [brand.name.split(/\s+/)[0]] : [])]} />
                             {live && (a.cited_urls ?? []).length > 0 && (
                               <ul className="answer-sources">{a.cited_urls.map((u) => <li key={u}><a href={u} target="_blank" rel="noopener noreferrer nofollow">{(() => { try { return new URL(u).hostname.replace(/^www\./, ""); } catch { return u; } })()}</a></li>)}</ul>
                             )}
