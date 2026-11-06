@@ -8,6 +8,7 @@ import { analyzeResponse, type BrandRef } from "./metrics.ts";
 import { runPrompts, type StopReason } from "./pipeline.ts";
 import { buildProviders } from "./providers/registry.ts";
 import { SimulatedProvider } from "./providers/simulated.ts";
+import { auditSite } from "./audit.ts";
 import type { ApiErrorClass, FetchLike, Provider, ProviderConfig, ProviderResult } from "./providers/types.ts";
 import type { Denial, Rejection, Reservation, UsageGate } from "./usage.ts";
 
@@ -137,6 +138,27 @@ export async function processNextRun(deps: WorkerDeps): Promise<WorkerResult | n
   } catch (e) {
     return await finish({ status: "failed", stop: "worker_error", ok: 0, failed: 0 }, undefined, (e as Error).message);
   }
+}
+
+/** Haftalık ölçümleri sıraya alır (kota yetiyorsa). */
+export async function scheduleWeekly(deps: WorkerDeps): Promise<number> {
+  return must(await deps.db.rpc("schedule_weekly_runs", { p_limit: 50 }), "schedule_weekly_runs") as number;
+}
+
+/** Bekleyen web sitesi kontrollerini yapar. */
+export async function processAudits(deps: WorkerDeps, max = 10): Promise<{ brandId: string; status: string }[]> {
+  const { db } = deps;
+  const pending = must(await db.rpc("pending_site_audits", { p_limit: max }), "pending_site_audits") as { brand_id: string; workspace_id: string; website: string }[];
+  const out: { brandId: string; status: string }[] = [];
+  for (const p of pending) {
+    const b = must(await db.from("brands").select("name,aliases").eq("id", p.brand_id).single(), "marka") as { name: string; aliases: string[] };
+    let res;
+    try { res = await auditSite(p.website, [b.name, ...(b.aliases ?? [])], deps.fetchFn); }
+    catch (e) { res = { url: p.website, status: "unreachable" as const, checks: [{ id: "reachable", ok: false, severity: "high" as const, title: "Siteye ulaşılamadı", detail: (e as Error).message.slice(0, 200) }] }; }
+    must(await db.from("site_audits").insert({ workspace_id: p.workspace_id, brand_id: p.brand_id, url: res.url, status: res.status, checks: res.checks }), "site_audits");
+    out.push({ brandId: p.brand_id, status: res.status });
+  }
+  return out;
 }
 
 export async function processQueue(deps: WorkerDeps, maxRuns = 20): Promise<WorkerResult[]> {

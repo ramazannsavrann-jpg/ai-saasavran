@@ -22,14 +22,19 @@ export class SimulatedProvider implements Provider {
   readonly config = SIMULATED_CONFIG;
   private brandNames: string[];
   private seed: string;
-  constructor(brandNames: string[], seed: string) {
+  private target?: string;
+  private boost: number;
+  /** boost: hedef markanın puanına eklenir (Demo Lab'de "önce/sonra" eğilimi göstermek için; 0 = nötr). */
+  constructor(brandNames: string[], seed: string, opts: { target?: string; boost?: number } = {}) {
     this.brandNames = brandNames;
     this.seed = seed;
+    this.target = opts.target;
+    this.boost = opts.boost ?? 0;
   }
   async ask(promptId: string, prompt: string): Promise<ProviderResult> {
     // Her marka için tekrar üretilebilir sözde-rastgele puan; ilk 3'ü "öneri listesi" olur.
     const ranked = this.brandNames
-      .map((name) => ({ name, s: score(`${this.seed}|${promptId}|${name}`) }))
+      .map((name) => ({ name, s: score(`${this.seed}|${promptId}|${name}`) + (name === this.target ? this.boost : 0) }))
       .sort((a, b) => b.s - a.s);
     const listed = ranked.filter((x) => x.s > 0.35).slice(0, 3);
     const lines = [`[SİMÜLASYON] "${prompt}" için örnek cevap:`];
