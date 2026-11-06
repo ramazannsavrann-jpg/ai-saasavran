@@ -1,6 +1,6 @@
 # Gerçek durum raporu
 
-**Son güncelleme:** 2026-11-06 · v0.3.1 (ilk bulut yayını)
+**Son güncelleme:** 2026-11-06 · v0.4 (sektörler, düzenleme, Google ile giriş, yasal taslaklar)
 
 **Canlı adres:** https://ai-saasavran.pages.dev (Cloudflare Pages + Supabase, ücretsiz katmanlar)
 
@@ -13,6 +13,12 @@
 | Alan | Durum | Test |
 |---|---|---|
 | Kayıt, giriş, çıkış, şifre değiştirme | ✅ | Gerçek Supabase Auth sunucusuyla (E2E) |
+| Google ile giriş (Google'da yayımlandı) | ✅ | E2E (yönlendirme) + canlı ayar kontrolü |
+| 22 sektör, hazır sorular, örnek rakipler | ✅ | E2E |
+| Marka / rakip / soru düzenleme | ✅ | E2E |
+| Cevabı göster (ham yapay zekâ cevabı, marka vurgulu) | ✅ | E2E |
+| Gerçek liste sırası (izlenmeyen markalar dahil) | ✅ | Birim + E2E |
+| Gizlilik politikası ve kullanım koşulları (taslak) | ⚠️ | Hukuki inceleme bekliyor |
 | Çalışma alanı (işletme / ajans) | ✅ | Entegrasyon + E2E |
 | Marka, rakip, soru yönetimi + paket limitleri | ✅ | Entegrasyon + E2E |
 | Şablondan soru önerileri (sektör + şehir, Türkçe ek uyumu) | ✅ | E2E |
@@ -39,6 +45,10 @@
 - **Önerilme tespiti:** kural tabanlı; belirsiz cümleler için yapay zekâ kontrolü yok.
 - **İngilizce arayüz:** çeviri altyapısı var, metinler çevrilmedi.
 - **Ölçüm işçisi:** GitHub Actions'ta İstanbul 08–23 arası saatlik çalışır; ölçüm sonucu en geç ~1 saatte gelir.
+
+## Bilinen engel
+
+- **`pages.dev` Türkiye'de erişime kapalı** (TFF kararı, Kasım 2025). Türkiye'den yalnızca özel DNS ile açılıyor. Müşteriye açmadan önce kendi alan adı gerekli (~10–12 $/yıl).
 
 ## Henüz yok
 
