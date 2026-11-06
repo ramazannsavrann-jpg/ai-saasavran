@@ -258,11 +258,15 @@ test("Banka sektörü: hazır sorular, örnek rakipler, düzenleme, gerçek sır
   const r = await work(["Öne çıkanlar:\n1. **Ziraat Bankası** – yaygın\n   - Akbank ile karşılaştırılır\n2. **Garanti BBVA** – mobil uygulaması güçlü\n3. İşbank"]);
   expect(r?.status).toBe("done");
   await page.reload();
-  await expect(page.getByText("Önerildiniz, en iyi sıra 2").first()).toBeVisible();
   await page.getByRole("button", { name: "Cevabı göster" }).first().click();
-  await expect(page.locator(".answer mark").first()).toHaveText("Garanti BBVA");
-  await expect(page.locator(".answer-text").first()).toContainText("Ziraat Bankası");
+  await expect(page.locator(".answer-text").first()).not.toBeEmpty();
   await expect(page.locator(".answer-text").first()).not.toContainText("**");
+  if (!REAL) {
+    // Sabit test cevabında: izlenmeyen Ziraat 1. sırada → Garanti'nin gerçek sırası 2
+    await expect(page.getByText("Önerildiniz, en iyi sıra 2").first()).toBeVisible();
+    await expect(page.locator(".answer mark").first()).toHaveText("Garanti BBVA");
+    await expect(page.locator(".answer-text").first()).toContainText("Ziraat Bankası");
+  }
   await shot(page, "14-cevabi-goster");
 
   // Karanlık tema: karşılaştırma çubukları görünür olmalı
