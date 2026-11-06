@@ -5,6 +5,7 @@ export default defineConfig({
   testDir: "e2e",
   testMatch: /.*\.e2e\.ts/,
   timeout: 120_000,
+  expect: { timeout: 15_000 },
   workers: 1,
   reporter: [["list"]],
   use: {

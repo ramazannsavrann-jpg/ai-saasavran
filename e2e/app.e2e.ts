@@ -21,6 +21,20 @@ test.beforeAll(async () => {
 });
 test.afterAll(async () => { await stack?.stop(); });
 
+// Hata anında CI log'una ekrandaki metni ve tarayıcı hatalarını yaz (ekran görüntüsü indirilemediğinde teşhis için).
+const browserLogs: string[] = [];
+test.beforeEach(async ({ page }) => {
+  browserLogs.length = 0;
+  page.on("console", (m) => { if (m.type() === "error" || m.type() === "warning") browserLogs.push(`[console.${m.type()}] ${m.text()}`); });
+  page.on("pageerror", (e) => browserLogs.push(`[pageerror] ${e.message}`));
+  page.on("response", (r) => { if (r.status() >= 400) browserLogs.push(`[http ${r.status()}] ${r.request().method()} ${r.url()}`); });
+});
+test.afterEach(async ({ page }, info) => {
+  if (info.status === info.expectedStatus) return;
+  const text = await page.locator("body").innerText().catch(() => "(okunamadı)");
+  console.log(`\n===== TEŞHİS: ${info.title} =====\nURL: ${page.url()}\n--- Ekran metni ---\n${text.slice(0, 2000)}\n--- Tarayıcı ---\n${browserLogs.slice(-30).join("\n")}\n=====`);
+});
+
 const svc = () => createClient(stack.url, stack.serviceKey, { auth: { persistSession: false } });
 
 /** Kuyruktaki ölçümü işler. Gerçek anahtar varsa gerçek Gemini (aramasız, ücretsiz), yoksa sahte cevap. */

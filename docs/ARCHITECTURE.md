@@ -2,14 +2,15 @@
 
 ## Genel yapı
 
-Tek dil (TypeScript), tek veritabanı (Supabase Postgres). Mikroservis yok.
+Tek dil (TypeScript), tek veritabanı (Supabase Postgres). Mikroservis, Redis veya ayrı API sunucusu yok.
 
 ```
-[Next.js arayüz]  ──(Supabase Auth + RLS)──►  [Postgres]
-                                                  ▲
-[Zamanlanmış iş: haftalık ölçüm] ──service role───┘
+[Arayüz: Vite + React, statik]  ──(kullanıcı oturumu, RLS)──►  [Supabase: Auth + PostgREST + Postgres]
+                                                                        ▲
+[İşçi: GitHub Actions]  ──(service role, kota fonksiyonları)────────────┘
         │
-        └─► engine/pipeline ──► providers/{gemini, openai, perplexity}
+        └─► engine/pipeline ──► providers/{gemini, openai*, perplexity*, simulated}
+                                 * ücretli: ALLOW_PAID_API olmadan kapalı
 ```
 
 Arayüz ve işçi yazıldı. Bulutta: Supabase (Auth + Postgres + PostgREST), arayüz statik dosya olarak (ör. Cloudflare Pages), işçi GitHub Actions'ta. Arayüz bağlantı bilgisini çalışma anında `/config.json`'dan okur.
