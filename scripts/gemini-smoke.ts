@@ -22,7 +22,16 @@ for (const search of ["true", "false"]) {
   if (!g) { results[label] = { ok: false, error: JSON.stringify(status) }; continue; }
   const t0 = Date.now();
   try {
-    const r = await g.ask("smoke", prompt);
+    // Geçici hatalarda (503 vb.) en fazla 3 deneme, artan bekleme
+    let r;
+    for (let attempt = 1; ; attempt++) {
+      try { r = await g.ask("smoke", prompt); break; }
+      catch (e) {
+        if ((e as { kind?: string }).kind !== "transient" || attempt >= 3) throw e;
+        console.log(`${label}: geçici hata, ${attempt * 10} sn sonra tekrar denenecek`);
+        await new Promise((res) => setTimeout(res, attempt * 10_000));
+      }
+    }
     anyOk = true;
     if (r.costUsd !== 0) throw new Error("ücretsiz katmanda maliyet 0 olmalıydı");
     results[label] = {
