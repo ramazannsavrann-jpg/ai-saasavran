@@ -244,11 +244,10 @@ form > .btn, .stack > .btn { width: 100%; }
 .bar-head { display: flex; justify-content: space-between; gap: 12px; font-size: .95rem; }
 .bar-name em { font-style: normal; color: var(--muted); }
 .bar-target .bar-name { font-weight: 700; }
-.bar-track { height: 12px; background: var(--paper); border-radius: 3px; margin-top: 4px; overflow: hidden; }
-.bar-fill { height: 100%; background: var(--muted); border-radius: 3px; }
-.bar-target .bar-fill.bar-model_knowledge, .bar-target .bar-fill.bar-live_search { background: var(--primary); }
-.bar-target .bar-fill.bar-simulated { background: var(--sim); }
-.bar-fill.bar-model_knowledge { background-image: repeating-linear-gradient(90deg, transparent 0 8px, var(--surface) 8px 10px); }
+.bar-track { height: 12px; background: var(--tint); border-radius: 3px; margin-top: 4px; overflow: hidden; }
+.bar-fill { height: 100%; background-color: var(--muted); border-radius: 3px; }
+.bar-target .bar-fill { background-color: var(--primary); }
+.bar-target .bar-fill.bar-simulated { background-color: var(--sim); }
 .bar-detail { font-size: .8rem; color: var(--muted); }
 
 /* Soru sonuçları ve listeler */
@@ -308,3 +307,19 @@ form > .btn, .stack > .btn { width: 100%; }
 .btn-google:hover { border-color: var(--muted); }
 .or { display: flex; align-items: center; gap: 12px; color: var(--muted); font-size: .88rem; }
 .or::before, .or::after { content: ""; flex: 1; border-top: 1px solid var(--line); }
+
+/* Düzenleme, öneri çipleri, cevap metni */
+.page-head .link-btn { margin-left: 8px; }
+.form-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+.form-actions .btn { width: auto; }
+.rows li.editing { display: block; }
+.edit-inline { padding: 4px 0 8px; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.chip { min-height: 40px; padding: 0 14px; border-radius: 99px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); font: 600 .92rem var(--body); cursor: pointer; }
+.chip:hover { border-color: var(--primary); }
+.chip[disabled] { opacity: .5; }
+.answers { margin-top: 8px; display: grid; gap: 10px; }
+.answer { margin: 0; padding: 12px 14px; background: var(--paper); border-left: 3px dashed var(--primary); border-radius: var(--radius-s); }
+.answer-meta { font-size: .8rem; color: var(--muted); margin-bottom: 6px; }
+.answer-text { white-space: pre-wrap; font-size: .92rem; line-height: 1.5; }
+.answer mark { background: var(--tint); color: var(--primary-ink); font-weight: 700; padding: 0 2px; border-radius: 3px; }

@@ -98,7 +98,7 @@ test("Müşteri akışı: kayıt → marka → rakip → soru → ölçüm → r
 
   // Sorular: şablondan 3 öneri ekle
   await expect(page.getByRole("heading", { name: "Lezzet Durağı Döner" })).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Şablondan öneriler" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Hazır sorular" })).toBeVisible();
   for (let k = 0; k < 3; k++) {
     await page.getByRole("button", { name: "Ekle", exact: true }).first().click();
     await expect(page.getByText(`${k + 1} / 10 aktif`)).toBeVisible();
@@ -197,6 +197,80 @@ test("Google ile giriş: düğme görünür ve doğru Google yetkilendirme adres
   await expect(page.getByRole("button", { name: "Google ile devam et" })).toBeVisible();
   await expect(page.getByText("Google ile devam ederek")).toBeVisible();
   await shot(page, "12-kayit-google");
+});
+
+test("Banka sektörü: hazır sorular, örnek rakipler, düzenleme, gerçek sıra, cevabı göster, karanlık tema", async ({ page }) => {
+  await page.goto("/kayit");
+  await expect(page.getByRole("heading", { name: "Hesap oluşturun" })).toBeVisible();
+  await page.getByLabel("E-posta").fill("banka@ornek.test");
+  await page.getByLabel("Şifre").fill("Guclu-Sifre-2026");
+  await page.getByRole("checkbox").check();
+  await page.getByRole("button", { name: "Hesap oluştur" }).click();
+  await page.getByLabel("İşletme adı").fill("Banka Deneme");
+  await page.getByRole("button", { name: "Çalışma alanını oluştur" }).click();
+  await page.getByLabel("Marka adı").fill("Garanti BBVA");
+  await page.getByLabel("Sektör").selectOption({ label: "Banka / finans" });
+  await page.getByRole("button", { name: "Markayı ekle" }).click();
+
+  // Şehir olmadan da ulusal sektör soruları çıkar; restoran şablonu çıkmaz
+  await expect(page.getByRole("heading", { name: "Hazır sorular" })).toBeVisible();
+  await expect(page.getByText("Kredi kartı almak için hangi bankayı önerirsin?")).toBeVisible();
+  for (let k = 0; k < 2; k++) {
+    await page.getByRole("button", { name: "Ekle", exact: true }).first().click();
+    await expect(page.getByText(`${k + 1} / 10 aktif`)).toBeVisible();
+  }
+
+  // Soru düzenleme
+  await page.getByRole("button", { name: "Düzenle" }).nth(1).click();
+  const qForm = page.getByRole("form", { name: "Soruyu düzenle" });
+  await qForm.getByLabel("Soru").fill("Türkiye'de en iyi mobil bankacılık uygulaması hangisi sence?");
+  await qForm.getByRole("button", { name: "Kaydet" }).click();
+  await expect(page.getByText("Türkiye'de en iyi mobil bankacılık uygulaması hangisi sence?")).toBeVisible();
+
+  // Örnek rakipler: kendi markası önerilmez
+  await page.getByRole("tab", { name: "Rakipler" }).click();
+  await expect(page.getByRole("heading", { name: "Bu sektörde bilinen markalar" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "+ Garanti BBVA" })).toHaveCount(0);
+  await page.getByRole("button", { name: "+ Akbank" }).click();
+  await expect(page.locator(".rows").getByText("Akbank", { exact: true })).toBeVisible();
+  await page.getByRole("button", { name: "+ İş Bankası" }).click();
+  await expect(page.locator(".rows").getByText("İş Bankası", { exact: true })).toBeVisible();
+  // Rakip adını düzenle (yanlış yazım düzeltme)
+  await page.locator(".rows li").filter({ hasText: "İş Bankası" }).getByRole("button", { name: "Düzenle" }).click();
+  const cForm = page.getByRole("form", { name: "İş Bankası düzenle" });
+  await cForm.getByLabel("Diğer yazılışlar").fill("İşbank, Türkiye İş Bankası");
+  await cForm.getByRole("button", { name: "Kaydet" }).click();
+  await expect(page.getByText("İşbank, Türkiye İş Bankası")).toBeVisible();
+  await shot(page, "13-ornek-rakipler");
+
+  // Marka düzenleme
+  await page.getByRole("button", { name: "Düzenle" }).first().click();
+  const bForm = page.getByRole("form", { name: "Markayı düzenle" });
+  await bForm.getByLabel("Diğer yazılışlar").fill("Garanti, Garanti Bankası");
+  await bForm.getByRole("button", { name: "Kaydet" }).click();
+  await expect(page.getByRole("heading", { name: "Garanti BBVA", level: 1 })).toBeVisible();
+
+  // Ölçüm: izlenmeyen Ziraat listede ilk sırada → Garanti'nin gerçek sırası 2 olmalı
+  await page.getByRole("tab", { name: "Rapor" }).click();
+  await page.getByRole("button", { name: "Ölçüm başlat" }).click();
+  await expect(page.getByRole("status").filter({ hasText: "sırada" })).toBeVisible();
+  const r = await work(["Öne çıkanlar:\n1. **Ziraat Bankası** – yaygın\n   - Akbank ile karşılaştırılır\n2. **Garanti BBVA** – mobil uygulaması güçlü\n3. İşbank"]);
+  expect(r?.status).toBe("done");
+  await page.reload();
+  await expect(page.getByText("Önerildiniz, en iyi sıra 2").first()).toBeVisible();
+  await page.getByRole("button", { name: "Cevabı göster" }).first().click();
+  await expect(page.locator(".answer mark").first()).toHaveText("Garanti BBVA");
+  await expect(page.locator(".answer-text").first()).toContainText("Ziraat Bankası");
+  await expect(page.locator(".answer-text").first()).not.toContainText("**");
+  await shot(page, "14-cevabi-goster");
+
+  // Karanlık tema: karşılaştırma çubukları görünür olmalı
+  await page.emulateMedia({ colorScheme: "dark" });
+  await page.reload();
+  const fill = await page.locator(".bar-target .bar-fill").first().evaluate((el) => getComputedStyle(el).backgroundColor);
+  const track = await page.locator(".bar-target .bar-track").first().evaluate((el) => getComputedStyle(el).backgroundColor);
+  expect(fill).not.toBe(track);
+  await shot(page, "15-rapor-karanlik");
 });
 
 test("İzolasyon arayüzde: ikinci müşteri ilk müşterinin markasını göremez", async ({ page }) => {

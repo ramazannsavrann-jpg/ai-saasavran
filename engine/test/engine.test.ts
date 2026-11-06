@@ -41,6 +41,20 @@ test("listede geçen marka önerilmiş sayılır, sıra doğru", () => {
   assert.equal(hits.find((h) => h.brandId === "c1")!.rank, 1);
 });
 
+test("sıra, izlenmeyen markalar dahil gerçek liste sırasıdır; alt maddeler sayılmaz", () => {
+  const text = [
+    "Türkiye'de öne çıkan bankalar:",
+    "1. **Ziraat Bankası** – en büyük kamu bankası",
+    "   - Geniş şube ağı",
+    "   - Kebapçı Halil ile anlaşmalı",
+    "2. **Ali Usta Döner** – örnek",
+    "3. Kebapçı Halil",
+  ].join("\n");
+  const hits = analyzeResponse({ promptId: "p", provider: "m", answerText: text, citedUrls: [] }, brands);
+  assert.equal(hits.find((h) => h.brandId === "us")!.rank, 2);
+  assert.equal(hits.find((h) => h.brandId === "c1")!.rank, 3);
+});
+
 test("olumsuz bağlam öneri sayılmaz", () => {
   const hits = analyzeResponse({ promptId: "p", provider: "m", answerText: "- Şirin Döner son yorumlara göre önerilmez.", citedUrls: [] }, brands);
   const c2 = hits.find((h) => h.brandId === "c2")!;

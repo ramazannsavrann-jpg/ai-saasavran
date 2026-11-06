@@ -5,12 +5,9 @@ import { api, type Brand, type MeasurementType } from "../lib/data";
 import { friendlyError } from "../lib/supabase";
 import { PAUSE_TEXT } from "../lib/messages";
 import { numLoc, series, pct, usd } from "../lib/report";
+import { SECTORS } from "../lib/sectors";
 import { Button, DataNotice, Empty, ErrorBox, Field, Loading, Meter, Select, TypeBadge } from "../components/ui";
 
-export const SECTORS = [
-  "Restoran / döner-kebap", "Market", "Akaryakıt istasyonu", "Otel / turizm", "Mobilya mağazası",
-  "Otomotiv", "Emlak", "Klinik / sağlık", "Teknoloji / elektronik", "Oto yıkama / yerel hizmet", "Diğer",
-];
 
 export function Dashboard() {
   const { current, workspaces } = useApp();

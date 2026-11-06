@@ -56,7 +56,6 @@ const LIST_LINE = /^\s*(\d+[.)]|[-*•])\s+/;
 
 export function analyzeResponse(resp: AIResponse, brands: BrandRef[]): BrandHit[] {
   const lines = resp.answerText.split(/\n+/);
-  const listOrder: string[] = []; // listede geçiş sırasına göre marka id'leri
 
   const hits = brands.map((b): BrandHit => {
     const needles = [b.name, ...b.aliases].map(normalize).filter((n) => n.length >= 2);
@@ -85,19 +84,16 @@ export function analyzeResponse(resp: AIResponse, brands: BrandRef[]): BrandHit[
     return { brandId: b.id, mentioned, recommended, ambiguous, cited, rank: null };
   });
 
-  // Sıralama: liste satırlarında ilk geçiş sırası
-  for (const line of lines) {
-    if (!LIST_LINE.test(line)) continue;
-    for (const b of brands) {
-      const n = [b.name, ...b.aliases].map(normalize);
-      if (!listOrder.includes(b.id) && n.some((x) => ` ${normalize(line)} `.includes(` ${x}`))) {
-        listOrder.push(b.id);
-      }
-    }
-  }
+  // Sıralama: cevaptaki GERÇEK liste sırası (izlenmeyen markalar da sayılır).
+  // Numaralı liste varsa o esas alınır; yoksa girintisiz madde işaretleri. Alt maddeler (özellik açıklamaları) sayılmaz.
+  const numbered = lines.filter((l) => /^\s{0,1}\d+[.)]\s+/.test(l));
+  const items = numbered.length > 0 ? numbered : lines.filter((l) => /^\s{0,1}[-*•]\s+/.test(l));
   for (const h of hits) {
-    const i = listOrder.indexOf(h.brandId);
-    h.rank = h.recommended && i >= 0 ? i + 1 : null;
+    if (!h.recommended) continue;
+    const b = brands.find((x) => x.id === h.brandId)!;
+    const n = [b.name, ...b.aliases].map(normalize).filter((x) => x.length >= 2);
+    const i = items.findIndex((line) => n.some((x) => ` ${normalize(line)} `.includes(` ${x}`)));
+    h.rank = i >= 0 ? i + 1 : null;
   }
   return hits;
 }

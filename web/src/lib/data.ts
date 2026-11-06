@@ -77,6 +77,11 @@ export const api = {
     must(await sb().from("prompts").insert(p));
   },
   async setPromptActive(id: string, active: boolean) { must(await sb().from("prompts").update({ active }).eq("id", id)); },
+  async updatePrompt(id: string, patch: { text?: string; intent?: Intent }) { must(await sb().from("prompts").update(patch).eq("id", id)); },
+  /** Bir ölçümdeki ham yapay zekâ cevapları (soru başına). */
+  async answers(runId: string): Promise<{ prompt_id: string; repetition: number; answer_text: string; model: string }[]> {
+    return must(await sb().from("responses").select("prompt_id,repetition,answer_text,model").eq("run_id", runId).order("repetition"));
+  },
   async deletePrompt(id: string) { must(await sb().from("prompts").delete().eq("id", id)); },
   async runs(brandId: string): Promise<Run[]> {
     return must(await sb().from("runs").select("*").eq("brand_id", brandId).order("created_at", { ascending: false }).limit(30));
