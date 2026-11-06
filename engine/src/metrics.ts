@@ -1,5 +1,5 @@
 // AI SaaSavran — görünürlük metrikleri (LLM gerektirmeyen, deterministik çekirdek)
-// Not: "recommended" kararı burada kural tabanlıdır (rules_v1). Belirsiz durumlar
+// Not: "recommended" kararı burada kural tabanlıdır (rules_v2: liste/başlık + öneri ifadeleri). Belirsiz durumlar
 // "ambiguous" olarak işaretlenir ve yalnızca bunlar ucuz bir LLM sınıflandırıcısına gider.
 
 export interface BrandRef {
@@ -51,8 +51,19 @@ const NEGATIVE = [
   "sikayet", "not recommend", "avoid", "closed",
 ];
 
-// Satır başı listeleme ("1. X", "- X", "**X**") → öneri listesi işareti
-const LIST_LINE = /^\s*(\d+[.)]|[-*•])\s+/;
+// Satır başı listeleme ("1. X", "- X", "**X**", "### X") → öneri listesi işareti
+const LIST_LINE = /^\s*(\d+[.)]|[-*•]\s|\*\*|#{2,4}\s)/;
+
+// Öneri ifadeleri (rules_v2): aynı cümlede marka + bu ifade → öneri sayılır
+const RECOMMEND_CUES = [
+  "oneririm", "oneriyorum", "oneririz", "tavsiye ederim", "tavsiye ediyorum", "tek bir isim", "tek isim",
+  "en iyi secenek", "en iyi tercih", "en guclu secenek", "ilk tercih", "one cikiyor", "one cikan", "en cok onerilen",
+  "i recommend", "i d recommend", "best option", "top pick", "my pick",
+];
+
+function sentences(line: string): string[] {
+  return line.split(/(?<=[!?])\s+|(?<=[a-zçğıöşü)\]*][.])\s+/i).filter(Boolean);
+}
 
 export function analyzeResponse(resp: AIResponse, brands: BrandRef[]): BrandHit[] {
   const lines = resp.answerText.split(/\n+/);
@@ -68,6 +79,10 @@ export function analyzeResponse(resp: AIResponse, brands: BrandRef[]): BrandHit[
     const mentioned = mentionLines.length > 0;
     const negative = mentionLines.some((l) => NEGATIVE.some((w) => normalize(l).includes(w)));
     const inList = mentionLines.some((l) => LIST_LINE.test(l));
+    const cueSentence = mentionLines.some((l) => sentences(l).some((sn) => {
+      const n = normalize(sn);
+      return containsBrand(sn) && RECOMMEND_CUES.some((c) => n.includes(c)) && !NEGATIVE.some((w) => n.includes(w));
+    }));
 
     const cited =
       !!b.domain &&
@@ -78,7 +93,8 @@ export function analyzeResponse(resp: AIResponse, brands: BrandRef[]): BrandHit[
 
     let recommended = false;
     let ambiguous = false;
-    if (mentioned && !negative && inList) recommended = true;
+    if (mentioned && cueSentence) recommended = true;
+    else if (mentioned && !negative && inList) recommended = true;
     else if (mentioned && !negative && !inList) ambiguous = true; // düz metinde geçiyor: öneri mi, bilgi mi?
 
     return { brandId: b.id, mentioned, recommended, ambiguous, cited, rank: null };
@@ -86,8 +102,10 @@ export function analyzeResponse(resp: AIResponse, brands: BrandRef[]): BrandHit[
 
   // Sıralama: cevaptaki GERÇEK liste sırası (izlenmeyen markalar da sayılır).
   // Numaralı liste varsa o esas alınır; yoksa girintisiz madde işaretleri. Alt maddeler (özellik açıklamaları) sayılmaz.
-  const numbered = lines.filter((l) => /^\s{0,1}\d+[.)]\s+/.test(l));
-  const items = numbered.length > 0 ? numbered : lines.filter((l) => /^\s{0,1}[-*•]\s+/.test(l));
+  const numbered = lines.filter((l) => /^\s{0,1}(#{2,4}\s+)?(\*\*)?\d+[.)]\s+/.test(l));
+  const bullets = lines.filter((l) => /^\s{0,1}[-*•]\s+/.test(l));
+  const headings = lines.filter((l) => /^\s{0,1}(\*\*|#{2,4}\s)/.test(l));
+  const items = numbered.length > 0 ? numbered : bullets.length > 0 ? bullets : headings;
   for (const h of hits) {
     if (!h.recommended) continue;
     const b = brands.find((x) => x.id === h.brandId)!;

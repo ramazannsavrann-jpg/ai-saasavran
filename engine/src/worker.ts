@@ -130,7 +130,7 @@ export async function processNextRun(deps: WorkerDeps): Promise<WorkerResult | n
         const hits = analyzeResponse(result, brands);
         must(await db.from("mentions").insert(hits.map((h) => ({
           response_id: resp.id, workspace_id: run.workspace_id, brand_id: h.brandId,
-          mentioned: h.mentioned, recommended: h.recommended, cited: h.cited, rank: h.rank, classifier: "rules_v1",
+          mentioned: h.mentioned, recommended: h.recommended, cited: h.cited, rank: h.rank, classifier: "rules_v2",
         }))), "anılma kaydı");
       },
       onFailedCall: async (_pid, kind) => { failed++; await gate.recordFailure(run.workspace_id, provider.config, kind); },
@@ -173,4 +173,31 @@ export async function processQueue(deps: WorkerDeps, maxRuns = 20): Promise<Work
     out.push(r);
   }
   return out;
+}
+
+/**
+ * Kayıtlı cevapları güncel kurallarla ve güncel marka bilgileriyle (takma ad, web sitesi) yeniden analiz eder.
+ * API çağrısı yapmaz, ücretsizdir. Yalnız verilen çalışma alanı türündeki ölçümlere uygulanır.
+ */
+export async function reanalyzeRuns(db: SupabaseClient, kind: "growth_lab" = "growth_lab"): Promise<{ runs: number; responses: number }> {
+  const ws = must(await db.from("workspaces").select("id").eq("kind", kind), "alanlar") as { id: string }[];
+  if (!ws.length) return { runs: 0, responses: 0 };
+  const runs = must(await db.from("runs").select("id,brand_id,workspace_id").in("workspace_id", ws.map((w) => w.id)).eq("status", "done"), "ölçümler") as { id: string; brand_id: string; workspace_id: string }[];
+  let n = 0;
+  for (const run of runs) {
+    const target = must(await db.from("brands").select("id,name,aliases,website").eq("id", run.brand_id).single(), "marka") as any;
+    const comps = must(await db.from("brands").select("id,name,aliases,website").eq("owner_brand_id", run.brand_id).eq("is_competitor", true), "rakipler") as any[];
+    const brands: BrandRef[] = [target, ...comps].map((b) => ({ id: b.id, name: b.name, aliases: b.aliases ?? [], domain: domainOf(b.website) }));
+    const resp = must(await db.from("responses").select("id,prompt_id,provider,answer_text,cited_urls").eq("run_id", run.id), "cevaplar") as any[];
+    for (const r of resp) {
+      const hits = analyzeResponse({ promptId: r.prompt_id, provider: r.provider, answerText: r.answer_text, citedUrls: r.cited_urls ?? [] }, brands);
+      must(await db.from("mentions").delete().eq("response_id", r.id), "eski anılma");
+      must(await db.from("mentions").insert(hits.map((h) => ({
+        response_id: r.id, workspace_id: run.workspace_id, brand_id: h.brandId,
+        mentioned: h.mentioned, recommended: h.recommended, cited: h.cited, rank: h.rank, classifier: "rules_v2",
+      }))), "anılma");
+      n++;
+    }
+  }
+  return { runs: runs.length, responses: n };
 }

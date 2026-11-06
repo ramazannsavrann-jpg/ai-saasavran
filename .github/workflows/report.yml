@@ -2,7 +2,7 @@ name: Growth Lab raporu
 on:
   push:
     branches: [main]
-    paths: [scripts/live-report.ts, .github/workflows/report.yml]
+    paths: [scripts/live-report.ts, scripts/reanalyze.ts, engine/src/metrics.ts, engine/src/labs.ts, .github/workflows/report.yml]
   workflow_dispatch:
 permissions: { contents: read }
 jobs:
@@ -14,6 +14,14 @@ jobs:
       - uses: actions/setup-node@v4
         with: { node-version: 22, cache: npm }
       - run: npm ci
+      - name: Laboratuvar bilgilerini güncelle ve kayıtlı cevapları yeniden analiz et (ücretsiz)
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          PLATFORM_ADMIN_EMAIL: ${{ secrets.PLATFORM_ADMIN_EMAIL }}
+        run: |
+          node scripts/labs-seed.ts
+          node scripts/reanalyze.ts
       - name: Özet (salt okunur)
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}

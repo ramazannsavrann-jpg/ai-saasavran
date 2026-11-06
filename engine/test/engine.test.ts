@@ -375,3 +375,27 @@ test("OpenAI en kötü durum maliyeti arama sınırını hesaba katar", () => {
   assert.ok(worst > 0.02 && worst < 0.03, String(worst));
   assert.equal(OPENAI_DEFAULT.model, "gpt-6-luna");
 });
+
+test("rules_v2: kalın başlıklı öneriler ve 'tek bir isim' gibi ifadeler öneri sayılır; ürün adı takma adla markaya bağlanır", () => {
+  const brands = [
+    { id: "is", name: "İş Bankası", aliases: ["İşCep"] },
+    { id: "g", name: "Garanti BBVA", aliases: ["Garanti BBVA Mobil"] },
+    { id: "a", name: "Akbank", aliases: [] },
+    { id: "z", name: "Ziraat Bankası", aliases: [] },
+  ];
+  const text = "**Tek bir isim söylemem gerekirse: İşCep.** Genel kullanımda kapsamlı ve güçlü bir seçenek.\n\n**Garanti BBVA Mobil** — kullanımı kolay, kampanyaları zengin.\n\n**Akbank** — hızlı para transferi.\n\nZiraat Bankası'nın şube ağı geniştir ama uygulaması yavaş, önerilmez.";
+  const h = Object.fromEntries(analyzeResponse({ promptId: "p", provider: "openai", answerText: text, citedUrls: [] }, brands).map((x) => [x.brandId, x]));
+  assert.equal(h.is.recommended, true, "İşCep → İş Bankası önerildi");
+  assert.equal(h.g.recommended, true, "kalın başlık öneri sayılır");
+  assert.equal(h.a.recommended, true);
+  assert.equal(h.z.mentioned, true);
+  assert.equal(h.z.recommended, false, "olumsuz bağlam öneri değildir");
+  assert.equal(h.is.rank, 1);
+  assert.equal(h.g.rank, 2);
+});
+
+test("rules_v2: düz paragrafta yalnızca anılan marka öneri sayılmaz", () => {
+  const h = analyzeResponse({ promptId: "p", provider: "openai", answerText: "Garanti BBVA 1946'da kurulmuş bir bankadır. Merkezi İstanbul'dadır.", citedUrls: [] }, [{ id: "g", name: "Garanti BBVA", aliases: [] }]);
+  assert.equal(h[0].mentioned, true);
+  assert.equal(h[0].recommended, false);
+});

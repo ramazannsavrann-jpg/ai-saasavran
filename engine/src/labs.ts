@@ -38,7 +38,13 @@ export const DEMO_BRANDS: DemoBrand[] = [
 export const GROWTH = {
   workspace: "AI SaaSavran (Growth Lab)",
   brand: { name: "AI SaaSavran", aliases: ["SaaSavran", "AI Savran"], website: "aisaasavran.com", sector: "Yazılım / dijital hizmet" },
-  competitors: ["Profound", "Peec AI", "Otterly.AI", "Semrush", "Ahrefs"],
+  competitors: [
+    { name: "Profound", aliases: ["tryprofound"], website: "tryprofound.com" },
+    { name: "Peec AI", aliases: ["Peec"], website: "peec.ai" },
+    { name: "Otterly.AI", aliases: ["Otterly"], website: "otterly.ai" },
+    { name: "Semrush", aliases: [], website: "semrush.com" },
+    { name: "Ahrefs", aliases: [], website: "ahrefs.com" },
+  ] as Comp[],
   prompts: [
     ["Markamın ChatGPT'de ne kadar görünür olduğunu nasıl ölçerim?", "informational"],
     ["Yapay zekâ cevaplarında marka görünürlüğünü ölçen araçlar hangileri?", "comparison"],
@@ -55,8 +61,14 @@ export const GROWTH = {
 
 /** Canlı arama ile aramasız sonucu karşılaştırmak için tanınmış bir test markası (Growth Lab içinde). */
 export const GROWTH_TEST = {
-  brand: { name: "Garanti BBVA", aliases: ["Garanti", "Garanti Bankası"], website: "garantibbva.com.tr", sector: "Banka / finans" },
-  competitors: ["Akbank", "İş Bankası", "Yapı Kredi", "Ziraat Bankası", "Enpara.com"],
+  brand: { name: "Garanti BBVA", aliases: ["Garanti Bankası", "Garanti BBVA Mobil", "Bonus Card"], website: "garantibbva.com.tr", sector: "Banka / finans" },
+  competitors: [
+    { name: "Akbank", aliases: ["Akbank Mobil", "Juzdan"], website: "akbank.com" },
+    { name: "İş Bankası", aliases: ["Türkiye İş Bankası", "İşCep", "İşbank", "Maximum Mobil"], website: "isbank.com.tr" },
+    { name: "Yapı Kredi", aliases: ["Yapı Kredi Mobil", "World Card", "Worldcard"], website: "yapikredi.com.tr" },
+    { name: "Ziraat Bankası", aliases: ["Ziraat", "Ziraat Mobil", "T.C. Ziraat Bankası"], website: "ziraatbank.com.tr" },
+    { name: "Enpara.com", aliases: ["Enpara"], website: "enpara.com" },
+  ] as Comp[],
   prompts: [
     ["Türkiye'de en iyi mobil bankacılık uygulaması hangisi?", "comparison"],
     ["Kredi kartı almak için hangi bankayı önerirsin?", "purchase"],
@@ -78,11 +90,22 @@ async function ensureWorkspace(db: SupabaseClient, name: string, kind: "demo_lab
   return id;
 }
 
-async function ensureBrand(db: SupabaseClient, ws: string, b: { name: string; sector?: string; city?: string; website?: string; aliases?: string[] }, origin: "simulated" | "live_api", competitors: string[], prompts: [string, Intent][]) {
+type Comp = string | { name: string; aliases?: string[]; website?: string };
+const compOf = (c: Comp) => (typeof c === "string" ? { name: c, aliases: [] as string[], website: undefined as string | undefined } : { name: c.name, aliases: c.aliases ?? [], website: c.website });
+
+async function ensureBrand(db: SupabaseClient, ws: string, b: { name: string; sector?: string; city?: string; website?: string; aliases?: string[] }, origin: "simulated" | "live_api", competitors: Comp[], prompts: [string, Intent][]) {
   const existing = must(await db.from("brands").select("id").eq("workspace_id", ws).eq("name", b.name).eq("is_competitor", false).limit(1), "marka ara") as { id: string }[];
-  if (existing[0]) return { id: existing[0].id, created: false };
+  if (existing[0]) {
+    // Var olan markada takma adları ve rakip bilgilerini (takma ad, web sitesi) güncelle
+    if (b.aliases?.length) must(await db.from("brands").update({ aliases: b.aliases }).eq("id", existing[0].id), "takma ad");
+    for (const c of competitors.map(compOf)) {
+      if (!c.aliases.length && !c.website) continue;
+      must(await db.from("brands").update({ aliases: c.aliases, website: c.website ?? null }).eq("owner_brand_id", existing[0].id).eq("name", c.name), "rakip güncelle");
+    }
+    return { id: existing[0].id, created: false };
+  }
   const brand = must(await db.from("brands").insert({ workspace_id: ws, name: b.name, sector: b.sector ?? null, city: b.city ?? null, website: b.website ?? null, aliases: b.aliases ?? [], data_origin: origin }).select("id").single(), "marka ekle") as { id: string };
-  if (competitors.length) must(await db.from("brands").insert(competitors.map((name) => ({ workspace_id: ws, name, is_competitor: true, owner_brand_id: brand.id, data_origin: origin }))), "rakip ekle");
+  if (competitors.length) must(await db.from("brands").insert(competitors.map(compOf).map((c) => ({ workspace_id: ws, name: c.name, aliases: c.aliases, website: c.website ?? null, is_competitor: true, owner_brand_id: brand.id, data_origin: origin }))), "rakip ekle");
   if (prompts.length) must(await db.from("prompts").insert(prompts.map(([text, intent]) => ({ workspace_id: ws, brand_id: brand.id, text, intent }))), "soru ekle");
   return { id: brand.id, created: true };
 }
@@ -112,7 +135,7 @@ async function seedSimulatedHistory(db: SupabaseClient, ws: string, brandId: str
         billing: "free", created_at: at.toISOString(),
       }).select("id").single(), "cevap") as { id: string };
       must(await db.from("mentions").insert(analyzeResponse(res, refs).map((h) => ({
-        response_id: resp.id, workspace_id: ws, brand_id: h.brandId, mentioned: h.mentioned, recommended: h.recommended, cited: false, rank: h.rank, classifier: "rules_v1",
+        response_id: resp.id, workspace_id: ws, brand_id: h.brandId, mentioned: h.mentioned, recommended: h.recommended, cited: false, rank: h.rank, classifier: "rules_v2",
       }))), "anılma");
     }
   }
