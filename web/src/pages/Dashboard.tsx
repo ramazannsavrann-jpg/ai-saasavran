@@ -28,7 +28,7 @@ function WorkspaceView() {
     <div className="stack">
       <header className="page-head">
         <h1>{ws.name}</h1>
-        <p className="muted">{ws.kind === "agency" ? "Ajans" : ws.kind === "demo_lab" ? "Demo Lab" : "İşletme"} hesabı{u && <>, {u.plan_name} paketi</>}</p>
+        <p className="muted">{ws.kind === "agency" ? "Ajans hesabı" : ws.kind === "demo_lab" ? "Demo Lab" : ws.kind === "growth_lab" ? "Growth Lab: AI SaaSavran'ın kendi görünürlüğü" : "İşletme hesabı"}{u && <>, {u.plan_name} paketi</>}</p>
       </header>
 
       {ws.status === "paused" && (

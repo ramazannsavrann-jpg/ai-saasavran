@@ -154,6 +154,14 @@ test("Müşteri akışı: kayıt → marka → rakip → soru → ölçüm → r
   await expect(page.locator(".run").first()).toContainText("Tamamlandı");
   await shot(page, `08-olcumler-${tag}`);
 
+  // Öneriler: kural tabanlı yapılacaklar + site kontrolü (web sitesi girilmedi)
+  await page.getByRole("tab", { name: "Öneriler" }).click();
+  await expect(page.getByRole("heading", { name: "Yapılacaklar" })).toBeVisible();
+  await expect(page.getByText("yapay zekâ ile üretilmedi")).toBeVisible();
+  await expect(page.locator(".rec").first()).toBeVisible();
+  await expect(page.getByText("Markaya web sitesi eklenmemiş")).toBeVisible();
+  await shot(page, `08b-oneriler-${tag}`);
+
   // Panel
   await page.getByRole("link", { name: "Panele dön" }).click();
   await expect(page.getByText("Bu ayki kullanım")).toBeVisible();

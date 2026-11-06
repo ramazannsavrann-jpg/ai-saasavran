@@ -3,6 +3,7 @@
 // Ücretli API'ler ALLOW_PAID_API=true olmadan asla kullanılmaz.
 import { createClient } from "@supabase/supabase-js";
 import { processAudits, processQueue, scheduleWeekly } from "../engine/src/worker.ts";
+import { seedLabs } from "../engine/src/labs.ts";
 
 const { SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY } = process.env;
 if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
@@ -11,6 +12,10 @@ if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
 }
 const db = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, { auth: { persistSession: false } });
 const deps = { db, env: process.env };
+// Laboratuvarlar yoksa oluştur (idempotent; yönetici siteye giriş yaptıktan sonraki ilk çalışmada devreye girer).
+if (process.env.PLATFORM_ADMIN_EMAIL) {
+  try { await seedLabs(db, process.env.PLATFORM_ADMIN_EMAIL); } catch (e) { console.log("Laboratuvar hazırlığı atlandı:", (e as Error).message); }
+}
 const scheduled = await scheduleWeekly(deps);
 const audits = await processAudits(deps);
 const results = await processQueue(deps, Number(process.env.WORKER_MAX_RUNS || 20));

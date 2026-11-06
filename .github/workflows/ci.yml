@@ -159,6 +159,26 @@ jobs:
           SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
         run: node scripts/migrate.mjs
 
+  labs-seed:
+    name: Demo Lab ve Growth Lab'i hazırla
+    needs: deploy-db
+    if: needs.deploy-db.result == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: npm }
+      - run: npm ci
+      - name: Laboratuvarları oluştur (yoksa)
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          PLATFORM_ADMIN_EMAIL: ${{ secrets.PLATFORM_ADMIN_EMAIL }}
+        run: |
+          if [ -z "$PLATFORM_ADMIN_EMAIL" ]; then echo "PLATFORM_ADMIN_EMAIL tanımlı değil; atlandı."; exit 0; fi
+          node scripts/labs-seed.ts
+
   deploy-web:
     name: Siteyi yayınla (Cloudflare Pages)
     needs: [deploy-check, deploy-db]

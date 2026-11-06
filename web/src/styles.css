@@ -329,3 +329,25 @@ form > .btn, .stack > .btn { width: 100%; }
 .legal > * + * { margin-top: 14px; }
 .legal h2 { margin-top: 28px; }
 .legal hr { border: 0; border-top: 1px solid var(--line); margin: 32px 0 12px; }
+
+/* Öneriler ve site kontrolü */
+.weekly-note { font-size: .88rem; }
+.recs { list-style: none; margin: 12px 0 0; padding: 0; display: grid; gap: 12px; counter-reset: rec; }
+.rec { border: 1px solid var(--line); border-left-width: 5px; border-radius: var(--radius-s); padding: 12px 14px; }
+.rec-high { border-left-color: var(--danger); }
+.rec-medium { border-left-color: var(--sim); }
+.rec-low { border-left-color: var(--muted); }
+.rec-head { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; align-items: baseline; }
+.rec-pri { font-size: .8rem; color: var(--muted); white-space: nowrap; }
+.rec-why, .rec-action { margin-top: 6px; font-size: .93rem; }
+.rec-why span, .rec-action span { font-weight: 600; }
+.checks { list-style: none; margin: 10px 0 0; padding: 0; }
+.checks li { display: grid; grid-template-columns: 28px 1fr; gap: 10px; padding: 10px 0; border-top: 1px solid var(--line); }
+.checks li:first-child { border-top: 0; }
+.checks strong { display: block; }
+.checks .muted { display: block; font-size: .9rem; }
+.check-mark { width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; font-weight: 700; font-size: .85rem; }
+.checks .ok .check-mark { background: var(--tint); color: var(--ok); }
+.checks .bad .check-mark { background: var(--danger-tint); color: var(--danger); }
+.checks .sev-info .check-mark, .checks .sev-low .check-mark { background: var(--sim-tint); color: var(--sim); }
+.sev { font-style: normal; font-size: .75rem; font-weight: 700; margin-left: 8px; color: var(--muted); }

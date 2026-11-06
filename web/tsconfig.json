@@ -12,5 +12,5 @@
     "noUnusedLocals": true,
     "types": ["vite/client"]
   },
-  "include": ["src", "../engine/src/metrics.ts"]
+  "include": ["src", "../engine/src/metrics.ts", "../engine/src/recommendations.ts", "../engine/src/audit.ts"]
 }

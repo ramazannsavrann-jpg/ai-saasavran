@@ -295,3 +295,64 @@ test("Fiyat: yeni Starter tipik senaryoda kârlı, eski Starter kötü durumda z
   assert.equal(Math.round(planCost(newStarter, SCENARIOS[0]).engineCallsPerMonth), 650);
   assert.equal(freeTierCapacity(newStarter), 62);
 });
+
+// ---------------- Site kontrolü ----------------
+import { robotsBlocks, auditSite, analyzeHtml } from "../src/audit.ts";
+import { buildRecommendations } from "../src/recommendations.ts";
+
+test("robots.txt: bot özel grubu genel kuralı geçersiz kılar; Allow / Disallow uzunluk önceliği", () => {
+  const r = "User-agent: *\nDisallow: /admin\n\nUser-agent: GPTBot\nDisallow: /\n\nUser-agent: PerplexityBot\nUser-agent: ClaudeBot\nDisallow: /\nAllow: /\n";
+  assert.equal(robotsBlocks(r, "GPTBot"), true);
+  assert.equal(robotsBlocks(r, "Google-Extended"), false); // genel grup sadece /admin
+  assert.equal(robotsBlocks(r, "PerplexityBot"), false);   // Allow / eşit uzunlukta kazanır
+  assert.equal(robotsBlocks("User-agent: *\nDisallow: /\n", "CCBot"), true);
+  assert.equal(robotsBlocks("User-agent: *\nDisallow:\n", "CCBot"), false);
+});
+
+test("HTML analizi: başlık, açıklama, JSON-LD türleri, marka adı", () => {
+  const h = analyzeHtml(`<html lang="tr"><head><title>Ali Usta Döner – Antalya</title><meta name="description" content="Antalya'da 1998'den beri odun ateşinde döner yapan aile işletmesi, paket servis ve masa.">
+    <meta name="viewport" content="width=device-width"><script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Restaurant","name":"Ali Usta"},{"@type":"FAQPage"}]}</script></head><body><h1>Ali Usta</h1></body></html>`, ["Ali Usta Döner"]);
+  assert.equal(h.nameInTitle, true);
+  assert.ok(h.types.has("Restaurant") && h.types.has("FAQPage"));
+  assert.equal(h.lang, "tr");
+  assert.ok(h.metaDesc.length > 50);
+});
+
+test("Site kontrolü: engelli bot, eksik schema → başarısız kontroller; ulaşılamayan site", async () => {
+  const pages: Record<string, [number, string]> = {
+    "https://ornek.test/": [200, `<html><head><title>X</title></head><body>${"metin ".repeat(200)}</body></html>`],
+    "https://ornek.test/robots.txt": [200, "User-agent: GPTBot\nDisallow: /\n"],
+    "https://ornek.test/sitemap.xml": [404, ""],
+    "https://ornek.test/llms.txt": [404, ""],
+  };
+  const fake = async (url: string) => { const [st, body] = pages[url] ?? [404, ""]; const r = new Response(body, { status: st }); Object.defineProperty(r, "url", { value: url }); return r; };
+  const res = await auditSite("ornek.test", ["Ali Usta"], fake as any);
+  const c = Object.fromEntries(res.checks.map((x) => [x.id, x]));
+  assert.equal(res.status, "ok");
+  assert.equal(c.ai_bots.ok, false);
+  assert.match(c.ai_bots.detail, /GPTBot/);
+  assert.equal(c.schema_org.ok, false);
+  assert.equal(c.https.ok, true);
+  assert.equal(c.sitemap.ok, false);
+  const down = await auditSite("ornek.test", [], (async () => { throw new TypeError("fetch failed"); }) as any);
+  assert.equal(down.status, "unreachable");
+});
+
+test("Öneriler: site hataları ve görünmediği sorular önceliğe göre sıralanır", () => {
+  const recs = buildRecommendations({
+    brandName: "Ali Usta", website: "ornek.test", city: "Antalya", sector: "Restoran / döner-kebap", aliases: [],
+    activePrompts: 3, completedRuns: 1, autoWeekly: true, measurementType: "model_knowledge",
+    prompts: [
+      { prompt_text: "Antalya'da en iyi döner?", answers: 1, target_mentioned: 0, target_recommended: 0, top_competitor: "Kebapçı Halil" },
+      { prompt_text: "Aile restoranı?", answers: 1, target_mentioned: 1, target_recommended: 0, top_competitor: null },
+      { prompt_text: "Gece açık?", answers: 1, target_mentioned: 1, target_recommended: 1, top_competitor: null },
+    ],
+    audit: { status: "ok", checks: [{ id: "ai_bots", ok: false, severity: "high", title: "", detail: "GPTBot engelli" }, { id: "faq", ok: false, severity: "low", title: "", detail: "yok" }, { id: "llms_txt", ok: false, severity: "info", title: "", detail: "yok" }] },
+  });
+  const ids = recs.map((r) => r.id);
+  assert.equal(recs[0].priority, "yüksek");
+  assert.ok(ids.includes("audit_ai_bots") && ids.includes("absent_prompts") && ids.includes("mentioned_not_recommended") && ids.includes("more_prompts"));
+  assert.ok(!ids.includes("audit_llms_txt"), "bilgi düzeyindeki kontrol öneri olmamalı");
+  assert.match(recs.find((r) => r.id === "absent_prompts")!.why, /Kebapçı Halil/);
+  assert.ok(ids.indexOf("audit_faq") > ids.indexOf("audit_ai_bots"));
+});

@@ -248,7 +248,7 @@ test("Migration çalıştırıcı: boş veritabanına uygular, ikinci kez uygula
   });
   const first = run();
   assert.equal(first.status, 0, first.stderr);
-  assert.match(first.stdout, /3 migration uygulandı/);
+  assert.match(first.stdout, /4 migration uygulandı/);
   const second = run();
   assert.equal(second.status, 0, second.stderr);
   assert.match(second.stdout, /güncel/);
@@ -264,4 +264,86 @@ test("Migration çalıştırıcı: boş veritabanına uygular, ikinci kez uygula
   const noRls = spawnSync("psql", ["-X", "-A", "-t", url, "-c",
     `select count(*) from pg_class c join pg_namespace n on n.oid = c.relnamespace where n.nspname = 'public' and c.relkind = 'r' and not c.relrowsecurity`], { encoding: "utf8" });
   assert.equal(noRls.stdout.trim(), "0");
+});
+
+test("Haftalık otomatik ölçüm: uygun markayı sıraya alır, yakın zamanda ölçüleni ve kotası yetmeyeni atlar", async () => {
+  const W = await user("haftalik@test.local");
+  const ws = ok(await W.c.rpc("create_workspace", { p_name: "Haftalık", p_kind: "business" })) as string;
+  const b = ok(await W.c.from("brands").insert({ workspace_id: ws, name: "Haftalık Marka" }).select("id").single()) as any;
+  ok(await W.c.from("prompts").insert([
+    { workspace_id: ws, brand_id: b.id, text: "Birinci deneme sorusu?", intent: "local" },
+    { workspace_id: ws, brand_id: b.id, text: "İkinci deneme sorusu?", intent: "local" },
+  ]));
+  const sched = async () => ok(await svc.rpc("schedule_weekly_runs", { p_limit: 100 })) as number;
+  const queued = () => stack.sql(`select count(*) from runs where brand_id='${b.id}' and trigger='weekly' and status='queued'`);
+  await sched();
+  assert.equal(queued(), "1");
+  await sched();
+  assert.equal(queued(), "1", "Bekleyen ölçüm varken ikinci kez sıraya alınmamalı");
+  // İstemci çağıramaz
+  assert.match((await W.c.rpc("schedule_weekly_runs", { p_limit: 1 })).error?.message ?? "", /permission denied/);
+  // Ölçümü tamamla, 8 gün öncesine çek → tekrar uygun
+  stack.sql(`update runs set status='done', created_at=now()-interval '8 days' where brand_id='${b.id}'`);
+  await sched();
+  assert.equal(queued(), "1");
+  // Kota: Free=40; 39 çağrı kullanılmışken 2 soruluk ölçüm kotayı aşar → atlanır, çalışma alanı DURDURULMAZ
+  stack.sql(`update runs set status='done', created_at=now()-interval '8 days' where brand_id='${b.id}'`);
+  stack.sql(`insert into cost_ledger (workspace_id, task, provider, model, cost_usd, billing) select '${ws}', 'query_engine', 'gemini', 'm', 0, 'free' from generate_series(1, 39)`);
+  await sched();
+  assert.equal(queued(), "0");
+  assert.equal(stack.sql(`select status from workspaces where id='${ws}'`), "active");
+  // Kapatılmış marka sıraya alınmaz
+  stack.sql(`delete from cost_ledger where workspace_id='${ws}'`);
+  ok(await W.c.from("brands").update({ auto_weekly: false }).eq("id", b.id));
+  await sched();
+  assert.equal(queued(), "0");
+});
+
+test("Site kontrolü: kullanıcı ister, işçi yapar, yalnız üyeler görür, saatte bir sınırı", async () => {
+  const S = await user("site@test.local");
+  const ws = ok(await S.c.rpc("create_workspace", { p_name: "Site", p_kind: "business" })) as string;
+  const b = ok(await S.c.from("brands").insert({ workspace_id: ws, name: "Site Marka" }).select("id").single()) as any;
+  assert.match((await S.c.rpc("request_site_audit", { p_brand: b.id })).error?.message ?? "", /web sitesi ekleyin/);
+  ok(await S.c.from("brands").update({ website: "sitemarka.test" }).eq("id", b.id));
+  ok(await S.c.rpc("request_site_audit", { p_brand: b.id }));
+  const { processAudits } = await import("../src/worker.ts");
+  const fake = async (url: string) => {
+    const body = url.endsWith("/robots.txt") ? "User-agent: *\nDisallow:\n" : url.endsWith("/") ? "<html lang='tr'><head><title>Site Marka resmi sitesi</title></head><body>merhaba</body></html>" : "";
+    const r = new Response(body, { status: body ? 200 : 404 }); Object.defineProperty(r, "url", { value: url }); return r;
+  };
+  const done = await processAudits({ db: svc, env: {}, fetchFn: fake as any });
+  assert.ok(done.some((d) => d.brandId === b.id && d.status === "ok"));
+  const audits = ok(await S.c.from("site_audits").select("checks,status").eq("brand_id", b.id)) as any[];
+  assert.equal(audits.length, 1);
+  assert.ok(audits[0].checks.find((c: any) => c.id === "ai_bots").ok);
+  assert.equal(audits[0].checks.find((c: any) => c.id === "schema_org").ok, false);
+  assert.match((await S.c.rpc("request_site_audit", { p_brand: b.id })).error?.message ?? "", /son bir saat/);
+  // Başka kullanıcı göremez, istemci yazamaz
+  assert.equal((ok(await B.c.from("site_audits").select("id")) as any[]).length, 0);
+  assert.ok((await S.c.from("site_audits").insert({ workspace_id: ws, brand_id: b.id, url: "x", status: "ok" })).error);
+});
+
+test("Laboratuvarlar: yönetici atanır, Demo Lab 10 hayali marka + 6 haftalık simülasyon, Growth Lab gerçek ölçüm sırada, tekrar çalışınca çoğaltmaz", async () => {
+  const { seedLabs, DEMO_BRANDS } = await import("../src/labs.ts");
+  const names = DEMO_BRANDS.map((d) => d.name);
+  const L = await user("kurucu@test.local");
+  const logs: string[] = [];
+  const none = await seedLabs(svc, "yok@test.local", (m) => logs.push(m));
+  assert.equal(none.ok, false);
+  const r = await seedLabs(svc, "KURUCU@test.local", (m) => logs.push(m));
+  assert.equal(r.ok, true);
+  assert.equal(ok(await L.c.rpc("is_platform_admin")), true);
+  const demoBrands = ok(await L.c.from("brands").select("id,name,data_origin").eq("workspace_id", r.demo).eq("is_competitor", false).in("name", names)) as any[];
+  assert.equal(demoBrands.length, 10);
+  assert.ok(demoBrands.every((x) => x.data_origin === "simulated"));
+  const series = ok(await L.c.rpc("brand_visibility", { p_brand: demoBrands[0].id, p_type: "simulated" })) as any[];
+  assert.equal(new Set(series.map((x) => x.run_id)).size, 6);
+  const growthRun = ok(await L.c.from("runs").select("status,measurement_type").eq("workspace_id", r.growth)) as any[];
+  assert.deepEqual(growthRun.map((x) => [x.status, x.measurement_type]), [["queued", "model_knowledge"]]);
+  // Tekrar çalıştır: çoğaltma yok
+  await seedLabs(svc, "kurucu@test.local", () => {});
+  assert.equal((ok(await L.c.from("brands").select("id").eq("workspace_id", r.demo).eq("is_competitor", false).in("name", names)) as any[]).length, 10);
+  assert.equal(stack.sql(`select count(*) from runs where workspace_id='${r.growth}'`), "1");
+  // Müşteri Demo Lab'i ve Growth Lab'i göremez
+  assert.equal((ok(await A.c.from("workspaces").select("id").in("id", [r.demo, r.growth])) as any[]).length, 0);
 });

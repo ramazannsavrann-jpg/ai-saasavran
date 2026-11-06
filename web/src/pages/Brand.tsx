@@ -8,9 +8,10 @@ import { ERROR_CLASS_TEXT, STOP_TEXT, runStatusText } from "../lib/messages";
 import { competitorsInRun, formatDateTime, MIN_SAMPLE, numLoc, pct, providerLabel, rangeText, series } from "../lib/report";
 import { Button, Confirm, DataNotice, Empty, ErrorBox, Field, Loading, Select, TypeBadge } from "../components/ui";
 import { CompareBars, TrendChart } from "../components/Chart";
+import { buildRecommendations } from "../../../engine/src/recommendations.ts";
 
 const TABS = [
-  ["rapor", "Rapor"], ["rakipler", "Rakipler"], ["sorular", "Sorular"], ["olcumler", "Ölçümler"],
+  ["rapor", "Rapor"], ["oneriler", "Öneriler"], ["rakipler", "Rakipler"], ["sorular", "Sorular"], ["olcumler", "Ölçümler"],
 ] as const;
 type Tab = (typeof TABS)[number][0];
 
@@ -51,6 +52,7 @@ export function BrandPage() {
         ))}
       </nav>
       {tab === "rapor" && <Report brand={b} type={type} />}
+      {tab === "oneriler" && <Advice brand={b} type={type} runs={runs.data ?? []} onBrandChange={brand.reload} />}
       {tab === "rakipler" && <Competitors brand={b} />}
       {tab === "sorular" && <Questions brand={b} />}
       {tab === "olcumler" && <RunHistory runs={runs.data ?? []} loading={runs.loading} />}
@@ -75,6 +77,7 @@ function BrandEditForm({ brand, onDone }: { brand: Brand; onDone: (changed: bool
         website: String(f.get("website") || "").trim() || null,
         sector: String(f.get("sector") || "") || null,
         city: String(f.get("city") || "").trim() || null,
+        ...(brand.data_origin !== "simulated" ? { auto_weekly: f.get("auto_weekly") === "on" } : {}),
       });
       onDone(true);
     } catch (e) { setErr(friendlyError(e)); setBusy(false); }
@@ -91,6 +94,12 @@ function BrandEditForm({ brand, onDone }: { brand: Brand; onDone: (changed: bool
         {brand.sector && !SECTORS.includes(brand.sector) && <option>{brand.sector}</option>}
       </Select>
       <Field label="Şehir veya ilçe" name="city" defaultValue={brand.city ?? ""} />
+      {brand.data_origin !== "simulated" && (
+        <label className="check">
+          <input type="checkbox" name="auto_weekly" defaultChecked={brand.auto_weekly} />
+          <span>Her hafta otomatik ölç <em className="muted">(paket kotası yetmezse o hafta atlanır)</em></span>
+        </label>
+      )}
       <p className="muted">Ad veya yazılışlar değişirse yeni ölçümler yeni adla yapılır; eski ölçümler olduğu gibi kalır.</p>
       <ErrorBox message={err} />
       <div className="form-actions">
@@ -143,6 +152,14 @@ function CompetitorRow({ c, onChange }: { c: Brand; onChange: () => void }) {
   );
 }
 
+/** Son ölçümden 7 gün sonra (işçi saatlik çalıştığı için yaklaşık). */
+function nextWeekly(runs: Run[]): string | null {
+  const last = runs.find((r) => r.status !== "failed");
+  if (!last) return "ilk ölçümden sonra";
+  const d = new Date(new Date(last.created_at).getTime() + 7 * 86_400_000);
+  return d < new Date() ? "bir saat içinde" : d.toLocaleDateString("tr-TR", { day: "numeric", month: "long", weekday: "long" });
+}
+
 function RunControl({ brand, runs, onChange }: { brand: Brand; runs: Run[]; onChange: () => void }) {
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
@@ -160,6 +177,11 @@ function RunControl({ brand, runs, onChange }: { brand: Brand; runs: Run[]; onCh
         </p>
       ) : (
         <Button busy={busy} onClick={start}>Ölçüm başlat</Button>
+      )}
+      {brand.data_origin !== "simulated" && (
+        <p className="muted weekly-note">
+          {brand.auto_weekly ? <>Haftalık otomatik ölçüm açık{nextWeekly(runs) && <>, sıradaki: {nextWeekly(runs)}</>}.</> : "Haftalık otomatik ölçüm kapalı."}
+        </p>
       )}
       <ErrorBox message={err} />
     </div>
@@ -266,6 +288,83 @@ function Report({ brand, type }: { brand: Brand; type: MeasurementType }) {
             </ul>
           </section>}
         </>
+      )}
+    </div>
+  );
+}
+
+const SEV_LABEL = { high: "Önemli", medium: "Orta", low: "Düşük", info: "Bilgi" } as const;
+
+function Advice({ brand, type, runs, onBrandChange }: { brand: Brand; type: MeasurementType; runs: Run[]; onBrandChange: () => void }) {
+  const audit = useLoad(() => api.latestAudit(brand.id), [brand.id, brand.audit_requested_at]);
+  const prompts = useLoad(() => api.prompts(brand.id), [brand.id]);
+  const lastRun = runs.find((r) => r.status === "done");
+  const results = useLoad(() => (lastRun ? api.promptResults(lastRun.id) : Promise.resolve([])), [lastRun?.id]);
+  const [busy, setBusy] = useState(false);
+  const [err, setErr] = useState<string | null>(null);
+  const [msg, setMsg] = useState<string | null>(null);
+  const sim = brand.data_origin === "simulated";
+  const pendingAudit = brand.audit_requested_at && (!audit.data || audit.data.created_at < brand.audit_requested_at);
+
+  if (audit.loading || prompts.loading || results.loading) return <Loading />;
+  const recs = buildRecommendations({
+    brandName: brand.name, website: brand.website, city: brand.city, sector: brand.sector, aliases: brand.aliases,
+    activePrompts: (prompts.data ?? []).filter((p) => p.active).length,
+    completedRuns: runs.filter((r) => r.status === "done").length,
+    autoWeekly: brand.auto_weekly || sim, measurementType: type,
+    prompts: results.data ?? [],
+    audit: sim ? null : audit.data ? { status: audit.data.status, checks: audit.data.checks } : null,
+  }).filter((r) => !(sim && r.id === "no_website"));
+
+  async function check() {
+    setBusy(true); setErr(null); setMsg(null);
+    try { await api.requestAudit(brand.id); setMsg("Kontrol sıraya alındı. Sonuç en geç bir saat içinde burada görünür."); onBrandChange(); }
+    catch (e) { setErr(friendlyError(e)); } finally { setBusy(false); }
+  }
+
+  return (
+    <div className="stack">
+      {sim && <DataNotice type="simulated" />}
+      <section className="panel">
+        <h2>Yapılacaklar</h2>
+        <p className="muted">Son ölçüm{!sim && " ve web sitesi kontrolü"} sonuçlarından kurallarla çıkarıldı; yapay zekâ ile üretilmedi. Önem sırasına göre.</p>
+        {recs.length === 0 ? <p>Şu an önerimiz yok. Yeni ölçümlerden sonra tekrar bakın.</p> : (
+          <ol className="recs">
+            {recs.map((r) => (
+              <li key={r.id} className={`rec rec-${r.priority === "yüksek" ? "high" : r.priority === "orta" ? "medium" : "low"}`}>
+                <div className="rec-head"><strong>{r.title}</strong><span className="rec-pri">{r.priority} öncelik</span></div>
+                <p className="rec-why"><span>Neden:</span> {r.why}</p>
+                <p className="rec-action"><span>Ne yapılmalı:</span> {r.action}</p>
+              </li>
+            ))}
+          </ol>
+        )}
+      </section>
+
+      {!sim && (
+        <section className="panel">
+          <div className="panel-head">
+            <h2>Web sitesi kontrolü</h2>
+            {brand.website && <Button variant="quiet" className="btn-small" busy={busy} onClick={check} disabled={!!pendingAudit}>{pendingAudit ? "Sırada" : "Siteyi kontrol et"}</Button>}
+          </div>
+          {msg && <p className="success-box">{msg}</p>}
+          <ErrorBox message={err} />
+          {!brand.website ? <p className="muted">Markaya web sitesi eklenmemiş. Adın yanındaki "Düzenle" ile ekleyin.</p>
+            : !audit.data ? <p className="muted">{pendingAudit ? "Kontrol sırada; en geç bir saat içinde sonuç gelir." : "Henüz kontrol edilmedi. Site her hafta otomatik olarak da kontrol edilir."}</p>
+            : (
+              <>
+                <p className="muted">{audit.data.url}, {formatDateTime(audit.data.created_at)}. {audit.data.checks.filter((c) => c.ok).length}/{audit.data.checks.length} kontrol geçti.</p>
+                <ul className="checks">
+                  {audit.data.checks.map((c) => (
+                    <li key={c.id} className={c.ok ? "ok" : `bad sev-${c.severity}`}>
+                      <span className="check-mark" aria-hidden>{c.ok ? "✓" : c.severity === "info" ? "i" : "!"}</span>
+                      <span><strong>{c.title}</strong>{!c.ok && <em className="sev">{SEV_LABEL[c.severity]}</em>}<span className="muted">{c.detail}</span></span>
+                    </li>
+                  ))}
+                </ul>
+              </>
+            )}
+        </section>
       )}
     </div>
   );

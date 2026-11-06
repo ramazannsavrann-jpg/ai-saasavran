@@ -8,6 +8,7 @@ export interface Workspace { id: string; name: string; kind: WorkspaceKind; plan
 export interface Brand {
   id: string; workspace_id: string; name: string; aliases: string[]; website: string | null;
   sector: string | null; city: string | null; is_competitor: boolean; owner_brand_id: string | null; data_origin: string;
+  auto_weekly: boolean; audit_requested_at: string | null;
 }
 export interface Prompt { id: string; brand_id: string; text: string; intent: Intent; active: boolean; created_at: string }
 export type Intent = "informational" | "comparison" | "purchase" | "local";
@@ -16,6 +17,7 @@ export interface Run {
   measurement_type: MeasurementType; provider: string | null; model: string | null;
   stop_reason: string | null; error_class: string | null; error: string | null;
   calls_ok: number; calls_failed: number; prompts_total: number; created_at: string; finished_at: string | null;
+  trigger: "manual" | "weekly" | "seed";
 }
 export interface Usage {
   plan_id: string; plan_name: string; status: "active" | "paused"; paused_reason: string | null;
@@ -29,6 +31,11 @@ export interface VisRow {
 export interface PromptResult {
   prompt_id: string; prompt_text: string; intent: Intent; answers: number; target_mentioned: number;
   target_recommended: number; best_rank: number | null; top_competitor: string | null; top_competitor_recs: number;
+}
+
+export interface SiteAudit {
+  id: string; brand_id: string; url: string; status: "ok" | "unreachable"; created_at: string;
+  checks: { id: string; ok: boolean; severity: "high" | "medium" | "low" | "info"; title: string; detail: string }[];
 }
 
 export const INTENT_LABEL: Record<Intent, string> = {
@@ -95,6 +102,11 @@ export const api = {
   async promptResults(runId: string): Promise<PromptResult[]> {
     return must(await sb().rpc("run_prompt_results", { p_run: runId }));
   },
+  async latestAudit(brandId: string): Promise<SiteAudit | null> {
+    const rows = must(await sb().from("site_audits").select("*").eq("brand_id", brandId).order("created_at", { ascending: false }).limit(1)) as SiteAudit[];
+    return rows[0] ?? null;
+  },
+  async requestAudit(brandId: string) { must(await sb().rpc("request_site_audit", { p_brand: brandId })); },
   async isPlatformAdmin(): Promise<boolean> {
     return must(await sb().rpc("is_platform_admin"));
   },
