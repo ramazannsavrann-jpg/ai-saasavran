@@ -59,13 +59,15 @@ export const GROWTH = {
   ] as [string, Intent][],
 };
 
+// Not: Bonus, World, Axess, Maximum gibi kart programları birden fazla bankada kullanılır (TEB Bonus, VakıfBank Worldcard vb.).
+// Bu yüzden takma ad olarak yalnız banka adıyla birlikte yazılmış hâlleri kullanılır; tek başına program adı markaya sayılmaz.
 /** Canlı arama ile aramasız sonucu karşılaştırmak için tanınmış bir test markası (Growth Lab içinde). */
 export const GROWTH_TEST = {
-  brand: { name: "Garanti BBVA", aliases: ["Garanti Bankası", "Garanti BBVA Mobil", "Garanti Bonus", "Bonus Card", "Bonus kart"], website: "garantibbva.com.tr", sector: "Banka / finans" },
+  brand: { name: "Garanti BBVA", aliases: ["Garanti Bankası", "Garanti BBVA Mobil", "Garanti Bonus", "Garanti BBVA Bonus"], website: "garantibbva.com.tr", sector: "Banka / finans" },
   competitors: [
-    { name: "Akbank", aliases: ["Akbank Mobil", "Juzdan", "Axess", "Wings"], website: "akbank.com" },
-    { name: "İş Bankası", aliases: ["Türkiye İş Bankası", "İşCep", "İşbank", "Maximum Mobil", "Maximum kart", "İş Bankası Maximum"], website: "isbank.com.tr" },
-    { name: "Yapı Kredi", aliases: ["Yapı Kredi Mobil", "World Card", "Worldcard", "Yapı Kredi World"], website: "yapikredi.com.tr" },
+    { name: "Akbank", aliases: ["Akbank Mobil", "Juzdan", "Akbank Axess", "Akbank Wings"], website: "akbank.com" },
+    { name: "İş Bankası", aliases: ["Türkiye İş Bankası", "İşCep", "İşbank", "Maximum Mobil", "İş Bankası Maximum"], website: "isbank.com.tr" },
+    { name: "Yapı Kredi", aliases: ["Yapı Kredi Mobil", "Yapı Kredi World", "Yapı Kredi Worldcard"], website: "yapikredi.com.tr" },
     { name: "Ziraat Bankası", aliases: ["Ziraat", "Ziraat Mobil", "T.C. Ziraat Bankası"], website: "ziraatbank.com.tr" },
     { name: "Enpara.com", aliases: ["Enpara"], website: "enpara.com" },
   ] as Comp[],

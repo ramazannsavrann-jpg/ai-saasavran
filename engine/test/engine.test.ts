@@ -413,3 +413,13 @@ test("rules_v2: 'Tek bir kart önereceksem ... X derim' öneri sayılır", () =>
   const h = analyzeResponse({ promptId: "p", provider: "x", answerText: "Tek bir kart önereceksem, yıllık aidat ödemek istemiyorsan Enpara Kredi Kartı derim.", citedUrls: [] }, [{ id: "e", name: "Enpara.com", aliases: ["Enpara"] }]);
   assert.equal(h[0].recommended, true);
 });
+
+test("Ortak kart programı başka bankanın adıyla geçince (TEB Bonus, VakıfBank Worldcard) yanlış markaya sayılmaz", async () => {
+  const { GROWTH_TEST } = await import("../src/labs.ts");
+  const g = { id: "g", name: GROWTH_TEST.brand.name, aliases: GROWTH_TEST.brand.aliases };
+  const yk = GROWTH_TEST.competitors.find((c: any) => c.name === "Yapı Kredi") as any;
+  const brands = [g, { id: "y", name: yk.name, aliases: yk.aliases }];
+  const r = (t: string) => Object.fromEntries(analyzeResponse({ promptId: "p", provider: "x", answerText: t, citedUrls: [] }, brands).map((h) => [h.brandId, h.mentioned]));
+  assert.deepEqual(r("TEB Bonus kart ve VakıfBank Worldcard kampanyalarına bakın."), { g: false, y: false });
+  assert.deepEqual(r("Garanti Bonus ve Yapı Kredi World kampanyalarına bakın."), { g: true, y: true });
+});

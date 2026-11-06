@@ -93,3 +93,4 @@ tr.us td { background: var(--tint); font-weight: 600; }
 .foot { border-top: 1px solid var(--line); padding: 20px 16px 32px; max-width: 1080px; margin: 0 auto; color: var(--muted); font-size: .9rem; }
 .foot p { margin: 0 0 .5em; }
 @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
+.top nav a.lang { display: inline; color: var(--muted); font-size: .9rem; }
