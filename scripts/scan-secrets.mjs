@@ -11,6 +11,9 @@ const patterns = [
   ["Anthropic anahtarı", /sk-ant-[A-Za-z0-9_\-]{20,}/],
   ["JWT / Supabase servis anahtarı", /eyJ[A-Za-z0-9_\-]{20,}\.eyJ[A-Za-z0-9_\-]{20,}/],
   ["Özel anahtar", /-----BEGIN [A-Z ]*PRIVATE KEY-----/],
+  ["Supabase gizli anahtarı", /sb_secret_[A-Za-z0-9_\-]{20,}/],
+  ["Postgres bağlantı adresi (şifreli)", /postgres(ql)?:\/\/[^:\s]+:[^@\s]{8,}@[a-z0-9.-]*supabase/],
+  ["Cloudflare API anahtarı", /CLOUDFLARE_API_TOKEN\s*=\s*[A-Za-z0-9_\-]{30,}/],
 ];
 let found = 0;
 for (const f of files) {

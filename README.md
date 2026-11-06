@@ -31,7 +31,7 @@ web/                         Arayüz (Vite + React + Supabase JS), Türkçe, mob
 scripts/stack/               Docker'sız test ortamı: Postgres 16 + Supabase Auth + PostgREST
 e2e/                         Mobil uçtan uca testler (Playwright)
 scripts/                     İşçi, DB testleri, gizli bilgi taraması, Gemini testi, fiyat raporu
-docs/                        Mimari, fiyatlandırma, durum
+docs/                        Mimari, fiyatlandırma, durum, yayına alma (DEPLOY.md)
 ```
 
 ## Testleri çalıştırma

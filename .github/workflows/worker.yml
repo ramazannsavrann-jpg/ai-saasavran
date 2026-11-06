@@ -1,9 +1,12 @@
-# Ölçüm işçisi. Supabase projesi bağlanana kadar her çalıştırmada "ATLANDI" der.
-# Supabase bağlanınca buraya saatlik "schedule" eklenecek (GitHub Actions dakika kotası hesaba katılarak).
+# Ölçüm işçisi: sıradaki ölçümleri işler. Supabase bağlanana kadar "ATLANDI" der.
+# Zamanlama: İstanbul saatiyle 08:00–23:00 arası her saat (günde 16 çalıştırma, ~1 dk).
+# Özel depoda GitHub Actions ücretsiz kotası ayda 2.000 dakikadır; bu iş ~500 dakika kullanır.
 name: Ölçüm işçisi
 on:
   push:
   workflow_dispatch:
+  schedule:
+    - cron: "17 5-20 * * *"
 permissions:
   contents: read
 concurrency:

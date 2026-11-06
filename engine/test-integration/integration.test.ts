@@ -232,3 +232,36 @@ test("Demo Lab: yalnızca platform yöneticisi; simülasyon etiketli; müşterid
   assert.equal((ok(await A.c.from("brands").select("name").ilike("name", "%hayali%")) as any[]).length, 0);
   assert.equal((ok(await C.c.from("brands").select("id").eq("workspace_id", wsA)) as any[]).length, 0);
 });
+
+test("Migration çalıştırıcı: boş veritabanına uygular, ikinci kez uygulamaz, değiştirilmiş dosyayı reddeder", async () => {
+  const { spawnSync } = await import("node:child_process");
+  const { mkdtempSync, cpSync, appendFileSync } = await import("node:fs");
+  const { join } = await import("node:path");
+  const { tmpdir } = await import("node:os");
+  stack.sql(`create database migtest`);
+  const url = "postgres://postgres:postgres@127.0.0.1:54322/migtest";
+  const p = spawnSync("psql", ["-X", "-q", url, "-c", `create schema auth; create function auth.uid() returns uuid language sql stable as $$ select null::uuid $$;`], { encoding: "utf8" });
+  assert.equal(p.status, 0, p.stderr);
+  const root = new URL("../..", import.meta.url).pathname;
+  const run = (dir?: string) => spawnSync("node", [join(root, "scripts/migrate.mjs")], {
+    encoding: "utf8", env: { ...process.env, SUPABASE_DB_URL: url, ...(dir ? { MIGRATIONS_DIR: dir } : {}) },
+  });
+  const first = run();
+  assert.equal(first.status, 0, first.stderr);
+  assert.match(first.stdout, /3 migration uygulandı/);
+  const second = run();
+  assert.equal(second.status, 0, second.stderr);
+  assert.match(second.stdout, /güncel/);
+  // Değiştirilmiş migration reddedilir; hata mesajında şifre görünmez
+  const dir = mkdtempSync(join(tmpdir(), "mig-copy-"));
+  cpSync(join(root, "supabase/migrations"), dir, { recursive: true });
+  appendFileSync(join(dir, "0001_init.sql"), "\n-- değişiklik\n");
+  const tampered = run(dir);
+  assert.notEqual(tampered.status, 0);
+  assert.match(tampered.stderr, /değiştirilmiş/);
+  assert.ok(!tampered.stderr.includes("postgres:postgres@"), "Bağlantı şifresi hata mesajına sızdı");
+  // RLS migtest'te de açık
+  const noRls = spawnSync("psql", ["-X", "-A", "-t", url, "-c",
+    `select count(*) from pg_class c join pg_namespace n on n.oid = c.relnamespace where n.nspname = 'public' and c.relkind = 'r' and not c.relrowsecurity`], { encoding: "utf8" });
+  assert.equal(noRls.stdout.trim(), "0");
+});
