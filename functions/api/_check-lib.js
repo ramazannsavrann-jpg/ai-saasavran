@@ -11,6 +11,11 @@ export function parseInput(body) {
   return { lang, brand, category, city, domain: /^[a-z0-9.-]+\.[a-z]{2,}$/.test(website) ? website : "" };
 }
 
+const STOP = new Set(("if what it its the this these those here there for when which also however best top note some many most you your they them " +
+  "we our and or but with without what's it's i ai llm llms geo seo api faq tip tips pros cons step steps option options key final summary overall " +
+  "bu şu bir ve ile için en çok daha ancak ayrıca örneğin not öneri sonuç kısaca").split(" "));
+const keepName = (n) => n.length >= 3 && !STOP.has(n.toLowerCase()) && !STOP.has(n.split(" ")[0].toLowerCase());
+
 export function buildQuestions({ lang, category, city }) {
   const where = city ? (lang === "tr" ? ` ${city} bölgesinde` : ` in ${city}`) : "";
   return lang === "tr"
@@ -23,7 +28,7 @@ export function buildQuestions({ lang, category, city }) {
       ]
     : [
         `What are the best ${category} options${where}?`,
-        `I'm looking for a ${category}${where}. Which one would you recommend?`,
+        `I'm looking for ${/^[aeiou]/i.test(category) ? "an" : "a"} ${category}${where}. Which one would you recommend?`,
         `Give me a short list of the most trusted ${category} providers${where}.`,
         `Which ${category} companies should I consider${where}?`,
         `What's the best value ${category}${where}?`,
@@ -39,7 +44,7 @@ export function analyze(answers, { brand, domain }) {
     return { i, ok: true, mentioned: !!hit?.mentioned, recommended: !!hit?.recommended, rank: hit?.rank ?? null };
   });
   const okRows = rows.filter((r) => r.ok);
-  const others = untrackedNames(answers.filter((a) => a.text).map((a) => a.text), [{ name: brand, aliases: [] }], 8);
+  const others = untrackedNames(answers.filter((a) => a.text).map((a) => a.text), [{ name: brand, aliases: [] }], 16).filter((o) => keepName(o.name)).slice(0, 8);
   return {
     total: okRows.length,
     mentioned: okRows.filter((r) => r.mentioned).length,

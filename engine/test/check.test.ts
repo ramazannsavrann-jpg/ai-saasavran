@@ -23,4 +23,7 @@ test("Ücretsiz kontrol: anılma ve önerilme sayılır, diğer adlar çıkarıl
   assert.equal(a.total, 2);
   assert.equal(a.mentioned, 1);
   assert.ok(a.others.some((o: { name: string }) => o.name.startsWith("Bright")));
+  const b = analyze([{ text: "If you want it, What matters is GEO. It depends. Here are picks: Semrush and Peec AI. If budget matters, Semrush." }], { brand: "X Corp", domain: "" });
+  assert.ok(!b.others.some((o: { name: string }) => ["If", "What", "It", "GEO", "Here"].includes(o.name)), JSON.stringify(b.others));
+  assert.match(buildQuestions({ lang: "en", category: "AI visibility tool", city: "" })[1], /looking for an AI visibility tool\./);
 });
