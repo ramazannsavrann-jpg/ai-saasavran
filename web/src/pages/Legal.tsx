@@ -109,8 +109,13 @@ export function Terms() {
         <li>Paket kotaları aşıldığında ölçümler otomatik olarak durur.</li>
       </ul>
 
-      <h2>Ücretler</h2>
-      <p>Şu an yalnızca ücretsiz paket vardır. Ücretli paketler sunulduğunda fiyatlar ve koşullar önceden açıkça bildirilecektir.</p>
+      <h2>Ücretler, iptal ve iade</h2>
+      <p>Paketler ve fiyatlar ana sayfadaki fiyat bölümünde yazar. Ücretli paketler henüz satışta değildir; satışa açıldığında şu kurallar geçerlidir:</p>
+      <ul className="plain">
+        <li>Ücretli paketler aylık yenilenir. Ödemeler, yetkili satıcı (merchant of record) olarak çalışan ödeme sağlayıcımız üzerinden alınır; faturayı ve vergileri o düzenler.</li>
+        <li>Aboneliğinizi istediğiniz zaman iptal edebilirsiniz; iptal, ödenmiş dönemin sonunda geçerli olur.</li>
+        <li>Memnun kalmazsanız ilk ödemenizden sonraki 14 gün içinde {CONTACT_EMAIL} adresine yazarak tam iade isteyebilirsiniz.</li>
+      </ul>
 
       <h2>Sorumluluğun sınırı</h2>
       <p>Hizmet "olduğu gibi" sunulur. Ölçüm sonuçlarına dayanarak verdiğiniz iş kararlarından doğan dolaylı zararlardan, yürürlükteki mevzuatın izin verdiği ölçüde sorumlu değiliz.</p>
@@ -193,8 +198,13 @@ function TermsEn() {
         <li>Measurements stop automatically when plan quotas are reached.</li>
       </ul>
 
-      <h2>Fees</h2>
-      <p>Only a free plan is available today. When paid plans launch, prices and terms will be stated clearly in advance.</p>
+      <h2>Fees, cancellation and refunds</h2>
+      <p>Plans and prices are listed in the pricing section of our home page. Paid plans are not on sale yet; when they launch, these rules apply:</p>
+      <ul className="plain">
+        <li>Paid plans renew monthly. Payments are processed by our payment provider acting as merchant of record, which issues invoices and handles sales tax.</li>
+        <li>You can cancel at any time; cancellation takes effect at the end of the period you've paid for.</li>
+        <li>If you're not satisfied, email {CONTACT_EMAIL} within 14 days of your first payment for a full refund.</li>
+      </ul>
 
       <h2>Limitation of liability</h2>
       <p>The service is provided "as is". To the extent the law allows, we are not liable for indirect losses from business decisions based on measurement results.</p>
