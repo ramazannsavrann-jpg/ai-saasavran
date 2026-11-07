@@ -46,6 +46,7 @@ export const LEGAL = {
 <li><b>Google</b>: Gemini AI and Google sign-in. Because we use Gemini's free tier for free-plan measurements, Google may use this content to improve its products, so don't put personal data in your questions.</li>
 <li><b>OpenAI</b>: ChatGPT live web-search measurement.</li>
 <li><b>Paddle</b>: payments, invoicing and tax for paid plans.</li>
+<li><b>Resend</b>: sending the weekly summary email (you can turn it off from your account page or with one click in the email).</li>
 <li><b>GitHub</b>: the automation that runs measurements.</li></ul>
 <p>We don't sell your data or share it for advertising.</p>
 <h2>Retention and your rights</h2>

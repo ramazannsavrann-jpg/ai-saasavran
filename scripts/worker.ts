@@ -4,6 +4,7 @@
 import { createClient } from "@supabase/supabase-js";
 import { processAudits, processQueue, processReanalysis, scheduleWeekly } from "../engine/src/worker.ts";
 import { seedLabs } from "../engine/src/labs.ts";
+import { sendWeeklyDigests } from "../engine/src/email.ts";
 
 const { SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY } = process.env;
 if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
@@ -20,5 +21,10 @@ const scheduled = await scheduleWeekly(deps);
 const audits = await processAudits(deps);
 const reanalyzed = await processReanalysis(deps);
 const results = await processQueue(deps, Number(process.env.WORKER_MAX_RUNS || 20));
-console.log(JSON.stringify({ weeklyScheduled: scheduled, audits, reanalyzed, processed: results.length, results }, null, 2));
+// Haftalık e-posta özeti (Pazartesi 09:00 İstanbul sonrası; kullanıcı başına haftada bir)
+let digests: unknown = "RESEND_API_KEY yok";
+if (process.env.RESEND_API_KEY) {
+  try { digests = await sendWeeklyDigests(db, process.env.RESEND_API_KEY); } catch (e) { digests = `hata: ${(e as Error).message}`; }
+}
+console.log(JSON.stringify({ weeklyScheduled: scheduled, audits, reanalyzed, digests, processed: results.length, results }, null, 2));
 if (results.some((r) => r.stop === "worker_error")) process.exit(1);

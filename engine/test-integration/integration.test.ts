@@ -252,7 +252,7 @@ test("Migration çalıştırıcı: boş veritabanına uygular, ikinci kez uygula
   });
   const first = run();
   assert.equal(first.status, 0, first.stderr);
-  assert.match(first.stdout, /10 migration uygulandı/);
+  assert.match(first.stdout, /11 migration uygulandı/);
   const second = run();
   assert.equal(second.status, 0, second.stderr);
   assert.match(second.stdout, /güncel/);
@@ -465,4 +465,27 @@ test("Kötüye kullanım sınırı: Free pakette ayda 4 ölçüm; 5. istek redde
   assert.match(fifth.error?.message ?? "", /ölçüm hakkınız doldu \(4 \/ ay\)/);
   ok(await svc.rpc("schedule_weekly_runs", { p_limit: 500 }));
   assert.equal(stack.sql(`select count(*) from runs where brand_id='${b.id}' and status='queued'`), "0");
+});
+
+test("Haftalık e-posta özeti: gerçek ölçümü olan kullanıcıya gider, haftada bir kez; abonelikten çıkan almaz", async () => {
+  const { sendWeeklyDigests } = await import("../src/email.ts");
+  ok(await A.c.rpc("set_email_prefs", { p_lang: "tr" }));
+  const sentTo: any[] = [];
+  const fakeResend = async (_u: string, init?: RequestInit) => { sentTo.push(JSON.parse(String(init!.body))); return new Response("{}", { status: 200 }); };
+  const r1 = await sendWeeklyDigests(svc, "re_test", { fetchFn: fakeResend as any, force: true });
+  const mine = sentTo.find((m) => m.to[0] === "a@test.local");
+  assert.ok(r1.sent >= 1 && mine, JSON.stringify(r1));
+  assert.match(mine.subject, /Haftalık/);
+  assert.match(mine.text, /Önerilme: %?\d+/);
+  assert.match(mine.headers["List-Unsubscribe"], /\/api\/unsubscribe\?t=/);
+  sentTo.length = 0;
+  await sendWeeklyDigests(svc, "re_test", { fetchFn: fakeResend as any, force: true });
+  assert.ok(!sentTo.some((m) => m.to[0] === "a@test.local"), "aynı hafta ikinci kez gitmemeli");
+  const token = mine.headers["List-Unsubscribe"].match(/t=([0-9a-f-]+)/)[1];
+  assert.equal(ok(await svc.rpc("unsubscribe_weekly", { p_token: token })), true);
+  stack.sql(`update email_prefs set last_weekly_at = null`);
+  sentTo.length = 0;
+  await sendWeeklyDigests(svc, "re_test", { fetchFn: fakeResend as any, force: true });
+  assert.ok(!sentTo.some((m) => m.to[0] === "a@test.local"), "abonelikten çıkan almamalı");
+  assert.ok((await A.c.rpc("weekly_digest")).error, "özet verisi kullanıcıya kapalı olmalı");
 });

@@ -36,6 +36,8 @@ test("Canlı site: açılıyor, doğru yapılandırılmış, güvenlik başlıkl
   expect(runtime.paddle?.clientToken).toMatch(/^live_/);
   // Ücretsiz kontrol uç noktası çalışıyor (boş istek reddedilir; kota harcanmaz)
   expect((await request.post(`${base}/api/check`, { data: {} })).status()).toBe(400);
+  // Abonelikten çıkma uç noktası çalışıyor (geçersiz bağlantı reddedilir)
+  expect((await request.get(`${base}/api/unsubscribe?t=bad`)).status()).toBe(400);
   // Ödeme bildirimi uç noktası çalışıyor ve imzasız isteği reddediyor
   expect((await request.post(`${base}/api/paddle/webhook`, { data: { event_type: "subscription.created" } })).status()).toBe(401);
   // Uygulama adresleri uygulamayı döndürür

@@ -6,6 +6,7 @@ import { Button, Empty, ErrorBox, Field } from "../components/ui";
 import { L } from "../lib/i18n";
 import { LangSwitch } from "../components/Shell";
 import { BillingPanel } from "../components/Billing";
+import { EmailPrefs } from "../components/EmailPrefs";
 
 type Level = "works" | "partial" | "missing";
 const STATUS: { area: string; items: [Level, string, string][] }[] = [
@@ -18,6 +19,7 @@ const STATUS: { area: string; items: [Level, string, string][] }[] = [
       ["works", L("Paket limitleri ve aylık kota", "Plan limits and monthly quota"), L("Limit aşılınca ölçüm durur.", "Measurements stop when a limit is reached.")],
       ["missing", L("Ekip üyesi davet etme", "Team invitations"), L("Henüz yok.", "Not yet.")],
       ["works", L("Ödeme ve paket yükseltme", "Payments and upgrades"), L("Paddle üzerinden aylık abonelik; ödeme sonrası paket otomatik açılır, iptal Paddle sayfasından.", "Monthly subscriptions via Paddle; the plan opens automatically after payment, cancel from the Paddle page.")],
+        ["works", L("Haftalık e-posta özeti", "Weekly email summary"), L("Pazartesi sabahı, o hafta ölçüm yapıldıysa; hesap sayfasından kapatılabilir.", "Monday mornings when there were measurements; can be turned off from the account page.")],
     ],
   },
   {
@@ -91,6 +93,7 @@ export function Account() {
     <div className="stack narrow">
       <header className="page-head"><h1>{L("Hesap", "Account")}</h1><p className="muted">{session?.user.email}</p></header>
       <BillingPanel />
+      <EmailPrefs />
       <form className="panel stack" onSubmit={changePassword} noValidate>
         <h2>{L("Şifre değiştir", "Change password")}</h2>
         <Field label={L("Yeni şifre", "New password")} name="password" type="password" autoComplete="new-password" minLength={8} hint={L("En az 8 karakter", "At least 8 characters")} />

@@ -447,3 +447,20 @@ test("Güncel paketler (Plus/Pro/Business): tipik %55+ kâr; tavan + komisyon fi
     assert.ok(planCost(plan, SCENARIOS[1]).perEngineUsd.openai <= cap, `${name}: kötü durum ChatGPT harcaması tavanı aşıyor`);
   }
 });
+
+test("Haftalık özet içeriği: oranlar, geçen haftayla fark, rakip ve abonelikten çıkma bağlantısı (EN/TR)", async () => {
+  const { buildDigest, isDigestTime } = await import("../src/email.ts");
+  const row = { user_id: "u", lang: "en" as const, token: "t", brand_id: "b1", brand_name: "Acme <Dental>", workspace_name: "W",
+    cur_n: 10, cur_mention: 6, cur_recommend: 3, prev_n: 10, prev_mention: 6, prev_recommend: 1, top_competitor: "Bright", top_competitor_rec: 7 };
+  const en = buildDigest([row], "tok-1");
+  assert.match(en.text, /Recommended: 30% \(last week 10%; \+20 pts\)/);
+  assert.match(en.text, /Mentioned: 60% \(about the same as last week\)/);
+  assert.match(en.text, /Most recommended competitor: Bright \(7 of 10 answers\)/);
+  assert.match(en.html, /Acme &lt;Dental&gt;/);
+  assert.match(en.html, /\/api\/unsubscribe\?t=tok-1/);
+  const tr = buildDigest([{ ...row, lang: "tr", prev_n: 0 }], "x");
+  assert.match(tr.text, /Önerilme: 30%\n/);
+  assert.equal(isDigestTime(new Date("2026-11-09T06:30:00Z")), true);   // Pazartesi 09:30 İstanbul
+  assert.equal(isDigestTime(new Date("2026-11-09T05:30:00Z")), false);  // 08:30
+  assert.equal(isDigestTime(new Date("2026-11-10T07:00:00Z")), false);  // Salı
+});

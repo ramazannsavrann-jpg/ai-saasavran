@@ -388,3 +388,6 @@ form > .btn, .stack > .btn { width: 100%; }
   main, .content { padding: 0 !important; max-width: none !important; }
   .chart, .bars li { break-inside: avoid; }
 }
+
+.check-row { display: flex; gap: 10px; align-items: flex-start; cursor: pointer; }
+.check-row input { width: 20px; height: 20px; margin-top: 2px; flex: none; accent-color: var(--primary); }

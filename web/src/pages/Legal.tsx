@@ -69,6 +69,7 @@ export function Privacy() {
         <li><strong>Google</strong> (Gemini yapay zekâ servisi ve Google ile giriş). Ölçüm yaparken yazdığınız sorular Gemini'ye gönderilir. Ücretsiz katmanı kullandığımız için <strong>Google bu içerikleri kendi ürünlerini geliştirmek için kullanabilir</strong>. Bu nedenle sorulara kişisel veri (ad, telefon, adres vb.) yazmayın.</li>
         <li><strong>OpenAI</strong> (ücretli paketlerde ChatGPT ile canlı web aramalı ölçüm).</li>
         <li><strong>Paddle</strong> (ücretli paketlerde ödeme, fatura ve vergi; kart bilginizi biz görmeyiz).</li>
+        <li><strong>Resend</strong> (haftalık özet e-postasının gönderimi; hesap sayfanızdan ya da e-postadaki bağlantıyla kapatabilirsiniz).</li>
         <li><strong>GitHub</strong> (ölçümleri çalıştıran otomasyon altyapısı).</li>
       </ul>
       <p>Verilerinizi satmıyoruz ve reklam amacıyla kimseyle paylaşmıyoruz.</p>
@@ -160,6 +161,7 @@ function PrivacyEn() {
         <li><strong>Google</strong>: the Gemini AI service and Google sign-in. Your questions are sent to Gemini when measuring. Because we use Gemini's free tier, <strong>Google may use this content to improve its products</strong>, so don't put personal data (names, phone numbers, addresses) in your questions.</li>
         <li><strong>OpenAI</strong>: ChatGPT live web-search measurement on paid plans.</li>
         <li><strong>Paddle</strong>: payments, invoicing and tax for paid plans. We never see your card details.</li>
+        <li><strong>Resend</strong>: sending the weekly summary email (turn it off from your account page or with one click in the email).</li>
         <li><strong>GitHub</strong>: the automation that runs measurements.</li>
       </ul>
       <p>We don't sell your data or share it for advertising.</p>
