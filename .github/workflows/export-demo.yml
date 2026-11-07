@@ -1,0 +1,23 @@
+# Ana sayfa sunumu için gerçek ölçüm verisini dışa aktarır (salt okunur, eser olarak).
+name: Sunum verisi
+on:
+  push:
+    paths: ["scripts/export-demo.ts", ".github/workflows/export-demo.yml"]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - run: npm ci
+      - env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: node scripts/export-demo.ts
+      - uses: actions/upload-artifact@v4
+        with: { name: demo-export, path: demo-export.json, retention-days: 1 }
