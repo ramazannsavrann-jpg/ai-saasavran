@@ -1,5 +1,6 @@
 // Ham sayımlardan rapor metrikleri. Güven aralığı motorla aynı fonksiyondan gelir.
 import { wilson } from "../../../engine/src/metrics.ts";
+import { L, isEn } from "./i18n";
 import type { VisRow } from "./data";
 
 export interface Rate { value: number; low: number; high: number; k: number; n: number }
@@ -53,22 +54,23 @@ export const pct = (v: number) => `%${Math.round(v * 100)}`;
 export const rangeText = (r: Rate) => `${pct(r.low)}–${pct(r.high)}`;
 
 export function formatDate(iso: string) {
-  return new Date(iso).toLocaleDateString("tr-TR", { day: "numeric", month: "short" });
+  return new Date(iso).toLocaleDateString(isEn() ? "en-US" : "tr-TR", { day: "numeric", month: "short" });
 }
 export function formatDateTime(iso: string) {
-  return new Date(iso).toLocaleString("tr-TR", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
+  return new Date(iso).toLocaleString(isEn() ? "en-US" : "tr-TR", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
 }
 
 /** Sayıya Türkçe bulunma eki: 2'sinde, 3'ünde, 10'unda, 0'ında. Okunuştaki son kelimeye göre. */
 const UNITS = ["ında", "inde", "sinde", "ünde", "ünde", "inde", "sında", "sinde", "inde", "unda"];
 const TENS = ["", "unda", "sinde", "unda", "ında", "sinde", "ında", "inde", "inde", "ında"];
 export function numLoc(n: number): string {
+  if (isEn()) return String(n);
   const sfx = n === 0 ? UNITS[0] : n % 10 ? UNITS[n % 10] : n % 100 ? TENS[(n % 100) / 10] : n % 1000 ? "ünde" : "inde";
   return `${n}'${sfx}`;
 }
 
-export const usd = (v: number) => `${v.toLocaleString("tr-TR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} $`;
-export const providerLabel = (p: string) => (p === "mock" ? "simülasyon" : p === "gemini" ? "Gemini" : p === "openai" ? "ChatGPT (OpenAI)" : p);
+export const usd = (v: number) => `${v.toLocaleString(isEn() ? "en-US" : "tr-TR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} $`;
+export const providerLabel = (p: string) => (p === "mock" ? L("simülasyon", "simulation") : p === "gemini" ? "Gemini" : p === "openai" ? "ChatGPT (OpenAI)" : p);
 
 /**
  * Kaynak fırsatları: rakip önerilirken sizin önerilmediğiniz cevaplarda yapay zekânın baktığı siteler.
@@ -106,6 +108,22 @@ export function shareSummary(o: {
   competitors: { name: string; recommend: { k: number; n: number } }[];
   absentPrompts: string[]; topSources: string[];
 }): string {
+  if (isEn()) {
+    const kindEn = o.simulated ? "Simulation (not real data)" : o.live ? "ChatGPT with live web search" : "Gemini without web search (model knowledge)";
+    const en = [
+      `AI SaaSavran snapshot: ${o.brand}`,
+      `Date: ${formatDateTime(o.at)}`,
+      `Measured with: ${kindEn}`,
+      "",
+      `Result: recommended in ${o.recommend.k} of ${o.recommend.n} answers (${pct(o.recommend.value)}); mentioned in ${o.mention.k}.`,
+    ];
+    const topEn = o.competitors.filter((c) => c.recommend.k > 0).sort((a, b) => b.recommend.k - a.recommend.k).slice(0, 3);
+    if (topEn.length) en.push(`Recommended instead of you most often: ${topEn.map((c) => `${c.name} (${c.recommend.k}/${c.recommend.n})`).join(", ")}`);
+    if (o.absentPrompts.length) en.push("", "Some questions where you weren't mentioned at all:", ...o.absentPrompts.slice(0, 3).map((p) => `- ${p}`));
+    if (o.topSources.length) en.push("", `Sites the AI relied on most: ${o.topSources.slice(0, 5).join(", ")}`);
+    en.push("", "Note: one measurement based on a small number of answers; don't read it as final.", "Details and free plan: https://aisaasavran.com");
+    return en.join("\n");
+  }
   const kind = o.simulated ? "Simülasyon (gerçek veri değil)" : o.live ? "ChatGPT, canlı web aramasıyla" : "Gemini, internete bakmadan (model bilgisi)";
   const lines = [
     `AI SaaSavran ön raporu: ${o.brand}`,

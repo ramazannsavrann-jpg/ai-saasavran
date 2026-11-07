@@ -6,6 +6,7 @@ import { friendlyError } from "../lib/supabase";
 import { PAUSE_TEXT } from "../lib/messages";
 import { numLoc, series, pct, usd } from "../lib/report";
 import { SECTORS } from "../lib/sectors";
+import { L, isEn } from "../lib/i18n";
 import { Button, DataNotice, Empty, ErrorBox, Field, Loading, Meter, Select, TypeBadge } from "../components/ui";
 
 
@@ -28,29 +29,31 @@ function WorkspaceView() {
     <div className="stack">
       <header className="page-head">
         <h1>{ws.name}</h1>
-        <p className="muted">{ws.kind === "agency" ? "Ajans hesabı" : ws.kind === "demo_lab" ? "Demo Lab" : ws.kind === "growth_lab" ? "Growth Lab: AI SaaSavran'ın kendi görünürlüğü" : "İşletme hesabı"}{u && <>, {u.plan_name} paketi</>}</p>
+        <p className="muted">{ws.kind === "agency" ? L("Ajans hesabı", "Agency account") : ws.kind === "demo_lab" ? "Demo Lab" : ws.kind === "growth_lab" ? L("Growth Lab: AI SaaSavran'ın kendi görünürlüğü", "Growth Lab: AI SaaSavran's own visibility") : L("İşletme hesabı", "Business account")}{u && <>, {L(`${u.plan_name} paketi`, `${u.plan_name} plan`)}</>}</p>
       </header>
 
       {ws.status === "paused" && (
-        <p className="error-box" role="alert">{PAUSE_TEXT[ws.paused_reason ?? ""] ?? "Bu çalışma alanı durduruldu."}</p>
+        <p className="error-box" role="alert">{PAUSE_TEXT[ws.paused_reason ?? ""] ?? L("Bu çalışma alanı durduruldu.", "This workspace is paused.")}</p>
       )}
 
       {ws.paid_live_allowed ? (
         <aside className="notice notice-live" role="note">
-          <strong>Bu alanda iki tür ölçüm var</strong>
-          <p><b>Aramasız (Gemini, ücretsiz):</b> yapay zekânın internete bakmadan bildiği. <b>Canlı aramalı (ChatGPT, ücretli deneme):</b> internete bakarak verdiği cevap; müşterinin gerçekte gördüğüne en yakın olan budur.</p>
+          <strong>{L("Bu alanda iki tür ölçüm var", "This workspace has two kinds of measurement")}</strong>
+          {isEn()
+            ? <p><b>No search (Gemini, free):</b> what the AI knows without looking at the web. <b>Live search (ChatGPT, paid trial):</b> the answer it gives after searching the web; closest to what customers actually see.</p>
+            : <p><b>Aramasız (Gemini, ücretsiz):</b> yapay zekânın internete bakmadan bildiği. <b>Canlı aramalı (ChatGPT, ücretli deneme):</b> internete bakarak verdiği cevap; müşterinin gerçekte gördüğüne en yakın olan budur.</p>}
         </aside>
       ) : <DataNotice type={type} />}
 
       <section className="panel">
         <div className="panel-head">
-          <h2>Markalar</h2>
-          {u && own.length < u.brand_limit && <Link className="btn btn-primary btn-small" to="/marka/yeni">Marka ekle</Link>}
+          <h2>{L("Markalar", "Brands")}</h2>
+          {u && own.length < u.brand_limit && <Link className="btn btn-primary btn-small" to="/marka/yeni">{L("Marka ekle", "Add brand")}</Link>}
         </div>
         {brands.loading ? <Loading /> : brands.error ? <ErrorBox message={brands.error} /> : own.length === 0 ? (
-          <Empty title="Henüz marka eklemediniz">
-            <p>İzlemek istediğiniz markayı ekleyin; ardından rakiplerini ve müşterilerinizin soracağı soruları tanımlayın.</p>
-            <Link className="btn btn-primary" to="/marka/yeni">İlk markayı ekle</Link>
+          <Empty title={L("Henüz marka eklemediniz", "No brands yet")}>
+            <p>{L("İzlemek istediğiniz markayı ekleyin; ardından rakiplerini ve müşterilerinizin soracağı soruları tanımlayın.", "Add the brand you want to track, then its competitors and the questions your customers would ask.")}</p>
+            <Link className="btn btn-primary" to="/marka/yeni">{L("İlk markayı ekle", "Add your first brand")}</Link>
           </Empty>
         ) : (
           <ul className="brand-list">{own.map((b) => <BrandRow key={b.id} brand={b} type={type} live={ws.paid_live_allowed} />)}</ul>
@@ -59,13 +62,13 @@ function WorkspaceView() {
 
       {u && (
         <section className="panel">
-          <h2>Bu ayki kullanım</h2>
-          <Meter label="Yapay zekâ sorgusu" used={u.engine_calls} limit={u.engine_call_limit} />
-          <Meter label="Marka" used={u.brands_used} limit={u.brand_limit} warn={false} />
+          <h2>{L("Bu ayki kullanım", "This month's usage")}</h2>
+          <Meter label={L("Yapay zekâ sorgusu", "AI queries")} used={u.engine_calls} limit={u.engine_call_limit} />
+          <Meter label={L("Marka", "Brands")} used={u.brands_used} limit={u.brand_limit} warn={false} />
           <dl className="facts">
-            <div><dt>Ücretsiz katman sorgusu</dt><dd className="num">{u.free_calls}</dd></div>
-            <div><dt>Ücretli API harcaması</dt><dd className="num">{usd(Number(u.paid_cost_usd))}<span className="muted dd-note">{ws.paid_live_allowed ? "Deneme bütçesinden (toplam üst sınır 3 $)" : "Ücretli kullanım kapalı"}</span></dd></div>
-            <div><dt>Canlı web araması</dt><dd>{u.live_search_enabled ? "Açık" : ws.paid_live_allowed ? "Yalnız elle, deneme" : "Kapalı"}</dd></div>
+            <div><dt>{L("Ücretsiz katman sorgusu", "Free-tier queries")}</dt><dd className="num">{u.free_calls}</dd></div>
+            <div><dt>{L("Ücretli API harcaması", "Paid API spend")}</dt><dd className="num">{usd(Number(u.paid_cost_usd))}<span className="muted dd-note">{ws.paid_live_allowed ? L("Deneme bütçesinden (toplam üst sınır 3 $)", "From the trial budget (total cap $3)") : L("Ücretli kullanım kapalı", "Paid usage off")}</span></dd></div>
+            <div><dt>{L("Canlı web araması", "Live web search")}</dt><dd>{u.live_search_enabled ? L("Açık", "On") : ws.paid_live_allowed ? L("Yalnız elle, deneme", "Manual only, trial") : L("Kapalı", "Off")}</dd></div>
           </dl>
         </section>
       )}
@@ -80,16 +83,16 @@ function BrandRow({ brand, type, live }: { brand: Brand; type: MeasurementType; 
   const last = pts[pts.length - 1];
   const lpts = series(lv.data ?? []);
   const llast = lpts[lpts.length - 1];
-  const line = (p: typeof last, label: string) => <>{label}: {p.recommend.n} cevabın {numLoc(p.recommend.k)} önerildi ({pct(p.recommend.value)})</>;
+  const line = (p: typeof last, label: string) => <>{label}: {isEn() ? `recommended in ${p.recommend.k} of ${p.recommend.n} answers` : `${p.recommend.n} cevabın ${numLoc(p.recommend.k)} önerildi`} ({pct(p.recommend.value)})</>;
   return (
     <li>
       <Link to={`/marka/${brand.id}${llast && !last ? "?tur=canli" : ""}`} className="brand-row">
         <span className="brand-row-name">{brand.name}</span>
-        <span className="brand-row-meta">{[brand.sector, brand.city].filter(Boolean).join(", ") || "Sektör ve şehir girilmedi"}</span>
-        {vis.loading || lv.loading ? <span className="brand-row-result">…</span> : !last && !llast ? <span className="brand-row-result">Henüz ölçüm yok</span> : (
+        <span className="brand-row-meta">{[brand.sector, brand.city].filter(Boolean).join(", ") || L("Sektör ve şehir girilmedi", "No sector or city")}</span>
+        {vis.loading || lv.loading ? <span className="brand-row-result">…</span> : !last && !llast ? <span className="brand-row-result">{L("Henüz ölçüm yok", "No measurements yet")}</span> : (
           <>
-            {last && <span className="brand-row-result">{line(last, live ? "Aramasız (Gemini)" : "Son ölçümde")}</span>}
-            {llast && <span className="brand-row-result">{line(llast, "Canlı aramalı (ChatGPT)")}</span>}
+            {last && <span className="brand-row-result">{line(last, live ? L("Aramasız (Gemini)", "No search (Gemini)") : L("Son ölçümde", "Latest"))}</span>}
+            {llast && <span className="brand-row-result">{line(llast, L("Canlı aramalı (ChatGPT)", "Live search (ChatGPT)"))}</span>}
           </>
         )}
         {last && !live && <TypeBadge type={type} />}
@@ -107,7 +110,7 @@ export function NewWorkspace() {
   async function submit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const name = String(new FormData(e.currentTarget).get("name")).trim();
-    if (!name) { setErr("Çalışma alanına bir ad verin."); return; }
+    if (!name) { setErr(L("Çalışma alanına bir ad verin.", "Give the workspace a name.")); return; }
     setBusy(true); setErr(null);
     try {
       const id = await api.createWorkspace(name, kind);
@@ -116,15 +119,15 @@ export function NewWorkspace() {
   }
   return (
     <form className="stack narrow" onSubmit={submit} noValidate>
-      <header className="page-head"><h1>Çalışma alanı oluşturun</h1><p className="muted">Her çalışma alanının verisi diğerlerinden tamamen ayrıdır.</p></header>
+      <header className="page-head"><h1>{L("Çalışma alanı oluşturun", "Create a workspace")}</h1><p className="muted">{L("Her çalışma alanının verisi diğerlerinden tamamen ayrıdır.", "Each workspace's data is completely separate.")}</p></header>
       <fieldset className="choice">
-        <legend>Hesap türü</legend>
-        <label className={kind === "business" ? "on" : ""}><input type="radio" name="kind" checked={kind === "business"} onChange={() => setKind("business")} /><strong>İşletme</strong><span>Kendi markamı izleyeceğim</span></label>
-        <label className={kind === "agency" ? "on" : ""}><input type="radio" name="kind" checked={kind === "agency"} onChange={() => setKind("agency")} /><strong>Ajans</strong><span>Müşterilerimin markalarını izleyeceğim</span></label>
+        <legend>{L("Hesap türü", "Account type")}</legend>
+        <label className={kind === "business" ? "on" : ""}><input type="radio" name="kind" checked={kind === "business"} onChange={() => setKind("business")} /><strong>{L("İşletme", "Business")}</strong><span>{L("Kendi markamı izleyeceğim", "I'll track my own brand")}</span></label>
+        <label className={kind === "agency" ? "on" : ""}><input type="radio" name="kind" checked={kind === "agency"} onChange={() => setKind("agency")} /><strong>{L("Ajans", "Agency")}</strong><span>{L("Müşterilerimin markalarını izleyeceğim", "I'll track my clients' brands")}</span></label>
       </fieldset>
-      <Field label={kind === "agency" ? "Ajans adı" : "İşletme adı"} name="name" maxLength={120} required />
+      <Field label={kind === "agency" ? L("Ajans adı", "Agency name") : L("İşletme adı", "Business name")} name="name" maxLength={120} required />
       <ErrorBox message={err} />
-      <Button type="submit" busy={busy}>Çalışma alanını oluştur</Button>
+      <Button type="submit" busy={busy}>{L("Çalışma alanını oluştur", "Create workspace")}</Button>
     </form>
   );
 }
@@ -140,7 +143,7 @@ export function NewBrand() {
     e.preventDefault();
     const f = new FormData(e.currentTarget);
     const name = String(f.get("name")).trim();
-    if (!name) { setErr("Marka adı gerekli."); return; }
+    if (!name) { setErr(L("Marka adı gerekli.", "Brand name is required.")); return; }
     setBusy(true); setErr(null);
     try {
       const b = await api.addBrand({
@@ -156,17 +159,17 @@ export function NewBrand() {
   }
   return (
     <form className="stack narrow" onSubmit={submit} noValidate>
-      <header className="page-head"><h1>Marka ekleyin</h1><p className="muted">Yapay zekâ cevaplarında arayacağımız markayı tanımlayın.</p></header>
-      <Field label="Marka adı" name="name" required maxLength={120} placeholder={demo ? "Hayali bir ad" : "Örn. Ali Usta Döner"} />
-      <Field label="Diğer yazılışlar" name="aliases" hint="Virgülle ayırın. Örn. Ali Usta, AliUsta" />
-      <Field label="Web sitesi" name="website" type="url" inputMode="url" placeholder="ornek.com" />
-      <Select label="Sektör" name="sector" defaultValue="">
-        <option value="" disabled>Seçin</option>
+      <header className="page-head"><h1>{L("Marka ekleyin", "Add a brand")}</h1><p className="muted">{L("Yapay zekâ cevaplarında arayacağımız markayı tanımlayın.", "Define the brand we'll look for in AI answers.")}</p></header>
+      <Field label={L("Marka adı", "Brand name")} name="name" required maxLength={120} placeholder={demo ? L("Hayali bir ad", "A fictional name") : L("Örn. Ali Usta Döner", "e.g. Joe's Pizza")} />
+      <Field label={L("Diğer yazılışlar", "Other spellings")} name="aliases" hint={L("Virgülle ayırın. Örn. Ali Usta, AliUsta", "Comma-separated, e.g. Joes Pizza, Joe's")} />
+      <Field label={L("Web sitesi", "Website")} name="website" type="url" inputMode="url" placeholder={L("ornek.com", "example.com")} />
+      <Select label={L("Sektör", "Sector")} name="sector" defaultValue="">
+        <option value="" disabled>{L("Seçin", "Choose")}</option>
         {SECTORS.map((s) => <option key={s}>{s}</option>)}
       </Select>
-      <Field label="Şehir veya ilçe" name="city" placeholder="Örn. Antalya" />
+      <Field label={L("Şehir veya ilçe", "City or area")} name="city" placeholder={L("Örn. Antalya", "e.g. Austin")} />
       <ErrorBox message={err} />
-      <Button type="submit" busy={busy}>Markayı ekle</Button>
+      <Button type="submit" busy={busy}>{L("Markayı ekle", "Add brand")}</Button>
     </form>
   );
 }

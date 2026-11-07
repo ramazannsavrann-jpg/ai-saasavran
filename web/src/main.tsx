@@ -16,6 +16,7 @@ import { Dashboard, NewBrand, NewWorkspace } from "./pages/Dashboard";
 import { BrandPage } from "./pages/Brand";
 import { Account, DemoLab, ProductStatus } from "./pages/Misc";
 import { Privacy, Terms } from "./pages/Legal";
+import { L } from "./lib/i18n";
 
 function Private({ children }: { children: React.ReactNode }) {
   const { session, loading } = useApp();
@@ -61,8 +62,8 @@ function App() {
 function NotConfigured() {
   return (
     <main className="content stack narrow">
-      <h1>Uygulama henüz yapılandırılmadı</h1>
-      <p>Sunucu bağlantı bilgileri (config.json) eksik. Bu, kurulumun tamamlanmadığı anlamına gelir.</p>
+      <h1>{L("Uygulama henüz yapılandırılmadı", "The app isn't configured yet")}</h1>
+      <p>{L("Sunucu bağlantı bilgileri (config.json) eksik. Bu, kurulumun tamamlanmadığı anlamına gelir.", "Server connection details (config.json) are missing; setup isn't complete.")}</p>
     </main>
   );
 }

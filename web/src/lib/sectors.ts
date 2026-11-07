@@ -5,6 +5,7 @@
 //   local: false → ulusal markalar (banka, telekom...). Sorular "Türkiye'de" diye kurulur.
 
 import type { Intent } from "./data";
+import { isEn } from "./i18n";
 
 export interface SectorDef {
   label: string;           // veritabanında saklanan değer (eski kayıtlarla uyumlu)
@@ -207,10 +208,112 @@ export const SECTOR_DEFS: SectorDef[] = [
   { label: "Diğer", local: false, competitors: [], questions: [] },
 ];
 
-export const SECTORS = SECTOR_DEFS.map((s) => s.label);
+
+// İngilizce arayüz için uluslararası sektörler. {city} = şehir adı ("in {city}" diye kurulur).
+export const SECTOR_DEFS_EN: SectorDef[] = [
+  { label: "Restaurant", local: true, competitors: [], questions: [
+    Q("What are the best restaurants in {city} right now?", "local"),
+    Q("Can you recommend an affordable, good restaurant in {city}?", "comparison"),
+    Q("Where can I take my family for dinner in {city}?", "local"),
+    Q("Which restaurants in {city} are good for a date night?", "purchase"),
+    Q("How can I tell if a restaurant is good before I go?", "informational"),
+  ] },
+  { label: "Cafe / bakery", local: true, competitors: [], questions: [
+    Q("What are the best cafes for breakfast in {city}?", "local"),
+    Q("Can you recommend a quiet cafe to work from in {city}?", "comparison"),
+    Q("Where can I order a good birthday cake in {city}?", "purchase"),
+  ] },
+  { label: "Dentist / medical clinic", local: true, competitors: [], questions: [
+    Q("Can you recommend a good dentist in {city}?", "local"),
+    Q("Which dental clinics in {city} are best for implants?", "comparison"),
+    Q("Where can I get teeth whitening at a fair price in {city}?", "purchase"),
+    Q("How do I choose a good dentist?", "informational"),
+  ] },
+  { label: "Beauty salon / spa", local: true, competitors: [], questions: [
+    Q("What are the best beauty salons in {city}?", "local"),
+    Q("Can you recommend a good hair salon in {city}?", "comparison"),
+    Q("Where can I book a relaxing spa day in {city}?", "purchase"),
+  ] },
+  { label: "Hotel / accommodation", local: true, competitors: [], questions: [
+    Q("What are the best hotels in {city}?", "local"),
+    Q("Can you recommend a boutique hotel in {city}?", "comparison"),
+    Q("Which family-friendly hotels in {city} are worth booking?", "purchase"),
+    Q("How do I find a good hotel without overpaying?", "informational"),
+  ] },
+  { label: "Auto repair", local: true, competitors: [], questions: [
+    Q("Can you recommend a reliable auto repair shop in {city}?", "local"),
+    Q("Where can I get an honest car inspection in {city}?", "comparison"),
+    Q("Which mechanics in {city} are good for European cars?", "purchase"),
+  ] },
+  { label: "Real estate agency", local: true, competitors: [], questions: [
+    Q("Which real estate agents in {city} are the best?", "local"),
+    Q("Can you recommend a real estate agency for buying an apartment in {city}?", "purchase"),
+    Q("How do I choose a good real estate agent?", "informational"),
+  ] },
+  { label: "Law firm", local: true, competitors: [], questions: [
+    Q("Can you recommend a good business lawyer in {city}?", "local"),
+    Q("Which law firms in {city} handle immigration cases well?", "comparison"),
+    Q("How do I find a trustworthy lawyer?", "informational"),
+  ] },
+  { label: "Accounting / tax", local: true, competitors: [], questions: [
+    Q("Can you recommend an accountant for small businesses in {city}?", "local"),
+    Q("Which accounting firms in {city} are good for startups?", "comparison"),
+  ] },
+  { label: "Gym / fitness", local: true, competitors: [], questions: [
+    Q("What are the best gyms in {city}?", "local"),
+    Q("Can you recommend a good personal trainer in {city}?", "comparison"),
+    Q("Where can I find affordable yoga classes in {city}?", "purchase"),
+  ] },
+  { label: "Home services (plumbing, cleaning…)", local: true, competitors: [], questions: [
+    Q("Can you recommend a reliable plumber in {city}?", "local"),
+    Q("Which house cleaning services in {city} are good?", "comparison"),
+    Q("How do I find a trustworthy contractor?", "informational"),
+  ] },
+  { label: "Marketing / digital agency", local: false, competitors: [], questions: [
+    Q("What are the best digital marketing agencies for small businesses?", "comparison"),
+    Q("Can you recommend an SEO agency for an e-commerce store?", "purchase"),
+    Q("How do I choose a marketing agency?", "informational"),
+  ] },
+  { label: "AI visibility / SEO tools", local: false,
+    competitors: ["Peec AI", "Otterly.AI", "Profound", "Semrush", "Ahrefs"], questions: [
+    Q("What are the best tools to track brand visibility in AI answers?", "comparison"),
+    Q("Which tool can show if ChatGPT recommends my business?", "purchase"),
+    Q("What are affordable alternatives to Profound for AI visibility tracking?", "comparison"),
+    Q("How do I measure my brand's visibility in ChatGPT?", "informational"),
+  ] },
+  { label: "Project management software", local: false,
+    competitors: ["Asana", "Monday.com", "Trello", "ClickUp", "Notion"], questions: [
+    Q("What is the best project management tool for a small team?", "comparison"),
+    Q("Which project management software should a 10-person agency buy?", "purchase"),
+    Q("What are good alternatives to Jira for non-developers?", "comparison"),
+  ] },
+  { label: "CRM software", local: false,
+    competitors: ["HubSpot", "Salesforce", "Pipedrive", "Zoho CRM"], questions: [
+    Q("What is the best CRM for a small business?", "comparison"),
+    Q("Which CRM should a small sales team buy?", "purchase"),
+    Q("What are affordable alternatives to Salesforce?", "comparison"),
+  ] },
+  { label: "Email marketing software", local: false,
+    competitors: ["Mailchimp", "Klaviyo", "Brevo", "Kit"], questions: [
+    Q("What is the best email marketing tool for an online store?", "comparison"),
+    Q("Which newsletter platform should a creator use?", "purchase"),
+    Q("What are cheaper alternatives to Mailchimp?", "comparison"),
+  ] },
+  { label: "E-commerce store", local: false, competitors: [], questions: [
+    Q("Where can I buy high-quality products like ours online?", "purchase"),
+    Q("Which online stores are trustworthy for this kind of product?", "comparison"),
+  ] },
+  { label: "Software / SaaS (other)", local: false, competitors: [], questions: [
+    Q("What are the best tools for this kind of job?", "comparison"),
+  ] },
+  { label: "Other", local: false, competitors: [], questions: [] },
+];
+
+/** Seçim listesi arayüz diline göre; kayıtlı eski değerler iki listede de aranır. */
+export const SECTORS = (isEn() ? SECTOR_DEFS_EN : SECTOR_DEFS).map((s) => s.label);
 
 export function sectorDef(label: string | null | undefined): SectorDef | undefined {
-  return SECTOR_DEFS.find((s) => s.label === label);
+  return SECTOR_DEFS.find((s) => s.label === label) ?? SECTOR_DEFS_EN.find((s) => s.label === label);
 }
 
 /** Türkçe bulunma eki (ünlü uyumu + sert ünsüz): Antalya'da, İzmir'de, Sinop'ta. */
@@ -231,6 +334,7 @@ export function questionTemplates(sector: string | null, city: string | null): {
   return def.questions
     .filter((q) => c || !/\{(city|where)\}/.test(q.text))
     .map((q) => ({ ...q, text: q.text.replace("{where}", c ? locative(c) : "").replace("{city}", c ?? "") }));
+
 }
 
 /** Örnek rakipler: markanın kendisi ve zaten ekli olanlar hariç. */

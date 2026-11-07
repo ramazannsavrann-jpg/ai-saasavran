@@ -1,7 +1,8 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { sb, friendlyError, isEmail, authProviders } from "../lib/supabase";
-import { t } from "../lib/i18n";
+import { t, L, isEn } from "../lib/i18n";
+import { LangSwitch } from "../components/Shell";
 import { Button, ErrorBox, Field } from "../components/ui";
 
 /** "Google ile devam et": yalnızca Supabase'de Google girişi açıksa görünür. */
@@ -25,11 +26,13 @@ function GoogleButton({ signup }: { signup?: boolean }) {
           <path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-8l-6.5 5C9.5 39.6 16.2 44 24 44z"/>
           <path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.4-.4-3.5z"/>
         </svg>
-        {busy ? "Google'a yönlendiriliyor…" : "Google ile devam et"}
+        {busy ? L("Google'a yönlendiriliyor…", "Redirecting to Google…") : L("Google ile devam et", "Continue with Google")}
       </button>
-      {signup && <p className="field-hint">Google ile devam ederek <Link to="/gizlilik" target="_blank">aydınlatma metnini</Link> okuduğunuzu ve <Link to="/kosullar" target="_blank">kullanım koşullarını</Link> kabul ettiğinizi onaylarsınız.</p>}
+      {signup && (isEn()
+        ? <p className="field-hint">By continuing with Google you confirm you've read the <Link to="/gizlilik" target="_blank">privacy notice</Link> and accept the <Link to="/kosullar" target="_blank">terms</Link>.</p>
+        : <p className="field-hint">Google ile devam ederek <Link to="/gizlilik" target="_blank">aydınlatma metnini</Link> okuduğunuzu ve <Link to="/kosullar" target="_blank">kullanım koşullarını</Link> kabul ettiğinizi onaylarsınız.</p>)}
       <ErrorBox message={err} />
-      <p className="or" aria-hidden><span>veya e-posta ile</span></p>
+      <p className="or" aria-hidden><span>{L("veya e-posta ile", "or with email")}</span></p>
     </div>
   );
 }
@@ -43,7 +46,7 @@ function AuthLayout({ title, lead, children }: { title: string; lead: string; ch
         <p>{lead}</p>
       </div>
       <div className="auth-card">{children}</div>
-      <p className="auth-foot"><Link to="/durum">Ürünün şu anki durumu</Link> · <Link to="/gizlilik">Gizlilik</Link> · <Link to="/kosullar">Koşullar</Link></p>
+      <p className="auth-foot"><Link to="/durum">{L("Ürünün şu anki durumu", "Product status")}</Link> · <Link to="/gizlilik">{L("Gizlilik", "Privacy")}</Link> · <Link to="/kosullar">{L("Koşullar", "Terms")}</Link> · <LangSwitch /></p>
     </div>
   );
 }
@@ -56,15 +59,15 @@ export function Login() {
     e.preventDefault();
     const f = new FormData(e.currentTarget);
     const email = String(f.get("email")).trim();
-    if (!isEmail(email)) { setErr("Geçerli bir e-posta adresi girin."); return; }
-    if (!String(f.get("password"))) { setErr("Şifrenizi girin."); return; }
+    if (!isEmail(email)) { setErr(L("Geçerli bir e-posta adresi girin.", "Enter a valid email address.")); return; }
+    if (!String(f.get("password"))) { setErr(L("Şifrenizi girin.", "Enter your password.")); return; }
     setBusy(true); setErr(null);
     const { error } = await sb().auth.signInWithPassword({ email, password: String(f.get("password")) });
     setBusy(false);
     if (error) setErr(friendlyError(error)); else nav("/panel");
   }
   return (
-    <AuthLayout title="Markanız yapay zekâ cevaplarında nerede?" lead="Gemini'ye müşterilerinizin sorduğu soruları sorar, markanızın anılıp anılmadığını ve önerilip önerilmediğini ölçeriz.">
+    <AuthLayout title={L("Markanız yapay zekâ cevaplarında nerede?", "Where does your brand stand in AI answers?")} lead={L("Gemini'ye müşterilerinizin sorduğu soruları sorar, markanızın anılıp anılmadığını ve önerilip önerilmediğini ölçeriz.", "We ask AI assistants the questions your customers ask, and measure whether your brand is mentioned and recommended.")}>
       <form onSubmit={submit} noValidate>
         <h2>{t("auth.login")}</h2>
         <GoogleButton />
@@ -88,9 +91,9 @@ export function Signup() {
     const f = new FormData(e.currentTarget);
     const email = String(f.get("email")).trim();
     const password = String(f.get("password"));
-    if (!isEmail(email)) { setErr("Geçerli bir e-posta adresi girin."); return; }
-    if (password.length < 8) { setErr("Şifre en az 8 karakter olmalı."); return; }
-    if (!f.get("kvkk")) { setErr("Devam etmek için aydınlatma metnini onaylayın."); return; }
+    if (!isEmail(email)) { setErr(L("Geçerli bir e-posta adresi girin.", "Enter a valid email address.")); return; }
+    if (password.length < 8) { setErr(L("Şifre en az 8 karakter olmalı.", "Password must be at least 8 characters.")); return; }
+    if (!f.get("kvkk")) { setErr(L("Devam etmek için aydınlatma metnini onaylayın.", "Accept the privacy notice to continue.")); return; }
     setBusy(true); setErr(null);
     const { data, error } = await sb().auth.signUp({ email, password, options: { emailRedirectTo: `${location.origin}/panel` } });
     setBusy(false);
@@ -99,7 +102,7 @@ export function Signup() {
     else setSent(true); // e-posta doğrulaması açık ortamlar
   }
   return (
-    <AuthLayout title="Hesap oluşturun" lead="Ücretsiz pakette 1 marka, 2 rakip ve 10 soruyla başlarsınız. Kart bilgisi istenmez.">
+    <AuthLayout title={L("Hesap oluşturun", "Create your account")} lead={L("Ücretsiz pakette 1 marka, 2 rakip ve 10 soruyla başlarsınız. Kart bilgisi istenmez.", "The free plan includes 1 brand, 2 competitors and 10 questions. No card required.")}>
       {sent ? <p className="success-box">{t("auth.checkEmail")}</p> : (
         <form onSubmit={submit} noValidate>
           <h2>{t("auth.signup")}</h2>
@@ -108,7 +111,9 @@ export function Signup() {
           <Field label={t("auth.password")} name="password" type="password" autoComplete="new-password" hint={t("auth.passwordHint")} minLength={8} required />
           <label className="check">
             <input type="checkbox" name="kvkk" />
-            <span><Link to="/gizlilik" target="_blank">Aydınlatma metnini</Link> okudum, <Link to="/kosullar" target="_blank">kullanım koşullarını</Link> kabul ediyorum.</span>
+            {isEn()
+              ? <span>I've read the <Link to="/gizlilik" target="_blank">privacy notice</Link> and accept the <Link to="/kosullar" target="_blank">terms</Link>.</span>
+              : <span><Link to="/gizlilik" target="_blank">Aydınlatma metnini</Link> okudum, <Link to="/kosullar" target="_blank">kullanım koşullarını</Link> kabul ediyorum.</span>}
           </label>
           <ErrorBox message={err} />
           <Button type="submit" busy={busy}>{t("auth.signup")}</Button>
@@ -126,14 +131,14 @@ export function Forgot() {
   async function submit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const email = String(new FormData(e.currentTarget).get("email")).trim();
-    if (!isEmail(email)) { setErr("Geçerli bir e-posta adresi girin."); return; }
+    if (!isEmail(email)) { setErr(L("Geçerli bir e-posta adresi girin.", "Enter a valid email address.")); return; }
     setBusy(true); setErr(null);
     const { error } = await sb().auth.resetPasswordForEmail(email, { redirectTo: `${location.origin}/hesap` });
     setBusy(false);
     if (error) setErr(friendlyError(error)); else setDone(true);
   }
   return (
-    <AuthLayout title="Şifre sıfırlama" lead="Kayıtlı e-posta adresinize bir sıfırlama bağlantısı göndereceğiz.">
+    <AuthLayout title={L("Şifre sıfırlama", "Reset password")} lead={L("Kayıtlı e-posta adresinize bir sıfırlama bağlantısı göndereceğiz.", "We'll send a reset link to your registered email.")}>
       {done ? <p className="success-box">{t("auth.resetSent")}</p> : (
         <form onSubmit={submit} noValidate>
           <Field label={t("auth.email")} name="email" type="email" autoComplete="email" required />

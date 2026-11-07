@@ -1,6 +1,6 @@
 import { useState, type ReactNode, type InputHTMLAttributes, type SelectHTMLAttributes } from "react";
 import { Link } from "react-router-dom";
-import { t } from "../lib/i18n";
+import { t, L } from "../lib/i18n";
 import type { MeasurementType } from "../lib/data";
 
 export function Field({ label, hint, error, ...props }: InputHTMLAttributes<HTMLInputElement> & { label: string; hint?: string; error?: string }) {
@@ -28,7 +28,7 @@ export function Button({ busy, variant = "primary", children, ...props }:
   React.ButtonHTMLAttributes<HTMLButtonElement> & { busy?: boolean; variant?: "primary" | "quiet" | "danger" }) {
   return (
     <button {...props} className={`btn btn-${variant} ${props.className ?? ""}`} disabled={busy || props.disabled} aria-busy={busy}>
-      {busy ? "Lütfen bekleyin…" : children}
+      {busy ? L("Lütfen bekleyin…", "Please wait…") : children}
     </button>
   );
 }
@@ -38,7 +38,7 @@ export function ErrorBox({ message }: { message?: string | null }) {
   return <p className="error-box" role="alert">{message}</p>;
 }
 
-export function Loading({ label = "Yükleniyor…" }: { label?: string }) {
+export function Loading({ label = L("Yükleniyor…", "Loading…") }: { label?: string }) {
   return <p className="loading" role="status">{label}</p>;
 }
 
@@ -60,8 +60,8 @@ export function TypeBadge({ type }: { type: MeasurementType }) {
 export function DataNotice({ type }: { type: MeasurementType }) {
   if (type === "live_search") return (
     <aside className="notice notice-live" role="note">
-      <strong>Canlı web aramalı ölçüm</strong>
-      <p>Bu sonuçlar ChatGPT'ye (OpenAI API) internette arama açıkken sorulan sorulardan geliyor. Cevaplar aramanın yapıldığı ana göre değişebilir; tek ölçümü kesin sonuç gibi okumayın.</p>
+      <strong>{L("Canlı web aramalı ölçüm", "Live web-search measurement")}</strong>
+      <p>{L("Bu sonuçlar ChatGPT'ye (OpenAI API) internette arama açıkken sorulan sorulardan geliyor. Cevaplar aramanın yapıldığı ana göre değişebilir; tek ölçümü kesin sonuç gibi okumayın.", "These results come from questions asked to ChatGPT (OpenAI API) with web search on. Answers depend on when the search ran; don't read a single measurement as final.")}</p>
     </aside>
   );
   const sim = type === "simulated";
@@ -69,7 +69,7 @@ export function DataNotice({ type }: { type: MeasurementType }) {
     <aside className={`notice ${sim ? "notice-sim" : "notice-nolive"}`} role="note">
       <strong>{t(sim ? "notice.sim.title" : "notice.noLive.title")}</strong>
       <p>{t(sim ? "notice.sim.body" : "notice.noLive.body")}</p>
-      {!sim && <Link to="/durum">Hangi özellikler çalışıyor?</Link>}
+      {!sim && <Link to="/durum">{L("Hangi özellikler çalışıyor?", "What works today?")}</Link>}
     </aside>
   );
 }
@@ -94,7 +94,7 @@ export function Confirm({ label, onConfirm, children }: { label: string; onConfi
     <span className="confirm">
       {label}
       <button className="link-btn danger" disabled={busy} onClick={async () => { setBusy(true); try { await onConfirm(); } finally { setBusy(false); setAsk(false); } }}>Evet, sil</button>
-      <button className="link-btn" onClick={() => setAsk(false)}>Vazgeç</button>
+      <button className="link-btn" onClick={() => setAsk(false)}>{L("Vazgeç", "Cancel")}</button>
     </span>
   );
 }

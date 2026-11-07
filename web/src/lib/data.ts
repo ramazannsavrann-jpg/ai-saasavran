@@ -1,5 +1,6 @@
 // Veri tipleri ve sorgular. Tüm erişim kullanıcının oturumuyla yapılır; izolasyonu veritabanı (RLS) sağlar.
 import { sb } from "./supabase";
+import { L } from "./i18n";
 
 export type MeasurementType = "live_search" | "model_knowledge" | "simulated";
 export type WorkspaceKind = "business" | "agency" | "demo_lab" | "growth_lab";
@@ -35,14 +36,14 @@ export interface PromptResult {
 
 export interface SiteAudit {
   id: string; brand_id: string; url: string; status: "ok" | "unreachable"; created_at: string;
-  checks: { id: string; ok: boolean; severity: "high" | "medium" | "low" | "info"; title: string; detail: string }[];
+  checks: { id: string; ok: boolean; severity: "high" | "medium" | "low" | "info"; title: string; detail: string; title_en?: string; detail_en?: string }[];
 }
 
 export const INTENT_LABEL: Record<Intent, string> = {
-  local: "Yerel işletme arıyor",
-  comparison: "Karşılaştırıyor",
-  purchase: "Satın almaya hazırlanıyor",
-  informational: "Bilgi arıyor",
+  local: L("Yerel işletme arıyor", "Looking for a local business"),
+  comparison: L("Karşılaştırıyor", "Comparing options"),
+  purchase: L("Satın almaya hazırlanıyor", "Ready to buy"),
+  informational: L("Bilgi arıyor", "Researching"),
 };
 
 function must<T>(r: { data: T | null; error: { message: string } | null }): T {

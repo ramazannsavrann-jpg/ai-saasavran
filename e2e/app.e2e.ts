@@ -298,6 +298,20 @@ test("Gizlilik ve koşullar sayfaları herkese açık, iletişim adresi ve tasla
   await shot(page, "16-gizlilik");
 });
 
+test("İngilizce arayüz: tarayıcı dili İngilizceyse giriş ve gizlilik İngilizce, TR düğmesi Türkçeye döner", async ({ browser }) => {
+  const ctx = await browser.newContext({ locale: "en-US" });
+  const page = await ctx.newPage();
+  await page.goto("/giris");
+  await expect(page.getByRole("button", { name: "Sign in", exact: true })).toBeVisible();
+  await page.goto("/gizlilik");
+  await expect(page.getByRole("heading", { name: "Privacy policy", level: 1 })).toBeVisible();
+  await expect(page.getByText("Google may use this content to improve its products")).toBeVisible();
+  await page.goto("/giris");
+  await page.getByRole("button", { name: "Türkçeye geç" }).click();
+  await expect(page.getByRole("button", { name: "Giriş yap", exact: true })).toBeVisible();
+  await ctx.close();
+});
+
 test("İzolasyon arayüzde: ikinci müşteri ilk müşterinin markasını göremez", async ({ page }) => {
   await page.goto("/kayit");
   await expect(page.getByRole("heading", { name: "Hesap oluşturun" })).toBeVisible();

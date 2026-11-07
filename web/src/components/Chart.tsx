@@ -2,6 +2,7 @@
 //   canlı arama → düz çizgi, aramasız model bilgisi → kesik çizgi, simülasyon → noktalı + taralı bant.
 import type { MeasurementType } from "../lib/data";
 import { formatDate, pct, type RunPoint } from "../lib/report";
+import { L } from "../lib/i18n";
 
 const sameDay = (pts: RunPoint[]) => new Set(pts.map((p) => p.at.slice(0, 10))).size < pts.length;
 const tickLabel = (iso: string, withTime: boolean) =>
@@ -19,13 +20,13 @@ export function TrendChart({ points, type, metric }: { points: RunPoint[]; type:
     ? `M${vals.map((v, i) => `${xs(i).toFixed(1)},${ys(v.high).toFixed(1)}`).join(" L")} L${[...vals].reverse().map((v, j) => `${xs(vals.length - 1 - j).toFixed(1)},${ys(v.low).toFixed(1)}`).join(" L")} Z`
     : "";
   const dash = type === "model_knowledge" ? "6 5" : type === "simulated" ? "1.5 4" : undefined;
-  const label = metric === "recommend" ? "önerilme oranı" : "anılma oranı";
+  const label = metric === "recommend" ? L("önerilme oranı", "recommendation rate") : L("anılma oranı", "mention rate");
   const ticks = labelIndexes(points.length);
   const withTime = sameDay(points);
 
   return (
     <figure className="chart">
-      <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label={`Zaman içinde ${label}: ${vals.map((v, i) => `${formatDate(points[i].at)} ${pct(v.value)}`).join(", ")}`}>
+      <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label={`${L("Zaman içinde", "Over time,")} ${label}: ${vals.map((v, i) => `${formatDate(points[i].at)} ${pct(v.value)}`).join(", ")}`}>
         <defs>
           <pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
             <line x1="0" y1="0" x2="0" y2="6" stroke="var(--sim)" strokeWidth="1.5" opacity=".35" />
@@ -41,7 +42,7 @@ export function TrendChart({ points, type, metric }: { points: RunPoint[]; type:
         <path d={line} className={`chart-line chart-${type}`} strokeDasharray={dash} />
         {vals.map((v, i) => (
           <circle key={i} cx={xs(i)} cy={ys(v.value)} r={4} className={`chart-dot chart-${type}`}>
-            <title>{`${formatDate(points[i].at)}: ${pct(v.value)} (${v.k}/${v.n} cevap, aralık ${pct(v.low)}–${pct(v.high)})`}</title>
+            <title>{`${formatDate(points[i].at)}: ${pct(v.value)} (${v.k}/${v.n} ${L("cevap, aralık", "answers, range")} ${pct(v.low)}–${pct(v.high)})`}</title>
           </circle>
         ))}
         {ticks.map((i) => (
@@ -50,7 +51,7 @@ export function TrendChart({ points, type, metric }: { points: RunPoint[]; type:
       </svg>
       <figcaption>
         <span className={`legend-line legend-${type}`} aria-hidden /> {label}
-        {points.length > 1 && <>. Gölgeli alan %95 güven aralığıdır.</>}
+        {points.length > 1 && <>{L(". Gölgeli alan %95 güven aralığıdır.", ". Shaded area is the 95% confidence range.")}</>}
       </figcaption>
     </figure>
   );
@@ -67,7 +68,7 @@ export function CompareBars({ rows, type }: { rows: { name: string; isTarget: bo
     <ul className="bars">
       {rows.map((r) => (
         <li key={r.name} className={r.isTarget ? "bar-target" : ""}>
-          <div className="bar-head"><span className="bar-name">{r.name}{r.isTarget && <em> (siz)</em>}</span><span className="num">{pct(r.value)}</span></div>
+          <div className="bar-head"><span className="bar-name">{r.name}{r.isTarget && <em> {L("(siz)", "(you)")}</em>}</span><span className="num">{pct(r.value)}</span></div>
           <div className="bar-track"><div className={`bar-fill bar-${type}`} style={{ width: `${Math.max(r.value * 100, 1)}%` }} /></div>
           <span className="bar-detail">{r.detail}</span>
         </li>

@@ -29,17 +29,47 @@ const tr = {
 } as const;
 
 type Key = keyof typeof tr;
-const en: Partial<Record<Key, string>> = {
+const en: Record<Key, string> = {
+  "app.name": "AI SaaSavran",
   "nav.dashboard": "Dashboard",
   "nav.status": "Product status",
   "nav.account": "Account",
+  "nav.demo": "Demo Lab",
   "auth.login": "Sign in",
   "auth.signup": "Create account",
   "auth.logout": "Sign out",
   "auth.email": "Email",
   "auth.password": "Password",
+  "auth.passwordHint": "At least 8 characters",
+  "auth.noAccount": "No account yet?",
+  "auth.haveAccount": "Already have an account?",
+  "auth.forgot": "Forgot password",
+  "auth.sendReset": "Send reset link",
+  "auth.resetSent": "If an account exists for this address, we sent a reset link.",
+  "auth.checkEmail": "Your account was created. Click the confirmation link in your email before signing in.",
+  "type.model_knowledge": "Model knowledge, no search",
+  "type.live_search": "Live web search",
+  "type.simulated": "Simulation",
+  "notice.noLive.title": "No live web search",
+  "notice.noLive.body": "These results come from questions asked to Gemini with web search turned off. They show what the model learned in training, not the up-to-date answers the Gemini app gives when it searches the web.",
+  "notice.sim.title": "Simulation, not real data",
+  "notice.sim.body": "Brands and answers in the Demo Lab are fictional. No AI platform was contacted.",
 };
 
-let lang: "tr" | "en" = "tr";
-export function setLang(l: "tr" | "en") { lang = l; document.documentElement.lang = l; }
-export function t(k: Key): string { return (lang === "en" && en[k]) || tr[k]; }
+export type Lang = "tr" | "en";
+/** Dil: kullanıcının seçimi, yoksa tarayıcı dili (Türkçe değilse İngilizce). */
+function detect(): Lang {
+  try { const s = localStorage.getItem("lang"); if (s === "tr" || s === "en") return s; } catch { /* depolama kapalı */ }
+  return typeof navigator !== "undefined" && (navigator.language || "").toLowerCase().startsWith("tr") ? "tr" : "en";
+}
+let lang: Lang = detect();
+if (typeof document !== "undefined") document.documentElement.lang = lang;
+
+export const getLang = (): Lang => lang;
+export function setLang(l: Lang) { lang = l; document.documentElement.lang = l; }
+/** Dili değiştirir ve sayfayı yeniler (tüm metinler yeni dilde çizilir). */
+export function switchLang(l: Lang) { try { localStorage.setItem("lang", l); } catch { /* yok say */ } location.reload(); }
+export function t(k: Key): string { return lang === "en" ? en[k] : tr[k]; }
+/** Satır içi çeviri: L("Türkçe", "English"). */
+export const L = (trText: string, enText: string): string => (lang === "en" ? enText : trText);
+export const isEn = () => lang === "en";
