@@ -369,3 +369,11 @@ form > .btn, .stack > .btn { width: 100%; }
 .chip .muted { margin-left: .3rem; font-size: .85em; }
 .chip-actions { flex-basis: 100%; display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; padding: .25rem 0 .5rem; }
 .share-row { display: flex; flex-wrap: wrap; align-items: center; gap: .6rem; margin-top: .9rem; }
+
+/* Paket seçimi (Hesap) */
+.plan-pick { display: grid; gap: 12px; }
+@media (min-width: 760px) { .plan-pick { grid-template-columns: repeat(3, 1fr); } .plan-pick > .small { grid-column: 1 / -1; } }
+.plan-opt { display: flex; flex-direction: column; gap: 8px; border: 1px solid var(--line); border-radius: 12px; padding: 14px; }
+.plan-opt-main { border: 2px solid var(--primary); }
+.plan-opt h3 { margin: 0; display: flex; justify-content: space-between; gap: 8px; }
+.plan-opt p { margin: 0; flex: 1; }

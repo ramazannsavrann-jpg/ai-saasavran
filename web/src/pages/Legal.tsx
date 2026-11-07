@@ -67,7 +67,8 @@ export function Privacy() {
         <li><strong>Supabase</strong> (veritabanı ve giriş sistemi; sunucu: Frankfurt, Almanya).</li>
         <li><strong>Cloudflare</strong> (web sitesinin barındırılması, alan adı ve çerezsiz ziyaret sayımı).</li>
         <li><strong>Google</strong> (Gemini yapay zekâ servisi ve Google ile giriş). Ölçüm yaparken yazdığınız sorular Gemini'ye gönderilir. Ücretsiz katmanı kullandığımız için <strong>Google bu içerikleri kendi ürünlerini geliştirmek için kullanabilir</strong>. Bu nedenle sorulara kişisel veri (ad, telefon, adres vb.) yazmayın.</li>
-        <li><strong>OpenAI</strong> (ChatGPT ile canlı web aramalı ölçüm; şu an yalnızca kendi test alanımızda, müşteri hesaplarında kapalı).</li>
+        <li><strong>OpenAI</strong> (ücretli paketlerde ChatGPT ile canlı web aramalı ölçüm).</li>
+        <li><strong>Paddle</strong> (ücretli paketlerde ödeme, fatura ve vergi; kart bilginizi biz görmeyiz).</li>
         <li><strong>GitHub</strong> (ölçümleri çalıştıran otomasyon altyapısı).</li>
       </ul>
       <p>Verilerinizi satmıyoruz ve reklam amacıyla kimseyle paylaşmıyoruz.</p>
@@ -110,9 +111,9 @@ export function Terms() {
       </ul>
 
       <h2>Ücretler, iptal ve iade</h2>
-      <p>Paketler ve fiyatlar ana sayfadaki fiyat bölümünde yazar. Ücretli paketler henüz satışta değildir; satışa açıldığında şu kurallar geçerlidir:</p>
+      <p>Paketler ve fiyatlar ana sayfadaki fiyat bölümünde yazar: Free (0 $), Plus (aylık 20 $), Pro (aylık 99 $), Business (aylık 249 $).</p>
       <ul className="plain">
-        <li>Ücretli paketler aylık yenilenir. Ödemeler, yetkili satıcı (merchant of record) olarak çalışan ödeme sağlayıcımız üzerinden alınır; faturayı ve vergileri o düzenler.</li>
+        <li>Ücretli paketler aylık yenilenir. Siparişler, tüm siparişlerimizde yetkili satıcı (merchant of record) olan çevrim içi satıcımız Paddle.com üzerinden alınır; faturayı, vergileri ve ödeme sorularını Paddle düzenler.</li>
         <li>Aboneliğinizi istediğiniz zaman iptal edebilirsiniz; iptal, ödenmiş dönemin sonunda geçerli olur.</li>
         <li>Memnun kalmazsanız ilk ödemenizden sonraki 14 gün içinde {CONTACT_EMAIL} adresine yazarak tam iade isteyebilirsiniz.</li>
       </ul>
@@ -157,7 +158,8 @@ function PrivacyEn() {
         <li><strong>Supabase</strong>: database and sign-in (servers in Frankfurt, Germany).</li>
         <li><strong>Cloudflare</strong>: website hosting, domain and cookieless visit counting.</li>
         <li><strong>Google</strong>: the Gemini AI service and Google sign-in. Your questions are sent to Gemini when measuring. Because we use Gemini's free tier, <strong>Google may use this content to improve its products</strong>, so don't put personal data (names, phone numbers, addresses) in your questions.</li>
-        <li><strong>OpenAI</strong>: ChatGPT live web-search measurement (currently only in our own test workspace, off for customer accounts).</li>
+        <li><strong>OpenAI</strong>: ChatGPT live web-search measurement on paid plans.</li>
+        <li><strong>Paddle</strong>: payments, invoicing and tax for paid plans. We never see your card details.</li>
         <li><strong>GitHub</strong>: the automation that runs measurements.</li>
       </ul>
       <p>We don't sell your data or share it for advertising.</p>
@@ -199,9 +201,9 @@ function TermsEn() {
       </ul>
 
       <h2>Fees, cancellation and refunds</h2>
-      <p>Plans and prices are listed in the pricing section of our home page. Paid plans are not on sale yet; when they launch, these rules apply:</p>
+      <p>Plans and prices are listed in the pricing section of our home page: Free ($0), Plus ($20/month), Pro ($99/month), Business ($249/month).</p>
       <ul className="plain">
-        <li>Paid plans renew monthly. Payments are processed by our payment provider acting as merchant of record, which issues invoices and handles sales tax.</li>
+        <li>Paid plans renew monthly. Our order process is conducted by our online reseller Paddle.com, the merchant of record for all our orders, which handles invoices, sales tax and billing enquiries.</li>
         <li>You can cancel at any time; cancellation takes effect at the end of the period you've paid for.</li>
         <li>If you're not satisfied, email {CONTACT_EMAIL} within 14 days of your first payment for a full refund.</li>
       </ul>

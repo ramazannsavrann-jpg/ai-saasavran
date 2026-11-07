@@ -197,12 +197,29 @@ jobs:
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+          PADDLE_CLIENT_TOKEN: ${{ secrets.PADDLE_CLIENT_TOKEN }}
         run: node scripts/web-release.mjs
       - name: Cloudflare Pages projesi (yoksa oluştur)
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         run: npx --yes wrangler@4 pages project create ai-saasavran --production-branch main || echo "Proje zaten var"
+      - name: Ödeme ayarları (Paddle katalog, bildirim hedefi, sunucu anahtarları)
+        env:
+          PADDLE_API_KEY: ${{ secrets.PADDLE_API_KEY }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          if [ -z "$PADDLE_API_KEY" ]; then echo "Paddle anahtarı yok; atlandı."; exit 0; fi
+          umask 077
+          PADDLE_SECRET_OUT="$RUNNER_TEMP/whsec" node scripts/paddle-setup.mjs
+          node -e 'const fs=require("fs");const e=process.env;fs.writeFileSync(process.argv[1],JSON.stringify({PADDLE_WEBHOOK_SECRET:fs.readFileSync(process.argv[2],"utf8"),PADDLE_API_KEY:e.PADDLE_API_KEY,SUPABASE_URL:e.SUPABASE_URL,SUPABASE_ANON_KEY:e.SUPABASE_ANON_KEY,SUPABASE_SERVICE_ROLE_KEY:e.SUPABASE_SERVICE_ROLE_KEY}))' "$RUNNER_TEMP/pages-secrets.json" "$RUNNER_TEMP/whsec"
+          npx --yes wrangler@4 pages secret bulk "$RUNNER_TEMP/pages-secrets.json" --project-name ai-saasavran > /dev/null
+          rm -f "$RUNNER_TEMP/whsec" "$RUNNER_TEMP/pages-secrets.json"
+          echo "Sunucu anahtarları Cloudflare'e yazıldı."
       - name: Yayınla
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}

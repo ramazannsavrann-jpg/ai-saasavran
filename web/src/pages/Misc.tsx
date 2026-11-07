@@ -5,6 +5,7 @@ import { runtimeConfig, sb, friendlyError } from "../lib/supabase";
 import { Button, Empty, ErrorBox, Field } from "../components/ui";
 import { L } from "../lib/i18n";
 import { LangSwitch } from "../components/Shell";
+import { BillingPanel } from "../components/Billing";
 
 type Level = "works" | "partial" | "missing";
 const STATUS: { area: string; items: [Level, string, string][] }[] = [
@@ -16,7 +17,7 @@ const STATUS: { area: string; items: [Level, string, string][] }[] = [
       ["works", L("Müşteri verisi izolasyonu", "Customer data isolation"), L("Veritabanı satır güvenliğiyle; her sürümde otomatik test ediliyor.", "Enforced by database row-level security; tested on every release.")],
       ["works", L("Paket limitleri ve aylık kota", "Plan limits and monthly quota"), L("Limit aşılınca ölçüm durur.", "Measurements stop when a limit is reached.")],
       ["missing", L("Ekip üyesi davet etme", "Team invitations"), L("Henüz yok.", "Not yet.")],
-      ["missing", L("Ödeme ve paket yükseltme", "Payments and upgrades"), L("Henüz yok; herkes Free paketinde.", "Not yet; everyone is on the Free plan.")],
+      ["works", L("Ödeme ve paket yükseltme", "Payments and upgrades"), L("Paddle üzerinden aylık abonelik; ödeme sonrası paket otomatik açılır, iptal Paddle sayfasından.", "Monthly subscriptions via Paddle; the plan opens automatically after payment, cancel from the Paddle page.")],
     ],
   },
   {
@@ -89,6 +90,7 @@ export function Account() {
   return (
     <div className="stack narrow">
       <header className="page-head"><h1>{L("Hesap", "Account")}</h1><p className="muted">{session?.user.email}</p></header>
+      <BillingPanel />
       <form className="panel stack" onSubmit={changePassword} noValidate>
         <h2>{L("Şifre değiştir", "Change password")}</h2>
         <Field label={L("Yeni şifre", "New password")} name="password" type="password" autoComplete="new-password" minLength={8} hint={L("En az 8 karakter", "At least 8 characters")} />

@@ -1,7 +1,7 @@
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import { L, isEn } from "./i18n";
 
-export interface RuntimeConfig { supabaseUrl: string; supabaseAnonKey: string; environment: string }
+export interface RuntimeConfig { supabaseUrl: string; supabaseAnonKey: string; environment: string; paddle?: unknown }
 
 let client: SupabaseClient | null = null;
 let config: RuntimeConfig | null = null;

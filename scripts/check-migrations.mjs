@@ -89,6 +89,23 @@ assert.equal(await reserve("paid", 0.01), "paid_not_allowed");
 await assert.rejects(db.exec(`update workspaces set paid_live_allowed = true where id='${C}'`));
 console.log("ok müşteri alanında ücretli çağrı reddedildi (paid_not_allowed), izin bayrağı konulamadı");
 
+// Abonelik: yalnız apply_subscription açar; aktifken ücretli çağrı izinli (toplam deneme tavanı uygulanmaz), iptalde Free'ye döner
+{
+  const before = (await db.query(`select plan from workspaces where id=$1`, [C])).rows[0].plan;
+  assert.equal((await db.query(`select apply_subscription($1, 'starter', 'active', 'sub_test', 'ctm_test', now() + interval '30 days') r`, [C])).rows[0].r, "ok");
+  let w = (await db.query(`select plan, paid_live_allowed, subscription_status from workspaces where id=$1`, [C])).rows[0];
+  assert.deepEqual(w, { plan: "starter", paid_live_allowed: true, subscription_status: "active" });
+  await db.exec(`update app_settings set paid_total_cap_usd = 0`);
+  assert.equal(await reserve("paid", 0.01), "ok", "abonede toplam deneme tavanı uygulanmamalı");
+  assert.equal((await db.query(`select apply_subscription($1, 'starter', 'canceled', 'sub_old', null, null) r`, [C])).rows[0].r, "stale_event");
+  assert.equal((await db.query(`select apply_subscription($1, 'starter', 'canceled', 'sub_test', null, null) r`, [C])).rows[0].r, "ok");
+  w = (await db.query(`select plan, paid_live_allowed from workspaces where id=$1`, [C])).rows[0];
+  assert.deepEqual(w, { plan: "free", paid_live_allowed: false });
+  assert.equal(await reserve("paid", 0.01), "paid_not_allowed");
+  await db.exec(`update workspaces set plan='${before}', subscription_status=null, paddle_subscription_id=null, paddle_customer_id=null; update app_settings set paid_total_cap_usd = 3; delete from cost_ledger where billing='paid'`);
+  console.log("ok abonelik: aktifken ücretli ölçüm açık, eski aboneliğin iptali yok sayıldı, iptalde Free'ye döndü");
+}
+
 // Ücretli tavan (Plus 9 $) — izinli alan (growth_lab) üzerinde, toplam tavan geniş tutularak
 await db.exec(`update workspaces set kind='growth_lab', paid_live_allowed=true where id='${C}'; update app_settings set paid_total_cap_usd = 1000;`);
 await record("paid", 8.5, 8.5);

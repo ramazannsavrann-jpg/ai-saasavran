@@ -21,13 +21,21 @@ import { L } from "./lib/i18n";
 function Private({ children }: { children: React.ReactNode }) {
   const { session, loading } = useApp();
   if (loading) return <Loading />;
-  if (!session) return <Navigate to="/giris" replace />;
+  if (!session) {
+    // Girişten sonra kaldığı yere dönsün (ör. fiyat sayfasından /hesap?plan=starter)
+    try { if (location.pathname === "/hesap") sessionStorage.setItem("next", location.pathname + location.search); } catch { /* yok say */ }
+    return <Navigate to="/giris" replace />;
+  }
   return <>{children}</>;
+}
+function nextPath(): string {
+  try { const n = sessionStorage.getItem("next"); sessionStorage.removeItem("next"); if (n && n.startsWith("/hesap")) return n; } catch { /* yok say */ }
+  return "/panel";
 }
 function PublicOnly({ children }: { children: React.ReactNode }) {
   const { session, loading } = useApp();
   if (loading) return <Loading />;
-  if (session) return <Navigate to="/panel" replace />;
+  if (session) return <Navigate to={nextPath()} replace />;
   return <>{children}</>;
 }
 function StatusRoute() {

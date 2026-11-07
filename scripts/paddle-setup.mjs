@@ -30,4 +30,20 @@ for (const p of PLANS) {
   }
   out[p.plan] = { product: prod.id, price: price.id };
 }
+// Bildirim (webhook) hedefi: ödeme olaylarını sitemize gönderir. Gizli anahtar yalnız dosyaya yazılır (CI → Cloudflare).
+const DEST = "https://aisaasavran.com/api/paddle/webhook";
+const EVENTS = ["subscription.created", "subscription.updated", "subscription.canceled", "subscription.activated",
+  "subscription.past_due", "subscription.paused", "subscription.resumed", "subscription.trialing"];
+let dest = (await api("GET", "/notification-settings")).data.find((n) => n.destination === DEST);
+if (!dest) {
+  dest = (await api("POST", "/notification-settings", { description: "AI SaaSavran subscriptions", destination: DEST, subscribed_events: EVENTS, type: "url", api_version: 1, include_sensitive_fields: false })).data;
+  console.log("Bildirim hedefi oluşturuldu");
+} else if (!dest.active) {
+  dest = (await api("PATCH", `/notification-settings/${dest.id}`, { active: true })).data;
+}
+if (process.env.PADDLE_SECRET_OUT) {
+  if (!dest.endpoint_secret_key) throw new Error("Bildirim gizli anahtarı alınamadı");
+  (await import("node:fs")).writeFileSync(process.env.PADDLE_SECRET_OUT, dest.endpoint_secret_key, { mode: 0o600 });
+}
+
 console.log("PADDLE_CATALOG=" + JSON.stringify({ env: BASE.includes("sandbox") ? "sandbox" : "live", ...out }));

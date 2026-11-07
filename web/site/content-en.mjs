@@ -203,7 +203,7 @@ export const GUIDES_EN = [
 
 export const HOME_FAQ_EN = [
   ["What does AI SaaSavran do?", "It asks ChatGPT and Gemini the questions your customers would ask, and measures whether your brand is mentioned, recommended or cited as a source, compared with your competitors."],
-  ["Is it free?", "The free plan includes 1 brand, 15 questions and 4 measurements a month. Paid plans are Plus $20, Pro $99 and Business $249 a month; they are not on sale yet and have a waitlist. Free-plan measurements use Gemini without live web search, and reports say so clearly."],
+  ["Is it free?", "The free plan includes 1 brand, 15 questions and 4 measurements a month. Paid plans are Plus $20, Pro $99 and Business $249 a month, billed monthly and cancellable anytime. Free-plan measurements use Gemini without live web search, and reports say so clearly."],
   ["Which AI assistants are measured?", "Gemini today (without live search). ChatGPT with live web search is in a trial phase and not yet open to customers. Perplexity is not supported yet."],
   ["Is the product ready?", "We are in early access. The app interface is being translated to English. We list exactly what works and what doesn't on this page."],
 ];

@@ -96,13 +96,13 @@ const PLAN_ROWS = (en) => [
   { name: "Free", price: "$0", per: "", items: en
       ? ["1 brand, 15 questions, 3 competitors", "4 measurements a month (one a week, automatic)", "Gemini, model knowledge (no live search)", "Website check and recommendations"]
       : ["1 marka, 15 soru, 3 rakip", "Ayda 4 ölçüm (haftada bir, otomatik)", "Gemini, model bilgisi (canlı arama yok)", "Web sitesi kontrolü ve öneriler"], live: true },
-  { name: "Plus", price: "$20", per: en ? "/month" : "/ay", items: en
+  { name: "Plus", id: "starter", price: "$20", per: en ? "/month" : "/ay", items: en
       ? ["1 brand, 25 questions, 5 competitors", "ChatGPT with live web search + Gemini", "Each question asked twice, every week", "Which websites the AI cited"]
       : ["1 marka, 25 soru, 5 rakip", "ChatGPT canlı web araması + Gemini", "Her soru haftada 2 kez sorulur", "Yapay zekânın baktığı kaynak siteler"] },
-  { name: "Pro", price: "$99", per: en ? "/month" : "/ay", items: en
+  { name: "Pro", id: "pro", price: "$99", per: en ? "/month" : "/ay", items: en
       ? ["5 brands, 30 questions each", "8 competitors per brand", "Everything in Plus", "For multi-location businesses and freelancers"]
       : ["5 marka, her biri 30 soru", "Marka başına 8 rakip", "Plus'taki her şey", "Çok şubeli işletmeler ve serbest çalışanlar için"] },
-  { name: "Business", price: "$249", per: en ? "/month" : "/ay", items: en
+  { name: "Business", id: "agency", price: "$249", per: en ? "/month" : "/ay", items: en
       ? ["15 brands, 30 questions each", "10 competitors per brand", "Everything in Pro", "For agencies managing client brands"]
       : ["15 marka, her biri 30 soru", "Marka başına 10 rakip", "Pro'daki her şey", "Müşteri markalarını yöneten ajanslar için"] },
 ];
@@ -116,12 +116,12 @@ const plansHtml = (en) => `
       <ul>${p.items.map((i) => `<li>${i}</li>`).join("")}</ul>
       ${p.live
         ? `<a class="btn" href="/kayit">${en ? "Start free" : "Ücretsiz başla"}</a>`
-        : `<a class="btn ghost" href="mailto:${SITE.email}?subject=${encodeURIComponent((en ? "Waitlist: " : "Bekleme listesi: ") + p.name)}">${en ? "Join the waitlist" : "Bekleme listesine katıl"}</a>`}
+        : `<a class="btn${p.name === "Plus" ? "" : " ghost"}" href="/hesap?plan=${p.id}">${en ? `Choose ${p.name}` : `${p.name}'ı seç`}</a>`}
     </div>`).join("")}
   </div>
   <p class="small">${en
-    ? "Paid plans aren't on sale yet. ChatGPT live-search measurement is in trial and opens with them. Join the waitlist and we'll email you once, when they launch. Prices in US dollars; taxes may apply."
-    : "Ücretli paketler henüz satışta değil. ChatGPT canlı aramalı ölçüm deneme aşamasında ve bu paketlerle açılacak. Bekleme listesine katılın, açıldığında bir kez e-posta atalım. Fiyatlar ABD doları; vergi eklenebilir."}</p>
+    ? "Monthly billing, cancel anytime, full refund within 14 days of your first payment. Prices in US dollars; sales tax may be added at checkout. Payments are processed by our reseller, Paddle."
+    : "Aylık ödeme, istediğiniz zaman iptal, ilk ödemeden sonraki 14 gün içinde tam iade. Fiyatlar ABD doları; ödeme sırasında vergi eklenebilir. Ödemeler yetkili satıcımız Paddle üzerinden alınır."}</p>
 </section>
 `;
 

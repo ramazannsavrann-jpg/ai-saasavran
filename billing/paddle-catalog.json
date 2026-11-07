@@ -1,0 +1,8 @@
+{
+  "env": "live",
+  "prices": {
+    "starter": "pri_01m6v5s49dbfxjwptv1gvf9ncp",
+    "pro": "pri_01m6v5s4jcckxsqn0g92x7zydn",
+    "agency": "pri_01m6v5s4vmgbbj6yqrhpdcmv29"
+  }
+}
