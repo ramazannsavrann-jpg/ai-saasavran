@@ -4,6 +4,7 @@
 import { mkdirSync, writeFileSync, renameSync, existsSync, copyFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { SITE, GUIDES, HOME_FAQ } from "./content.mjs";
+import { LEGAL } from "./legal.mjs";
 import { GUIDES_EN, HOME_FAQ_EN } from "./content-en.mjs";
 
 const DIST = "dist";
@@ -63,9 +64,11 @@ ${schema.map(ld).join("\n")}
 ${body}
 </main>
 <footer class="foot">
-  ${en ? `<p><b>AI SaaSavran</b> measures whether ChatGPT and Gemini recommend your business. Early access; the app interface is being translated to English.</p>
-  <p><a href="/guides/">Guides</a> · <a href="/tr/">Türkçe</a> · <a href="/gizlilik">Privacy</a> · <a href="/kosullar">Terms</a> · ${SITE.email}</p>` : `<p><b>AI SaaSavran</b>: markaların yapay zekâ asistanlarındaki görünürlüğünü ölçen araç. Erken erişim.</p>
-  <p><a href="/rehber/">Rehberler</a> · <a href="/durum">Ürün durumu</a> · <a href="/gizlilik">Gizlilik</a> · <a href="/kosullar">Kullanım koşulları</a> · <a href="/">English</a> · ${SITE.email}</p>`}
+  ${en ? `<p><b>AI SaaSavran</b> measures whether ChatGPT and Gemini recommend your business. Early access.</p>
+  <p><a href="/#pricing">Pricing</a> · <a href="/guides/">Guides</a> · <a href="/terms/">Terms</a> · <a href="/privacy/">Privacy</a> · <a href="/refund/">Refunds</a> · <a href="/tr/">Türkçe</a></p>
+  <p>Contact: <a href="mailto:${SITE.email}">${SITE.email}</a></p>` : `<p><b>AI SaaSavran</b>: markaların yapay zekâ asistanlarındaki görünürlüğünü ölçen araç. Erken erişim.</p>
+  <p><a href="/tr/#fiyatlar">Fiyatlar</a> · <a href="/rehber/">Rehberler</a> · <a href="/durum">Ürün durumu</a> · <a href="/kosullar">Kullanım koşulları</a> · <a href="/gizlilik">Gizlilik</a> · <a href="/iade/">İade</a> · <a href="/">English</a></p>
+  <p>İletişim: <a href="mailto:${SITE.email}">${SITE.email}</a></p>`}
 </footer>
 <script src="/site/site.js" defer></script>
 </body>
@@ -329,5 +332,7 @@ ${GUIDES.map((g) => `- [${g.title}](${SITE.url}/rehber/${g.slug}/)`).join("\n")}
 
 // 6) Uygulama adresleri → /app/ (Cloudflare Pages yeniden yazma, adres çubuğu değişmez)
 const APP_ROUTES = ["/giris", "/kayit", "/sifre", "/durum", "/durum-ic", "/gizlilik", "/kosullar", "/panel", "/hesap", "/demo-lab", "/calisma-alani/*", "/marka/*"];
+for (const l of Object.values(LEGAL)) write(l.path, page({ lang: l.lang, path: l.path, title: l.title, description: l.description, body: l.body }));
+
 writeFileSync(join(DIST, "_redirects"), ["/en / 301", "/en/ / 301", ...APP_ROUTES.map((r) => `${r} /app/ 200`)].join("\n") + "\n");
 console.log(`Statik sayfalar üretildi: ${urls.length} sayfa, uygulama /app/ altında`);

@@ -29,7 +29,8 @@ test("Canlı site: açılıyor, doğru yapılandırılmış, güvenlik başlıkl
   expect(landing).toContain("are you in the answer?");
   expect(await (await request.get(`${base}/tr/`)).text()).toContain("Müşteriniz yapay zekâya sorduğunda");
   expect(landing).not.toContain('id="root"');
-  for (const path of ["/guides/", "/guides/what-is-geo/", "/rehber/", "/rehber/geo-nedir/", "/llms.txt", "/sitemap.xml", "/robots.txt"]) expect((await request.get(`${base}${path}`)).status(), path).toBe(200);
+  for (const path of ["/guides/", "/guides/what-is-geo/", "/rehber/", "/rehber/geo-nedir/", "/llms.txt", "/sitemap.xml", "/robots.txt", "/terms/", "/privacy/", "/refund/", "/iade/"]) expect((await request.get(`${base}${path}`)).status(), path).toBe(200);
+  expect(await (await request.get(`${base}/refund/`)).text()).toContain("14-day money-back guarantee");
   // Uygulama adresleri uygulamayı döndürür
   expect(await (await request.get(`${base}/panel`)).text()).toContain('id="root"');
 
