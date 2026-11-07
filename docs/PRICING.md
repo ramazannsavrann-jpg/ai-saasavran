@@ -51,7 +51,7 @@ Kurucunun isteğiyle paket yapısı ChatGPT'ye benzetildi: Free / Plus / Pro / B
 
 | Paket | Fiyat/ay | Marka × soru | Rakip | Aylık cevap kotası | Motorlar | Ücretli tavan | ChatGPT maliyeti (tipik / kötü) | Tipik brüt kâr |
 |---|---|---|---|---|---|---|---|---|
-| Free | 0 $ | 1 × 15 (haftada 1 tekrar) | 3 | 100 | Gemini aramasız (ücretsiz katman) | 0 $ | 0 $ | — |
+| Free | 0 $ | 1 × 15 (haftada 1 tekrar), **ayda en fazla 4 ölçüm** (migration 0008) | 3 | 100 | Gemini aramasız (ücretsiz katman) | 0 $ | 0 $ | — |
 | Plus | 20 $ | 1 × 25 (haftada 2 tekrar) | 5 | 520 | ChatGPT canlı + Gemini | 9 $ | 4,1 $ / 5,5 $ | %65 |
 | Pro | 99 $ | 5 × 30 | 8 | 3.000 | ChatGPT canlı + Gemini | 50 $ | 24,8 $ / 33,2 $ | %65 |
 | Business | 249 $ | 15 × 30 | 10 | 9.000 | ChatGPT canlı + Gemini | 150 $ | 74,4 $ / 99,5 $ | %60 |

@@ -91,8 +91,8 @@ const APP = {
 // Paketler (migration 0007 ile aynı). Ücretli paketler henüz satışta değil: bekleme listesi e-postayla.
 const PLAN_ROWS = (en) => [
   { name: "Free", price: "$0", per: "", items: en
-      ? ["1 brand, 15 questions, 3 competitors", "100 AI answers a month", "Gemini, model knowledge (no live search)", "Weekly measurement and website check"]
-      : ["1 marka, 15 soru, 3 rakip", "Ayda 100 yapay zekâ cevabı", "Gemini, model bilgisi (canlı arama yok)", "Haftalık ölçüm ve web sitesi kontrolü"], live: true },
+      ? ["1 brand, 15 questions, 3 competitors", "4 measurements a month (one a week, automatic)", "Gemini, model knowledge (no live search)", "Website check and recommendations"]
+      : ["1 marka, 15 soru, 3 rakip", "Ayda 4 ölçüm (haftada bir, otomatik)", "Gemini, model bilgisi (canlı arama yok)", "Web sitesi kontrolü ve öneriler"], live: true },
   { name: "Plus", price: "$20", per: en ? "/month" : "/ay", items: en
       ? ["1 brand, 25 questions, 5 competitors", "ChatGPT with live web search + Gemini", "Each question asked twice, every week", "Which websites the AI cited"]
       : ["1 marka, 25 soru, 5 rakip", "ChatGPT canlı web araması + Gemini", "Her soru haftada 2 kez sorulur", "Yapay zekânın baktığı kaynak siteler"] },
@@ -129,7 +129,7 @@ const home = `
     <h1>Müşteriniz yapay zekâya sorduğunda markanız cevapta mı?</h1>
     <p class="lede">AI SaaSavran, müşterilerinizin ChatGPT ve Gemini'ye soracağı soruları sorar; markanızın anılıp anılmadığını, önerilip önerilmediğini ve sizin yerinize hangi rakibin önerildiğini ölçer.</p>
     <p class="actions"><a class="btn" href="/kayit">Ücretsiz başla</a><a class="btn ghost" href="/rehber/chatgpt-marka-gorunurlugu-olcme/">Nasıl ölçülür?</a></p>
-    <p class="small">Ücretsiz paket: 1 marka, 15 soru, ayda 100 cevap. Kart bilgisi istenmez. <a href="#fiyatlar">Fiyatlar</a></p>
+    <p class="small">Ücretsiz paket: 1 marka, 15 soru, ayda 4 ölçüm. Kart bilgisi istenmez. <a href="#fiyatlar">Fiyatlar</a></p>
   </div>
   <figure class="answer-card" aria-label="Örnek yapay zekâ cevabı">
     <figcaption><span class="q">Türkiye'de en iyi mobil bankacılık uygulaması hangisi?</span></figcaption>
@@ -190,7 +190,7 @@ const enHome = `
     <h1>When customers ask AI for a recommendation, are you in the answer?</h1>
     <p class="lede">AI SaaSavran asks ChatGPT and Gemini the questions your customers ask, then shows whether your business is mentioned, recommended, or passed over for a competitor, and which websites the AI relied on.</p>
     <p class="actions"><a class="btn" href="/kayit">Start free</a><a class="btn ghost" href="/guides/measure-brand-visibility-in-chatgpt/">How it's measured</a></p>
-    <p class="small">Free plan: 1 brand, 15 questions, 100 answers a month. No card. <a href="#pricing">See pricing</a></p>
+    <p class="small">Free plan: 1 brand, 15 questions, 4 measurements a month. No card. <a href="#pricing">See pricing</a></p>
   </div>
   <figure class="answer-card" aria-label="Example AI answer">
     <figcaption><span class="q">What are the best tools to track brand visibility in AI answers?</span></figcaption>

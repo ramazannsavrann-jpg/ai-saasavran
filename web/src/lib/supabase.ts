@@ -54,6 +54,7 @@ export function friendlyError(e: unknown): string {
 
 const num = (m: string) => m.match(/\d+/)?.[0] ?? "";
 const DB_EN: [RegExp, (m: string) => string][] = [
+  [/ölçüm hakkınız doldu/, (m) => `You have used this month's measurements (${num(m)} a month). They reset at the start of next month.`],
   [/zaten bekleyen bir ölçüm/, () => "A measurement for this brand is already queued."],
   [/son bir saat içinde kontrol/, () => "This site was checked in the last hour."],
   [/Canlı aramalı ölçüm bu hesapta kapalı/, () => "Live-search measurement is off for this account."],

@@ -252,7 +252,7 @@ test("Migration çalıştırıcı: boş veritabanına uygular, ikinci kez uygula
   });
   const first = run();
   assert.equal(first.status, 0, first.stderr);
-  assert.match(first.stdout, /7 migration uygulandı/);
+  assert.match(first.stdout, /8 migration uygulandı/);
   const second = run();
   assert.equal(second.status, 0, second.stderr);
   assert.match(second.stdout, /güncel/);
@@ -450,4 +450,19 @@ test("Yeniden analiz: takma ad eklenince marka işaretlenir, işçi eski cevapla
   assert.match((await R.c.rpc("pending_reanalysis", { p_limit: 5 })).error?.message ?? "", /permission denied/);
   await processReanalysis({ db: svc });
   assert.equal(stack.sql(`select mentioned from mentions where response_id='${resp.id}' and brand_id='${b.id}'`), "t");
+});
+
+test("Kötüye kullanım sınırı: Free pakette ayda 4 ölçüm; 5. istek reddedilir, haftalık plan da sıraya almaz", async () => {
+  const F = await user("aylik-sinir@test.local");
+  const ws = ok(await F.c.rpc("create_workspace", { p_name: "Aylık sınır", p_kind: "business" })) as string;
+  const b = ok(await F.c.from("brands").insert({ workspace_id: ws, name: "Sınır Marka" }).select("id").single()) as any;
+  ok(await F.c.from("prompts").insert({ workspace_id: ws, brand_id: b.id, text: "En iyi döner nerede?", intent: "local" }));
+  stack.sql(`insert into runs (workspace_id, brand_id, status, data_origin, measurement_type, max_cost_usd, prompts_total)
+             select '${ws}', '${b.id}', 'done', 'live_api', 'model_knowledge', 0.01, 1 from generate_series(1, 3)`);
+  ok(await F.c.rpc("request_run", { p_brand: b.id }));  // 4. ölçüm: izin var
+  stack.sql(`update runs set status='done', created_at = greatest(date_trunc('month', now()), now() - interval '8 days') where brand_id='${b.id}'`);
+  const fifth = await F.c.rpc("request_run", { p_brand: b.id });
+  assert.match(fifth.error?.message ?? "", /ölçüm hakkınız doldu \(4 \/ ay\)/);
+  ok(await svc.rpc("schedule_weekly_runs", { p_limit: 500 }));
+  assert.equal(stack.sql(`select count(*) from runs where brand_id='${b.id}' and status='queued'`), "0");
 });
