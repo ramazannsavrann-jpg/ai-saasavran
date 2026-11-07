@@ -65,7 +65,7 @@ ${body}
 </main>
 <footer class="foot">
   ${en ? `<p><b>AI SaaSavran</b> measures whether ChatGPT and Gemini recommend your business. Early access.</p>
-  <p><a href="/#pricing">Pricing</a> · <a href="/guides/">Guides</a> · <a href="/terms/">Terms</a> · <a href="/privacy/">Privacy</a> · <a href="/refund/">Refunds</a> · <a href="/tr/">Türkçe</a></p>
+  <p><a href="/pricing/">Pricing</a> · <a href="/guides/">Guides</a> · <a href="/terms/">Terms</a> · <a href="/privacy/">Privacy</a> · <a href="/refund/">Refunds</a> · <a href="/tr/">Türkçe</a></p>
   <p>Contact: <a href="mailto:${SITE.email}">${SITE.email}</a></p>` : `<p><b>AI SaaSavran</b>: markaların yapay zekâ asistanlarındaki görünürlüğünü ölçen araç. Erken erişim.</p>
   <p><a href="/tr/#fiyatlar">Fiyatlar</a> · <a href="/rehber/">Rehberler</a> · <a href="/durum">Ürün durumu</a> · <a href="/kosullar">Kullanım koşulları</a> · <a href="/gizlilik">Gizlilik</a> · <a href="/iade/">İade</a> · <a href="/">English</a></p>
   <p>İletişim: <a href="mailto:${SITE.email}">${SITE.email}</a></p>`}
@@ -332,6 +332,8 @@ ${GUIDES.map((g) => `- [${g.title}](${SITE.url}/rehber/${g.slug}/)`).join("\n")}
 
 // 6) Uygulama adresleri → /app/ (Cloudflare Pages yeniden yazma, adres çubuğu değişmez)
 const APP_ROUTES = ["/giris", "/kayit", "/sifre", "/durum", "/durum-ic", "/gizlilik", "/kosullar", "/panel", "/hesap", "/demo-lab", "/calisma-alani/*", "/marka/*"];
+write("/pricing/", page({ lang: "en", path: "/pricing/", title: "Pricing | AI SaaSavran", description: "AI SaaSavran plans: Free, Plus $20/month, Pro $99/month, Business $249/month.", body: `<section class="article"><h1>Pricing</h1><p>Start free. Paid plans add ChatGPT with live web search, more brands and more questions. Monthly billing, cancel anytime, 14-day money-back guarantee (<a href="/refund/">refund policy</a>).</p></section>${plansHtml(true)}`, schema: [APP] }));
+
 for (const l of Object.values(LEGAL)) write(l.path, page({ lang: l.lang, path: l.path, title: l.title, description: l.description, body: l.body }));
 
 writeFileSync(join(DIST, "_redirects"), ["/en / 301", "/en/ / 301", ...APP_ROUTES.map((r) => `${r} /app/ 200`)].join("\n") + "\n");
