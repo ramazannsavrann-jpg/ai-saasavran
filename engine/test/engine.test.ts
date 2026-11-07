@@ -12,7 +12,7 @@ import { type ProviderResult, classifyHttpError } from "../src/providers/types.t
 import { runPrompts } from "../src/pipeline.ts";
 import { InMemoryUsageGate } from "../src/usage.ts";
 import { buildReportHeader, MixedOriginError } from "../src/report.ts";
-import { PLANS, SCENARIOS, planCost, freeTierCapacity } from "../src/pricing.ts";
+import { PLANS, SCENARIOS, planCost, freeTierCapacity, PAID_CAPS } from "../src/pricing.ts";
 
 const brands: BrandRef[] = [
   { id: "us", name: "Ali Usta Döner", aliases: ["Ali Usta"], domain: "aliusta-demo.com" },
@@ -436,4 +436,14 @@ test("Takip edilmeyen adlar: TEB, QNB, VakıfBank bulunur; bilinen markalar ve s
   assert.ok(names.includes("VakıfBank"), names.join("|"));
   assert.ok(names.some((n) => n.startsWith("TEB")), names.join("|"));
   for (const bad of ["Garanti", "Garanti Bonus", "Akbank", "Akbank Axess", "Enpara", "Türkiye", "Kredi", "Ayrıca"]) assert.ok(!names.includes(bad), `${bad} çıkmamalı: ${names.join("|")}`);
+});
+
+test("Güncel paketler (Plus/Pro/Business): tipik %55+ kâr; tavan + komisyon fiyatın altında; kötü durum API'si tavana sığar", () => {
+  for (const name of ["Plus", "Pro", "Business"]) {
+    const plan = PLANS.findLast((p) => p.name.startsWith(name + " ("))!;
+    const cap = PAID_CAPS[name];
+    assert.ok(planCost(plan, SCENARIOS[0]).grossMarginPct > 55, name);
+    assert.ok(cap + plan.priceUsd * SCENARIOS[1].paymentFeeRate < plan.priceUsd, name);
+    assert.ok(planCost(plan, SCENARIOS[1]).perEngineUsd.openai <= cap, `${name}: kötü durum ChatGPT harcaması tavanı aşıyor`);
+  }
 });

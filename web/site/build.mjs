@@ -57,7 +57,7 @@ ${schema.map(ld).join("\n")}
 <body>
 <header class="top">
   <a class="mark" href="${en ? "/" : "/tr/"}" aria-label="AI SaaSavran"><img src="/icon.svg" alt="" width="28" height="28"><span>AI <b>SaaSavran</b></span></a>
-  <nav aria-label="${en ? "Main menu" : "Ana menü"}">${en ? `<a href="/guides/">Guides</a>` : `<a href="/rehber/">Rehberler</a><a href="/durum">Ürün durumu</a>`}<a class="lang" href="${alt ?? (en ? "/tr/" : "/")}" hreflang="${en ? "tr" : "en"}" lang="${en ? "tr" : "en"}">${en ? "Türkçe" : "English"}</a><a class="cta-sm" data-cta href="/giris">${en ? "Sign in" : "Giriş yap"}</a></nav>
+  <nav aria-label="${en ? "Main menu" : "Ana menü"}">${en ? `<a href="/#pricing">Pricing</a><a href="/guides/">Guides</a>` : `<a href="/tr/#fiyatlar">Fiyatlar</a><a href="/rehber/">Rehberler</a><a href="/durum">Ürün durumu</a>`}<a class="lang" href="${alt ?? (en ? "/tr/" : "/")}" hreflang="${en ? "tr" : "en"}" lang="${en ? "tr" : "en"}">${en ? "Türkçe" : "English"}</a><a class="cta-sm" data-cta href="/giris">${en ? "Sign in" : "Giriş yap"}</a></nav>
 </header>
 <main>
 ${body}
@@ -82,9 +82,45 @@ function write(path, html) {
 const ORG = { "@context": "https://schema.org", "@type": "Organization", name: SITE.name, url: SITE.url, email: SITE.email, logo: SITE.url + "/icon.svg" };
 const APP = {
   "@context": "https://schema.org", "@type": "SoftwareApplication", name: SITE.name, url: SITE.url, applicationCategory: "BusinessApplication",
-  operatingSystem: "Web", inLanguage: "tr", description: "Measures how often ChatGPT and Gemini mention and recommend your business versus competitors.",
-  offers: { "@type": "Offer", price: "0", priceCurrency: "USD", description: "Free plan" },
+  operatingSystem: "Web", description: "Measures how often ChatGPT and Gemini mention and recommend your business versus competitors.",
+  inLanguage: ["en", "tr"],
+  offers: [["Free", 0], ["Plus", 20], ["Pro", 99], ["Business", 249]].map(([n, p]) => ({ "@type": "Offer", name: n, price: String(p), priceCurrency: "USD" })),
 };
+
+
+// Paketler (migration 0007 ile aynı). Ücretli paketler henüz satışta değil: bekleme listesi e-postayla.
+const PLAN_ROWS = (en) => [
+  { name: "Free", price: "$0", per: "", items: en
+      ? ["1 brand, 15 questions, 3 competitors", "100 AI answers a month", "Gemini, model knowledge (no live search)", "Weekly measurement and website check"]
+      : ["1 marka, 15 soru, 3 rakip", "Ayda 100 yapay zekâ cevabı", "Gemini, model bilgisi (canlı arama yok)", "Haftalık ölçüm ve web sitesi kontrolü"], live: true },
+  { name: "Plus", price: "$20", per: en ? "/month" : "/ay", items: en
+      ? ["1 brand, 25 questions, 5 competitors", "ChatGPT with live web search + Gemini", "Each question asked twice, every week", "Which websites the AI cited"]
+      : ["1 marka, 25 soru, 5 rakip", "ChatGPT canlı web araması + Gemini", "Her soru haftada 2 kez sorulur", "Yapay zekânın baktığı kaynak siteler"] },
+  { name: "Pro", price: "$99", per: en ? "/month" : "/ay", items: en
+      ? ["5 brands, 30 questions each", "8 competitors per brand", "Everything in Plus", "For multi-location businesses and freelancers"]
+      : ["5 marka, her biri 30 soru", "Marka başına 8 rakip", "Plus'taki her şey", "Çok şubeli işletmeler ve serbest çalışanlar için"] },
+  { name: "Business", price: "$249", per: en ? "/month" : "/ay", items: en
+      ? ["15 brands, 30 questions each", "10 competitors per brand", "Everything in Pro", "For agencies managing client brands"]
+      : ["15 marka, her biri 30 soru", "Marka başına 10 rakip", "Pro'daki her şey", "Müşteri markalarını yöneten ajanslar için"] },
+];
+const plansHtml = (en) => `
+<section class="plans" id="${en ? "pricing" : "fiyatlar"}">
+  <h2>${en ? "Pricing" : "Fiyatlar"}</h2>
+  <div class="plan-grid">${PLAN_ROWS(en).map((p) => `
+    <div class="plan${p.name === "Plus" ? " plan-main" : ""}">
+      <h3>${p.name}</h3>
+      <p class="price"><span>${p.price}</span>${p.per}</p>
+      <ul>${p.items.map((i) => `<li>${i}</li>`).join("")}</ul>
+      ${p.live
+        ? `<a class="btn" href="/kayit">${en ? "Start free" : "Ücretsiz başla"}</a>`
+        : `<a class="btn ghost" href="mailto:${SITE.email}?subject=${encodeURIComponent((en ? "Waitlist: " : "Bekleme listesi: ") + p.name)}">${en ? "Join the waitlist" : "Bekleme listesine katıl"}</a>`}
+    </div>`).join("")}
+  </div>
+  <p class="small">${en
+    ? "Paid plans aren't on sale yet. ChatGPT live-search measurement is in trial and opens with them. Join the waitlist and we'll email you once, when they launch. Prices in US dollars; taxes may apply."
+    : "Ücretli paketler henüz satışta değil. ChatGPT canlı aramalı ölçüm deneme aşamasında ve bu paketlerle açılacak. Bekleme listesine katılın, açıldığında bir kez e-posta atalım. Fiyatlar ABD doları; vergi eklenebilir."}</p>
+</section>
+`;
 
 // 3) Tanıtım sayfası
 const home = `
@@ -93,7 +129,7 @@ const home = `
     <h1>Müşteriniz yapay zekâya sorduğunda markanız cevapta mı?</h1>
     <p class="lede">AI SaaSavran, müşterilerinizin ChatGPT ve Gemini'ye soracağı soruları sorar; markanızın anılıp anılmadığını, önerilip önerilmediğini ve sizin yerinize hangi rakibin önerildiğini ölçer.</p>
     <p class="actions"><a class="btn" href="/kayit">Ücretsiz başla</a><a class="btn ghost" href="/rehber/chatgpt-marka-gorunurlugu-olcme/">Nasıl ölçülür?</a></p>
-    <p class="small">Ücretsiz paket: 1 marka, 10 soru, ayda 40 ölçüm. Kart bilgisi istenmez.</p>
+    <p class="small">Ücretsiz paket: 1 marka, 15 soru, ayda 100 cevap. Kart bilgisi istenmez. <a href="#fiyatlar">Fiyatlar</a></p>
   </div>
   <figure class="answer-card" aria-label="Örnek yapay zekâ cevabı">
     <figcaption><span class="q">Türkiye'de en iyi mobil bankacılık uygulaması hangisi?</span></figcaption>
@@ -141,7 +177,7 @@ const home = `
   </ul>
   <p><a href="/durum">Ayrıntılı ürün durumu</a></p>
 </section>
-
+${plansHtml(false)}
 ${faqHtml(HOME_FAQ)}
 `;
 write("/tr/", page({ lang: "tr", alt: "/", path: "/tr/", title: "AI SaaSavran: Markanız ChatGPT ve Gemini cevaplarında mı?", description: "Markanızın ChatGPT ve Gemini gibi yapay zekâ asistanlarında ne sıklıkla anıldığını ve önerildiğini ölçün. Türkçe, ücretsiz başlangıç paketi.", body: home, schema: [ORG, APP, faqLd(HOME_FAQ)] }));
@@ -154,7 +190,7 @@ const enHome = `
     <h1>When customers ask AI for a recommendation, are you in the answer?</h1>
     <p class="lede">AI SaaSavran asks ChatGPT and Gemini the questions your customers ask, then shows whether your business is mentioned, recommended, or passed over for a competitor, and which websites the AI relied on.</p>
     <p class="actions"><a class="btn" href="/kayit">Start free</a><a class="btn ghost" href="/guides/measure-brand-visibility-in-chatgpt/">How it's measured</a></p>
-    <p class="small">Free plan: 1 brand, 10 questions, 40 answers a month. No card. App interface in English is coming; today it is in Turkish.</p>
+    <p class="small">Free plan: 1 brand, 15 questions, 100 answers a month. No card. <a href="#pricing">See pricing</a></p>
   </div>
   <figure class="answer-card" aria-label="Example AI answer">
     <figcaption><span class="q">What are the best tools to track brand visibility in AI answers?</span></figcaption>
@@ -198,10 +234,11 @@ const enHome = `
     <li class="ok">Gemini measurement (model knowledge, no live search), clearly labelled.</li>
     <li class="ok">Weekly automatic measurement, competitor comparison, website check, recommendations.</li>
     <li class="try">ChatGPT live-search measurement and source analysis: in trial, not yet open to customers.</li>
-    <li class="no">English app interface, Perplexity, PDF reports, payments: not yet.</li>
+    <li class="ok">App in English and Turkish.</li>
+    <li class="no">Perplexity, PDF reports, payments: not yet.</li>
   </ul>
 </section>
-
+${plansHtml(true)}
 ${faqHtml(HOME_FAQ_EN, true)}
 `;
 write("/", page({ lang: "en", alt: "/tr/", path: "/", title: "AI SaaSavran: Does ChatGPT recommend your business?", description: "See whether ChatGPT and Gemini mention and recommend your business versus competitors, and which sources they rely on. Free plan for small businesses and agencies.", body: enHome, schema: [ORG, APP, faqLd(HOME_FAQ_EN)] }));
@@ -224,7 +261,7 @@ for (const g of GUIDES_EN) {
   <p class="meta">Updated ${new Date(SITE.updated).toLocaleDateString("en-US", { day: "numeric", month: "long", year: "numeric" })} · AI SaaSavran</p>
   ${g.body}
   ${faqHtml(g.faq, true)}
-  <aside class="next"><p><b>Measure your own brand.</b> The free plan includes 10 questions and ready-made question templates.</p><a class="btn" href="/kayit">Start free</a></aside>
+  <aside class="next"><p><b>Measure your own brand.</b> The free plan includes 15 questions and ready-made question templates.</p><a class="btn" href="/kayit">Start free</a></aside>
   <nav class="related" aria-label="More guides"><h2>More guides</h2><ul>${others}</ul></nav>
 </article>`;
   const article = { "@context": "https://schema.org", "@type": "Article", headline: g.title, description: g.description, inLanguage: "en", datePublished: SITE.updated, dateModified: SITE.updated, author: { "@type": "Organization", name: SITE.name, url: SITE.url }, publisher: { "@type": "Organization", name: SITE.name, logo: { "@type": "ImageObject", url: SITE.url + "/icon.svg" } }, mainEntityOfPage: SITE.url + path };
@@ -250,7 +287,7 @@ for (const g of GUIDES) {
   <p class="meta">Güncelleme: ${new Date(SITE.updated).toLocaleDateString("tr-TR", { day: "numeric", month: "long", year: "numeric" })} · AI SaaSavran</p>
   ${g.body}
   ${faqHtml(g.faq)}
-  <aside class="next"><p><b>Kendi markanızı ölçün.</b> Ücretsiz pakette 10 soru ve sektörünüze hazır Türkçe şablonlar.</p><a class="btn" href="/kayit">Ücretsiz başla</a></aside>
+  <aside class="next"><p><b>Kendi markanızı ölçün.</b> Ücretsiz pakette 15 soru ve sektörünüze hazır Türkçe şablonlar.</p><a class="btn" href="/kayit">Ücretsiz başla</a></aside>
   <nav class="related" aria-label="Diğer rehberler"><h2>Diğer rehberler</h2><ul>${others}</ul></nav>
 </article>`;
   const article = { "@context": "https://schema.org", "@type": "Article", headline: g.title, description: g.description, inLanguage: "tr", datePublished: SITE.updated, dateModified: SITE.updated, author: { "@type": "Organization", name: SITE.name, url: SITE.url }, publisher: { "@type": "Organization", name: SITE.name, logo: { "@type": "ImageObject", url: SITE.url + "/icon.svg" } }, mainEntityOfPage: SITE.url + path };

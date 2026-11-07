@@ -111,4 +111,12 @@ export const PLANS: PlanSpec[] = [
   { name: "Pro (eski: 3 marka, 50 soru, 3 tekrar)", priceUsd: 79, brands: 3, promptsPerBrand: 50, repetitions: 3, runsPerMonth: WEEKS_PER_MONTH, engines: ["gemini", "openai", "perplexity"] },
   { name: "Pro (yeni: 3 marka, 30 soru, 2 tekrar)", priceUsd: 79, brands: 3, promptsPerBrand: 30, repetitions: 2, runsPerMonth: WEEKS_PER_MONTH, engines: ["gemini", "openai", "perplexity"] },
   { name: "Agency (yeni: 10 marka, 30 soru, 2 tekrar)", priceUsd: 199, brands: 10, promptsPerBrand: 30, repetitions: 2, runsPerMonth: WEEKS_PER_MONTH, engines: ["gemini", "openai", "perplexity"] },
+  // ---- Güncel paketler (7 Kasım 2026, ChatGPT tarzı) — migration 0007 ile aynı ----
+  { name: "Free (15 soru, Gemini aramasız, haftada 1 tekrar)", priceUsd: 0, brands: 1, promptsPerBrand: 15, repetitions: 1, runsPerMonth: WEEKS_PER_MONTH, engines: ["gemini"] },
+  { name: "Plus (1 marka, 25 soru, ChatGPT canlı + Gemini)", priceUsd: 20, brands: 1, promptsPerBrand: 25, repetitions: 2, runsPerMonth: WEEKS_PER_MONTH, engines: ["gemini", "openai"] },
+  { name: "Pro (5 marka, 30 soru, ChatGPT canlı + Gemini)", priceUsd: 99, brands: 5, promptsPerBrand: 30, repetitions: 2, runsPerMonth: WEEKS_PER_MONTH, engines: ["gemini", "openai"] },
+  { name: "Business (15 marka, 30 soru, ChatGPT canlı + Gemini)", priceUsd: 249, brands: 15, promptsPerBrand: 30, repetitions: 2, runsPerMonth: WEEKS_PER_MONTH, engines: ["gemini", "openai"] },
 ];
+
+/** Güncel paketlerin aylık ücretli harcama tavanı (migration 0007). Tavan + ödeme komisyonu < fiyat olmalı. */
+export const PAID_CAPS: Record<string, number> = { Plus: 9, Pro: 50, Business: 150 };

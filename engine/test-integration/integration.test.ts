@@ -108,11 +108,15 @@ test("Güvenlik: istemci paketini yükseltemez, durdurmayı kaldıramaz, sonuç/
   }
 });
 
-test("Paket limitleri: Free'de 1 marka, 2 rakip", async () => {
+test("Paket limitleri: Free'de 1 marka, 3 rakip", async () => {
   const b2 = await A.c.from("brands").insert({ workspace_id: wsA, name: "İkinci Marka" });
   assert.match(b2.error?.message ?? "", /en fazla 1 marka/);
-  const c3 = await A.c.from("brands").insert({ workspace_id: wsA, name: "Üçüncü Rakip", is_competitor: true, owner_brand_id: brandA });
-  assert.match(c3.error?.message ?? "", /en fazla 2 rakip/);
+  // Tek ifadede 3. ve 4. rakip: 4. sınırı aşar, ifade bütünüyle geri alınır (sonraki testler etkilenmez)
+  const c4 = await A.c.from("brands").insert([
+    { workspace_id: wsA, name: "Üçüncü Rakip", is_competitor: true, owner_brand_id: brandA },
+    { workspace_id: wsA, name: "Dördüncü Rakip", is_competitor: true, owner_brand_id: brandA },
+  ]);
+  assert.match(c4.error?.message ?? "", /en fazla 3 rakip/);
 });
 
 test("Demo Lab: müşteri oluşturamaz, simüle veri müşteriye yazılamaz", async () => {
@@ -198,7 +202,7 @@ test("Ücretli kilit: canlı arama açılsa bile ALLOW_PAID_API kapalıyken Open
 test("Maliyet koruması: aylık kota dolunca run çalışmaz, çalışma alanı durur, yeni istek reddedilir", async () => {
   ok(await A.c.rpc("request_run", { p_brand: brandA }));
   stack.sql(`insert into cost_ledger (workspace_id, task, provider, model, cost_usd, billing)
-             select '${wsA}', 'query_engine', 'gemini', 'm', 0, 'free' from generate_series(1, 40)`);
+             select '${wsA}', 'query_engine', 'gemini', 'm', 0, 'free' from generate_series(1, 100)`);
   const r = await processNextRun({ db: svc, env: ENV, sleep: noSleep, fetchFn: fakeGemini("1. Ali Usta Döner") as any });
   assert.equal(r?.status, "budget_blocked");
   assert.equal(r?.stop, "monthly_call_quota");
@@ -248,7 +252,7 @@ test("Migration çalıştırıcı: boş veritabanına uygular, ikinci kez uygula
   });
   const first = run();
   assert.equal(first.status, 0, first.stderr);
-  assert.match(first.stdout, /6 migration uygulandı/);
+  assert.match(first.stdout, /7 migration uygulandı/);
   const second = run();
   assert.equal(second.status, 0, second.stderr);
   assert.match(second.stdout, /güncel/);
@@ -286,9 +290,9 @@ test("Haftalık otomatik ölçüm: uygun markayı sıraya alır, yakın zamanda 
   stack.sql(`update runs set status='done', created_at=now()-interval '8 days' where brand_id='${b.id}'`);
   await sched();
   assert.equal(queued(), "1");
-  // Kota: Free=40; 39 çağrı kullanılmışken 2 soruluk ölçüm kotayı aşar → atlanır, çalışma alanı DURDURULMAZ
+  // Kota: Free=100; 99 çağrı kullanılmışken 2 soruluk ölçüm kotayı aşar → atlanır, çalışma alanı DURDURULMAZ
   stack.sql(`update runs set status='done', created_at=now()-interval '8 days' where brand_id='${b.id}'`);
-  stack.sql(`insert into cost_ledger (workspace_id, task, provider, model, cost_usd, billing) select '${ws}', 'query_engine', 'gemini', 'm', 0, 'free' from generate_series(1, 39)`);
+  stack.sql(`insert into cost_ledger (workspace_id, task, provider, model, cost_usd, billing) select '${ws}', 'query_engine', 'gemini', 'm', 0, 'free' from generate_series(1, 99)`);
   await sched();
   assert.equal(queued(), "0");
   assert.equal(stack.sql(`select status from workspaces where id='${ws}'`), "active");

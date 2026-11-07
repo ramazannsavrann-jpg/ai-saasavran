@@ -218,7 +218,7 @@ export const GUIDES = [
 
 export const HOME_FAQ = [
   ["AI SaaSavran ne işe yarar?", "Markanızın ChatGPT ve Gemini gibi yapay zekâ asistanlarının cevaplarında ne sıklıkla anıldığını ve önerildiğini ölçer, rakiplerinizle karşılaştırır ve ne yapmanız gerektiğini önerir."],
-  ["Ücretsiz mi?", "Ücretsiz paketle 1 marka, 10 soru ve ayda 40 ölçümle başlayabilirsiniz. Ücretsiz pakette ölçümler Gemini ile, internete bakmadan (model bilgisiyle) yapılır ve raporda bu açıkça yazar."],
+  ["Ücretsiz mi?", "Ücretsiz paketle 1 marka, 15 soru ve ayda 100 cevapla başlayabilirsiniz. Ücretli paketler ChatGPT tarzı: Plus 20 $, Pro 99 $, Business 249 $ (aylık); henüz satışta değil, bekleme listesi açık. Ücretsiz pakette ölçümler Gemini ile, internete bakmadan (model bilgisiyle) yapılır ve raporda bu açıkça yazar."],
   ["Hangi yapay zekâlar ölçülüyor?", "Bugün Gemini (aramasız). ChatGPT ile canlı web aramalı ölçüm deneme aşamasında; henüz müşterilere açık değil. Perplexity henüz yok."],
   ["Ürün hazır mı?", "Erken erişim aşamasındayız. Neyin çalıştığını, neyin denemede olduğunu ürün durumu sayfasında açıkça yazıyoruz."],
 ];

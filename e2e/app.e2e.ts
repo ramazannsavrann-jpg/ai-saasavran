@@ -102,13 +102,13 @@ test("Müşteri akışı: kayıt → marka → rakip → soru → ölçüm → r
   await expect(page.getByRole("heading", { name: "Hazır sorular" })).toBeVisible();
   for (let k = 0; k < 3; k++) {
     await page.getByRole("button", { name: "Ekle", exact: true }).first().click();
-    await expect(page.getByText(`${k + 1} / 10 aktif`)).toBeVisible();
+    await expect(page.getByText(`${k + 1} / 15 aktif`)).toBeVisible();
   }
   await shot(page, "04-sorular");
 
-  // Rakipler (Free: 2)
+  // Rakipler (Free: 3)
   await page.getByRole("tab", { name: "Rakipler" }).click();
-  for (const name of ["Kebapçı Halil", "Şirin Döner"]) {
+  for (const name of ["Kebapçı Halil", "Şirin Döner", "Dürümcü Zeki"]) {
     await page.getByLabel("Rakip adı").fill(name);
     await page.getByRole("button", { name: "Rakibi ekle" }).click();
     await expect(page.getByText(name, { exact: true })).toBeVisible();
@@ -226,7 +226,7 @@ test("Banka sektörü: hazır sorular, örnek rakipler, düzenleme, gerçek sır
   await expect(page.getByText("Kredi kartı almak için hangi bankayı önerirsin?")).toBeVisible();
   for (let k = 0; k < 2; k++) {
     await page.getByRole("button", { name: "Ekle", exact: true }).first().click();
-    await expect(page.getByText(`${k + 1} / 10 aktif`)).toBeVisible();
+    await expect(page.getByText(`${k + 1} / 15 aktif`)).toBeVisible();
   }
 
   // Soru düzenleme

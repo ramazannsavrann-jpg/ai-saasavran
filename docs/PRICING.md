@@ -43,3 +43,25 @@ Bu tablo `npm run pricing` ile fiyat kartlarından üretilir (fiyatlar 2026-11-0
 | LLM ek yükü (sınıflandırma + öneri) | marka başına 0,5–1 $/ay | tahmin |
 | Altyapı payı | müşteri başına 1,25–2,5 $/ay | Supabase Pro ~25 $ / 10–20 müşteri |
 | Ödeme komisyonu | %4 | varsayım; iyzico/PayTR teklifiyle güncellenecek |
+
+## Güncel karar (7 Kasım 2026): ChatGPT tarzı paketler
+
+Kurucunun isteğiyle paket yapısı ChatGPT'ye benzetildi: Free / Plus / Pro / Business. Pro için ChatGPT'deki 200 $ yerine
+99 $ seçildi, çünkü rakipler (Otterly, Peec AI) bu bantta. Kaynak: `supabase/migrations/0007_plans_v2.sql`, `engine/src/pricing.ts`.
+
+| Paket | Fiyat/ay | Marka × soru | Rakip | Aylık cevap kotası | Motorlar | Ücretli tavan | ChatGPT maliyeti (tipik / kötü) | Tipik brüt kâr |
+|---|---|---|---|---|---|---|---|---|
+| Free | 0 $ | 1 × 15 (haftada 1 tekrar) | 3 | 100 | Gemini aramasız (ücretsiz katman) | 0 $ | 0 $ | — |
+| Plus | 20 $ | 1 × 25 (haftada 2 tekrar) | 5 | 520 | ChatGPT canlı + Gemini | 9 $ | 4,1 $ / 5,5 $ | %65 |
+| Pro | 99 $ | 5 × 30 | 8 | 3.000 | ChatGPT canlı + Gemini | 50 $ | 24,8 $ / 33,2 $ | %65 |
+| Business | 249 $ | 15 × 30 | 10 | 9.000 | ChatGPT canlı + Gemini | 150 $ | 74,4 $ / 99,5 $ | %60 |
+
+**Zarar etmeme kuralı:** her ücretli paketin aylık harcama tavanı + %4 ödeme komisyonu fiyatın altında; tavana gelince ölçüm durur.
+Bu yüzden en kötü durumda bile müşteri başına zarar edilmez (birim testi: "Güncel paketler").
+
+**Ücretsiz paket neden zarar ettirmez:** yalnız Gemini ücretsiz katmanını kullanır (para maliyeti 0). Tek sınır, tüm kullanıcılar
+için ortak günlük Gemini kotası (kendi tavanımız 450/gün). Free kullanıcı başına ~65 cevap/ay → aynı anda ~200 aktif ücretsiz marka.
+Dolarsa ölçüm ertesi güne kalır, para harcanmaz. Ücretli müşteriler gelince Gemini için ayrı ücretli anahtar düşünülmeli
+(ücretsiz katmanda Google içerikleri kullanabilir) ve `app_settings.paid_total_cap_usd` (şu an 3 $ deneme tavanı) yükseltilmeli.
+
+Ücretli paketler ödeme sağlayıcısı (Paddle / Lemon Squeezy) bağlanana kadar satışta değil; sitede bekleme listesi (e-posta) var.

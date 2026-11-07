@@ -89,9 +89,9 @@ assert.equal(await reserve("paid", 0.01), "paid_not_allowed");
 await assert.rejects(db.exec(`update workspaces set paid_live_allowed = true where id='${C}'`));
 console.log("ok müşteri alanında ücretli çağrı reddedildi (paid_not_allowed), izin bayrağı konulamadı");
 
-// Ücretli tavan (Starter 12 $) — izinli alan (growth_lab) üzerinde, toplam tavan geniş tutularak
+// Ücretli tavan (Plus 9 $) — izinli alan (growth_lab) üzerinde, toplam tavan geniş tutularak
 await db.exec(`update workspaces set kind='growth_lab', paid_live_allowed=true where id='${C}'; update app_settings set paid_total_cap_usd = 1000;`);
-await record("paid", 11.5, 11.5);
+await record("paid", 8.5, 8.5);
 assert.equal(await reserve("paid", 1.0), "monthly_cost_cap");
 const ws = (await db.query(`select status, paused_reason from workspaces where id=$1`, [C])).rows[0];
 assert.deepEqual(ws, { status: "paused", paused_reason: "monthly_cost_cap" });
@@ -99,7 +99,7 @@ assert.equal(await reserve("free", 0.035, 100), "workspace_paused");
 console.log("ok ücretli tavan aşılacakken çağrı reddedildi, workspace otomatik durdu");
 
 // Toplam ücretli tavan (tüm alanlar): aşılacaksa reddedilir, alan durdurulmaz
-await db.exec(`update workspaces set status='active', paused_reason=null where id='${C}'; update app_settings set paid_total_cap_usd = 11.6;`);
+await db.exec(`update workspaces set status='active', paused_reason=null where id='${C}'; update app_settings set paid_total_cap_usd = 8.6;`);
 assert.equal(await reserve("paid", 0.5), "global_paid_cap");
 assert.equal((await db.query(`select status from workspaces where id=$1`, [C])).rows[0].status, "active");
 await db.exec(`update workspaces set kind='business', paid_live_allowed=false where id='${C}'; update app_settings set paid_total_cap_usd = 3;`);
@@ -108,9 +108,9 @@ console.log("ok toplam ücretli tavan aşılacakken çağrı reddedildi, alan du
 // Aylık çağrı kotası
 const D = "55555555-5555-5555-5555-555555555555";
 await db.exec(`insert into workspaces (id,name,kind,plan) values ('${D}','Free Müşteri','business','free')`);
-for (let i = 0; i < 40; i++) await db.query(`select record_engine_call($1,null,'gemini','m','free',1,1,0,0,true)`, [D]);
+for (let i = 0; i < 100; i++) await db.query(`select record_engine_call($1,null,'gemini','m','free',1,1,0,0,true)`, [D]);
 assert.equal((await db.query(`select reserve_engine_call($1,'gemini','free',0,1000) r`, [D])).rows[0].r, "monthly_call_quota");
-console.log("ok Free paket 40 çağrı kotası dolunca durdu");
+console.log("ok Free paket 100 çağrı kotası dolunca durdu");
 
 // Free pakette ücretli harcama tavanı 0: ücretli çağrı hiç başlayamaz
 const E = "66666666-6666-6666-6666-666666666666";

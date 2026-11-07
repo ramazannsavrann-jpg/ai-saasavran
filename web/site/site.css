@@ -94,3 +94,17 @@ tr.us td { background: var(--tint); font-weight: 600; }
 .foot p { margin: 0 0 .5em; }
 @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
 .top nav a.lang { display: inline; color: var(--muted); font-size: .9rem; }
+
+/* Fiyatlar */
+.plans { padding: 8px 0 24px; }
+.plan-grid { display: grid; gap: 14px; }
+@media (min-width: 720px) { .plan-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1040px) { .plan-grid { grid-template-columns: repeat(4, 1fr); } }
+.plan { display: flex; flex-direction: column; gap: 10px; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 18px; }
+.plan-main { border: 2px solid var(--primary); }
+.plan h3 { margin: 0; }
+.plan .price { margin: 0; color: var(--muted); }
+.plan .price span { font-size: 2rem; font-weight: 700; color: var(--ink, inherit); margin-right: 2px; }
+.plan ul { margin: 0; padding-left: 18px; flex: 1; }
+.plan li { margin: 4px 0; }
+.plan .btn { width: 100%; }
