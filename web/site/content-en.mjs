@@ -31,21 +31,22 @@ export const GUIDES_EN = [
 </dl>
 
 <h2>4. Don't mix live search and model knowledge</h2>
-<p>An assistant can answer from training data alone, or by searching the web first. The two modes can disagree sharply. In our own test, Peec AI was recommended in 2 of 20 answers by Gemini without search, and in 8 of 20 by ChatGPT with live search, for the same 10 questions. A report should always say which mode it measured.</p>
+<p>An assistant can answer from training data alone, or by searching the web first. The two modes can disagree sharply. In our own test, Tool A was recommended in 2 of 20 answers by Gemini without search, and in 8 of 20 by ChatGPT with live search, for the same 10 questions. A report should always say which mode it measured.</p>
 
 <h2>5. Read results as a range</h2>
 <p>40% recommended across 20 answers corresponds to a true rate somewhere around 22–61% (Wilson 95% interval). With small samples, "30% last week, 40% this week" is usually noise. Look at the trend over several measurements.</p>
 
 <h2>A real example: our own brand</h2>
 <p>We measured AI SaaSavran with our own tool: 10 questions, each asked twice, ChatGPT with live web search, 7 November 2026.</p>
+<p class="small">Tool names are hidden; all five are established AI visibility tools.</p>
 <table>
   <thead><tr><th>Brand</th><th>Recommended in</th><th>Own site cited in</th></tr></thead>
   <tbody>
-    <tr><td>Peec AI</td><td>8 / 20</td><td>7 / 20</td></tr>
-    <tr><td>Otterly.AI</td><td>7 / 20</td><td>6 / 20</td></tr>
-    <tr><td>Semrush</td><td>7 / 20</td><td>6 / 20</td></tr>
-    <tr><td>Profound</td><td>6 / 20</td><td>1 / 20</td></tr>
-    <tr><td>Ahrefs</td><td>5 / 20</td><td>5 / 20</td></tr>
+    <tr><td>Tool A</td><td>8 / 20</td><td>7 / 20</td></tr>
+    <tr><td>Tool B</td><td>7 / 20</td><td>6 / 20</td></tr>
+    <tr><td>Tool C</td><td>7 / 20</td><td>6 / 20</td></tr>
+    <tr><td>Tool E</td><td>6 / 20</td><td>1 / 20</td></tr>
+    <tr><td>Tool D</td><td>5 / 20</td><td>5 / 20</td></tr>
     <tr class="us"><td>AI SaaSavran</td><td>0 / 20</td><td>0 / 20</td></tr>
   </tbody>
 </table>
@@ -55,52 +56,6 @@ export const GUIDES_EN = [
       ["Can I measure my ChatGPT visibility for free?", "Yes. Ask the questions by hand and log the answers in a spreadsheet. AI SaaSavran's free plan automates this with Gemini (without live search)."],
       ["How many questions are enough?", "Start with 10 unbranded questions and at least 2 answers per question. Treat anything under 20 answers as a hint, not a result."],
       ["Why does the AI give different answers each time?", "Models are probabilistic, and with live search the pages found also change. That is why visibility is measured as a rate, not from one answer."],
-    ],
-  },
-  {
-    slug: "ai-visibility-tools-compared",
-    tr: "yapay-zeka-gorunurluk-araclari",
-    title: "AI visibility tools compared: Peec AI, Otterly, Profound, Semrush, Ahrefs",
-    short: "AI visibility tools compared",
-    description: "Who each AI visibility (GEO/AEO) tracker is for, what it measures and what it costs to start, with a checklist for choosing one.",
-    body: `
-<p class="lede">AI visibility tools measure how often your brand appears in answers from assistants like ChatGPT, Gemini and Perplexity. Below is a short summary based on public product pages and independent comparisons. Prices change often; check each vendor's site.</p>
-<p class="disclosure">Disclosure: written by the AI SaaSavran team. We included our own tool and listed what it does not do yet.</p>
-
-<h2>Who each tool is for</h2>
-<table>
-  <thead><tr><th>Tool</th><th>Cheapest paid plan*</th><th>Best for</th></tr></thead>
-  <tbody>
-    <tr><td>Otterly.AI</td><td>£23 / month</td><td>Small and mid-size teams; prompt-level tracking and sentiment</td></tr>
-    <tr><td>Peec AI</td><td>€89 / month</td><td>Mid-size marketing teams, strong in Europe</td></tr>
-    <tr><td>Semrush</td><td>£79 / month (SEO suite)</td><td>SEO teams already on Semrush</td></tr>
-    <tr><td>Ahrefs</td><td>£79 / month (SEO suite)</td><td>SEO teams already on Ahrefs</td></tr>
-    <tr><td>Profound</td><td>£399 / month</td><td>Enterprises; many engines, benchmarks and workflows</td></tr>
-    <tr class="us"><td>AI SaaSavran</td><td>Free plan available</td><td>Small businesses and small agencies who want an honest, simple measurement</td></tr>
-  </tbody>
-</table>
-<p class="small">*Starting prices as of April 2026 from <a href="https://seocompare.pages.dev/blog/tool-pricing-comparison-q2-2026/">SEOCompare's Q2 2026 comparison</a>; may have changed.</p>
-
-<h2>How to choose</h2>
-<ul>
-  <li><b>Live search or model knowledge?</b> Does the tool measure answers where the AI searched the web, or only what the model already knows? The report should say.</li>
-  <li><b>Repetition and confidence:</b> Is each question asked more than once? Rates from single answers mislead.</li>
-  <li><b>Source analysis:</b> Does it show which websites the AI relied on? That tells you what to do next.</li>
-  <li><b>Brand matching:</b> Are product names and shared names handled? (A card program used by several banks should not be credited to one of them.)</li>
-  <li><b>Cost controls:</b> Is there a hard monthly spending cap on paid measurements?</li>
-</ul>
-
-<h2>AI SaaSavran today (honest status)</h2>
-<ul>
-  <li>Works: brand, competitor and question management, Gemini measurement without search, weekly automatic runs, website check, rule-based recommendations.</li>
-  <li>In trial: ChatGPT live-search measurement and source analysis (not yet open to customers).</li>
-  <li>Not yet: Perplexity, PDF reports, payments, English app interface (coming).</li>
-</ul>
-`,
-    faq: [
-      ["What is the cheapest AI visibility tool?", "Prices change often; check vendors directly. Among established tools Otterly.AI starts low. AI SaaSavran has a free plan."],
-      ["What are affordable alternatives to Profound?", "Independent comparisons often name Peec AI and Otterly.AI for mid-size teams. For small businesses that want to start free, AI SaaSavran is an option."],
-      ["Do I need an AI visibility tool or can I do it by hand?", "For a handful of questions, by hand works. A tool helps once you track 10+ questions weekly, compare competitors, and need consistent counting."],
     ],
   },
   {
@@ -126,7 +81,7 @@ export const GUIDES_EN = [
 <h2>What does the AI rely on?</h2>
 <p>In our live-search measurements, ChatGPT most often cited:</p>
 <ul>
-  <li>Brands' own guide, blog and help pages (for example semrush.com, peec.ai, help.ahrefs.com)</li>
+  <li>Brands' own guide, blog and help pages (for example the help centres of established tools)</li>
   <li>Official bodies and reports (for banking questions: regulators and audit-firm reports)</li>
   <li>Comparison and review sites</li>
 </ul>
@@ -184,7 +139,7 @@ export const GUIDES_EN = [
 <p class="lede">When ChatGPT searches the web before answering, it shows the pages it used as sources. Looking at the sources behind answers that recommend your competitor is the fastest way to understand why.</p>
 
 <h2>A real example: our own category</h2>
-<p>We asked ChatGPT (live web search) 10 questions like "What are the best tools to track brand visibility in AI answers?", twice each, on 7 November 2026. The most cited sources were the vendors' own pages: semrush.com, help.openai.com, peec.ai, support.google.com, help.ahrefs.com, help.otterly.ai and blog.hubspot.com.</p>
+<p>We asked ChatGPT (live web search) 10 questions like "What are the best tools to track brand visibility in AI answers?", twice each, on 7 November 2026. The most cited sources were the vendors' own pages: the tool vendors' own sites and help centres, plus help.openai.com and support.google.com.</p>
 <p>The lesson: the tools that were recommended most also had their own help docs and guides cited. Clear, specific pages that answer the exact question get used as sources. One measurement with few answers is a hint, not a final ranking.</p>
 
 <h2>Your own competitor analysis in four steps</h2>

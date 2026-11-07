@@ -39,21 +39,22 @@ export const GUIDES = [
 </dl>
 
 <h2>4. Canlı arama ile aramasız cevabı karıştırmayın</h2>
-<p>Yapay zekâ iki şekilde cevap verebilir: internete bakmadan yalnızca eğitim verisinden ya da internette arayarak. İki sonuç çok farklı çıkabilir. Kendi ölçümümüzde aynı 10 soruda Peec AI, internete bakmayan Gemini'de 20 cevabın 2'sinde önerildi, internette arayan ChatGPT'de 8'inde. Raporunuzda hangi türün ölçüldüğü açıkça yazmalı.</p>
+<p>Yapay zekâ iki şekilde cevap verebilir: internete bakmadan yalnızca eğitim verisinden ya da internette arayarak. İki sonuç çok farklı çıkabilir. Kendi ölçümümüzde aynı 10 soruda Araç A, internete bakmayan Gemini'de 20 cevabın 2'sinde önerildi, internette arayan ChatGPT'de 8'inde. Raporunuzda hangi türün ölçüldüğü açıkça yazmalı.</p>
 
 <h2>5. Sonucu aralıkla okuyun</h2>
 <p>20 cevapta %40 önerilme, gerçekte yaklaşık %22–61 arasında bir değere karşılık gelir (Wilson güven aralığı). Küçük örneklemde "geçen hafta %30'du, bu hafta %40 oldu" demek çoğu zaman yanlış alarmdır. Eğilime birkaç ölçüm üst üste bakın.</p>
 
 <h2>Gerçek bir örnek: kendi markamız</h2>
 <p>AI SaaSavran'ı kendi ürünümüzle ölçtük (10 soru, her biri 2 kez, ChatGPT canlı web aramasıyla, 7 Kasım 2026):</p>
+<p class="small">Araç adları gizlendi; beşi de tanınmış yapay zekâ görünürlük araçları.</p>
 <table>
   <thead><tr><th>Marka</th><th>Önerildiği cevap</th><th>Sitesi kaynak gösterildi</th></tr></thead>
   <tbody>
-    <tr><td>Peec AI</td><td>8 / 20</td><td>7 / 20</td></tr>
-    <tr><td>Otterly.AI</td><td>7 / 20</td><td>6 / 20</td></tr>
-    <tr><td>Semrush</td><td>7 / 20</td><td>6 / 20</td></tr>
-    <tr><td>Profound</td><td>6 / 20</td><td>1 / 20</td></tr>
-    <tr><td>Ahrefs</td><td>5 / 20</td><td>5 / 20</td></tr>
+    <tr><td>Araç A</td><td>8 / 20</td><td>7 / 20</td></tr>
+    <tr><td>Araç B</td><td>7 / 20</td><td>6 / 20</td></tr>
+    <tr><td>Araç C</td><td>7 / 20</td><td>6 / 20</td></tr>
+    <tr><td>Araç E</td><td>6 / 20</td><td>1 / 20</td></tr>
+    <tr><td>Araç D</td><td>5 / 20</td><td>5 / 20</td></tr>
     <tr class="us"><td>AI SaaSavran</td><td>0 / 20</td><td>0 / 20</td></tr>
   </tbody>
 </table>
@@ -63,51 +64,6 @@ export const GUIDES = [
       ["ChatGPT'de markamın görünürlüğünü ücretsiz ölçebilir miyim?", "Evet. Soruları elle ChatGPT'ye sorup sonuçları bir tabloya yazabilirsiniz. AI SaaSavran'ın ücretsiz paketi bu işi Gemini ile (aramasız) otomatik yapar."],
       ["Kaç soru yeterli?", "Başlangıç için 10 markasız soru ve her soru için en az 2 cevap. 20 cevabın altındaki sonuçları kesin kabul etmeyin."],
       ["Yapay zekâ neden her seferinde farklı cevap veriyor?", "Dil modelleri olasılıksal çalışır ve canlı arama yapıldığında bulunan sayfalar da değişir. Bu yüzden ölçüm tek cevapla değil, oranla yapılır."],
-    ],
-  },
-  {
-    slug: "yapay-zeka-gorunurluk-araclari",
-    title: "Yapay zekâ görünürlüğü ölçen araçlar: Türkçe karşılaştırma",
-    short: "Görünürlük araçları karşılaştırması",
-    description: "Profound, Peec AI, Otterly.AI, Semrush ve Ahrefs gibi yapay zekâ görünürlüğü (GEO/AEO) araçları kime uygun, neyi ölçer? Türkiye'deki işletmeler için tarafsız özet.",
-    body: `
-<p class="lede">Yapay zekâ görünürlüğü araçları, markanızın ChatGPT, Gemini, Perplexity gibi asistanların cevaplarında ne sıklıkla geçtiğini ölçer. Çoğu yurt dışı merkezli ve İngilizce arayüzlüdür. Aşağıdaki özet, araçların herkese açık tanıtımlarına ve bağımsız karşılaştırmalara dayanır; fiyatlar sık değiştiği için güncel fiyatı her aracın kendi sitesinden kontrol edin.</p>
-<p class="disclosure">Not: Bu sayfayı AI SaaSavran ekibi yazdı. Kendi aracımızı da listeye ekledik ve eksiklerini açıkça yazdık.</p>
-
-<h2>Araçlar kime uygun?</h2>
-<table>
-  <thead><tr><th>Araç</th><th>Kime uygun</th><th>Öne çıkan</th></tr></thead>
-  <tbody>
-    <tr><td>Profound</td><td>Büyük şirketler ve kurumsal pazarlama ekipleri</td><td>Birçok yapay zekâ motorunda soru takibi, sektör sıralamaları, içerik üretim akışları</td></tr>
-    <tr><td>Peec AI</td><td>Orta ölçekli ekipler, özellikle Avrupalı markalar</td><td>Soru araştırması, marka izleme, öneri motoru</td></tr>
-    <tr><td>Otterly.AI</td><td>KOBİ'ler ve orta ölçekli ekipler</td><td>Soru bazında takip, duygu (olumlu/olumsuz) analizi</td></tr>
-    <tr><td>Semrush</td><td>Zaten Semrush kullanan SEO ekipleri</td><td>SEO platformuna eklenen yapay zekâ görünürlüğü modülleri</td></tr>
-    <tr><td>Ahrefs (Brand Radar)</td><td>Ahrefs kullanan SEO ekipleri</td><td>Yapay zekâ cevaplarında marka izleme ve keşif</td></tr>
-    <tr class="us"><td>AI SaaSavran</td><td>Türkiye'deki işletmeler ve ajanslar</td><td>Türkçe arayüz, sektöre göre Türkçe soru şablonları, ücretsiz başlangıç paketi</td></tr>
-  </tbody>
-</table>
-
-<h2>Seçerken nelere bakmalı?</h2>
-<ul>
-  <li><b>Canlı arama mı, model bilgisi mi?</b> Araç, yapay zekânın internete bakarak verdiği cevabı mı ölçüyor yoksa eğitim verisinden bildiğini mi? Raporda bu açıkça yazmalı.</li>
-  <li><b>Tekrar ve güven aralığı:</b> Her soru birden fazla kez soruluyor mu? Tek cevaba dayanan oranlar yanıltır.</li>
-  <li><b>Kaynak analizi:</b> Yapay zekânın hangi sitelere baktığını gösteriyor mu? Ne yapmanız gerektiğini en iyi bu söyler.</li>
-  <li><b>Dil ve pazar:</b> Türkçe sorular ve yerel rakipler doğru tanınıyor mu? "İşCep" gibi ürün adlarının markaya bağlanması bunun bir örneği.</li>
-  <li><b>Maliyet sınırı:</b> Ücretli ölçümlerde aylık harcama tavanı var mı?</li>
-</ul>
-
-<h2>AI SaaSavran'ın bugünkü durumu (dürüst özet)</h2>
-<ul>
-  <li>Çalışan: Türkçe arayüz, marka/rakip/soru yönetimi, Gemini ile aramasız ölçüm, haftalık otomatik ölçüm, web sitesi kontrolü, kural tabanlı öneriler.</li>
-  <li>Deneme aşamasında: ChatGPT ile canlı aramalı ölçüm ve kaynak analizi (henüz müşterilere açık değil).</li>
-  <li>Henüz yok: Perplexity, PDF rapor, ödeme. Ürün erken erişim aşamasındadır.</li>
-</ul>
-<p>Güncel liste her zaman <a href="/durum">ürün durumu sayfasında</a>.</p>
-`,
-    faq: [
-      ["En ucuz yapay zekâ görünürlüğü aracı hangisi?", "Fiyatlar sık değişiyor; her aracın kendi sitesinden güncel fiyata bakın. AI SaaSavran'ın ücretsiz paketiyle maliyetsiz başlayabilirsiniz."],
-      ["Türkçe destekleyen bir araç var mı?", "AI SaaSavran Türkçe arayüzlü ve Türkçe soru şablonlarıyla çalışır. Diğer araçların çoğu İngilizce arayüzlüdür; Türkçe soruları takip edip edemediklerini denemeden önce kontrol edin."],
-      ["Profound'un uygun fiyatlı alternatifleri neler?", "Bağımsız karşılaştırmalarda Peec AI ve Otterly.AI orta ölçekli ekipler için sık anılan alternatiflerdir. Türkiye odaklı ve ücretsiz başlamak isteyenler için AI SaaSavran bir seçenektir."],
     ],
   },
   {
@@ -132,8 +88,8 @@ export const GUIDES = [
 <h2>Yapay zekâ neye bakarak öneriyor?</h2>
 <p>Canlı aramalı ölçümlerimizde ChatGPT'nin en çok şu tür kaynakları gösterdiğini gördük:</p>
 <ul>
-  <li>Markaların kendi sitelerindeki rehber, blog ve yardım sayfaları (örneğin semrush.com, peec.ai, help.ahrefs.com)</li>
-  <li>Resmî kurumlar ve raporlar (bankacılık sorularında BDDK, TMSF, KPMG raporları)</li>
+  <li>Markaların kendi sitelerindeki rehber, blog ve yardım sayfaları (örneğin tanınmış araçların yardım merkezleri)</li>
+  <li>Resmî kurumlar ve raporlar (bankacılık sorularında BDDK, TMSF ve danışmanlık şirketlerinin raporları)</li>
   <li>Karşılaştırma ve inceleme siteleri</li>
 </ul>
 
@@ -192,14 +148,14 @@ export const GUIDES = [
 <table>
   <thead><tr><th>Banka</th><th>Önerildiği cevap</th></tr></thead>
   <tbody>
-    <tr><td>İş Bankası</td><td>6 / 10</td></tr>
-    <tr><td>Enpara.com</td><td>5 / 10</td></tr>
-    <tr><td>Akbank</td><td>3 / 10</td></tr>
-    <tr><td>Yapı Kredi</td><td>2 / 10</td></tr>
-    <tr><td>Garanti BBVA</td><td>1 / 10</td></tr>
+    <tr><td>Banka C</td><td>6 / 10</td></tr>
+    <tr><td>Banka A</td><td>5 / 10</td></tr>
+    <tr><td>Banka B</td><td>3 / 10</td></tr>
+    <tr><td>Banka E</td><td>2 / 10</td></tr>
+    <tr><td>Banka D</td><td>1 / 10</td></tr>
   </tbody>
 </table>
-<p>En çok gösterilen kaynaklar: enpara.com, isbank.com.tr, bddk.gov.tr, tmsf.org.tr ve bir KPMG raporu. İş Bankası örneğinde ChatGPT, bankanın kendi sitesindeki "uygulamamız art arda ödül aldı" sayfasını kaynak gösterip "İşCep" uygulamasını önerdi.</p>
+<p>En çok gösterilen kaynaklar: Banka A ve Banka C'nin kendi siteleri, bddk.gov.tr, tmsf.org.tr ve bir danışmanlık şirketinin raporu. Banka C örneğinde ChatGPT, bankanın kendi sitesindeki "uygulamamız art arda ödül aldı" sayfasını kaynak gösterip bankanın mobil uygulamasını önerdi.</p>
 <p>Çıkarılacak ders: Yapay zekâ, <b>doğrulanabilir ve güncel iddiaları</b> (ödül, rapor, resmî veri) kendi sitesinde açıkça yazan markayı öne çıkarıyor. Bu ölçüm tek seferliktir ve az sayıda cevaba dayanır; kesin bir sıralama olarak okunmamalıdır.</p>
 
 <h2>Kendi rakip analiziniz için 4 adım</h2>

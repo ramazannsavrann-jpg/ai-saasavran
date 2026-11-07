@@ -139,12 +139,12 @@ const home = `
   <figure class="answer-card" aria-label="Örnek yapay zekâ cevabı">
     <figcaption><span class="q">Türkiye'de en iyi mobil bankacılık uygulaması hangisi?</span></figcaption>
     <blockquote>
-      <p>1. <mark class="hit">İşCep</mark> (İş Bankası) …</p>
-      <p>2. <mark class="hit">Enpara.com</mark> …</p>
-      <p>3. <mark class="hit alt">Akbank</mark> …</p>
+      <p>1. <mark class="hit">Banka C</mark>'nin mobil uygulaması …</p>
+      <p>2. <mark class="hit">Banka A</mark> …</p>
+      <p>3. <mark class="hit alt">Banka B</mark> …</p>
     </blockquote>
-    <p class="cite">Kaynaklar: isbank.com.tr · enpara.com · bddk.gov.tr</p>
-    <p class="caption">Temsilî gösterim. Gerçek ölçümümüzde (ChatGPT, canlı web aramasıyla, 7 Kasım 2026, 10 cevap) bu tür sorularda en sık önerilenler İş Bankası (İşCep), Enpara.com ve Akbank; en sık kaynaklar bu sitelerdi.</p>
+    <p class="cite">Kaynaklar: bankaların kendi siteleri · bddk.gov.tr</p>
+    <p class="caption">Temsilî gösterim, gerçek ölçümümüze dayanır (ChatGPT, canlı web aramasıyla, 7 Kasım 2026, 10 cevap). Banka adları gizlendi.</p>
   </figure>
 </section>
 ${demoHtml(false)}
@@ -152,7 +152,7 @@ ${demoHtml(false)}
 <section class="band">
   <h2>Ne ölçüyoruz?</h2>
   <div class="trio">
-    <div><h3>Anılma</h3><p>Cevapta markanızın adı geçiyor mu? "İşCep" gibi ürün adlarını da markanıza bağlarız.</p></div>
+    <div><h3>Anılma</h3><p>Cevapta markanızın adı geçiyor mu? Ürün ve uygulama adlarını da markanıza bağlarız.</p></div>
     <div><h3>Önerilme</h3><p>Öneri listesinde misiniz? "Önerilmez" gibi olumsuz bağlamları öneri saymayız.</p></div>
     <div><h3>Rakip ve kaynak</h3><p>Sizin yerinize kim öneriliyor, yapay zekâ hangi sitelere bakıyor?</p></div>
   </div>
@@ -202,12 +202,12 @@ const enHome = `
   <figure class="answer-card" aria-label="Example AI answer">
     <figcaption><span class="q">What are the best tools to track brand visibility in AI answers?</span></figcaption>
     <blockquote>
-      <p>1. <mark class="hit">Peec AI</mark> …</p>
-      <p>2. <mark class="hit">Otterly.AI</mark> …</p>
-      <p>3. <mark class="hit alt">Semrush</mark> …</p>
+      <p>1. <mark class="hit">Tool A</mark> …</p>
+      <p>2. <mark class="hit">Tool B</mark> …</p>
+      <p>3. <mark class="hit alt">Tool C</mark> …</p>
     </blockquote>
-    <p class="cite">Sources: peec.ai · semrush.com · help.ahrefs.com</p>
-    <p class="caption">Illustration based on our real measurement (ChatGPT with live web search, 7 Nov 2026, 20 answers): Peec AI 8/20, Otterly.AI 7/20, Semrush 7/20. We were 0/20.</p>
+    <p class="cite">Sources: the tools' own websites and help centres</p>
+    <p class="caption">Illustration based on our real measurement (ChatGPT with live web search, 7 Nov 2026, 20 answers): Tool A 8/20, Tool B 7/20, Tool C 7/20. We were 0/20. Tool names are hidden.</p>
   </figure>
 </section>
 ${demoHtml(true)}
@@ -344,5 +344,5 @@ write("/pricing/", page({ lang: "en", path: "/pricing/", title: "Pricing | AI Sa
 
 for (const l of Object.values(LEGAL)) write(l.path, page({ lang: l.lang, path: l.path, title: l.title, description: l.description, body: l.body }));
 
-writeFileSync(join(DIST, "_redirects"), ["/en / 301", "/en/ / 301", ...APP_ROUTES.map((r) => `${r} /app/ 200`)].join("\n") + "\n");
+writeFileSync(join(DIST, "_redirects"), ["/en / 301", "/en/ / 301", "/guides/ai-visibility-tools-compared/ /guides/ 301", "/rehber/yapay-zeka-gorunurluk-araclari/ /rehber/ 301", ...APP_ROUTES.map((r) => `${r} /app/ 200`)].join("\n") + "\n");
 console.log(`Statik sayfalar üretildi: ${urls.length} sayfa, uygulama /app/ altında`);
