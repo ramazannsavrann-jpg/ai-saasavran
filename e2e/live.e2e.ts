@@ -29,11 +29,13 @@ test("Canlı site: açılıyor, doğru yapılandırılmış, güvenlik başlıkl
   expect(landing).toContain("are you in the answer?");
   expect(await (await request.get(`${base}/tr/`)).text()).toContain("Müşteriniz yapay zekâya sorduğunda");
   expect(landing).not.toContain('id="root"');
-  for (const path of ["/guides/", "/guides/what-is-geo/", "/rehber/", "/rehber/geo-nedir/", "/llms.txt", "/sitemap.xml", "/robots.txt", "/terms/", "/privacy/", "/refund/", "/iade/", "/pricing/"]) expect((await request.get(`${base}${path}`)).status(), path).toBe(200);
+  for (const path of ["/guides/", "/guides/what-is-geo/", "/rehber/", "/rehber/geo-nedir/", "/llms.txt", "/sitemap.xml", "/robots.txt", "/terms/", "/privacy/", "/refund/", "/iade/", "/pricing/", "/check/", "/tr/kontrol/"]) expect((await request.get(`${base}${path}`)).status(), path).toBe(200);
   expect(await (await request.get(`${base}/refund/`)).text()).toContain("14-day money-back guarantee");
   const runtime = await (await request.get(`${base}/config.json`)).json();
   expect(runtime.paddle?.environment, "ödeme ayarı").toBe("production");
   expect(runtime.paddle?.clientToken).toMatch(/^live_/);
+  // Ücretsiz kontrol uç noktası çalışıyor (boş istek reddedilir; kota harcanmaz)
+  expect((await request.post(`${base}/api/check`, { data: {} })).status()).toBe(400);
   // Ödeme bildirimi uç noktası çalışıyor ve imzasız isteği reddediyor
   expect((await request.post(`${base}/api/paddle/webhook`, { data: { event_type: "subscription.created" } })).status()).toBe(401);
   // Uygulama adresleri uygulamayı döndürür

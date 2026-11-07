@@ -145,4 +145,14 @@ console.log("ok istemci kota fonksiyonlarını çağıramıyor; başka müşteri
 await assert.rejects(db.exec(`insert into workspaces (name,kind,plan) values ('x','business','yok')`));
 console.log("ok tanımsız paket atanamıyor");
 
+{
+  const r = async (ip) => (await db.query(`select reserve_free_check($1, 'en', 'Acme', 'dentist', 'Austin', 5, 450) r`, [ip])).rows[0].r;
+  assert.match(await r("ip-a"), /^ok:/);
+  assert.match(await r("ip-a"), /^ok:/);
+  assert.equal(await r("ip-a"), "person_limit", "kişi başına 30 günde 2 kontrol");
+  assert.match(await r("ip-b"), /^ok:/);
+  await db.exec(`update provider_daily_usage set calls = 448 where provider='gemini' and day=current_date`);
+  assert.equal(await r("ip-c"), "daily_limit", "ortak Gemini günlük tavanı korunur");
+  console.log("ok ücretsiz kontrol: kişi başına 2 hak, ortak günlük tavan korunuyor");
+}
 console.log("TÜM DB TESTLERİ GEÇTİ");

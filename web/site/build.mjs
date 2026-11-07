@@ -5,6 +5,8 @@ import { mkdirSync, writeFileSync, renameSync, existsSync, copyFileSync } from "
 import { dirname, join } from "node:path";
 import { SITE, GUIDES, HOME_FAQ } from "./content.mjs";
 import { LEGAL } from "./legal.mjs";
+import { demoHtml } from "./demo.mjs";
+import { checkHtml } from "./check.mjs";
 import { GUIDES_EN, HOME_FAQ_EN } from "./content-en.mjs";
 
 const DIST = "dist";
@@ -131,7 +133,7 @@ const home = `
   <div class="hero-copy">
     <h1>Müşteriniz yapay zekâya sorduğunda markanız cevapta mı?</h1>
     <p class="lede">AI SaaSavran, müşterilerinizin ChatGPT ve Gemini'ye soracağı soruları sorar; markanızın anılıp anılmadığını, önerilip önerilmediğini ve sizin yerinize hangi rakibin önerildiğini ölçer.</p>
-    <p class="actions"><a class="btn" href="/kayit">Ücretsiz başla</a><a class="btn ghost" href="/rehber/chatgpt-marka-gorunurlugu-olcme/">Nasıl ölçülür?</a></p>
+    <p class="actions"><a class="btn" href="/kayit">Ücretsiz başla</a><a class="btn ghost" href="/tr/kontrol/">Üye olmadan dene</a></p>
     <p class="small">Ücretsiz paket: 1 marka, 15 soru, ayda 4 ölçüm. Kart bilgisi istenmez. <a href="#fiyatlar">Fiyatlar</a></p>
   </div>
   <figure class="answer-card" aria-label="Örnek yapay zekâ cevabı">
@@ -145,6 +147,7 @@ const home = `
     <p class="caption">Temsilî gösterim. Gerçek ölçümümüzde (ChatGPT, canlı web aramasıyla, 7 Kasım 2026, 10 cevap) bu tür sorularda en sık önerilenler İş Bankası (İşCep), Enpara.com ve Akbank; en sık kaynaklar bu sitelerdi.</p>
   </figure>
 </section>
+${demoHtml(false)}
 
 <section class="band">
   <h2>Ne ölçüyoruz?</h2>
@@ -175,7 +178,8 @@ const home = `
   <ul>
     <li class="ok">Gemini ile ölçüm (internete bakmadan, model bilgisiyle). Raporda açıkça yazar.</li>
     <li class="ok">Haftalık otomatik ölçüm, web sitesi kontrolü, kural tabanlı öneriler.</li>
-    <li class="try">ChatGPT ile canlı aramalı ölçüm ve kaynak analizi: deneme aşamasında, henüz müşterilere açık değil.</li>
+    <li class="ok">ChatGPT ile canlı aramalı ölçüm ve kaynak analizi: ücretli paketlerde.</li>
+    <li class="ok">Üye olmadan ücretsiz kontrol (ayda 2 kez).</li>
     <li class="no">Perplexity, PDF rapor, ödeme: henüz yok.</li>
   </ul>
   <p><a href="/durum">Ayrıntılı ürün durumu</a></p>
@@ -192,7 +196,7 @@ const enHome = `
   <div class="hero-copy">
     <h1>When customers ask AI for a recommendation, are you in the answer?</h1>
     <p class="lede">AI SaaSavran asks ChatGPT and Gemini the questions your customers ask, then shows whether your business is mentioned, recommended, or passed over for a competitor, and which websites the AI relied on.</p>
-    <p class="actions"><a class="btn" href="/kayit">Start free</a><a class="btn ghost" href="/guides/measure-brand-visibility-in-chatgpt/">How it's measured</a></p>
+    <p class="actions"><a class="btn" href="/kayit">Start free</a><a class="btn ghost" href="/check/">Try it without signing up</a></p>
     <p class="small">Free plan: 1 brand, 15 questions, 4 measurements a month. No card. <a href="#pricing">See pricing</a></p>
   </div>
   <figure class="answer-card" aria-label="Example AI answer">
@@ -206,6 +210,7 @@ const enHome = `
     <p class="caption">Illustration based on our real measurement (ChatGPT with live web search, 7 Nov 2026, 20 answers): Peec AI 8/20, Otterly.AI 7/20, Semrush 7/20. We were 0/20.</p>
   </figure>
 </section>
+${demoHtml(true)}
 
 <section class="band">
   <h2>What you see</h2>
@@ -236,7 +241,8 @@ const enHome = `
   <ul>
     <li class="ok">Gemini measurement (model knowledge, no live search), clearly labelled.</li>
     <li class="ok">Weekly automatic measurement, competitor comparison, website check, recommendations.</li>
-    <li class="try">ChatGPT live-search measurement and source analysis: in trial, not yet open to customers.</li>
+    <li class="ok">ChatGPT live-search measurement and source analysis: on paid plans.</li>
+    <li class="ok">Free check without signing up (2 a month).</li>
     <li class="ok">App in English and Turkish.</li>
     <li class="no">Perplexity, PDF reports, payments: not yet.</li>
   </ul>
@@ -332,6 +338,8 @@ ${GUIDES.map((g) => `- [${g.title}](${SITE.url}/rehber/${g.slug}/)`).join("\n")}
 
 // 6) Uygulama adresleri → /app/ (Cloudflare Pages yeniden yazma, adres çubuğu değişmez)
 const APP_ROUTES = ["/giris", "/kayit", "/sifre", "/durum", "/durum-ic", "/gizlilik", "/kosullar", "/panel", "/hesap", "/demo-lab", "/calisma-alani/*", "/marka/*"];
+write("/check/", page({ lang: "en", alt: "/tr/kontrol/", path: "/check/", title: "Free AI visibility check | AI SaaSavran", description: "Check for free whether Gemini mentions your business when customers ask about your category. No signup.", body: checkHtml(true), schema: [APP] }));
+write("/tr/kontrol/", page({ lang: "tr", alt: "/check/", path: "/tr/kontrol/", title: "Ücretsiz yapay zekâ görünürlük kontrolü | AI SaaSavran", description: "İşletmeniz Gemini cevaplarında geçiyor mu? Üye olmadan ücretsiz kontrol edin.", body: checkHtml(false), schema: [APP] }));
 write("/pricing/", page({ lang: "en", path: "/pricing/", title: "Pricing | AI SaaSavran", description: "AI SaaSavran plans: Free, Plus $20/month, Pro $99/month, Business $249/month.", body: `<section class="article"><h1>Pricing</h1><p>Start free. Paid plans add ChatGPT with live web search, more brands and more questions. Monthly billing, cancel anytime, 14-day money-back guarantee (<a href="/refund/">refund policy</a>).</p></section>${plansHtml(true)}`, schema: [APP] }));
 
 for (const l of Object.values(LEGAL)) write(l.path, page({ lang: l.lang, path: l.path, title: l.title, description: l.description, body: l.body }));
