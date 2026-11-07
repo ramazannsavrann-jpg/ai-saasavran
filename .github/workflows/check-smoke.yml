@@ -1,0 +1,17 @@
+# Canlı ücretsiz kontrolü bir kez gerçekten çalıştırır (5 ücretsiz Gemini çağrısı). Yalnız bu dosya değişince ya da elle.
+name: Ücretsiz kontrol denemesi
+on:
+  push:
+    paths: [".github/workflows/check-smoke.yml"]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - run: |
+          curl -sS -X POST https://aisaasavran.com/api/check -H 'content-type: application/json' \
+            -d '{"lang":"en","brand":"Peec AI","category":"AI visibility tracking tool","city":""}' \
+            | python3 -c 'import json,sys;j=json.load(sys.stdin);print({k:j.get(k) for k in ["error","engine","total","mentioned","recommended","others"]});[print("-",q["q"],"|",q["mentioned"],q["recommended"]) for q in j.get("questions",[])]'
