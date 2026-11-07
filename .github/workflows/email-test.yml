@@ -1,0 +1,22 @@
+# Resend ile tek bir deneme e-postası gönderir (kurucunun adresine). Yalnız bu dosya değişince ya da elle.
+name: E-posta denemesi
+on:
+  push:
+    paths: [".github/workflows/email-test.yml"]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  send:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - env:
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          TO: ${{ secrets.PLATFORM_ADMIN_EMAIL }}
+        run: |
+          code=$(curl -sS -o /tmp/r.json -w "%{http_code}" https://api.resend.com/emails \
+            -H "Authorization: Bearer $RESEND_API_KEY" -H "Content-Type: application/json" \
+            -d "{\"from\":\"AI SaaSavran <report@aisaasavran.com>\",\"to\":[\"$TO\"],\"reply_to\":\"info@aisaasavran.com\",\"subject\":\"AI SaaSavran e-posta denemesi\",\"text\":\"Bu bir deneme e-postasidir. Haftalik ozet bu adresten gonderilecek.\"}")
+          echo "Resend yanıtı: $code"; python3 -c 'import json;d=json.load(open("/tmp/r.json"));print({k:d.get(k) for k in ("id","name","message")})'
+          test "$code" = "200"

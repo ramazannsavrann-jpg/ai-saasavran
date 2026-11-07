@@ -67,7 +67,27 @@ export function BillingPanel() {
     upgrade(p);
   }, [current?.id, sum]);
 
-  if (!current || !customerWs) return null;
+  // Paket bağlantısıyla (#paket) gelindiyse bölüme kaydır
+  useEffect(() => { if (location.hash === "#paket") setTimeout(() => document.getElementById("paket")?.scrollIntoView({ behavior: "smooth" }), 300); }, []);
+
+  if (!current) return null;
+  if (!customerWs) {
+    // İç test / demo alanı: paketleri göster, satın alma işletme alanında
+    return (
+      <section className="panel stack" id="paket">
+        <h2>{L("Paketler", "Plans")}</h2>
+        <div className="plan-pick">
+          {(Object.keys(PLAN_INFO) as PaidPlan[]).map((p) => (
+            <div key={p} className={`plan-opt${p === "starter" ? " plan-opt-main" : ""}`}>
+              <h3>{PLAN_INFO[p].name} <span className="muted">${PLAN_INFO[p].price}{L("/ay", "/month")}</span></h3>
+              <p className="muted">{FEATURES[p]()}</p>
+            </div>
+          ))}
+          <p className="small muted">{L("Bu alan bir test alanı. Paket almak için üstten bir işletme çalışma alanı seçin ya da yeni bir tane oluşturun.", "This is a test workspace. To buy a plan, pick a business workspace at the top or create a new one.")}</p>
+        </div>
+      </section>
+    );
+  }
   const date = (iso: string | null) => (iso ? new Date(iso).toLocaleDateString(isEn() ? "en-US" : "tr-TR", { day: "numeric", month: "long", year: "numeric" }) : "");
 
   return (
