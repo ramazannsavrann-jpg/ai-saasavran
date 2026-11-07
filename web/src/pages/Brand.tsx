@@ -719,6 +719,7 @@ function ShareButton({ text }: { text: () => string }) {
   return (
     <div className="share-row">
       <Button variant="quiet" className="btn-small" onClick={share}>{L("Özeti paylaş (WhatsApp, e-posta)", "Share summary")}</Button>
+      <Button variant="quiet" className="btn-small" onClick={() => window.print()}>{L("PDF olarak indir", "Download PDF")}</Button>
       {done && <span className="muted" role="status">{done}</span>}
     </div>
   );

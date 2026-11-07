@@ -377,3 +377,14 @@ form > .btn, .stack > .btn { width: 100%; }
 .plan-opt-main { border: 2px solid var(--primary); }
 .plan-opt h3 { margin: 0; display: flex; justify-content: space-between; gap: 8px; }
 .plan-opt p { margin: 0; flex: 1; }
+
+/* Yazdırma / PDF: yalnız rapor içeriği; gezinme, düğmeler ve formlar gizlenir */
+@media print {
+  @page { margin: 14mm; }
+  body { background: #fff !important; color: #000 !important; }
+  header, nav, footer, .topnav, .share-row, .run-buttons, form, button, .btn, .chip-actions, .skip-link { display: none !important; }
+  .panel, .card { box-shadow: none !important; border: 1px solid #ccc !important; break-inside: avoid; }
+  a { color: #000 !important; text-decoration: none !important; }
+  main, .content { padding: 0 !important; max-width: none !important; }
+  .chart, .bars li { break-inside: avoid; }
+}
