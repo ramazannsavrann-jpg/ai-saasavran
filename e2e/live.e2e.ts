@@ -26,9 +26,10 @@ test("Canlı site: açılıyor, doğru yapılandırılmış, güvenlik başlıkl
 
   // Herkese açık statik sayfalar (JavaScript'siz okunabilir) ve bot dosyaları
   const landing = await (await request.get(`${base}/`)).text();
-  expect(landing).toContain("Müşteriniz yapay zekâya sorduğunda");
+  expect(landing).toContain("are you in the answer?");
+  expect(await (await request.get(`${base}/tr/`)).text()).toContain("Müşteriniz yapay zekâya sorduğunda");
   expect(landing).not.toContain('id="root"');
-  for (const path of ["/en/", "/rehber/", "/rehber/geo-nedir/", "/llms.txt", "/sitemap.xml", "/robots.txt"]) expect((await request.get(`${base}${path}`)).status(), path).toBe(200);
+  for (const path of ["/guides/", "/guides/what-is-geo/", "/rehber/", "/rehber/geo-nedir/", "/llms.txt", "/sitemap.xml", "/robots.txt"]) expect((await request.get(`${base}${path}`)).status(), path).toBe(200);
   // Uygulama adresleri uygulamayı döndürür
   expect(await (await request.get(`${base}/panel`)).text()).toContain('id="root"');
 
@@ -53,7 +54,7 @@ test("Canlı site: açılıyor, doğru yapılandırılmış, güvenlik başlıkl
   await page.goto(`${base}/giris`);
   await page.screenshot({ path: "e2e/screenshots/canli-giris.png", fullPage: true });
   await page.goto(`${base}/`);
-  await expect(page.getByRole("heading", { level: 1 })).toContainText("Müşteriniz yapay zekâya");
+  await expect(page.getByRole("heading", { level: 1 })).toContainText("are you in the answer?");
   await page.screenshot({ path: "e2e/screenshots/canli-anasayfa.png", fullPage: true });
   expect(errors, `Tarayıcı hataları:\n${errors.join("\n")}`).toEqual([]);
 });
