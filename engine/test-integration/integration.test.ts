@@ -342,6 +342,8 @@ test("Laboratuvarlar: yönetici atanır, Demo Lab 10 hayali marka + 6 haftalık 
   const byName = (n: string) => growthRuns.filter((x) => x.brands.name === n).map((x) => [x.status, x.measurement_type]);
   assert.deepEqual(byName("AI SaaSavran"), [["queued", "model_knowledge"]]);
   assert.deepEqual(byName("Garanti BBVA"), [["queued", "live_search"]], "test markası için tek seferlik canlı deneme");
+  const pws = ok(await L.c.from("workspaces").select("kind,plan,paid_live_allowed").eq("id", r.pilot).single()) as any;
+  assert.deepEqual([pws.kind, pws.plan, pws.paid_live_allowed], ["agency", "agency_plus", false], "pilot alanı: ajans, geniş kota, ücretli kapalı");
   const gws = ok(await L.c.from("workspaces").select("paid_live_allowed").eq("id", r.growth).single()) as any;
   assert.equal(gws.paid_live_allowed, true);
   // Tekrar çalıştır: çoğaltma yok

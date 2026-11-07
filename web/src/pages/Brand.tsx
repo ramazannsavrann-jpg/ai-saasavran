@@ -5,7 +5,7 @@ import { useApp, useLoad } from "../lib/app";
 import { api, INTENT_LABEL, type Brand, type Intent, type MeasurementType, type Prompt, type Run } from "../lib/data";
 import { friendlyError } from "../lib/supabase";
 import { ERROR_CLASS_TEXT, STOP_TEXT, runStatusText } from "../lib/messages";
-import { competitorsInRun, formatDateTime, MIN_SAMPLE, numLoc, pct, providerLabel, rangeText, series, sourceOpportunities, topDomains, usd } from "../lib/report";
+import { competitorsInRun, formatDateTime, MIN_SAMPLE, numLoc, pct, providerLabel, rangeText, series, shareSummary, sourceOpportunities, topDomains, usd } from "../lib/report";
 import { Button, Confirm, DataNotice, Empty, ErrorBox, Field, Loading, Select, TypeBadge } from "../components/ui";
 import { CompareBars, TrendChart } from "../components/Chart";
 import { buildRecommendations } from "../../../engine/src/recommendations.ts";
@@ -254,6 +254,13 @@ function Report({ brand, type, onBrandChange }: { brand: Brand; type: Measuremen
             {last.recommend.n < MIN_SAMPLE && (
               <p className="caution">Örneklem küçük ({last.recommend.n} cevap). Oranları kesin sonuç gibi okumayın; aralıklar geniştir. Daha fazla soru ekleyip tekrar ölçün.</p>
             )}
+            <ShareButton text={() => shareSummary({
+              brand: brand.name, at: last.at, live, simulated: type === "simulated",
+              recommend: last.recommend, mention: last.mention,
+              competitors: competitorsInRun(vis.data ?? [], last.runId).filter((c) => !c.isTarget),
+              absentPrompts: (prompts.data ?? []).filter((p) => p.target_mentioned === 0).map((p) => p.prompt_text),
+              topSources: domains.map((d) => d.domain),
+            })} />
           </section>
 
           <section className="panel">
@@ -684,5 +691,26 @@ function UntrackedNames({ brand, competitors, texts, onChange }: { brand: Brand;
         ))}
       </ul>
     </section>
+  );
+}
+
+/** Özeti telefonun paylaşım menüsüyle (WhatsApp vb.) gönderir; desteklenmiyorsa panoya kopyalar. */
+function ShareButton({ text }: { text: () => string }) {
+  const [done, setDone] = useState<string | null>(null);
+  async function share() {
+    const t = text();
+    try {
+      if (navigator.share) { await navigator.share({ title: "AI SaaSavran ön raporu", text: t }); setDone("Paylaşıldı."); return; }
+      await navigator.clipboard.writeText(t); setDone("Özet panoya kopyalandı; WhatsApp'a yapıştırabilirsiniz.");
+    } catch (e) {
+      if ((e as Error).name === "AbortError") return;
+      try { await navigator.clipboard.writeText(t); setDone("Özet panoya kopyalandı."); } catch { setDone("Kopyalanamadı; tarayıcı izin vermedi."); }
+    }
+  }
+  return (
+    <div className="share-row">
+      <Button variant="quiet" className="btn-small" onClick={share}>Özeti paylaş (WhatsApp, e-posta)</Button>
+      {done && <span className="muted" role="status">{done}</span>}
+    </div>
   );
 }

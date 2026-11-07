@@ -98,3 +98,26 @@ export function topDomains(urls: string[], limit = 10): { domain: string; count:
   }
   return [...m.entries()].map(([domain, count]) => ({ domain, count })).sort((a, b) => b.count - a.count).slice(0, limit);
 }
+
+/** WhatsApp/e-posta ile paylaşılacak düz metin özet (işletme sahibine gönderilen ön rapor). */
+export function shareSummary(o: {
+  brand: string; at: string; live: boolean; simulated: boolean;
+  recommend: { k: number; n: number; value: number }; mention: { k: number; n: number };
+  competitors: { name: string; recommend: { k: number; n: number } }[];
+  absentPrompts: string[]; topSources: string[];
+}): string {
+  const kind = o.simulated ? "Simülasyon (gerçek veri değil)" : o.live ? "ChatGPT, canlı web aramasıyla" : "Gemini, internete bakmadan (model bilgisi)";
+  const lines = [
+    `AI SaaSavran ön raporu: ${o.brand}`,
+    `Tarih: ${formatDateTime(o.at)}`,
+    `Ölçüm: ${kind}`,
+    "",
+    `Sonuç: ${o.recommend.n} cevabın ${numLoc(o.recommend.k)} önerildiniz (${pct(o.recommend.value)}); ${numLoc(o.mention.k)} adınız geçti.`,
+  ];
+  const top = o.competitors.filter((c) => c.recommend.k > 0).sort((a, b) => b.recommend.k - a.recommend.k).slice(0, 3);
+  if (top.length) lines.push(`Sizin yerinize en çok önerilenler: ${top.map((c) => `${c.name} (${c.recommend.k}/${c.recommend.n})`).join(", ")}`);
+  if (o.absentPrompts.length) lines.push("", "Hiç anılmadığınız sorulardan bazıları:", ...o.absentPrompts.slice(0, 3).map((p) => `- ${p}`));
+  if (o.topSources.length) lines.push("", `Yapay zekânın en çok baktığı siteler: ${o.topSources.slice(0, 5).join(", ")}`);
+  lines.push("", "Not: Az sayıda cevaba dayanan tek bir ölçümdür; kesin sonuç gibi okunmamalıdır.", "Ayrıntılar ve ücretsiz deneme: https://aisaasavran.com");
+  return lines.join("\n");
+}

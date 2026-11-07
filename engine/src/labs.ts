@@ -35,6 +35,8 @@ export const DEMO_BRANDS: DemoBrand[] = [
     prompts: [["Örnekşehir'de en iyi oto yıkama?", "local"], ["Örnekşehir'de detaylı iç temizlik yapan yer?", "purchase"], ["Örnekşehir'de uygun fiyatlı oto kuaför?", "comparison"]] },
 ];
 
+export const PILOT_WORKSPACE = "Pilot: ücretsiz ön raporlar";
+
 export const GROWTH = {
   workspace: "AI SaaSavran (Growth Lab)",
   brand: { name: "AI SaaSavran", aliases: ["SaaSavran", "AI Savran"], website: "aisaasavran.com", sector: "Yazılım / dijital hizmet" },
@@ -85,7 +87,7 @@ function must<T>(r: { data: T | null; error: { message: string } | null }, what:
   return r.data as T;
 }
 
-async function ensureWorkspace(db: SupabaseClient, name: string, kind: "demo_lab" | "growth_lab", plan: string, uid: string): Promise<string> {
+async function ensureWorkspace(db: SupabaseClient, name: string, kind: "demo_lab" | "growth_lab" | "agency", plan: string, uid: string): Promise<string> {
   const found = must(await db.from("workspaces").select("id").eq("name", name).eq("kind", kind).limit(1), "workspace ara") as { id: string }[];
   const id = found[0]?.id ?? (must(await db.from("workspaces").insert({ name, kind, plan }).select("id").single(), "workspace oluştur") as { id: string }).id;
   must(await db.from("workspace_members").upsert({ workspace_id: id, user_id: uid, role: "owner" }, { onConflict: "workspace_id,user_id" }), "üyelik");
@@ -190,5 +192,9 @@ export async function seedLabs(db: SupabaseClient, adminEmail: string, log: (m: 
     }
     log("Growth Lab: ilk canlı aramalı deneme ölçümleri sıraya alındı.");
   }
-  return { ok: true, demo, growth };
+  // Pilot: 20 işletmeye ücretsiz ön rapor için yönetici çalışma alanı (Agency Plus kotası; ücretli kullanım kapalı, aramasız Gemini)
+  const pilot = await ensureWorkspace(db, PILOT_WORKSPACE, "agency", "agency_plus", uid);
+  log(`Pilot alanı hazır (${pilot}).`);
+
+  return { ok: true, demo, growth, pilot };
 }
