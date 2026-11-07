@@ -8,7 +8,7 @@ export interface Workspace { id: string; name: string; kind: WorkspaceKind; plan
 export interface Brand {
   id: string; workspace_id: string; name: string; aliases: string[]; website: string | null;
   sector: string | null; city: string | null; is_competitor: boolean; owner_brand_id: string | null; data_origin: string;
-  auto_weekly: boolean; audit_requested_at: string | null;
+  auto_weekly: boolean; audit_requested_at: string | null; reanalyze_requested_at: string | null;
 }
 export interface Prompt { id: string; brand_id: string; text: string; intent: Intent; active: boolean; created_at: string }
 export type Intent = "informational" | "comparison" | "purchase" | "local";

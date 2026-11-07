@@ -181,3 +181,55 @@ export function summarize(allHits: BrandHit[][], brandIds: string[]): BrandSumma
     };
   });
 }
+
+// ---------------- Takip edilmeyen adlar (kullanıcıya "bu kim?" diye sorulur) ----------------
+const GENERIC_CAPS = new Set([
+  "türkiye", "türk", "ancak", "bu", "bunlar", "bunun", "şu", "eğer", "örneğin", "ayrıca", "kısaca", "sonuç", "sonuçta", "not", "genel",
+  "özellikle", "tek", "en", "iyi", "ve", "veya", "ya", "da", "de", "hangi", "neden", "nasıl", "ne", "kim", "evet", "hayır", "ama", "fakat",
+  "kredi", "kart", "kartı", "kartlar", "banka", "bankası", "bankalar", "mobil", "uygulama", "uygulaması", "bankacılık", "hesap", "faiz",
+  "kampanya", "kampanyalar", "avantaj", "avantajlar", "artı", "eksi", "öneri", "öneriler", "önerim", "kaynak", "kaynaklar", "güncel",
+  "istanbul", "ankara", "izmir", "antalya", "bursa", "kadıköy", "beşiktaş", "ocak", "şubat", "mart", "nisan", "mayıs", "haziran",
+  "temmuz", "ağustos", "eylül", "ekim", "kasım", "aralık", "pazartesi", "salı", "çarşamba", "perşembe", "cuma", "cumartesi", "pazar",
+  "the", "this", "if", "for", "and", "or", "but", "best", "top", "note", "pros", "cons", "summary", "yes", "no", "chatgpt", "openai",
+  "google", "gemini", "ai", "seo", "kobi", "tl", "usd", "ios", "android", "app", "store", "play",
+]);
+const NAME_RE = /(?:\p{Lu}[\p{L}\p{N}&.+-]*)(?:\s+(?:\p{Lu}[\p{L}\p{N}&.+-]*))*/gu;
+
+/**
+ * Cevaplarda geçen, takip edilmeyen marka benzeri adları sayar (ör. "TEB", "QNB", "VakıfBank").
+ * Bilinen markalar, takma adları ve ilk kelime eşleşmeleri hariç tutulur. Kural tabanlıdır; kullanıcı onayıyla kullanılır.
+ */
+export function untrackedNames(texts: string[], brands: { name: string; aliases: string[] }[], limit = 12): { name: string; count: number }[] {
+  const known = brands.flatMap((b) => [b.name, ...b.aliases]).map(normalize).filter(Boolean);
+  const firsts = brands.map((b) => firstWordPattern(b.name)).filter((x): x is RegExp => !!x);
+  const counts = new Map<string, { name: string; count: number; strong: boolean }>();
+  for (const raw of texts) {
+    const text = raw.replace(/\[([^\]]*)\]\([^)]*\)/g, " ").replace(/https?:\/\/\S+/g, " ").replace(/[*_#`>]/g, " ");
+    for (const line of text.split(/\n+/)) {
+      const listLine = /^\s*(\d+[.)]|[-•])\s+/.test(raw.split("\n").find((l) => l.includes(line.trim().slice(0, 20))) ?? "");
+      for (const sentence of line.split(/(?<=[.!?:;])\s+/)) {
+        for (const m of sentence.matchAll(NAME_RE)) {
+          let name = m[0].replace(/['’].*$/u, "").replace(/[.\-+&]+$/u, "").trim();
+          // Baştaki/sondaki genel kelimeleri ayıkla ("En iyi Enpara" → "Enpara", "Akbank Mobil" → "Akbank")
+          const words = name.split(/\s+/).filter((w) => !GENERIC_CAPS.has(w.toLocaleLowerCase("tr-TR")));
+          // "TEB Bonus", "VakıfBank Worldcard": kısaltma ya da birleşik yazılmış ilk kelime markanın kendisidir
+          if (words.length > 1 && (/^[\p{Lu}\p{N}]{2,6}$/u.test(words[0]) || /\p{Ll}\p{Lu}/u.test(words[0]))) words.splice(1);
+          name = words.join(" ");
+          if (name.length < 2 || words.length === 0 || words.length > 3) continue;
+          const n = normalize(name);
+          if (!n || known.some((k) => ` ${n} `.includes(` ${k} `) || ` ${k} `.includes(` ${n} `))) continue;
+          if (firsts.some((re) => re.test(name))) continue;
+          const atStart = m.index === 0;
+          const acronym = /^[\p{Lu}\p{N}]{2,6}$/u.test(name);
+          const camel = /\p{Ll}\p{Lu}/u.test(name);
+          const strong = acronym || camel || words.length > 1 || !atStart || listLine;
+          const key = n;
+          const v = counts.get(key) ?? { name, count: 0, strong: false };
+          v.count++; v.strong ||= strong; counts.set(key, v);
+        }
+      }
+    }
+  }
+  return [...counts.values()].filter((v) => v.strong && (v.count >= 2 || /\p{Ll}\p{Lu}|^[\p{Lu}\p{N}]{2,6}$/u.test(v.name)))
+    .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name, "tr")).slice(0, limit).map(({ name, count }) => ({ name, count }));
+}

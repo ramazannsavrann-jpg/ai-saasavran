@@ -248,7 +248,7 @@ test("Migration çalıştırıcı: boş veritabanına uygular, ikinci kez uygula
   });
   const first = run();
   assert.equal(first.status, 0, first.stderr);
-  assert.match(first.stdout, /5 migration uygulandı/);
+  assert.match(first.stdout, /6 migration uygulandı/);
   const second = run();
   assert.equal(second.status, 0, second.stderr);
   assert.match(second.stdout, /güncel/);
@@ -418,4 +418,30 @@ test("Ücretli canlı ölçüm: müşteri alanında imkânsız, Growth Lab'de ç
   ok(await G.c.rpc("request_run", { p_brand: gb.id, p_live: true }));
   const r3 = await processNextRun({ db: svc, env: { ...PAID_ENV, ALLOW_PAID_API: "false" }, sleep: noSleep });
   assert.equal(r3?.stop, "provider_not_configured");
+});
+
+test("Yeniden analiz: takma ad eklenince marka işaretlenir, işçi eski cevapları ücretsiz yeniden hesaplar, işaret kalkar", async () => {
+  const { processReanalysis } = await import("../src/worker.ts");
+  const R = await user("reanaliz@test.local");
+  const ws = ok(await R.c.rpc("create_workspace", { p_name: "Reanaliz", p_kind: "business" })) as string;
+  const b = ok(await R.c.from("brands").insert({ workspace_id: ws, name: "Garanti BBVA" }).select("id,reanalyze_requested_at").single()) as any;
+  assert.equal(b.reanalyze_requested_at, null, "yeni markada işaret olmamalı");
+  const p = ok(await R.c.from("prompts").insert({ workspace_id: ws, brand_id: b.id, text: "Hangi kartı önerirsin?", intent: "purchase" }).select("id").single()) as any;
+  // Kayıtlı bir ölçüm ve cevap (servis rolüyle; gerçek ölçümün bıraktığı iz)
+  const run = ok(await svc.from("runs").insert({ workspace_id: ws, brand_id: b.id, status: "done", data_origin: "live_api", measurement_type: "model_knowledge", max_cost_usd: 1, prompts_total: 1 }).select("id").single()) as any;
+  const resp = ok(await svc.from("responses").insert({ workspace_id: ws, run_id: run.id, prompt_id: p.id, provider: "gemini", model: "m", method: "api_no_search", repetition: 1, answer_text: "1. QNB kart\n2. Bonus programı", measurement_type: "model_knowledge", data_origin: "live_api", billing: "free" }).select("id").single()) as any;
+  ok(await svc.from("mentions").insert({ response_id: resp.id, workspace_id: ws, brand_id: b.id, mentioned: false, recommended: false, cited: false, classifier: "rules_v2" }));
+  // Rakip ekle → ana marka işaretlenir; işçi çalışınca QNB önerildi olarak hesaplanır
+  const qnb = ok(await R.c.from("brands").insert({ workspace_id: ws, name: "QNB", is_competitor: true, owner_brand_id: b.id }).select("id").single()) as any;
+  assert.notEqual(stack.sql(`select reanalyze_requested_at from brands where id='${b.id}'`), "");
+  const done = await processReanalysis({ db: svc });
+  assert.ok(done.some((d) => d.brandId === b.id && d.responses === 1));
+  assert.equal(stack.sql(`select recommended from mentions where response_id='${resp.id}' and brand_id='${qnb.id}'`), "t");
+  assert.equal(stack.sql(`select coalesce(reanalyze_requested_at::text,'') from brands where id='${b.id}'`), "", "işaret kalkmalı");
+  // Takma ad eklenince yine işaretlenir; istemci pending_reanalysis çağıramaz
+  ok(await R.c.from("brands").update({ aliases: ["Bonus programı"] }).eq("id", b.id));
+  assert.notEqual(stack.sql(`select coalesce(reanalyze_requested_at::text,'') from brands where id='${b.id}'`), "");
+  assert.match((await R.c.rpc("pending_reanalysis", { p_limit: 5 })).error?.message ?? "", /permission denied/);
+  await processReanalysis({ db: svc });
+  assert.equal(stack.sql(`select mentioned from mentions where response_id='${resp.id}' and brand_id='${b.id}'`), "t");
 });

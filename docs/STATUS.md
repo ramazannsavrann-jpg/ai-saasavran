@@ -39,6 +39,7 @@
 | Growth Lab: AI SaaSavran'ın kendi görünürlüğü, gerçek aramasız ölçüm | ✅ | Canlıda ilk ölçüm tamamlandı (20/20 cevap) |
 | Ücretli canlı aramalı ölçüm (ChatGPT, OpenAI `gpt-6-luna` + web araması) | 🧪 Deneme | Yalnız Growth Lab'de; toplam 3 $ tavanı veritabanında; müşteri alanlarında veritabanı kısıtıyla imkânsız. Kullanıcı izni 7 Kasım 2026. |
 | Kaynak (citation) analizi: yapay zekânın baktığı siteler | 🧪 Deneme | Yalnız canlı aramalı ölçümde |
+| "Cevaplarda geçen diğer adlar": takip edilmeyen markaları bulup "benim markam / rakip" diye işaretletme; geçmiş ölçümleri ücretsiz yeniden hesaplama | ✅ | Birim + entegrasyon |
 | Mobil uyum (yatay taşma yok, 48 px dokunma alanları) | ✅ | E2E her ekranda taşma kontrolü |
 | Ürün durumu sayfası (çalışan / kısmen / yok) | ✅ | E2E |
 

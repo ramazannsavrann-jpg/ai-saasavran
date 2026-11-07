@@ -423,3 +423,17 @@ test("Ortak kart programı başka bankanın adıyla geçince (TEB Bonus, VakıfB
   assert.deepEqual(r("TEB Bonus kart ve VakıfBank Worldcard kampanyalarına bakın."), { g: false, y: false });
   assert.deepEqual(r("Garanti Bonus ve Yapı Kredi World kampanyalarına bakın."), { g: true, y: true });
 });
+
+test("Takip edilmeyen adlar: TEB, QNB, VakıfBank bulunur; bilinen markalar ve sıradan kelimeler çıkmaz", async () => {
+  const { untrackedNames } = await import("../src/metrics.ts");
+  const texts = [
+    "1. **Enpara Kredi Kartı** — aidatsız.\n2. **QNB** kart kampanyaları güçlü.\nAyrıca TEB Bonus ve VakıfBank Worldcard kampanyalarına bakın.",
+    "Garanti Bonus, Akbank Axess ve QNB iyi seçenekler. Türkiye'de VakıfBank da yaygın. Kredi kartı seçerken dikkat edin. ([enpara.com](https://enpara.com/x))",
+  ];
+  const brands = [{ name: "Garanti BBVA", aliases: [] }, { name: "Akbank", aliases: [] }, { name: "Enpara.com", aliases: ["Enpara"] }];
+  const names = untrackedNames(texts, brands).map((x) => x.name);
+  assert.ok(names.includes("QNB"), names.join("|"));
+  assert.ok(names.includes("VakıfBank"), names.join("|"));
+  assert.ok(names.some((n) => n.startsWith("TEB")), names.join("|"));
+  for (const bad of ["Garanti", "Garanti Bonus", "Akbank", "Akbank Axess", "Enpara", "Türkiye", "Kredi", "Ayrıca"]) assert.ok(!names.includes(bad), `${bad} çıkmamalı: ${names.join("|")}`);
+});

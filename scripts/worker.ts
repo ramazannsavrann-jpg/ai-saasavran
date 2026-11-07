@@ -2,7 +2,7 @@
 // Gerekli: SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY. İsteğe bağlı: GEMINI_API_KEY.
 // Ücretli API'ler ALLOW_PAID_API=true olmadan asla kullanılmaz.
 import { createClient } from "@supabase/supabase-js";
-import { processAudits, processQueue, scheduleWeekly } from "../engine/src/worker.ts";
+import { processAudits, processQueue, processReanalysis, scheduleWeekly } from "../engine/src/worker.ts";
 import { seedLabs } from "../engine/src/labs.ts";
 
 const { SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY } = process.env;
@@ -18,6 +18,7 @@ if (process.env.PLATFORM_ADMIN_EMAIL) {
 }
 const scheduled = await scheduleWeekly(deps);
 const audits = await processAudits(deps);
+const reanalyzed = await processReanalysis(deps);
 const results = await processQueue(deps, Number(process.env.WORKER_MAX_RUNS || 20));
-console.log(JSON.stringify({ weeklyScheduled: scheduled, audits, processed: results.length, results }, null, 2));
+console.log(JSON.stringify({ weeklyScheduled: scheduled, audits, reanalyzed, processed: results.length, results }, null, 2));
 if (results.some((r) => r.stop === "worker_error")) process.exit(1);

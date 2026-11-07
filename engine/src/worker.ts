@@ -175,19 +175,14 @@ export async function processQueue(deps: WorkerDeps, maxRuns = 20): Promise<Work
   return out;
 }
 
-/**
- * Kayıtlı cevapları güncel kurallarla ve güncel marka bilgileriyle (takma ad, web sitesi) yeniden analiz eder.
- * API çağrısı yapmaz, ücretsizdir. Yalnız verilen çalışma alanı türündeki ölçümlere uygulanır.
- */
-export async function reanalyzeRuns(db: SupabaseClient, kind: "growth_lab" = "growth_lab"): Promise<{ runs: number; responses: number }> {
-  const ws = must(await db.from("workspaces").select("id").eq("kind", kind), "alanlar") as { id: string }[];
-  if (!ws.length) return { runs: 0, responses: 0 };
-  const runs = must(await db.from("runs").select("id,brand_id,workspace_id").in("workspace_id", ws.map((w) => w.id)).eq("status", "done"), "ölçümler") as { id: string; brand_id: string; workspace_id: string }[];
+/** Bir markanın tüm tamamlanmış ölçümlerini güncel kurallar ve güncel marka bilgileriyle yeniden analiz eder (ücretsiz). */
+export async function reanalyzeBrand(db: SupabaseClient, brandId: string): Promise<number> {
+  const target = must(await db.from("brands").select("id,name,aliases,website").eq("id", brandId).single(), "marka") as any;
+  const comps = must(await db.from("brands").select("id,name,aliases,website").eq("owner_brand_id", brandId).eq("is_competitor", true), "rakipler") as any[];
+  const brands: BrandRef[] = [target, ...comps].map((b) => ({ id: b.id, name: b.name, aliases: b.aliases ?? [], domain: domainOf(b.website) }));
+  const runs = must(await db.from("runs").select("id,workspace_id").eq("brand_id", brandId).eq("status", "done"), "ölçümler") as { id: string; workspace_id: string }[];
   let n = 0;
   for (const run of runs) {
-    const target = must(await db.from("brands").select("id,name,aliases,website").eq("id", run.brand_id).single(), "marka") as any;
-    const comps = must(await db.from("brands").select("id,name,aliases,website").eq("owner_brand_id", run.brand_id).eq("is_competitor", true), "rakipler") as any[];
-    const brands: BrandRef[] = [target, ...comps].map((b) => ({ id: b.id, name: b.name, aliases: b.aliases ?? [], domain: domainOf(b.website) }));
     const resp = must(await db.from("responses").select("id,prompt_id,provider,answer_text,cited_urls").eq("run_id", run.id), "cevaplar") as any[];
     for (const r of resp) {
       const hits = analyzeResponse({ promptId: r.prompt_id, provider: r.provider, answerText: r.answer_text, citedUrls: r.cited_urls ?? [] }, brands);
@@ -199,5 +194,28 @@ export async function reanalyzeRuns(db: SupabaseClient, kind: "growth_lab" = "gr
       n++;
     }
   }
-  return { runs: runs.length, responses: n };
+  return n;
+}
+
+/** Marka bilgisi değiştiği için işaretlenen markaları yeniden analiz eder; işareti yalnız arada yeni değişiklik yoksa kaldırır. */
+export async function processReanalysis(deps: { db: SupabaseClient }, limit = 20): Promise<{ brandId: string; responses: number }[]> {
+  const ids = must(await deps.db.rpc("pending_reanalysis", { p_limit: limit }), "bekleyen yeniden analiz") as string[];
+  const out: { brandId: string; responses: number }[] = [];
+  for (const id of ids) {
+    const before = must(await deps.db.from("brands").select("reanalyze_requested_at").eq("id", id).single(), "işaret") as { reanalyze_requested_at: string };
+    const n = await reanalyzeBrand(deps.db, id);
+    must(await deps.db.from("brands").update({ reanalyze_requested_at: null }).eq("id", id).eq("reanalyze_requested_at", before.reanalyze_requested_at), "işaret kaldır");
+    out.push({ brandId: id, responses: n });
+  }
+  return out;
+}
+
+/** Growth Lab'deki tüm markaları yeniden analiz eder (kural değişikliğinden sonra; ücretsiz). */
+export async function reanalyzeRuns(db: SupabaseClient, kind: "growth_lab" = "growth_lab"): Promise<{ runs: number; responses: number }> {
+  const ws = must(await db.from("workspaces").select("id").eq("kind", kind), "alanlar") as { id: string }[];
+  if (!ws.length) return { runs: 0, responses: 0 };
+  const brands = must(await db.from("brands").select("id").in("workspace_id", ws.map((w) => w.id)).eq("is_competitor", false), "markalar") as { id: string }[];
+  let responses = 0;
+  for (const b of brands) responses += await reanalyzeBrand(db, b.id);
+  return { runs: brands.length, responses };
 }

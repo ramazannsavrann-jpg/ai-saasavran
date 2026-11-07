@@ -9,6 +9,7 @@ import { competitorsInRun, formatDateTime, MIN_SAMPLE, numLoc, pct, providerLabe
 import { Button, Confirm, DataNotice, Empty, ErrorBox, Field, Loading, Select, TypeBadge } from "../components/ui";
 import { CompareBars, TrendChart } from "../components/Chart";
 import { buildRecommendations } from "../../../engine/src/recommendations.ts";
+import { untrackedNames } from "../../../engine/src/metrics.ts";
 
 const TABS = [
   ["rapor", "Rapor"], ["oneriler", "Öneriler"], ["rakipler", "Rakipler"], ["sorular", "Sorular"], ["olcumler", "Ölçümler"],
@@ -61,7 +62,7 @@ export function BrandPage() {
           <button aria-pressed={type === "live_search"} onClick={() => setView("canli")}>Canlı aramalı (ChatGPT)</button>
         </div>
       )}
-      {tab === "rapor" && <Report brand={b} type={type} />}
+      {tab === "rapor" && <Report brand={b} type={type} onBrandChange={brand.reload} />}
       {tab === "oneriler" && <Advice brand={b} type={type} runs={runs.data ?? []} onBrandChange={brand.reload} />}
       {tab === "rakipler" && <Competitors brand={b} />}
       {tab === "sorular" && <Questions brand={b} />}
@@ -207,7 +208,7 @@ function RunControl({ brand, runs, onChange, paidAllowed, workspaceId }: { brand
   );
 }
 
-function Report({ brand, type }: { brand: Brand; type: MeasurementType }) {
+function Report({ brand, type, onBrandChange }: { brand: Brand; type: MeasurementType; onBrandChange: () => void }) {
   const vis = useLoad(() => api.visibility(brand.id, type), [brand.id, type]);
   const [metric, setMetric] = useState<"recommend" | "mention">("recommend");
   const pts = series(vis.data ?? []);
@@ -217,7 +218,7 @@ function Report({ brand, type }: { brand: Brand; type: MeasurementType }) {
   const live = type === "live_search";
   const engine = type === "simulated" ? "Simülasyonda" : live ? "ChatGPT (canlı web aramasıyla)" : "Gemini";
   const domains = live ? topDomains((answers.data ?? []).flatMap((a) => a.cited_urls ?? [])) : [];
-  const comps = useLoad(() => (live ? api.competitors(brand.id) : Promise.resolve([])), [brand.id, live]);
+  const comps = useLoad(() => api.competitors(brand.id), [brand.id, brand.aliases.join("|")]);
   const ments = useLoad(() => (live && answers.data ? api.mentionsFor(answers.data.map((a) => a.id)) : Promise.resolve([])), [live, answers.data]);
   const host = (w: string | null) => (w ? w.replace(/^https?:\/\//, "").replace(/^www\./, "").split("/")[0].toLowerCase() : "");
   const opps = live && answers.data && ments.data
@@ -286,6 +287,11 @@ function Report({ brand, type }: { brand: Brand; type: MeasurementType }) {
                 </ol>
               )}
             </section>
+          )}
+
+          {type !== "simulated" && answers.data && comps.data && (
+            <UntrackedNames brand={brand} competitors={comps.data} texts={answers.data.map((a) => a.answer_text)}
+              onChange={() => { onBrandChange(); comps.reload(); }} />
           )}
 
           {live && (
@@ -632,5 +638,51 @@ function RunHistory({ runs, loading }: { runs: Run[]; loading: boolean }) {
         );
       })}
     </ul>
+  );
+}
+
+/** Cevaplarda geçen ama takip edilmeyen adlar: kullanıcı "benim markam" ya da "rakip" diye işaretler; eski ölçümler ücretsiz yeniden hesaplanır. */
+function UntrackedNames({ brand, competitors, texts, onChange }: { brand: Brand; competitors: Brand[]; texts: string[]; onChange: () => void }) {
+  const [open, setOpen] = useState<string | null>(null);
+  const [hidden, setHidden] = useState<string[]>([]);
+  const [busy, setBusy] = useState(false);
+  const [msg, setMsg] = useState<string | null>(null);
+  const [err, setErr] = useState<string | null>(null);
+  const names = untrackedNames(texts, [brand, ...competitors]).filter((n) => !hidden.includes(n.name));
+  if (names.length === 0 && !msg && !brand.reanalyze_requested_at) return null;
+  async function act(name: string, kind: "alias" | "competitor") {
+    setBusy(true); setErr(null); setMsg(null);
+    try {
+      if (kind === "alias") await api.updateBrand(brand.id, { aliases: [...brand.aliases, name] });
+      else await api.addBrand({ workspace_id: brand.workspace_id, name, is_competitor: true, owner_brand_id: brand.id, data_origin: brand.data_origin } as never);
+      setHidden((h) => [...h, name]); setOpen(null);
+      setMsg(kind === "alias" ? `"${name}" markanızın diğer adı olarak eklendi.` : `"${name}" rakip olarak eklendi.`);
+      onChange();
+    } catch (e) { setErr(friendlyError(e)); } finally { setBusy(false); }
+  }
+  return (
+    <section className="panel">
+      <h2>Cevaplarda geçen diğer adlar</h2>
+      <p className="muted">Bu adlar cevaplarda geçiyor ama takip etmiyorsunuz. Markanızın başka bir yazılışıysa ya da bir rakipse işaretleyin; geçmiş ölçümler ücretsiz olarak yeniden hesaplanır.</p>
+      {brand.reanalyze_requested_at && <p className="success-box">Geçmiş ölçümler yeni bilgilerle yeniden hesaplanıyor; en geç bir saat içinde rapora yansır.</p>}
+      {msg && <p className="success-box">{msg}</p>}
+      <ErrorBox message={err} />
+      <ul className="name-chips">
+        {names.map((n) => (
+          <li key={n.name}>
+            <button className={open === n.name ? "chip on" : "chip"} aria-expanded={open === n.name} onClick={() => setOpen(open === n.name ? null : n.name)}>
+              {n.name} <span className="muted">{n.count}</span>
+            </button>
+            {open === n.name && (
+              <div className="chip-actions">
+                <Button variant="quiet" className="btn-small" busy={busy} onClick={() => act(n.name, "alias")}>Benim markamın diğer adı</Button>
+                <Button variant="quiet" className="btn-small" busy={busy} onClick={() => act(n.name, "competitor")}>Rakip olarak ekle</Button>
+                <button className="link-btn" onClick={() => { setHidden((h) => [...h, n.name]); setOpen(null); }}>Önemsiz, gizle</button>
+              </div>
+            )}
+          </li>
+        ))}
+      </ul>
+    </section>
   );
 }
