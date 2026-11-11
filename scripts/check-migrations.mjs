@@ -190,4 +190,18 @@ console.log("ok tanımsız paket atanamıyor");
   }
   console.log("ok 0013: bölge listesi doğru; aksiyon yalnız kendi alanına ve markasına yazılabiliyor" + (own ? "" : " (marka yok, RLS adımı atlandı)"));
 }
+{
+  // 0014: yardımcı ücretli çağrı kotaya sayılmaz, harcamaya sayılır; soru etiketi sınırı
+  const F = "77777777-7777-7777-7777-777777777777";
+  await db.exec(`insert into workspaces (id,name,kind,plan) values ('${F}','Aux','business','starter')`);
+  await db.query(`select record_aux_call($1, null, 'classify', 'openai', 'm', 900, 100, 0.0002)`, [F]);
+  const u = (await db.query(`select count(*) filter (where task='query_engine')::int q, sum(cost_usd)::float c from cost_ledger where workspace_id=$1`, [F])).rows[0];
+  assert.deepEqual(u, { q: 0, c: 0.0002 });
+  await assert.rejects(db.query(`select record_aux_call($1, null, 'query_engine', 'openai', 'm', 1, 1, 0.1)`, [F]));
+  await db.query(`select record_aux_call($1, null, 'classify', 'openai', 'm', 1, 1, 9.5)`, [F]);
+  assert.equal((await db.query(`select status from workspaces where id=$1`, [F])).rows[0].status, "paused", "tavan aşılınca durur");
+  await assert.rejects(as(U1, `select record_aux_call('${A}', null, 'classify', 'openai', 'm', 1, 1, 0.1)`));
+  assert.equal((await db.query(`select count(*)::int n from pg_constraint where conrelid = 'prompts'::regclass and pg_get_constraintdef(oid) like '%segment%'`)).rows[0].n, 1);
+  console.log("ok 0014: yardımcı çağrı kotaya sayılmıyor, tavana sayılıyor; istemci çağıramıyor; etiket en fazla 40 karakter");
+}
 console.log("TÜM DB TESTLERİ GEÇTİ");

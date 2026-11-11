@@ -9,6 +9,7 @@ import { runPrompts, type StopReason } from "./pipeline.ts";
 import { buildProviders } from "./providers/registry.ts";
 import { SimulatedProvider } from "./providers/simulated.ts";
 import { auditSite } from "./audit.ts";
+import { classifyAnswer, CLASSIFY_WORST_USD } from "./classify.ts";
 import type { ApiErrorClass, FetchLike, Provider, ProviderConfig, ProviderResult } from "./providers/types.ts";
 import type { Denial, Rejection, Reservation, UsageGate } from "./usage.ts";
 
@@ -113,11 +114,15 @@ export async function processNextRun(deps: WorkerDeps): Promise<WorkerResult | n
     }
 
     const gate = new DbUsageGate(db, run.id);
+    const guard = new BudgetGuard(Number(run.max_cost_usd));
+    // "Önerildi mi" LLM kontrolü: yalnız ücretli OpenAI ölçümlerinde ve açıkça etkinleştirildiyse
+    const llmClassify = env.LLM_CLASSIFY === "true" && provider.config.provider === "openai" && provider.config.billing === "paid" && !!env.OPENAI_API_KEY;
+    let classified = 0;
     const repetitions = ws.plan === "free" || run.measurement_type === "simulated" ? 1 : 2;
     let failed = 0;
     const outcome = await runPrompts({
       workspaceId: run.workspace_id, provider, prompts, repetitions,
-      guard: new BudgetGuard(Number(run.max_cost_usd)), cache: new ResponseCache(86_400_000),
+      guard, cache: new ResponseCache(86_400_000),
       gate, env, day, sleep: deps.sleep,
       onItem: async ({ result, repetition }) => {
         const resp = must(await db.from("responses").insert({
@@ -128,9 +133,26 @@ export async function processNextRun(deps: WorkerDeps): Promise<WorkerResult | n
           input_tokens: result.inputTokens, output_tokens: result.outputTokens, cost_usd: result.costUsd,
         }).select("id").single(), "cevap kaydı") as any;
         const hits = analyzeResponse(result, brands);
+        const classifier = new Map<string, string>();
+        const seen = brands.filter((b) => hits.find((h) => h.brandId === b.id)?.mentioned);
+        if (llmClassify && seen.length > 0 && guard.remainingUsd > CLASSIFY_WORST_USD) {
+          try {
+            const c = await classifyAnswer({ apiKey: env.OPENAI_API_KEY!, model: provider.config.model, price: provider.config.price, answer: result.answerText, names: seen.map((b) => b.name), fetchFn: deps.fetchFn });
+            if (c.costUsd > 0) guard.commit(c.costUsd);
+            must(await db.rpc("record_aux_call", { p_workspace: run.workspace_id, p_run: run.id, p_task: "classify", p_provider: "openai", p_model: c.model, p_in: c.inputTokens, p_out: c.outputTokens, p_cost: c.costUsd }), "record_aux_call");
+            for (const b of seen) {
+              const label = c.labels[b.name]; const h = hits.find((x) => x.brandId === b.id)!;
+              if (!label) continue;
+              h.recommended = label === "recommended";
+              if (!h.recommended) h.rank = null;
+              classifier.set(b.id, `llm:${c.model}`);
+            }
+            classified++;
+          } catch { /* kural sonucu geçerli kalır */ }
+        }
         must(await db.from("mentions").insert(hits.map((h) => ({
           response_id: resp.id, workspace_id: run.workspace_id, brand_id: h.brandId,
-          mentioned: h.mentioned, recommended: h.recommended, cited: h.cited, rank: h.rank, classifier: "rules_v3",
+          mentioned: h.mentioned, recommended: h.recommended, cited: h.cited, rank: h.rank, classifier: classifier.get(h.brandId) ?? "rules_v3",
         }))), "anılma kaydı");
       },
       onFailedCall: async (_pid, kind) => { failed++; await gate.recordFailure(run.workspace_id, provider.config, kind); },
@@ -196,11 +218,17 @@ export async function reanalyzeBrand(db: SupabaseClient, brandId: string): Promi
     const resp = must(await db.from("responses").select("id,prompt_id,provider,answer_text,cited_urls").eq("run_id", run.id), "cevaplar") as any[];
     for (const r of resp) {
       const hits = analyzeResponse({ promptId: r.prompt_id, provider: r.provider, answerText: r.answer_text, citedUrls: r.cited_urls ?? [] }, brands);
+      // LLM ile sınıflandırılmış "önerildi" kararları korunur (kural tabanlı yeniden hesap onları ezmez)
+      const prev = must(await db.from("mentions").select("brand_id,recommended,classifier").eq("response_id", r.id), "önceki anılma") as { brand_id: string; recommended: boolean; classifier: string }[];
+      const llm = new Map(prev.filter((x) => x.classifier?.startsWith("llm:")).map((x) => [x.brand_id, x]));
       must(await db.from("mentions").delete().eq("response_id", r.id), "eski anılma");
-      must(await db.from("mentions").insert(hits.map((h) => ({
-        response_id: r.id, workspace_id: run.workspace_id, brand_id: h.brandId,
-        mentioned: h.mentioned, recommended: h.recommended, cited: h.cited, rank: h.rank, classifier: "rules_v3",
-      }))), "anılma");
+      must(await db.from("mentions").insert(hits.map((h) => {
+        const k = h.mentioned ? llm.get(h.brandId) : undefined;
+        return {
+          response_id: r.id, workspace_id: run.workspace_id, brand_id: h.brandId, mentioned: h.mentioned,
+          recommended: k ? k.recommended : h.recommended, cited: h.cited, rank: k && !k.recommended ? null : h.rank, classifier: k ? k.classifier : "rules_v3",
+        };
+      })), "anılma");
       n++;
     }
   }

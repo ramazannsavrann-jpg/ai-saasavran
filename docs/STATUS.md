@@ -32,12 +32,16 @@
 - Kota %80'e gelince panelde uyarı; kota dolunca ay başında kendiliğinden açıldığı yazılır.
 - Canlı test (11 Kasım, ChatGPT gpt-6-luna, yeni anahtar): 20/20 çağrı başarılı, 0,42 $, 4,4 dk.
 
+## v0.8 (11 Kasım 2026, dördüncü paket)
+
+- **"Önerildi mi" LLM kontrolü (0014):** yalnız ücretli ChatGPT ölçümlerinde; cevap başına tek çağrı, web araması yok, maliyeti paket tavanına sayılır, sorgu kotasına sayılmaz. Hata olursa kural sonucu geçerli kalır. `mentions.classifier` alanı `llm:<model>` ya da `rules_v3` yazar.
+- **Soru etiketi:** soruya "ucuz", "premium", "Almanya" gibi kısa etiket; rapor etiketlere göre de önerilme oranı verir.
+
 ## Bilinen açık konular
 
 - Bölge kısıtı uygulama içinde markanın ülke koduna dayanır; kullanıcı kodu değiştirebilir. Kesin uygulama için sunucu tarafında kullanıcı ülkesi gerekir.
-- Koşul haritası yalnız soru niyetine göredir (fiyat segmenti, kullanım senaryosu için soru etiketleri yok).
 
-- "Önerildi" tespiti hâlâ kural tabanlı; listede geçen marka önerilmiş sayılır (olumsuz ifade yoksa).
+- Ücretsiz (Gemini) ölçümlerde "önerildi" tespiti kural tabanlıdır; listede geçen marka önerilmiş sayılır (olumsuz ifade yoksa). LLM kontrolü yalnız ücretli ölçümlerdedir ve doğruluğu elle etiketlenmiş cevaplarla henüz ölçülmedi.
 - Perplexity, ekip daveti, ürün/SKU ölçümü yok.
 - Aşağıdaki tablolar 6 Kasım 2026 tarihlidir; "Henüz yok" bölümündeki ödeme, PDF ve ChatGPT satırları artık geçerli değildir.
 
