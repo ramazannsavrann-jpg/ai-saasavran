@@ -1,5 +1,5 @@
 // AI SaaSavran — görünürlük metrikleri (LLM gerektirmeyen, deterministik çekirdek)
-// Not: "recommended" kararı burada kural tabanlıdır (rules_v2: liste/başlık + öneri ifadeleri). Belirsiz durumlar
+// Not: "recommended" kararı burada kural tabanlıdır (rules_v3: tam kelime eşleşmesi + liste/başlık + öneri ifadeleri). Belirsiz durumlar
 // "ambiguous" olarak işaretlenir ve yalnızca bunlar ucuz bir LLM sınıflandırıcısına gider.
 
 export interface BrandRef {
@@ -47,9 +47,31 @@ function hostOf(url: string): string | null {
 
 // Olumsuz bağlam: "X'ten uzak durun", "X önermiyorum", "X kapandı"
 const NEGATIVE = [
-  "onermiyorum", "onerilmez", "uzak durun", "kacinin", "kapandi", "kapali",
-  "sikayet", "not recommend", "avoid", "closed",
+  "onermiyorum", "onermiyoruz", "onermem", "onerilmez", "tavsiye etmem", "tavsiye etmiyorum", "uzak durun", "kacinin", "kapandi", "kapali",
+  "sikayet", "memnun degil", "not recommend", "don t recommend", "wouldn t recommend", "avoid", "closed",
 ];
+
+// Türkçe çekim ekleri (normalize edilmiş hâlde): "Garantinin", "Akbanka", "Enparadan", "Migroslar"
+const TR_SUFFIX = /^(?:y?[iu]|[nsy]?[iu]n|y?[ae]|[dt][ae]n?|l[ae]r(?:[iu]n?)?|l[iu]|s[iu]|y?l[ae]|ki|c[ae])$/;
+
+/**
+ * Normalize edilmiş metinde marka adı tam kelime olarak geçiyor mu? (rules_v3)
+ * Kabul: tam kelime ("akbank"), alan adı ("akbank.com.tr"), ya da en az 4 harfli adın Türkçe ekli hâli ("garantinin").
+ * Ret: başka bir kelimenin başı ("Ada" ≠ "Adalet", "Nova" ≠ "Novartis").
+ */
+export function hasName(normalizedText: string, needle: string): boolean {
+  const t = ` ${normalizedText} `;
+  let from = 0;
+  for (;;) {
+    const i = t.indexOf(` ${needle}`, from);
+    if (i < 0) return false;
+    const end = i + 1 + needle.length;
+    const sp = t.indexOf(" ", end);
+    const rest = t.slice(end, sp < 0 ? undefined : sp).replace(/\.+$/, "");
+    if (rest === "" || rest.startsWith(".") || (needle.length >= 4 && TR_SUFFIX.test(rest))) return true;
+    from = i + 1;
+  }
+}
 
 // Satır başı listeleme ("1. X", "- X", "**X**", "### X") → öneri listesi işareti
 const LIST_LINE = /^\s*(\d+[.)]|[-*•]\s|\*\*|#{2,4}\s)/;
@@ -89,8 +111,8 @@ export function analyzeResponse(resp: AIResponse, brands: BrandRef[]): BrandHit[
     const needles = [b.name, ...b.aliases].map(normalize).filter((n) => n.length >= 2);
     const first = firstWordPattern(b.name);
     const containsBrand = (text: string) => {
-      const t = ` ${normalize(text)} `;
-      return needles.some((n) => t.includes(` ${n} `) || t.includes(` ${n}`)) || (!!first && first.test(text));
+      const t = normalize(text);
+      return needles.some((n) => hasName(t, n)) || (!!first && first.test(text));
     };
 
     const mentionLines = lines.filter(containsBrand);
@@ -129,7 +151,7 @@ export function analyzeResponse(resp: AIResponse, brands: BrandRef[]): BrandHit[
     const b = brands.find((x) => x.id === h.brandId)!;
     const n = [b.name, ...b.aliases].map(normalize).filter((x) => x.length >= 2);
     const fw = firstWordPattern(b.name);
-    const i = items.findIndex((line) => n.some((x) => ` ${normalize(line)} `.includes(` ${x}`)) || (!!fw && fw.test(line)));
+    const i = items.findIndex((line) => n.some((x) => hasName(normalize(line), x)) || (!!fw && fw.test(line)));
     h.rank = i >= 0 ? i + 1 : null;
   }
   return hits;

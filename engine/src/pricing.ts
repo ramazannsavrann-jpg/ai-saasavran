@@ -26,7 +26,8 @@ export interface Scenario {
   calls: Record<"gemini" | "openai" | "perplexity", CallAssumption>;
   overheadPerBrandUsd: number;     // sınıflandırma + öneri üretimi (LLM)
   infraPerCustomerUsd: number;     // barındırma payı
-  paymentFeeRate: number;          // ödeme sağlayıcısı komisyonu (varsayım)
+  paymentFeeRate: number;          // ödeme sağlayıcısı komisyonu: Paddle %5 (paddle.com/pricing, 11 Kasım 2026)
+  paymentFeeFixedUsd: number;      // işlem başına sabit ücret: Paddle 0,50 $
 }
 
 const CARDS: Record<"gemini" | "openai" | "perplexity", ProviderConfig> = {
@@ -65,7 +66,7 @@ export function planCost(plan: PlanSpec, s: Scenario): PlanCost {
     apiUsd += c;
   }
   const overheadUsd = plan.brands * s.overheadPerBrandUsd;
-  const paymentFeeUsd = plan.priceUsd * s.paymentFeeRate;
+  const paymentFeeUsd = plan.priceUsd > 0 ? plan.priceUsd * s.paymentFeeRate + s.paymentFeeFixedUsd : 0;
   const totalCostUsd = apiUsd + overheadUsd + s.infraPerCustomerUsd + paymentFeeUsd;
   return {
     plan: plan.name,
@@ -94,12 +95,12 @@ const typical = {
 export const SCENARIOS: Scenario[] = [
   {
     name: "Tipik", geminiGroundingCharged: false, calls: typical,
-    overheadPerBrandUsd: 0.5, infraPerCustomerUsd: 1.25, paymentFeeRate: 0.04,
+    overheadPerBrandUsd: 0.5, infraPerCustomerUsd: 1.25, paymentFeeRate: 0.05, paymentFeeFixedUsd: 0.5,
   },
   {
     name: "Kötü durum", geminiGroundingCharged: true,
     calls: { ...typical, openai: { inputTokens: 40_000, outputTokens: 3_000, searchCalls: 2 } },
-    overheadPerBrandUsd: 1.0, infraPerCustomerUsd: 2.5, paymentFeeRate: 0.04,
+    overheadPerBrandUsd: 1.0, infraPerCustomerUsd: 2.5, paymentFeeRate: 0.05, paymentFeeFixedUsd: 0.5,
   },
 ];
 

@@ -45,7 +45,7 @@ export function buildProviders(env: Record<string, string | undefined>, fetchFn?
   if (!env.OPENAI_API_KEY) status.push({ provider: "openai", enabled: false, reason: "OPENAI_API_KEY yok" });
   else if (!allowPaid) status.push({ provider: "openai", enabled: false, reason: "ücretli; ALLOW_PAID_API kapalı" });
   else {
-    providers.push(new OpenAIProvider(env.OPENAI_API_KEY, { ...OPENAI_DEFAULT, model: env.OPENAI_MODEL || OPENAI_DEFAULT.model }, fetchFn));
+    providers.push(new OpenAIProvider(env.OPENAI_API_KEY, { ...OPENAI_DEFAULT, model: env.OPENAI_MODEL || OPENAI_DEFAULT.model, searchCountry: env.SEARCH_COUNTRY }, fetchFn));
     status.push({ provider: "openai", enabled: true, reason: `${env.OPENAI_MODEL || OPENAI_DEFAULT.model}, ücretli, web araması açık` });
   }
 

@@ -1,6 +1,7 @@
 # Ölçüm işçisi: sıradaki ölçümleri işler. Supabase bağlanana kadar "ATLANDI" der.
 # Zamanlama: İstanbul saatiyle 08:00–23:00 arası her saat (günde 16 çalıştırma, ~1 dk).
-# Özel depoda GitHub Actions ücretsiz kotası ayda 2.000 dakikadır; bu iş ~500 dakika kullanır.
+# Depo herkese açık olduğu için GitHub Actions dakikaları ücretsizdir. Depo gizli yapılırsa ayda 2.000 dakika kotası geçerli olur.
+# İş süresi sınırı 45 dk; işçi 25 dk sonra yeni ölçüm almaz; 60 dk'dan eski "çalışıyor" ölçümler kapatılır (0012).
 name: Ölçüm işçisi
 on:
   # Yalnızca ana dal: taslak dallardaki kod gerçek veritabanına dokunmasın
@@ -17,7 +18,7 @@ concurrency:
 jobs:
   work:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4

@@ -180,7 +180,8 @@ ${demoHtml(false)}
     <li class="ok">Haftalık otomatik ölçüm, web sitesi kontrolü, kural tabanlı öneriler.</li>
     <li class="ok">ChatGPT ile canlı aramalı ölçüm ve kaynak analizi: ücretli paketlerde.</li>
     <li class="ok">Üye olmadan ücretsiz kontrol (ayda 2 kez).</li>
-    <li class="no">Perplexity, PDF rapor, ödeme: henüz yok.</li>
+    <li class="ok">Kayıp nedeni kanıtları ve "kaynaklar kimi destekliyor" tablosu: canlı aramalı ölçümde.</li>
+    <li class="no">Perplexity: henüz yok. PDF, tarayıcının yazdır penceresiyle alınır.</li>
   </ul>
   <p><a href="/durum">Ayrıntılı ürün durumu</a></p>
 </section>
@@ -244,7 +245,8 @@ ${demoHtml(true)}
     <li class="ok">ChatGPT live-search measurement and source analysis: on paid plans.</li>
     <li class="ok">Free check without signing up (2 a month).</li>
     <li class="ok">App in English and Turkish.</li>
-    <li class="no">Perplexity, PDF reports, payments: not yet.</li>
+    <li class="ok">Evidence for why a competitor was recommended instead, and which brands each source supports: in live-search measurements.</li>
+    <li class="no">Perplexity: not yet. PDFs are saved from the browser's print dialog.</li>
   </ul>
 </section>
 ${plansHtml(true)}

@@ -443,7 +443,7 @@ test("Güncel paketler (Plus/Pro/Business): tipik %55+ kâr; tavan + komisyon fi
     const plan = PLANS.findLast((p) => p.name.startsWith(name + " ("))!;
     const cap = PAID_CAPS[name];
     assert.ok(planCost(plan, SCENARIOS[0]).grossMarginPct > 55, name);
-    assert.ok(cap + plan.priceUsd * SCENARIOS[1].paymentFeeRate < plan.priceUsd, name);
+    assert.ok(cap + plan.priceUsd * SCENARIOS[1].paymentFeeRate + SCENARIOS[1].paymentFeeFixedUsd < plan.priceUsd, name);
     assert.ok(planCost(plan, SCENARIOS[1]).perEngineUsd.openai <= cap, `${name}: kötü durum ChatGPT harcaması tavanı aşıyor`);
   }
 });
@@ -463,4 +463,57 @@ test("Haftalık özet içeriği: oranlar, geçen haftayla fark, rakip ve aboneli
   assert.equal(isDigestTime(new Date("2026-11-09T06:30:00Z")), true);   // Pazartesi 09:30 İstanbul
   assert.equal(isDigestTime(new Date("2026-11-09T05:30:00Z")), false);  // 08:30
   assert.equal(isDigestTime(new Date("2026-11-10T07:00:00Z")), false);  // Salı
+});
+
+test("rules_v3: marka adı başka kelimenin başıysa eşleşmez; Türkçe ek ve alan adı eşleşir; olumsuz liste satırı öneri sayılmaz", async () => {
+  const { analyzeResponse, hasName, normalize } = await import("../src/metrics.ts");
+  const brands = [{ id: "ada", name: "Ada", aliases: [] }, { id: "nova", name: "Nova", aliases: [] }, { id: "gar", name: "Garanti", aliases: [] }];
+  const run = (t: string) => Object.fromEntries(analyzeResponse({ promptId: "1", provider: "x", answerText: t, citedUrls: [] }, brands).map((h) => [h.brandId, h]));
+  let r = run("En iyi seçenekler:\n1. Adalet Sigorta\n2. Novartis\n3. Garanti'nin kartı");
+  assert.equal(r.ada.mentioned, false); assert.equal(r.nova.mentioned, false);
+  assert.equal(r.gar.mentioned, true); assert.equal(r.gar.rank, 3);
+  r = run("- Nova: kullanıcılar memnun değil, tavsiye etmem\n- Garantinin uygulaması iyi");
+  assert.equal(r.nova.mentioned, true); assert.equal(r.nova.recommended, false);
+  assert.equal(r.gar.recommended, true);
+  assert.ok(hasName(normalize("Kaynak: garanti.com.tr sitesi"), "garanti"));
+  assert.ok(hasName(normalize("Ada."), "ada"));
+  assert.ok(!hasName(normalize("Adalar ilçesi"), "ada"));
+});
+
+test("Kaynak egemenliği ve kayıp nedeni kartı: kaynak sahibi, desteklenen marka ve kanıtlar", async () => {
+  const { sourceDominance, lossCards } = await import("../src/insights.ts");
+  const brands = [
+    { id: "t", name: "Biz", website: "https://biz.com", isTarget: true },
+    { id: "c1", name: "Rakip A", website: "rakipa.com", isTarget: false },
+    { id: "c2", name: "Rakip B", website: null, isTarget: false },
+  ];
+  const answers = [
+    { id: "r1", prompt_id: "p1", cited_urls: ["https://www.rakipa.com/guide", "https://inceleme.org/x", "https://inceleme.org/y"] },
+    { id: "r2", prompt_id: "p1", cited_urls: ["https://help.rakipa.com/a"] },
+    { id: "r3", prompt_id: "p2", cited_urls: ["https://biz.com/", "https://inceleme.org/z"] },
+    { id: "r4", prompt_id: "p3", cited_urls: [] },
+  ];
+  const m = (response_id: string, brand_id: string, recommended: boolean, mentioned = recommended) => ({ response_id, brand_id, recommended, mentioned });
+  const mentions = [
+    m("r1", "t", false), m("r1", "c1", true), m("r1", "c2", true),
+    m("r2", "t", false, true), m("r2", "c1", true),
+    m("r3", "t", true), m("r3", "c1", false),
+    m("r4", "t", false), m("r4", "c2", true),
+  ];
+  const dom = sourceDominance(answers, mentions, brands);
+  const rakip = dom.find((d) => d.domain === "rakipa.com")!;
+  assert.deepEqual([rakip.answers, rakip.owner, rakip.ownerName, rakip.targetRecommended], [1, "competitor", "Rakip A", 0]);
+  assert.equal(dom.find((d) => d.domain === "help.rakipa.com")!.owner, "competitor");
+  const inc = dom.find((d) => d.domain === "inceleme.org")!;
+  assert.equal(inc.answers, 2, "aynı cevapta iki kez geçen alan adı bir sayılır");
+  assert.equal(inc.owner, "third_party");
+  assert.deepEqual(inc.supports.map((s) => `${s.name}:${s.count}`).sort(), ["Biz:1", "Rakip A:1", "Rakip B:1"]);
+  assert.equal(dom.find((d) => d.domain === "biz.com")!.owner, "target");
+
+  const cards = lossCards(answers, mentions, brands);
+  assert.deepEqual(cards.map((c) => c.promptId).sort(), ["p1", "p3"], "önerildiğimiz soru (p2) kart üretmez");
+  const p1 = cards.find((c) => c.promptId === "p1")!;
+  assert.deepEqual(p1.winners, [{ name: "Rakip A", count: 2 }, { name: "Rakip B", count: 1 }]);
+  assert.deepEqual(p1.evidence, ["competitor_own_site_cited", "target_site_not_cited", "third_party_sources", "mentioned_not_recommended"]);
+  assert.deepEqual(cards.find((c) => c.promptId === "p3")!.evidence, ["no_sources", "absent"], "kaynak yoksa neden üretilmez");
 });
