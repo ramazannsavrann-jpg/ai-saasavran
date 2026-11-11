@@ -1,6 +1,6 @@
 # Gerçek durum raporu
 
-**Son güncelleme:** 2026-11-11 · v0.6 (denetim düzeltmeleri, kaynak egemenliği, kayıp nedeni kartı)
+**Son güncelleme:** 2026-11-11 · v0.7 (denetim düzeltmeleri, kayıp zekâsı özellikleri, bölge kısıtı)
 
 **Canlı adres:** https://aisaasavran.com (Cloudflare Pages + Supabase)
 
@@ -24,9 +24,19 @@
 - **Kayıp nedeni: kanıtlar**: önerilmediğiniz her soru için yerinize önerilen rakip, kullanılan kaynaklar, sitenizin kaynak gösterilip gösterilmediği. Kanıt yoksa neden üretilmez.
 - İkisi de yalnız canlı aramalı ölçümde çalışır ve ek API çağrısı yapmaz.
 
+## v0.7 (11 Kasım 2026, ikinci ve üçüncü paket)
+
+- **Ücretsiz Gemini bölge kısıtı (0013):** AEA, İsviçre ve Birleşik Krallık. Ücretsiz kontrol sayfası bu ülkelerden gelen ziyaretçiye kapalı; ülke kodu bu listede olan markalarda aramasız Gemini ölçümü başlatılmaz; yeni marka formunda ülke kodu ziyaretçinin ülkesinden önceden doldurulur (`/api/geo`).
+- **Yaptıklarım ve sonuçları** (Aksiyon ve Sonuç Takibi): `brand_actions` tablosu; önce/sonra karşılaştırması motor bazında, güven aralıkları ayrışmadıkça "ölçüm oynaklığı olabilir".
+- **Hangi koşulda görünüyorsunuz** (Koşullu Görünürlük Haritası): soru niyetine göre, son 4 ölçümün toplamı.
+- Kota %80'e gelince panelde uyarı; kota dolunca ay başında kendiliğinden açıldığı yazılır.
+- Canlı test (11 Kasım, ChatGPT gpt-6-luna, yeni anahtar): 20/20 çağrı başarılı, 0,42 $, 4,4 dk.
+
 ## Bilinen açık konular
 
-- Gemini ücretsiz katmanı: Google koşulları AEA, İsviçre ve Birleşik Krallık'taki kullanıcılar için yalnız ücretli servise izin veriyor. Karar bekliyor.
+- Bölge kısıtı uygulama içinde markanın ülke koduna dayanır; kullanıcı kodu değiştirebilir. Kesin uygulama için sunucu tarafında kullanıcı ülkesi gerekir.
+- Koşul haritası yalnız soru niyetine göredir (fiyat segmenti, kullanım senaryosu için soru etiketleri yok).
+
 - "Önerildi" tespiti hâlâ kural tabanlı; listede geçen marka önerilmiş sayılır (olumsuz ifade yoksa).
 - Perplexity, ekip daveti, ürün/SKU ölçümü yok.
 - Aşağıdaki tablolar 6 Kasım 2026 tarihlidir; "Henüz yok" bölümündeki ödeme, PDF ve ChatGPT satırları artık geçerli değildir.
