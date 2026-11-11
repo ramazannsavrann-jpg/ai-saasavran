@@ -2,7 +2,7 @@
 // Gerekli: SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY. İsteğe bağlı: GEMINI_API_KEY.
 // Ücretli API'ler ALLOW_PAID_API=true olmadan asla kullanılmaz.
 import { createClient } from "@supabase/supabase-js";
-import { maintain, processAudits, processProductChecks, processQueue, processReanalysis, scheduleWeekly } from "../engine/src/worker.ts";
+import { maintain, processAudits, processProductChecks, processQueue, processShoppingChecks, processReanalysis, scheduleWeekly } from "../engine/src/worker.ts";
 import { seedLabs } from "../engine/src/labs.ts";
 import { sendWeeklyDigests } from "../engine/src/email.ts";
 
@@ -24,6 +24,8 @@ const scheduled = await scheduleWeekly(deps);
 const audits = await processAudits(deps);
 let productChecks: unknown;
 try { productChecks = await processProductChecks(deps); } catch (e) { productChecks = `hata: ${(e as Error).message}`; }
+let shoppingChecks: unknown;
+try { shoppingChecks = await processShoppingChecks(deps); } catch (e) { shoppingChecks = `hata: ${(e as Error).message}`; }
 const reanalyzed = await processReanalysis(deps);
 const results = await processQueue(deps, Number(process.env.WORKER_MAX_RUNS || 20), Number(process.env.WORKER_BUDGET_MIN || 25) * 60_000);
 // Haftalık e-posta özeti (Pazartesi 09:00 İstanbul sonrası; kullanıcı başına haftada bir)
@@ -31,5 +33,5 @@ let digests: unknown = "RESEND_API_KEY yok";
 if (process.env.RESEND_API_KEY) {
   try { digests = await sendWeeklyDigests(db, process.env.RESEND_API_KEY); } catch (e) { digests = `hata: ${(e as Error).message}`; }
 }
-console.log(JSON.stringify({ maintenance, productChecks, weeklyScheduled: scheduled, audits, reanalyzed, digests, processed: results.length, results }, null, 2));
+console.log(JSON.stringify({ maintenance, productChecks, shoppingChecks, weeklyScheduled: scheduled, audits, reanalyzed, digests, processed: results.length, results }, null, 2));
 if (results.some((r) => r.stop === "worker_error")) process.exit(1);

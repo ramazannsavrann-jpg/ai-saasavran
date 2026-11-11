@@ -11,6 +11,7 @@ import { SimulatedProvider } from "./providers/simulated.ts";
 import { auditSite } from "./audit.ts";
 import { classifyAnswer, CLASSIFY_WORST_USD } from "./classify.ts";
 import { buildProductQuestion, judgeProduct } from "./product.ts";
+import { matchShopping, searchShopping, shoppingQuery, shoppingSearchesLeft, ShoppingError, type ShoppingTarget } from "./shopping.ts";
 import { assertBillingAllowed } from "./providers/registry.ts";
 import { estimateCost } from "./providers/types.ts";
 import { OPENAI_DEFAULT } from "./providers/openai.ts";
@@ -264,6 +265,50 @@ export async function processProductChecks(deps: WorkerDeps, max = 5): Promise<{
       await gate.recordFailure(p.workspace_id, cfg, "transient").catch(() => {});
       await clear(p.product_id);
       out.push({ productId: p.product_id, status: `failed: ${(e as Error).message.slice(0, 80)}` });
+    }
+  }
+  return out;
+}
+
+/**
+ * Google Shopping görünürlüğü: ücretli alanlardaki kendi ürünleri haftada bir (ya da kullanıcı isteğiyle) Google Shopping'de arar.
+ * SERPAPI_KEY yoksa hiçbir şey yapmaz. Her çalıştırmada en fazla `max` arama; SerpApi'de kalan hak SERPAPI_RESERVE'in
+ * (varsayılan 10) altına inerse durur. Bir ürün 20 saatte en fazla bir kez denenir; anahtar/kota hatasında tüm iş durur.
+ */
+export async function processShoppingChecks(deps: WorkerDeps, max = 5): Promise<{ productId: string; status: string }[] | string> {
+  const { db, env } = deps;
+  const key = env.SERPAPI_KEY;
+  if (!key) return "SERPAPI_KEY yok";
+  const pending = must(await db.rpc("pending_shopping_checks", { p_limit: max }), "pending_shopping_checks") as
+    { product_id: string; workspace_id: string; brand_name: string; product_name: string; shopping_query: string | null; country: string; rivals: { id: string; name: string; brand: string | null }[]; requested: boolean }[];
+  if (!pending.length) return [];
+  const reserve = Number(env.SERPAPI_RESERVE || 10);
+  let left = await shoppingSearchesLeft(key, deps.fetchFn);
+  const out: { productId: string; status: string }[] = [];
+  for (const p of pending) {
+    if (left !== null && left <= reserve) { out.push({ productId: p.product_id, status: "serpapi_quota_low" }); break; }
+    must(await db.from("products").update({ shopping_attempted_at: (deps.now ?? (() => new Date()))().toISOString() }).eq("id", p.product_id), "shopping_attempted_at");
+    const query = shoppingQuery(p.brand_name, p.product_name, p.shopping_query);
+    const targets: ShoppingTarget[] = [
+      { id: p.product_id, name: p.product_name, brand: p.brand_name, kind: "own" },
+      ...(p.rivals ?? []).map((r) => ({ id: r.id, name: r.name, brand: r.brand, kind: "rival" as const })),
+    ];
+    try {
+      const items = await searchShopping({ apiKey: key, query, country: p.country, fetchFn: deps.fetchFn });
+      if (left !== null) left--;
+      const r = matchShopping(items, targets, query, p.country);
+      must(await db.from("shopping_checks").insert({
+        workspace_id: p.workspace_id, product_id: p.product_id, query, country: p.country,
+        own_position: r.own?.position ?? null, own_price: r.own?.price ?? null, own_seller: r.own?.seller ?? null, own_count: r.ownCount,
+        rivals: r.rivals, items: r.items.map((i) => ({ position: i.position, title: i.title, source: i.source, price: i.price, link: i.link, match: i.match })),
+      }), "shopping_checks");
+      if (p.requested) await db.from("products").update({ shopping_requested_at: null }).eq("id", p.product_id);
+      out.push({ productId: p.product_id, status: r.own ? `found:${r.own.position}` : "not_in_list" });
+    } catch (e) {
+      const kind = e instanceof ShoppingError ? e.kind : "transient";
+      if (p.requested) await db.from("products").update({ shopping_requested_at: null }).eq("id", p.product_id);
+      out.push({ productId: p.product_id, status: `failed(${kind}): ${(e as Error).message.slice(0, 80)}` });
+      if (kind === "auth" || kind === "quota") break;
     }
   }
   return out;

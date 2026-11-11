@@ -45,7 +45,7 @@ export function shoppingQuery(brand: string, product: string, custom?: string | 
 }
 
 const STOP = new Set(["ve", "ile", "for", "the", "and", "de", "da"]);
-function tokens(s: string): string[] { return normalize(s).split(" ").filter((t) => t.length >= 2 && !STOP.has(t)); }
+function tokens(s: string): string[] { return normalize(s).split(" ").filter((t) => (t.length >= 2 || /^\d$/.test(t)) && !STOP.has(t)); }
 
 /**
  * Bir ilan başlığı ürünle eşleşiyor mu? Ürün adının tüm anlamlı kelimeleri başlıkta geçmeli.
@@ -111,7 +111,8 @@ export function matchShopping(items: ShoppingItem[], targets: ShoppingTarget[], 
 }
 
 export class ShoppingError extends Error {
-  constructor(message: string, readonly kind: "auth" | "quota" | "transient" | "bad_response") { super(message); }
+  readonly kind: "auth" | "quota" | "transient" | "bad_response";
+  constructor(message: string, kind: "auth" | "quota" | "transient" | "bad_response") { super(message); this.kind = kind; }
 }
 
 /** Google Shopping araması (SerpApi). Hata durumunda ShoppingError fırlatır. */

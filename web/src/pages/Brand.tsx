@@ -2,7 +2,7 @@ import { useMemo, useState, type FormEvent } from "react";
 import { SECTORS, competitorSuggestions, questionTemplates, sectorDef } from "../lib/sectors";
 import { Link, useParams, useSearchParams } from "react-router-dom";
 import { useApp, useLoad } from "../lib/app";
-import { api, INTENT_LABEL, type Brand, type Intent, type MeasurementType, type Prompt, type Run } from "../lib/data";
+import { api, INTENT_LABEL, type Brand, type Intent, type MeasurementType, type Prompt, type Run, type Product, type ShoppingCheck } from "../lib/data";
 import { friendlyError } from "../lib/supabase";
 import { L, isEn } from "../lib/i18n";
 import { ERROR_CLASS_TEXT, STOP_TEXT, runStatusText } from "../lib/messages";
@@ -151,10 +151,74 @@ function ProductVisibilityView({ vis, loading, hasRuns }: { vis: ReturnType<type
   );
 }
 
+/** Google Shopping görünürlüğü: haftalık (ya da istekle) Google Shopping araması; ürününüzün ve rakip ürünlerin sırası, fiyatı, satıcısı. */
+function ShoppingView({ product, rivals, checks, paidAllowed, onChange, onError, onMsg }: {
+  product: Product; rivals: Product[]; checks: ShoppingCheck[]; paidAllowed: boolean;
+  onChange: () => void; onError: (m: string) => void; onMsg: (m: string) => void;
+}) {
+  const [busy, setBusy] = useState(false);
+  const [editing, setEditing] = useState(false);
+  const [showAll, setShowAll] = useState(false);
+  const last = checks[0], prev = checks[1];
+  const pending = !!product.shopping_requested_at && (!last || last.created_at < product.shopping_requested_at);
+  const nameOf = (id: string) => { const r = rivals.find((x) => x.id === id); return r ? `${r.rival_brand ? `${r.rival_brand} ` : ""}${r.name}` : "?"; };
+  async function request() {
+    setBusy(true);
+    try { await api.requestShoppingCheck(product.id); onMsg(L("Google Shopping kontrolü sıraya alındı. Sonuç en geç bir saat içinde burada görünür.", "Google Shopping check queued. The result appears here within an hour.")); onChange(); }
+    catch (x) { onError(friendlyError(x)); } finally { setBusy(false); }
+  }
+  async function saveQuery(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const q = String(new FormData(e.currentTarget).get("shopping_query") || "").trim();
+    if (q && q.length < 2) { onError(L("Arama en az 2 karakter olmalı.", "The search needs at least 2 characters.")); return; }
+    setBusy(true);
+    try { await api.setShoppingQuery(product.id, q || null); setEditing(false); onChange(); }
+    catch (x) { onError(friendlyError(x)); } finally { setBusy(false); }
+  }
+  const change = last && prev && last.query === prev.query ? (() => {
+    const a = last.own_position, b = prev.own_position;
+    if (a && b) return a < b ? (isEn() ? ` Up from #${b}.` : ` Geçen kontrolde ${b}. sıradaydı, yükseldi.`) : a > b ? (isEn() ? ` Down from #${b}.` : ` Geçen kontrolde ${b}. sıradaydı, düştü.`) : L(" Geçen kontrolle aynı.", " Same as last check.");
+    if (a && !b) return L(" Geçen kontrolde listede yoktu.", " Not in the list last time.");
+    if (!a && b) return isEn() ? ` Was #${b} last time.` : ` Geçen kontrolde ${b}. sıradaydı.`;
+    return "";
+  })() : "";
+  const items = last ? (showAll ? last.items : last.items.slice(0, 5)) : [];
+  return (
+    <div className="prod-vis">
+      <p className="src-sup"><strong>Google Shopping</strong></p>
+      {!last && <p className="src-sup muted">{paidAllowed
+        ? (pending ? L("Kontrol sırada.", "Check queued.") : L("Henüz kontrol edilmedi. Ücretli paketlerde ürünleriniz haftada bir otomatik olarak Google Shopping'de aranır.", "Not checked yet. On paid plans your products are searched on Google Shopping automatically once a week."))
+        : L("Ücretli paketlerde ürünleriniz haftada bir otomatik olarak Google Shopping'de aranır: sıranız, fiyatınız, satıcılar ve rakip ürünler.", "On paid plans your products are searched on Google Shopping once a week: your position, price, sellers and competitor products.")}</p>}
+      {last && <>
+        <p className="src-sup">{formatDateTime(last.created_at)} · {L("Arama", "Search")}: <em>{last.query}</em></p>
+        <p className="src-sup">{last.own_position
+          ? (isEn() ? `Your product is #${last.own_position} of ${last.items.length} listings${last.own_price ? `, ${last.own_price}` : ""}${last.own_seller ? ` (${last.own_seller})` : ""}.${last.own_count > 1 ? ` It appears in ${last.own_count} listings.` : ""}` : `Ürününüz ${last.items.length} ilan içinde ${last.own_position}. sırada${last.own_price ? `, ${last.own_price}` : ""}${last.own_seller ? ` (${last.own_seller})` : ""}.${last.own_count > 1 ? ` Toplam ${last.own_count} ilanda geçiyor.` : ""}`)
+          : (isEn() ? `Your product is not among the first ${last.items.length} listings.` : `Ürününüz ilk ${last.items.length} ilan arasında yok.`)}{change}</p>
+        {last.rivals.length > 0 && <p className="src-sup">{L("Rakip ürünler: ", "Competitor products: ")}{last.rivals.map((r) => isEn() ? `${nameOf(r.id)} #${r.position}${r.price ? ` (${r.price})` : ""}` : `${nameOf(r.id)} ${r.position}. sırada${r.price ? ` (${r.price})` : ""}`).join(", ")}.</p>}
+        {items.length > 0 && <ol className="src-sup shop-list">{items.map((i) => (
+          <li key={i.position} value={i.position}>{i.match ? <strong>{i.title}</strong> : i.title}<span className="muted">{i.source ? ` · ${i.source}` : ""}{i.price ? ` · ${i.price}` : ""}{i.match?.kind === "own" ? L(" · sizin ürününüz", " · your product") : i.match?.kind === "rival" ? L(" · rakip ürün", " · competitor product") : ""}</span></li>
+        ))}</ol>}
+        {last.items.length > 5 && <button className="link-btn" onClick={() => setShowAll(!showAll)}>{showAll ? L("İlk 5'i göster", "Show top 5") : isEn() ? `Show all ${last.items.length}` : `${last.items.length} ilanın hepsini göster`}</button>}
+        {last.items.length === 0 && <p className="src-sup muted">{L("Bu arama için Google Shopping sonuç vermedi. Daha genel bir arama deneyin.", "Google Shopping returned no results for this search. Try a broader search.")}</p>}
+      </>}
+      {editing ? (
+        <form className="stack" onSubmit={saveQuery} noValidate aria-label={L("Google Shopping araması", "Google Shopping search")}>
+          <Field label={L("Google Shopping'de aranacak ifade", "Search on Google Shopping")} name="shopping_query" maxLength={120} defaultValue={product.shopping_query ?? ""}
+            placeholder={L("Örn. erkek koşu ayakkabısı", "e.g. men's running shoes")} hint={L("Müşterinin yazacağı kategori araması. Boş bırakırsanız marka ve ürün adı aranır.", "The category search a customer would type. Leave empty to search the brand and product name.")} />
+          <Button type="submit" variant="quiet" busy={busy}>{L("Kaydet", "Save")}</Button>
+        </form>
+      ) : <p className="src-sup"><span className="muted">{L("Aranan: ", "Searching: ")}</span>{product.shopping_query ?? L("marka ve ürün adı", "brand and product name")} <button className="link-btn" onClick={() => setEditing(true)}>{L("değiştir", "change")}</button></p>}
+      {paidAllowed && <button className="link-btn" disabled={pending || busy} onClick={request}>{pending ? L("Kontrol sırada", "Check queued") : L("Şimdi kontrol et", "Check now")}</button>}
+      <p className="src-sup muted">{L("Google Shopping sonuçları konuma ve kişiye göre değişebilir; bu, markanızın ülkesinden yapılmış tek bir aramanın anlık görüntüsüdür. İlan başlıkları ürün adınızla eşleştirilir; farklı yazılmış ilanlar sayılmayabilir.", "Google Shopping results can vary by location and person; this is a snapshot of one search from your brand's country. Listing titles are matched to your product name; listings written differently may be missed.")}</p>
+    </div>
+  );
+}
+
 /** Ürün Doğruluğu (pilot): doğru bilgileri girilen ürünü ChatGPT'ye sorar, cevaptaki iddiaları bu bilgilerle karşılaştırır. */
 function Products({ brand, paidAllowed }: { brand: Brand; paidAllowed: boolean }) {
   const products = useLoad(() => api.products(brand.id), [brand.id]);
   const checks = useLoad(() => api.productChecks((products.data ?? []).map((p) => p.id)), [(products.data ?? []).map((p) => p.id).join(",")]);
+  const shop = useLoad(() => api.shoppingChecks((products.data ?? []).filter((p) => !p.rival_of).map((p) => p.id)), [(products.data ?? []).map((p) => `${p.id}:${p.shopping_requested_at ?? ""}`).join(",")]);
   // Ürün görünürlüğü: ürün adları markanın SON ölçüm cevaplarında aranır (her ölçüm türünün en yenisi; ek API çağrısı yok)
   const runs = useLoad(() => api.runs(brand.id), [brand.id]);
   const lastIds = (["live_search", "model_knowledge"] as const)
@@ -217,6 +281,8 @@ function Products({ brand, paidAllowed }: { brand: Brand; paidAllowed: boolean }
                       </div>
                     );
                   })()}
+                  <ShoppingView product={p} rivals={rivals} checks={(shop.data ?? []).filter((c) => c.product_id === p.id)} paidAllowed={paidAllowed}
+                    onChange={() => { products.reload(); shop.reload(); }} onError={setErr} onMsg={setMsg} />
                   <RivalCompare own={p} rivals={rivals} brand={brand} answers={visAnswers.data ?? null} hasRuns={lastIds.length > 0} onChange={products.reload} onError={setErr} />
                   <ProductVisibilityView loading={runs.loading || visAnswers.loading || visComps.loading} hasRuns={lastIds.length > 0}
                     vis={visAnswers.data && visComps.data && lastIds.length > 0 ? productVisibility(visAnswers.data, { id: p.id, name: p.name }, { name: brand.name, website: brand.website }, visComps.data) : null} />

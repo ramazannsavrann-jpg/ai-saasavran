@@ -34,6 +34,8 @@ jobs:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          # Google Shopping (SerpApi): ücretli alanlarda ürün başına haftada 1 arama; SerpApi'de kalan hak 10'un altına inince durur.
+          SERPAPI_KEY: ${{ secrets.SERPAPI_KEY }}
           GEMINI_TIER: free
           # Ücretli API açık, ama yalnız veritabanında izinli alanda (Growth Lab) ve toplam 3 $ tavanıyla kullanılır.
           # Kullanıcı izni: 7 Kasım 2026. Müşteri alanlarında ücretli çağrı veritabanı tarafından reddedilir.

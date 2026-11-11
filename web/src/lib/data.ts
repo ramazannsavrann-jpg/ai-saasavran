@@ -41,7 +41,12 @@ export interface SiteAudit {
 
 export interface BrandAction { id: string; brand_id: string; title: string; note: string | null; done_on: string; created_at: string }
 
-export interface Product { id: string; brand_id: string; name: string; price: string | null; facts: string | null; rival_of: string | null; rival_brand: string | null; check_requested_at: string | null; created_at: string }
+export interface Product { id: string; brand_id: string; name: string; price: string | null; facts: string | null; rival_of: string | null; rival_brand: string | null; check_requested_at: string | null; shopping_query: string | null; shopping_requested_at: string | null; created_at: string }
+export interface ShoppingCheck {
+  id: string; product_id: string; query: string; country: string; own_position: number | null; own_price: string | null; own_seller: string | null; own_count: number;
+  rivals: { id: string; position: number; price: string | null; seller: string | null }[];
+  items: { position: number; title: string; source: string | null; price: string | null; link: string | null; match: { id: string; kind: "own" | "rival" } | null }[]; created_at: string;
+}
 export interface ProductCheck {
   id: string; product_id: string; model: string; question: string; answer_text: string; cited_urls: string[];
   recognized: boolean | null; claims: { claim: string; status: "correct" | "wrong" | "unverifiable"; fact: string }[]; judge: string | null; created_at: string;
@@ -131,7 +136,7 @@ export const api = {
   async addAction(a: { workspace_id: string; brand_id: string; title: string; note: string | null; done_on: string }) { must(await sb().from("brand_actions").insert(a)); },
   async deleteAction(id: string) { must(await sb().from("brand_actions").delete().eq("id", id)); },
   async products(brandId: string): Promise<Product[]> {
-    return must(await sb().from("products").select("id,brand_id,name,price,facts,rival_of,rival_brand,check_requested_at,created_at").eq("brand_id", brandId).order("created_at"));
+    return must(await sb().from("products").select("id,brand_id,name,price,facts,rival_of,rival_brand,check_requested_at,shopping_query,shopping_requested_at,created_at").eq("brand_id", brandId).order("created_at"));
   },
   async addProduct(p: { workspace_id: string; brand_id: string; name: string; price: string | null; facts: string }) { must(await sb().from("products").insert(p)); },
   async addRival(p: { workspace_id: string; brand_id: string; name: string; rival_of: string; rival_brand: string | null }) { must(await sb().from("products").insert(p)); },
@@ -141,6 +146,12 @@ export const api = {
     if (!productIds.length) return [];
     return must(await sb().from("product_checks").select("id,product_id,model,question,answer_text,cited_urls,recognized,claims,judge,created_at").in("product_id", productIds).order("created_at", { ascending: false }).limit(40));
   },
+  async shoppingChecks(productIds: string[]): Promise<ShoppingCheck[]> {
+    if (!productIds.length) return [];
+    return must(await sb().from("shopping_checks").select("id,product_id,query,country,own_position,own_price,own_seller,own_count,rivals,items,created_at").in("product_id", productIds).order("created_at", { ascending: false }).limit(60));
+  },
+  async requestShoppingCheck(id: string) { must(await sb().rpc("request_shopping_check", { p_product: id })); },
+  async setShoppingQuery(id: string, q: string | null) { must(await sb().from("products").update({ shopping_query: q }).eq("id", id)); },
   async isPlatformAdmin(): Promise<boolean> {
     return must(await sb().rpc("is_platform_admin"));
   },
