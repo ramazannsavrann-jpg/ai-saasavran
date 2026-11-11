@@ -4,6 +4,7 @@
 import { GeminiProvider, GEMINI_FREE_DEFAULT } from "./gemini.ts";
 import { OpenAIProvider, OPENAI_DEFAULT } from "./openai.ts";
 import { PerplexityProvider } from "./perplexity.ts";
+import { ClaudeProvider, CLAUDE_DEFAULT } from "./claude.ts";
 import type { FetchLike, Provider } from "./types.ts";
 
 export class PaidApiBlocked extends Error {}
@@ -47,6 +48,16 @@ export function buildProviders(env: Record<string, string | undefined>, fetchFn?
   else {
     providers.push(new OpenAIProvider(env.OPENAI_API_KEY, { ...OPENAI_DEFAULT, model: env.OPENAI_MODEL || OPENAI_DEFAULT.model, searchCountry: env.SEARCH_COUNTRY }, fetchFn));
     status.push({ provider: "openai", enabled: true, reason: `${env.OPENAI_MODEL || OPENAI_DEFAULT.model}, ücretli, web araması açık` });
+  }
+
+  // Claude (Anthropic) — her zaman ücretli
+  if (!env.ANTHROPIC_API_KEY) status.push({ provider: "claude", enabled: false, reason: "ANTHROPIC_API_KEY yok" });
+  else if (!allowPaid) status.push({ provider: "claude", enabled: false, reason: "ücretli; ALLOW_PAID_API kapalı" });
+  else {
+    const model = env.CLAUDE_MODEL || CLAUDE_DEFAULT.model;
+    const useSearch = env.CLAUDE_SEARCH !== "false";
+    providers.push(new ClaudeProvider(env.ANTHROPIC_API_KEY, { ...CLAUDE_DEFAULT, model, useSearch, searchCountry: env.SEARCH_COUNTRY }, fetchFn));
+    status.push({ provider: "claude", enabled: true, reason: `${model}, ücretli, web araması ${useSearch ? "açık" : "kapalı"}` });
   }
 
   // Perplexity — adaptör henüz yok

@@ -10,6 +10,10 @@ import { buildProviders } from "./providers/registry.ts";
 import { SimulatedProvider } from "./providers/simulated.ts";
 import { auditSite } from "./audit.ts";
 import { classifyAnswer, CLASSIFY_WORST_USD } from "./classify.ts";
+import { buildProductQuestion, judgeProduct } from "./product.ts";
+import { assertBillingAllowed } from "./providers/registry.ts";
+import { estimateCost } from "./providers/types.ts";
+import { OPENAI_DEFAULT } from "./providers/openai.ts";
 import type { ApiErrorClass, FetchLike, Provider, ProviderConfig, ProviderResult } from "./providers/types.ts";
 import type { Denial, Rejection, Reservation, UsageGate } from "./usage.ts";
 
@@ -46,8 +50,8 @@ function domainOf(website: string | null): string | undefined {
 
 export class DbUsageGate implements UsageGate {
   private db: SupabaseClient;
-  private runId: string;
-  constructor(db: SupabaseClient, runId: string) { this.db = db; this.runId = runId; }
+  private runId: string | null;
+  constructor(db: SupabaseClient, runId: string | null) { this.db = db; this.runId = runId; }
   async reserve(ws: string, cfg: ProviderConfig, worst: number): Promise<Reservation | Rejection> {
     const r = must(await this.db.rpc("reserve_engine_call", {
       p_workspace: ws, p_provider: cfg.provider, p_billing: cfg.billing,
@@ -71,16 +75,36 @@ export class DbUsageGate implements UsageGate {
   }
 }
 
-export function chooseProvider(type: MeasurementType, env: Record<string, string | undefined>, brandNames: string[], seed: string, fetchFn?: FetchLike): Provider | null {
-  if (type === "simulated") return new SimulatedProvider(brandNames, seed);
+/** Canlı aramada çalışacak motorlar, sırayla. LIVE_ENGINES ile değiştirilebilir (ör. "openai"). */
+export const DEFAULT_LIVE_ENGINES = "openai,claude";
+
+/**
+ * Ölçüm türüne göre motor listesi. Canlı aramada ücretli arama yapan tüm etkin motorlar
+ * (varsayılan: önce ChatGPT, sonra Claude); diğer türlerde tek motor.
+ */
+export function chooseProviders(type: MeasurementType, env: Record<string, string | undefined>, brandNames: string[], seed: string, fetchFn?: FetchLike): Provider[] {
+  if (type === "simulated") return [new SimulatedProvider(brandNames, seed)];
   const search = type === "live_search" ? "true" : "false";
-  const { providers } = buildProviders({ ...env, GEMINI_SEARCH: search }, fetchFn);
+  const { providers } = buildProviders({ ...env, GEMINI_SEARCH: search, CLAUDE_SEARCH: "true" }, fetchFn);
   if (type === "live_search") {
-    // Ücretsiz Gemini'de arama yok; canlı aramada ücretli sağlayıcı (önce OpenAI) seçilir
-    return providers.find((p) => p.config.provider === "openai")
-      ?? providers.find((p) => p.config.useSearch && p.config.billing === "paid") ?? null;
+    // Ücretsiz Gemini'de arama yok; canlı aramada yalnız ücretli, aramalı motorlar
+    const order = (env.LIVE_ENGINES || DEFAULT_LIVE_ENGINES).split(",").map((x) => x.trim()).filter(Boolean);
+    const live = providers.filter((p) => p.config.useSearch && p.config.billing === "paid");
+    return order.map((name) => live.find((p) => p.config.provider === name)).filter((p): p is Provider => !!p);
   }
-  return providers.find((p) => !p.config.useSearch && p.config.provider === "gemini") ?? null;
+  const g = providers.find((p) => !p.config.useSearch && p.config.provider === "gemini");
+  return g ? [g] : [];
+}
+
+export function chooseProvider(type: MeasurementType, env: Record<string, string | undefined>, brandNames: string[], seed: string, fetchFn?: FetchLike): Provider | null {
+  return chooseProviders(type, env, brandNames, seed, fetchFn)[0] ?? null;
+}
+
+/** Birden çok motorla yapılan ölçümün durma nedenini özetler: biri tamamlandıysa ve diğeri durduysa o neden yazılır. */
+function combineStops(outs: { stop: StopReason; stopMessage?: string; errorClass?: ApiErrorClass; provider: string }[]) {
+  const bad = outs.find((o) => o.stop !== "completed");
+  if (!bad) return { stop: "completed" as StopReason };
+  return { stop: bad.stop, errorClass: bad.errorClass, stopMessage: outs.length > 1 ? `${bad.provider}: ${bad.stopMessage ?? bad.stop}` : bad.stopMessage };
 }
 
 export async function processNextRun(deps: WorkerDeps): Promise<WorkerResult | null> {
@@ -90,11 +114,12 @@ export async function processNextRun(deps: WorkerDeps): Promise<WorkerResult | n
   const run = claimed?.[0];
   if (!run) return null;
 
-  const finish = async (r: Omit<WorkerResult, "runId">, provider?: Provider, msg?: string) => {
+  const finish = async (r: Omit<WorkerResult, "runId">, used?: Provider[], msg?: string) => {
     must(await db.rpc("finish_run", {
       p_run: run.id, p_status: r.status, p_stop_reason: r.stop, p_error_class: r.errorClass ?? null,
       p_error: msg ?? null, p_ok: r.ok, p_failed: r.failed,
-      p_provider: provider?.config.provider ?? null, p_model: provider?.config.model ?? null,
+      p_provider: used?.length ? used.map((p) => p.config.provider).join(",") : null,
+      p_model: used?.length ? used.map((p) => p.config.model).join(",") : null,
     }), "finish_run");
     return { runId: run.id as string, ...r };
   };
@@ -103,64 +128,75 @@ export async function processNextRun(deps: WorkerDeps): Promise<WorkerResult | n
     const target = must(await db.from("brands").select("id,name,aliases,website,country").eq("id", run.brand_id).single(), "marka") as any;
     const comps = must(await db.from("brands").select("id,name,aliases,website").eq("owner_brand_id", run.brand_id).eq("is_competitor", true), "rakipler") as any[];
     const prompts = must(await db.from("prompts").select("id,text").eq("brand_id", run.brand_id).eq("active", true).order("created_at"), "sorular") as any[];
-    const ws = must(await db.from("workspaces").select("plan").eq("id", run.workspace_id).single(), "workspace") as any;
+    const ws = must(await db.from("workspaces").select("plan,kind").eq("id", run.workspace_id).single(), "workspace") as any;
 
     const brands: BrandRef[] = [target, ...comps].map((b) => ({ id: b.id, name: b.name, aliases: b.aliases ?? [], domain: domainOf(b.website) }));
     const day = now().toISOString().slice(0, 10);
-    const provider = chooseProvider(run.measurement_type, { ...env, SEARCH_COUNTRY: target.country || env.SEARCH_COUNTRY }, brands.map((b) => b.name), `${run.id}`, deps.fetchFn);
-    if (!provider) {
+    const all = chooseProviders(run.measurement_type, { ...env, SEARCH_COUNTRY: target.country || env.SEARCH_COUNTRY }, brands.map((b) => b.name), `${run.id}`, deps.fetchFn);
+    // Birden çok canlı motor şimdilik yalnız Growth Lab'de (paket maliyetleri tek motora göre hesaplı)
+    const providers = run.measurement_type === "live_search" && ws.kind === "growth_lab" ? all : all.slice(0, 1);
+    if (!providers.length) {
       return await finish({ status: "failed", stop: "provider_not_configured", ok: 0, failed: 0 }, undefined,
         run.measurement_type === "live_search" ? "Canlı arama sağlayıcısı etkin değil" : "Gemini anahtarı tanımlı değil");
     }
 
     const gate = new DbUsageGate(db, run.id);
     const guard = new BudgetGuard(Number(run.max_cost_usd));
-    // "Önerildi mi" LLM kontrolü: yalnız ücretli OpenAI ölçümlerinde ve açıkça etkinleştirildiyse
-    const llmClassify = env.LLM_CLASSIFY === "true" && provider.config.provider === "openai" && provider.config.billing === "paid" && !!env.OPENAI_API_KEY;
-    let classified = 0;
+    // "Önerildi mi" LLM kontrolü: ücretli canlı ölçümlerde, OpenAI anahtarıyla ve açıkça etkinleştirildiyse
+    const classifyModel = env.OPENAI_MODEL || OPENAI_DEFAULT.model;
     const repetitions = ws.plan === "free" || run.measurement_type === "simulated" ? 1 : 2;
     let failed = 0;
-    const outcome = await runPrompts({
-      workspaceId: run.workspace_id, provider, prompts, repetitions,
-      guard, cache: new ResponseCache(86_400_000),
-      gate, env, day, sleep: deps.sleep,
-      onItem: async ({ result, repetition }) => {
-        const resp = must(await db.from("responses").insert({
-          workspace_id: run.workspace_id, run_id: run.id, prompt_id: result.promptId,
-          provider: result.provider, model: result.model, method: result.method, repetition,
-          answer_text: result.answerText, cited_urls: result.citedUrls, search_queries: result.searchQueries,
-          data_origin: result.dataOrigin, measurement_type: run.measurement_type, billing: result.billing,
-          input_tokens: result.inputTokens, output_tokens: result.outputTokens, cost_usd: result.costUsd,
-        }).select("id").single(), "cevap kaydı") as any;
-        const hits = analyzeResponse(result, brands);
-        const classifier = new Map<string, string>();
-        const seen = brands.filter((b) => hits.find((h) => h.brandId === b.id)?.mentioned);
-        if (llmClassify && seen.length > 0 && guard.remainingUsd > CLASSIFY_WORST_USD) {
-          try {
-            const c = await classifyAnswer({ apiKey: env.OPENAI_API_KEY!, model: provider.config.model, price: provider.config.price, answer: result.answerText, names: seen.map((b) => b.name), fetchFn: deps.fetchFn });
-            if (c.costUsd > 0) guard.commit(c.costUsd);
-            must(await db.rpc("record_aux_call", { p_workspace: run.workspace_id, p_run: run.id, p_task: "classify", p_provider: "openai", p_model: c.model, p_in: c.inputTokens, p_out: c.outputTokens, p_cost: c.costUsd }), "record_aux_call");
-            for (const b of seen) {
-              const label = c.labels[b.name]; const h = hits.find((x) => x.brandId === b.id)!;
-              if (!label) continue;
-              h.recommended = label === "recommended";
-              if (!h.recommended) h.rank = null;
-              classifier.set(b.id, `llm:${c.model}`);
-            }
-            classified++;
-          } catch { /* kural sonucu geçerli kalır */ }
-        }
-        must(await db.from("mentions").insert(hits.map((h) => ({
-          response_id: resp.id, workspace_id: run.workspace_id, brand_id: h.brandId,
-          mentioned: h.mentioned, recommended: h.recommended, cited: h.cited, rank: h.rank, classifier: classifier.get(h.brandId) ?? "rules_v3",
-        }))), "anılma kaydı");
-      },
-      onFailedCall: async (_pid, kind) => { failed++; await gate.recordFailure(run.workspace_id, provider.config, kind); },
-    });
+    let ok = 0;
+    const outs: { stop: StopReason; stopMessage?: string; errorClass?: ApiErrorClass; provider: string }[] = [];
+    const cache = new ResponseCache<ProviderResult>(86_400_000);
+    for (const provider of providers) {
+      const llmClassify = env.LLM_CLASSIFY === "true" && provider.config.billing === "paid" && provider.config.useSearch && !!env.OPENAI_API_KEY;
+      const outcome = await runPrompts({
+        workspaceId: run.workspace_id, provider, prompts, repetitions,
+        guard, cache,
+        gate, env, day, sleep: deps.sleep,
+        onItem: async ({ result, repetition }) => {
+          const resp = must(await db.from("responses").insert({
+            workspace_id: run.workspace_id, run_id: run.id, prompt_id: result.promptId,
+            provider: result.provider, model: result.model, method: result.method, repetition,
+            answer_text: result.answerText, cited_urls: result.citedUrls, search_queries: result.searchQueries,
+            data_origin: result.dataOrigin, measurement_type: run.measurement_type, billing: result.billing,
+            input_tokens: result.inputTokens, output_tokens: result.outputTokens, cost_usd: result.costUsd,
+          }).select("id").single(), "cevap kaydı") as any;
+          const hits = analyzeResponse(result, brands);
+          const classifier = new Map<string, string>();
+          const seen = brands.filter((b) => hits.find((h) => h.brandId === b.id)?.mentioned);
+          if (llmClassify && seen.length > 0 && guard.remainingUsd > CLASSIFY_WORST_USD) {
+            try {
+              const c = await classifyAnswer({ apiKey: env.OPENAI_API_KEY!, model: classifyModel, price: OPENAI_DEFAULT.price, answer: result.answerText, names: seen.map((b) => b.name), fetchFn: deps.fetchFn });
+              if (c.costUsd > 0) guard.commit(c.costUsd);
+              must(await db.rpc("record_aux_call", { p_workspace: run.workspace_id, p_run: run.id, p_task: "classify", p_provider: "openai", p_model: c.model, p_in: c.inputTokens, p_out: c.outputTokens, p_cost: c.costUsd }), "record_aux_call");
+              for (const b of seen) {
+                const label = c.labels[b.name]; const h = hits.find((x) => x.brandId === b.id)!;
+                if (!label) continue;
+                h.recommended = label === "recommended";
+                if (!h.recommended) h.rank = null;
+                classifier.set(b.id, `llm:${c.model}`);
+              }
+            } catch { /* kural sonucu geçerli kalır */ }
+          }
+          must(await db.from("mentions").insert(hits.map((h) => ({
+            response_id: resp.id, workspace_id: run.workspace_id, brand_id: h.brandId,
+            mentioned: h.mentioned, recommended: h.recommended, cited: h.cited, rank: h.rank, classifier: classifier.get(h.brandId) ?? "rules_v3",
+          }))), "anılma kaydı");
+        },
+        onFailedCall: async (_pid, kind) => { failed++; await gate.recordFailure(run.workspace_id, provider.config, kind); },
+      });
+      ok += outcome.items.length;
+      outs.push({ stop: outcome.stop, stopMessage: outcome.stopMessage, errorClass: outcome.errorClass, provider: provider.config.provider });
+      // Bütçe/kota durması bütün ölçüm için geçerli: sonraki motora geçilmez
+      if (BUDGET_STOPS.has(outcome.stop)) break;
+    }
 
-    const ok = outcome.items.length;
-    const status = ok > 0 ? "done" : BUDGET_STOPS.has(outcome.stop) ? "budget_blocked" : "failed";
-    return await finish({ status, stop: outcome.stop, errorClass: outcome.errorClass, ok, failed }, provider, outcome.stopMessage);
+    const c = combineStops(outs);
+    const status = ok > 0 ? "done" : BUDGET_STOPS.has(c.stop) ? "budget_blocked" : "failed";
+    const used = providers.filter((p) => outs.some((o) => o.provider === p.config.provider));
+    return await finish({ status, stop: c.stop, errorClass: c.errorClass, ok, failed }, used, c.stopMessage);
   } catch (e) {
     return await finish({ status: "failed", stop: "worker_error", ok: 0, failed: 0 }, undefined, (e as Error).message);
   }
@@ -183,6 +219,50 @@ export async function processAudits(deps: WorkerDeps, max = 10): Promise<{ brand
     catch (e) { res = { url: p.website, status: "unreachable" as const, checks: [{ id: "reachable", ok: false, severity: "high" as const, title: "Siteye ulaşılamadı", detail: (e as Error).message.slice(0, 200) }] }; }
     must(await db.from("site_audits").insert({ workspace_id: p.workspace_id, brand_id: p.brand_id, url: res.url, status: res.status, checks: res.checks }), "site_audits");
     out.push({ brandId: p.brand_id, status: res.status });
+  }
+  return out;
+}
+
+/**
+ * Ürün Doğruluğu (pilot): bekleyen kontrolleri işler. Her kontrol = 1 canlı aramalı ChatGPT cevabı + 1 karşılaştırma çağrısı.
+ * Kota ve harcama tavanı ölçümlerle aynı kapıdan geçer. Başarısız olursa istek temizlenir (tekrar tekrar para harcanmaz).
+ */
+export async function processProductChecks(deps: WorkerDeps, max = 5): Promise<{ productId: string; status: string }[]> {
+  const { db, env } = deps;
+  const pending = must(await db.rpc("pending_product_checks", { p_limit: max }), "pending_product_checks") as
+    { product_id: string; workspace_id: string; brand_name: string; product_name: string; price: string | null; facts: string; country: string | null }[];
+  const out: { productId: string; status: string }[] = [];
+  const clear = async (id: string) => { await db.from("products").update({ check_requested_at: null }).eq("id", id); };
+  for (const p of pending) {
+    const { providers } = buildProviders({ ...env, SEARCH_COUNTRY: p.country || env.SEARCH_COUNTRY }, deps.fetchFn);
+    const provider = providers.find((x) => x.config.provider === "openai");
+    if (!provider) { await clear(p.product_id); out.push({ productId: p.product_id, status: "provider_not_configured" }); continue; }
+    try { assertBillingAllowed(provider, env); } catch { await clear(p.product_id); out.push({ productId: p.product_id, status: "paid_api_blocked" }); continue; }
+    const cfg = provider.config;
+    const gate = new DbUsageGate(db, null);
+    const worst = estimateCost({ ...cfg.price, perCall: cfg.price.perCall * (cfg.worstCaseToolCalls ?? 1) }, cfg.worstCaseTokens.input, cfg.worstCaseTokens.output);
+    const res = await gate.reserve(p.workspace_id, cfg, worst);
+    if (!res.ok) { await clear(p.product_id); out.push({ productId: p.product_id, status: res.reason }); continue; }
+    const question = buildProductQuestion(p.brand_name, p.product_name, p.country);
+    try {
+      const result = await provider.ask(p.product_id, question);
+      await gate.record(p.workspace_id, result);
+      let verdict = null as Awaited<ReturnType<typeof judgeProduct>> | null;
+      try {
+        verdict = await judgeProduct({ apiKey: env.OPENAI_API_KEY!, model: cfg.model, price: cfg.price, product: `${p.brand_name} ${p.product_name}`, productPrice: p.price, facts: p.facts, answer: result.answerText, fetchFn: deps.fetchFn });
+        must(await db.rpc("record_aux_call", { p_workspace: p.workspace_id, p_run: null, p_task: "product_judge", p_provider: "openai", p_model: cfg.model, p_in: verdict.inputTokens, p_out: verdict.outputTokens, p_cost: verdict.costUsd }), "record_aux_call");
+      } catch { verdict = null; }
+      must(await db.from("product_checks").insert({
+        workspace_id: p.workspace_id, product_id: p.product_id, provider: result.provider, model: result.model, question,
+        answer_text: result.answerText, cited_urls: result.citedUrls, recognized: verdict?.verdict.recognized ?? null,
+        claims: verdict?.verdict.claims ?? [], judge: verdict ? `llm:${cfg.model}` : null, cost_usd: result.costUsd + (verdict?.costUsd ?? 0),
+      }), "product_checks");
+      out.push({ productId: p.product_id, status: verdict ? "done" : "done_without_judge" });
+    } catch (e) {
+      await gate.recordFailure(p.workspace_id, cfg, "transient").catch(() => {});
+      await clear(p.product_id);
+      out.push({ productId: p.product_id, status: `failed: ${(e as Error).message.slice(0, 80)}` });
+    }
   }
   return out;
 }

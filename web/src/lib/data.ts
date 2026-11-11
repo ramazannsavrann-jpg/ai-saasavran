@@ -41,6 +41,12 @@ export interface SiteAudit {
 
 export interface BrandAction { id: string; brand_id: string; title: string; note: string | null; done_on: string; created_at: string }
 
+export interface Product { id: string; brand_id: string; name: string; price: string | null; facts: string; check_requested_at: string | null; created_at: string }
+export interface ProductCheck {
+  id: string; product_id: string; model: string; question: string; answer_text: string; cited_urls: string[];
+  recognized: boolean | null; claims: { claim: string; status: "correct" | "wrong" | "unverifiable"; fact: string }[]; judge: string | null; created_at: string;
+}
+
 export const INTENT_LABEL: Record<Intent, string> = {
   local: L("Yerel işletme arıyor", "Looking for a local business"),
   comparison: L("Karşılaştırıyor", "Comparing options"),
@@ -111,8 +117,8 @@ export const api = {
   async visibility(brandId: string, type: MeasurementType): Promise<VisRow[]> {
     return must(await sb().rpc("brand_visibility", { p_brand: brandId, p_type: type }));
   },
-  async promptResults(runId: string): Promise<PromptResult[]> {
-    return must(await sb().rpc("run_prompt_results", { p_run: runId }));
+  async promptResults(runId: string, provider?: string | null): Promise<PromptResult[]> {
+    return must(await sb().rpc("run_prompt_results", provider ? { p_run: runId, p_provider: provider } : { p_run: runId }));
   },
   async latestAudit(brandId: string): Promise<SiteAudit | null> {
     const rows = must(await sb().from("site_audits").select("*").eq("brand_id", brandId).order("created_at", { ascending: false }).limit(1)) as SiteAudit[];
@@ -124,6 +130,16 @@ export const api = {
   },
   async addAction(a: { workspace_id: string; brand_id: string; title: string; note: string | null; done_on: string }) { must(await sb().from("brand_actions").insert(a)); },
   async deleteAction(id: string) { must(await sb().from("brand_actions").delete().eq("id", id)); },
+  async products(brandId: string): Promise<Product[]> {
+    return must(await sb().from("products").select("id,brand_id,name,price,facts,check_requested_at,created_at").eq("brand_id", brandId).order("created_at"));
+  },
+  async addProduct(p: { workspace_id: string; brand_id: string; name: string; price: string | null; facts: string }) { must(await sb().from("products").insert(p)); },
+  async deleteProduct(id: string) { must(await sb().from("products").delete().eq("id", id)); },
+  async requestProductCheck(id: string) { must(await sb().rpc("request_product_check", { p_product: id })); },
+  async productChecks(productIds: string[]): Promise<ProductCheck[]> {
+    if (!productIds.length) return [];
+    return must(await sb().from("product_checks").select("id,product_id,model,question,answer_text,cited_urls,recognized,claims,judge,created_at").in("product_id", productIds).order("created_at", { ascending: false }).limit(40));
+  },
   async isPlatformAdmin(): Promise<boolean> {
     return must(await sb().rpc("is_platform_admin"));
   },

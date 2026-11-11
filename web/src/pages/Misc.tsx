@@ -39,6 +39,7 @@ const STATUS: { area: string; items: [Level, string, string][] }[] = [
       ["works", L("Geçmiş ölçüm grafiği ve soru bazında sonuç", "History chart and per-question results"), L("Hangi soruda önerildiğiniz, hangi rakibin öne çıktığı.", "Which questions recommend you and which competitor leads.")],
       ["works", L("Kaynak analizi, kaynak egemenliği ve kayıp nedeni kanıtları", "Source analysis, source dominance and loss evidence"), L("Yalnız canlı aramalı ölçümde (ChatGPT). Kanıt gösterir; kesin neden iddia etmez.", "Only with live-search measurements (ChatGPT). Shows evidence; does not claim a proven cause.")],
       ["works", L("Web sitesi kontrolü ve öneriler", "Website check and recommendations"), L("Kural tabanlı; yapay zekâ ile üretilmez.", "Rule-based; not AI-generated.")],
+      ["partial", L("Ürün doğruluğu (deneme)", "Product accuracy (pilot)"), L("Ücretli paketlerde: ChatGPT'nin ürününüz hakkında söylediklerini girdiğiniz doğru bilgilerle karşılaştırır. Karşılaştırma bir yapay zekâ adımıdır ve yanılabilir.", "On paid plans: compares what ChatGPT says about your product with the facts you enter. The comparison is an AI step and can be wrong.")],
       ["partial", L("PDF rapor", "PDF reports"), L("Rapor, tarayıcının yazdır penceresinden PDF olarak kaydedilir; ayrı bir PDF dosyası üretilmez.", "Reports can be saved as PDF from the browser's print dialog; no separate PDF file is generated.")],
     ],
   },

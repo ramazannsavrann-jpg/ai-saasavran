@@ -37,6 +37,12 @@
 - **"Önerildi mi" LLM kontrolü (0014):** yalnız ücretli ChatGPT ölçümlerinde; cevap başına tek çağrı, web araması yok, maliyeti paket tavanına sayılır, sorgu kotasına sayılmaz. Hata olursa kural sonucu geçerli kalır. `mentions.classifier` alanı `llm:<model>` ya da `rules_v3` yazar.
 - **Soru etiketi:** soruya "ucuz", "premium", "Almanya" gibi kısa etiket; rapor etiketlere göre de önerilme oranı verir.
 
+## v0.9 (11 Kasım 2026, beşinci paket)
+
+- **Ürün Doğruluğu (pilot, 0015):** marka başına en fazla 10 ürün; kullanıcı doğru bilgileri girer. Ücretli alanlarda "Doğruluğu kontrol et": 1 canlı aramalı ChatGPT cevabı + 1 karşılaştırma çağrısı (yaklaşık 0,02 $), ürün başına günde bir. Sonuç: doğru / yanlış / doğrulanamadı. Karşılaştırmanın doğruluğu henüz ölçülmedi; tek cevaba dayanır.
+
+- **"Önerildi mi" kontrolünün canlı denemesi (11 Kasım):** 20/20 ChatGPT cevabı başarılı (0,37 $). Marka geçen 9 cevap sınıflandırıldı, toplam 0,001 $ (cevap başına yaklaşık 0,0001 $). "X'e alternatif" sorularında X'in kendisini doğru biçimde "önerilmedi" saydı. Elle etiketli geniş bir karşılaştırma henüz yapılmadı.
+
 ## Bilinen açık konular
 
 - Bölge kısıtı uygulama içinde markanın ülke koduna dayanır; kullanıcı kodu değiştirebilir. Kesin uygulama için sunucu tarafında kullanıcı ülkesi gerekir.
@@ -75,6 +81,7 @@
 | Demo Lab: 10 hayali marka, 6 haftalık simülasyon geçmişi | ✅ | Entegrasyon; canlıda kuruldu |
 | Growth Lab: AI SaaSavran'ın kendi görünürlüğü, gerçek aramasız ölçüm | ✅ | Canlıda ilk ölçüm tamamlandı (20/20 cevap) |
 | Ücretli canlı aramalı ölçüm (ChatGPT, OpenAI `gpt-6-luna` + web araması) | 🧪 Deneme | Yalnız Growth Lab'de; toplam 3 $ tavanı veritabanında; müşteri alanlarında veritabanı kısıtıyla imkânsız. Kullanıcı izni 7 Kasım 2026. |
+| Claude (Anthropic `claude-haiku-5-5` + web araması) adaptörü | 🧪 Deneme | 11 Kasım 2026 eklendi. Birim testli; gerçek bağlantı testi `claude-smoke.yml` (3 çağrı, 0,15 $ tavan). Growth Lab'de canlı ölçüm ChatGPT + Claude birlikte çalışır (LIVE_ENGINES, varsayılan `openai,claude`); rapor motor seçicili. Müşteri paketlerinde yalnız ChatGPT (paket maliyeti tek motora göre). Toplam 3 $ deneme tavanı iki motora birlikte uygulanır. |
 | Kaynak (citation) analizi: yapay zekânın baktığı siteler | 🧪 Deneme | Yalnız canlı aramalı ölçümde |
 | "Cevaplarda geçen diğer adlar": takip edilmeyen markaları bulup "benim markam / rakip" diye işaretletme; geçmiş ölçümleri ücretsiz yeniden hesaplama | ✅ | Birim + entegrasyon |
 | Mobil uyum (yatay taşma yok, 48 px dokunma alanları) | ✅ | E2E her ekranda taşma kontrolü |
