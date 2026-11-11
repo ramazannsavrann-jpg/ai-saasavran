@@ -1,6 +1,6 @@
 // Üye olmadan ücretsiz kontrol: Gemini'ye (ücretsiz katman, internet araması yok) 5 soru sorar, markanın geçip geçmediğini ölçer.
 // Sınırlar veritabanında: kişi başına 30 günde 2 kontrol, günlük toplam tavan, ortak Gemini günlük tavanı.
-import { parseInput, buildQuestions, analyze } from "./_check-lib.js";
+import { parseInput, buildQuestions, analyze, geminiRestricted } from "./_check-lib.js";
 
 const MODEL = "gemini-3.5-flash-lite";
 const json = (b, s = 200) => new Response(JSON.stringify(b), { status: s, headers: { "content-type": "application/json", "cache-control": "no-store" } });
@@ -34,6 +34,8 @@ async function ask(env, q) {
 
 export async function onRequestPost({ request, env }) {
   if (!env.GEMINI_API_KEY || !env.SUPABASE_URL) return json({ error: "unavailable" }, 503);
+  // AEA, İsviçre ve Birleşik Krallık ziyaretçilerine ücretsiz Gemini ile hizmet verilmez (Google koşulları)
+  if (geminiRestricted(request.cf?.country ?? request.headers.get("CF-IPCountry"))) return json({ error: "region" }, 451);
   const input = parseInput(await request.json().catch(() => ({})));
   if (input.error) return json({ error: "input" }, 400);
   const ip = request.headers.get("CF-Connecting-IP") ?? "unknown";

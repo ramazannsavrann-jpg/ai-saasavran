@@ -53,3 +53,7 @@ export function analyze(answers, { brand, domain }) {
     others,
   };
 }
+
+/** Ücretsiz Gemini'nin kullanılamadığı ülkeler (AEA, İsviçre, Birleşik Krallık): Google Gemini API ek koşulları. */
+const GEMINI_FREE_RESTRICTED = new Set(("AT BE BG HR CY CZ DK EE FI FR DE GR HU IE IT LV LT LU MT NL PL PT RO SK SI ES SE IS LI NO CH GB").split(" "));
+export const geminiRestricted = (country) => GEMINI_FREE_RESTRICTED.has(String(country ?? "").toUpperCase());

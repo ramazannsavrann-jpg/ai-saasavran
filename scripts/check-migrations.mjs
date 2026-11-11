@@ -177,4 +177,17 @@ console.log("ok tanımsız paket atanamıyor");
   await assert.rejects(db.exec(`update brands set country = 'tr' where false; insert into brands (workspace_id, name, country) values ('${D}', 'x', 'turkiye')`));
   console.log("ok 0012: yarıda kalan ölçüm kurtarıldı; durdurulan alan yeni ayda açıldı; istemci çağıramıyor; ülke kodu doğrulanıyor");
 }
+{
+  // 0013: bölge kısıtı ve aksiyon takibi
+  const g = async (c) => (await db.query(`select gemini_free_restricted($1) r`, [c])).rows[0].r;
+  assert.equal(await g("de"), true); assert.equal(await g("GB"), true); assert.equal(await g("TR"), false); assert.equal(await g(null), false); assert.equal(await g("US"), false);
+  const own = (await db.query(`select id, workspace_id from brands where workspace_id=$1 and not is_competitor limit 1`, [A])).rows[0];
+  if (own) {
+    await as(U1, `insert into brand_actions (workspace_id, brand_id, title) values ('${A}', '${own.id}', 'SSS sayfası eklendi')`);
+    assert.equal((await as(U1, `select count(*)::int n from brand_actions`)).rows[0].n, 1);
+    await assert.rejects(as(U1, `insert into brand_actions (workspace_id, brand_id, title) values ('${D}', '${own.id}', 'başka alan')`));
+    await assert.rejects(as(U1, `insert into brand_actions (workspace_id, brand_id, title) values ('${A}', '${own.id}', 'x')`), "çok kısa başlık");
+  }
+  console.log("ok 0013: bölge listesi doğru; aksiyon yalnız kendi alanına ve markasına yazılabiliyor" + (own ? "" : " (marka yok, RLS adımı atlandı)"));
+}
 console.log("TÜM DB TESTLERİ GEÇTİ");

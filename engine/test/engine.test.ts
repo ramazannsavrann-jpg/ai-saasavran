@@ -517,3 +517,23 @@ test("Kaynak egemenliği ve kayıp nedeni kartı: kaynak sahibi, desteklenen mar
   assert.deepEqual(p1.evidence, ["competitor_own_site_cited", "target_site_not_cited", "third_party_sources", "mentioned_not_recommended"]);
   assert.deepEqual(cards.find((c) => c.promptId === "p3")!.evidence, ["no_sources", "absent"], "kaynak yoksa neden üretilmez");
 });
+
+test("Koşul haritası ve aksiyon etkisi: niyete göre toplama, küçük örneklem işareti, aralıklar ayrışmadıkça 'belirsiz'", async () => {
+  const { conditionMap, actionImpact } = await import("../src/insights.ts");
+  const run = [
+    { intent: "purchase", answers: 2, target_mentioned: 2, target_recommended: 2, top_competitor: "A", top_competitor_recs: 1 },
+    { intent: "purchase", answers: 2, target_mentioned: 1, target_recommended: 1, top_competitor: "B", top_competitor_recs: 2 },
+    { intent: "local", answers: 2, target_mentioned: 0, target_recommended: 0, top_competitor: "A", top_competitor_recs: 2 },
+  ];
+  const map = conditionMap([run, run]);
+  assert.deepEqual(map.map((m) => [m.key, m.answers, m.recommended, m.topCompetitor, m.lowSample]), [["purchase", 8, 6, "B", true], ["local", 4, 0, "A", true]]);
+  const pts = [{ at: "2026-11-01T10:00:00Z", k: 2, n: 50 }, { at: "2026-11-08T10:00:00Z", k: 4, n: 50 }, { at: "2026-11-15T10:00:00Z", k: 30, n: 50 }];
+  assert.equal(actionImpact(pts, "2026-11-10").verdict, "up");
+  assert.equal(actionImpact(pts, "2026-11-10").before!.k, 4);
+  assert.equal(actionImpact(pts, "2026-11-05").verdict, "up");
+  assert.equal(actionImpact(pts.slice(0, 2), "2026-11-05").verdict, "unclear", "2/50 → 4/50 gürültü olabilir");
+  assert.equal(actionImpact(pts, "2026-10-01").verdict, "no_before");
+  assert.equal(actionImpact(pts, "2026-11-15").verdict, "no_after", "aksiyon günü yapılan ölçüm sonraki sayılmaz");
+  const { geminiRestricted } = await import("../../functions/api/_check-lib.js");
+  assert.equal(geminiRestricted("DE"), true); assert.equal(geminiRestricted("gb"), true); assert.equal(geminiRestricted("TR"), false); assert.equal(geminiRestricted(undefined), false);
+});

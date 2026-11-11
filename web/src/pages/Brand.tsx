@@ -6,7 +6,7 @@ import { api, INTENT_LABEL, type Brand, type Intent, type MeasurementType, type 
 import { friendlyError } from "../lib/supabase";
 import { L, isEn } from "../lib/i18n";
 import { ERROR_CLASS_TEXT, STOP_TEXT, runStatusText } from "../lib/messages";
-import { lossCards, sourceDominance, type LossCard, type SourceRow } from "../../../engine/src/insights.ts";
+import { actionImpact, conditionMap, lossCards, sourceDominance, type LossCard, type SourceRow } from "../../../engine/src/insights.ts";
 import { competitorsInRun, formatDateTime, MIN_SAMPLE, numLoc, pct, providerLabel, rangeText, series, shareSummary, sourceOpportunities, topDomains, usd } from "../lib/report";
 import { Button, Confirm, DataNotice, Empty, ErrorBox, Field, Loading, Select, TypeBadge } from "../components/ui";
 import { CompareBars, TrendChart } from "../components/Chart";
@@ -258,6 +258,10 @@ function Report({ brand, type, onBrandChange }: { brand: Brand; type: Measuremen
   const opps = live && answers.data && ments.data
     ? sourceOpportunities(answers.data, ments.data, brand.id, [brand.website, ...(comps.data ?? []).map((c) => c.website)].map(host).filter(Boolean))
     : [];
+  // Koşullu görünürlük: son 4 ölçümün cevapları soru niyetine göre toplanır (ek API çağrısı yok)
+  const recentIds = pts.slice(-4).map((p) => p.runId);
+  const condRuns = useLoad(() => Promise.all(recentIds.map((id) => api.promptResults(id))), [recentIds.join(",")]);
+  const conditions = conditionMap(condRuns.data ?? []);
   const [open, setOpen] = useState<string | null>(null);
   // Kaynak egemenliği ve kayıp nedeni kanıtları (yalnız canlı aramalı ölçümde; ek API çağrısı yok)
   const insightBrands = [{ id: brand.id, name: brand.name, website: brand.website, isTarget: true },
@@ -326,6 +330,22 @@ function Report({ brand, type, onBrandChange }: { brand: Brand; type: Measuremen
               name: c.name, isTarget: c.isTarget, value: c.recommend.value,
               detail: isEn() ? `${c.recommend.k}/${c.recommend.n} answers, range ${rangeText(c.recommend)}, share of recommendations ${pct(c.share)}` : `${c.recommend.k}/${c.recommend.n} cevap, aralık ${rangeText(c.recommend)}, önerilerde pay ${pct(c.share)}`,
             }))} />
+          </section>
+
+          <section className="panel" id="kosul-haritasi">
+            <h2>{L("Hangi koşulda görünüyorsunuz", "Where you show up, and where you don't")}</h2>
+            <p className="muted">{isEn() ? `Recommendation rate by what the customer is doing, over the last ${recentIds.length} measurement${recentIds.length > 1 ? "s" : ""}. Groups under 20 answers are marked; don't draw conclusions from them.` : `Müşterinin ne yaptığına göre önerilme oranı, son ${recentIds.length} ölçümün toplamı. 20 cevabın altındaki gruplar işaretlidir; onlardan sonuç çıkarmayın.`}</p>
+            {condRuns.loading ? <Loading /> : conditions.length === 0 ? <p>{L("Henüz veri yok.", "No data yet.")}</p> : (
+              <ul className="src-dom">
+                {conditions.map((c) => (
+                  <li key={c.key}>
+                    <p className="src-head"><strong>{INTENT_LABEL[c.key as keyof typeof INTENT_LABEL] ?? c.key}</strong> <span className="num">{pct(c.answers ? c.recommended / c.answers : 0)}</span></p>
+                    <p className="src-sup muted">{isEn() ? `Recommended in ${c.recommended} of ${c.answers} answers, range ${pct(c.low)}–${pct(c.high)}` : `${c.answers} cevabın ${c.recommended} tanesinde önerildiniz, aralık ${pct(c.low)}–${pct(c.high)}`}{c.topCompetitor && <>{L("; en çok önerilen rakip: ", "; most recommended competitor: ")}{c.topCompetitor}</>}.</p>
+                    {c.lowSample && <p className="src-sup muted">{L("Örneklem küçük: bu grupta daha fazla soru ekleyin.", "Small sample: add more questions of this kind.")}</p>}
+                  </li>
+                ))}
+              </ul>
+            )}
           </section>
 
           {live && (
@@ -428,6 +448,71 @@ function Report({ brand, type, onBrandChange }: { brand: Brand; type: Measuremen
   );
 }
 
+/** Aksiyon ve Sonuç Takibi: yapılan iyileştirme tarihle kaydedilir; önceki ve sonraki ölçüm motor bazında karşılaştırılır. */
+function ActionsPanel({ brand }: { brand: Brand }) {
+  const actions = useLoad(() => api.actions(brand.id), [brand.id]);
+  const live = useLoad(() => api.visibility(brand.id, "live_search"), [brand.id]);
+  const know = useLoad(() => api.visibility(brand.id, "model_knowledge"), [brand.id]);
+  const [busy, setBusy] = useState(false);
+  const [err, setErr] = useState<string | null>(null);
+  const today = new Date().toISOString().slice(0, 10);
+  const toPoints = (rows: typeof live.data) => series(rows ?? []).map((p) => ({ at: p.at, k: p.recommend.k, n: p.recommend.n }));
+  const engines = [
+    { label: L("ChatGPT (canlı arama)", "ChatGPT (live search)"), points: toPoints(live.data) },
+    { label: L("Gemini (aramasız)", "Gemini (no search)"), points: toPoints(know.data) },
+  ].filter((e) => e.points.length > 0);
+
+  async function add(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const form = e.currentTarget, f = new FormData(form);
+    const title = String(f.get("action_title") || "").trim();
+    if (title.length < 3) { setErr(L("Ne yaptığınızı kısaca yazın.", "Briefly describe what you did.")); return; }
+    setBusy(true); setErr(null);
+    try {
+      await api.addAction({ workspace_id: brand.workspace_id, brand_id: brand.id, title, note: String(f.get("action_note") || "").trim() || null, done_on: String(f.get("action_date") || today) });
+      form.reset(); actions.reload();
+    } catch (x) { setErr(friendlyError(x)); } finally { setBusy(false); }
+  }
+  async function remove(id: string) { try { await api.deleteAction(id); actions.reload(); } catch (x) { setErr(friendlyError(x)); } }
+  const rateText = (p: { k: number; n: number; low: number; high: number }) => `${pct(p.n ? p.k / p.n : 0)} (${p.k}/${p.n}, ${pct(p.low)}–${pct(p.high)})`;
+
+  return (
+    <section className="panel stack" id="aksiyonlar">
+      <h2>{L("Yaptıklarım ve sonuçları", "What I did, and what happened")}</h2>
+      <p className="muted">{L("Bir iyileştirme yaptığınızda buraya tarihiyle yazın. Önceki son ölçümle sonraki en güncel ölçümü motor bazında karşılaştırırız. Önerilme oranı tek başına nedeni kanıtlamaz: yapay zekâ modelleri, rakipler ve kaynak siteler de değişir.", "When you make an improvement, log it here with its date. We compare the last measurement before it with the latest one after it, per engine. A change in the rate does not prove the cause: AI models, competitors and source sites change too.")}</p>
+      <form className="stack" onSubmit={add} noValidate aria-label={L("Aksiyon ekle", "Add action")}>
+        <Field label={L("Ne yaptınız?", "What did you do?")} name="action_title" maxLength={200} placeholder={L("Örn. SSS sayfası eklendi", "e.g. Added an FAQ page")} />
+        <Field label={L("Tarih", "Date")} name="action_date" type="date" defaultValue={today} max={today} />
+        <Field label={L("Not (isteğe bağlı)", "Note (optional)")} name="action_note" maxLength={1000} />
+        <ErrorBox message={err} />
+        <Button type="submit" variant="quiet" busy={busy}>{L("Kaydet", "Save")}</Button>
+      </form>
+      {actions.loading ? <Loading /> : (actions.data ?? []).length === 0 ? <p className="muted">{L("Henüz kayıt yok.", "Nothing logged yet.")}</p> : (
+        <ul className="src-dom">
+          {(actions.data ?? []).map((a) => (
+            <li key={a.id}>
+              <p className="src-head"><strong>{a.title}</strong> <span className="muted num">{new Date(a.done_on + "T00:00:00").toLocaleDateString(isEn() ? "en-US" : "tr-TR", { day: "numeric", month: "short", year: "numeric" })}</span></p>
+              {a.note && <p className="src-sup muted">{a.note}</p>}
+              {engines.length === 0 && <p className="src-sup muted">{L("Henüz tamamlanmış ölçüm yok.", "No completed measurements yet.")}</p>}
+              {engines.map((en) => {
+                const im = actionImpact(en.points, a.done_on);
+                const text = im.verdict === "no_before" ? L("öncesinde ölçüm yok; karşılaştırma yapılamaz.", "no measurement before it; can't compare.")
+                  : im.verdict === "no_after" ? (isEn() ? `before: ${rateText(im.before!)}. Waiting for the next measurement.` : `önce: ${rateText(im.before!)}. Sonraki ölçüm bekleniyor.`)
+                  : (isEn() ? `before ${rateText(im.before!)} → after ${rateText(im.after!)}. ` : `önce ${rateText(im.before!)} → sonra ${rateText(im.after!)}. `)
+                    + (im.verdict === "up" ? L("Artış, ölçüm oynaklığından büyük.", "The rise is larger than measurement noise.")
+                      : im.verdict === "down" ? L("Düşüş, ölçüm oynaklığından büyük.", "The drop is larger than measurement noise.")
+                      : L("Aralıklar örtüşüyor: fark ölçüm oynaklığı olabilir.", "The ranges overlap: the difference may be measurement noise."));
+                return <p key={en.label} className="src-sup"><span className="muted">{en.label}: </span>{text}</p>;
+              })}
+              <button className="link-btn" onClick={() => remove(a.id)}>{L("Sil", "Delete")}</button>
+            </li>
+          ))}
+        </ul>
+      )}
+    </section>
+  );
+}
+
 const SEV_LABEL = { high: L("Önemli", "Important"), medium: L("Orta", "Medium"), low: L("Düşük", "Low"), info: L("Bilgi", "Info") } as const;
 
 function Advice({ brand, type, runs, onBrandChange }: { brand: Brand; type: MeasurementType; runs: Run[]; onBrandChange: () => void }) {
@@ -476,6 +561,8 @@ function Advice({ brand, type, runs, onBrandChange }: { brand: Brand; type: Meas
           </ol>
         )}
       </section>
+
+      {!sim && <ActionsPanel brand={brand} />}
 
       {!sim && (
         <section className="panel">
