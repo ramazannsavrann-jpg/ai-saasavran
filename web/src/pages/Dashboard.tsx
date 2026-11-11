@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import { useApp, useLoad } from "../lib/app";
 import { api, type Brand, type MeasurementType } from "../lib/data";
@@ -64,6 +64,13 @@ function WorkspaceView() {
         <section className="panel">
           <h2>{L("Bu ayki kullanım", "This month's usage")}</h2>
           <Meter label={L("Yapay zekâ sorgusu", "AI queries")} used={u.engine_calls} limit={u.engine_call_limit} />
+          {u.engine_call_limit > 0 && u.engine_calls >= u.engine_call_limit * 0.8 && (
+            <p className="caution">{u.engine_calls >= u.engine_call_limit
+              ? L("Bu ayki sorgu kotanız doldu. Ölçümler ay başında kendiliğinden yeniden başlar; beklemek istemezseniz paketinizi yükseltebilirsiniz. ", "You've used this month's query quota. Measurements resume automatically next month; upgrade if you'd rather not wait. ")
+              : (isEn() ? `You've used ${Math.round((100 * u.engine_calls) / u.engine_call_limit)}% of this month's query quota. ` : `Bu ayki sorgu kotanızın %${Math.round((100 * u.engine_calls) / u.engine_call_limit)} kadarını kullandınız. `)}
+              <Link to="/hesap#paket">{L("Paketleri gör", "See plans")}</Link>
+            </p>
+          )}
           <Meter label={L("Marka", "Brands")} used={u.brands_used} limit={u.brand_limit} warn={false} />
           <dl className="facts">
             <div><dt>{L("Ücretsiz katman sorgusu", "Free-tier queries")}</dt><dd className="num">{u.free_calls}</dd></div>
@@ -137,6 +144,13 @@ export function NewBrand() {
   const nav = useNavigate();
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
+  // Ziyaretçinin ülkesi: ülke kodu önceden doldurulur. Avrupa Ekonomik Alanı, İsviçre ve Birleşik Krallık'ta ücretsiz Gemini kapalıdır.
+  const [geo, setGeo] = useState<{ country: string; geminiFree: boolean }>({ country: "", geminiFree: true });
+  useEffect(() => {
+    let live = true;
+    fetch("/api/geo").then((r) => (r.ok ? r.json() : null)).then((j) => { if (live && j && typeof j.country === "string") setGeo({ country: j.country, geminiFree: j.geminiFree !== false }); }).catch(() => {});
+    return () => { live = false; };
+  }, []);
   if (!current) return <Navigate to="/panel" replace />;
   const demo = current.kind === "demo_lab";
   async function submit(e: FormEvent<HTMLFormElement>) {
@@ -169,7 +183,8 @@ export function NewBrand() {
         {SECTORS.map((s) => <option key={s}>{s}</option>)}
       </Select>
       <Field label={L("Şehir veya ilçe", "City or area")} name="city" placeholder={L("Örn. Antalya", "e.g. Austin")} />
-      <Field label={L("Ülke kodu (isteğe bağlı)", "Country code (optional)")} name="country" maxLength={2} placeholder={L("TR", "US")} hint={L("İki harf: TR, US, DE, GB… Boşsa Türkiye sayılır.", "Two letters: US, GB, DE, TR… Empty means Turkey.")} />
+      <Field label={L("Ülke kodu (isteğe bağlı)", "Country code (optional)")} name="country" key={geo.country} defaultValue={geo.country} maxLength={2} placeholder={L("TR", "US")} hint={L("İki harf: TR, US, DE, GB… Boşsa Türkiye sayılır.", "Two letters: US, GB, DE, TR… Empty means Turkey.")} />
+      {!geo.geminiFree && !demo && <p className="caution">{L("Bulunduğunuz ülkede ücretsiz Gemini ölçümü kapalı (Avrupa Ekonomik Alanı, İsviçre, Birleşik Krallık). Marka ekleyebilir ve sorularınızı hazırlayabilirsiniz; ölçüm için ChatGPT canlı aramalı ücretli paketler kullanılabilir.", "Free Gemini measurement isn't available in your country (EEA, Switzerland, UK). You can add your brand and prepare questions; measurement is available with ChatGPT live search on paid plans.")}</p>}
       <ErrorBox message={err} />
       <Button type="submit" busy={busy}>{L("Markayı ekle", "Add brand")}</Button>
     </form>
