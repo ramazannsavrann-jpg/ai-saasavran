@@ -678,3 +678,20 @@ test("Markalı soru ayrımı: kendi adı geçen soru markalı, rakip adı geçen
   ], b);
   assert.deepEqual(split.map((x) => [x.kind, x.prompts, x.answers, x.recommended]), [["unbranded", 2, 4, 1], ["branded", 1, 2, 2]]);
 });
+
+test("Rakip ürün karşılaştırması: aynı cevaplarda yan yana sayım ve ikili karşılaşma", async () => {
+  const { compareProducts } = await import("../src/insights.ts");
+  const answers = [
+    { id: "a1", prompt_id: "p1", provider: "openai", answer_text: "Öneriler:\n1. Oltre XR4\n2. Aero 5", cited_urls: [] },
+    { id: "a2", prompt_id: "p1", provider: "openai", answer_text: "Oltre XR4 pahalı, tavsiye etmem.\n\nDaha iyisi:\n- Rakip Bisiklet Aero 5", cited_urls: [] },
+    { id: "a3", prompt_id: "p2", provider: "claude", answer_text: "Seçenekler:\n- Aero 5", cited_urls: [] },
+  ];
+  const rows = compareProducts(answers, { id: "o", name: "Bianchi Oltre XR4" }, [{ id: "r", name: "Aero 5", rival_brand: "Rakip Bisiklet" }], { name: "Bianchi" });
+  const own = rows.find((r) => r.isOwn)!, rival = rows.find((r) => !r.isOwn)!;
+  assert.equal(rival.name, "Rakip Bisiklet Aero 5");
+  assert.deepEqual([own.byEngine.openai.mentioned, own.byEngine.openai.recommended], [2, 1]);
+  assert.deepEqual([rival.byEngine.openai.mentioned, rival.byEngine.openai.recommended], [2, 2]);
+  assert.deepEqual([rival.byEngine.claude.mentioned, rival.byEngine.claude.recommended], [1, 1]);
+  assert.equal(own.byEngine.claude.mentioned, 0);
+  assert.deepEqual(rival.headToHead, { bothMentioned: 2, ownWins: 0, rivalWins: 1 });
+});

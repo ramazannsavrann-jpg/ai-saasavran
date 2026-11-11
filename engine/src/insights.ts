@@ -255,3 +255,56 @@ export function splitByKind(
   }
   return (["unbranded", "branded"] as const).filter((k) => acc[k].prompts > 0).map((k) => ({ kind: k, ...acc[k], ...wilson(acc[k].recommended, acc[k].answers) }));
 }
+
+// ---------------- Rakip ürün karşılaştırması ----------------
+export interface ProductCompareRow { id: string; name: string; isOwn: boolean; byEngine: Record<string, { answers: number; mentioned: number; recommended: number; low: number; high: number }>; headToHead: { bothMentioned: number; ownWins: number; rivalWins: number } | null }
+
+/**
+ * Kendi ürünü ve rakip ürünler aynı cevaplarda aranır. Her ürün için motor bazında anılma ve önerilme;
+ * rakipler için "ikisi aynı cevapta geçtiğinde kim önerildi" sayımı. Ek API çağrısı yok; kural tabanlı.
+ */
+export function compareProducts(
+  answers: ProductAnswer[],
+  own: { id: string; name: string },
+  rivals: { id: string; name: string; rival_brand?: string | null }[],
+  brand: { name: string },
+): ProductCompareRow[] {
+  const lowerBrand = brand.name.toLocaleLowerCase("tr-TR");
+  const bareOf = (name: string, b: string | null | undefined) => {
+    const lb = (b ?? "").toLocaleLowerCase("tr-TR");
+    const n = name.toLocaleLowerCase("tr-TR");
+    for (const pre of [lowerBrand, lb].filter(Boolean)) if (n.startsWith(pre + " ")) return name.slice(pre.length + 1).trim();
+    return "";
+  };
+  const refs: BrandRef[] = [own, ...rivals].map((p) => {
+    const bare = bareOf(p.name, (p as { rival_brand?: string | null }).rival_brand);
+    const full = (p as { rival_brand?: string | null }).rival_brand && !p.name.toLocaleLowerCase("tr-TR").startsWith(((p as { rival_brand?: string | null }).rival_brand ?? "").toLocaleLowerCase("tr-TR"))
+      ? [`${(p as { rival_brand?: string | null }).rival_brand} ${p.name}`] : [];
+    return { id: p.id, name: p.name, aliases: [...full, ...(bare.length >= 3 ? [bare] : [])], domain: "" };
+  });
+  const stats = new Map<string, Map<string, { answers: number; mentioned: number; recommended: number }>>();
+  const h2h = new Map<string, { bothMentioned: number; ownWins: number; rivalWins: number }>(rivals.map((r) => [r.id, { bothMentioned: 0, ownWins: 0, rivalWins: 0 }]));
+  for (const a of answers) {
+    const hits = analyzeResponse({ promptId: a.prompt_id, provider: a.provider, answerText: a.answer_text, citedUrls: a.cited_urls ?? [] }, refs);
+    const by = new Map(hits.map((h) => [h.brandId, h]));
+    for (const r of refs) {
+      const m = stats.get(r.id) ?? new Map(); const e = m.get(a.provider) ?? { answers: 0, mentioned: 0, recommended: 0 };
+      const h = by.get(r.id); e.answers++; if (h?.mentioned) e.mentioned++; if (h?.recommended) e.recommended++;
+      m.set(a.provider, e); stats.set(r.id, m);
+    }
+    const o = by.get(own.id);
+    for (const r of rivals) {
+      const x = by.get(r.id), t = h2h.get(r.id)!;
+      if (o?.mentioned && x?.mentioned) {
+        t.bothMentioned++;
+        if (o.recommended && !x.recommended) t.ownWins++;
+        if (x.recommended && !o.recommended) t.rivalWins++;
+      }
+    }
+  }
+  return [{ ...own, isOwn: true }, ...rivals.map((r) => ({ id: r.id, name: r.rival_brand && !r.name.toLocaleLowerCase("tr-TR").startsWith(r.rival_brand.toLocaleLowerCase("tr-TR")) ? `${r.rival_brand} ${r.name}` : r.name, isOwn: false }))].map((p) => ({
+    id: p.id, name: p.name, isOwn: p.isOwn,
+    byEngine: Object.fromEntries([...(stats.get(p.id) ?? new Map()).entries()].map(([k, e]) => [k, { ...e, ...wilson(e.recommended, e.answers) }])),
+    headToHead: p.isOwn ? null : h2h.get(p.id) ?? null,
+  }));
+}

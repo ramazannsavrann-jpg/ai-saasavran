@@ -6,7 +6,7 @@ import { api, INTENT_LABEL, type Brand, type Intent, type MeasurementType, type 
 import { friendlyError } from "../lib/supabase";
 import { L, isEn } from "../lib/i18n";
 import { ERROR_CLASS_TEXT, STOP_TEXT, runStatusText } from "../lib/messages";
-import { actionImpact, conditionMap, lossCards, productVisibility, promptKind, sourceDominance, splitByKind, type LossCard, type SourceRow } from "../../../engine/src/insights.ts";
+import { actionImpact, compareProducts, conditionMap, lossCards, productVisibility, promptKind, sourceDominance, splitByKind, type LossCard, type SourceRow } from "../../../engine/src/insights.ts";
 import { competitorsInRun, formatDateTime, MIN_SAMPLE, numLoc, pct, providerLabel, rangeText, series, shareSummary, sourceOpportunities, topDomains, usd } from "../lib/report";
 import { Button, Confirm, DataNotice, Empty, ErrorBox, Field, Loading, Select, TypeBadge } from "../components/ui";
 import { CompareBars, TrendChart } from "../components/Chart";
@@ -70,6 +70,58 @@ export function BrandPage() {
       {tab === "sorular" && <Questions brand={b} />}
       {tab === "urunler" && <Products brand={b} paidAllowed={!!current?.paid_live_allowed} />}
       {tab === "olcumler" && <RunHistory runs={runs.data ?? []} loading={runs.loading} />}
+    </div>
+  );
+}
+
+/** Rakip ürün karşılaştırması: kendi ürünü ve rakip ürünler aynı cevaplarda, motor bazında; ikisi birlikte geçtiğinde kim önerildi. */
+function RivalCompare({ own, rivals, brand, answers, hasRuns, onChange, onError }: {
+  own: { id: string; name: string }; rivals: { id: string; name: string; rival_brand: string | null }[]; brand: Brand;
+  answers: Parameters<typeof compareProducts>[0] | null; hasRuns: boolean; onChange: () => void; onError: (m: string) => void;
+}) {
+  const [open, setOpen] = useState(false);
+  const [busy, setBusy] = useState(false);
+  const rows = answers && rivals.length ? compareProducts(answers, own, rivals, { name: brand.name }) : [];
+  const engines = [...new Set(rows.flatMap((r) => Object.keys(r.byEngine)))].sort();
+  async function add(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const form = e.currentTarget, f = new FormData(form);
+    const name = String(f.get("rival_name") || "").trim();
+    if (name.length < 2) { onError(L("Rakip ürünün adını yazın.", "Enter the competitor product's name.")); return; }
+    setBusy(true);
+    try { await api.addRival({ workspace_id: brand.workspace_id, brand_id: brand.id, name, rival_of: own.id, rival_brand: String(f.get("rival_brand") || "").trim() || null }); form.reset(); setOpen(false); onChange(); }
+    catch (x) { onError(friendlyError(x)); } finally { setBusy(false); }
+  }
+  return (
+    <div className="prod-vis">
+      <p className="src-sup"><strong>{L("Rakip ürünlerle karşılaştırma", "Compared with competitor products")}</strong></p>
+      {rivals.length === 0 && <p className="src-sup muted">{L("Henüz rakip ürün yok. Müşterinizin bu ürün yerine alabileceği 1–5 rakip ürün ekleyin.", "No competitor products yet. Add 1–5 products a customer might buy instead.")}</p>}
+      {rivals.length > 0 && !hasRuns && <p className="src-sup muted">{L("Karşılaştırma için önce bir ölçüm tamamlanmalı.", "A completed measurement is needed to compare.")}</p>}
+      {rows.length > 0 && engines.map((en) => (
+        <div key={en}>
+          <p className="src-sup muted">{providerLabel(en)}</p>
+          <ul className="src-dom">
+            {rows.map((r) => { const e = r.byEngine[en]; return (
+              <li key={r.id}>
+                <p className="src-head"><span>{r.isOwn ? <strong>{r.name}</strong> : r.name}</span> <span className="num">{e ? `${e.recommended}/${e.answers}` : "–"}</span></p>
+                {e && <p className="src-sup muted">{isEn() ? `mentioned ${e.mentioned}, recommended ${e.recommended} (range ${pct(e.low)}–${pct(e.high)})` : `${e.mentioned} kez geçti, ${e.recommended} kez önerildi (aralık ${pct(e.low)}–${pct(e.high)})`}</p>}
+              </li>
+            ); })}
+          </ul>
+        </div>
+      ))}
+      {rows.filter((r) => !r.isOwn && r.headToHead && r.headToHead.bothMentioned > 0).map((r) => (
+        <p key={r.id} className="src-sup">{isEn() ? `${own.name} vs ${r.name}: both appeared in ${r.headToHead!.bothMentioned} answers; only yours recommended in ${r.headToHead!.ownWins}, only theirs in ${r.headToHead!.rivalWins}.` : `${own.name} ↔ ${r.name}: ${r.headToHead!.bothMentioned} cevapta ikisi birlikte geçti; yalnız sizinki ${r.headToHead!.ownWins}, yalnız onunki ${r.headToHead!.rivalWins} kez önerildi.`}</p>
+      ))}
+      {rows.length > 0 && <p className="src-sup muted">{L("Son ölçümün cevaplarına dayanır; ek ücret yok. Ürün adları cevaplarda farklı yazılabilir, sayımlar bu yüzden düşük kalabilir.", "Based on the latest measurement's answers; no extra cost. Product names may be written differently in answers, so counts can be low.")}</p>}
+      {rivals.length > 0 && <p className="src-sup">{rivals.map((r) => <span key={r.id} className="chip-inline">{r.rival_brand ? `${r.rival_brand} ` : ""}{r.name} <button className="link-btn" onClick={async () => { try { await api.deleteProduct(r.id); onChange(); } catch (x) { onError(friendlyError(x)); } }}>{L("sil", "remove")}</button></span>)}</p>}
+      {rivals.length < 5 && (open ? (
+        <form className="stack" onSubmit={add} noValidate aria-label={L("Rakip ürün ekle", "Add competitor product")}>
+          <Field label={L("Rakip ürün adı", "Competitor product name")} name="rival_name" maxLength={120} placeholder={L("Örn. Aero 5", "e.g. Aero 5")} />
+          <Field label={L("Rakip marka (isteğe bağlı)", "Competitor brand (optional)")} name="rival_brand" maxLength={80} />
+          <Button type="submit" variant="quiet" busy={busy}>{L("Ekle", "Add")}</Button>
+        </form>
+      ) : <button className="link-btn" onClick={() => setOpen(true)}>{L("+ Rakip ürün ekle", "+ Add competitor product")}</button>)}
     </div>
   );
 }
@@ -143,8 +195,9 @@ function Products({ brand, paidAllowed }: { brand: Brand; paidAllowed: boolean }
         <ErrorBox message={err} />
         {products.loading ? <Loading /> : (products.data ?? []).length === 0 ? <p className="muted">{L("Henüz ürün eklenmedi.", "No products yet.")}</p> : (
           <ul className="src-dom">
-            {(products.data ?? []).map((p) => {
+            {(products.data ?? []).filter((p) => !p.rival_of).map((p) => {
               const last = (checks.data ?? []).find((c) => c.product_id === p.id);
+              const rivals = (products.data ?? []).filter((r) => r.rival_of === p.id);
               const pending = !!p.check_requested_at && (!last || last.created_at < p.check_requested_at);
               const claims = [...(last?.claims ?? [])].sort((a, b) => order[a.status] - order[b.status]);
               const wrong = claims.filter((c) => c.status === "wrong").length;
@@ -152,6 +205,7 @@ function Products({ brand, paidAllowed }: { brand: Brand; paidAllowed: boolean }
                 <li key={p.id}>
                   <p className="src-head"><strong>{p.name}</strong> {p.price && <span className="muted num">{p.price}</span>}</p>
                   <p className="src-sup muted">{p.facts}</p>
+                  <RivalCompare own={p} rivals={rivals} brand={brand} answers={visAnswers.data ?? null} hasRuns={lastIds.length > 0} onChange={products.reload} onError={setErr} />
                   <ProductVisibilityView loading={runs.loading || visAnswers.loading || visComps.loading} hasRuns={lastIds.length > 0}
                     vis={visAnswers.data && visComps.data && lastIds.length > 0 ? productVisibility(visAnswers.data, { id: p.id, name: p.name }, { name: brand.name, website: brand.website }, visComps.data) : null} />
                   {last && (
@@ -181,7 +235,7 @@ function Products({ brand, paidAllowed }: { brand: Brand; paidAllowed: boolean }
           </ul>
         )}
       </section>
-      {(products.data ?? []).length < 10 && (
+      {(products.data ?? []).filter((p) => !p.rival_of).length < 10 && (
         <form className="panel stack" onSubmit={add} noValidate aria-label={L("Ürün ekle", "Add product")}>
           <h2>{L("Ürün ekleyin", "Add a product")}</h2>
           <Field label={L("Ürün adı", "Product name")} name="product_name" maxLength={120} placeholder={L("Örn. Model X 29 jant dağ bisikleti", "e.g. Model X 29er mountain bike")} />

@@ -219,4 +219,20 @@ console.log("ok tanımsız paket atanamıyor");
   }
   console.log("ok 0015: ürün yalnız kendi markasına eklenir; kontrol isteği yalnız ücretli alanda ve yalnız fonksiyonla" + (own ? "" : " (marka yok, RLS adımı atlandı)"));
 }
+{
+  // 0018: rakip ürünler
+  const own = (await db.query(`select id from brands where workspace_id=$1 and not is_competitor limit 1`, [A])).rows[0];
+  if (own) {
+    await as(U1, `insert into products (workspace_id, brand_id, name, facts) values ('${A}', '${own.id}', 'Model X', 'Ağırlık 9 kg, karbon kadro')`);
+    const mine = (await db.query(`select id from products where brand_id=$1 and rival_of is null`, [own.id])).rows[0].id;
+    await as(U1, `insert into products (workspace_id, brand_id, name, rival_of, rival_brand) values ('${A}', '${own.id}', 'Aero 5', '${mine}', 'Rakip Bisiklet')`);
+    const rival = (await db.query(`select id from products where rival_of=$1`, [mine])).rows[0].id;
+    await assert.rejects(as(U1, `insert into products (workspace_id, brand_id, name, rival_of) values ('${A}', '${own.id}', 'Zincir', '${rival}')`), "rakibin rakibi olmaz");
+    await assert.rejects(as(U1, `insert into products (workspace_id, brand_id, name) values ('${A}', '${own.id}', 'Bilgisiz ürün')`), "kendi ürününde bilgi zorunlu");
+    await assert.rejects(as(U1, `select request_product_check('${rival}')`), "rakip ürüne doğruluk kontrolü yok");
+    await db.query(`delete from products where id=$1`, [mine]);
+    assert.equal((await db.query(`select count(*)::int n from products where id=$1`, [rival])).rows[0].n, 0, "kendi ürünü silinince rakipleri de silinir");
+  }
+  console.log("ok 0018: rakip ürün yalnız kendi ürününe bağlanır; doğruluk kontrolü yalnız kendi ürününde" + (own ? "" : " (marka yok, atlandı)"));
+}
 console.log("TÜM DB TESTLERİ GEÇTİ");
