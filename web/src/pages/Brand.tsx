@@ -737,7 +737,7 @@ function Questions({ brand }: { brand: Brand }) {
           <Select label={L("Müşteri ne yapıyor?", "What is the customer doing?")} name="intent" defaultValue="local">
             {(Object.keys(INTENT_LABEL) as Intent[]).map((k) => <option key={k} value={k}>{INTENT_LABEL[k]}</option>)}
           </Select>
-          <Field label={L("Etiket (isteğe bağlı)", "Tag (optional)")} name="segment" maxLength={40}  placeholder={L("Örn. ucuz, premium, Almanya", "e.g. budget, premium, Germany")} hint={L("Aynı etiketli sorular raporda birlikte gösterilir: hangi koşulda görünüp hangisinde kaybolduğunuzu görürsünüz.", "Questions sharing a tag are grouped in the report, so you can see where you show up and where you don't.")} />
+          <Field label={L("Etiket (isteğe bağlı)", "Tag (optional)")} name="segment" maxLength={40}  placeholder={L("Örn. ucuz, premium, Almanya", "e.g. budget, premium, Germany")} hint={L("Aynı etiketi taşıyanlar raporda birlikte gösterilir: hangi koşulda görünüp hangisinde kaybolduğunuzu görürsünüz.", "Items sharing a tag are grouped in the report, so you can see where you show up and where you don't.")} />
           <ErrorBox message={err} />
           <Button type="submit" busy={busy}>Soruyu ekle</Button>
         </form>
@@ -765,7 +765,7 @@ function PromptRow({ p, onChange, onError }: { p: Prompt; onChange: () => void; 
           <Select label={L("Müşteri ne yapıyor?", "What is the customer doing?")} name="intent" defaultValue={p.intent}>
             {(Object.keys(INTENT_LABEL) as Intent[]).map((k) => <option key={k} value={k}>{INTENT_LABEL[k]}</option>)}
           </Select>
-          <Field label={L("Etiket (isteğe bağlı)", "Tag (optional)")} name="segment" maxLength={40} id={`segment-${p.id}`} defaultValue={p.segment ?? ""} placeholder={L("Örn. ucuz, premium, Almanya", "e.g. budget, premium, Germany")} hint={L("Aynı etiketli sorular raporda birlikte gösterilir: hangi koşulda görünüp hangisinde kaybolduğunuzu görürsünüz.", "Questions sharing a tag are grouped in the report, so you can see where you show up and where you don't.")} />
+          <Field label={L("Etiket (isteğe bağlı)", "Tag (optional)")} name="segment" maxLength={40} id={`segment-${p.id}`} defaultValue={p.segment ?? ""} placeholder={L("Örn. ucuz, premium, Almanya", "e.g. budget, premium, Germany")} hint={L("Aynı etiketi taşıyanlar raporda birlikte gösterilir: hangi koşulda görünüp hangisinde kaybolduğunuzu görürsünüz.", "Items sharing a tag are grouped in the report, so you can see where you show up and where you don't.")} />
           <div className="form-actions">
             <Button type="submit" busy={busy} className="btn-small">Kaydet</Button>
             <Button type="button" variant="quiet" className="btn-small" onClick={() => setEditing(false)}>{L("Vazgeç", "Cancel")}</Button>
