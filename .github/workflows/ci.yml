@@ -195,11 +195,18 @@ jobs:
           node-version: 22
       - run: npm ci --prefix web
       - run: npm run build --prefix web
+      - name: Paddle katalog (fiyatlar ve bildirim hedefi)
+        env:
+          PADDLE_API_KEY: ${{ secrets.PADDLE_API_KEY }}
+        run: |
+          umask 077
+          if [ -n "$PADDLE_API_KEY" ]; then PADDLE_SECRET_OUT="$RUNNER_TEMP/whsec" PADDLE_CATALOG_OUT="$RUNNER_TEMP/paddle-catalog.json" node scripts/paddle-setup.mjs; else echo "Paddle anahtarı yok; ödeme ayarı atlandı."; fi
       - name: Yayın ayarları (config.json, güvenlik başlıkları)
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
           PADDLE_CLIENT_TOKEN: ${{ secrets.PADDLE_CLIENT_TOKEN }}
+          PADDLE_CATALOG_FILE: ${{ runner.temp }}/paddle-catalog.json
         run: node scripts/web-release.mjs
       - name: Cloudflare Pages projesi (yoksa oluştur)
         env:
@@ -217,7 +224,6 @@ jobs:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         run: |
           umask 077
-          if [ -n "$PADDLE_API_KEY" ]; then PADDLE_SECRET_OUT="$RUNNER_TEMP/whsec" node scripts/paddle-setup.mjs; else echo "Paddle anahtarı yok; ödeme ayarı atlandı."; fi
           node -e 'const fs=require("fs");const e=process.env;const o={};const w=process.argv[2];if(fs.existsSync(w))o.PADDLE_WEBHOOK_SECRET=fs.readFileSync(w,"utf8");for(const k of ["PADDLE_API_KEY","GEMINI_API_KEY","SUPABASE_URL","SUPABASE_ANON_KEY","SUPABASE_SERVICE_ROLE_KEY"])if(e[k])o[k]=e[k];fs.writeFileSync(process.argv[1],JSON.stringify(o));console.log("Sunucu anahtarları: "+Object.keys(o).join(", "))' "$RUNNER_TEMP/pages-secrets.json" "$RUNNER_TEMP/whsec"
           npx --yes wrangler@4 pages secret bulk "$RUNNER_TEMP/pages-secrets.json" --project-name ai-saasavran > /dev/null
           rm -f "$RUNNER_TEMP/whsec" "$RUNNER_TEMP/pages-secrets.json"

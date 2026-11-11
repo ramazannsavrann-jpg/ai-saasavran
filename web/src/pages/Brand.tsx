@@ -6,7 +6,7 @@ import { api, INTENT_LABEL, type Brand, type Intent, type MeasurementType, type 
 import { friendlyError } from "../lib/supabase";
 import { L, isEn } from "../lib/i18n";
 import { ERROR_CLASS_TEXT, STOP_TEXT, runStatusText } from "../lib/messages";
-import { actionImpact, compareProducts, conditionMap, lossCards, productVisibility, promptKind, sourceDominance, splitByKind, type LossCard, type SourceRow } from "../../../engine/src/insights.ts";
+import { actionImpact, compareProducts, conditionMap, lossCards, productVisibility, promptKind, shoppingSources, sourceDominance, splitByKind, type LossCard, type SourceRow } from "../../../engine/src/insights.ts";
 import { competitorsInRun, formatDateTime, MIN_SAMPLE, numLoc, pct, providerLabel, rangeText, series, shareSummary, sourceOpportunities, topDomains, usd } from "../lib/report";
 import { Button, Confirm, DataNotice, Empty, ErrorBox, Field, Loading, Select, TypeBadge } from "../components/ui";
 import { CompareBars, TrendChart } from "../components/Chart";
@@ -205,6 +205,18 @@ function Products({ brand, paidAllowed }: { brand: Brand; paidAllowed: boolean }
                 <li key={p.id}>
                   <p className="src-head"><strong>{p.name}</strong> {p.price && <span className="muted num">{p.price}</span>}</p>
                   <p className="src-sup muted">{p.facts}</p>
+                  {visAnswers.data && lastIds.length > 0 && (() => {
+                    const sh = shoppingSources(visAnswers.data, p.id, p.name, { name: brand.name, website: brand.website });
+                    if (sh.productAnswers === 0) return null;
+                    return (
+                      <div className="prod-vis">
+                        <p className="src-sup"><strong>{L("Nereden satın alınır (AI alışveriş)", "Where to buy (AI shopping)")}</strong></p>
+                        <p className="src-sup">{isEn() ? `In the ${sh.productAnswers} answers that mention this product, your own site was cited ${sh.ownSite} times.` : `Bu ürünün geçtiği ${sh.productAnswers} cevapta kendi siteniz ${sh.ownSite} kez kaynak gösterildi.`}
+                          {sh.marketplaces.length > 0 ? <> {L("Kaynak gösterilen satış siteleri: ", "Retail sites cited: ")}{sh.marketplaces.slice(0, 6).map((m) => `${m.domain} (${m.answers})`).join(", ")}.</> : <> {L("Hiçbir satış sitesi kaynak gösterilmedi.", "No retail site was cited.")}</>}</p>
+                        <p className="src-sup muted">{L("Yalnız canlı aramalı cevaplarda kaynak vardır. ChatGPT'nin uygulamadaki alışveriş kartları (ürün karuseli) bu ölçüme dahil değildir.", "Only live-search answers have sources. ChatGPT's in-app shopping cards (product carousel) are not part of this measurement.")}</p>
+                      </div>
+                    );
+                  })()}
                   <RivalCompare own={p} rivals={rivals} brand={brand} answers={visAnswers.data ?? null} hasRuns={lastIds.length > 0} onChange={products.reload} onError={setErr} />
                   <ProductVisibilityView loading={runs.loading || visAnswers.loading || visComps.loading} hasRuns={lastIds.length > 0}
                     vis={visAnswers.data && visComps.data && lastIds.length > 0 ? productVisibility(visAnswers.data, { id: p.id, name: p.name }, { name: brand.name, website: brand.website }, visComps.data) : null} />

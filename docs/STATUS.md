@@ -62,6 +62,11 @@
 - **Rakip ürün karşılaştırması (0018):** kendi ürününe en fazla 5 rakip ürün bağlanır; son ölçüm cevaplarında yan yana, motor bazında anılma/önerilme ve "ikisi birlikte geçtiğinde kim önerildi" sayımı. Ek API maliyeti yok. Rakip üründe doğruluk kontrolü yok.
 - **AI Shopping (araştırma):** ChatGPT'nin alışveriş kartları (ürün karuseli) API cevabında yer almıyor; bu yüzden ölçülmüyor. Ölçülen, metin cevaplarındaki ürün anılmasıdır.
 
+## v1.3 (12 Kasım 2026)
+
+- **Fiyatlar (0019):** Plus 29 $, Pro 149 $, Business 449 $ (tipik maliyetin yaklaşık 3 katı). Limitler ve tavanlar aynı. Paddle'da yeni fiyatlar yayın sırasında otomatik oluşur; site ödeme düğmeleri kurulumun ürettiği güncel kataloğu kullanır.
+- **AI alışveriş:** ürün için "nereden satın alınır" (cevaplarda kaynak gösterilen satış siteleri ve kendi sitenin payı) ve site denetiminde ürün yapılandırılmış verisi (Product + Offer) kontrolü. ChatGPT uygulamasındaki ürün karuseli ölçülmüyor.
+
 ## Bilinen açık konular
 
 - Bölge kısıtı uygulama içinde markanın ülke koduna dayanır; kullanıcı kodu değiştirebilir. Kesin uygulama için sunucu tarafında kullanıcı ülkesi gerekir.

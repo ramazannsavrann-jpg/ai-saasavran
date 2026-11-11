@@ -695,3 +695,17 @@ test("Rakip ürün karşılaştırması: aynı cevaplarda yan yana sayım ve iki
   assert.equal(own.byEngine.claude.mentioned, 0);
   assert.deepEqual(rival.headToHead, { bothMentioned: 2, ownWins: 0, rivalWins: 1 });
 });
+
+test("AI alışveriş: ürünün geçtiği cevaplarda satış siteleri ve kendi site sayımı", async () => {
+  const { shoppingSources, isMarketplace } = await import("../src/insights.ts");
+  assert.ok(isMarketplace("www.trendyol.com".replace(/^www\./, "")) && isMarketplace("smile.amazon.com") && !isMarketplace("rakip.com"));
+  const answers = [
+    { id: "a1", prompt_id: "p1", provider: "openai", answer_text: "Öneriler:\n- Oltre XR4", cited_urls: ["https://www.trendyol.com/x", "https://bianchi.com/oltre", "https://hepsiburada.com/y"] },
+    { id: "a2", prompt_id: "p1", provider: "openai", answer_text: "Başka bir bisiklet: Aero 5", cited_urls: ["https://www.trendyol.com/z"] },
+    { id: "a3", prompt_id: "p2", provider: "claude", answer_text: "Bianchi Oltre XR4 iyi bir seçim", cited_urls: ["https://www.trendyol.com/q"] },
+  ];
+  const r = shoppingSources(answers, "o", "Bianchi Oltre XR4", { name: "Bianchi", website: "https://bianchi.com" });
+  assert.equal(r.productAnswers, 2, "ürünün geçmediği cevap sayılmaz");
+  assert.equal(r.ownSite, 1);
+  assert.deepEqual(r.marketplaces, [{ domain: "trendyol.com", answers: 2 }, { domain: "hepsiburada.com", answers: 1 }]);
+});

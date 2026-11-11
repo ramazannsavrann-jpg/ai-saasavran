@@ -308,3 +308,29 @@ export function compareProducts(
     headToHead: p.isOwn ? null : h2h.get(p.id) ?? null,
   }));
 }
+
+// ---------------- Nereden satın alınır: cevaplarda kaynak gösterilen satış siteleri ----------------
+const MARKETPLACES = ["trendyol.com", "hepsiburada.com", "n11.com", "amazon.com.tr", "amazon.com", "amazon.de", "amazon.co.uk", "amazon.fr", "amazon.it", "amazon.es",
+  "ciceksepeti.com", "pazarama.com", "akakce.com", "cimri.com", "epey.com", "mediamarkt.com.tr", "teknosa.com", "vatanbilgisayar.com", "decathlon.com.tr",
+  "ebay.com", "walmart.com", "bestbuy.com", "target.com", "etsy.com", "aliexpress.com", "idealo.de", "otto.de", "zalando.com", "argos.co.uk", "currys.co.uk"];
+export const isMarketplace = (domain: string) => MARKETPLACES.some((m) => domain === m || domain.endsWith("." + m));
+
+/** Ürünün geçtiği cevaplarda kaynak gösterilen satış siteleri ve ürünün kendi sitesinin kaynak gösterilme sayısı. */
+export function shoppingSources(answers: ProductAnswer[], productId: string, productName: string, brand: { name: string; website: string | null }): { marketplaces: { domain: string; answers: number }[]; ownSite: number; productAnswers: number } {
+  const vis = productVisibility(answers, { id: productId, name: productName }, brand, []);
+  const ids = new Set(vis.promptsMentioned);
+  const own = domainOf(brand.website);
+  const counts = new Map<string, number>();
+  let ownSite = 0, productAnswers = 0;
+  for (const a of answers) {
+    if (!ids.has(a.prompt_id)) continue;
+    const t = normalize(a.answer_text);
+    const names = [productName, ...(productName.toLocaleLowerCase("tr-TR").startsWith(brand.name.toLocaleLowerCase("tr-TR") + " ") ? [productName.slice(brand.name.length + 1)] : [])].map(normalize);
+    if (!names.some((n) => n.length >= 3 && hasName(t, n))) continue;
+    productAnswers++;
+    const ds = new Set((a.cited_urls ?? []).map(domainOf).filter(Boolean));
+    if (own && [...ds].some((d) => d === own || d.endsWith("." + own))) ownSite++;
+    for (const d of ds) if (isMarketplace(d)) counts.set(d, (counts.get(d) ?? 0) + 1);
+  }
+  return { marketplaces: [...counts.entries()].map(([domain, n]) => ({ domain, answers: n })).sort((x, y) => y.answers - x.answers), ownSite, productAnswers };
+}
