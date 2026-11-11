@@ -1,0 +1,27 @@
+# Gerçek Google Shopping (SerpApi) bağlantı testi: en fazla 1 arama.
+# Yalnız bu dosya ya da test betiği değişince (ve elle) çalışır; her push'ta arama harcamaz.
+name: Google Shopping bağlantı testi
+on:
+  push:
+    paths:
+      - scripts/shopping-smoke.ts
+      - .github/workflows/shopping-smoke.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: shopping-smoke
+  cancel-in-progress: false
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Google Shopping'e gerçek istek gönder
+        env:
+          SERPAPI_KEY: ${{ secrets.SERPAPI_KEY }}
+        run: node scripts/shopping-smoke.ts
