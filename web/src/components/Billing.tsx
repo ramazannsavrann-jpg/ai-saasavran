@@ -6,7 +6,7 @@ import { L, isEn } from "../lib/i18n";
 import { PLAN_INFO, billingSummary, openCheckout, openPortal, paymentsEnabled, planName, type BillingSummary, type PaidPlan } from "../lib/billing";
 
 const FEATURES: Record<PaidPlan, () => string> = {
-  starter: () => L("1 marka, 25 soru, 5 rakip. ChatGPT canlı web araması + Gemini, her hafta.", "1 brand, 25 questions, 5 competitors. ChatGPT with live web search + Gemini, every week."),
+  starter: () => L("1 marka, 25 soru, 5 rakip. ChatGPT ve Claude canlı web araması + Gemini, her hafta.", "1 brand, 25 questions, 5 competitors. ChatGPT and Claude with live web search + Gemini, every week."),
   pro: () => L("5 marka, her biri 30 soru, marka başına 8 rakip.", "5 brands, 30 questions each, 8 competitors per brand."),
   agency: () => L("15 marka, her biri 30 soru, marka başına 10 rakip. Ajanslar için.", "15 brands, 30 questions each, 10 competitors per brand. For agencies."),
 };

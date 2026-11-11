@@ -2,6 +2,7 @@
 
 import { GEMINI_FREE_DEFAULT } from "./providers/gemini.ts";
 import { OPENAI_DEFAULT } from "./providers/openai.ts";
+import { CLAUDE_DEFAULT } from "./providers/claude.ts";
 import { PERPLEXITY_DEFAULT } from "./providers/perplexity.ts";
 import { estimateCost, type ProviderConfig } from "./providers/types.ts";
 
@@ -14,7 +15,9 @@ export interface PlanSpec {
   promptsPerBrand: number;
   repetitions: number;
   runsPerMonth: number; // haftalık = 4,33
-  engines: ("gemini" | "openai" | "perplexity")[];
+  engines: ("gemini" | "openai" | "perplexity" | "claude")[];
+  /** Motor başına farklı tekrar sayısı (yoksa repetitions). Müşteri paketlerinde Claude 1 tekrar çalışır. */
+  engineReps?: Partial<Record<"gemini" | "openai" | "perplexity" | "claude", number>>;
 }
 
 /** Tipik çağrı varsayımları (gerçek ölçümle güncellenecek). */
@@ -23,17 +26,18 @@ export interface CallAssumption { inputTokens: number; outputTokens: number; sea
 export interface Scenario {
   name: string;
   geminiGroundingCharged: boolean; // false = ücretsiz/ücretli katmanın bedava dayanak kotası içinde
-  calls: Record<"gemini" | "openai" | "perplexity", CallAssumption>;
+  calls: Record<"gemini" | "openai" | "perplexity" | "claude", CallAssumption>;
   overheadPerBrandUsd: number;     // sınıflandırma + öneri üretimi (LLM)
   infraPerCustomerUsd: number;     // barındırma payı
   paymentFeeRate: number;          // ödeme sağlayıcısı komisyonu: Paddle %5 (paddle.com/pricing, 11 Kasım 2026)
   paymentFeeFixedUsd: number;      // işlem başına sabit ücret: Paddle 0,50 $
 }
 
-const CARDS: Record<"gemini" | "openai" | "perplexity", ProviderConfig> = {
+const CARDS: Record<"gemini" | "openai" | "perplexity" | "claude", ProviderConfig> = {
   gemini: GEMINI_FREE_DEFAULT,
   openai: OPENAI_DEFAULT,
   perplexity: PERPLEXITY_DEFAULT,
+  claude: CLAUDE_DEFAULT,
 };
 
 export function costPerCall(engine: keyof typeof CARDS, a: CallAssumption, s: Scenario): number {
@@ -57,13 +61,14 @@ export interface PlanCost {
 }
 
 export function planCost(plan: PlanSpec, s: Scenario): PlanCost {
-  const callsPerEngine = plan.brands * plan.promptsPerBrand * plan.repetitions * plan.runsPerMonth;
+  const callsFor = (e: keyof typeof CARDS) => plan.brands * plan.promptsPerBrand * (plan.engineReps?.[e] ?? plan.repetitions) * plan.runsPerMonth;
   const perEngineUsd: Record<string, number> = {};
-  let apiUsd = 0;
+  let apiUsd = 0, totalCalls = 0;
   for (const e of plan.engines) {
-    const c = callsPerEngine * costPerCall(e, s.calls[e], s);
+    const c = callsFor(e) * costPerCall(e, s.calls[e], s);
     perEngineUsd[e] = c;
     apiUsd += c;
+    totalCalls += callsFor(e);
   }
   const overheadUsd = plan.brands * s.overheadPerBrandUsd;
   const paymentFeeUsd = plan.priceUsd > 0 ? plan.priceUsd * s.paymentFeeRate + s.paymentFeeFixedUsd : 0;
@@ -71,7 +76,7 @@ export function planCost(plan: PlanSpec, s: Scenario): PlanCost {
   return {
     plan: plan.name,
     priceUsd: plan.priceUsd,
-    engineCallsPerMonth: Math.round(callsPerEngine * plan.engines.length),
+    engineCallsPerMonth: Math.round(totalCalls),
     apiUsd, overheadUsd, infraUsd: s.infraPerCustomerUsd, paymentFeeUsd, totalCostUsd,
     grossMarginPct: plan.priceUsd > 0 ? ((plan.priceUsd - totalCostUsd) / plan.priceUsd) * 100 : -Infinity,
     perEngineUsd,
@@ -90,6 +95,8 @@ const typical = {
   // GERÇEK ÖLÇÜM (7 Kasım 2026, 30 canlı cevap, gpt-6-luna): ort. 17.400 girdi / 670 çıktı token, ~1,7 arama → 0,0194 $/cevap
   openai: { inputTokens: 17_400, outputTokens: 670, searchCalls: 1.7 },
   perplexity: { inputTokens: 150, outputTokens: 700, searchCalls: 1 },
+  // GERÇEK ÖLÇÜM (11 Kasım 2026, 20 canlı cevap, claude-haiku-5-5): 0,384 $ / 20 = 0,0192 $/cevap. Token dağılımı varsayımdır; toplam ölçüme eşitlenmiştir.
+  claude: { inputTokens: 17_000, outputTokens: 700, searchCalls: 1.7 },
 };
 
 export const SCENARIOS: Scenario[] = [
@@ -99,7 +106,7 @@ export const SCENARIOS: Scenario[] = [
   },
   {
     name: "Kötü durum", geminiGroundingCharged: true,
-    calls: { ...typical, openai: { inputTokens: 40_000, outputTokens: 3_000, searchCalls: 2 } },
+    calls: { ...typical, openai: { inputTokens: 40_000, outputTokens: 3_000, searchCalls: 2 }, claude: { inputTokens: 40_000, outputTokens: 3_000, searchCalls: 2 } },
     overheadPerBrandUsd: 1.0, infraPerCustomerUsd: 2.5, paymentFeeRate: 0.05, paymentFeeFixedUsd: 0.5,
   },
 ];
@@ -117,6 +124,10 @@ export const PLANS: PlanSpec[] = [
   { name: "Plus (1 marka, 25 soru, ChatGPT canlı + Gemini)", priceUsd: 20, brands: 1, promptsPerBrand: 25, repetitions: 2, runsPerMonth: WEEKS_PER_MONTH, engines: ["gemini", "openai"] },
   { name: "Pro (5 marka, 30 soru, ChatGPT canlı + Gemini)", priceUsd: 99, brands: 5, promptsPerBrand: 30, repetitions: 2, runsPerMonth: WEEKS_PER_MONTH, engines: ["gemini", "openai"] },
   { name: "Business (15 marka, 30 soru, ChatGPT canlı + Gemini)", priceUsd: 249, brands: 15, promptsPerBrand: 30, repetitions: 2, runsPerMonth: WEEKS_PER_MONTH, engines: ["gemini", "openai"] },
+  // ---- 11 Kasım 2026: Claude müşteri paketlerinde (ChatGPT 2 tekrar, Claude 1 tekrar) — işçi ve migration 0017 ile aynı ----
+  { name: "Plus + Claude (1 marka, 25 soru)", priceUsd: 20, brands: 1, promptsPerBrand: 25, repetitions: 2, runsPerMonth: WEEKS_PER_MONTH, engines: ["gemini", "openai", "claude"], engineReps: { claude: 1 } },
+  { name: "Pro + Claude (5 marka, 30 soru)", priceUsd: 99, brands: 5, promptsPerBrand: 30, repetitions: 2, runsPerMonth: WEEKS_PER_MONTH, engines: ["gemini", "openai", "claude"], engineReps: { claude: 1 } },
+  { name: "Business + Claude (15 marka, 30 soru)", priceUsd: 249, brands: 15, promptsPerBrand: 30, repetitions: 2, runsPerMonth: WEEKS_PER_MONTH, engines: ["gemini", "openai", "claude"], engineReps: { claude: 1 } },
 ];
 
 /** Güncel paketlerin aylık ücretli harcama tavanı (migration 0007). Tavan + ödeme komisyonu < fiyat olmalı. */

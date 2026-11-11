@@ -43,6 +43,13 @@
 
 - **"Önerildi mi" kontrolünün canlı denemesi (11 Kasım):** 20/20 ChatGPT cevabı başarılı (0,37 $). Marka geçen 9 cevap sınıflandırıldı, toplam 0,001 $ (cevap başına yaklaşık 0,0001 $). "X'e alternatif" sorularında X'in kendisini doğru biçimde "önerilmedi" saydı. Elle etiketli geniş bir karşılaştırma henüz yapılmadı.
 
+## v1.0 (11 Kasım 2026, altıncı paket)
+
+- **Claude müşteri paketlerinde (0017):** canlı ölçümde ChatGPT (2 tekrar) + Claude (1 tekrar). Ücretli tavanlar aynı (9 / 50 / 150 $); sorgu kotaları 620 / 3.600 / 10.800. Tipik brüt marj: Plus %51, Pro %51, Business %44 (`npm run pricing`).
+- Canlı deneme (Growth Lab, 11 Kasım): ChatGPT 20/20, Claude 20/20, toplam 0,80 $. Claude cevap başına 0,0192 $.
+- Ürün doğruluğu canlı denemesi: ChatGPT "AI SaaSavran Plus" sorusunda markayı savran.ai ile karıştırdı; sistem "farklı ürün" olarak işaretledi.
+- Growth Lab toplam deneme tavanı 3 $ → 6 $ (app_settings).
+
 ## Bilinen açık konular
 
 - Bölge kısıtı uygulama içinde markanın ülke koduna dayanır; kullanıcı kodu değiştirebilir. Kesin uygulama için sunucu tarafında kullanıcı ülkesi gerekir.
