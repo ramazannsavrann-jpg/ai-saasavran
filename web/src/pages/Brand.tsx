@@ -1,5 +1,5 @@
 import { useMemo, useState, type FormEvent } from "react";
-import { SECTORS, competitorSuggestions, questionTemplates, sectorDef } from "../lib/sectors";
+import { SECTORS, competitorSuggestions, postPurchaseTemplates, questionTemplates, sectorDef } from "../lib/sectors";
 import { Link, useParams, useSearchParams } from "react-router-dom";
 import { useApp, useLoad } from "../lib/app";
 import { api, INTENT_LABEL, type Brand, type Intent, type MeasurementType, type Prompt, type Run, type Product, type ShoppingCheck } from "../lib/data";
@@ -968,7 +968,7 @@ function Questions({ brand }: { brand: Brand }) {
   const active = list.filter((p) => p.active).length;
   const limit = usage.data?.prompt_limit ?? 0;
   const existing = new Set(list.map((p) => p.text));
-  const ideas = questionTemplates(brand.sector, brand.city).filter((s) => !existing.has(s.text));
+  const ideas = [...questionTemplates(brand.sector, brand.city), ...postPurchaseTemplates(brand.name, isEn())].filter((s) => !existing.has(s.text));
   const def = sectorDef(brand.sector);
   const needsCity = def?.local && !brand.city;
 
@@ -1010,12 +1010,12 @@ function Questions({ brand }: { brand: Brand }) {
       {active < limit && ideas.length > 0 && (
         <section className="panel">
           <h2>{L("Hazır sorular", "Suggested questions")}</h2>
-          <p className="muted">{isEn() ? `Hand-written questions for "${brand.sector}"${def?.local && brand.city ? `, for ${brand.city}` : ""}. You can edit them after adding.` : `"${brand.sector}" sektörü için elle hazırlanmış sorular${def?.local && brand.city ? `, ${brand.city} için` : ""}. Ekledikten sonra düzenleyebilirsiniz.`}</p>
+          <p className="muted">{isEn() ? `Hand-written questions${brand.sector ? ` for "${brand.sector}"` : ""}${def?.local && brand.city ? `, for ${brand.city}` : ""}. "After buying" questions check what the AI tells your existing customers about warranty, returns and support; they contain your name, so add only one or two. You can edit them after adding.` : `${brand.sector ? `"${brand.sector}" sektörü için ` : ""}elle hazırlanmış sorular${def?.local && brand.city ? `, ${brand.city} için` : ""}. "Satın aldıktan sonra" soruları, yapay zekânın mevcut müşterilerinize garanti, iade ve destek hakkında ne söylediğini kontrol eder; marka adınızı içerdiği için bir iki tane yeterli. Ekledikten sonra düzenleyebilirsiniz.`}</p>
           <ul className="rows">
             {ideas.map((s) => (
               <li key={s.text}>
                 <span><span className="q-text">{s.text}</span><span className="q-meta">{INTENT_LABEL[s.intent]}</span></span>
-                <button className="link-btn" disabled={busy} onClick={() => add(s.text, s.intent)}>Ekle</button>
+                <button className="link-btn" disabled={busy} onClick={() => add(s.text, s.intent)}>{L("Ekle", "Add")}</button>
               </li>
             ))}
           </ul>

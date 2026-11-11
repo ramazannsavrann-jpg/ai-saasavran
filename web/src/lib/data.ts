@@ -12,7 +12,7 @@ export interface Brand {
   auto_weekly: boolean; audit_requested_at: string | null; reanalyze_requested_at: string | null;
 }
 export interface Prompt { id: string; brand_id: string; text: string; intent: Intent; segment: string | null; active: boolean; created_at: string }
-export type Intent = "informational" | "comparison" | "purchase" | "local";
+export type Intent = "informational" | "comparison" | "purchase" | "local" | "post_purchase";
 export interface Run {
   id: string; brand_id: string; status: "queued" | "running" | "done" | "failed" | "budget_blocked";
   measurement_type: MeasurementType; provider: string | null; model: string | null;
@@ -56,6 +56,7 @@ export const INTENT_LABEL: Record<Intent, string> = {
   local: L("Yerel işletme arıyor", "Looking for a local business"),
   comparison: L("Karşılaştırıyor", "Comparing options"),
   purchase: L("Satın almaya hazırlanıyor", "Ready to buy"),
+  post_purchase: L("Satın aldıktan sonra soruyor", "After buying"),
   informational: L("Bilgi arıyor", "Researching"),
 };
 
