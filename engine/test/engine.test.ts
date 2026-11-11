@@ -554,3 +554,74 @@ test("LLM sınıflandırma: istem markaları içerir, çıktı ayrıştırılır
   assert.equal(sent.tools, undefined, "web araması kullanılmaz");
   await assert.rejects(classifyAnswer({ apiKey: "k", model: "m", price: { inputPerMTok: 0.1, outputPerMTok: 0.5, perCall: 0, source: "t", checkedOn: "x" }, answer: "x", names: ["A"], fetchFn: async () => new Response("{}", { status: 500 }) }));
 });
+
+// ---------------- Claude (Anthropic) ----------------
+import { parseClaudeResponse, ClaudeProvider, CLAUDE_DEFAULT } from "../src/providers/claude.ts";
+
+test("Claude: Messages API cevabı ayrıştırılır; ara cümle atılır, arama başına ücret eklenir", () => {
+  const r = parseClaudeResponse({
+    content: [
+      { type: "text", text: "Arayacağım." },
+      { type: "server_tool_use", name: "web_search", input: { query: "antalya döner" } },
+      { type: "web_search_tool_result", content: [{ type: "web_search_result", url: "https://aliusta-demo.com/" }] },
+      { type: "text", text: "1. Ali Usta Döner", citations: [{ type: "web_search_result_location", url: "https://aliusta-demo.com/" }] },
+      { type: "text", text: " 2. Demo Döner" },
+    ],
+    usage: { input_tokens: 4000, cache_read_input_tokens: 1000, output_tokens: 500, server_tool_use: { web_search_requests: 1 } },
+  }, "p1", CLAUDE_DEFAULT);
+  assert.equal(r.answerText, "1. Ali Usta Döner 2. Demo Döner");
+  assert.equal(r.provider, "claude");
+  assert.equal(r.billing, "paid");
+  assert.equal(r.inputTokens, 5000);
+  assert.ok(Math.abs(r.costUsd - (0.0005 + 0.00025 + 0.01)) < 1e-9);
+  assert.deepEqual(r.citedUrls, ["https://aliusta-demo.com/"]);
+  assert.deepEqual(r.searchQueries, ["antalya döner"]);
+});
+
+test("Claude: istek biçimi doğru, anahtar hata mesajına sızmaz, kredi bitince kota hatası", async () => {
+  let seen: { url: string; init: RequestInit } | undefined;
+  const ok = new ClaudeProvider("sk-ant-KEY9", CLAUDE_DEFAULT, async (url, init) => {
+    seen = { url, init };
+    return new Response(JSON.stringify({ content: [{ type: "text", text: "cevap" }], usage: { input_tokens: 10, output_tokens: 5 } }), { status: 200 });
+  });
+  const r = await ok.ask("p", "soru");
+  assert.equal(seen!.url, "https://api.anthropic.com/v1/messages");
+  const h = seen!.init.headers as Record<string, string>;
+  assert.equal(h["x-api-key"], "sk-ant-KEY9");
+  assert.equal(h["anthropic-version"], "2023-06-01");
+  const body = JSON.parse(seen!.init.body as string);
+  assert.equal(body.model, "claude-haiku-5-5");
+  assert.deepEqual(body.tools[0], { type: "web_search_20250305", name: "web_search", max_uses: 2, user_location: { type: "approximate", country: "TR", timezone: "Europe/Istanbul" } });
+  assert.equal(r.costUsd, (10 / 1e6) * 0.10 + (5 / 1e6) * 0.50);
+
+  const noSearch = new ClaudeProvider("k", { ...CLAUDE_DEFAULT, useSearch: false }, async (_u, init) => {
+    assert.equal(JSON.parse(init.body as string).tools, undefined);
+    return new Response(JSON.stringify({ content: [{ type: "text", text: "x" }] }), { status: 200 });
+  });
+  assert.equal((await noSearch.ask("p", "s")).method, "api_no_search");
+
+  const broke = new ClaudeProvider("sk-ant-KEY9", CLAUDE_DEFAULT, async () =>
+    new Response('{"error":{"message":"Your credit balance is too low (sk-ant-KEY9)"}}', { status: 400 }));
+  await assert.rejects(broke.ask("p", "x"), (e: Error & { kind?: string }) => e.kind === "quota_exceeded" && !e.message.includes("KEY9"));
+  const bad = new ClaudeProvider("k", CLAUDE_DEFAULT, async () => new Response("invalid x-api-key", { status: 401 }));
+  await assert.rejects(bad.ask("p", "x"), (e: Error & { kind?: string }) => e.kind === "auth_error");
+});
+
+test("Kayıt defteri: Claude yalnız ALLOW_PAID_API açıkken ve anahtar varken açılır", async () => {
+  const { chooseProvider } = await import("../src/worker.ts");
+  const off = buildProviders({ ANTHROPIC_API_KEY: "sk-ant-x" });
+  assert.equal(off.providers.length, 0);
+  assert.match(off.status.find((s) => s.provider === "claude")!.reason, /ALLOW_PAID_API kapalı/);
+  const on = buildProviders({ ANTHROPIC_API_KEY: "sk-ant-x", ALLOW_PAID_API: "true" });
+  assert.deepEqual(on.providers.map((p) => [p.config.provider, p.config.billing, p.config.useSearch]), [["claude", "paid", true]]);
+  // Canlı aramada varsayılan hâlâ ChatGPT; Claude yalnız OpenAI yoksa seçilir
+  assert.equal(chooseProvider("live_search", { OPENAI_API_KEY: "sk-o", ANTHROPIC_API_KEY: "sk-ant-x", ALLOW_PAID_API: "true" }, ["A"], "s")?.config.provider, "openai");
+  assert.equal(chooseProvider("live_search", { ANTHROPIC_API_KEY: "sk-ant-x", ALLOW_PAID_API: "true" }, ["A"], "s")?.config.provider, "claude");
+});
+
+test("Claude: en kötü durum çağrı maliyeti 6 sentin altında ve istem 100K token sınırının altında", () => {
+  const c = CLAUDE_DEFAULT;
+  const worst = c.price.perCall * (c.worstCaseToolCalls ?? 1) + c.worstCaseTokens.input / 1e6 * c.price.inputPerMTok + c.worstCaseTokens.output / 1e6 * c.price.outputPerMTok;
+  assert.ok(worst < 0.06, String(worst));
+  assert.ok(c.worstCaseTokens.input < 100_000);
+});

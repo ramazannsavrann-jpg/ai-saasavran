@@ -14,7 +14,7 @@ export interface PriceCard {
 }
 
 export interface ProviderConfig {
-  provider: "gemini" | "openai" | "perplexity" | "mock";
+  provider: "gemini" | "openai" | "claude" | "perplexity" | "mock";
   model: string;
   billing: BillingTier;          // bu anahtar/model ücretsiz mi ücretli mi kullanılıyor
   useSearch: boolean;            // arama dayanağı açık mı

@@ -70,7 +70,7 @@ export function numLoc(n: number): string {
 }
 
 export const usd = (v: number) => `${v.toLocaleString(isEn() ? "en-US" : "tr-TR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} $`;
-export const providerLabel = (p: string) => (p === "mock" ? L("simülasyon", "simulation") : p === "gemini" ? "Gemini" : p === "openai" ? "ChatGPT (OpenAI)" : p);
+export const providerLabel = (p: string) => (p === "mock" ? L("simülasyon", "simulation") : p === "gemini" ? "Gemini" : p === "openai" ? "ChatGPT (OpenAI)" : p === "claude" ? "Claude (Anthropic)" : p);
 
 /**
  * Kaynak fırsatları: rakip önerilirken sizin önerilmediğiniz cevaplarda yapay zekânın baktığı siteler.

@@ -116,6 +116,16 @@ if (env.OPENAI_API_KEY) {
   }
 }
 
+// --- Claude / Anthropic (isteğe bağlı; ücretsiz model bilgisi çağrısıyla doğrulanır, ücret çıkmaz)
+if (env.ANTHROPIC_API_KEY) {
+  const k = env.ANTHROPIC_API_KEY.trim();
+  if (!k.startsWith("sk-ant-")) add("ANTHROPIC_API_KEY", false, "Biçim yanlış (sk-ant- ile başlamalı)");
+  else {
+    const s = await http("https://api.anthropic.com/v1/models/claude-haiku-5-5", { "x-api-key": k, "anthropic-version": "2023-06-01" });
+    add("ANTHROPIC_API_KEY", s === 200, s === 200 ? "Anthropic kabul etti, claude-haiku-5-5 erişilebilir" : s === 404 ? "Anahtar geçerli olabilir ama claude-haiku-5-5 bu hesapta yok (404)" : `Anthropic kabul etmedi (${s})`);
+  }
+}
+
 const lines = rows.map((r) => `${r.ok ? "✅" : "❌"} ${r.name}: ${r.msg}`);
 console.log(lines.join("\n"));
 if (env.GITHUB_STEP_SUMMARY) appendFileSync(env.GITHUB_STEP_SUMMARY, `## Ayar kontrolü\n\n${lines.map((l) => `- ${l}`).join("\n")}\n`);
