@@ -6,7 +6,7 @@ import { api, INTENT_LABEL, type Brand, type Intent, type MeasurementType, type 
 import { friendlyError } from "../lib/supabase";
 import { L, isEn } from "../lib/i18n";
 import { ERROR_CLASS_TEXT, STOP_TEXT, runStatusText } from "../lib/messages";
-import { actionImpact, conditionMap, lossCards, productVisibility, sourceDominance, type LossCard, type SourceRow } from "../../../engine/src/insights.ts";
+import { actionImpact, conditionMap, lossCards, productVisibility, promptKind, sourceDominance, splitByKind, type LossCard, type SourceRow } from "../../../engine/src/insights.ts";
 import { competitorsInRun, formatDateTime, MIN_SAMPLE, numLoc, pct, providerLabel, rangeText, series, shareSummary, sourceOpportunities, topDomains, usd } from "../lib/report";
 import { Button, Confirm, DataNotice, Empty, ErrorBox, Field, Loading, Select, TypeBadge } from "../components/ui";
 import { CompareBars, TrendChart } from "../components/Chart";
@@ -545,12 +545,27 @@ function Report({ brand, type, onBrandChange }: { brand: Brand; type: Measuremen
 
           <section className="panel">
             <h2>{L("Soru bazında sonuç", "Results by question")}</h2>
+            {!prompts.loading && (() => {
+              const split = splitByKind(prompts.data ?? [], { name: brand.name, aliases: brand.aliases ?? [] });
+              const br = split.find((x) => x.kind === "branded"), un = split.find((x) => x.kind === "unbranded");
+              if (!br) return null;
+              return (
+                <div className="loss-card">
+                  <p className="loss-title">{L("Markalı ve markasız sorular ayrı", "Branded and unbranded questions, separately")}</p>
+                  <ul>
+                    {un && <li>{isEn() ? `Unbranded (${un.prompts} questions): recommended in ${un.recommended} of ${un.answers} answers, ${pct(un.answers ? un.recommended / un.answers : 0)} (range ${pct(un.low)}–${pct(un.high)}).` : `Markasız (${un.prompts} soru): ${un.answers} cevabın ${un.recommended} tanesinde önerildiniz, ${pct(un.answers ? un.recommended / un.answers : 0)} (aralık ${pct(un.low)}–${pct(un.high)}).`}</li>}
+                    <li>{isEn() ? `Branded (${br.prompts} questions containing your name): recommended in ${br.recommended} of ${br.answers} answers, ${pct(br.answers ? br.recommended / br.answers : 0)}.` : `Markalı (adınızın geçtiği ${br.prompts} soru): ${br.answers} cevabın ${br.recommended} tanesinde önerildiniz, ${pct(br.answers ? br.recommended / br.answers : 0)}.`}</li>
+                  </ul>
+                  <p className="loss-note muted">{L("Soruda adınız geçince yapay zekâ sizden neredeyse her zaman söz eder; bu oranı şişirir. Gerçek görünürlüğünüz markasız sorulardaki orandır. Yukarıdaki genel oranlar iki grubu birlikte içerir.", "When your name is in the question, the AI almost always mentions you, which inflates the rate. Your real visibility is the unbranded rate. The overall rates above include both groups.")}</p>
+                </div>
+              );
+            })()}
             {prompts.loading ? <Loading /> : (
               <ul className="q-results">
                 {(prompts.data ?? []).map((p) => (
                   <li key={p.prompt_id}>
                     <p className="q-text">{p.prompt_text}</p>
-                    <p className="q-meta">{INTENT_LABEL[p.intent]}</p>
+                    <p className="q-meta">{INTENT_LABEL[p.intent]}{promptKind(p.prompt_text, { name: brand.name, aliases: brand.aliases ?? [] }) === "branded" && L(", markalı soru", ", branded question")}</p>
                     <p className={`q-verdict ${p.target_recommended ? "yes" : p.target_mentioned ? "partial" : "no"}`}>
                       {p.target_recommended ? (isEn() ? `Recommended${p.best_rank ? `, best position ${p.best_rank}` : ""}` : `Önerildiniz${p.best_rank ? `, en iyi sıra ${p.best_rank}` : ""}`) : p.target_mentioned ? L("Anıldınız ama önerilmediniz", "Mentioned, not recommended") : L("Cevapta yoksunuz", "Not in the answer")}
                       <span className="muted"> ({p.answers} cevap)</span>
@@ -847,9 +862,17 @@ function Questions({ brand }: { brand: Brand }) {
         <p className="muted">{L("Müşterilerinizin yapay zekâya soracağı soruları yazın. Her ölçümde bu sorular Gemini'ye sorulur.", "Write the questions your customers would ask an AI assistant. Every measurement asks these questions.")}</p>
         {prompts.loading ? <Loading /> : list.length === 0 ? <p className="muted">{L("Henüz soru yok.", "No questions yet.")}</p> : (
           <ul className="rows">
-            {list.map((p) => <PromptRow key={p.id} p={p} onChange={prompts.reload} onError={setErr} />)}
+            {list.map((p) => <PromptRow key={p.id} p={p} onChange={prompts.reload} onError={setErr} branded={promptKind(p.text, { name: brand.name, aliases: brand.aliases ?? [] }) === "branded"} />)}
           </ul>
         )}
+        {(() => {
+          const act = list.filter((p) => p.active), nb = act.filter((p) => promptKind(p.text, { name: brand.name, aliases: brand.aliases ?? [] }) === "branded").length;
+          if (act.length < 3) return null;
+          const share = nb / act.length;
+          return share > 0.3
+            ? <p className="caution">{isEn() ? `${nb} of your ${act.length} questions contain your brand name (${Math.round(share * 100)}%). Keep this to about 20%: branded questions almost always mention you and make the result look better than it is.` : `${act.length} sorunuzun ${nb} tanesinde marka adınız geçiyor (%${Math.round(share * 100)}). Bunu %20 civarında tutun: markalı sorularda yapay zekâ sizden neredeyse her zaman söz eder ve sonuç olduğundan iyi görünür.`}</p>
+            : <p className="muted small">{isEn() ? `Mix: ${act.length - nb} unbranded, ${nb} branded. A good start is about 80% unbranded questions, spread across researching, comparing and buying.` : `Dağılım: ${act.length - nb} markasız, ${nb} markalı. İyi bir başlangıç: soruların %80 kadarı markasız, bilgi arama, karşılaştırma ve satın alma arasında dağılmış.`}</p>;
+        })()}
       </section>
 
       {active < limit && ideas.length > 0 && (
@@ -887,7 +910,7 @@ function Questions({ brand }: { brand: Brand }) {
   );
 }
 
-function PromptRow({ p, onChange, onError }: { p: Prompt; onChange: () => void; onError: (m: string) => void }) {
+function PromptRow({ p, onChange, onError, branded = false }: { p: Prompt; onChange: () => void; onError: (m: string) => void; branded?: boolean }) {
   const [editing, setEditing] = useState(false);
   const [busy, setBusy] = useState(false);
   if (editing) {
@@ -917,7 +940,7 @@ function PromptRow({ p, onChange, onError }: { p: Prompt; onChange: () => void; 
   }
   return (
     <li className={p.active ? "" : "inactive"}>
-      <span><span className="q-text">{p.text}</span><span className="q-meta">{INTENT_LABEL[p.intent]}{p.segment && `, ${p.segment}`}{!p.active && ", pasif"}</span></span>
+      <span><span className="q-text">{p.text}</span><span className="q-meta">{INTENT_LABEL[p.intent]}{p.segment && `, ${p.segment}`}{branded && L(", markalı", ", branded")}{!p.active && ", pasif"}</span></span>
       <span className="row-actions">
         <button className="link-btn" onClick={() => setEditing(true)}>{L("Düzenle", "Edit")}</button>
         <button className="link-btn" onClick={async () => { try { await api.setPromptActive(p.id, !p.active); onChange(); } catch (e) { onError(friendlyError(e)); } }}>{p.active ? L("Pasifleştir", "Deactivate") : L("Etkinleştir", "Activate")}</button>

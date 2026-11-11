@@ -662,3 +662,19 @@ test("Ürün görünürlüğü: ürün adı mevcut cevaplarda aranır, motor baz
   assert.deepEqual(v2.losses.map((l) => l.promptId).sort(), ["p1", "p2"]);
   assert.ok(v2.losses[0].evidence.includes("competitor_own_site_cited"));
 });
+
+test("Markalı soru ayrımı: kendi adı geçen soru markalı, rakip adı geçen işaretli; oranlar ayrı hesaplanır", async () => {
+  const { promptKind, splitByKind } = await import("../src/insights.ts");
+  const b = { name: "Ada Kebap", aliases: ["Ada"] };
+  assert.equal(promptKind("Ada Kebap güvenilir mi?", b), "branded");
+  assert.equal(promptKind("Ada'nın menüsü nasıl?", b), "branded", "Türkçe ekli ad");
+  assert.equal(promptKind("Adalar'da en iyi kebap?", b), "unbranded", "başka kelimenin başı eşleşmez");
+  assert.equal(promptKind("Yıldız Döner'e alternatifler neler?", b, [{ name: "Yıldız Döner" }]), "competitor_named");
+  assert.equal(promptKind("Antalya'da en iyi kebap hangisi?", b, [{ name: "Yıldız Döner" }]), "unbranded");
+  const split = splitByKind([
+    { prompt_text: "Ada Kebap güvenilir mi?", answers: 2, target_mentioned: 2, target_recommended: 2 },
+    { prompt_text: "Antalya'da en iyi kebap?", answers: 2, target_mentioned: 0, target_recommended: 0 },
+    { prompt_text: "Ucuz kebap nerede?", answers: 2, target_mentioned: 1, target_recommended: 1 },
+  ], b);
+  assert.deepEqual(split.map((x) => [x.kind, x.prompts, x.answers, x.recommended]), [["unbranded", 2, 4, 1], ["branded", 1, 2, 2]]);
+});

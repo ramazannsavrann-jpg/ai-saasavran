@@ -170,7 +170,7 @@ export function actionImpact(points: ImpactPoint[], doneOn: string): Impact {
 }
 
 // ---------------- Ürün görünürlüğü ve ürün önerilme oranı ----------------
-import { analyzeResponse, type BrandRef } from "./metrics.ts";
+import { analyzeResponse, hasName, normalize, type BrandRef } from "./metrics.ts";
 
 export interface ProductAnswer { id: string; prompt_id: string; provider: string; answer_text: string; cited_urls: string[] | null }
 export interface ProductVisibility {
@@ -227,4 +227,31 @@ export function productVisibility(
     losses: lossCards(answers, mentions, insightBrands),
     promptsMentioned: [...promptsMentioned],
   };
+}
+
+// ---------------- Markalı / markasız soru ayrımı ----------------
+// Soruda markanın kendi adı geçiyorsa ("X güvenilir mi?") yapay zekâ o markadan neredeyse her zaman söz eder; bu, oranları şişirir.
+// Bu yüzden markalı sorular ayrı raporlanır. Rakip adı geçen sorular ("Y'ye alternatifler") markasız sayılır ama işaretlenir.
+
+export type PromptKind = "branded" | "competitor_named" | "unbranded";
+export function promptKind(text: string, brand: { name: string; aliases?: string[] }, competitors: { name: string; aliases?: string[] }[] = []): PromptKind {
+  const t = normalize(text);
+  const names = (b: { name: string; aliases?: string[] }) => [b.name, ...(b.aliases ?? [])].map(normalize).filter((n) => n.length >= 2);
+  if (names(brand).some((n) => hasName(t, n))) return "branded";
+  if (competitors.some((c) => names(c).some((n) => hasName(t, n)))) return "competitor_named";
+  return "unbranded";
+}
+
+export interface KindSplit { kind: "branded" | "unbranded"; prompts: number; answers: number; recommended: number; mentioned: number; low: number; high: number }
+/** Soru bazlı sonuçları markalı ve markasız olarak ayırır; her grup için önerilme oranı ve Wilson aralığı. */
+export function splitByKind(
+  rows: { prompt_text: string; answers: number; target_mentioned: number; target_recommended: number }[],
+  brand: { name: string; aliases?: string[] },
+): KindSplit[] {
+  const acc = { branded: { prompts: 0, answers: 0, recommended: 0, mentioned: 0 }, unbranded: { prompts: 0, answers: 0, recommended: 0, mentioned: 0 } };
+  for (const r of rows) {
+    const k = promptKind(r.prompt_text, brand) === "branded" ? acc.branded : acc.unbranded;
+    k.prompts++; k.answers += r.answers; k.recommended += r.target_recommended; k.mentioned += r.target_mentioned;
+  }
+  return (["unbranded", "branded"] as const).filter((k) => acc[k].prompts > 0).map((k) => ({ kind: k, ...acc[k], ...wilson(acc[k].recommended, acc[k].answers) }));
 }
