@@ -41,6 +41,8 @@
 
 - **Ürün Doğruluğu (pilot, 0015):** marka başına en fazla 10 ürün; kullanıcı doğru bilgileri girer. Ücretli alanlarda "Doğruluğu kontrol et": 1 canlı aramalı ChatGPT cevabı + 1 karşılaştırma çağrısı (yaklaşık 0,02 $), ürün başına günde bir. Sonuç: doğru / yanlış / doğrulanamadı. Karşılaştırmanın doğruluğu henüz ölçülmedi; tek cevaba dayanır.
 
+- **"Önerildi mi" kontrolünün canlı denemesi (11 Kasım):** 20/20 ChatGPT cevabı başarılı (0,37 $). Marka geçen 9 cevap sınıflandırıldı, toplam 0,001 $ (cevap başına yaklaşık 0,0001 $). "X'e alternatif" sorularında X'in kendisini doğru biçimde "önerilmedi" saydı. Elle etiketli geniş bir karşılaştırma henüz yapılmadı.
+
 ## Bilinen açık konular
 
 - Bölge kısıtı uygulama içinde markanın ülke koduna dayanır; kullanıcı kodu değiştirebilir. Kesin uygulama için sunucu tarafında kullanıcı ülkesi gerekir.

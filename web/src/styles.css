@@ -97,13 +97,13 @@ a { color: var(--primary-ink); text-underline-offset: 3px; }
 .field-label { font-weight: 600; font-size: .95rem; }
 .field-hint { font-size: .85rem; color: var(--muted); }
 .field-error { font-size: .85rem; color: var(--danger); }
-input, select {
+input, select, textarea {
   font: inherit; color: var(--ink); background: var(--surface); width: 100%;
   min-height: 48px; padding: 10px 12px; border: 1px solid var(--line); border-radius: var(--radius-s);
 }
 select { appearance: none; background-image: linear-gradient(45deg, transparent 50%, var(--muted) 50%), linear-gradient(135deg, var(--muted) 50%, transparent 50%);
   background-position: calc(100% - 18px) 50%, calc(100% - 13px) 50%; background-size: 5px 5px; background-repeat: no-repeat; padding-right: 36px; }
-input:focus, select:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 0 3px var(--tint); }
+input:focus, select:focus, textarea:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 0 3px var(--tint); }
 input[aria-invalid="true"] { border-color: var(--danger); }
 .check { display: flex; gap: 10px; align-items: flex-start; font-size: .9rem; }
 .check input { width: 22px; height: 22px; min-height: 0; margin-top: 2px; flex: none; accent-color: var(--primary); }
@@ -408,3 +408,6 @@ form > .btn, .stack > .btn { width: 100%; }
 .src-dom .src-head { display: flex; justify-content: space-between; gap: 1rem; }
 .src-dom .src-owner, .src-dom .src-sup { font-size: .9rem; }
 .src-competitor .src-owner { font-weight: 600; }
+
+/* Çok satırlı alan (ürün bilgileri) */
+textarea { min-height: 7rem; resize: vertical; font: inherit; line-height: 1.45; }
