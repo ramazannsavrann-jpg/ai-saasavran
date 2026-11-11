@@ -168,3 +168,143 @@ export function actionImpact(points: ImpactPoint[], doneOn: string): Impact {
   const verdict: ImpactVerdict = !before ? "no_before" : !after ? "no_after" : after.low > before.high ? "up" : after.high < before.low ? "down" : "unclear";
   return { before, after, verdict };
 }
+
+// ---------------- Ürün görünürlüğü ve ürün önerilme oranı ----------------
+import { analyzeResponse, hasName, normalize, type BrandRef } from "./metrics.ts";
+
+export interface ProductAnswer { id: string; prompt_id: string; provider: string; answer_text: string; cited_urls: string[] | null }
+export interface ProductVisibility {
+  productId: string;
+  /** Motor bazında: ürün adının geçtiği ve önerildiği cevap sayısı (Wilson aralığıyla) */
+  engines: { provider: string; answers: number; mentioned: number; recommended: number; low: number; high: number }[];
+  /** Ürünün hiç önerilmediği ve bir rakip markanın önerildiği sorular için kanıt kartları */
+  losses: LossCard[];
+  /** Ürünün geçtiği soruların kimlikleri */
+  promptsMentioned: string[];
+}
+
+/**
+ * Ürün görünürlüğü: ürün adı markanın mevcut ölçüm cevaplarında aranır (ek API çağrısı yok).
+ * Eşleştirme marka ile aynı kurallarla yapılır (tam kelime, liste = öneri, olumsuz ifade hariç).
+ * Rakipler MARKA düzeyindedir: "ürün yerine hangi rakip marka önerildi" sorusunu cevaplar, rakip ÜRÜN karşılaştırması değildir.
+ */
+export function productVisibility(
+  answers: ProductAnswer[],
+  product: { id: string; name: string; aliases?: string[] },
+  brand: { name: string; website: string | null },
+  competitors: { id: string; name: string; aliases?: string[]; website: string | null }[],
+): ProductVisibility {
+  // Ürün adı marka adıyla başlıyorsa markasız hâli de aranır ("Bianchi Oltre" → "Oltre")
+  const lowerBrand = brand.name.toLocaleLowerCase("tr-TR");
+  const bare = product.name.toLocaleLowerCase("tr-TR").startsWith(lowerBrand + " ") ? product.name.slice(brand.name.length + 1).trim() : "";
+  const refs: BrandRef[] = [
+    { id: product.id, name: product.name, aliases: [...(product.aliases ?? []), ...(bare.length >= 3 ? [bare] : [])], domain: "" },
+    ...competitors.map((c) => ({ id: c.id, name: c.name, aliases: c.aliases ?? [], domain: domainOf(c.website) })),
+  ];
+  const mentions: InsightMention[] = [];
+  const per = new Map<string, { answers: number; mentioned: number; recommended: number }>();
+  const promptsMentioned = new Set<string>();
+  for (const a of answers) {
+    const hits = analyzeResponse({ promptId: a.prompt_id, provider: a.provider, answerText: a.answer_text, citedUrls: a.cited_urls ?? [] }, refs);
+    const e = per.get(a.provider) ?? { answers: 0, mentioned: 0, recommended: 0 };
+    e.answers++;
+    for (const h of hits) {
+      mentions.push({ response_id: a.id, brand_id: h.brandId, mentioned: h.mentioned, recommended: h.recommended });
+      if (h.brandId === product.id) {
+        if (h.mentioned) { e.mentioned++; promptsMentioned.add(a.prompt_id); }
+        if (h.recommended) e.recommended++;
+      }
+    }
+    per.set(a.provider, e);
+  }
+  const insightBrands: InsightBrand[] = [
+    { id: product.id, name: product.name, website: brand.website, isTarget: true },
+    ...competitors.map((c) => ({ id: c.id, name: c.name, website: c.website, isTarget: false })),
+  ];
+  return {
+    productId: product.id,
+    engines: [...per.entries()].map(([provider, e]) => ({ provider, ...e, ...wilson(e.recommended, e.answers) })).sort((x, y) => x.provider.localeCompare(y.provider)),
+    losses: lossCards(answers, mentions, insightBrands),
+    promptsMentioned: [...promptsMentioned],
+  };
+}
+
+// ---------------- Markalı / markasız soru ayrımı ----------------
+// Soruda markanın kendi adı geçiyorsa ("X güvenilir mi?") yapay zekâ o markadan neredeyse her zaman söz eder; bu, oranları şişirir.
+// Bu yüzden markalı sorular ayrı raporlanır. Rakip adı geçen sorular ("Y'ye alternatifler") markasız sayılır ama işaretlenir.
+
+export type PromptKind = "branded" | "competitor_named" | "unbranded";
+export function promptKind(text: string, brand: { name: string; aliases?: string[] }, competitors: { name: string; aliases?: string[] }[] = []): PromptKind {
+  const t = normalize(text);
+  const names = (b: { name: string; aliases?: string[] }) => [b.name, ...(b.aliases ?? [])].map(normalize).filter((n) => n.length >= 2);
+  if (names(brand).some((n) => hasName(t, n))) return "branded";
+  if (competitors.some((c) => names(c).some((n) => hasName(t, n)))) return "competitor_named";
+  return "unbranded";
+}
+
+export interface KindSplit { kind: "branded" | "unbranded"; prompts: number; answers: number; recommended: number; mentioned: number; low: number; high: number }
+/** Soru bazlı sonuçları markalı ve markasız olarak ayırır; her grup için önerilme oranı ve Wilson aralığı. */
+export function splitByKind(
+  rows: { prompt_text: string; answers: number; target_mentioned: number; target_recommended: number }[],
+  brand: { name: string; aliases?: string[] },
+): KindSplit[] {
+  const acc = { branded: { prompts: 0, answers: 0, recommended: 0, mentioned: 0 }, unbranded: { prompts: 0, answers: 0, recommended: 0, mentioned: 0 } };
+  for (const r of rows) {
+    const k = promptKind(r.prompt_text, brand) === "branded" ? acc.branded : acc.unbranded;
+    k.prompts++; k.answers += r.answers; k.recommended += r.target_recommended; k.mentioned += r.target_mentioned;
+  }
+  return (["unbranded", "branded"] as const).filter((k) => acc[k].prompts > 0).map((k) => ({ kind: k, ...acc[k], ...wilson(acc[k].recommended, acc[k].answers) }));
+}
+
+// ---------------- Rakip ürün karşılaştırması ----------------
+export interface ProductCompareRow { id: string; name: string; isOwn: boolean; byEngine: Record<string, { answers: number; mentioned: number; recommended: number; low: number; high: number }>; headToHead: { bothMentioned: number; ownWins: number; rivalWins: number } | null }
+
+/**
+ * Kendi ürünü ve rakip ürünler aynı cevaplarda aranır. Her ürün için motor bazında anılma ve önerilme;
+ * rakipler için "ikisi aynı cevapta geçtiğinde kim önerildi" sayımı. Ek API çağrısı yok; kural tabanlı.
+ */
+export function compareProducts(
+  answers: ProductAnswer[],
+  own: { id: string; name: string },
+  rivals: { id: string; name: string; rival_brand?: string | null }[],
+  brand: { name: string },
+): ProductCompareRow[] {
+  const lowerBrand = brand.name.toLocaleLowerCase("tr-TR");
+  const bareOf = (name: string, b: string | null | undefined) => {
+    const lb = (b ?? "").toLocaleLowerCase("tr-TR");
+    const n = name.toLocaleLowerCase("tr-TR");
+    for (const pre of [lowerBrand, lb].filter(Boolean)) if (n.startsWith(pre + " ")) return name.slice(pre.length + 1).trim();
+    return "";
+  };
+  const refs: BrandRef[] = [own, ...rivals].map((p) => {
+    const bare = bareOf(p.name, (p as { rival_brand?: string | null }).rival_brand);
+    const full = (p as { rival_brand?: string | null }).rival_brand && !p.name.toLocaleLowerCase("tr-TR").startsWith(((p as { rival_brand?: string | null }).rival_brand ?? "").toLocaleLowerCase("tr-TR"))
+      ? [`${(p as { rival_brand?: string | null }).rival_brand} ${p.name}`] : [];
+    return { id: p.id, name: p.name, aliases: [...full, ...(bare.length >= 3 ? [bare] : [])], domain: "" };
+  });
+  const stats = new Map<string, Map<string, { answers: number; mentioned: number; recommended: number }>>();
+  const h2h = new Map<string, { bothMentioned: number; ownWins: number; rivalWins: number }>(rivals.map((r) => [r.id, { bothMentioned: 0, ownWins: 0, rivalWins: 0 }]));
+  for (const a of answers) {
+    const hits = analyzeResponse({ promptId: a.prompt_id, provider: a.provider, answerText: a.answer_text, citedUrls: a.cited_urls ?? [] }, refs);
+    const by = new Map(hits.map((h) => [h.brandId, h]));
+    for (const r of refs) {
+      const m = stats.get(r.id) ?? new Map(); const e = m.get(a.provider) ?? { answers: 0, mentioned: 0, recommended: 0 };
+      const h = by.get(r.id); e.answers++; if (h?.mentioned) e.mentioned++; if (h?.recommended) e.recommended++;
+      m.set(a.provider, e); stats.set(r.id, m);
+    }
+    const o = by.get(own.id);
+    for (const r of rivals) {
+      const x = by.get(r.id), t = h2h.get(r.id)!;
+      if (o?.mentioned && x?.mentioned) {
+        t.bothMentioned++;
+        if (o.recommended && !x.recommended) t.ownWins++;
+        if (x.recommended && !o.recommended) t.rivalWins++;
+      }
+    }
+  }
+  return [{ ...own, isOwn: true }, ...rivals.map((r) => ({ id: r.id, name: r.rival_brand && !r.name.toLocaleLowerCase("tr-TR").startsWith(r.rival_brand.toLocaleLowerCase("tr-TR")) ? `${r.rival_brand} ${r.name}` : r.name, isOwn: false }))].map((p) => ({
+    id: p.id, name: p.name, isOwn: p.isOwn,
+    byEngine: Object.fromEntries([...(stats.get(p.id) ?? new Map()).entries()].map(([k, e]) => [k, { ...e, ...wilson(e.recommended, e.answers) }])),
+    headToHead: p.isOwn ? null : h2h.get(p.id) ?? null,
+  }));
+}

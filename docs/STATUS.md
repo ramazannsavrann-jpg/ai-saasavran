@@ -50,6 +50,18 @@
 - Ürün doğruluğu canlı denemesi: ChatGPT "AI SaaSavran Plus" sorusunda markayı savran.ai ile karıştırdı; sistem "farklı ürün" olarak işaretledi.
 - Growth Lab toplam deneme tavanı 3 $ → 6 $ (app_settings).
 
+## v1.1 (11 Kasım 2026, yedinci paket)
+
+- **Ürün görünürlüğü ve ürün önerilme oranı:** Ürünler sekmesinde her ürün için, son ölçüm cevaplarında ürün adının geçtiği ve önerildiği cevap sayısı (motor bazında, güven aralığıyla). Ek API çağrısı yok. Ürünün önerilmediği sorularda yerine önerilen rakip markalar ve kaynaklar. Rakipler marka düzeyindedir; rakip ürün karşılaştırması henüz yok.
+- **İsim karışıklığına karşı site:** SSS'ye "benzer adlı şirketlerle ilgimiz var mı?" sorusu, yapısal veriye alternatif adlar ve bağımsızlık açıklaması (başka şirketin adı yazılmadan).
+- **Markalı / markasız soru ayrımı (soru şablonu araştırması, B seçeneği):** soruda markanın kendi adı geçiyorsa "markalı" sayılır; raporda markasız ve markalı oranlar ayrı gösterilir, Sorular sekmesinde markalı oran %30'u aşarsa uyarı çıkar. Sektör soru kütüphanesi (43 sektör, Türkçe ve İngilizce) ve niyet etiketi zaten vardı. Ek API maliyeti yok.
+- Uçtan uca testte düz çizgi grafiğin "görünmez" sayılması düzeltildi.
+
+## v1.2 (12 Kasım 2026)
+
+- **Rakip ürün karşılaştırması (0018):** kendi ürününe en fazla 5 rakip ürün bağlanır; son ölçüm cevaplarında yan yana, motor bazında anılma/önerilme ve "ikisi birlikte geçtiğinde kim önerildi" sayımı. Ek API maliyeti yok. Rakip üründe doğruluk kontrolü yok.
+- **AI Shopping (araştırma):** ChatGPT'nin alışveriş kartları (ürün karuseli) API cevabında yer almıyor; bu yüzden ölçülmüyor. Ölçülen, metin cevaplarındaki ürün anılmasıdır.
+
 ## Bilinen açık konular
 
 - Bölge kısıtı uygulama içinde markanın ülke koduna dayanır; kullanıcı kodu değiştirebilir. Kesin uygulama için sunucu tarafında kullanıcı ülkesi gerekir.

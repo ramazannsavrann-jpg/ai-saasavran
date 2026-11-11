@@ -361,6 +361,7 @@ test("Demo Lab: simülasyon açıkça etiketli ve müşteriden ayrı", async ({ 
   await expect(page.getByRole("note").filter({ hasText: "simülasyondur" }).first()).toBeVisible();
   await page.getByRole("link", { name: /Hayali Döner Evi/ }).click();
   await expect(page.getByRole("note").filter({ hasText: "Simülasyon — gerçek veri değil" })).toBeVisible();
-  await expect(page.locator(".chart-line.chart-simulated")).toBeVisible();
+  // Çizgi dümdüz çıkabilir (tüm ölçümlerde aynı oran); yüksekliği sıfır olan çizgiyi Playwright "gizli" sayar, bu yüzden varlığı denetlenir.
+  await expect(page.locator(".chart-line.chart-simulated")).toHaveCount(1);
   await shot(page, "11-demo-lab-simulasyon");
 });

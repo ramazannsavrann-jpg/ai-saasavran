@@ -6,7 +6,7 @@ import { api, INTENT_LABEL, type Brand, type Intent, type MeasurementType, type 
 import { friendlyError } from "../lib/supabase";
 import { L, isEn } from "../lib/i18n";
 import { ERROR_CLASS_TEXT, STOP_TEXT, runStatusText } from "../lib/messages";
-import { actionImpact, conditionMap, lossCards, sourceDominance, type LossCard, type SourceRow } from "../../../engine/src/insights.ts";
+import { actionImpact, compareProducts, conditionMap, lossCards, productVisibility, promptKind, sourceDominance, splitByKind, type LossCard, type SourceRow } from "../../../engine/src/insights.ts";
 import { competitorsInRun, formatDateTime, MIN_SAMPLE, numLoc, pct, providerLabel, rangeText, series, shareSummary, sourceOpportunities, topDomains, usd } from "../lib/report";
 import { Button, Confirm, DataNotice, Empty, ErrorBox, Field, Loading, Select, TypeBadge } from "../components/ui";
 import { CompareBars, TrendChart } from "../components/Chart";
@@ -74,10 +74,93 @@ export function BrandPage() {
   );
 }
 
+/** Rakip ürün karşılaştırması: kendi ürünü ve rakip ürünler aynı cevaplarda, motor bazında; ikisi birlikte geçtiğinde kim önerildi. */
+function RivalCompare({ own, rivals, brand, answers, hasRuns, onChange, onError }: {
+  own: { id: string; name: string }; rivals: { id: string; name: string; rival_brand: string | null }[]; brand: Brand;
+  answers: Parameters<typeof compareProducts>[0] | null; hasRuns: boolean; onChange: () => void; onError: (m: string) => void;
+}) {
+  const [open, setOpen] = useState(false);
+  const [busy, setBusy] = useState(false);
+  const rows = answers && rivals.length ? compareProducts(answers, own, rivals, { name: brand.name }) : [];
+  const engines = [...new Set(rows.flatMap((r) => Object.keys(r.byEngine)))].sort();
+  async function add(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const form = e.currentTarget, f = new FormData(form);
+    const name = String(f.get("rival_name") || "").trim();
+    if (name.length < 2) { onError(L("Rakip ürünün adını yazın.", "Enter the competitor product's name.")); return; }
+    setBusy(true);
+    try { await api.addRival({ workspace_id: brand.workspace_id, brand_id: brand.id, name, rival_of: own.id, rival_brand: String(f.get("rival_brand") || "").trim() || null }); form.reset(); setOpen(false); onChange(); }
+    catch (x) { onError(friendlyError(x)); } finally { setBusy(false); }
+  }
+  return (
+    <div className="prod-vis">
+      <p className="src-sup"><strong>{L("Rakip ürünlerle karşılaştırma", "Compared with competitor products")}</strong></p>
+      {rivals.length === 0 && <p className="src-sup muted">{L("Henüz rakip ürün yok. Müşterinizin bu ürün yerine alabileceği 1–5 rakip ürün ekleyin.", "No competitor products yet. Add 1–5 products a customer might buy instead.")}</p>}
+      {rivals.length > 0 && !hasRuns && <p className="src-sup muted">{L("Karşılaştırma için önce bir ölçüm tamamlanmalı.", "A completed measurement is needed to compare.")}</p>}
+      {rows.length > 0 && engines.map((en) => (
+        <div key={en}>
+          <p className="src-sup muted">{providerLabel(en)}</p>
+          <ul className="src-dom">
+            {rows.map((r) => { const e = r.byEngine[en]; return (
+              <li key={r.id}>
+                <p className="src-head"><span>{r.isOwn ? <strong>{r.name}</strong> : r.name}</span> <span className="num">{e ? `${e.recommended}/${e.answers}` : "–"}</span></p>
+                {e && <p className="src-sup muted">{isEn() ? `mentioned ${e.mentioned}, recommended ${e.recommended} (range ${pct(e.low)}–${pct(e.high)})` : `${e.mentioned} kez geçti, ${e.recommended} kez önerildi (aralık ${pct(e.low)}–${pct(e.high)})`}</p>}
+              </li>
+            ); })}
+          </ul>
+        </div>
+      ))}
+      {rows.filter((r) => !r.isOwn && r.headToHead && r.headToHead.bothMentioned > 0).map((r) => (
+        <p key={r.id} className="src-sup">{isEn() ? `${own.name} vs ${r.name}: both appeared in ${r.headToHead!.bothMentioned} answers; only yours recommended in ${r.headToHead!.ownWins}, only theirs in ${r.headToHead!.rivalWins}.` : `${own.name} ↔ ${r.name}: ${r.headToHead!.bothMentioned} cevapta ikisi birlikte geçti; yalnız sizinki ${r.headToHead!.ownWins}, yalnız onunki ${r.headToHead!.rivalWins} kez önerildi.`}</p>
+      ))}
+      {rows.length > 0 && <p className="src-sup muted">{L("Son ölçümün cevaplarına dayanır; ek ücret yok. Ürün adları cevaplarda farklı yazılabilir, sayımlar bu yüzden düşük kalabilir.", "Based on the latest measurement's answers; no extra cost. Product names may be written differently in answers, so counts can be low.")}</p>}
+      {rivals.length > 0 && <p className="src-sup">{rivals.map((r) => <span key={r.id} className="chip-inline">{r.rival_brand ? `${r.rival_brand} ` : ""}{r.name} <button className="link-btn" onClick={async () => { try { await api.deleteProduct(r.id); onChange(); } catch (x) { onError(friendlyError(x)); } }}>{L("sil", "remove")}</button></span>)}</p>}
+      {rivals.length < 5 && (open ? (
+        <form className="stack" onSubmit={add} noValidate aria-label={L("Rakip ürün ekle", "Add competitor product")}>
+          <Field label={L("Rakip ürün adı", "Competitor product name")} name="rival_name" maxLength={120} placeholder={L("Örn. Aero 5", "e.g. Aero 5")} />
+          <Field label={L("Rakip marka (isteğe bağlı)", "Competitor brand (optional)")} name="rival_brand" maxLength={80} />
+          <Button type="submit" variant="quiet" busy={busy}>{L("Ekle", "Add")}</Button>
+        </form>
+      ) : <button className="link-btn" onClick={() => setOpen(true)}>{L("+ Rakip ürün ekle", "+ Add competitor product")}</button>)}
+    </div>
+  );
+}
+
+/** Ürün görünürlüğü ve önerilme oranı: motor bazında; ürünün önerilmediği sorularda yerine önerilen rakip markalar ve kaynaklar. */
+function ProductVisibilityView({ vis, loading, hasRuns }: { vis: ReturnType<typeof productVisibility> | null; loading: boolean; hasRuns: boolean }) {
+  if (loading) return <p className="src-sup muted">{L("Görünürlük hesaplanıyor…", "Calculating visibility…")}</p>;
+  if (!hasRuns || !vis) return <p className="src-sup muted">{L("Görünürlük için önce bir ölçüm tamamlanmalı.", "Visibility needs a completed measurement first.")}</p>;
+  const total = vis.engines.reduce((n, e) => n + e.mentioned, 0);
+  const winners = new Map<string, number>(); const sources = new Map<string, number>();
+  for (const l of vis.losses) { for (const w of l.winners) winners.set(w.name, (winners.get(w.name) ?? 0) + w.count); for (const s of l.sources) sources.set(s.domain, (sources.get(s.domain) ?? 0) + s.count); }
+  const top = (m: Map<string, number>, n: number) => [...m.entries()].sort((a, b) => b[1] - a[1]).slice(0, n).map(([k, v]) => `${k} (${v})`).join(", ");
+  return (
+    <div className="prod-vis">
+      <p className="src-sup"><strong>{L("Görünürlük (son ölçüm)", "Visibility (latest measurement)")}</strong></p>
+      {vis.engines.map((e) => (
+        <p key={e.provider} className="src-sup"><span className="muted">{providerLabel(e.provider)}: </span>
+          {isEn() ? `mentioned in ${e.mentioned} of ${e.answers} answers, recommended in ${e.recommended} (${pct(e.answers ? e.recommended / e.answers : 0)}, range ${pct(e.low)}–${pct(e.high)})` : `${e.answers} cevabın ${e.mentioned} tanesinde geçti, ${e.recommended} tanesinde önerildi (${pct(e.answers ? e.recommended / e.answers : 0)}, aralık ${pct(e.low)}–${pct(e.high)})`}{e.answers < MIN_SAMPLE && L("; örneklem küçük", "; small sample")}.
+        </p>
+      ))}
+      {total === 0 && <p className="src-sup muted">{L("Ürün adı hiçbir cevapta geçmedi. Sorularınız marka düzeyindeyse bu beklenir: Sorular sekmesinden bu ürünün kategorisine dair markasız sorular ekleyin (örn. \"1.000 dolar altı en iyi yol bisikleti hangisi?\").", "The product name did not appear in any answer. That is expected if your questions are brand-level: add unbranded questions about this product's category in the Questions tab (e.g. \"What is the best road bike under $1,000?\").")}</p>}
+      {vis.losses.length > 0 && winners.size > 0 && (
+        <p className="src-sup">{isEn() ? `Not recommended in ${vis.losses.length} question${vis.losses.length > 1 ? "s" : ""} where a competitor brand was. Recommended instead: ${top(winners, 4)}.` : `${vis.losses.length} soruda ürününüz önerilmedi, rakip marka önerildi. Yerine önerilenler: ${top(winners, 4)}.`}{sources.size > 0 && <> {L("Bu cevapların dayandığı kaynaklar: ", "Sources behind those answers: ")}{top(sources, 5)}.</>}</p>
+      )}
+      <p className="src-sup muted">{L("Kural tabanlı eşleştirme; rakipler marka düzeyindedir (rakip ürün karşılaştırması değildir). Kanıt gösterir, neden kanıtlamaz.", "Rule-based matching; competitors are brand-level (not a competitor-product comparison). Shows evidence, not proof of cause.")}</p>
+    </div>
+  );
+}
+
 /** Ürün Doğruluğu (pilot): doğru bilgileri girilen ürünü ChatGPT'ye sorar, cevaptaki iddiaları bu bilgilerle karşılaştırır. */
 function Products({ brand, paidAllowed }: { brand: Brand; paidAllowed: boolean }) {
   const products = useLoad(() => api.products(brand.id), [brand.id]);
   const checks = useLoad(() => api.productChecks((products.data ?? []).map((p) => p.id)), [(products.data ?? []).map((p) => p.id).join(",")]);
+  // Ürün görünürlüğü: ürün adları markanın SON ölçüm cevaplarında aranır (her ölçüm türünün en yenisi; ek API çağrısı yok)
+  const runs = useLoad(() => api.runs(brand.id), [brand.id]);
+  const lastIds = (["live_search", "model_knowledge"] as const)
+    .map((t) => (runs.data ?? []).find((r) => r.status === "done" && r.measurement_type === t)?.id).filter((x): x is string => !!x);
+  const visAnswers = useLoad(() => Promise.all(lastIds.map((id) => api.answers(id))).then((a) => a.flat()), [lastIds.join(",")]);
+  const visComps = useLoad(() => api.competitors(brand.id), [brand.id]);
   const [busy, setBusy] = useState<string | null>(null);
   const [err, setErr] = useState<string | null>(null);
   const [msg, setMsg] = useState<string | null>(null);
@@ -105,15 +188,16 @@ function Products({ brand, paidAllowed }: { brand: Brand; paidAllowed: boolean }
   return (
     <div className="stack">
       <section className="panel stack">
-        <h2>{L("Ürün doğruluğu (deneme)", "Product accuracy (pilot)")}</h2>
+        <h2>{L("Ürün görünürlüğü ve doğruluğu (deneme)", "Product visibility and accuracy (pilot)")}</h2>
         <p className="muted">{L("Ürününüzün doğru bilgilerini yazın. ChatGPT'ye (canlı web aramasıyla) ürünü sorarız ve cevabındaki iddiaları sizin yazdıklarınızla karşılaştırırız. Karşılaştırmayı bir yapay zekâ adımı yapar ve yanılabilir: \"Yanlış\" işaretli satırları cevabın kendisinden kontrol edin. Tek bir cevaba dayanır; cevaplar sorudan soruya değişir.", "Enter the correct facts about your product. We ask ChatGPT (with live web search) about it and compare the claims in its answer with what you wrote. The comparison is done by an AI step and can be wrong: verify rows marked \"Wrong\" against the answer itself. It is based on a single answer; answers vary between requests.")}</p>
         {!paidAllowed && <p className="caution">{L("Kontrol, ChatGPT canlı aramalı ücretli paketlerde çalışır. Ürünlerinizi şimdiden ekleyebilirsiniz. ", "Checks run on paid plans with ChatGPT live search. You can add your products now. ")}<Link to="/hesap#paket">{L("Paketleri gör", "See plans")}</Link></p>}
         {msg && <p className="success-box">{msg}</p>}
         <ErrorBox message={err} />
         {products.loading ? <Loading /> : (products.data ?? []).length === 0 ? <p className="muted">{L("Henüz ürün eklenmedi.", "No products yet.")}</p> : (
           <ul className="src-dom">
-            {(products.data ?? []).map((p) => {
+            {(products.data ?? []).filter((p) => !p.rival_of).map((p) => {
               const last = (checks.data ?? []).find((c) => c.product_id === p.id);
+              const rivals = (products.data ?? []).filter((r) => r.rival_of === p.id);
               const pending = !!p.check_requested_at && (!last || last.created_at < p.check_requested_at);
               const claims = [...(last?.claims ?? [])].sort((a, b) => order[a.status] - order[b.status]);
               const wrong = claims.filter((c) => c.status === "wrong").length;
@@ -121,6 +205,9 @@ function Products({ brand, paidAllowed }: { brand: Brand; paidAllowed: boolean }
                 <li key={p.id}>
                   <p className="src-head"><strong>{p.name}</strong> {p.price && <span className="muted num">{p.price}</span>}</p>
                   <p className="src-sup muted">{p.facts}</p>
+                  <RivalCompare own={p} rivals={rivals} brand={brand} answers={visAnswers.data ?? null} hasRuns={lastIds.length > 0} onChange={products.reload} onError={setErr} />
+                  <ProductVisibilityView loading={runs.loading || visAnswers.loading || visComps.loading} hasRuns={lastIds.length > 0}
+                    vis={visAnswers.data && visComps.data && lastIds.length > 0 ? productVisibility(visAnswers.data, { id: p.id, name: p.name }, { name: brand.name, website: brand.website }, visComps.data) : null} />
                   {last && (
                     <div className="loss-card">
                       <p className="loss-title">{formatDateTime(last.created_at)}: {last.recognized === false ? L("ChatGPT farklı bir ürünü anlatmış olabilir.", "ChatGPT may have described a different product.")
@@ -148,7 +235,7 @@ function Products({ brand, paidAllowed }: { brand: Brand; paidAllowed: boolean }
           </ul>
         )}
       </section>
-      {(products.data ?? []).length < 10 && (
+      {(products.data ?? []).filter((p) => !p.rival_of).length < 10 && (
         <form className="panel stack" onSubmit={add} noValidate aria-label={L("Ürün ekle", "Add product")}>
           <h2>{L("Ürün ekleyin", "Add a product")}</h2>
           <Field label={L("Ürün adı", "Product name")} name="product_name" maxLength={120} placeholder={L("Örn. Model X 29 jant dağ bisikleti", "e.g. Model X 29er mountain bike")} />
@@ -512,12 +599,27 @@ function Report({ brand, type, onBrandChange }: { brand: Brand; type: Measuremen
 
           <section className="panel">
             <h2>{L("Soru bazında sonuç", "Results by question")}</h2>
+            {!prompts.loading && (() => {
+              const split = splitByKind(prompts.data ?? [], { name: brand.name, aliases: brand.aliases ?? [] });
+              const br = split.find((x) => x.kind === "branded"), un = split.find((x) => x.kind === "unbranded");
+              if (!br) return null;
+              return (
+                <div className="loss-card">
+                  <p className="loss-title">{L("Markalı ve markasız sorular ayrı", "Branded and unbranded questions, separately")}</p>
+                  <ul>
+                    {un && <li>{isEn() ? `Unbranded (${un.prompts} questions): recommended in ${un.recommended} of ${un.answers} answers, ${pct(un.answers ? un.recommended / un.answers : 0)} (range ${pct(un.low)}–${pct(un.high)}).` : `Markasız (${un.prompts} soru): ${un.answers} cevabın ${un.recommended} tanesinde önerildiniz, ${pct(un.answers ? un.recommended / un.answers : 0)} (aralık ${pct(un.low)}–${pct(un.high)}).`}</li>}
+                    <li>{isEn() ? `Branded (${br.prompts} questions containing your name): recommended in ${br.recommended} of ${br.answers} answers, ${pct(br.answers ? br.recommended / br.answers : 0)}.` : `Markalı (adınızın geçtiği ${br.prompts} soru): ${br.answers} cevabın ${br.recommended} tanesinde önerildiniz, ${pct(br.answers ? br.recommended / br.answers : 0)}.`}</li>
+                  </ul>
+                  <p className="loss-note muted">{L("Soruda adınız geçince yapay zekâ sizden neredeyse her zaman söz eder; bu oranı şişirir. Gerçek görünürlüğünüz markasız sorulardaki orandır. Yukarıdaki genel oranlar iki grubu birlikte içerir.", "When your name is in the question, the AI almost always mentions you, which inflates the rate. Your real visibility is the unbranded rate. The overall rates above include both groups.")}</p>
+                </div>
+              );
+            })()}
             {prompts.loading ? <Loading /> : (
               <ul className="q-results">
                 {(prompts.data ?? []).map((p) => (
                   <li key={p.prompt_id}>
                     <p className="q-text">{p.prompt_text}</p>
-                    <p className="q-meta">{INTENT_LABEL[p.intent]}</p>
+                    <p className="q-meta">{INTENT_LABEL[p.intent]}{promptKind(p.prompt_text, { name: brand.name, aliases: brand.aliases ?? [] }) === "branded" && L(", markalı soru", ", branded question")}</p>
                     <p className={`q-verdict ${p.target_recommended ? "yes" : p.target_mentioned ? "partial" : "no"}`}>
                       {p.target_recommended ? (isEn() ? `Recommended${p.best_rank ? `, best position ${p.best_rank}` : ""}` : `Önerildiniz${p.best_rank ? `, en iyi sıra ${p.best_rank}` : ""}`) : p.target_mentioned ? L("Anıldınız ama önerilmediniz", "Mentioned, not recommended") : L("Cevapta yoksunuz", "Not in the answer")}
                       <span className="muted"> ({p.answers} cevap)</span>
@@ -814,9 +916,17 @@ function Questions({ brand }: { brand: Brand }) {
         <p className="muted">{L("Müşterilerinizin yapay zekâya soracağı soruları yazın. Her ölçümde bu sorular Gemini'ye sorulur.", "Write the questions your customers would ask an AI assistant. Every measurement asks these questions.")}</p>
         {prompts.loading ? <Loading /> : list.length === 0 ? <p className="muted">{L("Henüz soru yok.", "No questions yet.")}</p> : (
           <ul className="rows">
-            {list.map((p) => <PromptRow key={p.id} p={p} onChange={prompts.reload} onError={setErr} />)}
+            {list.map((p) => <PromptRow key={p.id} p={p} onChange={prompts.reload} onError={setErr} branded={promptKind(p.text, { name: brand.name, aliases: brand.aliases ?? [] }) === "branded"} />)}
           </ul>
         )}
+        {(() => {
+          const act = list.filter((p) => p.active), nb = act.filter((p) => promptKind(p.text, { name: brand.name, aliases: brand.aliases ?? [] }) === "branded").length;
+          if (act.length < 3) return null;
+          const share = nb / act.length;
+          return share > 0.3
+            ? <p className="caution">{isEn() ? `${nb} of your ${act.length} questions contain your brand name (${Math.round(share * 100)}%). Keep this to about 20%: branded questions almost always mention you and make the result look better than it is.` : `${act.length} sorunuzun ${nb} tanesinde marka adınız geçiyor (%${Math.round(share * 100)}). Bunu %20 civarında tutun: markalı sorularda yapay zekâ sizden neredeyse her zaman söz eder ve sonuç olduğundan iyi görünür.`}</p>
+            : <p className="muted small">{isEn() ? `Mix: ${act.length - nb} unbranded, ${nb} branded. A good start is about 80% unbranded questions, spread across researching, comparing and buying.` : `Dağılım: ${act.length - nb} markasız, ${nb} markalı. İyi bir başlangıç: soruların %80 kadarı markasız, bilgi arama, karşılaştırma ve satın alma arasında dağılmış.`}</p>;
+        })()}
       </section>
 
       {active < limit && ideas.length > 0 && (
@@ -854,7 +964,7 @@ function Questions({ brand }: { brand: Brand }) {
   );
 }
 
-function PromptRow({ p, onChange, onError }: { p: Prompt; onChange: () => void; onError: (m: string) => void }) {
+function PromptRow({ p, onChange, onError, branded = false }: { p: Prompt; onChange: () => void; onError: (m: string) => void; branded?: boolean }) {
   const [editing, setEditing] = useState(false);
   const [busy, setBusy] = useState(false);
   if (editing) {
@@ -884,7 +994,7 @@ function PromptRow({ p, onChange, onError }: { p: Prompt; onChange: () => void; 
   }
   return (
     <li className={p.active ? "" : "inactive"}>
-      <span><span className="q-text">{p.text}</span><span className="q-meta">{INTENT_LABEL[p.intent]}{p.segment && `, ${p.segment}`}{!p.active && ", pasif"}</span></span>
+      <span><span className="q-text">{p.text}</span><span className="q-meta">{INTENT_LABEL[p.intent]}{p.segment && `, ${p.segment}`}{branded && L(", markalı", ", branded")}{!p.active && ", pasif"}</span></span>
       <span className="row-actions">
         <button className="link-btn" onClick={() => setEditing(true)}>{L("Düzenle", "Edit")}</button>
         <button className="link-btn" onClick={async () => { try { await api.setPromptActive(p.id, !p.active); onChange(); } catch (e) { onError(friendlyError(e)); } }}>{p.active ? L("Pasifleştir", "Deactivate") : L("Etkinleştir", "Activate")}</button>
