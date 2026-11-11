@@ -133,8 +133,9 @@ export async function processNextRun(deps: WorkerDeps): Promise<WorkerResult | n
     const brands: BrandRef[] = [target, ...comps].map((b) => ({ id: b.id, name: b.name, aliases: b.aliases ?? [], domain: domainOf(b.website) }));
     const day = now().toISOString().slice(0, 10);
     const all = chooseProviders(run.measurement_type, { ...env, SEARCH_COUNTRY: target.country || env.SEARCH_COUNTRY }, brands.map((b) => b.name), `${run.id}`, deps.fetchFn);
-    // Birden çok canlı motor şimdilik yalnız Growth Lab'de (paket maliyetleri tek motora göre hesaplı)
-    const providers = run.measurement_type === "live_search" && ws.kind === "growth_lab" ? all : all.slice(0, 1);
+    // Canlı aramada tüm etkin motorlar (ChatGPT + Claude). Müşteri paketlerinde Claude her soruyu 1 kez sorar
+    // (paket tavanları buna göre hesaplı: pricing.ts "+ Claude" satırları); Growth Lab'de her motor 2 tekrar.
+    const providers = run.measurement_type === "live_search" ? all : all.slice(0, 1);
     if (!providers.length) {
       return await finish({ status: "failed", stop: "provider_not_configured", ok: 0, failed: 0 }, undefined,
         run.measurement_type === "live_search" ? "Canlı arama sağlayıcısı etkin değil" : "Gemini anahtarı tanımlı değil");
@@ -152,7 +153,8 @@ export async function processNextRun(deps: WorkerDeps): Promise<WorkerResult | n
     for (const provider of providers) {
       const llmClassify = env.LLM_CLASSIFY === "true" && provider.config.billing === "paid" && provider.config.useSearch && !!env.OPENAI_API_KEY;
       const outcome = await runPrompts({
-        workspaceId: run.workspace_id, provider, prompts, repetitions,
+        workspaceId: run.workspace_id, provider, prompts,
+        repetitions: provider.config.provider === "claude" && ws.kind !== "growth_lab" ? 1 : repetitions,
         guard, cache,
         gate, env, day, sleep: deps.sleep,
         onItem: async ({ result, repetition }) => {

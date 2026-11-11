@@ -99,8 +99,8 @@ const PLAN_ROWS = (en) => [
       ? ["1 brand, 15 questions, 3 competitors", "4 measurements a month (one a week, automatic)", "Gemini, model knowledge (no live search)", "Website check and recommendations"]
       : ["1 marka, 15 soru, 3 rakip", "Ayda 4 ölçüm (haftada bir, otomatik)", "Gemini, model bilgisi (canlı arama yok)", "Web sitesi kontrolü ve öneriler"], live: true },
   { name: "Plus", id: "starter", price: "$20", per: en ? "/month" : "/ay", items: en
-      ? ["1 brand, 25 questions, 5 competitors", "ChatGPT with live web search + Gemini", "Each question asked twice, every week", "Which websites the AI cited"]
-      : ["1 marka, 25 soru, 5 rakip", "ChatGPT canlı web araması + Gemini", "Her soru haftada 2 kez sorulur", "Yapay zekânın baktığı kaynak siteler"] },
+      ? ["1 brand, 25 questions, 5 competitors", "ChatGPT and Claude with live web search + Gemini", "Every week: ChatGPT and Gemini ask each question twice, Claude once", "Which websites the AI cited"]
+      : ["1 marka, 25 soru, 5 rakip", "ChatGPT ve Claude canlı web araması + Gemini", "Her hafta: ChatGPT ve Gemini her soruyu 2 kez, Claude 1 kez sorar", "Yapay zekânın baktığı kaynak siteler"] },
   { name: "Pro", id: "pro", price: "$99", per: en ? "/month" : "/ay", items: en
       ? ["5 brands, 30 questions each", "8 competitors per brand", "Everything in Plus", "For multi-location businesses and freelancers"]
       : ["5 marka, her biri 30 soru", "Marka başına 8 rakip", "Plus'taki her şey", "Çok şubeli işletmeler ve serbest çalışanlar için"] },
@@ -242,7 +242,7 @@ ${demoHtml(true)}
   <ul>
     <li class="ok">Gemini measurement (model knowledge, no live search), clearly labelled.</li>
     <li class="ok">Weekly automatic measurement, competitor comparison, website check, recommendations.</li>
-    <li class="ok">ChatGPT live-search measurement and source analysis: on paid plans.</li>
+    <li class="ok">ChatGPT and Claude live-search measurement and source analysis: on paid plans, reported per engine.</li>
     <li class="ok">Free check without signing up (2 a month).</li>
     <li class="ok">App in English and Turkish.</li>
     <li class="ok">Evidence for why a competitor was recommended instead, and which brands each source supports: in live-search measurements.</li>

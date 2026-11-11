@@ -74,7 +74,7 @@ function WorkspaceView() {
           <Meter label={L("Marka", "Brands")} used={u.brands_used} limit={u.brand_limit} warn={false} />
           <dl className="facts">
             <div><dt>{L("Ücretsiz katman sorgusu", "Free-tier queries")}</dt><dd className="num">{u.free_calls}</dd></div>
-            <div><dt>{L("Ücretli API harcaması", "Paid API spend")}</dt><dd className="num">{usd(Number(u.paid_cost_usd))}<span className="muted dd-note">{ws.paid_live_allowed ? L("Deneme bütçesinden (toplam üst sınır 3 $)", "From the trial budget (total cap $3)") : L("Ücretli kullanım kapalı", "Paid usage off")}</span></dd></div>
+            <div><dt>{L("Ücretli API harcaması", "Paid API spend")}</dt><dd className="num">{usd(Number(u.paid_cost_usd))}<span className="muted dd-note">{ws.paid_live_allowed ? L("Deneme bütçesinden (toplam üst sınır 6 $)", "From the trial budget (total cap $6)") : L("Ücretli kullanım kapalı", "Paid usage off")}</span></dd></div>
             <div><dt>{L("Canlı web araması", "Live web search")}</dt><dd>{u.live_search_enabled ? L("Açık", "On") : ws.paid_live_allowed ? L("Yalnız elle, deneme", "Manual only, trial") : L("Kapalı", "Off")}</dd></div>
           </dl>
         </section>
