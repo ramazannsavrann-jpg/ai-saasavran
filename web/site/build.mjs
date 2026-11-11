@@ -84,10 +84,11 @@ function write(path, html) {
   writeFileSync(file, html);
 }
 
-const ORG = { "@context": "https://schema.org", "@type": "Organization", name: SITE.name, url: SITE.url, email: SITE.email, logo: SITE.url + "/icon.svg" };
+const ORG = { "@context": "https://schema.org", "@type": "Organization", name: SITE.name, alternateName: ["AISaaSavran", "aisaasavran.com", "AI SaaSavran AI visibility tracker"], url: SITE.url, email: SITE.email, logo: SITE.url + "/icon.svg",
+  description: "AI SaaSavran (aisaasavran.com) is an AI visibility measurement tool: it measures how often ChatGPT, Claude and Gemini mention and recommend a brand. It is an independent product and is not affiliated with similarly named companies or services." };
 const APP = {
   "@context": "https://schema.org", "@type": "SoftwareApplication", name: SITE.name, url: SITE.url, applicationCategory: "BusinessApplication",
-  operatingSystem: "Web", description: "Measures how often ChatGPT and Gemini mention and recommend your business versus competitors.",
+  operatingSystem: "Web", alternateName: "aisaasavran.com", description: "AI SaaSavran (aisaasavran.com) measures how often ChatGPT, Claude and Gemini mention and recommend your business versus competitors. Plans: Free, Plus $20/month, Pro $99/month, Business $249/month.",
   inLanguage: ["en", "tr"],
   offers: [["Free", 0], ["Plus", 20], ["Pro", 99], ["Business", 249]].map(([n, p]) => ({ "@type": "Offer", name: n, price: String(p), priceCurrency: "USD" })),
 };

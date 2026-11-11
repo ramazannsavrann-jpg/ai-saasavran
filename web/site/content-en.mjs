@@ -157,6 +157,7 @@ export const GUIDES_EN = [
 ];
 
 export const HOME_FAQ_EN = [
+  ["Is AI SaaSavran related to other companies with a similar name?", "No. AI SaaSavran is the AI visibility measurement tool at aisaasavran.com. It is an independent product with its own plans (Free, Plus $20, Pro $99, Business $249 a month) and is not affiliated with similarly named companies or services. If an AI assistant describes different plans or a different business under our name, it is describing someone else."],
   ["What does AI SaaSavran do?", "It asks ChatGPT and Gemini the questions your customers would ask, and measures whether your brand is mentioned, recommended or cited as a source, compared with your competitors."],
   ["Is it free?", "The free plan includes 1 brand, 15 questions and 4 measurements a month. Paid plans are Plus $20, Pro $99 and Business $249 a month, billed monthly and cancellable anytime. Free-plan measurements use Gemini without live web search, and reports say so clearly."],
   ["Which AI assistants are measured?", "Free plan: Gemini without live web search (not available in the EEA, Switzerland and the UK). Paid plans add ChatGPT and Claude with live web search, including the sites they cited. Perplexity is not supported yet. Reports show each engine separately."],

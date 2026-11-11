@@ -642,3 +642,23 @@ test("Claude: en kötü durum çağrı maliyeti 6 sentin altında ve istem 100K 
   assert.ok(worst < 0.06, String(worst));
   assert.ok(c.worstCaseTokens.input < 100_000);
 });
+
+test("Ürün görünürlüğü: ürün adı mevcut cevaplarda aranır, motor bazında sayılır, önerilmediği sorularda kanıt kartı çıkar", async () => {
+  const { productVisibility } = await import("../src/insights.ts");
+  const answers = [
+    { id: "a1", prompt_id: "p1", provider: "openai", answer_text: "Öneriler:\n1. Bianchi Oltre XR4\n2. Rakip Bisiklet Aero", cited_urls: ["https://inceleme.org/a"] },
+    { id: "a2", prompt_id: "p1", provider: "openai", answer_text: "Bu bütçede Oltre XR4 iyi bir seçenek değil, tavsiye etmem.\n\nDaha uygun seçenek:\n- Rakip Bisiklet Aero", cited_urls: ["https://rakip.com/aero"] },
+    { id: "a3", prompt_id: "p2", provider: "openai", answer_text: "En iyi seçenek:\n- Rakip Bisiklet Aero", cited_urls: ["https://rakip.com/aero"] },
+    { id: "a4", prompt_id: "p2", provider: "claude", answer_text: "Seçenekler:\n- Oltre XR4\n- Rakip Bisiklet", cited_urls: [] },
+  ];
+  const v = productVisibility(answers, { id: "pr", name: "Bianchi Oltre XR4" }, { name: "Bianchi", website: "bianchi.com" }, [{ id: "c", name: "Rakip Bisiklet", website: "rakip.com" }]);
+  const oa = v.engines.find((e) => e.provider === "openai")!;
+  assert.deepEqual([oa.answers, oa.mentioned, oa.recommended], [3, 2, 1], "markasız ad da eşleşir; olumsuz anılma öneri sayılmaz");
+  const cl = v.engines.find((e) => e.provider === "claude")!;
+  assert.deepEqual([cl.answers, cl.mentioned, cl.recommended], [1, 1, 1]);
+  assert.deepEqual(v.promptsMentioned.sort(), ["p1", "p2"]);
+  assert.equal(v.losses.length, 0, "ürün her iki soruda da en az bir kez önerildiyse kayıp kartı çıkmaz");
+  const v2 = productVisibility(answers.slice(1, 3), { id: "pr", name: "Bianchi Oltre XR4" }, { name: "Bianchi", website: "bianchi.com" }, [{ id: "c", name: "Rakip Bisiklet", website: "rakip.com" }]);
+  assert.deepEqual(v2.losses.map((l) => l.promptId).sort(), ["p1", "p2"]);
+  assert.ok(v2.losses[0].evidence.includes("competitor_own_site_cited"));
+});

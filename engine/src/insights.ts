@@ -168,3 +168,63 @@ export function actionImpact(points: ImpactPoint[], doneOn: string): Impact {
   const verdict: ImpactVerdict = !before ? "no_before" : !after ? "no_after" : after.low > before.high ? "up" : after.high < before.low ? "down" : "unclear";
   return { before, after, verdict };
 }
+
+// ---------------- Ürün görünürlüğü ve ürün önerilme oranı ----------------
+import { analyzeResponse, type BrandRef } from "./metrics.ts";
+
+export interface ProductAnswer { id: string; prompt_id: string; provider: string; answer_text: string; cited_urls: string[] | null }
+export interface ProductVisibility {
+  productId: string;
+  /** Motor bazında: ürün adının geçtiği ve önerildiği cevap sayısı (Wilson aralığıyla) */
+  engines: { provider: string; answers: number; mentioned: number; recommended: number; low: number; high: number }[];
+  /** Ürünün hiç önerilmediği ve bir rakip markanın önerildiği sorular için kanıt kartları */
+  losses: LossCard[];
+  /** Ürünün geçtiği soruların kimlikleri */
+  promptsMentioned: string[];
+}
+
+/**
+ * Ürün görünürlüğü: ürün adı markanın mevcut ölçüm cevaplarında aranır (ek API çağrısı yok).
+ * Eşleştirme marka ile aynı kurallarla yapılır (tam kelime, liste = öneri, olumsuz ifade hariç).
+ * Rakipler MARKA düzeyindedir: "ürün yerine hangi rakip marka önerildi" sorusunu cevaplar, rakip ÜRÜN karşılaştırması değildir.
+ */
+export function productVisibility(
+  answers: ProductAnswer[],
+  product: { id: string; name: string; aliases?: string[] },
+  brand: { name: string; website: string | null },
+  competitors: { id: string; name: string; aliases?: string[]; website: string | null }[],
+): ProductVisibility {
+  // Ürün adı marka adıyla başlıyorsa markasız hâli de aranır ("Bianchi Oltre" → "Oltre")
+  const lowerBrand = brand.name.toLocaleLowerCase("tr-TR");
+  const bare = product.name.toLocaleLowerCase("tr-TR").startsWith(lowerBrand + " ") ? product.name.slice(brand.name.length + 1).trim() : "";
+  const refs: BrandRef[] = [
+    { id: product.id, name: product.name, aliases: [...(product.aliases ?? []), ...(bare.length >= 3 ? [bare] : [])], domain: "" },
+    ...competitors.map((c) => ({ id: c.id, name: c.name, aliases: c.aliases ?? [], domain: domainOf(c.website) })),
+  ];
+  const mentions: InsightMention[] = [];
+  const per = new Map<string, { answers: number; mentioned: number; recommended: number }>();
+  const promptsMentioned = new Set<string>();
+  for (const a of answers) {
+    const hits = analyzeResponse({ promptId: a.prompt_id, provider: a.provider, answerText: a.answer_text, citedUrls: a.cited_urls ?? [] }, refs);
+    const e = per.get(a.provider) ?? { answers: 0, mentioned: 0, recommended: 0 };
+    e.answers++;
+    for (const h of hits) {
+      mentions.push({ response_id: a.id, brand_id: h.brandId, mentioned: h.mentioned, recommended: h.recommended });
+      if (h.brandId === product.id) {
+        if (h.mentioned) { e.mentioned++; promptsMentioned.add(a.prompt_id); }
+        if (h.recommended) e.recommended++;
+      }
+    }
+    per.set(a.provider, e);
+  }
+  const insightBrands: InsightBrand[] = [
+    { id: product.id, name: product.name, website: brand.website, isTarget: true },
+    ...competitors.map((c) => ({ id: c.id, name: c.name, website: c.website, isTarget: false })),
+  ];
+  return {
+    productId: product.id,
+    engines: [...per.entries()].map(([provider, e]) => ({ provider, ...e, ...wilson(e.recommended, e.answers) })).sort((x, y) => x.provider.localeCompare(y.provider)),
+    losses: lossCards(answers, mentions, insightBrands),
+    promptsMentioned: [...promptsMentioned],
+  };
+}

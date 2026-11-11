@@ -50,6 +50,12 @@
 - Ürün doğruluğu canlı denemesi: ChatGPT "AI SaaSavran Plus" sorusunda markayı savran.ai ile karıştırdı; sistem "farklı ürün" olarak işaretledi.
 - Growth Lab toplam deneme tavanı 3 $ → 6 $ (app_settings).
 
+## v1.1 (11 Kasım 2026, yedinci paket)
+
+- **Ürün görünürlüğü ve ürün önerilme oranı:** Ürünler sekmesinde her ürün için, son ölçüm cevaplarında ürün adının geçtiği ve önerildiği cevap sayısı (motor bazında, güven aralığıyla). Ek API çağrısı yok. Ürünün önerilmediği sorularda yerine önerilen rakip markalar ve kaynaklar. Rakipler marka düzeyindedir; rakip ürün karşılaştırması henüz yok.
+- **İsim karışıklığına karşı site:** SSS'ye "benzer adlı şirketlerle ilgimiz var mı?" sorusu, yapısal veriye alternatif adlar ve bağımsızlık açıklaması (başka şirketin adı yazılmadan).
+- Uçtan uca testte düz çizgi grafiğin "görünmez" sayılması düzeltildi.
+
 ## Bilinen açık konular
 
 - Bölge kısıtı uygulama içinde markanın ülke koduna dayanır; kullanıcı kodu değiştirebilir. Kesin uygulama için sunucu tarafında kullanıcı ülkesi gerekir.

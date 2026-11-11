@@ -6,7 +6,7 @@ import { api, INTENT_LABEL, type Brand, type Intent, type MeasurementType, type 
 import { friendlyError } from "../lib/supabase";
 import { L, isEn } from "../lib/i18n";
 import { ERROR_CLASS_TEXT, STOP_TEXT, runStatusText } from "../lib/messages";
-import { actionImpact, conditionMap, lossCards, sourceDominance, type LossCard, type SourceRow } from "../../../engine/src/insights.ts";
+import { actionImpact, conditionMap, lossCards, productVisibility, sourceDominance, type LossCard, type SourceRow } from "../../../engine/src/insights.ts";
 import { competitorsInRun, formatDateTime, MIN_SAMPLE, numLoc, pct, providerLabel, rangeText, series, shareSummary, sourceOpportunities, topDomains, usd } from "../lib/report";
 import { Button, Confirm, DataNotice, Empty, ErrorBox, Field, Loading, Select, TypeBadge } from "../components/ui";
 import { CompareBars, TrendChart } from "../components/Chart";
@@ -74,10 +74,41 @@ export function BrandPage() {
   );
 }
 
+/** Ürün görünürlüğü ve önerilme oranı: motor bazında; ürünün önerilmediği sorularda yerine önerilen rakip markalar ve kaynaklar. */
+function ProductVisibilityView({ vis, loading, hasRuns }: { vis: ReturnType<typeof productVisibility> | null; loading: boolean; hasRuns: boolean }) {
+  if (loading) return <p className="src-sup muted">{L("Görünürlük hesaplanıyor…", "Calculating visibility…")}</p>;
+  if (!hasRuns || !vis) return <p className="src-sup muted">{L("Görünürlük için önce bir ölçüm tamamlanmalı.", "Visibility needs a completed measurement first.")}</p>;
+  const total = vis.engines.reduce((n, e) => n + e.mentioned, 0);
+  const winners = new Map<string, number>(); const sources = new Map<string, number>();
+  for (const l of vis.losses) { for (const w of l.winners) winners.set(w.name, (winners.get(w.name) ?? 0) + w.count); for (const s of l.sources) sources.set(s.domain, (sources.get(s.domain) ?? 0) + s.count); }
+  const top = (m: Map<string, number>, n: number) => [...m.entries()].sort((a, b) => b[1] - a[1]).slice(0, n).map(([k, v]) => `${k} (${v})`).join(", ");
+  return (
+    <div className="prod-vis">
+      <p className="src-sup"><strong>{L("Görünürlük (son ölçüm)", "Visibility (latest measurement)")}</strong></p>
+      {vis.engines.map((e) => (
+        <p key={e.provider} className="src-sup"><span className="muted">{providerLabel(e.provider)}: </span>
+          {isEn() ? `mentioned in ${e.mentioned} of ${e.answers} answers, recommended in ${e.recommended} (${pct(e.answers ? e.recommended / e.answers : 0)}, range ${pct(e.low)}–${pct(e.high)})` : `${e.answers} cevabın ${e.mentioned} tanesinde geçti, ${e.recommended} tanesinde önerildi (${pct(e.answers ? e.recommended / e.answers : 0)}, aralık ${pct(e.low)}–${pct(e.high)})`}{e.answers < MIN_SAMPLE && L("; örneklem küçük", "; small sample")}.
+        </p>
+      ))}
+      {total === 0 && <p className="src-sup muted">{L("Ürün adı hiçbir cevapta geçmedi. Sorularınız marka düzeyindeyse bu beklenir: Sorular sekmesinden bu ürünün kategorisine dair markasız sorular ekleyin (örn. \"1.000 dolar altı en iyi yol bisikleti hangisi?\").", "The product name did not appear in any answer. That is expected if your questions are brand-level: add unbranded questions about this product's category in the Questions tab (e.g. \"What is the best road bike under $1,000?\").")}</p>}
+      {vis.losses.length > 0 && winners.size > 0 && (
+        <p className="src-sup">{isEn() ? `Not recommended in ${vis.losses.length} question${vis.losses.length > 1 ? "s" : ""} where a competitor brand was. Recommended instead: ${top(winners, 4)}.` : `${vis.losses.length} soruda ürününüz önerilmedi, rakip marka önerildi. Yerine önerilenler: ${top(winners, 4)}.`}{sources.size > 0 && <> {L("Bu cevapların dayandığı kaynaklar: ", "Sources behind those answers: ")}{top(sources, 5)}.</>}</p>
+      )}
+      <p className="src-sup muted">{L("Kural tabanlı eşleştirme; rakipler marka düzeyindedir (rakip ürün karşılaştırması değildir). Kanıt gösterir, neden kanıtlamaz.", "Rule-based matching; competitors are brand-level (not a competitor-product comparison). Shows evidence, not proof of cause.")}</p>
+    </div>
+  );
+}
+
 /** Ürün Doğruluğu (pilot): doğru bilgileri girilen ürünü ChatGPT'ye sorar, cevaptaki iddiaları bu bilgilerle karşılaştırır. */
 function Products({ brand, paidAllowed }: { brand: Brand; paidAllowed: boolean }) {
   const products = useLoad(() => api.products(brand.id), [brand.id]);
   const checks = useLoad(() => api.productChecks((products.data ?? []).map((p) => p.id)), [(products.data ?? []).map((p) => p.id).join(",")]);
+  // Ürün görünürlüğü: ürün adları markanın SON ölçüm cevaplarında aranır (her ölçüm türünün en yenisi; ek API çağrısı yok)
+  const runs = useLoad(() => api.runs(brand.id), [brand.id]);
+  const lastIds = (["live_search", "model_knowledge"] as const)
+    .map((t) => (runs.data ?? []).find((r) => r.status === "done" && r.measurement_type === t)?.id).filter((x): x is string => !!x);
+  const visAnswers = useLoad(() => Promise.all(lastIds.map((id) => api.answers(id))).then((a) => a.flat()), [lastIds.join(",")]);
+  const visComps = useLoad(() => api.competitors(brand.id), [brand.id]);
   const [busy, setBusy] = useState<string | null>(null);
   const [err, setErr] = useState<string | null>(null);
   const [msg, setMsg] = useState<string | null>(null);
@@ -105,7 +136,7 @@ function Products({ brand, paidAllowed }: { brand: Brand; paidAllowed: boolean }
   return (
     <div className="stack">
       <section className="panel stack">
-        <h2>{L("Ürün doğruluğu (deneme)", "Product accuracy (pilot)")}</h2>
+        <h2>{L("Ürün görünürlüğü ve doğruluğu (deneme)", "Product visibility and accuracy (pilot)")}</h2>
         <p className="muted">{L("Ürününüzün doğru bilgilerini yazın. ChatGPT'ye (canlı web aramasıyla) ürünü sorarız ve cevabındaki iddiaları sizin yazdıklarınızla karşılaştırırız. Karşılaştırmayı bir yapay zekâ adımı yapar ve yanılabilir: \"Yanlış\" işaretli satırları cevabın kendisinden kontrol edin. Tek bir cevaba dayanır; cevaplar sorudan soruya değişir.", "Enter the correct facts about your product. We ask ChatGPT (with live web search) about it and compare the claims in its answer with what you wrote. The comparison is done by an AI step and can be wrong: verify rows marked \"Wrong\" against the answer itself. It is based on a single answer; answers vary between requests.")}</p>
         {!paidAllowed && <p className="caution">{L("Kontrol, ChatGPT canlı aramalı ücretli paketlerde çalışır. Ürünlerinizi şimdiden ekleyebilirsiniz. ", "Checks run on paid plans with ChatGPT live search. You can add your products now. ")}<Link to="/hesap#paket">{L("Paketleri gör", "See plans")}</Link></p>}
         {msg && <p className="success-box">{msg}</p>}
@@ -121,6 +152,8 @@ function Products({ brand, paidAllowed }: { brand: Brand; paidAllowed: boolean }
                 <li key={p.id}>
                   <p className="src-head"><strong>{p.name}</strong> {p.price && <span className="muted num">{p.price}</span>}</p>
                   <p className="src-sup muted">{p.facts}</p>
+                  <ProductVisibilityView loading={runs.loading || visAnswers.loading || visComps.loading} hasRuns={lastIds.length > 0}
+                    vis={visAnswers.data && visComps.data && lastIds.length > 0 ? productVisibility(visAnswers.data, { id: p.id, name: p.name }, { name: brand.name, website: brand.website }, visComps.data) : null} />
                   {last && (
                     <div className="loss-card">
                       <p className="loss-title">{formatDateTime(last.created_at)}: {last.recognized === false ? L("ChatGPT farklı bir ürünü anlatmış olabilir.", "ChatGPT may have described a different product.")

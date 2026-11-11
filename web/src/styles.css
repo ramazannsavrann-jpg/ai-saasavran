@@ -411,3 +411,5 @@ form > .btn, .stack > .btn { width: 100%; }
 
 /* Çok satırlı alan (ürün bilgileri) */
 textarea { min-height: 7rem; resize: vertical; font: inherit; line-height: 1.45; }
+
+.prod-vis { margin: 6px 0; padding: 8px 0; border-top: 1px dashed var(--line); }
