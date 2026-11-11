@@ -37,6 +37,10 @@
 - **"Önerildi mi" LLM kontrolü (0014):** yalnız ücretli ChatGPT ölçümlerinde; cevap başına tek çağrı, web araması yok, maliyeti paket tavanına sayılır, sorgu kotasına sayılmaz. Hata olursa kural sonucu geçerli kalır. `mentions.classifier` alanı `llm:<model>` ya da `rules_v3` yazar.
 - **Soru etiketi:** soruya "ucuz", "premium", "Almanya" gibi kısa etiket; rapor etiketlere göre de önerilme oranı verir.
 
+## v0.9 (11 Kasım 2026, beşinci paket)
+
+- **Ürün Doğruluğu (pilot, 0015):** marka başına en fazla 10 ürün; kullanıcı doğru bilgileri girer. Ücretli alanlarda "Doğruluğu kontrol et": 1 canlı aramalı ChatGPT cevabı + 1 karşılaştırma çağrısı (yaklaşık 0,02 $), ürün başına günde bir. Sonuç: doğru / yanlış / doğrulanamadı. Karşılaştırmanın doğruluğu henüz ölçülmedi; tek cevaba dayanır.
+
 ## Bilinen açık konular
 
 - Bölge kısıtı uygulama içinde markanın ülke koduna dayanır; kullanıcı kodu değiştirebilir. Kesin uygulama için sunucu tarafında kullanıcı ülkesi gerekir.

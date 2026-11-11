@@ -10,6 +10,9 @@ import { buildProviders } from "./providers/registry.ts";
 import { SimulatedProvider } from "./providers/simulated.ts";
 import { auditSite } from "./audit.ts";
 import { classifyAnswer, CLASSIFY_WORST_USD } from "./classify.ts";
+import { buildProductQuestion, judgeProduct } from "./product.ts";
+import { assertBillingAllowed } from "./providers/registry.ts";
+import { estimateCost } from "./providers/types.ts";
 import type { ApiErrorClass, FetchLike, Provider, ProviderConfig, ProviderResult } from "./providers/types.ts";
 import type { Denial, Rejection, Reservation, UsageGate } from "./usage.ts";
 
@@ -46,8 +49,8 @@ function domainOf(website: string | null): string | undefined {
 
 export class DbUsageGate implements UsageGate {
   private db: SupabaseClient;
-  private runId: string;
-  constructor(db: SupabaseClient, runId: string) { this.db = db; this.runId = runId; }
+  private runId: string | null;
+  constructor(db: SupabaseClient, runId: string | null) { this.db = db; this.runId = runId; }
   async reserve(ws: string, cfg: ProviderConfig, worst: number): Promise<Reservation | Rejection> {
     const r = must(await this.db.rpc("reserve_engine_call", {
       p_workspace: ws, p_provider: cfg.provider, p_billing: cfg.billing,
@@ -183,6 +186,50 @@ export async function processAudits(deps: WorkerDeps, max = 10): Promise<{ brand
     catch (e) { res = { url: p.website, status: "unreachable" as const, checks: [{ id: "reachable", ok: false, severity: "high" as const, title: "Siteye ulaşılamadı", detail: (e as Error).message.slice(0, 200) }] }; }
     must(await db.from("site_audits").insert({ workspace_id: p.workspace_id, brand_id: p.brand_id, url: res.url, status: res.status, checks: res.checks }), "site_audits");
     out.push({ brandId: p.brand_id, status: res.status });
+  }
+  return out;
+}
+
+/**
+ * Ürün Doğruluğu (pilot): bekleyen kontrolleri işler. Her kontrol = 1 canlı aramalı ChatGPT cevabı + 1 karşılaştırma çağrısı.
+ * Kota ve harcama tavanı ölçümlerle aynı kapıdan geçer. Başarısız olursa istek temizlenir (tekrar tekrar para harcanmaz).
+ */
+export async function processProductChecks(deps: WorkerDeps, max = 5): Promise<{ productId: string; status: string }[]> {
+  const { db, env } = deps;
+  const pending = must(await db.rpc("pending_product_checks", { p_limit: max }), "pending_product_checks") as
+    { product_id: string; workspace_id: string; brand_name: string; product_name: string; price: string | null; facts: string; country: string | null }[];
+  const out: { productId: string; status: string }[] = [];
+  const clear = async (id: string) => { await db.from("products").update({ check_requested_at: null }).eq("id", id); };
+  for (const p of pending) {
+    const { providers } = buildProviders({ ...env, SEARCH_COUNTRY: p.country || env.SEARCH_COUNTRY }, deps.fetchFn);
+    const provider = providers.find((x) => x.config.provider === "openai");
+    if (!provider) { await clear(p.product_id); out.push({ productId: p.product_id, status: "provider_not_configured" }); continue; }
+    try { assertBillingAllowed(provider, env); } catch { await clear(p.product_id); out.push({ productId: p.product_id, status: "paid_api_blocked" }); continue; }
+    const cfg = provider.config;
+    const gate = new DbUsageGate(db, null);
+    const worst = estimateCost({ ...cfg.price, perCall: cfg.price.perCall * (cfg.worstCaseToolCalls ?? 1) }, cfg.worstCaseTokens.input, cfg.worstCaseTokens.output);
+    const res = await gate.reserve(p.workspace_id, cfg, worst);
+    if (!res.ok) { await clear(p.product_id); out.push({ productId: p.product_id, status: res.reason }); continue; }
+    const question = buildProductQuestion(p.brand_name, p.product_name, p.country);
+    try {
+      const result = await provider.ask(p.product_id, question);
+      await gate.record(p.workspace_id, result);
+      let verdict = null as Awaited<ReturnType<typeof judgeProduct>> | null;
+      try {
+        verdict = await judgeProduct({ apiKey: env.OPENAI_API_KEY!, model: cfg.model, price: cfg.price, product: `${p.brand_name} ${p.product_name}`, productPrice: p.price, facts: p.facts, answer: result.answerText, fetchFn: deps.fetchFn });
+        must(await db.rpc("record_aux_call", { p_workspace: p.workspace_id, p_run: null, p_task: "product_judge", p_provider: "openai", p_model: cfg.model, p_in: verdict.inputTokens, p_out: verdict.outputTokens, p_cost: verdict.costUsd }), "record_aux_call");
+      } catch { verdict = null; }
+      must(await db.from("product_checks").insert({
+        workspace_id: p.workspace_id, product_id: p.product_id, provider: result.provider, model: result.model, question,
+        answer_text: result.answerText, cited_urls: result.citedUrls, recognized: verdict?.verdict.recognized ?? null,
+        claims: verdict?.verdict.claims ?? [], judge: verdict ? `llm:${cfg.model}` : null, cost_usd: result.costUsd + (verdict?.costUsd ?? 0),
+      }), "product_checks");
+      out.push({ productId: p.product_id, status: verdict ? "done" : "done_without_judge" });
+    } catch (e) {
+      await gate.recordFailure(p.workspace_id, cfg, "transient").catch(() => {});
+      await clear(p.product_id);
+      out.push({ productId: p.product_id, status: `failed: ${(e as Error).message.slice(0, 80)}` });
+    }
   }
   return out;
 }

@@ -14,7 +14,7 @@ import { buildRecommendations } from "../../../engine/src/recommendations.ts";
 import { untrackedNames } from "../../../engine/src/metrics.ts";
 
 const TABS = [
-  ["rapor", L("Rapor", "Report")], ["oneriler", L("Öneriler", "Recommendations")], ["rakipler", L("Rakipler", "Competitors")], ["sorular", L("Sorular", "Questions")], ["olcumler", L("Ölçümler", "Runs")],
+  ["rapor", L("Rapor", "Report")], ["oneriler", L("Öneriler", "Recommendations")], ["rakipler", L("Rakipler", "Competitors")], ["sorular", L("Sorular", "Questions")], ["urunler", L("Ürünler", "Products")], ["olcumler", L("Ölçümler", "Runs")],
 ] as const;
 type Tab = (typeof TABS)[number][0];
 
@@ -68,7 +68,99 @@ export function BrandPage() {
       {tab === "oneriler" && <Advice brand={b} type={type} runs={runs.data ?? []} onBrandChange={brand.reload} />}
       {tab === "rakipler" && <Competitors brand={b} />}
       {tab === "sorular" && <Questions brand={b} />}
+      {tab === "urunler" && <Products brand={b} paidAllowed={!!current?.paid_live_allowed} />}
       {tab === "olcumler" && <RunHistory runs={runs.data ?? []} loading={runs.loading} />}
+    </div>
+  );
+}
+
+/** Ürün Doğruluğu (pilot): doğru bilgileri girilen ürünü ChatGPT'ye sorar, cevaptaki iddiaları bu bilgilerle karşılaştırır. */
+function Products({ brand, paidAllowed }: { brand: Brand; paidAllowed: boolean }) {
+  const products = useLoad(() => api.products(brand.id), [brand.id]);
+  const checks = useLoad(() => api.productChecks((products.data ?? []).map((p) => p.id)), [(products.data ?? []).map((p) => p.id).join(",")]);
+  const [busy, setBusy] = useState<string | null>(null);
+  const [err, setErr] = useState<string | null>(null);
+  const [msg, setMsg] = useState<string | null>(null);
+  const [open, setOpen] = useState<string | null>(null);
+  const sim = brand.data_origin === "simulated";
+
+  async function add(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const form = e.currentTarget, f = new FormData(form);
+    const name = String(f.get("product_name") || "").trim(), facts = String(f.get("product_facts") || "").trim();
+    if (name.length < 2 || facts.length < 10) { setErr(L("Ürün adını ve en az bir iki doğru bilgiyi yazın.", "Enter the product name and at least a couple of correct facts.")); return; }
+    setBusy("add"); setErr(null); setMsg(null);
+    try { await api.addProduct({ workspace_id: brand.workspace_id, brand_id: brand.id, name, price: String(f.get("product_price") || "").trim() || null, facts }); form.reset(); products.reload(); }
+    catch (x) { setErr(friendlyError(x)); } finally { setBusy(null); }
+  }
+  async function check(id: string) {
+    setBusy(id); setErr(null); setMsg(null);
+    try { await api.requestProductCheck(id); setMsg(L("Kontrol sıraya alındı. Sonuç en geç bir saat içinde burada görünür.", "Check queued. The result appears here within an hour.")); products.reload(); }
+    catch (x) { setErr(friendlyError(x)); } finally { setBusy(null); }
+  }
+  const STATUS = { wrong: L("Yanlış", "Wrong"), correct: L("Doğru", "Correct"), unverifiable: L("Doğrulanamadı", "Can't verify") } as const;
+  const order = { wrong: 0, unverifiable: 1, correct: 2 } as const;
+
+  if (sim) return <div className="stack"><DataNotice type="simulated" /><p className="muted">{L("Ürün doğruluğu demo markalarda kullanılmaz.", "Product accuracy isn't available for demo brands.")}</p></div>;
+  return (
+    <div className="stack">
+      <section className="panel stack">
+        <h2>{L("Ürün doğruluğu (deneme)", "Product accuracy (pilot)")}</h2>
+        <p className="muted">{L("Ürününüzün doğru bilgilerini yazın. ChatGPT'ye (canlı web aramasıyla) ürünü sorarız ve cevabındaki iddiaları sizin yazdıklarınızla karşılaştırırız. Karşılaştırmayı bir yapay zekâ adımı yapar ve yanılabilir: \"Yanlış\" işaretli satırları cevabın kendisinden kontrol edin. Tek bir cevaba dayanır; cevaplar sorudan soruya değişir.", "Enter the correct facts about your product. We ask ChatGPT (with live web search) about it and compare the claims in its answer with what you wrote. The comparison is done by an AI step and can be wrong: verify rows marked \"Wrong\" against the answer itself. It is based on a single answer; answers vary between requests.")}</p>
+        {!paidAllowed && <p className="caution">{L("Kontrol, ChatGPT canlı aramalı ücretli paketlerde çalışır. Ürünlerinizi şimdiden ekleyebilirsiniz. ", "Checks run on paid plans with ChatGPT live search. You can add your products now. ")}<Link to="/hesap#paket">{L("Paketleri gör", "See plans")}</Link></p>}
+        {msg && <p className="success-box">{msg}</p>}
+        <ErrorBox message={err} />
+        {products.loading ? <Loading /> : (products.data ?? []).length === 0 ? <p className="muted">{L("Henüz ürün eklenmedi.", "No products yet.")}</p> : (
+          <ul className="src-dom">
+            {(products.data ?? []).map((p) => {
+              const last = (checks.data ?? []).find((c) => c.product_id === p.id);
+              const pending = !!p.check_requested_at && (!last || last.created_at < p.check_requested_at);
+              const claims = [...(last?.claims ?? [])].sort((a, b) => order[a.status] - order[b.status]);
+              const wrong = claims.filter((c) => c.status === "wrong").length;
+              return (
+                <li key={p.id}>
+                  <p className="src-head"><strong>{p.name}</strong> {p.price && <span className="muted num">{p.price}</span>}</p>
+                  <p className="src-sup muted">{p.facts}</p>
+                  {last && (
+                    <div className="loss-card">
+                      <p className="loss-title">{formatDateTime(last.created_at)}: {last.recognized === false ? L("ChatGPT farklı bir ürünü anlatmış olabilir.", "ChatGPT may have described a different product.")
+                        : last.judge === null ? L("Cevap alındı ama karşılaştırma yapılamadı.", "Got the answer, but the comparison couldn't run.")
+                        : wrong > 0 ? (isEn() ? `${wrong} claim${wrong > 1 ? "s" : ""} contradict your facts.` : `${wrong} iddia sizin bilgilerinizle çelişiyor.`)
+                        : L("Bilgilerinizle çelişen iddia bulunmadı.", "No claims contradict your facts.")}</p>
+                      {claims.length > 0 && <ul>{claims.map((c, i) => <li key={i}><strong>{STATUS[c.status]}:</strong> {c.claim}{c.fact && <span className="muted"> ({L("sizin bilginiz", "your fact")}: {c.fact})</span>}</li>)}</ul>}
+                      <button className="link-btn" aria-expanded={open === p.id} onClick={() => setOpen(open === p.id ? null : p.id)}>{open === p.id ? L("Cevabı gizle", "Hide answer") : L("Cevabı göster", "Show answer")}</button>
+                      {open === p.id && (
+                        <blockquote className="answer">
+                          <p className="answer-meta">{last.question}</p>
+                          <p style={{ whiteSpace: "pre-wrap" }}>{last.answer_text}</p>
+                          {last.cited_urls.length > 0 && <ul className="answer-sources">{last.cited_urls.map((u) => <li key={u}><a href={u} target="_blank" rel="noopener noreferrer nofollow">{(() => { try { return new URL(u).hostname.replace(/^www\./, ""); } catch { return u; } })()}</a></li>)}</ul>}
+                        </blockquote>
+                      )}
+                    </div>
+                  )}
+                  <span className="row-actions">
+                    {paidAllowed && <button className="link-btn" disabled={pending || busy === p.id} onClick={() => check(p.id)}>{pending ? L("Kontrol sırada", "Check queued") : L("Doğruluğu kontrol et (yaklaşık 0,02 $)", "Check accuracy (about $0.02)")}</button>}
+                    <button className="link-btn" onClick={async () => { try { await api.deleteProduct(p.id); products.reload(); } catch (x) { setErr(friendlyError(x)); } }}>{L("Sil", "Delete")}</button>
+                  </span>
+                </li>
+              );
+            })}
+          </ul>
+        )}
+      </section>
+      {(products.data ?? []).length < 10 && (
+        <form className="panel stack" onSubmit={add} noValidate aria-label={L("Ürün ekle", "Add product")}>
+          <h2>{L("Ürün ekleyin", "Add a product")}</h2>
+          <Field label={L("Ürün adı", "Product name")} name="product_name" maxLength={120} placeholder={L("Örn. Model X 29 jant dağ bisikleti", "e.g. Model X 29er mountain bike")} />
+          <Field label={L("Fiyat (isteğe bağlı)", "Price (optional)")} name="product_price" maxLength={60} placeholder={L("Örn. 24.900 TL", "e.g. $899")} />
+          <label className="field" htmlFor="product_facts">
+            <span className="field-label">{L("Doğru bilgiler", "Correct facts")}</span>
+            <textarea id="product_facts" name="product_facts" rows={5} maxLength={2000} placeholder={L("Örn. Ağırlık 13,2 kg. Alüminyum kadro. 12 vites. Hidrolik disk fren. Yetişkinler için, 165–185 cm.", "e.g. Weight 13.2 kg. Aluminium frame. 12 speeds. Hydraulic disc brakes. For adults 165–185 cm.")} />
+            <span className="field-hint">{L("Kısa ve kesin cümleler yazın. Yazmadığınız konular \"doğrulanamadı\" olarak işaretlenir.", "Write short, exact sentences. Topics you leave out are marked \"can't verify\".")}</span>
+          </label>
+          <Button type="submit" busy={busy === "add"}>{L("Ürünü ekle", "Add product")}</Button>
+        </form>
+      )}
     </div>
   );
 }

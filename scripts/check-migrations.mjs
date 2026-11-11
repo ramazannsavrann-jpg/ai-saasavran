@@ -204,4 +204,19 @@ console.log("ok tanımsız paket atanamıyor");
   assert.equal((await db.query(`select count(*)::int n from pg_constraint where conrelid = 'prompts'::regclass and pg_get_constraintdef(oid) like '%segment%'`)).rows[0].n, 1);
   console.log("ok 0014: yardımcı çağrı kotaya sayılmıyor, tavana sayılıyor; istemci çağıramıyor; etiket en fazla 40 karakter");
 }
+{
+  // 0015: ürünler ve doğruluk kontrolü isteği
+  const own = (await db.query(`select id from brands where workspace_id=$1 and not is_competitor limit 1`, [A])).rows[0];
+  if (own) {
+    await as(U1, `insert into products (workspace_id, brand_id, name, facts, check_requested_at) values ('${A}', '${own.id}', 'Model X', 'Ağırlık 9 kg, karbon kadro', now())`);
+    const pr = (await db.query(`select id, check_requested_at from products where brand_id=$1`, [own.id])).rows[0];
+    assert.equal(pr.check_requested_at, null, "istemci kontrol isteğini doğrudan yazamaz");
+    await assert.rejects(as(U1, `select request_product_check('${pr.id}')`), "ücretsiz alanda kapalı");
+    await assert.rejects(as(U1, `insert into products (workspace_id, brand_id, name, facts) values ('${D}', '${own.id}', 'Başka', 'başka alan başka alan')`));
+    await assert.rejects(as(U1, `insert into product_checks (workspace_id, product_id, provider, model, question, answer_text) values ('${A}', '${pr.id}', 'x', 'x', 'x', 'x')`));
+    assert.equal((await db.query(`select count(*)::int n from pending_product_checks(5)`)).rows[0].n, 0);
+    await db.query(`delete from products where id=$1`, [pr.id]);
+  }
+  console.log("ok 0015: ürün yalnız kendi markasına eklenir; kontrol isteği yalnız ücretli alanda ve yalnız fonksiyonla" + (own ? "" : " (marka yok, RLS adımı atlandı)"));
+}
 console.log("TÜM DB TESTLERİ GEÇTİ");

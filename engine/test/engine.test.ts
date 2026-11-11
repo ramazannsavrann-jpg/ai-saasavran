@@ -554,3 +554,20 @@ test("LLM sınıflandırma: istem markaları içerir, çıktı ayrıştırılır
   assert.equal(sent.tools, undefined, "web araması kullanılmaz");
   await assert.rejects(classifyAnswer({ apiKey: "k", model: "m", price: { inputPerMTok: 0.1, outputPerMTok: 0.5, perCall: 0, source: "t", checkedOn: "x" }, answer: "x", names: ["A"], fetchFn: async () => new Response("{}", { status: 500 }) }));
 });
+
+test("Ürün doğruluğu: soru üretimi, karar ayrıştırma ve geçersiz çıktının reddi", async () => {
+  const { buildProductQuestion, buildJudgePrompt, parseVerdict, judgeProduct } = await import("../src/product.ts");
+  assert.ok(buildProductQuestion("Bianchi", "Oltre XR4", null).startsWith("Bianchi Oltre XR4 nedir?"));
+  assert.ok(buildProductQuestion("Bianchi", "Bianchi Oltre", "DE").startsWith("What is the Bianchi Oltre?"), "marka adı iki kez yazılmaz");
+  const jp = buildJudgePrompt({ product: "X", price: "1.000 TL", facts: "9 kg", answer: "a" });
+  assert.ok(jp.includes("Price: 1.000 TL") && jp.includes("only FACTS decide"));
+  const v = parseVerdict('ok {"recognized":true,"claims":[{"claim":"8 kg","status":"WRONG","fact":"9 kg"},{"claim":"","status":"correct"},{"claim":"x","status":"maybe"},{"claim":"alüminyum","status":"unverifiable"}]}')!;
+  assert.equal(v.recognized, true);
+  assert.deepEqual(v.claims, [{ claim: "8 kg", status: "wrong", fact: "9 kg" }, { claim: "alüminyum", status: "unverifiable", fact: "" }]);
+  assert.equal(parseVerdict('{"claims":[]}'), null, "recognized zorunlu");
+  assert.equal(parseVerdict("metin"), null);
+  const body = { output: [{ type: "message", content: [{ type: "output_text", text: '{"recognized":false,"claims":[]}' }] }], usage: { input_tokens: 2000, output_tokens: 400 } };
+  const r = await judgeProduct({ apiKey: "k", model: "m", price: { inputPerMTok: 0.1, outputPerMTok: 0.5, perCall: 0.01, source: "t", checkedOn: "x" }, product: "X", facts: "9 kg karbon", answer: "a", fetchFn: async () => new Response(JSON.stringify(body), { status: 200 }) });
+  assert.equal(r.verdict.recognized, false);
+  assert.ok(Math.abs(r.costUsd - 0.0004) < 1e-9);
+});
