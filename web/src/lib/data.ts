@@ -11,7 +11,7 @@ export interface Brand {
   sector: string | null; city: string | null; country: string | null; is_competitor: boolean; owner_brand_id: string | null; data_origin: string;
   auto_weekly: boolean; audit_requested_at: string | null; reanalyze_requested_at: string | null;
 }
-export interface Prompt { id: string; brand_id: string; text: string; intent: Intent; active: boolean; created_at: string }
+export interface Prompt { id: string; brand_id: string; text: string; intent: Intent; segment: string | null; active: boolean; created_at: string }
 export type Intent = "informational" | "comparison" | "purchase" | "local";
 export interface Run {
   id: string; brand_id: string; status: "queued" | "running" | "done" | "failed" | "budget_blocked";
@@ -83,11 +83,11 @@ export const api = {
   async prompts(brandId: string): Promise<Prompt[]> {
     return must(await sb().from("prompts").select("*").eq("brand_id", brandId).order("created_at"));
   },
-  async addPrompt(p: { workspace_id: string; brand_id: string; text: string; intent: Intent }) {
+  async addPrompt(p: { workspace_id: string; brand_id: string; text: string; intent: Intent; segment?: string | null }) {
     must(await sb().from("prompts").insert(p));
   },
   async setPromptActive(id: string, active: boolean) { must(await sb().from("prompts").update({ active }).eq("id", id)); },
-  async updatePrompt(id: string, patch: { text?: string; intent?: Intent }) { must(await sb().from("prompts").update(patch).eq("id", id)); },
+  async updatePrompt(id: string, patch: { text?: string; intent?: Intent; segment?: string | null }) { must(await sb().from("prompts").update(patch).eq("id", id)); },
   /** Bir ölçümdeki ham yapay zekâ cevapları (soru başına). */
   async answers(runId: string): Promise<{ id: string; prompt_id: string; repetition: number; answer_text: string; model: string; provider: string; cited_urls: string[] }[]> {
     return must(await sb().from("responses").select("id,prompt_id,repetition,answer_text,model,provider,cited_urls").eq("run_id", runId).order("repetition"));

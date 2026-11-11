@@ -262,6 +262,16 @@ function Report({ brand, type, onBrandChange }: { brand: Brand; type: Measuremen
   const recentIds = pts.slice(-4).map((p) => p.runId);
   const condRuns = useLoad(() => Promise.all(recentIds.map((id) => api.promptResults(id))), [recentIds.join(",")]);
   const conditions = conditionMap(condRuns.data ?? []);
+  const allPrompts = useLoad(() => api.prompts(brand.id), [brand.id]);
+  const segOf = new Map((allPrompts.data ?? []).filter((q) => q.segment).map((q) => [q.id, q.segment as string]));
+  const segments = conditionMap((condRuns.data ?? []).map((rows) => rows.filter((r) => segOf.has(r.prompt_id)).map((r) => ({ ...r, intent: segOf.get(r.prompt_id)! }))));
+  const condRow = (c: (typeof conditions)[number], label: string) => (
+    <li key={label}>
+      <p className="src-head"><strong>{label}</strong> <span className="num">{pct(c.answers ? c.recommended / c.answers : 0)}</span></p>
+      <p className="src-sup muted">{isEn() ? `Recommended in ${c.recommended} of ${c.answers} answers, range ${pct(c.low)}–${pct(c.high)}` : `${c.answers} cevabın ${c.recommended} tanesinde önerildiniz, aralık ${pct(c.low)}–${pct(c.high)}`}{c.topCompetitor && <>{L("; en çok önerilen rakip: ", "; most recommended competitor: ")}{c.topCompetitor}</>}.</p>
+      {c.lowSample && <p className="src-sup muted">{L("Örneklem küçük: bu grupta daha fazla soru ekleyin.", "Small sample: add more questions of this kind.")}</p>}
+    </li>
+  );
   const [open, setOpen] = useState<string | null>(null);
   // Kaynak egemenliği ve kayıp nedeni kanıtları (yalnız canlı aramalı ölçümde; ek API çağrısı yok)
   const insightBrands = [{ id: brand.id, name: brand.name, website: brand.website, isTarget: true },
@@ -336,15 +346,13 @@ function Report({ brand, type, onBrandChange }: { brand: Brand; type: Measuremen
             <h2>{L("Hangi koşulda görünüyorsunuz", "Where you show up, and where you don't")}</h2>
             <p className="muted">{isEn() ? `Recommendation rate by what the customer is doing, over the last ${recentIds.length} measurement${recentIds.length > 1 ? "s" : ""}. Groups under 20 answers are marked; don't draw conclusions from them.` : `Müşterinin ne yaptığına göre önerilme oranı, son ${recentIds.length} ölçümün toplamı. 20 cevabın altındaki gruplar işaretlidir; onlardan sonuç çıkarmayın.`}</p>
             {condRuns.loading ? <Loading /> : conditions.length === 0 ? <p>{L("Henüz veri yok.", "No data yet.")}</p> : (
-              <ul className="src-dom">
-                {conditions.map((c) => (
-                  <li key={c.key}>
-                    <p className="src-head"><strong>{INTENT_LABEL[c.key as keyof typeof INTENT_LABEL] ?? c.key}</strong> <span className="num">{pct(c.answers ? c.recommended / c.answers : 0)}</span></p>
-                    <p className="src-sup muted">{isEn() ? `Recommended in ${c.recommended} of ${c.answers} answers, range ${pct(c.low)}–${pct(c.high)}` : `${c.answers} cevabın ${c.recommended} tanesinde önerildiniz, aralık ${pct(c.low)}–${pct(c.high)}`}{c.topCompetitor && <>{L("; en çok önerilen rakip: ", "; most recommended competitor: ")}{c.topCompetitor}</>}.</p>
-                    {c.lowSample && <p className="src-sup muted">{L("Örneklem küçük: bu grupta daha fazla soru ekleyin.", "Small sample: add more questions of this kind.")}</p>}
-                  </li>
-                ))}
-              </ul>
+              <>
+                <ul className="src-dom">{conditions.map((c) => condRow(c, INTENT_LABEL[c.key as keyof typeof INTENT_LABEL] ?? c.key))}</ul>
+                <h3>{L("Etiketlere göre", "By tag")}</h3>
+                {segments.length === 0
+                  ? <p className="muted">{isEn() ? <>No tagged questions yet. Add a tag such as "budget", "premium" or a country to your <Link to="?sekme=sorular">questions</Link> to compare conditions.</> : <>Henüz etiketli soru yok. <Link to="?sekme=sorular">Sorularınıza</Link> "ucuz", "premium" ya da ülke adı gibi bir etiket ekleyerek koşulları karşılaştırabilirsiniz.</>}</p>
+                  : <ul className="src-dom">{segments.map((c) => condRow(c, c.key))}</ul>}
+              </>
             )}
           </section>
 
@@ -676,9 +684,9 @@ function Questions({ brand }: { brand: Brand }) {
   const def = sectorDef(brand.sector);
   const needsCity = def?.local && !brand.city;
 
-  async function add(text: string, intent: Intent) {
+  async function add(text: string, intent: Intent, segment: string | null = null) {
     setBusy(true); setErr(null);
-    try { await api.addPrompt({ workspace_id: brand.workspace_id, brand_id: brand.id, text, intent }); prompts.reload(); }
+    try { await api.addPrompt({ workspace_id: brand.workspace_id, brand_id: brand.id, text, intent, ...(segment ? { segment } : {}) }); prompts.reload(); }
     catch (e) { setErr(friendlyError(e)); } finally { setBusy(false); }
   }
   async function submit(e: FormEvent<HTMLFormElement>) {
@@ -687,7 +695,7 @@ function Questions({ brand }: { brand: Brand }) {
     const f = new FormData(form);
     const text = String(f.get("text")).trim();
     if (text.length < 5) { setErr(L("Soru en az 5 karakter olmalı.", "A question needs at least 5 characters.")); return; }
-    await add(text, String(f.get("intent")) as Intent);
+    await add(text, String(f.get("intent")) as Intent, String(f.get("segment") || "").trim().slice(0, 40) || null);
     form.reset();
   }
 
@@ -729,6 +737,7 @@ function Questions({ brand }: { brand: Brand }) {
           <Select label={L("Müşteri ne yapıyor?", "What is the customer doing?")} name="intent" defaultValue="local">
             {(Object.keys(INTENT_LABEL) as Intent[]).map((k) => <option key={k} value={k}>{INTENT_LABEL[k]}</option>)}
           </Select>
+          <Field label={L("Etiket (isteğe bağlı)", "Tag (optional)")} name="segment" maxLength={40}  placeholder={L("Örn. ucuz, premium, Almanya", "e.g. budget, premium, Germany")} hint={L("Aynı etiketli sorular raporda birlikte gösterilir: hangi koşulda görünüp hangisinde kaybolduğunuzu görürsünüz.", "Questions sharing a tag are grouped in the report, so you can see where you show up and where you don't.")} />
           <ErrorBox message={err} />
           <Button type="submit" busy={busy}>Soruyu ekle</Button>
         </form>
@@ -749,13 +758,14 @@ function PromptRow({ p, onChange, onError }: { p: Prompt; onChange: () => void; 
           const text = String(f.get("text")).trim();
           if (text.length < 5) { onError(L("Soru en az 5 karakter olmalı.", "A question needs at least 5 characters.")); return; }
           setBusy(true);
-          try { await api.updatePrompt(p.id, { text, intent: String(f.get("intent")) as Intent }); setEditing(false); onChange(); }
+          try { await api.updatePrompt(p.id, { text, intent: String(f.get("intent")) as Intent, segment: String(f.get("segment") || "").trim().slice(0, 40) || null }); setEditing(false); onChange(); }
           catch (err) { onError(friendlyError(err)); } finally { setBusy(false); }
         }}>
           <Field label={L("Soru", "Question")} name="text" defaultValue={p.text} maxLength={300} />
           <Select label={L("Müşteri ne yapıyor?", "What is the customer doing?")} name="intent" defaultValue={p.intent}>
             {(Object.keys(INTENT_LABEL) as Intent[]).map((k) => <option key={k} value={k}>{INTENT_LABEL[k]}</option>)}
           </Select>
+          <Field label={L("Etiket (isteğe bağlı)", "Tag (optional)")} name="segment" maxLength={40} id={`segment-${p.id}`} defaultValue={p.segment ?? ""} placeholder={L("Örn. ucuz, premium, Almanya", "e.g. budget, premium, Germany")} hint={L("Aynı etiketli sorular raporda birlikte gösterilir: hangi koşulda görünüp hangisinde kaybolduğunuzu görürsünüz.", "Questions sharing a tag are grouped in the report, so you can see where you show up and where you don't.")} />
           <div className="form-actions">
             <Button type="submit" busy={busy} className="btn-small">Kaydet</Button>
             <Button type="button" variant="quiet" className="btn-small" onClick={() => setEditing(false)}>{L("Vazgeç", "Cancel")}</Button>
@@ -766,7 +776,7 @@ function PromptRow({ p, onChange, onError }: { p: Prompt; onChange: () => void; 
   }
   return (
     <li className={p.active ? "" : "inactive"}>
-      <span><span className="q-text">{p.text}</span><span className="q-meta">{INTENT_LABEL[p.intent]}{!p.active && ", pasif"}</span></span>
+      <span><span className="q-text">{p.text}</span><span className="q-meta">{INTENT_LABEL[p.intent]}{p.segment && `, ${p.segment}`}{!p.active && ", pasif"}</span></span>
       <span className="row-actions">
         <button className="link-btn" onClick={() => setEditing(true)}>{L("Düzenle", "Edit")}</button>
         <button className="link-btn" onClick={async () => { try { await api.setPromptActive(p.id, !p.active); onChange(); } catch (e) { onError(friendlyError(e)); } }}>{p.active ? L("Pasifleştir", "Deactivate") : L("Etkinleştir", "Activate")}</button>

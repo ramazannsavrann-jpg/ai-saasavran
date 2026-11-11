@@ -37,4 +37,6 @@ jobs:
           # Ücretli API açık, ama yalnız veritabanında izinli alanda (Growth Lab) ve toplam 3 $ tavanıyla kullanılır.
           # Kullanıcı izni: 7 Kasım 2026. Müşteri alanlarında ücretli çağrı veritabanı tarafından reddedilir.
           ALLOW_PAID_API: "true"
+          # "Önerildi mi" LLM kontrolü: yalnız ücretli OpenAI ölçümlerinde, cevap başına ~0,0003 $; paket tavanına sayılır.
+          LLM_CLASSIFY: "true"
         run: npm run worker
