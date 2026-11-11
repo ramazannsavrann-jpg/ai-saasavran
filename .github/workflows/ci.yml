@@ -60,7 +60,8 @@ jobs:
       - run: npm ci
       - run: npm ci --prefix web
       - run: npm run build --prefix web
-      - run: npx playwright install --with-deps chromium
+      # GitHub paket aynası zaman zaman yanıt vermiyor: iki kez dene, olmazsa sistem paketleri olmadan kur (tarayıcı çalışır).
+      - run: npx playwright install --with-deps chromium || (sleep 20 && npx playwright install --with-deps chromium) || npx playwright install chromium
       # Yayın kararı dış servislere bağlı olmasın: burada sabit test cevapları kullanılır.
       # Gerçek Gemini ile aynı akış aşağıdaki bilgi amaçlı "e2e-gemini" işinde çalışır.
       - name: Uçtan uca testler
@@ -90,7 +91,8 @@ jobs:
       - run: npm ci
       - run: npm ci --prefix web
       - run: npm run build --prefix web
-      - run: npx playwright install --with-deps chromium
+      # GitHub paket aynası zaman zaman yanıt vermiyor: iki kez dene, olmazsa sistem paketleri olmadan kur (tarayıcı çalışır).
+      - run: npx playwright install --with-deps chromium || (sleep 20 && npx playwright install --with-deps chromium) || npx playwright install chromium
       - name: Uçtan uca testler (gerçek Gemini, aramasız, ücretsiz)
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
@@ -237,7 +239,8 @@ jobs:
         with:
           node-version: 22
       - run: npm ci
-      - run: npx playwright install --with-deps chromium
+      # GitHub paket aynası zaman zaman yanıt vermiyor: iki kez dene, olmazsa sistem paketleri olmadan kur (tarayıcı çalışır).
+      - run: npx playwright install --with-deps chromium || (sleep 20 && npx playwright install --with-deps chromium) || npx playwright install chromium
       - name: Canlı siteyi kontrol et
         env:
           LIVE_URL: https://aisaasavran.com
