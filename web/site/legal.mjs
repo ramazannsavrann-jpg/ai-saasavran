@@ -20,7 +20,7 @@ export const LEGAL = {
 <li>Don't overload the service with automated tools, try to bypass security, or access other users' data.</li>
 <li>Measurements stop automatically when plan quotas are reached. The free plan includes 4 measurements a month.</li></ul>
 <h2>Plans, payment and cancellation</h2>
-<p>Plans and prices are listed on our <a href="/#pricing">pricing section</a>: Free ($0), Plus ($20/month), Pro ($99/month), Business ($249/month). Paid plans renew monthly until cancelled. Our order process is conducted by our online reseller Paddle.com, which is the merchant of record for all our orders and handles invoices, sales tax, billing enquiries and returns. You can cancel at any time; cancellation takes effect at the end of the period you've paid for. See our <a href="/refund/">refund policy</a>.</p>
+<p>Plans and prices are listed on our <a href="/#pricing">pricing section</a>: Free ($0), Plus ($29/month), Pro ($149/month), Business ($449/month). Paid plans renew monthly until cancelled. Our order process is conducted by our online reseller Paddle.com, which is the merchant of record for all our orders and handles invoices, sales tax, billing enquiries and returns. You can cancel at any time; cancellation takes effect at the end of the period you've paid for. See our <a href="/refund/">refund policy</a>.</p>
 <h2>Limitation of liability</h2>
 <p>The service is provided "as is". To the extent the law allows, we are not liable for indirect losses from business decisions based on measurement results.</p>
 <h2>Closing your account</h2>

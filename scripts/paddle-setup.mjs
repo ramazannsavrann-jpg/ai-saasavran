@@ -1,12 +1,12 @@
 // Paddle katalogunu kurar (tekrar çalıştırmak güvenli): Plus / Pro / Business ürünleri ve aylık USD fiyatları.
-// Fiyatlar migration 0007 ile aynı olmalı. Anahtar yazdırılmaz; yalnız ürün/fiyat kimlikleri (gizli değil) yazdırılır.
+// Fiyatlar migration 0019 ile aynı olmalı. Fiyat değişince yeni fiyat oluşturulur; eski fiyat Paddle'da kalır ama kullanılmaz. Anahtar yazdırılmaz; yalnız ürün/fiyat kimlikleri (gizli değil) yazdırılır.
 const KEY = process.env.PADDLE_API_KEY;
 if (!KEY) { console.log("PADDLE_API_KEY yok; atlandı."); process.exit(0); }
 const BASE = KEY.includes("_sdbx_") ? "https://sandbox-api.paddle.com" : "https://api.paddle.com";
 const PLANS = [
-  { plan: "starter", name: "AI SaaSavran Plus", cents: 2000, description: "1 brand, 25 questions, 5 competitors. ChatGPT with live web search + Gemini, measured weekly." },
-  { plan: "pro", name: "AI SaaSavran Pro", cents: 9900, description: "5 brands, 30 questions each, 8 competitors per brand. ChatGPT with live web search + Gemini, measured weekly." },
-  { plan: "agency", name: "AI SaaSavran Business", cents: 24900, description: "15 brands, 30 questions each, 10 competitors per brand. For agencies managing client brands." },
+  { plan: "starter", name: "AI SaaSavran Plus", cents: 2900, description: "1 brand, 25 questions, 5 competitors. ChatGPT and Claude with live web search + Gemini, measured weekly." },
+  { plan: "pro", name: "AI SaaSavran Pro", cents: 14900, description: "5 brands, 30 questions each, 8 competitors per brand. ChatGPT and Claude with live web search + Gemini, measured weekly." },
+  { plan: "agency", name: "AI SaaSavran Business", cents: 44900, description: "15 brands, 30 questions each, 10 competitors per brand. For agencies managing client brands." },
 ];
 async function api(method, path, body) {
   const r = await fetch(BASE + path, { method, headers: { Authorization: `Bearer ${KEY}`, "Content-Type": "application/json" }, body: body ? JSON.stringify(body) : undefined });
@@ -46,4 +46,7 @@ if (process.env.PADDLE_SECRET_OUT) {
   (await import("node:fs")).writeFileSync(process.env.PADDLE_SECRET_OUT, dest.endpoint_secret_key, { mode: 0o600 });
 }
 
-console.log("PADDLE_CATALOG=" + JSON.stringify({ env: BASE.includes("sandbox") ? "sandbox" : "live", ...out }));
+const catalog = { env: BASE.includes("sandbox") ? "sandbox" : "live", prices: Object.fromEntries(Object.entries(out).map(([k, v]) => [k, v.price])) };
+console.log("PADDLE_CATALOG=" + JSON.stringify(catalog));
+// Yayın betiği (web-release.mjs) bu dosyayı okur: sitedeki ödeme düğmeleri her zaman güncel fiyat kimliğini kullanır.
+if (process.env.PADDLE_CATALOG_OUT) (await import("node:fs")).writeFileSync(process.env.PADDLE_CATALOG_OUT, JSON.stringify(catalog));

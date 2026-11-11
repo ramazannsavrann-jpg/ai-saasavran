@@ -112,7 +112,7 @@ export function Terms() {
       </ul>
 
       <h2>Ücretler, iptal ve iade</h2>
-      <p>Paketler ve fiyatlar ana sayfadaki fiyat bölümünde yazar: Free (0 $), Plus (aylık 20 $), Pro (aylık 99 $), Business (aylık 249 $).</p>
+      <p>Paketler ve fiyatlar ana sayfadaki fiyat bölümünde yazar: Free (0 $), Plus (aylık 29 $), Pro (aylık 149 $), Business (aylık 449 $).</p>
       <ul className="plain">
         <li>Ücretli paketler aylık yenilenir. Siparişler, tüm siparişlerimizde yetkili satıcı (merchant of record) olan çevrim içi satıcımız Paddle.com üzerinden alınır; faturayı, vergileri ve ödeme sorularını Paddle düzenler.</li>
         <li>Aboneliğinizi istediğiniz zaman iptal edebilirsiniz; iptal, ödenmiş dönemin sonunda geçerli olur.</li>
@@ -203,7 +203,7 @@ function TermsEn() {
       </ul>
 
       <h2>Fees, cancellation and refunds</h2>
-      <p>Plans and prices are listed in the pricing section of our home page: Free ($0), Plus ($20/month), Pro ($99/month), Business ($249/month).</p>
+      <p>Plans and prices are listed in the pricing section of our home page: Free ($0), Plus ($29/month), Pro ($149/month), Business ($449/month).</p>
       <ul className="plain">
         <li>Paid plans renew monthly. Our order process is conducted by our online reseller Paddle.com, the merchant of record for all our orders, which handles invoices, sales tax and billing enquiries.</li>
         <li>You can cancel at any time; cancellation takes effect at the end of the period you've paid for.</li>

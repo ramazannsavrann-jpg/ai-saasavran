@@ -88,9 +88,9 @@ const ORG = { "@context": "https://schema.org", "@type": "Organization", name: S
   description: "AI SaaSavran (aisaasavran.com) is an AI visibility measurement tool: it measures how often ChatGPT, Claude and Gemini mention and recommend a brand. It is an independent product and is not affiliated with similarly named companies or services." };
 const APP = {
   "@context": "https://schema.org", "@type": "SoftwareApplication", name: SITE.name, url: SITE.url, applicationCategory: "BusinessApplication",
-  operatingSystem: "Web", alternateName: "aisaasavran.com", description: "AI SaaSavran (aisaasavran.com) measures how often ChatGPT, Claude and Gemini mention and recommend your business versus competitors. Plans: Free, Plus $20/month, Pro $99/month, Business $249/month.",
+  operatingSystem: "Web", alternateName: "aisaasavran.com", description: "AI SaaSavran (aisaasavran.com) measures how often ChatGPT, Claude and Gemini mention and recommend your business versus competitors. Plans: Free, Plus $29/month, Pro $149/month, Business $449/month.",
   inLanguage: ["en", "tr"],
-  offers: [["Free", 0], ["Plus", 20], ["Pro", 99], ["Business", 249]].map(([n, p]) => ({ "@type": "Offer", name: n, price: String(p), priceCurrency: "USD" })),
+  offers: [["Free", 0], ["Plus", 29], ["Pro", 149], ["Business", 449]].map(([n, p]) => ({ "@type": "Offer", name: n, price: String(p), priceCurrency: "USD" })),
 };
 
 
@@ -99,13 +99,13 @@ const PLAN_ROWS = (en) => [
   { name: "Free", price: "$0", per: "", items: en
       ? ["1 brand, 15 questions, 3 competitors", "4 measurements a month (one a week, automatic)", "Gemini, model knowledge (no live search)", "Website check and recommendations"]
       : ["1 marka, 15 soru, 3 rakip", "Ayda 4 ölçüm (haftada bir, otomatik)", "Gemini, model bilgisi (canlı arama yok)", "Web sitesi kontrolü ve öneriler"], live: true },
-  { name: "Plus", id: "starter", price: "$20", per: en ? "/month" : "/ay", items: en
+  { name: "Plus", id: "starter", price: "$29", per: en ? "/month" : "/ay", items: en
       ? ["1 brand, 25 questions, 5 competitors", "ChatGPT and Claude with live web search + Gemini", "Every week: ChatGPT and Gemini ask each question twice, Claude once", "Which websites the AI cited"]
       : ["1 marka, 25 soru, 5 rakip", "ChatGPT ve Claude canlı web araması + Gemini", "Her hafta: ChatGPT ve Gemini her soruyu 2 kez, Claude 1 kez sorar", "Yapay zekânın baktığı kaynak siteler"] },
-  { name: "Pro", id: "pro", price: "$99", per: en ? "/month" : "/ay", items: en
+  { name: "Pro", id: "pro", price: "$149", per: en ? "/month" : "/ay", items: en
       ? ["5 brands, 30 questions each", "8 competitors per brand", "Everything in Plus", "For multi-location businesses and freelancers"]
       : ["5 marka, her biri 30 soru", "Marka başına 8 rakip", "Plus'taki her şey", "Çok şubeli işletmeler ve serbest çalışanlar için"] },
-  { name: "Business", id: "agency", price: "$249", per: en ? "/month" : "/ay", items: en
+  { name: "Business", id: "agency", price: "$449", per: en ? "/month" : "/ay", items: en
       ? ["15 brands, 30 questions each", "10 competitors per brand", "Everything in Pro", "For agencies managing client brands"]
       : ["15 marka, her biri 30 soru", "Marka başına 10 rakip", "Pro'daki her şey", "Müşteri markalarını yöneten ajanslar için"] },
 ];
@@ -343,7 +343,7 @@ ${GUIDES.map((g) => `- [${g.title}](${SITE.url}/rehber/${g.slug}/)`).join("\n")}
 const APP_ROUTES = ["/giris", "/kayit", "/sifre", "/durum", "/durum-ic", "/gizlilik", "/kosullar", "/panel", "/hesap", "/demo-lab", "/calisma-alani/*", "/marka/*"];
 write("/check/", page({ lang: "en", alt: "/tr/kontrol/", path: "/check/", title: "Free AI visibility check | AI SaaSavran", description: "Check for free whether Gemini mentions your business when customers ask about your category. No signup.", body: checkHtml(true), schema: [APP] }));
 write("/tr/kontrol/", page({ lang: "tr", alt: "/check/", path: "/tr/kontrol/", title: "Ücretsiz yapay zekâ görünürlük kontrolü | AI SaaSavran", description: "İşletmeniz Gemini cevaplarında geçiyor mu? Üye olmadan ücretsiz kontrol edin.", body: checkHtml(false), schema: [APP] }));
-write("/pricing/", page({ lang: "en", path: "/pricing/", title: "Pricing | AI SaaSavran", description: "AI SaaSavran plans: Free, Plus $20/month, Pro $99/month, Business $249/month.", body: `<section class="article"><h1>Pricing</h1><p>Start free. Paid plans add ChatGPT with live web search, more brands and more questions. Monthly billing, cancel anytime, 14-day money-back guarantee (<a href="/refund/">refund policy</a>).</p></section>${plansHtml(true)}`, schema: [APP] }));
+write("/pricing/", page({ lang: "en", path: "/pricing/", title: "Pricing | AI SaaSavran", description: "AI SaaSavran plans: Free, Plus $29/month, Pro $149/month, Business $449/month.", body: `<section class="article"><h1>Pricing</h1><p>Start free. Paid plans add ChatGPT with live web search, more brands and more questions. Monthly billing, cancel anytime, 14-day money-back guarantee (<a href="/refund/">refund policy</a>).</p></section>${plansHtml(true)}`, schema: [APP] }));
 
 for (const l of Object.values(LEGAL)) write(l.path, page({ lang: l.lang, path: l.path, title: l.title, description: l.description, body: l.body }));
 

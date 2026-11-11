@@ -22,7 +22,8 @@ if (url.protocol !== "https:") throw new Error("SUPABASE_URL https ile başlamal
 let paddle = null;
 if (PADDLE_CLIENT_TOKEN) {
   if (!/^(live|test)_[A-Za-z0-9]+$/.test(PADDLE_CLIENT_TOKEN)) throw new Error("PADDLE_CLIENT_TOKEN 'live_' ile başlayan istemci anahtarı olmalı (sunucu API anahtarı değil).");
-  const catalog = JSON.parse(readFileSync("billing/paddle-catalog.json", "utf8"));
+  // Paddle kurulum adımının ürettiği güncel katalog varsa o, yoksa depodaki kayıtlı katalog
+  const catalog = JSON.parse(readFileSync(process.env.PADDLE_CATALOG_FILE && existsSync(process.env.PADDLE_CATALOG_FILE) ? process.env.PADDLE_CATALOG_FILE : "billing/paddle-catalog.json", "utf8"));
   const env = PADDLE_CLIENT_TOKEN.startsWith("test_") ? "sandbox" : "production";
   if ((env === "sandbox") !== (catalog.env === "sandbox")) throw new Error("Paddle istemci anahtarı ile katalog ortamı uyuşmuyor");
   paddle = { clientToken: PADDLE_CLIENT_TOKEN, environment: env, prices: catalog.prices };
