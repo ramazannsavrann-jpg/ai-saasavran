@@ -151,6 +151,7 @@ export function NewBrand() {
         website: String(f.get("website") || "").trim() || null,
         sector: String(f.get("sector") || "") || null,
         city: String(f.get("city") || "").trim() || null,
+        country: /^[A-Za-z]{2}$/.test(String(f.get("country") || "").trim()) ? String(f.get("country")).trim().toUpperCase() : null,
         aliases: String(f.get("aliases") || "").split(",").map((s) => s.trim()).filter(Boolean),
         ...(demo ? { data_origin: "simulated" } : {}),
       });
@@ -168,6 +169,7 @@ export function NewBrand() {
         {SECTORS.map((s) => <option key={s}>{s}</option>)}
       </Select>
       <Field label={L("Şehir veya ilçe", "City or area")} name="city" placeholder={L("Örn. Antalya", "e.g. Austin")} />
+      <Field label={L("Ülke kodu (isteğe bağlı)", "Country code (optional)")} name="country" maxLength={2} placeholder={L("TR", "US")} hint={L("İki harf: TR, US, DE, GB… Boşsa Türkiye sayılır.", "Two letters: US, GB, DE, TR… Empty means Turkey.")} />
       <ErrorBox message={err} />
       <Button type="submit" busy={busy}>{L("Markayı ekle", "Add brand")}</Button>
     </form>

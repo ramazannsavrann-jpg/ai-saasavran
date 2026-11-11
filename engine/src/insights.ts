@@ -118,3 +118,53 @@ export function lossCards(answers: InsightAnswer[], mentions: InsightMention[], 
   }
   return cards;
 }
+
+// ---------------- Koşullu Görünürlük Haritası ----------------
+export interface ConditionInput { intent: string; answers: number; target_mentioned: number; target_recommended: number; top_competitor: string | null; top_competitor_recs: number }
+export interface ConditionRow {
+  key: string; answers: number; recommended: number; mentioned: number;
+  low: number; high: number;            // önerilme oranının %95 Wilson aralığı
+  topCompetitor: string | null;
+  lowSample: boolean;                   // 20'den az cevap: yorum yapılmaz
+}
+import { wilson } from "./metrics.ts";
+
+/** Soruları bir koşula (bugün: soru niyeti) göre gruplar; birden çok ölçüm verilirse cevapları toplar. */
+export function conditionMap(runs: ConditionInput[][], minSample = 20): ConditionRow[] {
+  const acc = new Map<string, { answers: number; rec: number; men: number; comp: Map<string, number> }>();
+  for (const rows of runs) for (const r of rows) {
+    const a = acc.get(r.intent) ?? { answers: 0, rec: 0, men: 0, comp: new Map<string, number>() };
+    a.answers += r.answers; a.rec += r.target_recommended; a.men += r.target_mentioned;
+    if (r.top_competitor) a.comp.set(r.top_competitor, (a.comp.get(r.top_competitor) ?? 0) + r.top_competitor_recs);
+    acc.set(r.intent, a);
+  }
+  return [...acc.entries()].map(([key, a]) => ({
+    key, answers: a.answers, recommended: a.rec, mentioned: a.men, ...wilson(a.rec, a.answers),
+    topCompetitor: [...a.comp.entries()].sort((x, y) => y[1] - x[1] || x[0].localeCompare(y[0]))[0]?.[0] ?? null,
+    lowSample: a.answers < minSample,
+  })).sort((x, y) => (y.answers ? y.recommended / y.answers : 0) - (x.answers ? x.recommended / x.answers : 0) || x.key.localeCompare(y.key));
+}
+
+// ---------------- Aksiyon ve Sonuç Takibi ----------------
+export interface ImpactPoint { at: string; k: number; n: number }
+export type ImpactVerdict = "no_before" | "no_after" | "up" | "down" | "unclear";
+export interface Impact {
+  before: (ImpactPoint & { low: number; high: number }) | null;
+  after: (ImpactPoint & { low: number; high: number }) | null;
+  verdict: ImpactVerdict;
+}
+/**
+ * Aksiyon tarihinden önceki son ölçüm ile sonraki en güncel ölçümü karşılaştırır.
+ * "up"/"down" yalnız güven aralıkları ayrışıyorsa verilir; aksi hâlde "unclear" (fark gürültü olabilir).
+ * Nedensellik iddiası içermez.
+ */
+export function actionImpact(points: ImpactPoint[], doneOn: string): Impact {
+  const sorted = [...points].sort((a, b) => a.at.localeCompare(b.at));
+  const cut = doneOn.slice(0, 10);
+  const b = sorted.filter((p) => p.at.slice(0, 10) < cut).pop() ?? null;
+  const a = sorted.filter((p) => p.at.slice(0, 10) > cut).pop() ?? null;
+  const w = (p: ImpactPoint | null) => (p ? { ...p, ...wilson(p.k, p.n) } : null);
+  const before = w(b), after = w(a);
+  const verdict: ImpactVerdict = !before ? "no_before" : !after ? "no_after" : after.low > before.high ? "up" : after.high < before.low ? "down" : "unclear";
+  return { before, after, verdict };
+}

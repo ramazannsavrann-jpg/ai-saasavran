@@ -39,6 +39,8 @@ export interface SiteAudit {
   checks: { id: string; ok: boolean; severity: "high" | "medium" | "low" | "info"; title: string; detail: string; title_en?: string; detail_en?: string }[];
 }
 
+export interface BrandAction { id: string; brand_id: string; title: string; note: string | null; done_on: string; created_at: string }
+
 export const INTENT_LABEL: Record<Intent, string> = {
   local: L("Yerel işletme arıyor", "Looking for a local business"),
   comparison: L("Karşılaştırıyor", "Comparing options"),
@@ -117,6 +119,11 @@ export const api = {
     return rows[0] ?? null;
   },
   async requestAudit(brandId: string) { must(await sb().rpc("request_site_audit", { p_brand: brandId })); },
+  async actions(brandId: string): Promise<BrandAction[]> {
+    return must(await sb().from("brand_actions").select("id,brand_id,title,note,done_on,created_at").eq("brand_id", brandId).order("done_on", { ascending: false }).limit(50));
+  },
+  async addAction(a: { workspace_id: string; brand_id: string; title: string; note: string | null; done_on: string }) { must(await sb().from("brand_actions").insert(a)); },
+  async deleteAction(id: string) { must(await sb().from("brand_actions").delete().eq("id", id)); },
   async isPlatformAdmin(): Promise<boolean> {
     return must(await sb().rpc("is_platform_admin"));
   },
