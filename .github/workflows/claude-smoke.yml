@@ -1,0 +1,27 @@
+# Gerçek Claude (Anthropic) bağlantı testi: en fazla 3 çağrı, toplam 0,15 $ tavan.
+# Yalnız bu dosya ya da test betiği değişince (ve elle) çalışır; her push'ta para harcamaz.
+name: Claude bağlantı testi
+on:
+  push:
+    paths:
+      - scripts/claude-smoke.ts
+      - .github/workflows/claude-smoke.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: claude-smoke
+  cancel-in-progress: false
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Claude'a gerçek istek gönder
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: node scripts/claude-smoke.ts

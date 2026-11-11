@@ -252,7 +252,7 @@ test("Migration çalıştırıcı: boş veritabanına uygular, ikinci kez uygula
   });
   const first = run();
   assert.equal(first.status, 0, first.stderr);
-  assert.match(first.stdout, /15 migration uygulandı/);
+  assert.match(first.stdout, /16 migration uygulandı/);
   const second = run();
   assert.equal(second.status, 0, second.stderr);
   assert.match(second.stdout, /güncel/);
@@ -424,6 +424,34 @@ test("Ücretli canlı ölçüm: müşteri alanında imkânsız, Growth Lab'de ç
   ok(await G.c.rpc("request_run", { p_brand: gb.id, p_live: true }));
   const r3 = await processNextRun({ db: svc, env: { ...PAID_ENV, ALLOW_PAID_API: "false" }, sleep: noSleep });
   assert.equal(r3?.stop, "provider_not_configured");
+  // Growth Lab'de ChatGPT + Claude birlikte: her motor ayrı cevap yazar, ölçümün sağlayıcısı "openai,claude"
+  stack.sql(`update runs set status='failed' where status in ('queued','running')`);
+  const run4 = ok(await G.c.rpc("request_run", { p_brand: gb.id, p_live: true })) as string;
+  const calls4: string[] = [];
+  const both = async (url: string, init?: RequestInit) => {
+    calls4.push(url);
+    if (url.includes("anthropic")) {
+      return new Response(JSON.stringify({
+        content: [
+          { type: "server_tool_use", name: "web_search", input: { query: "banka" } },
+          { type: "web_search_tool_result", content: [] },
+          { type: "text", text: "1. Akbank\n2. Garanti BBVA", citations: [{ type: "web_search_result_location", url: "https://www.akbank.com/x" }] },
+        ],
+        usage: { input_tokens: 6000, output_tokens: 300, server_tool_use: { web_search_requests: 1 } },
+      }), { status: 200 });
+    }
+    return fakeOpenAI("1. Garanti BBVA", ["https://www.garantibbva.com.tr/kart"])(url, init);
+  };
+  const r4 = await processNextRun({ db: svc, env: { ...PAID_ENV, ANTHROPIC_API_KEY: "sk-ant-test" }, sleep: noSleep, fetchFn: both as any });
+  assert.equal(r4?.runId, run4);
+  assert.equal(r4?.status, "done", JSON.stringify(r4));
+  assert.ok(calls4.some((u) => u.includes("api.openai.com")) && calls4.some((u) => u === "https://api.anthropic.com/v1/messages"));
+  const resp4 = ok(await G.c.from("responses").select("provider,billing").eq("run_id", run4)) as any[];
+  assert.deepEqual([...new Set(resp4.map((x) => x.provider))].sort(), ["claude", "openai"]);
+  assert.ok(resp4.every((x) => x.billing === "paid"));
+  assert.equal(stack.sql(`select provider from runs where id='${run4}'`), "openai,claude");
+  const vis = ok(await G.c.rpc("brand_visibility", { p_brand: gb.id, p_type: "live_search" })) as any[];
+  assert.ok(vis.some((v) => v.run_id === run4 && v.provider === "claude"), "rapor satırları motor bazında ayrılmalı");
 });
 
 test("Yeniden analiz: takma ad eklenince marka işaretlenir, işçi eski cevapları ücretsiz yeniden hesaplar, işaret kalkar", async () => {

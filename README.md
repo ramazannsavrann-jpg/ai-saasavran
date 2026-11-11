@@ -24,7 +24,7 @@ engine/src/pipeline.ts       Ölçüm akışı (önbellek → kilit → kota →
 engine/src/usage.ts          Müşteri kotası ve maliyet tavanı
 engine/src/report.ts         Rapor etiketleme kuralları
 engine/src/pricing.ts        Paket maliyet hesabı
-engine/src/providers/        gemini, openai, perplexity, simulated, mock, registry
+engine/src/providers/        gemini, openai, claude, perplexity, simulated, mock, registry
 engine/src/worker.ts         Ölçüm işçisi (kuyruk → sağlayıcı → kota → kayıt)
 supabase/migrations/         0001–0012 (son: 0012 sağlamlaştırma)
 engine/src/insights.ts       Kaynak egemenliği ve kayıp nedeni kanıtları (LLM yok)

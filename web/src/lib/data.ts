@@ -117,8 +117,8 @@ export const api = {
   async visibility(brandId: string, type: MeasurementType): Promise<VisRow[]> {
     return must(await sb().rpc("brand_visibility", { p_brand: brandId, p_type: type }));
   },
-  async promptResults(runId: string): Promise<PromptResult[]> {
-    return must(await sb().rpc("run_prompt_results", { p_run: runId }));
+  async promptResults(runId: string, provider?: string | null): Promise<PromptResult[]> {
+    return must(await sb().rpc("run_prompt_results", provider ? { p_run: runId, p_provider: provider } : { p_run: runId }));
   },
   async latestAudit(brandId: string): Promise<SiteAudit | null> {
     const rows = must(await sb().from("site_audits").select("*").eq("brand_id", brandId).order("created_at", { ascending: false }).limit(1)) as SiteAudit[];

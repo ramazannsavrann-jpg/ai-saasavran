@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from "react";
+import { useMemo, useState, type FormEvent } from "react";
 import { SECTORS, competitorSuggestions, questionTemplates, sectorDef } from "../lib/sectors";
 import { Link, useParams, useSearchParams } from "react-router-dom";
 import { useApp, useLoad } from "../lib/app";
@@ -334,15 +334,25 @@ function LossCardView({ card, brand, hasSite }: { card: LossCard; brand: string;
   );
 }
 
+const ENGINE_ORDER = ["openai", "claude", "gemini", "mock"];
+
 function Report({ brand, type, onBrandChange }: { brand: Brand; type: MeasurementType; onBrandChange: () => void }) {
   const vis = useLoad(() => api.visibility(brand.id, type), [brand.id, type]);
   const [metric, setMetric] = useState<"recommend" | "mention">("recommend");
-  const pts = series(vis.data ?? []);
+  // Canlı aramada birden çok motor olabilir (ChatGPT, Claude): oranlar motor bazında ayrı gösterilir, karıştırılmaz
+  const engList = [...new Set((vis.data ?? []).map((r) => r.provider))].sort((x, y) => ENGINE_ORDER.indexOf(x) - ENGINE_ORDER.indexOf(y));
+  const [engPick, setEngPick] = useState<string | null>(null);
+  const eng = engList.length > 1 ? (engPick && engList.includes(engPick) ? engPick : engList[0]) : null;
+  const rows = eng ? (vis.data ?? []).filter((r) => r.provider === eng) : vis.data;
+  const pts = series(rows ?? []);
   const last = pts[pts.length - 1];
-  const prompts = useLoad(() => (last ? api.promptResults(last.runId) : Promise.resolve([])), [last?.runId]);
-  const answers = useLoad(() => (last ? api.answers(last.runId) : Promise.resolve([])), [last?.runId]);
+  const prompts = useLoad(() => (last ? api.promptResults(last.runId, eng) : Promise.resolve([])), [last?.runId, eng]);
+  const answersAll = useLoad(() => (last ? api.answers(last.runId) : Promise.resolve([])), [last?.runId]);
+  // useMemo: süzülmüş dizi her çizimde yeniden oluşmasın (aşağıdaki yüklemeler buna bağlı)
+  const answersData = useMemo(() => (answersAll.data && eng ? answersAll.data.filter((x) => x.provider === eng) : answersAll.data), [answersAll.data, eng]);
+  const answers = { ...answersAll, data: answersData };
   const live = type === "live_search";
-  const engine = type === "simulated" ? L("Simülasyonda", "In the simulation") : live ? L("ChatGPT (canlı web aramasıyla)", "ChatGPT (with live web search)") : "Gemini";
+  const engine = type === "simulated" ? L("Simülasyonda", "In the simulation") : live ? (eng === "claude" ? L("Claude (canlı web aramasıyla)", "Claude (with live web search)") : L("ChatGPT (canlı web aramasıyla)", "ChatGPT (with live web search)")) : "Gemini";
   const domains = live ? topDomains((answers.data ?? []).flatMap((a) => a.cited_urls ?? [])) : [];
   const comps = useLoad(() => api.competitors(brand.id), [brand.id, brand.aliases.join("|")]);
   const ments = useLoad(() => (live && answers.data ? api.mentionsFor(answers.data.map((a) => a.id)) : Promise.resolve([])), [live, answers.data]);
@@ -352,7 +362,7 @@ function Report({ brand, type, onBrandChange }: { brand: Brand; type: Measuremen
     : [];
   // Koşullu görünürlük: son 4 ölçümün cevapları soru niyetine göre toplanır (ek API çağrısı yok)
   const recentIds = pts.slice(-4).map((p) => p.runId);
-  const condRuns = useLoad(() => Promise.all(recentIds.map((id) => api.promptResults(id))), [recentIds.join(",")]);
+  const condRuns = useLoad(() => Promise.all(recentIds.map((id) => api.promptResults(id, eng))), [recentIds.join(","), eng]);
   const conditions = conditionMap(condRuns.data ?? []);
   const allPrompts = useLoad(() => api.prompts(brand.id), [brand.id]);
   const segOf = new Map((allPrompts.data ?? []).filter((q) => q.segment).map((q) => [q.id, q.segment as string]));
@@ -386,6 +396,11 @@ function Report({ brand, type, onBrandChange }: { brand: Brand; type: Measuremen
         </Empty>
       ) : (
         <>
+          {engList.length > 1 && (
+            <div className="seg" role="group" aria-label={L("Yapay zekâ motoru", "AI engine")}>
+              {engList.map((e) => <button key={e} aria-pressed={e === eng} onClick={() => setEngPick(e)}>{providerLabel(e)}</button>)}
+            </div>
+          )}
           <section className="panel lead-result">
             <div className="lead-meta"><TypeBadge type={type} /><span className="muted">{formatDateTime(last.at)}, {last.providers.map(providerLabel).join(", ")}</span></div>
             <p className="lead-sentence">
@@ -407,7 +422,7 @@ function Report({ brand, type, onBrandChange }: { brand: Brand; type: Measuremen
             <ShareButton text={() => shareSummary({
               brand: brand.name, at: last.at, live, simulated: type === "simulated",
               recommend: last.recommend, mention: last.mention,
-              competitors: competitorsInRun(vis.data ?? [], last.runId).filter((c) => !c.isTarget),
+              competitors: competitorsInRun(rows ?? [], last.runId).filter((c) => !c.isTarget),
               absentPrompts: (prompts.data ?? []).filter((p) => p.target_mentioned === 0).map((p) => p.prompt_text),
               topSources: domains.map((d) => d.domain),
             })} />
@@ -428,7 +443,7 @@ function Report({ brand, type, onBrandChange }: { brand: Brand; type: Measuremen
           <section className="panel">
             <h2>{L("Rakiplerle karşılaştırma", "Competitor comparison")}</h2>
             <p className="muted">{L("Son ölçümde her markanın önerildiği cevap oranı.", "Share of answers recommending each brand in the latest measurement.")}</p>
-            <CompareBars type={type} rows={competitorsInRun(vis.data ?? [], last.runId).map((c) => ({
+            <CompareBars type={type} rows={competitorsInRun(rows ?? [], last.runId).map((c) => ({
               name: c.name, isTarget: c.isTarget, value: c.recommend.value,
               detail: isEn() ? `${c.recommend.k}/${c.recommend.n} answers, range ${rangeText(c.recommend)}, share of recommendations ${pct(c.share)}` : `${c.recommend.k}/${c.recommend.n} cevap, aralık ${rangeText(c.recommend)}, önerilerde pay ${pct(c.share)}`,
             }))} />
@@ -557,8 +572,9 @@ function ActionsPanel({ brand }: { brand: Brand }) {
   const [err, setErr] = useState<string | null>(null);
   const today = new Date().toISOString().slice(0, 10);
   const toPoints = (rows: typeof live.data) => series(rows ?? []).map((p) => ({ at: p.at, k: p.recommend.k, n: p.recommend.n }));
+  const liveEngines = [...new Set((live.data ?? []).map((r) => r.provider))].sort((x, y) => ENGINE_ORDER.indexOf(x) - ENGINE_ORDER.indexOf(y));
   const engines = [
-    { label: L("ChatGPT (canlı arama)", "ChatGPT (live search)"), points: toPoints(live.data) },
+    ...liveEngines.map((e) => ({ label: `${providerLabel(e)} ${L("(canlı arama)", "(live search)")}`, points: toPoints((live.data ?? []).filter((r) => r.provider === e)) })),
     { label: L("Gemini (aramasız)", "Gemini (no search)"), points: toPoints(know.data) },
   ].filter((e) => e.points.length > 0);
 
