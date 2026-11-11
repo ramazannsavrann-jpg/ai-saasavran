@@ -395,3 +395,16 @@ form > .btn, .stack > .btn { width: 100%; }
 /* Paket yükseltme bağlantısı (üst menü ve alt menü) */
 .topnav .nav-upgrade { background: var(--primary); color: #fff !important; border-radius: 999px; padding: 6px 14px; font-weight: 600; }
 .bottomnav .nav-upgrade-b { color: var(--primary); font-weight: 600; }
+
+/* Kayıp nedeni kartı ve kaynak egemenliği */
+.loss-card { margin: 8px 0; padding: 10px 12px; background: var(--sim-tint); border-radius: var(--radius-s); font-size: .92rem; }
+.loss-card .loss-title { font-weight: 700; margin: 0 0 4px; }
+.loss-card ul { margin: 0; padding-left: 1.1rem; display: grid; gap: .3rem; }
+.loss-card .loss-note { margin: 6px 0 0; font-size: .85rem; }
+.src-dom { list-style: none; margin: 0; padding: 0; display: grid; gap: .75rem; }
+.src-dom li { padding-bottom: .75rem; border-bottom: 1px solid var(--line, #e3e8e6); overflow-wrap: anywhere; }
+.src-dom li:last-child { border-bottom: 0; padding-bottom: 0; }
+.src-dom p { margin: 0 0 2px; }
+.src-dom .src-head { display: flex; justify-content: space-between; gap: 1rem; }
+.src-dom .src-owner, .src-dom .src-sup { font-size: .9rem; }
+.src-competitor .src-owner { font-weight: 600; }

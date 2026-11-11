@@ -1,12 +1,35 @@
 # Gerçek durum raporu
 
-**Son güncelleme:** 2026-11-06 · v0.5 (haftalık otomatik ölçüm, site kontrolü ve öneriler, Demo Lab ve Growth Lab dolu)
+**Son güncelleme:** 2026-11-11 · v0.6 (denetim düzeltmeleri, kaynak egemenliği, kayıp nedeni kartı)
 
-**Canlı adres:** https://aisaasavran.com (yedek: https://ai-saasavran.pages.dev, Türkiye'de erişime kapalı) (Cloudflare Pages + Supabase, ücretsiz katmanlar)
+**Canlı adres:** https://aisaasavran.com (Cloudflare Pages + Supabase)
 
-> **Bu sürüm gerçek müşteri kullanımına hazır değildir.** Canlı web araması yapılmıyor; ölçümler Gemini'nin
-> aramasız model bilgisini gösterir ve Gemini uygulamasının güncel cevaplarını temsil etmez.
-> Bulut ortamı kuruldu (2026-11-06); her yayından sonra canlı site otomatik kontrol ediliyor.
+> **Erken erişim.** Ödeme (Paddle) ve haftalık e-posta (Resend) kodu hazır ve testli, ancak gerçek bir ödeme
+> ve gerçek bir gelen kutusu teslimi uçtan uca henüz doğrulanmadı. Hukuki metinleri avukat incelemedi.
+
+## 11 Kasım 2026 denetimi: yapılan düzeltmeler
+
+| Konu | Önce | Şimdi |
+|---|---|---|
+| Yarıda kesilen ölçüm | "çalışıyor" durumunda kalıyor, markayı kilitliyordu | 60 dk sonra kapatılır (0012); işçi 25 dk sonra yeni ölçüm almaz |
+| Kota nedeniyle durdurulan alan | Yeni ayda açılmıyordu | Ay başında kendiliğinden açılır (0012) |
+| Marka eşleştirme | "Ada" markası "Adalet" kelimesinde bulunuyordu | Tam kelime + Türkçe ek + alan adı (rules_v3) |
+| Canlı arama konumu | Sabit TR | Marka başına ülke kodu; boşsa TR |
+| Ödeme komisyonu hesabı | %4 varsayım | Paddle %5 + 0,50 $ |
+| Site metinleri | "ChatGPT müşterilere açık değil", "PDF yok" diyordu | Güncel duruma göre düzeltildi |
+
+## Yeni (v0.6)
+
+- **Kaynaklar kimi destekliyor** (Rakip Kaynak Egemenliği): her kaynak site kaç cevapta kullanıldı, kime ait, o cevaplarda kim önerildi.
+- **Kayıp nedeni: kanıtlar**: önerilmediğiniz her soru için yerinize önerilen rakip, kullanılan kaynaklar, sitenizin kaynak gösterilip gösterilmediği. Kanıt yoksa neden üretilmez.
+- İkisi de yalnız canlı aramalı ölçümde çalışır ve ek API çağrısı yapmaz.
+
+## Bilinen açık konular
+
+- Gemini ücretsiz katmanı: Google koşulları AEA, İsviçre ve Birleşik Krallık'taki kullanıcılar için yalnız ücretli servise izin veriyor. Karar bekliyor.
+- "Önerildi" tespiti hâlâ kural tabanlı; listede geçen marka önerilmiş sayılır (olumsuz ifade yoksa).
+- Perplexity, ekip daveti, ürün/SKU ölçümü yok.
+- Aşağıdaki tablolar 6 Kasım 2026 tarihlidir; "Henüz yok" bölümündeki ödeme, PDF ve ChatGPT satırları artık geçerli değildir.
 
 ## Çalışan ve test edilen
 

@@ -37,9 +37,9 @@ const STATUS: { area: string; items: [Level, string, string][] }[] = [
     items: [
       ["works", L("Anılma, önerilme, rakip payı, güven aralığı", "Mentions, recommendations, share, confidence range"), L("Her oran örneklem sayısıyla ve aralığıyla gösterilir.", "Every rate is shown with its sample size and range.")],
       ["works", L("Geçmiş ölçüm grafiği ve soru bazında sonuç", "History chart and per-question results"), L("Hangi soruda önerildiğiniz, hangi rakibin öne çıktığı.", "Which questions recommend you and which competitor leads.")],
-      ["partial", L("Kaynak (citation) analizi", "Source (citation) analysis"), L("Yalnız canlı aramalı ölçümde; deneme aşamasında.", "Only with live-search measurement; in trial.")],
+      ["works", L("Kaynak analizi, kaynak egemenliği ve kayıp nedeni kanıtları", "Source analysis, source dominance and loss evidence"), L("Yalnız canlı aramalı ölçümde (ChatGPT). Kanıt gösterir; kesin neden iddia etmez.", "Only with live-search measurements (ChatGPT). Shows evidence; does not claim a proven cause.")],
       ["works", L("Web sitesi kontrolü ve öneriler", "Website check and recommendations"), L("Kural tabanlı; yapay zekâ ile üretilmez.", "Rule-based; not AI-generated.")],
-      ["missing", L("PDF rapor", "PDF reports"), L("Henüz yok; özet metin paylaşılabilir.", "Not yet; a text summary can be shared.")],
+      ["partial", L("PDF rapor", "PDF reports"), L("Rapor, tarayıcının yazdır penceresinden PDF olarak kaydedilir; ayrı bir PDF dosyası üretilmez.", "Reports can be saved as PDF from the browser's print dialog; no separate PDF file is generated.")],
     ],
   },
 ];

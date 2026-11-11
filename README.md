@@ -2,7 +2,7 @@
 
 Markaların ChatGPT, Gemini ve Perplexity cevaplarında ne kadar görünür olduğunu ölçen self-service SaaS. İlk pazar Türkiye; işletmeler ve ajanslar.
 
-**Sürüm:** v0.3 · **Durum:** MVP arayüzü ve ölçüm akışı test ortamında çalışıyor; bulut ortamı kurulmadı; canlı web araması yok. Gerçek müşteri kullanımına hazır değildir. Ayrıntı: [docs/STATUS.md](docs/STATUS.md)
+**Sürüm:** v0.6 (11 Kasım 2026) · **Durum:** canlıda (aisaasavran.com). Gemini aramasız ölçüm ücretsiz pakette; ChatGPT canlı aramalı ölçüm abonelerde. Ödeme (Paddle) kodu hazır, gerçek ödemeyle uçtan uca henüz denenmedi. Ayrıntı: [docs/STATUS.md](docs/STATUS.md)
 
 ## Temel kurallar (kodla zorlanır)
 
@@ -26,7 +26,8 @@ engine/src/report.ts         Rapor etiketleme kuralları
 engine/src/pricing.ts        Paket maliyet hesabı
 engine/src/providers/        gemini, openai, perplexity, simulated, mock, registry
 engine/src/worker.ts         Ölçüm işçisi (kuyruk → sağlayıcı → kota → kayıt)
-supabase/migrations/         0001 temel, 0002 kota/ücret, 0003 MVP çekirdeği
+supabase/migrations/         0001–0012 (son: 0012 sağlamlaştırma)
+engine/src/insights.ts       Kaynak egemenliği ve kayıp nedeni kanıtları (LLM yok)
 web/                         Arayüz (Vite + React + Supabase JS), Türkçe, mobil öncelikli
 scripts/stack/               Docker'sız test ortamı: Postgres 16 + Supabase Auth + PostgREST
 e2e/                         Mobil uçtan uca testler (Playwright)

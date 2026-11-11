@@ -155,4 +155,26 @@ console.log("ok tanımsız paket atanamıyor");
   assert.equal(await r("ip-c"), "daily_limit", "ortak Gemini günlük tavanı korunur");
   console.log("ok ücretsiz kontrol: kişi başına 2 hak, ortak günlük tavan korunuyor");
 }
+{
+  // 0012: yarıda kalan ölçüm kurtarılır; önceki ayda durdurulan alan yeni ayda açılır
+  const br = (await db.query(`select id from brands where workspace_id=$1 and not is_competitor limit 1`, [A])).rows[0];
+  if (br) {
+    const run = (await db.query(`insert into runs (workspace_id, brand_id, status, data_origin, measurement_type, max_cost_usd, started_at)
+      values ($1, $2, 'running', 'live_api', 'model_knowledge', 1, now() - interval '3 hours') returning id`, [A, br.id])).rows[0].id;
+    const fresh = (await db.query(`insert into runs (workspace_id, brand_id, status, data_origin, measurement_type, max_cost_usd, started_at)
+      values ($1, $2, 'running', 'live_api', 'model_knowledge', 1, now()) returning id`, [A, br.id])).rows[0].id;
+    assert.equal((await db.query(`select recover_stale_runs(60) r`)).rows[0].r, 1);
+    assert.deepEqual((await db.query(`select status, stop_reason from runs where id=$1`, [run])).rows[0], { status: "failed", stop_reason: "worker_timeout" });
+    assert.equal((await db.query(`select status from runs where id=$1`, [fresh])).rows[0].status, "running");
+    await db.query(`delete from runs where id in ($1, $2)`, [run, fresh]);
+  }
+  await db.exec(`update workspaces set status='paused', paused_reason='monthly_call_quota', paused_at = now() where id='${D}'`);
+  assert.equal((await db.query(`select resume_quota_paused() r`)).rows[0].r, 0, "aynı ay içinde açılmaz");
+  await db.exec(`update workspaces set paused_at = date_trunc('month', now()) - interval '1 day' where id='${D}'`);
+  assert.equal((await db.query(`select resume_quota_paused() r`)).rows[0].r, 1);
+  assert.equal((await db.query(`select status from workspaces where id=$1`, [D])).rows[0].status, "active");
+  await assert.rejects(as(U1, `select resume_quota_paused()`));
+  await assert.rejects(db.exec(`update brands set country = 'tr' where false; insert into brands (workspace_id, name, country) values ('${D}', 'x', 'turkiye')`));
+  console.log("ok 0012: yarıda kalan ölçüm kurtarıldı; durdurulan alan yeni ayda açıldı; istemci çağıramıyor; ülke kodu doğrulanıyor");
+}
 console.log("TÜM DB TESTLERİ GEÇTİ");

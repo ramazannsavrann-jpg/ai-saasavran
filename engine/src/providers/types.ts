@@ -21,6 +21,8 @@ export interface ProviderConfig {
   price: PriceCard;              // ücretli eşdeğer fiyat (free tier'da bile raporlamak için)
   freeDailyCallLimit?: number;   // ücretsiz katman günlük çağrı sınırı (sağlayıcı tarafı)
   worstCaseTokens: { input: number; output: number };
+  /** Canlı aramada konum (ISO 3166-1 iki harf). Boşsa TR. */
+  searchCountry?: string;
   /** Bir çağrıdaki en fazla ücretli araç (arama) sayısı; yoksa 1. */
   worstCaseToolCalls?: number;
 }

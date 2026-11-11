@@ -6,6 +6,7 @@ import { api, INTENT_LABEL, type Brand, type Intent, type MeasurementType, type 
 import { friendlyError } from "../lib/supabase";
 import { L, isEn } from "../lib/i18n";
 import { ERROR_CLASS_TEXT, STOP_TEXT, runStatusText } from "../lib/messages";
+import { lossCards, sourceDominance, type LossCard, type SourceRow } from "../../../engine/src/insights.ts";
 import { competitorsInRun, formatDateTime, MIN_SAMPLE, numLoc, pct, providerLabel, rangeText, series, shareSummary, sourceOpportunities, topDomains, usd } from "../lib/report";
 import { Button, Confirm, DataNotice, Empty, ErrorBox, Field, Loading, Select, TypeBadge } from "../components/ui";
 import { CompareBars, TrendChart } from "../components/Chart";
@@ -89,6 +90,7 @@ function BrandEditForm({ brand, onDone }: { brand: Brand; onDone: (changed: bool
         website: String(f.get("website") || "").trim() || null,
         sector: String(f.get("sector") || "") || null,
         city: String(f.get("city") || "").trim() || null,
+        country: /^[A-Za-z]{2}$/.test(String(f.get("country") || "").trim()) ? String(f.get("country")).trim().toUpperCase() : null,
         ...(brand.data_origin !== "simulated" ? { auto_weekly: f.get("auto_weekly") === "on" } : {}),
       });
       onDone(true);
@@ -106,6 +108,8 @@ function BrandEditForm({ brand, onDone }: { brand: Brand; onDone: (changed: bool
         {brand.sector && !SECTORS.includes(brand.sector) && <option>{brand.sector}</option>}
       </Select>
       <Field label={L("Şehir veya ilçe", "City or area")} name="city" defaultValue={brand.city ?? ""} />
+      <Field label={L("Ülke kodu (canlı arama konumu)", "Country code (live-search location)")} name="country" defaultValue={brand.country ?? ""} maxLength={2} placeholder="TR"
+        hint={L("İki harf: TR, US, DE, GB… Boş bırakılırsa Türkiye. ChatGPT web aramasını bu ülkeden yapılmış gibi çalıştırır.", "Two letters: US, GB, DE, TR… Empty means Turkey. ChatGPT runs its web search as if from this country.")} />
       {brand.data_origin !== "simulated" && (
         <label className="check">
           <input type="checkbox" name="auto_weekly" defaultChecked={brand.auto_weekly} />
@@ -213,6 +217,31 @@ function RunControl({ brand, runs, onChange, paidAllowed, workspaceId }: { brand
   );
 }
 
+/** Kayıp Nedeni Kartı: yalnız kanıt gösterir; kanıt yoksa neden üretmez. */
+function LossCardView({ card, brand, hasSite }: { card: LossCard; brand: string; hasSite: boolean }) {
+  const comp = card.sources.filter((s) => s.owner === "competitor");
+  const third = card.sources.filter((s) => s.owner === "third_party");
+  const lines: string[] = [];
+  lines.push(isEn()
+    ? `Recommended instead: ${card.winners.map((w) => `${w.name} (${w.count}/${card.answers})`).join(", ")}.`
+    : `Sizin yerinize önerilen: ${card.winners.map((w) => `${w.name} (${card.answers} cevabın ${w.count}'inde)`).join(", ")}.`);
+  if (card.evidence.includes("absent")) lines.push(L(`${brand} bu sorunun hiçbir cevabında geçmedi.`, `${brand} did not appear in any answer to this question.`));
+  if (card.evidence.includes("mentioned_not_recommended")) lines.push(isEn() ? `${brand} was mentioned in ${card.targetMentioned} of ${card.answers} answers but never recommended.` : `${brand}, ${card.answers} cevabın ${card.targetMentioned}'inde anıldı ama hiç önerilmedi.`);
+  if (card.evidence.includes("competitor_own_site_cited")) lines.push(L(`Cevap, rakibin kendi sitesine dayandı: ${comp.map((s) => `${s.domain} (${s.ownerName})`).join(", ")}.`, `The answer relied on a competitor's own site: ${comp.map((s) => `${s.domain} (${s.ownerName})`).join(", ")}.`));
+  if (card.evidence.includes("target_site_not_cited")) lines.push(L("Sizin siteniz bu sorunun hiçbir cevabında kaynak gösterilmedi.", "Your site was not cited in any answer to this question."));
+  if (card.evidence.includes("target_site_cited_anyway")) lines.push(isEn() ? `Your site was cited in ${card.targetSiteCited} answers, yet you were not recommended. The page may not answer this question directly.` : `Siteniz ${card.targetSiteCited} cevapta kaynak gösterildi ama yine de önerilmediniz. Sayfanız bu soruya doğrudan cevap vermiyor olabilir.`);
+  if (card.evidence.includes("third_party_sources")) lines.push(L(`Kullanılan üçüncü taraf kaynaklar: ${third.slice(0, 5).map((s) => s.domain).join(", ")}. Bu sitelerde yer alıp almadığınızı kontrol edin.`, `Third-party sources used: ${third.slice(0, 5).map((s) => s.domain).join(", ")}. Check whether you are featured on them.`));
+  if (card.evidence.includes("no_sources")) lines.push(L("Bu cevaplarda kaynak gösterilmedi; neden hakkında kanıt yok.", "These answers cited no sources; there is no evidence about the reason."));
+  if (!hasSite) lines.push(L("Markanıza web sitesi eklenmemiş; sitenizin kaynak gösterilip gösterilmediği ölçülemedi.", "No website is set for your brand, so we couldn't check whether your site was cited."));
+  return (
+    <div className="loss-card">
+      <p className="loss-title">{L("Kayıp nedeni: kanıtlar", "Why you lost: the evidence")}</p>
+      <ul>{lines.map((l) => <li key={l}>{l}</li>)}</ul>
+      <p className="loss-note muted">{isEn() ? `Based on ${card.answers} answers. This is evidence, not a proven cause; AI answers vary between runs.` : `${card.answers} cevaba dayanır. Bunlar kanıttır, kesin neden değildir; yapay zekâ cevapları ölçümden ölçüme değişir.`}</p>
+    </div>
+  );
+}
+
 function Report({ brand, type, onBrandChange }: { brand: Brand; type: MeasurementType; onBrandChange: () => void }) {
   const vis = useLoad(() => api.visibility(brand.id, type), [brand.id, type]);
   const [metric, setMetric] = useState<"recommend" | "mention">("recommend");
@@ -230,6 +259,12 @@ function Report({ brand, type, onBrandChange }: { brand: Brand; type: Measuremen
     ? sourceOpportunities(answers.data, ments.data, brand.id, [brand.website, ...(comps.data ?? []).map((c) => c.website)].map(host).filter(Boolean))
     : [];
   const [open, setOpen] = useState<string | null>(null);
+  // Kaynak egemenliği ve kayıp nedeni kanıtları (yalnız canlı aramalı ölçümde; ek API çağrısı yok)
+  const insightBrands = [{ id: brand.id, name: brand.name, website: brand.website, isTarget: true },
+    ...(comps.data ?? []).map((c) => ({ id: c.id, name: c.name, website: c.website, isTarget: false }))];
+  const insightsReady = live && !!answers.data && !!ments.data && !!comps.data;
+  const dominance: SourceRow[] = insightsReady ? sourceDominance(answers.data!, ments.data!, insightBrands) : [];
+  const losses = new Map<string, LossCard>((insightsReady ? lossCards(answers.data!, ments.data!, insightBrands) : []).map((c) => [c.promptId, c]));
 
   if (vis.loading) return <Loading />;
   if (vis.error) return <ErrorBox message={vis.error} />;
@@ -305,6 +340,24 @@ function Report({ brand, type, onBrandChange }: { brand: Brand; type: Measuremen
             </section>
           )}
 
+          {live && (
+            <section className="panel" id="kaynak-egemenligi">
+              <h2>{L("Kaynaklar kimi destekliyor", "Who the sources support")}</h2>
+              <p className="muted">{L("Her kaynak sitenin kaç cevapta kullanıldığı, kime ait olduğu ve o cevaplarda hangi markaların önerildiği. Bir kaynağın geçtiği cevapta bir markanın önerilmesi, kaynağın o markayı önerdiğini kanıtlamaz; birlikte görülme sayısıdır.", "How many answers used each source site, who owns it, and which brands were recommended in those answers. A brand being recommended in an answer that cites a source does not prove the source recommends it; this is a co-occurrence count.")}</p>
+              {ments.loading || comps.loading || answers.loading ? <Loading /> : dominance.length === 0 ? <p>{L("Bu ölçümde kaynak gösterilmedi.", "No sources were cited in this measurement.")}</p> : (
+                <ul className="src-dom">
+                  {dominance.map((d) => (
+                    <li key={d.domain} className={`src-${d.owner}`}>
+                      <p className="src-head"><strong>{d.domain}</strong> <span className="muted num">{isEn() ? `${d.answers} answers` : `${d.answers} cevap`}</span></p>
+                      <p className="src-owner">{d.owner === "target" ? L("Sizin siteniz", "Your site") : d.owner === "competitor" ? L(`Rakibin kendi sitesi: ${d.ownerName}`, `Competitor's own site: ${d.ownerName}`) : L("Üçüncü taraf site", "Third-party site")}</p>
+                      <p className="src-sup muted">{d.supports.length === 0 ? L("Bu cevaplarda takip ettiğiniz hiçbir marka önerilmedi.", "No tracked brand was recommended in these answers.") : <>{L("Bu cevaplarda önerilen: ", "Recommended in these answers: ")}{d.supports.map((x) => `${x.name} (${x.count})`).join(", ")}</>}</p>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </section>
+          )}
+
           {type !== "simulated" && answers.data && comps.data && (
             <UntrackedNames brand={brand} competitors={comps.data} texts={answers.data.map((a) => a.answer_text)}
               onChange={() => { onBrandChange(); comps.reload(); }} />
@@ -335,6 +388,10 @@ function Report({ brand, type, onBrandChange }: { brand: Brand; type: Measuremen
                       <span className="muted"> ({p.answers} cevap)</span>
                     </p>
                     {p.top_competitor && <p className="q-comp">{p.target_recommended ? L("Sizinle birlikte en çok önerilen rakip", "Competitor most recommended alongside you") : L("Sizin yerinize önerilen rakip", "Competitor recommended instead")}: {p.top_competitor}</p>}
+                    {losses.get(p.prompt_id) && <LossCardView card={losses.get(p.prompt_id)!} brand={brand.name} hasSite={!!brand.website} />}
+                    {type === "model_knowledge" && !p.target_recommended && p.top_competitor && (
+                      <p className="q-comp muted">{L("Neden önerilmediğinize dair kaynak kanıtı yalnız canlı aramalı ölçümde (ChatGPT, ücretli paketler) çıkar.", "Source evidence for why you weren't recommended is only available in live-search measurements (ChatGPT, paid plans).")}</p>
+                    )}
                     <button className="link-btn" aria-expanded={open === p.prompt_id} onClick={() => setOpen(open === p.prompt_id ? null : p.prompt_id)}>
                       {open === p.prompt_id ? L("Cevabı gizle", "Hide answer") : L("Cevabı göster", "Show answer")}
                     </button>

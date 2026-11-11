@@ -25,6 +25,12 @@ export const OPENAI_DEFAULT: ProviderConfig = {
   worstCaseToolCalls: OPENAI_MAX_SEARCHES,
 };
 
+/** Arama konumu: marka ülkesi verilmişse o ülke; yoksa (ya da geçersizse) Türkiye. */
+export function searchLocation(country?: string): { type: "approximate"; country: string; timezone?: string } {
+  const c = /^[A-Z]{2}$/.test(country ?? "") ? country! : "TR";
+  return c === "TR" ? { type: "approximate", country: "TR", timezone: "Europe/Istanbul" } : { type: "approximate", country: c };
+}
+
 interface OpenAIResponse {
   output?: {
     type: string;
@@ -72,7 +78,7 @@ export class OpenAIProvider implements Provider {
           model: this.config.model,
           input: prompt,
           ...(this.config.useSearch ? {
-            tools: [{ type: "web_search", user_location: { type: "approximate", country: "TR", timezone: "Europe/Istanbul" } }],
+            tools: [{ type: "web_search", user_location: searchLocation(this.config.searchCountry) }],
             max_tool_calls: OPENAI_MAX_SEARCHES,
           } : {}),
           reasoning: { effort: "low" },

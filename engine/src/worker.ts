@@ -99,14 +99,14 @@ export async function processNextRun(deps: WorkerDeps): Promise<WorkerResult | n
   };
 
   try {
-    const target = must(await db.from("brands").select("id,name,aliases,website").eq("id", run.brand_id).single(), "marka") as any;
+    const target = must(await db.from("brands").select("id,name,aliases,website,country").eq("id", run.brand_id).single(), "marka") as any;
     const comps = must(await db.from("brands").select("id,name,aliases,website").eq("owner_brand_id", run.brand_id).eq("is_competitor", true), "rakipler") as any[];
     const prompts = must(await db.from("prompts").select("id,text").eq("brand_id", run.brand_id).eq("active", true).order("created_at"), "sorular") as any[];
     const ws = must(await db.from("workspaces").select("plan").eq("id", run.workspace_id).single(), "workspace") as any;
 
     const brands: BrandRef[] = [target, ...comps].map((b) => ({ id: b.id, name: b.name, aliases: b.aliases ?? [], domain: domainOf(b.website) }));
     const day = now().toISOString().slice(0, 10);
-    const provider = chooseProvider(run.measurement_type, env, brands.map((b) => b.name), `${run.id}`, deps.fetchFn);
+    const provider = chooseProvider(run.measurement_type, { ...env, SEARCH_COUNTRY: target.country || env.SEARCH_COUNTRY }, brands.map((b) => b.name), `${run.id}`, deps.fetchFn);
     if (!provider) {
       return await finish({ status: "failed", stop: "provider_not_configured", ok: 0, failed: 0 }, undefined,
         run.measurement_type === "live_search" ? "Canlı arama sağlayıcısı etkin değil" : "Gemini anahtarı tanımlı değil");
@@ -130,7 +130,7 @@ export async function processNextRun(deps: WorkerDeps): Promise<WorkerResult | n
         const hits = analyzeResponse(result, brands);
         must(await db.from("mentions").insert(hits.map((h) => ({
           response_id: resp.id, workspace_id: run.workspace_id, brand_id: h.brandId,
-          mentioned: h.mentioned, recommended: h.recommended, cited: h.cited, rank: h.rank, classifier: "rules_v2",
+          mentioned: h.mentioned, recommended: h.recommended, cited: h.cited, rank: h.rank, classifier: "rules_v3",
         }))), "anılma kaydı");
       },
       onFailedCall: async (_pid, kind) => { failed++; await gate.recordFailure(run.workspace_id, provider.config, kind); },
@@ -165,9 +165,19 @@ export async function processAudits(deps: WorkerDeps, max = 10): Promise<{ brand
   return out;
 }
 
-export async function processQueue(deps: WorkerDeps, maxRuns = 20): Promise<WorkerResult[]> {
+/** Bakım: yarıda kalmış ölçümleri kapatır, önceki ayda kota nedeniyle durdurulan alanları açar. */
+export async function maintain(deps: { db: SupabaseClient }, staleMinutes = 60): Promise<{ recovered: number; resumed: number }> {
+  const recovered = must(await deps.db.rpc("recover_stale_runs", { p_minutes: staleMinutes }), "recover_stale_runs") as number;
+  const resumed = must(await deps.db.rpc("resume_quota_paused"), "resume_quota_paused") as number;
+  return { recovered, resumed };
+}
+
+/** Sıradaki ölçümleri işler. Süre bütçesi dolunca yeni ölçüm almaz; böylece iş yarıda kesilmez. */
+export async function processQueue(deps: WorkerDeps, maxRuns = 20, budgetMs = Infinity): Promise<WorkerResult[]> {
   const out: WorkerResult[] = [];
+  const started = Date.now();
   for (let i = 0; i < maxRuns; i++) {
+    if (Date.now() - started > budgetMs) break;
     const r = await processNextRun(deps);
     if (!r) break;
     out.push(r);
@@ -189,7 +199,7 @@ export async function reanalyzeBrand(db: SupabaseClient, brandId: string): Promi
       must(await db.from("mentions").delete().eq("response_id", r.id), "eski anılma");
       must(await db.from("mentions").insert(hits.map((h) => ({
         response_id: r.id, workspace_id: run.workspace_id, brand_id: h.brandId,
-        mentioned: h.mentioned, recommended: h.recommended, cited: h.cited, rank: h.rank, classifier: "rules_v2",
+        mentioned: h.mentioned, recommended: h.recommended, cited: h.cited, rank: h.rank, classifier: "rules_v3",
       }))), "anılma");
       n++;
     }
