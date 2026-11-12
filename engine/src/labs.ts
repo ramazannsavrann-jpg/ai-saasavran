@@ -226,7 +226,7 @@ export async function seedLabs(db: SupabaseClient, adminEmail: string, log: (m: 
   }
   log(`Demo Lab: ${DEMO_BRANDS.length} marka (${seeded} yeni, 6 haftalık simülasyon).`);
 
-  const growth = await ensureWorkspace(db, GROWTH.workspace, "growth_lab", "pro", uid);
+  const growth = await ensureWorkspace(db, GROWTH.workspace, "growth_lab", "agency", uid); // 6 marka var (Pro sınırı 5); toplam ücretli tavan ayrıca geçerli
   // Ücretli canlı ölçüm yalnız bu alanda açılabilir (veritabanı kısıtı: yalnız growth_lab)
   must(await db.from("workspaces").update({ paid_live_allowed: true }).eq("id", growth), "ücretli izin");
   const g = await ensureBrand(db, growth, GROWTH.brand, "live_api", GROWTH.competitors, GROWTH.prompts);
