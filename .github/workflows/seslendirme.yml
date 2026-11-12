@@ -1,0 +1,29 @@
+name: Seslendirme (video)
+on:
+  push:
+    branches: [seslendirme]
+    paths: [".github/workflows/seslendirme.yml", "video/narration.txt"]
+  workflow_dispatch:
+jobs:
+  tts:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: OpenAI TTS
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: |
+          mkdir -p out
+          for v in ash onyx; do
+            jq -n --rawfile t video/narration.txt --arg v "$v" '{model:"gpt-4o-mini-tts", voice:$v, input:$t, response_format:"mp3",
+              instructions:"Türkçe konuş. Enerjik, heyecanlı, samimi bir reklam/YouTube Shorts sunucusu gibi; tempolu ama anlaşılır. Doğal Türkçe vurgu ve tonlama."}' > req.json
+            curl -sS --fail-with-body https://api.openai.com/v1/audio/speech \
+              -H "Authorization: Bearer $OPENAI_API_KEY" -H "Content-Type: application/json" \
+              -d @req.json -o "out/ses-$v.mp3"
+            ls -l "out/ses-$v.mp3"
+          done
+      - uses: actions/upload-artifact@v4
+        with:
+          name: seslendirme
+          path: out/
+          retention-days: 3
