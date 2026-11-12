@@ -62,6 +62,10 @@
 - **Rakip ürün karşılaştırması (0018):** kendi ürününe en fazla 5 rakip ürün bağlanır; son ölçüm cevaplarında yan yana, motor bazında anılma/önerilme ve "ikisi birlikte geçtiğinde kim önerildi" sayımı. Ek API maliyeti yok. Rakip üründe doğruluk kontrolü yok.
 - **AI Shopping (araştırma):** ChatGPT'nin alışveriş kartları (ürün karuseli) API cevabında yer almıyor; bu yüzden ölçülmüyor. Ölçülen, metin cevaplarındaki ürün anılmasıdır.
 
+## v1.8 (12 Kasım 2026): ekip
+
+- 0026: ekip daveti (e-postayla; davetli aynı e-postayla giriş yapınca panelde görür ya da `/davet/<anahtar>` bağlantısıyla kabul eder; 14 gün). Roller: sahip, yönetici, düzenleyici, izleyici. Kişi sınırı (sahip dahil): Free 1, Plus 2, Pro 5, Business 15. Hesap sayfasında Ekip bölümü: rol değiştirme, çıkarma, ayrılma, davet iptali.
+
 ## v1.7 (12 Kasım 2026): paylaşılabilir rapor
 
 - 0025: marka sahibi raporu salt okunur bağlantıyla paylaşır (7/30/90 gün, iptal edilebilir, marka başına en fazla 10 etkin bağlantı). `/rapor/<anahtar>` giriş istemez, arama motorlarına kapalı; cevap metni yok (sayılar, rakipler, sorular, kaynak alan adları). "PDF olarak kaydet" logolu yazdırma görünümü.

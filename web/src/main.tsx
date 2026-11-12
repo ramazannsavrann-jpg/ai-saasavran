@@ -14,7 +14,7 @@ import { Loading } from "./components/ui";
 import { Forgot, Login, Signup } from "./pages/Auth";
 import { Dashboard, NewBrand, NewWorkspace } from "./pages/Dashboard";
 import { BrandPage } from "./pages/Brand";
-import { Account, AdminCustomers, DemoLab, ProductStatus } from "./pages/Misc";
+import { AcceptInvite, Account, AdminCustomers, DemoLab, ProductStatus } from "./pages/Misc";
 import { SharedReport } from "./pages/SharedReport";
 import { Privacy, Terms } from "./pages/Legal";
 import { L } from "./lib/i18n";
@@ -24,13 +24,13 @@ function Private({ children }: { children: React.ReactNode }) {
   if (loading) return <Loading />;
   if (!session) {
     // Girişten sonra kaldığı yere dönsün (ör. fiyat sayfasından /hesap?plan=starter)
-    try { if (location.pathname === "/hesap") sessionStorage.setItem("next", location.pathname + location.search); } catch { /* yok say */ }
+    try { if (location.pathname === "/hesap" || location.pathname.startsWith("/davet/")) sessionStorage.setItem("next", location.pathname + location.search); } catch { /* yok say */ }
     return <Navigate to="/giris" replace />;
   }
   return <>{children}</>;
 }
 function nextPath(): string {
-  try { const n = sessionStorage.getItem("next"); sessionStorage.removeItem("next"); if (n && n.startsWith("/hesap")) return n; } catch { /* yok say */ }
+  try { const n = sessionStorage.getItem("next"); sessionStorage.removeItem("next"); if (n && (n.startsWith("/hesap") || n.startsWith("/davet/"))) return n; } catch { /* yok say */ }
   return "/panel";
 }
 function PublicOnly({ children }: { children: React.ReactNode }) {
@@ -64,6 +64,7 @@ function App() {
         <Route path="/hesap" element={<Account />} />
         <Route path="/demo-lab" element={<DemoLab />} />
         <Route path="/yonetim" element={<AdminCustomers />} />
+        <Route path="/davet/:token" element={<AcceptInvite />} />
       </Route>
       <Route path="*" element={<Navigate to="/panel" replace />} />
     </Routes>
