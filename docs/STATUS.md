@@ -62,6 +62,14 @@
 - **Rakip ürün karşılaştırması (0018):** kendi ürününe en fazla 5 rakip ürün bağlanır; son ölçüm cevaplarında yan yana, motor bazında anılma/önerilme ve "ikisi birlikte geçtiğinde kim önerildi" sayımı. Ek API maliyeti yok. Rakip üründe doğruluk kontrolü yok.
 - **AI Shopping (araştırma):** ChatGPT'nin alışveriş kartları (ürün karuseli) API cevabında yer almıyor; bu yüzden ölçülmüyor. Ölçülen, metin cevaplarındaki ürün anılmasıdır.
 
+## v1.5 (12 Kasım 2026): güvenlik
+
+- 0022: giriş yapmamış ziyaretçinin çağırabildiği oturumlu SECURITY DEFINER fonksiyonlar kapatıldı (yalnız RLS yardımcıları `is_member`, `is_platform_admin` açık); tetikleyici fonksiyonları API'den çağrılamaz; iki fonksiyona sabit `search_path`.
+- Her yayında `scripts/security-audit.mjs`: RLS kapalı tablo, ziyaretçiye açık fonksiyon, sabit olmayan arama yolu varsa yayın durur.
+- Entegrasyon testi: ziyaretçi oturumlu fonksiyonları çağıramaz, tablolardan veri alamaz.
+- Yedek: henüz yok. Herkese açık depoda (şifreli bile olsa) veritabanı dökümü yayınlanmaz; yöntem sahibiyle kararlaştırılacak.
+- Bilinen: Supabase "sızdırılmış şifre koruması" kapalı.
+
 ## v1.4 (12 Kasım 2026): Google Shopping
 
 - Ücretli alanlarda kendi ürünleri haftada bir (ya da "Şimdi kontrol et" ile günde en fazla bir) Google Shopping'de aranır (SerpApi, `SERPAPI_KEY`).
