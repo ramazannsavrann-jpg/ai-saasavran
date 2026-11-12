@@ -259,7 +259,7 @@ test("Migration çalıştırıcı: boş veritabanına uygular, ikinci kez uygula
   });
   const first = run();
   assert.equal(first.status, 0, first.stderr);
-  assert.match(first.stdout, /29 migration uygulandı/);
+  assert.match(first.stdout, /30 migration uygulandı/);
   const second = run();
   assert.equal(second.status, 0, second.stderr);
   assert.match(second.stdout, /güncel/);
@@ -782,4 +782,40 @@ test("Ölçüm aralığı: marka 10 günde bir; Growth Lab'de seçilen markalar 
   stack.sql(`update runs set status='done', created_at=now()-interval '40 days' where brand_id='${vid}'`);
   ok(await svc.rpc("schedule_weekly_runs", { p_limit: 500 }));
   assert.equal(count(vid, "live_search"), "0");
+});
+
+test("API/MCP anahtarı: yalnız Pro+/yönetici; özet saklanır; doğrulama, günlük sınır, iptal, başka alanın markası yok", async () => {
+  const { createHash } = await import("node:crypto");
+  const h = (k: string) => createHash("sha256").update(k).digest("hex");
+  const O = await user("api@test.local");
+  const ws = ok(await O.c.rpc("create_workspace", { p_name: "API", p_kind: "business" })) as string;
+  const b = ok(await O.c.from("brands").insert({ workspace_id: ws, name: "API Marka" }).select("id").single()) as any;
+  assert.ok((await O.c.rpc("create_api_key", { p_workspace: ws, p_name: "deneme" })).error, "Free pakette yok");
+  ok(await svc.from("workspaces").update({ plan: "pro" }).eq("id", ws));
+  const key = ok(await O.c.rpc("create_api_key", { p_workspace: ws, p_name: "Claude" })) as string;
+  assert.match(key, /^aisv_[0-9a-f]{64}$/);
+  const rows = ok(await O.c.from("api_keys").select("id,name,prefix")) as any[];
+  assert.equal(rows[0].prefix, key.slice(0, 12));
+  assert.ok((await O.c.from("api_keys").select("key_hash")).error, "istemci özeti okuyamaz");
+  assert.ok((await O.c.rpc("api_auth", { p_key_hash: h(key) })).error, "istemci doğrulama fonksiyonunu çağıramaz");
+  const a = ok(await svc.rpc("api_auth", { p_key_hash: h(key) })) as any;
+  assert.equal(a.workspace_id, ws);
+  assert.equal((ok(await svc.rpc("api_auth", { p_key_hash: h("aisv_yanlis") })) as any).error, "invalid_key");
+  const brands = ok(await svc.rpc("api_brands", { p_workspace: ws })) as any[];
+  assert.deepEqual(brands.map((x) => x.name), ["API Marka"]);
+  assert.ok(ok(await svc.rpc("api_brand_report", { p_workspace: ws, p_brand: b.id })));
+  // başka alanın markası
+  const other = ok(await O.c.rpc("create_workspace", { p_name: "Başka", p_kind: "business" })) as string;
+  const ob = ok(await O.c.from("brands").insert({ workspace_id: other, name: "Başka Marka" }).select("id").single()) as any;
+  assert.equal(ok(await svc.rpc("api_brand_report", { p_workspace: ws, p_brand: ob.id })), null);
+  // günlük sınır
+  ok(await svc.from("api_keys").update({ day: new Date().toISOString().slice(0, 10), day_count: 1000 }).eq("id", rows[0].id));
+  assert.equal((ok(await svc.rpc("api_auth", { p_key_hash: h(key) })) as any).error, "rate_limit");
+  // paket düşerse çalışmaz; iptal edilirse geçersiz
+  ok(await svc.from("api_keys").update({ day_count: 0 }).eq("id", rows[0].id));
+  ok(await svc.from("workspaces").update({ plan: "starter" }).eq("id", ws));
+  assert.equal((ok(await svc.rpc("api_auth", { p_key_hash: h(key) })) as any).error, "plan");
+  ok(await svc.from("workspaces").update({ plan: "pro" }).eq("id", ws));
+  ok(await O.c.rpc("revoke_api_key", { p_key: rows[0].id }));
+  assert.equal((ok(await svc.rpc("api_auth", { p_key_hash: h(key) })) as any).error, "invalid_key");
 });

@@ -62,6 +62,12 @@
 - **Rakip ürün karşılaştırması (0018):** kendi ürününe en fazla 5 rakip ürün bağlanır; son ölçüm cevaplarında yan yana, motor bazında anılma/önerilme ve "ikisi birlikte geçtiğinde kim önerildi" sayımı. Ek API maliyeti yok. Rakip üründe doğruluk kontrolü yok.
 - **AI Shopping (araştırma):** ChatGPT'nin alışveriş kartları (ürün karuseli) API cevabında yer almıyor; bu yüzden ölçülmüyor. Ölçülen, metin cevaplarındaki ürün anılmasıdır.
 
+## v1.11 (12 Kasım 2026): API ve MCP
+
+- 0030: Pro/Business çalışma alanlarında API anahtarı (en fazla 5; yalnız SHA-256 özeti saklanır; sahip/yönetici oluşturur; günlük 1000 istek; iptal edilebilir).
+- REST: `GET /api/v1/brands`, `GET /api/v1/brands/<id>` (Bearer aisv_…). MCP: `POST /api/mcp` (durumsuz Streamable HTTP, JSON), araçlar `list_brands`, `get_brand_report`; salt okunur.
+- Rapor içeriği paylaşılan raporla aynı ortak fonksiyondan (`brand_report_json`); cevap metni yok.
+
 ## v1.10 (12 Kasım 2026): Growth Lab video konuları
 
 - 0029: markaya göre ölçüm aralığı (`measure_every_days`) ve yalnız Growth Lab'de otomatik canlı aralık (`live_every_days`).
