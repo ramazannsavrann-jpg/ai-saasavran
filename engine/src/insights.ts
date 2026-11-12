@@ -198,7 +198,7 @@ export function productVisibility(
   const lowerBrand = brand.name.toLocaleLowerCase("tr-TR");
   const bare = product.name.toLocaleLowerCase("tr-TR").startsWith(lowerBrand + " ") ? product.name.slice(brand.name.length + 1).trim() : "";
   const refs: BrandRef[] = [
-    { id: product.id, name: product.name, aliases: [...(product.aliases ?? []), ...(bare.length >= 3 ? [bare] : [])], domain: "" },
+    { id: product.id, name: product.name, aliases: [...(product.aliases ?? []), ...(bare.length >= 3 ? [bare] : [])], domain: "", exactOnly: true },
     ...competitors.map((c) => ({ id: c.id, name: c.name, aliases: c.aliases ?? [], domain: domainOf(c.website) })),
   ];
   const mentions: InsightMention[] = [];
@@ -319,7 +319,7 @@ export function compareProducts(
     const bare = bareOf(p.name, (p as { rival_brand?: string | null }).rival_brand);
     const full = (p as { rival_brand?: string | null }).rival_brand && !p.name.toLocaleLowerCase("tr-TR").startsWith(((p as { rival_brand?: string | null }).rival_brand ?? "").toLocaleLowerCase("tr-TR"))
       ? [`${(p as { rival_brand?: string | null }).rival_brand} ${p.name}`] : [];
-    return { id: p.id, name: p.name, aliases: [...full, ...(bare.length >= 3 ? [bare] : [])], domain: "" };
+    return { id: p.id, name: p.name, aliases: [...full, ...(bare.length >= 3 ? [bare] : [])], domain: "", exactOnly: true };
   });
   const stats = new Map<string, Map<string, { answers: number; mentioned: number; recommended: number }>>();
   const h2h = new Map<string, { bothMentioned: number; ownWins: number; rivalWins: number }>(rivals.map((r) => [r.id, { bothMentioned: 0, ownWins: 0, rivalWins: 0 }]));

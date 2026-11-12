@@ -7,6 +7,8 @@ export interface BrandRef {
   name: string;
   aliases: string[];
   domain?: string; // ör. "aliusta.com.tr"
+  /** Ürün gibi çok kelimeli adlarda ilk kelimeyle (çoğu zaman marka adı) tek başına eşleşmeyi kapatır. */
+  exactOnly?: boolean;
 }
 
 export interface AIResponse {
@@ -106,10 +108,21 @@ function sentences(line: string): string[] {
 
 export function analyzeResponse(resp: AIResponse, brands: BrandRef[]): BrandHit[] {
   const lines = resp.answerText.split(/\n+/);
+  // İlk kelime iki ayrı markada aynıysa ("Marka A" / "Marka B", "Samsung Galaxy" / "Samsung Pay") tek başına ilk kelime hiçbirine sayılmaz
+  const firstOf = (n: string) => n.trim().split(/\s+/)[0].toLocaleLowerCase("tr-TR");
+  const firstCount = new Map<string, number>();
+  for (const b of brands) if (b.name.trim().includes(" ")) firstCount.set(firstOf(b.name), (firstCount.get(firstOf(b.name)) ?? 0) + 1);
+  // Başka bir markanın tek kelimelik adı/takma adı bu markanın ilk kelimesiyle aynıysa ilk kelime tek başına bu markaya sayılmaz
+  const singleOwner = new Map<string, Set<string>>();
+  for (const b of brands) for (const n of [b.name, ...b.aliases]) if (!n.trim().includes(" ")) {
+    const k = n.trim().toLocaleLowerCase("tr-TR"); singleOwner.set(k, (singleOwner.get(k) ?? new Set()).add(b.id));
+  }
+  const otherOwns = (word: string, id: string) => [...(singleOwner.get(word) ?? [])].some((x) => x !== id);
 
   const hits = brands.map((b): BrandHit => {
     const needles = [b.name, ...b.aliases].map(normalize).filter((n) => n.length >= 2);
-    const first = firstWordPattern(b.name);
+    const fw = firstOf(b.name);
+    const first = b.exactOnly || (firstCount.get(fw) ?? 0) > 1 || otherOwns(fw, b.id) ? null : firstWordPattern(b.name);
     const containsBrand = (text: string) => {
       const t = normalize(text);
       return needles.some((n) => hasName(t, n)) || (!!first && first.test(text));
