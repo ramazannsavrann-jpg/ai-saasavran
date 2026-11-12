@@ -42,6 +42,10 @@ export interface SiteAudit {
 export interface BrandAction { id: string; brand_id: string; title: string; note: string | null; done_on: string; created_at: string }
 
 export interface Product { id: string; brand_id: string; name: string; price: string | null; facts: string | null; rival_of: string | null; rival_brand: string | null; check_requested_at: string | null; shopping_query: string | null; shopping_requested_at: string | null; created_at: string }
+export interface AdminWorkspace {
+  id: string; name: string; kind: string; plan: string; status: string; subscription_status: string | null; comped: boolean; comped_until: string | null;
+  has_paddle: boolean; owner_email: string | null; brands: number; created_at: string;
+}
 export interface ShoppingCheck {
   id: string; product_id: string; query: string; country: string; own_position: number | null; own_price: string | null; own_seller: string | null; own_count: number;
   rivals: { id: string; position: number; price: string | null; seller: string | null }[];
@@ -153,6 +157,8 @@ export const api = {
   },
   async requestShoppingCheck(id: string) { must(await sb().rpc("request_shopping_check", { p_product: id })); },
   async setShoppingQuery(id: string, q: string | null) { must(await sb().from("products").update({ shopping_query: q }).eq("id", id)); },
+  async adminWorkspaces(): Promise<AdminWorkspace[]> { return must(await sb().rpc("admin_workspaces")); },
+  async adminSetPlan(workspaceId: string, plan: string, until: string | null) { must(await sb().rpc("admin_set_plan", { p_workspace: workspaceId, p_plan: plan, p_until: until })); },
   async isPlatformAdmin(): Promise<boolean> {
     return must(await sb().rpc("is_platform_admin"));
   },

@@ -62,6 +62,12 @@
 - **Rakip ürün karşılaştırması (0018):** kendi ürününe en fazla 5 rakip ürün bağlanır; son ölçüm cevaplarında yan yana, motor bazında anılma/önerilme ve "ikisi birlikte geçtiğinde kim önerildi" sayımı. Ek API maliyeti yok. Rakip üründe doğruluk kontrolü yok.
 - **AI Shopping (araştırma):** ChatGPT'nin alışveriş kartları (ürün karuseli) API cevabında yer almıyor; bu yüzden ölçülmüyor. Ölçülen, metin cevaplarındaki ürün anılmasıdır.
 
+## v1.6 (12 Kasım 2026): yönetim ve günlük örnek
+
+- Marka silme: marka adı yazılarak onaylanır; soruları, rakipleri, ürünleri ve ölçümleriyle silinir (harcama kaydı kalır).
+- 0023: platform yöneticisi müşterilere ücretsiz paket verir (Müşteriler sayfası, `/yonetim`), süreli ya da süresiz; süre dolunca işçi Free'ye döndürür; Paddle aboneliği olan alana dokunulmaz; her işlem `admin_log`'da.
+- 0024: ana sayfada "bugünün ölçümü": her gün Growth Lab'den başka bir gerçek soru (`/api/example`), marka adları harf, cevap metni ve adres yok, markalı soru yok. Gelmezse sabit örnek kalır.
+
 ## v1.5 (12 Kasım 2026): güvenlik
 
 - 0022: giriş yapmamış ziyaretçinin çağırabildiği oturumlu SECURITY DEFINER fonksiyonlar kapatıldı (yalnız RLS yardımcıları `is_member`, `is_platform_admin` açık); tetikleyici fonksiyonları API'den çağrılamaz; iki fonksiyona sabit `search_path`.

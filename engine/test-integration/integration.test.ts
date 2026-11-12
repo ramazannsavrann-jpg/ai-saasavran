@@ -6,7 +6,7 @@ import { test, before, after } from "node:test";
 import assert from "node:assert/strict";
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import { startStack } from "../../scripts/stack/stack.mjs";
-import { processNextRun, processShoppingChecks } from "../src/worker.ts";
+import { maintain, processNextRun, processShoppingChecks } from "../src/worker.ts";
 
 let stack: Awaited<ReturnType<typeof startStack>>;
 let svc: SupabaseClient;
@@ -252,7 +252,7 @@ test("Migration çalıştırıcı: boş veritabanına uygular, ikinci kez uygula
   });
   const first = run();
   assert.equal(first.status, 0, first.stderr);
-  assert.match(first.stdout, /22 migration uygulandı/);
+  assert.match(first.stdout, /24 migration uygulandı/);
   const second = run();
   assert.equal(second.status, 0, second.stderr);
   assert.match(second.stdout, /güncel/);
@@ -579,4 +579,70 @@ test("Güvenlik: giriş yapmamış ziyaretçi oturum gerektiren fonksiyonları �
     const r = await anon.from(t).select("id").limit(1);
     assert.ok(r.error || (r.data ?? []).length === 0, `${t} anon'a veri vermemeli`);
   }
+});
+
+test("Yönetici ücretsiz paket: yalnız platform yöneticisi verir; Paddle aboneliğine dokunmaz; süresi dolunca Free'ye döner", async () => {
+  const adm = await user("yonetici@test.local");
+  const cust = await user("musteri-comp@test.local");
+  stack.sql(`insert into platform_admins values ('${adm.id}')`);
+  const wsId = ok(await cust.c.rpc("create_workspace", { p_name: "Comp Müşteri", p_kind: "business" })) as string;
+  // müşteri kendine paket veremez, listeyi göremez
+  assert.ok((await cust.c.rpc("admin_set_plan", { p_workspace: wsId, p_plan: "pro" })).error);
+  assert.ok((await cust.c.rpc("admin_workspaces")).error);
+  const list = ok(await adm.c.rpc("admin_workspaces")) as any[];
+  const row = list.find((w) => w.id === wsId);
+  assert.equal(row.owner_email, "musteri-comp@test.local");
+  assert.equal(row.plan, "free");
+  // geçmiş tarih reddedilir
+  assert.ok((await adm.c.rpc("admin_set_plan", { p_workspace: wsId, p_plan: "pro", p_until: "2020-01-01" })).error);
+  ok(await adm.c.rpc("admin_set_plan", { p_workspace: wsId, p_plan: "pro", p_until: "2099-01-01" }));
+  let w = ok(await svc.from("workspaces").select("plan,paid_live_allowed,comped,comped_until,subscription_status").eq("id", wsId).single()) as any;
+  assert.deepEqual([w.plan, w.paid_live_allowed, w.comped, w.subscription_status], ["pro", true, true, "active"]);
+  const log = ok(await adm.c.from("admin_log").select("action,detail").eq("workspace_id", wsId)) as any[];
+  assert.equal(log[0].detail.to, "pro");
+  assert.equal((ok(await cust.c.from("admin_log").select("id")) as any[]).length, 0, "müşteri yönetici kaydını görmez");
+  // süre dolunca (tarihi geçmişe çek) işçi bakımı Free'ye döndürür
+  ok(await svc.from("workspaces").update({ comped_until: "2020-01-01" }).eq("id", wsId));
+  const m = await maintain({ db: svc });
+  assert.ok(m.compedExpired >= 1);
+  w = ok(await svc.from("workspaces").select("plan,paid_live_allowed,comped").eq("id", wsId).single()) as any;
+  assert.deepEqual([w.plan, w.paid_live_allowed, w.comped], ["free", false, false]);
+  // Paddle aboneliği olan alana dokunulmaz
+  ok(await svc.rpc("apply_subscription", { p_workspace: wsId, p_plan: "starter", p_status: "active", p_subscription: "sub_1", p_customer: "ctm_1", p_period_end: null }));
+  assert.ok((await adm.c.rpc("admin_set_plan", { p_workspace: wsId, p_plan: "agency" })).error);
+});
+
+test("Bugünün ölçümü: yalnız Growth Lab, markalı soru seçilmez, marka adları harfe dönüşür", async () => {
+  const g = ok(await svc.from("workspaces").insert({ name: "GL Örnek", kind: "growth_lab", plan: "pro" }).select("id").single()) as any;
+  const own = ok(await svc.from("brands").insert({ workspace_id: g.id, name: "Örnekmarka", data_origin: "live_api" }).select("id").single()) as any;
+  const rival = ok(await svc.from("brands").insert({ workspace_id: g.id, name: "Rakipmarka", is_competitor: true, owner_brand_id: own.id, data_origin: "live_api" }).select("id").single()) as any;
+  const run = ok(await svc.from("runs").insert({ workspace_id: g.id, brand_id: own.id, status: "done", data_origin: "live_api", measurement_type: "live_search", max_cost_usd: 1, prompts_total: 2 }).select("id").single()) as any;
+  for (const text of ["Hangi aracı önerirsin?", "Rakipmarka iyi mi?"]) {
+    const p = ok(await svc.from("prompts").insert({ workspace_id: g.id, brand_id: own.id, text, intent: "comparison" }).select("id").single()) as any;
+    for (const rep of [1, 2]) {
+      const r = ok(await svc.from("responses").insert({ workspace_id: g.id, run_id: run.id, prompt_id: p.id, provider: "openai", model: "m", method: "api_with_search", repetition: rep, answer_text: "Rakipmarka ve Örnekmarka", cited_urls: ["https://a.example/x", "https://b.example/y"], measurement_type: "live_search", data_origin: "live_api", billing: "paid" }).select("id").single()) as any;
+      ok(await svc.from("mentions").insert([
+        { response_id: r.id, workspace_id: g.id, brand_id: rival.id, mentioned: true, recommended: true, cited: false, rank: 1, classifier: "rules_v3" },
+        { response_id: r.id, workspace_id: g.id, brand_id: own.id, mentioned: true, recommended: rep === 1, cited: false, rank: 2, classifier: "rules_v3" },
+      ]));
+    }
+  }
+  // aday soruların hepsini gün gün dolaş (testte başka Growth Lab verisi de olabilir)
+  const first = ok(await svc.rpc("daily_example", { p_day: "2026-01-01" })) as any;
+  const seen: any[] = [];
+  for (let i = 0; i < first.candidates; i++) {
+    const day = new Date(Date.UTC(2026, 0, 1 + i)).toISOString().slice(0, 10);
+    seen.push(ok(await svc.rpc("daily_example", { p_day: day })) as any);
+  }
+  assert.ok(!seen.some((x) => x.question === "Rakipmarka iyi mi?"), "markalı soru seçilmemeli");
+  const ex = seen.find((x) => x.question === "Hangi aracı önerirsin?");
+  assert.ok(ex, "uygun soru adaylar arasında olmalı");
+  assert.equal(ex.answers, 2);
+  assert.equal(ex.sources, 2);
+  assert.deepEqual(ex.brands.map((b: any) => [b.label, b.recommended, b.first]), [["A", 2, 2], ["B", 1, 0]]);
+  assert.ok(!JSON.stringify(seen).toLocaleLowerCase("tr-TR").includes("marka\""), "marka adı sızmamalı");
+  assert.ok(!JSON.stringify(seen).includes("Örnekmarka"));
+  // istemci çağıramaz
+  const u = await user("ornek@test.local");
+  assert.ok((await u.c.rpc("daily_example", { p_day: "2026-11-12" })).error);
 });

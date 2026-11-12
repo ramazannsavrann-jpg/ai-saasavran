@@ -148,6 +148,7 @@ const home = `
     <p class="caption">Temsilî gösterim, gerçek ölçümümüze dayanır (ChatGPT, canlı web aramasıyla, 7 Kasım 2026, 10 cevap). Banka adları gizlendi.</p>
   </figure>
 </section>
+<section class="demo daily" id="daily" data-lang="tr" hidden aria-labelledby="daily-h"></section>
 ${demoHtml(false)}
 
 <section class="band">
@@ -212,6 +213,7 @@ const enHome = `
     <p class="caption">Illustration based on our real measurement (ChatGPT with live web search, 7 Nov 2026, 20 answers): Tool A 8/20, Tool B 7/20, Tool C 7/20. We were 0/20. Tool names are hidden.</p>
   </figure>
 </section>
+<section class="demo daily" id="daily" data-lang="en" hidden aria-labelledby="daily-h"></section>
 ${demoHtml(true)}
 
 <section class="band">

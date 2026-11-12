@@ -1,6 +1,6 @@
 import { useMemo, useState, type FormEvent } from "react";
 import { SECTORS, competitorSuggestions, postPurchaseTemplates, questionTemplates, sectorDef } from "../lib/sectors";
-import { Link, useParams, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useApp, useLoad } from "../lib/app";
 import { api, INTENT_LABEL, type Brand, type Intent, type MeasurementType, type Prompt, type Run, type Product, type ShoppingCheck } from "../lib/data";
 import { friendlyError } from "../lib/supabase";
@@ -386,7 +386,37 @@ function BrandEditForm({ brand, onDone }: { brand: Brand; onDone: (changed: bool
         <Button type="submit" busy={busy}>Kaydet</Button>
         <Button type="button" variant="quiet" onClick={() => onDone(false)}>{L("Vazgeç", "Cancel")}</Button>
       </div>
+      <DeleteBrand brand={brand} />
     </form>
+  );
+}
+
+/** Markayı tamamen silme: soruları, rakipleri, ürünleri ve tüm ölçümleriyle. Yanlışlıkla silinmesin diye marka adı yazılır. */
+function DeleteBrand({ brand }: { brand: Brand }) {
+  const nav = useNavigate();
+  const [open, setOpen] = useState(false);
+  const [typed, setTyped] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [err, setErr] = useState<string | null>(null);
+  const match = typed.trim().toLocaleLowerCase("tr-TR") === brand.name.trim().toLocaleLowerCase("tr-TR");
+  async function del() {
+    setBusy(true); setErr(null);
+    try { await api.deleteBrand(brand.id); nav("/", { replace: true }); }
+    catch (e) { setErr(friendlyError(e)); setBusy(false); }
+  }
+  if (!open) return <p><button type="button" className="link-btn danger" onClick={() => setOpen(true)}>{L("Markayı tamamen sil", "Delete brand completely")}</button></p>;
+  return (
+    <div className="caution stack" role="group" aria-label={L("Markayı sil", "Delete brand")}>
+      <p><strong>{L("Bu işlem geri alınamaz.", "This can't be undone.")}</strong> {L("Marka; soruları, rakipleri, ürünleri, site denetimleri ve tüm ölçüm sonuçlarıyla birlikte silinir. Bu ay kullanılan sorgu hakkı geri gelmez.", "The brand is deleted with its questions, competitors, products, site audits and all measurement results. Queries already used this month are not refunded.")}</p>
+      <label className="field"><span>{isEn() ? `To confirm, type the brand name: ${brand.name}` : `Onaylamak için marka adını yazın: ${brand.name}`}</span>
+        <input value={typed} onChange={(e) => setTyped(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") e.preventDefault(); }} autoComplete="off" aria-label={L("Silmek için marka adı", "Brand name to delete")} />
+      </label>
+      <ErrorBox message={err} />
+      <div className="form-actions">
+        <Button type="button" variant="danger" disabled={!match} busy={busy} onClick={del}>{L("Markayı sil", "Delete brand")}</Button>
+        <Button type="button" variant="quiet" onClick={() => { setOpen(false); setTyped(""); }}>{L("Vazgeç", "Cancel")}</Button>
+      </div>
+    </div>
   );
 }
 

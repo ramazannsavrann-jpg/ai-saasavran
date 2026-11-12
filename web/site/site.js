@@ -74,3 +74,62 @@
       .catch(function () { btn.disabled = false; out.innerHTML = '<p class="check-msg">' + T.err + "</p>"; });
   });
 })();
+
+// Bugünün ölçümü: her gün Growth Lab'in gerçek bir sonucu (marka adları gizli). Gelmezse sabit örnek kalır.
+(function () {
+  var box = document.getElementById("daily");
+  if (!box || !window.fetch) return;
+  var en = box.getAttribute("data-lang") === "en";
+  var T = en ? {
+    h: "Today's measurement", sub: "A different real question every day from our own lab. Brand names are hidden; the numbers are as measured.",
+    q: "Question", trNote: " (asked in Turkish)", eng: { openai: "ChatGPT", claude: "Claude", gemini: "Gemini" },
+    live: "live web search", know: "no web search (model knowledge)", answers: "answers", res: "What we measured",
+    rec: function (b, n) { return "recommended in " + b.recommended + " of " + n + (b.first ? ", first pick " + b.first + "×" : ""); },
+    brand: "Brand ", src: function (k) { return "The AI read " + k + " different websites."; },
+    note: "Tomorrow there will be another question. In your report every question is asked again each week and shown with confidence ranges.",
+    c1: "Free check, no signup", c1h: "/check/", c2: "Measure your own brand"
+  } : {
+    h: "Bugünün ölçümü", sub: "Her gün kendi laboratuvarımızdan başka bir gerçek soru. Marka adlarını gizledik; sayılar ölçüldüğü gibi.",
+    q: "Soru", trNote: "", eng: { openai: "ChatGPT", claude: "Claude", gemini: "Gemini" },
+    live: "canlı web araması", know: "web araması yok (model bilgisi)", answers: "cevap", res: "Ölçtüğümüz",
+    rec: function (b, n) { return n + " cevabın " + b.recommended + " tanesinde önerildi" + (b.first ? ", " + b.first + " kez ilk sırada" : ""); },
+    brand: "Marka ", src: function (k) { return "Yapay zekâ " + k + " farklı siteye baktı."; },
+    note: "Yarın başka bir soru olacak. Raporunuzda her soru her hafta yeniden sorulur ve güven aralığıyla gösterilir.",
+    c1: "Üye olmadan ücretsiz kontrol", c1h: "/tr/kontrol/", c2: "Kendi markanızı ölçün"
+  };
+  function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+  fetch("/api/example").then(function (r) { return r.ok ? r.json() : null; }).then(function (x) {
+    if (!x || !x.brands || x.brands.length < 2) return;
+    var d = new Date(x.at);
+    var date = isNaN(d) ? "" : d.toLocaleDateString(en ? "en-GB" : "tr-TR", { day: "numeric", month: "long", year: "numeric" });
+    var h = el("h2", null, T.h); h.id = "daily-h"; box.appendChild(h);
+    box.appendChild(el("p", "muted", T.sub));
+    var ol = el("ol", "demo-steps");
+    var li1 = el("li"); li1.appendChild(el("h3", null, T.q)); li1.appendChild(el("p", "demo-q", x.question));
+    li1.appendChild(el("p", "small", (T.eng[x.provider] || x.provider) + ", " + (x.measurement_type === "live_search" ? T.live : T.know) + " · " + date + " · " + x.answers + " " + T.answers + T.trNote));
+    ol.appendChild(li1);
+    var li2 = el("li"); li2.appendChild(el("h3", null, T.res + " (" + x.answers + " " + T.answers + ")"));
+    var ul = el("ul", "demo-bars");
+    x.brands.forEach(function (b) {
+      var row = el("li");
+      row.appendChild(el("span", "nm", T.brand + b.label));
+      var tr = el("span", "track"); var f = el("span", "fill"); f.style.width = Math.round(100 * b.recommended / Math.max(1, x.answers)) + "%"; tr.appendChild(f); row.appendChild(tr);
+      row.appendChild(el("span", "k", b.recommended + "/" + x.answers));
+      row.appendChild(el("span", "d", T.rec(b, x.answers)));
+      ul.appendChild(row);
+    });
+    li2.appendChild(ul);
+    if (x.sources > 0) li2.appendChild(el("p", "small", T.src(x.sources)));
+    li2.appendChild(el("p", "small", T.note));
+    ol.appendChild(li2);
+    box.appendChild(ol);
+    var act = el("p", "actions");
+    var a1 = el("a", "btn", T.c1); a1.href = T.c1h; act.appendChild(a1);
+    var a2 = el("a", "btn ghost", T.c2); a2.href = "/kayit"; act.appendChild(a2);
+    box.appendChild(act);
+    box.hidden = false;
+    var stat = box.nextElementSibling;
+    if (stat && stat.classList.contains("demo")) stat.hidden = true;
+  }).catch(function () { /* sabit örnek kalır */ });
+})();
+

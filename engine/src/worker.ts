@@ -315,10 +315,12 @@ export async function processShoppingChecks(deps: WorkerDeps, max = 5): Promise<
 }
 
 /** Bakım: yarıda kalmış ölçümleri kapatır, önceki ayda kota nedeniyle durdurulan alanları açar. */
-export async function maintain(deps: { db: SupabaseClient }, staleMinutes = 60): Promise<{ recovered: number; resumed: number }> {
+export async function maintain(deps: { db: SupabaseClient }, staleMinutes = 60): Promise<{ recovered: number; resumed: number; compedExpired: number }> {
   const recovered = must(await deps.db.rpc("recover_stale_runs", { p_minutes: staleMinutes }), "recover_stale_runs") as number;
   const resumed = must(await deps.db.rpc("resume_quota_paused"), "resume_quota_paused") as number;
-  return { recovered, resumed };
+  // süresi dolan ücretsiz (yöneticinin verdiği) paketler Free'ye döner
+  const compedExpired = must(await deps.db.rpc("expire_comped"), "expire_comped") as number;
+  return { recovered, resumed, compedExpired };
 }
 
 /** Sıradaki ölçümleri işler. Süre bütçesi dolunca yeni ölçüm almaz; böylece iş yarıda kesilmez. */
