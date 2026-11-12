@@ -252,7 +252,7 @@ test("Migration çalıştırıcı: boş veritabanına uygular, ikinci kez uygula
   });
   const first = run();
   assert.equal(first.status, 0, first.stderr);
-  assert.match(first.stdout, /28 migration uygulandı/);
+  assert.match(first.stdout, /29 migration uygulandı/);
   const second = run();
   assert.equal(second.status, 0, second.stderr);
   assert.match(second.stdout, /güncel/);
@@ -744,4 +744,35 @@ test("Soru önerisi: yalnız editör; demo ve kısıtlı ülkede kapalı; günde
   const de = ok(await O.c.rpc("create_workspace", { p_name: "DE", p_kind: "business" })) as string;
   const bd = ok(await O.c.from("brands").insert({ workspace_id: de, name: "Berlin Kafe", country: "DE" }).select("id").single()) as any;
   assert.ok((await O.c.rpc("reserve_question_suggestion", { p_brand: bd.id })).error, "AEA'da kapalı");
+});
+
+test("Ölçüm aralığı: marka 10 günde bir; Growth Lab'de seçilen markalar ayda bir canlı, kendi markamız canlıda yok", async () => {
+  const g = ok(await svc.from("workspaces").insert({ name: "GL Aralık", kind: "growth_lab", plan: "pro", paid_live_allowed: true }).select("id").single()) as any;
+  const mk = async (name: string, every: number, live: number | null) => {
+    const b = ok(await svc.from("brands").insert({ workspace_id: g.id, name, data_origin: "live_api", auto_weekly: true, measure_every_days: every, live_every_days: live }).select("id").single()) as any;
+    ok(await svc.from("prompts").insert({ workspace_id: g.id, brand_id: b.id, text: `${name} için soru?`, intent: "comparison" }));
+    return b.id as string;
+  };
+  const own = await mk("Kendimiz", 10, null);
+  const vid = await mk("Video Konusu", 7, 30);
+  const count = (id: string, t: string) => stack.sql(`select count(*) from runs where brand_id='${id}' and status='queued' and measurement_type='${t}'`);
+  ok(await svc.rpc("schedule_weekly_runs", { p_limit: 500 }));
+  assert.equal(count(own, "model_knowledge"), "1");
+  assert.equal(count(own, "live_search"), "0", "kendi markamız otomatik canlı ölçülmez");
+  assert.equal(count(vid, "model_knowledge"), "1");
+  assert.equal(count(vid, "live_search"), "1", "video konusu canlı ölçülür");
+  // 8 gün sonra: video konusu tekrar (7 gün), kendimiz henüz değil (10 gün); canlı 30 günden önce tekrar yok
+  stack.sql(`update runs set status='done', created_at=now()-interval '8 days' where brand_id in ('${own}','${vid}')`);
+  ok(await svc.rpc("schedule_weekly_runs", { p_limit: 500 }));
+  assert.equal(count(own, "model_knowledge"), "0", "10 gün dolmadı");
+  assert.equal(count(vid, "model_knowledge"), "1");
+  assert.equal(count(vid, "live_search"), "0", "canlı ayda bir");
+  stack.sql(`update runs set status='done', created_at=now()-interval '11 days' where brand_id in ('${own}','${vid}')`);
+  ok(await svc.rpc("schedule_weekly_runs", { p_limit: 500 }));
+  assert.equal(count(own, "model_knowledge"), "1", "10 gün doldu");
+  // canlı izni olmayan çalışma alanında live_every_days yok sayılır
+  ok(await svc.from("workspaces").update({ paid_live_allowed: false }).eq("id", g.id));
+  stack.sql(`update runs set status='done', created_at=now()-interval '40 days' where brand_id='${vid}'`);
+  ok(await svc.rpc("schedule_weekly_runs", { p_limit: 500 }));
+  assert.equal(count(vid, "live_search"), "0");
 });

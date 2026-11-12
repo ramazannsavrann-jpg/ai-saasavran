@@ -62,6 +62,12 @@
 - **Rakip ürün karşılaştırması (0018):** kendi ürününe en fazla 5 rakip ürün bağlanır; son ölçüm cevaplarında yan yana, motor bazında anılma/önerilme ve "ikisi birlikte geçtiğinde kim önerildi" sayımı. Ek API maliyeti yok. Rakip üründe doğruluk kontrolü yok.
 - **AI Shopping (araştırma):** ChatGPT'nin alışveriş kartları (ürün karuseli) API cevabında yer almıyor; bu yüzden ölçülmüyor. Ölçülen, metin cevaplarındaki ürün anılmasıdır.
 
+## v1.10 (12 Kasım 2026): Growth Lab video konuları
+
+- 0029: markaya göre ölçüm aralığı (`measure_every_days`) ve yalnız Growth Lab'de otomatik canlı aralık (`live_every_days`).
+- Growth Lab: AI SaaSavran 10 günde bir ücretsiz ölçülür, otomatik canlı (ücretli) ölçümde yer almaz. Video/içerik konuları (banka, akıllı telefon, e-ticaret, havayolu): haftada bir ücretsiz Gemini, ayda bir canlı aramalı (ChatGPT + Claude). Tahmini canlı tur maliyeti ~1,3 $; toplam ücretli tavan (6 $) dolunca durur.
+- Bu veriler ana sayfadaki "bugünün ölçümü"ne de girer (marka adları harfle gizli).
+
 ## v1.9 (12 Kasım 2026): yapay zekâyla soru önerisi
 
 - 0027 + `/api/suggest`: Sorular sekmesinde "Bana soru öner": ücretsiz Gemini, sektör/şehir/rakip/mevcut sorulara göre 8 markasız soru taslağı; marka/rakip adı geçen, tekrar eden, çok kısa/uzun öneriler atılır. Editör ve üstü; çalışma alanı başına günde 5; ortak Gemini günlük sayacından düşer (440 tavan); AEA/İsviçre/Birleşik Krallık'ta kapalı.

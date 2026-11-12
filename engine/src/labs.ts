@@ -82,6 +82,59 @@ export const GROWTH_TEST = {
   ] as [string, Intent][],
 };
 
+/**
+ * Video ve içerik konuları (Growth Lab): tüketicinin ilgilendiği, tanınmış markaların yarıştığı kategoriler.
+ * Amaç: kendi verimiz birikir; videolarda ve ana sayfada marka adları gizlenerek (Marka A, B, C) kullanılır.
+ * Ölçüm: her hafta ücretsiz Gemini (aramasız); ayda bir canlı aramalı (ChatGPT + Claude, toplam ücretli tavanla sınırlı).
+ * Hedef marka seçimi önemsizdir: raporda kategorideki bütün markalar yan yana karşılaştırılır.
+ */
+export const VIDEO_TOPICS: { brand: { name: string; aliases: string[]; website: string; sector: string }; competitors: Comp[]; prompts: [string, Intent][] }[] = [
+  {
+    brand: { name: "Samsung", aliases: ["Samsung Galaxy", "Galaxy S", "Galaxy A"], website: "samsung.com", sector: "Teknoloji / elektronik" },
+    competitors: [
+      { name: "Apple", aliases: ["iPhone"], website: "apple.com" },
+      { name: "Xiaomi", aliases: ["Redmi", "Poco"], website: "mi.com" },
+      { name: "Huawei", aliases: [], website: "huawei.com" },
+      { name: "Oppo", aliases: [], website: "oppo.com" },
+    ],
+    prompts: [
+      ["Fiyat performans olarak en iyi akıllı telefon hangisi?", "comparison"],
+      ["Kamerası en iyi telefon hangisi?", "comparison"],
+      ["Öğrenci için hangi telefonu almalıyım?", "purchase"],
+      ["Pil ömrü en uzun telefon markası hangisi?", "informational"],
+    ],
+  },
+  {
+    brand: { name: "Trendyol", aliases: [], website: "trendyol.com", sector: "E-ticaret" },
+    competitors: [
+      { name: "Hepsiburada", aliases: [], website: "hepsiburada.com" },
+      { name: "Amazon", aliases: ["Amazon Türkiye", "Amazon.com.tr"], website: "amazon.com.tr" },
+      { name: "n11", aliases: ["n11.com"], website: "n11.com" },
+      { name: "Temu", aliases: [], website: "temu.com" },
+    ],
+    prompts: [
+      ["Türkiye'de en güvenilir online alışveriş sitesi hangisi?", "comparison"],
+      ["İnternetten elektronik almak için hangi siteyi önerirsin?", "purchase"],
+      ["Kargosu en hızlı alışveriş sitesi hangisi?", "comparison"],
+      ["İade süreci en kolay e-ticaret sitesi hangisi?", "informational"],
+    ],
+  },
+  {
+    brand: { name: "Türk Hava Yolları", aliases: ["THY", "Turkish Airlines"], website: "turkishairlines.com", sector: "Havayolu / seyahat" },
+    competitors: [
+      { name: "Pegasus", aliases: ["Pegasus Hava Yolları", "flypgs"], website: "flypgs.com" },
+      { name: "AJet", aliases: ["AnadoluJet"], website: "ajet.com" },
+      { name: "SunExpress", aliases: [], website: "sunexpress.com" },
+    ],
+    prompts: [
+      ["Yurt içi uçuşlarda en iyi havayolu hangisi?", "comparison"],
+      ["Ucuz uçak bileti için hangi havayolunu önerirsin?", "purchase"],
+      ["Bagaj hakkı en iyi havayolu hangisi?", "informational"],
+      ["Uçuşları en az rötar yapan havayolu hangisi?", "comparison"],
+    ],
+  },
+];
+
 function must<T>(r: { data: T | null; error: { message: string } | null }, what: string): T {
   if (r.error) throw new Error(`${what}: ${r.error.message}`);
   return r.data as T;
@@ -172,11 +225,16 @@ export async function seedLabs(db: SupabaseClient, adminEmail: string, log: (m: 
     must(await db.from("brands").update({ website: GROWTH.brand.website }).eq("id", g.id).neq("website", GROWTH.brand.website), "web sitesi güncelle");
     log("Growth Lab: zaten var.");
   }
+  // Kendi markamız: 10 günde bir ücretsiz ölçüm; otomatik canlı (ücretli) ölçümde kendimizi aramayız
+  must(await db.from("brands").update({ auto_weekly: true, measure_every_days: 10, live_every_days: null }).eq("id", g.id), "kendi marka aralığı");
   const gt = await ensureBrand(db, growth, GROWTH_TEST.brand, "live_api", GROWTH_TEST.competitors, GROWTH_TEST.prompts);
-  if (gt.created) {
-    // Test markası haftalık ücretsiz ölçüme dahil olmasın; yalnız elle ölçülür
-    must(await db.from("brands").update({ auto_weekly: false }).eq("id", gt.id), "test markası");
-    log("Growth Lab: karşılaştırma için Garanti BBVA test markası eklendi.");
+  if (gt.created) log("Growth Lab: banka kategorisi (Garanti BBVA ve rakipleri) eklendi.");
+  // Video/içerik konuları: haftada bir ücretsiz, ayda bir canlı aramalı ölçüm (banka kategorisi de dahil)
+  must(await db.from("brands").update({ auto_weekly: true, measure_every_days: 7, live_every_days: 30 }).eq("id", gt.id), "banka aralığı");
+  for (const v of VIDEO_TOPICS) {
+    const r = await ensureBrand(db, growth, v.brand, "live_api", v.competitors, v.prompts);
+    must(await db.from("brands").update({ auto_weekly: true, measure_every_days: 7, live_every_days: 30 }).eq("id", r.id), "video konusu aralığı");
+    if (r.created) log(`Growth Lab: video konusu eklendi (${v.brand.sector}).`);
   }
   // İlk canlı aramalı (ücretli) deneme ölçümü: Growth Lab'de hiç yoksa iki marka için birer kez sıraya alınır.
   // Toplam harcama veritabanındaki tavanla (app_settings.paid_total_cap_usd) sınırlıdır.
