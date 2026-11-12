@@ -475,7 +475,7 @@ test("Yeniden analiz: takma ad eklenince marka işaretlenir, işçi eski cevapla
   // Rakip ekle → ana marka işaretlenir; işçi çalışınca QNB önerildi olarak hesaplanır
   const qnb = ok(await R.c.from("brands").insert({ workspace_id: ws, name: "QNB", is_competitor: true, owner_brand_id: b.id }).select("id").single()) as any;
   assert.notEqual(stack.sql(`select reanalyze_requested_at from brands where id='${b.id}'`), "");
-  const done = await processReanalysis({ db: svc });
+  const done = await processReanalysis({ db: svc }, 500);
   assert.ok(done.some((d) => d.brandId === b.id && d.responses === 1));
   assert.equal(stack.sql(`select recommended from mentions where response_id='${resp.id}' and brand_id='${qnb.id}'`), "t");
   assert.equal(stack.sql(`select coalesce(reanalyze_requested_at::text,'') from brands where id='${b.id}'`), "", "işaret kalkmalı");
@@ -483,7 +483,7 @@ test("Yeniden analiz: takma ad eklenince marka işaretlenir, işçi eski cevapla
   ok(await R.c.from("brands").update({ aliases: ["Bonus programı"] }).eq("id", b.id));
   assert.notEqual(stack.sql(`select coalesce(reanalyze_requested_at::text,'') from brands where id='${b.id}'`), "");
   assert.match((await R.c.rpc("pending_reanalysis", { p_limit: 5 })).error?.message ?? "", /permission denied/);
-  await processReanalysis({ db: svc });
+  await processReanalysis({ db: svc }, 500);
   assert.equal(stack.sql(`select mentioned from mentions where response_id='${resp.id}' and brand_id='${b.id}'`), "t");
 });
 
