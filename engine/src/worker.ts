@@ -148,6 +148,7 @@ export async function processNextRun(deps: WorkerDeps): Promise<WorkerResult | n
     const classifyModel = env.OPENAI_MODEL || OPENAI_DEFAULT.model;
     const repetitions = ws.plan === "free" || run.measurement_type === "simulated" ? 1 : 2;
     let failed = 0;
+    let lastFailKind: ApiErrorClass | undefined;
     let ok = 0;
     const outs: { stop: StopReason; stopMessage?: string; errorClass?: ApiErrorClass; provider: string }[] = [];
     const cache = new ResponseCache<ProviderResult>(86_400_000);
@@ -188,7 +189,7 @@ export async function processNextRun(deps: WorkerDeps): Promise<WorkerResult | n
             mentioned: h.mentioned, recommended: h.recommended, cited: h.cited, rank: h.rank, classifier: classifier.get(h.brandId) ?? "rules_v3",
           }))), "anılma kaydı");
         },
-        onFailedCall: async (_pid, kind) => { failed++; await gate.recordFailure(run.workspace_id, provider.config, kind); },
+        onFailedCall: async (_pid, kind) => { failed++; lastFailKind = kind; await gate.recordFailure(run.workspace_id, provider.config, kind); },
       });
       ok += outcome.items.length;
       outs.push({ stop: outcome.stop, stopMessage: outcome.stopMessage, errorClass: outcome.errorClass, provider: provider.config.provider });
@@ -199,7 +200,10 @@ export async function processNextRun(deps: WorkerDeps): Promise<WorkerResult | n
     const c = combineStops(outs);
     const status = ok > 0 ? "done" : BUDGET_STOPS.has(c.stop) ? "budget_blocked" : "failed";
     const used = providers.filter((p) => outs.some((o) => o.provider === p.config.provider));
-    return await finish({ status, stop: c.stop, errorClass: c.errorClass, ok, failed }, used, c.stopMessage);
+    // Bütün çağrılar tek tek başarısız olduysa (ölçüm "tamamlandı" ama cevap yok) nedeni boş kalmasın
+    const errorClass = c.errorClass ?? (status === "failed" ? lastFailKind : undefined);
+    const msg = c.stopMessage ?? (status === "failed" && failed > 0 ? `Tüm çağrılar başarısız oldu (${failed})` : undefined);
+    return await finish({ status, stop: c.stop, errorClass, ok, failed }, used, msg);
   } catch (e) {
     return await finish({ status: "failed", stop: "worker_error", ok: 0, failed: 0 }, undefined, (e as Error).message);
   }

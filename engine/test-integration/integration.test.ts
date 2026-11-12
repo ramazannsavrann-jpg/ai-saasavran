@@ -175,6 +175,13 @@ test("Hata sınıfları uçtan uca: model yok / yetki hatası / anahtar yok", as
     const run = ok(await A.c.from("runs").select("error_class").eq("id", r!.runId).single()) as any;
     assert.equal(run.error_class, cls);
   }
+  // Bütün çağrılar tek tek başarısız olursa da neden kaydedilir (boş kalmaz)
+  ok(await A.c.rpc("request_run", { p_brand: brandA }));
+  const allFail = await processNextRun({ db: svc, env: ENV, sleep: noSleep, fetchFn: fakeGemini('{"error":{"message":"internal"}}', 500) as any });
+  assert.equal(allFail?.status, "failed");
+  const fr = ok(await A.c.from("runs").select("error_class,error").eq("id", allFail!.runId).single()) as any;
+  assert.ok(fr.error_class, "hata sınıfı boş kalmamalı");
+  assert.ok(fr.error, "hata metni boş kalmamalı");
   ok(await A.c.rpc("request_run", { p_brand: brandA }));
   const none = await processNextRun({ db: svc, env: {}, sleep: noSleep });
   assert.equal(none?.stop, "provider_not_configured");
