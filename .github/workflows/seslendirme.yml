@@ -14,7 +14,7 @@ jobs:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: |
           mkdir -p out
-          for v in ash onyx; do
+          for v in ash; do
             jq -n --rawfile t video/narration.txt --arg v "$v" '{model:"gpt-4o-mini-tts", voice:$v, input:$t, response_format:"mp3",
               instructions:"Türkçe konuş. Enerjik, heyecanlı, samimi bir reklam/YouTube Shorts sunucusu gibi; tempolu ama anlaşılır. Doğal Türkçe vurgu ve tonlama."}' > req.json
             curl -sS --fail-with-body https://api.openai.com/v1/audio/speech \
