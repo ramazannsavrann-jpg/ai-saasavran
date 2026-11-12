@@ -15,6 +15,7 @@ import { Forgot, Login, Signup } from "./pages/Auth";
 import { Dashboard, NewBrand, NewWorkspace } from "./pages/Dashboard";
 import { BrandPage } from "./pages/Brand";
 import { Account, AdminCustomers, DemoLab, ProductStatus } from "./pages/Misc";
+import { SharedReport } from "./pages/SharedReport";
 import { Privacy, Terms } from "./pages/Legal";
 import { L } from "./lib/i18n";
 
@@ -53,6 +54,7 @@ function App() {
       <Route path="/durum" element={<StatusRoute />} />
       <Route path="/gizlilik" element={<Privacy />} />
       <Route path="/kosullar" element={<Terms />} />
+      <Route path="/rapor/:token" element={<SharedReport />} />
       <Route element={<Private><Shell /></Private>}>
         <Route path="/panel" element={<Dashboard />} />
         <Route path="/durum-ic" element={<ProductStatus />} />

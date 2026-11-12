@@ -252,7 +252,7 @@ test("Migration çalıştırıcı: boş veritabanına uygular, ikinci kez uygula
   });
   const first = run();
   assert.equal(first.status, 0, first.stderr);
-  assert.match(first.stdout, /24 migration uygulandı/);
+  assert.match(first.stdout, /25 migration uygulandı/);
   const second = run();
   assert.equal(second.status, 0, second.stderr);
   assert.match(second.stdout, /güncel/);
@@ -645,4 +645,38 @@ test("Bugünün ölçümü: yalnız Growth Lab, markalı soru seçilmez, marka a
   // istemci çağıramaz
   const u = await user("ornek@test.local");
   assert.ok((await u.c.rpc("daily_example", { p_day: "2026-11-12" })).error);
+});
+
+test("Paylaşılan rapor: editör bağlantı üretir; bağlantıyla salt okunur rapor; iptal/süre sonrası boş; başkası üretemez", async () => {
+  const O = await user("paylas@test.local");
+  const X = await user("yabanci-paylas@test.local");
+  const ws = ok(await O.c.rpc("create_workspace", { p_name: "Paylaşım", p_kind: "business" })) as string;
+  const b = ok(await O.c.from("brands").insert({ workspace_id: ws, name: "Paylaşmarka" }).select("id").single()) as any;
+  const p = ok(await O.c.from("prompts").insert({ workspace_id: ws, brand_id: b.id, text: "Hangi kafeyi önerirsin?", intent: "local" }).select("id").single()) as any;
+  const run = ok(await svc.from("runs").insert({ workspace_id: ws, brand_id: b.id, status: "done", data_origin: "live_api", measurement_type: "model_knowledge", max_cost_usd: 1, prompts_total: 1, finished_at: new Date().toISOString() }).select("id").single()) as any;
+  const r = ok(await svc.from("responses").insert({ workspace_id: ws, run_id: run.id, prompt_id: p.id, provider: "gemini", model: "m", method: "api_no_search", repetition: 1, answer_text: "Paylaşmarka iyi", cited_urls: ["https://www.ornek.com/a"], measurement_type: "model_knowledge", data_origin: "live_api", billing: "free" }).select("id").single()) as any;
+  ok(await svc.from("mentions").insert({ response_id: r.id, workspace_id: ws, brand_id: b.id, mentioned: true, recommended: true, cited: false, rank: 1, classifier: "rules_v3" }));
+
+  assert.ok((await X.c.rpc("create_report_share", { p_brand: b.id, p_days: 30 })).error, "üye olmayan üretemez");
+  assert.ok((await O.c.rpc("create_report_share", { p_brand: b.id, p_days: 365 })).error, "en fazla 90 gün");
+  const token = ok(await O.c.rpc("create_report_share", { p_brand: b.id, p_days: 30 })) as string;
+  assert.ok((await O.c.rpc("shared_report", { p_token: token })).error, "istemci rapor fonksiyonunu doğrudan çağıramaz");
+  const rep = ok(await svc.rpc("shared_report", { p_token: token })) as any;
+  assert.equal(rep.brand.name, "Paylaşmarka");
+  assert.equal(rep.vis.model_knowledge.length, 1);
+  assert.equal(rep.vis.model_knowledge[0].recommended, 1);
+  assert.deepEqual(rep.questions.map((q: any) => [q.text, q.recommended]), [["Hangi kafeyi önerirsin?", 1]]);
+  assert.deepEqual(rep.sources, [{ domain: "ornek.com", count: 1 }]);
+  assert.ok(!JSON.stringify(rep).includes("Paylaşmarka iyi"), "cevap metni raporda olmamalı");
+  // listede görünür, yabancı görmez; iptal edilince boş
+  const list = ok(await O.c.from("report_shares").select("id,token")) as any[];
+  assert.equal(list.length, 1);
+  assert.equal((ok(await X.c.from("report_shares").select("id")) as any[]).length, 0);
+  assert.ok((await X.c.rpc("revoke_report_share", { p_share: list[0].id })).error);
+  ok(await O.c.rpc("revoke_report_share", { p_share: list[0].id }));
+  assert.equal(ok(await svc.rpc("shared_report", { p_token: token })), null);
+  // süresi dolan bağlantı da boş
+  const t2 = ok(await O.c.rpc("create_report_share", { p_brand: b.id, p_days: 1 })) as string;
+  ok(await svc.from("report_shares").update({ expires_at: "2020-01-01" }).eq("token", t2));
+  assert.equal(ok(await svc.rpc("shared_report", { p_token: t2 })), null);
 });

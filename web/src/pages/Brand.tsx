@@ -7,7 +7,7 @@ import { friendlyError } from "../lib/supabase";
 import { L, isEn } from "../lib/i18n";
 import { ERROR_CLASS_TEXT, STOP_TEXT, runStatusText } from "../lib/messages";
 import { actionImpact, compareProducts, rivalReasons, conditionMap, lossCards, productVisibility, promptKind, shoppingSources, sourceDominance, splitByKind, type LossCard, type SourceRow } from "../../../engine/src/insights.ts";
-import { competitorsInRun, formatDateTime, MIN_SAMPLE, numLoc, pct, providerLabel, rangeText, series, shareSummary, sourceOpportunities, topDomains, usd } from "../lib/report";
+import { competitorsInRun, formatDate, formatDateTime, MIN_SAMPLE, numLoc, pct, providerLabel, rangeText, series, shareSummary, sourceOpportunities, topDomains, usd } from "../lib/report";
 import { Button, Confirm, DataNotice, Empty, ErrorBox, Field, Loading, Select, TypeBadge } from "../components/ui";
 import { CompareBars, TrendChart } from "../components/Chart";
 import { buildRecommendations } from "../../../engine/src/recommendations.ts";
@@ -65,12 +65,61 @@ export function BrandPage() {
         </div>
       )}
       {tab === "rapor" && <Report brand={b} type={type} onBrandChange={brand.reload} />}
+      {tab === "rapor" && current?.kind !== "demo_lab" && b.data_origin !== "simulated" && runList.some((r) => r.status === "done") && <ReportSharePanel brand={b} />}
       {tab === "oneriler" && <Advice brand={b} type={type} runs={runs.data ?? []} onBrandChange={brand.reload} />}
       {tab === "rakipler" && <Competitors brand={b} />}
       {tab === "sorular" && <Questions brand={b} />}
       {tab === "urunler" && <Products brand={b} paidAllowed={!!current?.paid_live_allowed} />}
       {tab === "olcumler" && <RunHistory runs={runs.data ?? []} loading={runs.loading} />}
     </div>
+  );
+}
+
+/** Paylaşılabilir rapor bağlantısı: giriş yapmadan görülebilen salt okunur rapor (PDF olarak da kaydedilebilir). */
+function ReportSharePanel({ brand }: { brand: Brand }) {
+  const shares = useLoad(() => api.reportShares(brand.id), [brand.id]);
+  const [busy, setBusy] = useState(false);
+  const [err, setErr] = useState<string | null>(null);
+  const [copied, setCopied] = useState<string | null>(null);
+  const url = (t: string) => `${location.origin}/rapor/${t}`;
+  async function create(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const days = Number(new FormData(e.currentTarget).get("days") || 30);
+    setBusy(true); setErr(null);
+    try { const t = await api.createReportShare(brand.id, days); shares.reload(); await copy(t); }
+    catch (x) { setErr(friendlyError(x)); } finally { setBusy(false); }
+  }
+  async function copy(t: string) {
+    try {
+      if (navigator.share) await navigator.share({ title: `${brand.name}: ${L("yapay zekâ görünürlük raporu", "AI visibility report")}`, url: url(t) });
+      else { await navigator.clipboard.writeText(url(t)); setCopied(t); }
+    } catch { /* kullanıcı vazgeçti */ }
+  }
+  return (
+    <section className="panel stack">
+      <h2>{L("Raporu paylaş", "Share the report")}</h2>
+      <p className="muted">{L("Bağlantıyı bilen herkes giriş yapmadan raporu görür: son ölçümün sayıları, rakip karşılaştırması, sorular ve kaynak siteler. Cevap metinleri gösterilmez. Rapor sayfasında \"PDF olarak kaydet\" düğmesi var. İstediğiniz zaman iptal edebilirsiniz.", "Anyone with the link can view the report without signing in: latest numbers, competitor comparison, questions and source sites. Answer texts are not shown. The report page has a \"Save as PDF\" button. You can revoke it anytime.")}</p>
+      <form className="row-form" onSubmit={create} aria-label={L("Paylaşım bağlantısı oluştur", "Create share link")}>
+        <Select label={L("Geçerlilik", "Valid for")} name="days" defaultValue="30">
+          <option value="7">{L("7 gün", "7 days")}</option>
+          <option value="30">{L("30 gün", "30 days")}</option>
+          <option value="90">{L("90 gün", "90 days")}</option>
+        </Select>
+        <Button type="submit" busy={busy}>{L("Bağlantı oluştur", "Create link")}</Button>
+      </form>
+      <ErrorBox message={err} />
+      {(shares.data ?? []).length > 0 && (
+        <ul className="rows">{(shares.data ?? []).map((s) => (
+          <li key={s.id}>
+            <span><a href={url(s.token)} target="_blank" rel="noopener">{L("Rapor bağlantısı", "Report link")}</a><span className="q-meta">{isEn() ? `until ${formatDate(s.expires_at)}` : `${formatDate(s.expires_at)} tarihine kadar`}{copied === s.token ? L(" · kopyalandı", " · copied") : ""}</span></span>
+            <span>
+              <button className="link-btn" onClick={() => copy(s.token)}>{L("Paylaş", "Share")}</button>
+              <Confirm label={L("İptal edilsin mi?", "Revoke?")} onConfirm={async () => { await api.revokeReportShare(s.id); shares.reload(); }}>{L("İptal et", "Revoke")}</Confirm>
+            </span>
+          </li>
+        ))}</ul>
+      )}
+    </section>
   );
 }
 

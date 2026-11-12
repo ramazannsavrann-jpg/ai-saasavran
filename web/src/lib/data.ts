@@ -42,6 +42,7 @@ export interface SiteAudit {
 export interface BrandAction { id: string; brand_id: string; title: string; note: string | null; done_on: string; created_at: string }
 
 export interface Product { id: string; brand_id: string; name: string; price: string | null; facts: string | null; rival_of: string | null; rival_brand: string | null; check_requested_at: string | null; shopping_query: string | null; shopping_requested_at: string | null; created_at: string }
+export interface ReportShare { id: string; token: string; created_at: string; expires_at: string; revoked_at: string | null }
 export interface AdminWorkspace {
   id: string; name: string; kind: string; plan: string; status: string; subscription_status: string | null; comped: boolean; comped_until: string | null;
   has_paddle: boolean; owner_email: string | null; brands: number; created_at: string;
@@ -159,6 +160,11 @@ export const api = {
   async setShoppingQuery(id: string, q: string | null) { must(await sb().from("products").update({ shopping_query: q }).eq("id", id)); },
   async adminWorkspaces(): Promise<AdminWorkspace[]> { return must(await sb().rpc("admin_workspaces")); },
   async adminSetPlan(workspaceId: string, plan: string, until: string | null) { must(await sb().rpc("admin_set_plan", { p_workspace: workspaceId, p_plan: plan, p_until: until })); },
+  async reportShares(brandId: string): Promise<ReportShare[]> {
+    return must(await sb().from("report_shares").select("id,token,created_at,expires_at,revoked_at").eq("brand_id", brandId).is("revoked_at", null).gt("expires_at", new Date().toISOString()).order("created_at", { ascending: false }));
+  },
+  async createReportShare(brandId: string, days: number): Promise<string> { return must(await sb().rpc("create_report_share", { p_brand: brandId, p_days: days })); },
+  async revokeReportShare(id: string) { must(await sb().rpc("revoke_report_share", { p_share: id })); },
   async isPlatformAdmin(): Promise<boolean> {
     return must(await sb().rpc("is_platform_admin"));
   },

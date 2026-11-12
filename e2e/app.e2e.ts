@@ -286,6 +286,27 @@ test("Banka sektörü: hazır sorular, örnek rakipler, düzenleme, gerçek sır
   await shot(page, "15-rapor-karanlik");
 });
 
+test("Paylaşılan rapor: giriş yapmadan açılır, logolu başlık ve PDF düğmesi; geçersiz bağlantıda uyarı", async ({ page }) => {
+  const at = new Date().toISOString();
+  const row = (brand_id: string, brand_name: string, is_target: boolean, recommended: number) =>
+    ({ run_id: "r1", run_at: at, provider: "openai", model: "m", brand_id, brand_name, is_target, n: 4, mentioned: 4, recommended, cited: 0 });
+  await page.route("**/api/report?t=11111111-1111-1111-1111-111111111111", (r) => r.fulfill({ json: {
+    brand: { name: "Örnek Kafe", sector: "Kafe", city: "Antalya", country: "TR" }, expires_at: at,
+    vis: { live_search: [row("b1", "Örnek Kafe", true, 1), row("b2", "Rakip Kafe", false, 3)], model_knowledge: [] },
+    questions: [{ text: "Antalya'da hangi kafeyi önerirsin?", answers: 4, recommended: 1, mentioned: 4, top_competitor: "Rakip Kafe" }],
+    sources: [{ domain: "ornek-rehber.com", count: 2 }],
+  } }));
+  await page.route("**/api/report?t=22222222-2222-2222-2222-222222222222", (r) => r.fulfill({ status: 404, json: { error: "invalid" } }));
+  await page.goto("/rapor/11111111-1111-1111-1111-111111111111");
+  await expect(page.getByRole("heading", { name: "Örnek Kafe", level: 1 })).toBeVisible();
+  await expect(page.getByRole("button", { name: "PDF olarak kaydet" })).toBeVisible();
+  await expect(page.getByText("Antalya'da hangi kafeyi önerirsin?")).toBeVisible();
+  await expect(page.getByText("ornek-rehber.com")).toBeVisible();
+  await shot(page, "17-paylasilan-rapor");
+  await page.goto("/rapor/22222222-2222-2222-2222-222222222222");
+  await expect(page.getByText("Bu rapor bağlantısı geçersiz ya da süresi dolmuş")).toBeVisible();
+});
+
 test("Gizlilik ve koşullar sayfaları herkese açık, iletişim adresi ve taslak uyarısı var", async ({ page }) => {
   for (const [path, title] of [["/gizlilik", "Gizlilik politikası ve aydınlatma metni"], ["/kosullar", "Kullanım koşulları"]]) {
     await page.goto(path);
