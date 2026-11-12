@@ -1,7 +1,7 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { sb, friendlyError, isEmail, authProviders } from "../lib/supabase";
-import { t, L, isEn } from "../lib/i18n";
+import { t, L, isEn, getLang } from "../lib/i18n";
 import { LangSwitch } from "../components/Shell";
 import { Button, ErrorBox, Field } from "../components/ui";
 
@@ -95,7 +95,7 @@ export function Signup() {
     if (password.length < 8) { setErr(L("Şifre en az 8 karakter olmalı.", "Password must be at least 8 characters.")); return; }
     if (!f.get("kvkk")) { setErr(L("Devam etmek için aydınlatma metnini onaylayın.", "Accept the privacy notice to continue.")); return; }
     setBusy(true); setErr(null);
-    const { data, error } = await sb().auth.signUp({ email, password, options: { emailRedirectTo: `${location.origin}/panel` } });
+    const { data, error } = await sb().auth.signUp({ email, password, options: { emailRedirectTo: `${location.origin}/panel`, data: { lang: getLang() } } });
     setBusy(false);
     if (error) setErr(friendlyError(error));
     else if (data.session) nav("/calisma-alani/yeni");
