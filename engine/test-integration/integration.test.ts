@@ -688,6 +688,8 @@ test("Ekip daveti: sahip davet eder, davetli aynı e-postayla kabul eder; koltuk
   const ws = ok(await S.c.rpc("create_workspace", { p_name: "Ekip", p_kind: "business" })) as string;
   // Free: yalnız sahip
   assert.ok((await S.c.rpc("create_invite", { p_workspace: ws, p_email: "editor-ekip@test.local", p_role: "editor" })).error, "Free pakette davet yok");
+  ok(await svc.from("workspaces").update({ plan: "starter" }).eq("id", ws));
+  assert.ok((await S.c.rpc("create_invite", { p_workspace: ws, p_email: "editor-ekip@test.local", p_role: "editor" })).error, "Plus pakette davet yok");
   ok(await svc.from("workspaces").update({ plan: "pro" }).eq("id", ws));
   assert.ok((await S.c.rpc("create_invite", { p_workspace: ws, p_email: "gecersiz", p_role: "editor" })).error);
   const token = ok(await S.c.rpc("create_invite", { p_workspace: ws, p_email: " Editor-Ekip@test.local ", p_role: "editor" })) as string;
@@ -708,9 +710,11 @@ test("Ekip daveti: sahip davet eder, davetli aynı e-postayla kabul eder; koltuk
   ok(await S.c.rpc("set_member_role", { p_workspace: ws, p_user: E.id, p_role: "viewer" }));
   assert.ok((await S.c.rpc("set_member_role", { p_workspace: ws, p_user: S.id, p_role: "viewer" })).error, "sahip rolü değişmez");
   assert.ok((await E.c.rpc("remove_member", { p_workspace: ws, p_user: S.id })).error, "sahip çıkarılamaz");
-  // koltuk sınırı: Plus = 2 kişi (sahip + 1)
-  ok(await svc.from("workspaces").update({ plan: "starter" }).eq("id", ws));
+  // koltuk sınırı: Pro = 3 kişi (sahip + editör + 1 bekleyen davet)
+  ok(await S.c.rpc("create_invite", { p_workspace: ws, p_email: "dorduncu@test.local", p_role: "viewer" }));
   assert.ok((await S.c.rpc("create_invite", { p_workspace: ws, p_email: "ucuncu@test.local", p_role: "viewer" })).error, "koltuk dolu");
+  const d4 = ok(await S.c.from("workspace_invites").select("id").eq("email", "dorduncu@test.local").single()) as any;
+  ok(await S.c.rpc("revoke_invite", { p_invite: d4.id }));
   // kendi isteğiyle ayrılır; sonra koltuk açılır
   ok(await E.c.rpc("remove_member", { p_workspace: ws, p_user: E.id }));
   const t2 = ok(await S.c.rpc("create_invite", { p_workspace: ws, p_email: "ucuncu@test.local", p_role: "viewer" })) as string;

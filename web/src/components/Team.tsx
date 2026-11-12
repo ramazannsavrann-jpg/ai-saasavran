@@ -75,7 +75,7 @@ export function TeamPanel() {
             <Select label={L("Rol", "Role")} name="role" defaultValue="editor">
               {(isOwner ? ["admin", "editor", "viewer"] : ["editor", "viewer"]).map((r) => <option key={r} value={r}>{ROLE_TEXT[r]()}</option>)}
             </Select>
-            <p className="src-sup muted">{L("Davet edilen kişi bu e-posta adresiyle kaydolup giriş yapınca davet panelinde görünür. Ayrıca aşağıdaki davet bağlantısını kendisine gönderebilirsiniz. Davet 14 gün geçerli. Kişi sınırı paketinize göre: Plus 2, Pro 5, Business 15 kişi (sahip dahil).", "The invited person sees the invitation on their dashboard after signing up with this email. You can also send them the invitation link below. Valid for 14 days. Seats depend on your plan: Plus 2, Pro 5, Business 15 (including the owner).")}</p>
+            <p className="src-sup muted">{L("Davet edilen kişi bu e-posta adresiyle kaydolup giriş yapınca davet panelinde görünür. Ayrıca aşağıdaki davet bağlantısını kendisine gönderebilirsiniz. Davet 14 gün geçerli. Ekip daveti Pro (3 kişi) ve Business (15 kişi) paketlerinde var; sayılara sahip dahil.", "The invited person sees the invitation on their dashboard after signing up with this email. You can also send them the invitation link below. Valid for 14 days. Team invites are on Pro (3 people) and Business (15 people), including the owner.")}</p>
             <ErrorBox message={err} />
             <Button type="submit" busy={busy}>{L("Davet oluştur", "Create invitation")}</Button>
           </form>

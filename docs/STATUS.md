@@ -68,7 +68,7 @@
 
 ## v1.8 (12 Kasım 2026): ekip
 
-- 0026: ekip daveti (e-postayla; davetli aynı e-postayla giriş yapınca panelde görür ya da `/davet/<anahtar>` bağlantısıyla kabul eder; 14 gün). Roller: sahip, yönetici, düzenleyici, izleyici. Kişi sınırı (sahip dahil): Free 1, Plus 2, Pro 5, Business 15. Hesap sayfasında Ekip bölümü: rol değiştirme, çıkarma, ayrılma, davet iptali.
+- 0026: ekip daveti (e-postayla; davetli aynı e-postayla giriş yapınca panelde görür ya da `/davet/<anahtar>` bağlantısıyla kabul eder; 14 gün). Roller: sahip, yönetici, düzenleyici, izleyici. Kişi sınırı (sahip dahil): Free ve Plus yalnız sahip, Pro 3, Business 15. Hesap sayfasında Ekip bölümü: rol değiştirme, çıkarma, ayrılma, davet iptali.
 
 ## v1.7 (12 Kasım 2026): paylaşılabilir rapor
 
