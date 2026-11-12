@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useApp, useLoad } from "../lib/app";
 import { api, type AdminWorkspace } from "../lib/data";
@@ -83,6 +83,12 @@ export function Account() {
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState<string | null>(null);
   const [err, setErr] = useState<string | null>(null);
+  const [recovery, setRecovery] = useState(() => { try { return sessionStorage.getItem("recovery") === "1" || /type=recovery/.test(location.hash); } catch { return false; } });
+  useEffect(() => {
+    if (recovery) document.getElementById("yeni-sifre")?.scrollIntoView({ block: "center" });
+    const t = setInterval(() => { try { if (sessionStorage.getItem("recovery") === "1") setRecovery(true); } catch { /* yok say */ } }, 500);
+    return () => clearInterval(t);
+  }, [recovery]);
   async function changePassword(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const form = e.currentTarget;
@@ -91,7 +97,10 @@ export function Account() {
     setBusy(true); setErr(null); setMsg(null);
     const { error } = await sb().auth.updateUser({ password });
     setBusy(false);
-    if (error) setErr(friendlyError(error)); else { setMsg(L("Şifreniz güncellendi.", "Password updated.")); form.reset(); }
+    if (error) setErr(friendlyError(error)); else {
+      setMsg(L("Şifreniz güncellendi. Bundan sonra yeni şifrenizle giriş yapabilirsiniz.", "Password updated. Use your new password from now on."));
+      form.reset(); setRecovery(false); try { sessionStorage.removeItem("recovery"); } catch { /* yok say */ }
+    }
   }
   return (
     <div className="stack narrow">
@@ -100,8 +109,9 @@ export function Account() {
       <TeamPanel />
       <ApiPanel />
       <EmailPrefs />
-      <form className="panel stack" onSubmit={changePassword} noValidate>
-        <h2>{L("Şifre değiştir", "Change password")}</h2>
+      {recovery && <p className="caution" role="alert">{L("Şifre sıfırlama bağlantısıyla giriş yaptınız. Lütfen aşağıdan yeni şifrenizi belirleyin.", "You signed in with a password reset link. Please set your new password below.")}</p>}
+      <form className="panel stack" onSubmit={changePassword} noValidate id="yeni-sifre">
+        <h2>{recovery ? L("Yeni şifrenizi belirleyin", "Set your new password") : L("Şifre değiştir", "Change password")}</h2>
         <Field label={L("Yeni şifre", "New password")} name="password" type="password" autoComplete="new-password" minLength={8} hint={L("En az 8 karakter", "At least 8 characters")} />
         <ErrorBox message={err} />
         {msg && <p className="success-box">{msg}</p>}
