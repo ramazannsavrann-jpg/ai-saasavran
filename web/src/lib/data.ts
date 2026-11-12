@@ -42,6 +42,7 @@ export interface SiteAudit {
 export interface BrandAction { id: string; brand_id: string; title: string; note: string | null; done_on: string; created_at: string }
 
 export interface Product { id: string; brand_id: string; name: string; price: string | null; facts: string | null; rival_of: string | null; rival_brand: string | null; check_requested_at: string | null; shopping_query: string | null; shopping_requested_at: string | null; created_at: string }
+export interface ApiKey { id: string; name: string; prefix: string; created_at: string; last_used_at: string | null }
 export interface TeamMember { user_id: string; email: string; role: string; joined_at: string; is_me: boolean }
 export interface Invite { id: string; token: string; email: string; role: string; expires_at: string }
 export interface MyInvite { id: string; token: string; workspace_name: string; role: string; expires_at: string }
@@ -178,6 +179,11 @@ export const api = {
   async acceptInvite(token: string): Promise<string> { return must(await sb().rpc("accept_invite", { p_token: token })); },
   async setMemberRole(workspaceId: string, userId: string, role: string) { must(await sb().rpc("set_member_role", { p_workspace: workspaceId, p_user: userId, p_role: role })); },
   async removeMember(workspaceId: string, userId: string) { must(await sb().rpc("remove_member", { p_workspace: workspaceId, p_user: userId })); },
+  async apiKeys(workspaceId: string): Promise<ApiKey[]> {
+    return must(await sb().from("api_keys").select("id,name,prefix,created_at,last_used_at").eq("workspace_id", workspaceId).is("revoked_at", null).order("created_at", { ascending: false }));
+  },
+  async createApiKey(workspaceId: string, name: string): Promise<string> { return must(await sb().rpc("create_api_key", { p_workspace: workspaceId, p_name: name })); },
+  async revokeApiKey(id: string) { must(await sb().rpc("revoke_api_key", { p_key: id })); },
   async isPlatformAdmin(): Promise<boolean> {
     return must(await sb().rpc("is_platform_admin"));
   },

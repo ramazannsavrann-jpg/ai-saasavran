@@ -9,6 +9,7 @@ import { LangSwitch } from "../components/Shell";
 import { BillingPanel } from "../components/Billing";
 import { EmailPrefs } from "../components/EmailPrefs";
 import { TeamPanel } from "../components/Team";
+import { ApiPanel } from "../components/ApiPanel";
 
 type Level = "works" | "partial" | "missing";
 const STATUS: { area: string; items: [Level, string, string][] }[] = [
@@ -97,6 +98,7 @@ export function Account() {
       <header className="page-head"><h1>{L("Hesap", "Account")}</h1><p className="muted">{session?.user.email}</p></header>
       <BillingPanel />
       <TeamPanel />
+      <ApiPanel />
       <EmailPrefs />
       <form className="panel stack" onSubmit={changePassword} noValidate>
         <h2>{L("Şifre değiştir", "Change password")}</h2>

@@ -425,3 +425,5 @@ textarea { min-height: 7rem; resize: vertical; font: inherit; line-height: 1.45;
   .shared-report .report-head { display: flex !important; border-bottom: 2px solid #11705e; margin-bottom: 8px; }
   .no-print { display: none !important; }
 }
+.key-box { display: block; word-break: break-all; padding: 8px; background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius-s); font-size: .85rem; }
+pre.code { white-space: pre-wrap; word-break: break-all; padding: 8px 10px; background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius-s); font-size: .8rem; }
