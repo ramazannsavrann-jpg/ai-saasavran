@@ -6,7 +6,7 @@ import { api, INTENT_LABEL, type Brand, type Intent, type MeasurementType, type 
 import { friendlyError, sb } from "../lib/supabase";
 import { L, isEn } from "../lib/i18n";
 import { ERROR_CLASS_TEXT, STOP_TEXT, runStatusText } from "../lib/messages";
-import { actionImpact, compareProducts, engineComparison, sourcesByEngine, rivalReasons, conditionMap, lossCards, productVisibility, promptKind, shoppingSources, sourceDominance, splitByKind, type EngineCompareRow, type LossCard, type SourceRow } from "../../../engine/src/insights.ts";
+import { actionImpact, compareProducts, engineComparison, visibilityForecast, sourcesByEngine, rivalReasons, conditionMap, lossCards, productVisibility, promptKind, shoppingSources, sourceDominance, splitByKind, type EngineCompareRow, type LossCard, type SourceRow } from "../../../engine/src/insights.ts";
 import { competitorsInRun, formatDate, formatDateTime, MIN_SAMPLE, numLoc, pct, providerLabel, rangeText, series, shareSummary, sourceOpportunities, topDomains, usd } from "../lib/report";
 import { Button, Confirm, DataNotice, Empty, ErrorBox, Field, Loading, Select, TypeBadge } from "../components/ui";
 import { CompareBars, TrendChart } from "../components/Chart";
@@ -689,6 +689,21 @@ function Report({ brand, type, onBrandChange }: { brand: Brand; type: Measuremen
             </div>
             {pts.length < 2 && <p className="muted">{L("Eğilim için en az iki ölçüm gerekir. Şimdilik tek ölçüm gösteriliyor.", "A trend needs at least two measurements. Showing one for now.")}</p>}
             <TrendChart points={pts} type={type} metric={metric} />
+            {type !== "simulated" && (() => {
+              const f = visibilityForecast(pts.map((p) => ({ at: p.at, k: p.recommend.k, n: p.recommend.n })));
+              if (!f) return <p className="muted forecast-note">{L("Tahmin için en az 4 ölçüm ve 14 günlük süre gerekir.", "A forecast needs at least 4 measurements over 14 days.")}</p>;
+              return (
+                <div className="forecast">
+                  <p className="forecast-title"><span className="badge-forecast">{L("Tahmin", "Forecast")}</span> {L("gerçek ölçüm değildir", "not a measurement")}</p>
+                  <p>{isEn()
+                    ? <>If the current trend continues, the recommendation rate in {f.days} days would be around <strong>{pct(f.value)}</strong> (range {pct(f.low)}–{pct(f.high)}).</>
+                    : <>Mevcut eğilim sürerse {f.days} gün sonra önerilme oranı yaklaşık <strong>{pct(f.value)}</strong> olur (aralık {pct(f.low)}–{pct(f.high)}).</>}</p>
+                  <p className="muted">{f.trend === "flat"
+                    ? L(`Belirgin bir eğilim yok (son ${f.points} ölçüm, ${f.spanDays} gün). Değişim ölçüm oynaklığı içinde.`, `No clear trend (last ${f.points} measurements, ${f.spanDays} days). Changes are within measurement noise.`)
+                    : isEn() ? `Trend ${f.trend === "up" ? "up" : "down"} about ${Math.abs(Math.round(f.perWeek * 100))} pts per week (last ${f.points} measurements, ${f.spanDays} days).` : `Eğilim haftada yaklaşık ${Math.abs(Math.round(f.perWeek * 100))} puan ${f.trend === "up" ? "yukarı" : "aşağı"} (son ${f.points} ölçüm, ${f.spanDays} gün).`}</p>
+                </div>
+              );
+            })()}
           </section>
 
           <section className="panel">
