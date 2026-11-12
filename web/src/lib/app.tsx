@@ -38,7 +38,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
       if (data.session) await reload().catch(() => {});
       setLoading(false);
     });
-    const { data: sub } = sb().auth.onAuthStateChange((_e, s) => {
+    const { data: sub } = sb().auth.onAuthStateChange((e, s) => {
+      // Şifre sıfırlama bağlantısıyla gelindi: hesap sayfası "yeni şifre belirle" uyarısını göstersin
+      if (e === "PASSWORD_RECOVERY") { try { sessionStorage.setItem("recovery", "1"); } catch { /* yok say */ } }
       setSession(s);
       if (s) reload().catch(() => {}); else { setWorkspaces([]); setIsAdmin(false); }
     });
