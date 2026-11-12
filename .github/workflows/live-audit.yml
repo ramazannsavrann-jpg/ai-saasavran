@@ -1,0 +1,27 @@
+# Canlı site denetimi: aisaasavran.com'da gerçek isteklerle her parçayı dener (hesap açmaz, ödeme yapmaz).
+# Bu dosya ya da betik değişince, her pazartesi ve elle çalışır. Rapor: çalıştırmanın Summary sayfası.
+name: Canlı site denetimi
+on:
+  push:
+    paths:
+      - scripts/live-audit.mjs
+      - .github/workflows/live-audit.yml
+  schedule:
+    - cron: "41 6 * * 1"   # pazartesi 09:41 (İstanbul)
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Canlı siteyi denetle
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+        run: node scripts/live-audit.mjs
