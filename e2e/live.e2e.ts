@@ -21,6 +21,17 @@ test("Canlı site: açılıyor, doğru yapılandırılmış, güvenlik başlıkl
   expect(h["content-security-policy"], "CSP başlığı yok").toContain("default-src 'self'");
   expect(h["x-frame-options"]).toBe("DENY");
 
+  // Bugünün ölçümü: yalnız harf etiketleri (gerçek marka adı yok), cevap metni ve adres yok
+  const ex = await request.get(`${base}/api/example`);
+  expect([200, 404]).toContain(ex.status());
+  if (ex.status() === 200) {
+    const x = await ex.json();
+    expect(x.brands.length).toBeGreaterThanOrEqual(2);
+    for (const b of x.brands) expect(b.label).toMatch(/^[A-H]$/);
+    expect(JSON.stringify(x)).not.toMatch(/https?:\/\//);
+    expect(x).not.toHaveProperty("answer_text");
+  }
+
   // Google "Publish app" için gereken sayfalar
   for (const path of ["/gizlilik", "/kosullar"]) expect((await request.get(`${base}${path}`)).status()).toBe(200);
 
