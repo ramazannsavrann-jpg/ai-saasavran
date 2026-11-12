@@ -28,6 +28,14 @@ test("Shopping: başlık eşleşmesi tüm kelimeleri ve markayı ister; Türkçe
   assert.equal(titleMatches("Marka B Rüzgar 2 Taklit", { name: "Rüzgar 2", brand: "Marka A" }), false, "başka markanın aynı adlı ürünü");
   assert.equal(titleMatches("Rüzgar 2 koşu", { name: "Rüzgar 2", brand: "Marka A" }, "Marka A Resmi Mağaza"), true, "marka satıcı adında");
   assert.equal(titleMatches("Marka A Rüzgar 3", { name: "Rüzgar 2", brand: "Marka A" }), false, "farklı model numarası");
+  // 12 Kasım canlı kontrolü: kitap/kılavuz ve aksesuar ilanları ürünün kendisi sayılmaz
+  assert.equal(titleMatches("Sony WH-1000XM6 User Guide: Comprehensive Setup", { name: "WH-1000XM6", brand: "Sony" }), false, "kılavuz kitabı");
+  assert.equal(titleMatches("Sony WH-1000XM6 için Kulak Yastığı Süngeri", { name: "WH-1000XM6", brand: "Sony" }), false, "yedek yastık");
+  assert.equal(titleMatches("WH-1000XM6 Uyumlu Taşıma Kılıfı", { name: "WH-1000XM6", brand: "Sony" }), false, "kılıf");
+  assert.equal(titleMatches("Sony WH-1000XM6 Kulak Üstü Bluetooth Kulaklık Gümüş", { name: "WH-1000XM6", brand: "Sony" }), true);
+  assert.equal(titleMatches("WH-1000XM6 The Best Noise Cancelling Wireless Headphones", { name: "WH-1000XM6", brand: "Sony" }), true, "model kodu markasız da yeterli");
+  assert.equal(titleMatches("Sony Wh-1000XM5 Kulak Üstü Kulaklık", { name: "WH-1000XM6", brand: "Sony" }), false, "önceki model");
+  assert.equal(titleMatches("Marka A Kılıf Pro Taşıma Çantası", { name: "Kılıf Pro", brand: "Marka A" }), true, "ürün adının kendisi aksesuar kelimesi içeriyorsa");
   assert.equal(titleMatches("Marka A Rüzgar 2'yi alın", { name: "Rüzgar 2", brand: "Marka A" }), true);
 });
 

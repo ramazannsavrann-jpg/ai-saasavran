@@ -105,6 +105,21 @@ export const VIDEO_TOPICS: { brand: { name: string; aliases: string[]; website: 
     ],
   },
   {
+    brand: { name: "Sony", aliases: ["Sony WH", "Sony WF"], website: "sony.com.tr", sector: "Elektronik / kulaklık" },
+    competitors: [
+      { name: "Bose", aliases: ["QuietComfort"], website: "bose.com" },
+      { name: "Apple", aliases: ["AirPods"], website: "apple.com" },
+      { name: "JBL", aliases: [], website: "jbl.com" },
+      { name: "Sennheiser", aliases: ["Momentum"], website: "sennheiser.com" },
+    ],
+    prompts: [
+      ["En iyi gürültü önleyici kablosuz kulaklık hangisi?", "comparison"],
+      ["Uçakta ve yolculukta kullanmak için hangi kulak üstü kulaklığı önerirsin?", "purchase"],
+      ["20 bin TL civarında alınabilecek en iyi kulak üstü kulaklık hangisi?", "purchase"],
+      ["Pil ömrü en uzun gürültü önleyici kulaklık hangisi?", "informational"],
+    ],
+  },
+  {
     brand: { name: "Trendyol", aliases: [], website: "trendyol.com", sector: "E-ticaret" },
     competitors: [
       { name: "Hepsiburada", aliases: [], website: "hepsiburada.com" },
