@@ -6,7 +6,7 @@ import { api, INTENT_LABEL, type Brand, type Intent, type MeasurementType, type 
 import { friendlyError } from "../lib/supabase";
 import { L, isEn } from "../lib/i18n";
 import { ERROR_CLASS_TEXT, STOP_TEXT, runStatusText } from "../lib/messages";
-import { actionImpact, compareProducts, conditionMap, lossCards, productVisibility, promptKind, shoppingSources, sourceDominance, splitByKind, type LossCard, type SourceRow } from "../../../engine/src/insights.ts";
+import { actionImpact, compareProducts, rivalReasons, conditionMap, lossCards, productVisibility, promptKind, shoppingSources, sourceDominance, splitByKind, type LossCard, type SourceRow } from "../../../engine/src/insights.ts";
 import { competitorsInRun, formatDateTime, MIN_SAMPLE, numLoc, pct, providerLabel, rangeText, series, shareSummary, sourceOpportunities, topDomains, usd } from "../lib/report";
 import { Button, Confirm, DataNotice, Empty, ErrorBox, Field, Loading, Select, TypeBadge } from "../components/ui";
 import { CompareBars, TrendChart } from "../components/Chart";
@@ -112,6 +112,13 @@ function RivalCompare({ own, rivals, brand, answers, hasRuns, onChange, onError 
       ))}
       {rows.filter((r) => !r.isOwn && r.headToHead && r.headToHead.bothMentioned > 0).map((r) => (
         <p key={r.id} className="src-sup">{isEn() ? `${own.name} vs ${r.name}: both appeared in ${r.headToHead!.bothMentioned} answers; only yours recommended in ${r.headToHead!.ownWins}, only theirs in ${r.headToHead!.rivalWins}.` : `${own.name} ↔ ${r.name}: ${r.headToHead!.bothMentioned} cevapta ikisi birlikte geçti; yalnız sizinki ${r.headToHead!.ownWins}, yalnız onunki ${r.headToHead!.rivalWins} kez önerildi.`}</p>
+      ))}
+      {answers && rivals.length > 0 && rivalReasons(answers, own, rivals, { name: brand.name }).filter((x) => x.quotes.length > 0).map((x) => (
+        <div key={x.rivalId} className="loss-card">
+          <p className="loss-title">{isEn() ? `Why ${rows.find((r) => r.id === x.rivalId)?.name} was recommended instead of yours (${x.answers} answer${x.answers > 1 ? "s" : ""})` : `${rows.find((r) => r.id === x.rivalId)?.name} sizin yerinize neden önerildi (${x.answers} cevap)`}</p>
+          <ul>{x.quotes.map((q) => <li key={q.answerId}><span className="muted">{providerLabel(q.provider)}: </span>“{q.text}”</li>)}</ul>
+          <p className="src-sup muted">{L("Cevaplardan birebir alıntı. Bu özellikler sizin ürününüzde de varsa sitenizde ve ürün sayfanızda açıkça yazın.", "Verbatim quotes from the answers. If your product has these strengths too, state them clearly on your site and product page.")}</p>
+        </div>
       ))}
       {rows.length > 0 && <p className="src-sup muted">{L("Son ölçümün cevaplarına dayanır; ek ücret yok. Ürün adları cevaplarda farklı yazılabilir, sayımlar bu yüzden düşük kalabilir.", "Based on the latest measurement's answers; no extra cost. Product names may be written differently in answers, so counts can be low.")}</p>}
       {rivals.length > 0 && <p className="src-sup">{rivals.map((r) => <span key={r.id} className="chip-inline">{r.rival_brand ? `${r.rival_brand} ` : ""}{r.name} <button className="link-btn" onClick={async () => { try { await api.deleteProduct(r.id); onChange(); } catch (x) { onError(friendlyError(x)); } }}>{L("sil", "remove")}</button></span>)}</p>}

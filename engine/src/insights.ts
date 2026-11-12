@@ -259,6 +259,45 @@ export function splitByKind(
 // ---------------- Rakip ürün karşılaştırması ----------------
 export interface ProductCompareRow { id: string; name: string; isOwn: boolean; byEngine: Record<string, { answers: number; mentioned: number; recommended: number; low: number; high: number }>; headToHead: { bothMentioned: number; ownWins: number; rivalWins: number } | null }
 
+export interface RivalReason { rivalId: string; quotes: { provider: string; answerId: string; text: string }[]; answers: number }
+
+/** Bir cevabı cümlelere/satırlara böler (liste maddeleri ayrı satır sayılır). */
+function sentences(text: string): string[] {
+  return text.replace(/\*\*/g, "").split(/\n+|(?<=[.!?])\s+(?=[A-ZÇĞİÖŞÜ0-9"“])/).map((x) => x.replace(/^[\s\-*•#>\d.)]+/, "").trim()).filter((x) => x.length >= 12);
+}
+
+/**
+ * "Rakip ürün neden önerildi?": rakip ürünün önerildiği ama sizinkinin önerilmediği cevaplardan, rakip ürün adının
+ * geçtiği cümleleri alıntılar. Yorum yapmaz, cevabın kendi sözlerini gösterir; ek API çağrısı yok.
+ */
+export function rivalReasons(
+  answers: ProductAnswer[],
+  own: { id: string; name: string },
+  rivals: { id: string; name: string; rival_brand?: string | null }[],
+  brand: { name: string },
+  maxQuotes = 3,
+): RivalReason[] {
+  const out: RivalReason[] = [];
+  const ownRow = { id: own.id, name: own.name };
+  for (const r of rivals) {
+    const quotes: RivalReason["quotes"] = [];
+    let n = 0;
+    const names = [r.name, ...(r.rival_brand && !normalize(r.name).startsWith(normalize(r.rival_brand)) ? [`${r.rival_brand} ${r.name}`] : [])].map(normalize);
+    for (const a of answers) {
+      const rows = compareProducts([a], ownRow, [r], brand);
+      const e = (row: ProductCompareRow) => row.byEngine[a.provider];
+      const o = rows.find((x) => x.isOwn)!, x = rows.find((y) => !y.isOwn)!;
+      if (!e(x)?.recommended || e(o)?.recommended) continue;
+      n++;
+      if (quotes.length >= maxQuotes) continue;
+      const hit = sentences(a.answer_text).find((sn) => names.some((nm) => hasName(normalize(sn), nm)));
+      if (hit) quotes.push({ provider: a.provider, answerId: a.id, text: hit.length > 280 ? `${hit.slice(0, 277)}…` : hit });
+    }
+    out.push({ rivalId: r.id, quotes, answers: n });
+  }
+  return out;
+}
+
 /**
  * Kendi ürünü ve rakip ürünler aynı cevaplarda aranır. Her ürün için motor bazında anılma ve önerilme;
  * rakipler için "ikisi aynı cevapta geçtiğinde kim önerildi" sayımı. Ek API çağrısı yok; kural tabanlı.
