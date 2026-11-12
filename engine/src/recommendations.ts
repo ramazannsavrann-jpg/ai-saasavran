@@ -24,9 +24,25 @@ export interface RecInput {
   audit: { status: "ok" | "unreachable"; checks: AuditCheck[] } | null;
   /** Arayüz dili; verilmezse Türkçe. */
   lang?: "tr" | "en";
+  /** Önceki tamamlanmış ölçümün soru sonuçları (aynı ölçüm türü); ilerleme kontrolü için */
+  previousPrompts?: PromptOutcome[];
+  /** Rakip önerilirken sizin önerilmediğiniz cevaplarda kaynak gösterilen üçüncü taraf siteler (canlı arama) */
+  opportunitySites?: { domain: string; count: number }[];
+  /** Hedef markanın motorlar arası durumu (motor karşılaştırmasından) */
+  engineGap?: { ignoredBy: string[]; high: string | null; highK: number; highN: number; level: "clear" | "large" | "none" } | null;
+  /** Ürün doğruluk kontrolünde yanlış bulunan iddialar */
+  wrongClaims?: { product: string; claim: string; fact: string }[];
+  /** Google Shopping: kendi ürününüz rakip üründen geride */
+  shoppingBehind?: { product: string; ownPos: number | null; rival: string; rivalPos: number }[];
 }
 export type Priority = "yüksek" | "orta" | "düşük";
-export interface Recommendation { id: string; priority: Priority; title: string; why: string; action: string }
+export interface Recommendation {
+  id: string; priority: Priority; title: string; why: string; action: string;
+  /** Sonraki ölçümde neye bakılacak (başarı ölçütü) */
+  check?: string;
+  /** Önceki ölçüme göre durum: improved (iyileşti), same (değişmedi), worse (kötüleşti) */
+  progress?: { status: "improved" | "same" | "worse"; text: string };
+}
 
 const ORDER: Record<Priority, number> = { yüksek: 0, orta: 1, düşük: 2 };
 
@@ -133,6 +149,79 @@ export function buildRecommendations(i: RecInput): Recommendation[] {
       : { id: "model_knowledge_note", priority: "düşük", title: "Değişikliklerin etkisi zaman alabilir",
         why: "Bu ölçümler canlı web araması olmadan yapıldı; modelin bilgisi ancak yeni eğitimlerle güncellenir.",
         action: "Sitenizde yaptığınız iyileştirmeler önce canlı arama yapan asistanlarda etkisini gösterir. Aramasız ölçümde değişim haftalar veya aylar sürebilir; bu normaldir." });
+  }
+
+  // --- Kanıta dayalı ek maddeler (iyileştirme rehberi)
+  const prov = (p: string) => (p === "openai" ? "ChatGPT" : p === "claude" ? "Claude" : p === "gemini" ? "Gemini" : p);
+  if (i.engineGap && i.engineGap.ignoredBy.length > 0 && i.engineGap.high) {
+    const g = i.engineGap, names = g.ignoredBy.map(prov).join(", ");
+    add({
+      id: "engine_gap", priority: g.level === "clear" ? "yüksek" : "orta",
+      title: en ? `${names} doesn't mention you at all` : `${names} sizi hiç anmıyor`,
+      why: en ? `In the same measurement ${prov(g.high!)} recommended you in ${g.highK} of ${g.highN} answers.${g.level === "clear" ? "" : " The sample is small; confirm with the next measurement."}`
+        : `Aynı ölçümde ${prov(g.high!)} sizi ${g.highN} cevabın ${g.highK} tanesinde önerdi.${g.level === "clear" ? "" : " Örneklem küçük; sonraki ölçümle doğrulayın."}`,
+      action: en ? `Open "Engine comparison" in the report and look at the sites only ${names} reads; aim to be featured there. Engines that search the web rely on different sources.`
+        : `Rapordaki "Motor karşılaştırması" bölümünde yalnız ${names} motorunun baktığı sitelere bakın; oralarda yer almayı hedefleyin. Web'de arama yapan motorlar farklı kaynaklara dayanır.`,
+      check: en ? `Next measurement: is ${names} mentioning you at least once?` : `Sonraki ölçüm: ${names} sizi en az bir kez anıyor mu?`,
+    });
+  }
+  if (i.opportunitySites && i.opportunitySites.length > 0) {
+    const top = i.opportunitySites.slice(0, 3);
+    add({
+      id: "source_sites", priority: "orta",
+      title: en ? "Get featured on the sites that recommend your competitors" : "Rakiplerinizi öneren sitelerde yer alın",
+      why: en ? `When a competitor was recommended instead of you, the AI read: ${top.map((d) => `${d.domain} (${d.count})`).join(", ")}.`
+        : `Rakibiniz sizin yerinize önerildiğinde yapay zekâ şu sitelere baktı: ${top.map((d) => `${d.domain} (${d.count})`).join(", ")}.`,
+      action: en ? "Reach out to these sites: reviews, comparison lists, buying guides, price listings. Make sure your product data there is complete and current."
+        : "Bu sitelerle iletişime geçin: inceleme, karşılaştırma listesi, satın alma rehberi, fiyat listesi. Oradaki ürün/işletme bilgilerinizin eksiksiz ve güncel olduğundan emin olun.",
+      check: en ? "Next measurement: are these sites cited in answers that recommend you?" : "Sonraki ölçüm: bu siteler sizi öneren cevaplarda kaynak gösteriliyor mu?",
+    });
+  }
+  if (i.wrongClaims && i.wrongClaims.length > 0) {
+    const w = i.wrongClaims[0];
+    add({
+      id: "wrong_claims", priority: "yüksek",
+      title: en ? `AI states ${i.wrongClaims.length} wrong product fact${i.wrongClaims.length > 1 ? "s" : ""}` : `Yapay zekâ ürününüz hakkında ${i.wrongClaims.length} yanlış bilgi veriyor`,
+      why: en ? `${w.product}: "${w.claim}". Correct: ${w.fact}` : `${w.product}: "${w.claim}". Doğrusu: ${w.fact}`,
+      action: en ? "Fix this fact on your product page, marketplace listings and structured data (Product/Offer). Old reviews and price sites that repeat it also matter."
+        : "Bu bilgiyi ürün sayfanızda, pazar yeri ilanlarında ve yapılandırılmış veride (Product/Offer) düzeltin. Eski bilgiyi tekrarlayan inceleme ve fiyat siteleri de önemlidir.",
+      check: en ? "Next accuracy check: is the claim now correct?" : "Sonraki doğruluk kontrolü: bu iddia doğru çıkıyor mu?",
+    });
+  }
+  if (i.shoppingBehind && i.shoppingBehind.length > 0) {
+    const sb = i.shoppingBehind[0];
+    add({
+      id: "shopping_behind", priority: "orta",
+      title: en ? "A rival product ranks above yours on Google Shopping" : "Google Shopping'de rakip ürün sizden önde",
+      why: en ? `${sb.product}: ${sb.ownPos ? `position ${sb.ownPos}` : "not in the results"}; ${sb.rival}: position ${sb.rivalPos}.`
+        : `${sb.product}: ${sb.ownPos ? `${sb.ownPos}. sıra` : "sonuçlarda yok"}; ${sb.rival}: ${sb.rivalPos}. sıra.`,
+      action: en ? "Check your product feed in Merchant Center: title with the exact model name, price, stock, images, and reviews. Listings on major marketplaces also count."
+        : "Merchant Center ürün akışınızı kontrol edin: tam model adı içeren başlık, fiyat, stok, görseller ve yorumlar. Büyük pazar yerlerindeki ilanlar da sayılır.",
+      check: en ? "Next Shopping check: did your position improve?" : "Sonraki Shopping kontrolü: sıranız yükseldi mi?",
+    });
+  }
+
+  // --- Başarı ölçütleri ve önceki ölçüme göre ilerleme
+  const prev = new Map((i.previousPrompts ?? []).filter((p) => p.answers > 0).map((p) => [p.prompt_text, p]));
+  for (const r of recs) {
+    if (r.id === "absent_prompts") {
+      r.check = en ? "Next measurement: are you mentioned in these questions?" : "Sonraki ölçüm: bu sorularda anılıyor musunuz?";
+      const before = absent.filter((p) => prev.has(p.prompt_text));
+      const wasAbsent = [...prev.values()].filter((p) => p.target_mentioned === 0);
+      if (prev.size > 0) {
+        const fixed = wasAbsent.filter((p) => measured.some((m) => m.prompt_text === p.prompt_text && m.target_mentioned > 0)).length;
+        const newly = absent.filter((p) => { const b = prev.get(p.prompt_text); return b && b.target_mentioned > 0; }).length;
+        r.progress = fixed > newly
+          ? { status: "improved", text: en ? `Since the previous measurement you now appear in ${fixed} more question${fixed > 1 ? "s" : ""}.` : `Önceki ölçüme göre ${fixed} soruda artık anılıyorsunuz.` }
+          : newly > fixed
+            ? { status: "worse", text: en ? `You dropped out of ${newly} question${newly > 1 ? "s" : ""} since the previous measurement.` : `Önceki ölçüme göre ${newly} soruda artık anılmıyorsunuz.` }
+            : { status: "same", text: en ? `Same as the previous measurement (${before.length} of these were missing then too).` : `Önceki ölçümle aynı (bunların ${before.length} tanesinde o zaman da yoktunuz).` };
+      }
+    } else if (r.id === "mentioned_not_recommended") {
+      r.check = en ? "Next measurement: are you on the recommended list in these questions?" : "Sonraki ölçüm: bu sorularda öneri listesine giriyor musunuz?";
+    } else if (r.id.startsWith("audit_")) {
+      r.check ??= en ? "Next site check: is this item passing?" : "Sonraki site kontrolü: bu madde geçiyor mu?";
+    }
   }
 
   return recs.sort((a, b) => ORDER[a.priority] - ORDER[b.priority]);

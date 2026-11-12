@@ -71,10 +71,17 @@
 - Ek API maliyeti yok. Kulaklık pilot verisiyle test edildi (Marka E: ChatGPT 0/8, Claude 5/8 → "fark büyük, örneklem küçük").
 - Google Shopping: kılavuz/kitap/kılıf/yastık/"uyumlu" aksesuar ilanları ürün sayılmaz; model kodu markasız eşleşir (PR #25).
 
+## v1.14 (12 Kasım 2026): iyileştirme rehberi
+
+- "Yapılacaklar" sekmesi **İyileştirme rehberi** oldu: her maddede kanıt, ne yapılmalı, öncelik ve **başarı ölçütü** (sonraki ölçümde neye bakılacak).
+- Yeni kanıta dayalı maddeler: bir motor sizi hiç anmıyor (motor karşılaştırmasından), rakibi öneren üçüncü taraf siteler, ürün doğruluğunda yanlış bilgi, Google Shopping'de rakip ürün önde.
+- **Önceki ölçüme göre ilerleme**: anılmadığınız sorularda iyileşti / kötüleşti / aynı.
+- Kural tabanlı; yapay zekâ üretmez, ek API maliyeti yok.
+
 ## Yol haritası (12 Kasım 2026)
 
 1. Motor karşılaştırması ve öneri payı ✅ (v1.13)
-2. İyileştirme rehberi: sorun, kanıt, önerilen işlem, öncelik, sonraki ölçümde başarı kontrolü
+2. İyileştirme rehberi ✅ (v1.14)
 3. Görünürlük tahmini: gerçek ölçümden ayrı, "tahmin" etiketli; az ölçümde gösterilmez
 4. Marka algısı: yapay zekânın markaya atfettiği özellikler (premium, ucuz, güvenilir…) ve kaynakları (küçük API maliyeti)
 5. TruthGuard: yanlış bilgi, sahte istatistik, kaynak güvenilirliği denetimi (ayrı plan)

@@ -437,3 +437,9 @@ pre.code { white-space: pre-wrap; word-break: break-all; padding: 8px 10px; back
 .eng-table .gap-clear { color: #b3261e; font-weight: 700; }
 .eng-table .gap-large { color: #a15c00; font-weight: 600; }
 .eng-src { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+/* İyileştirme rehberi: başarı ölçütü ve ilerleme */
+.rec-check, .rec-progress { margin: .25rem 0 0; font-size: .92rem; }
+.rec-check span { font-weight: 600; }
+.rec-progress.rec-improved { color: var(--brand, #0f6e5c); font-weight: 600; }
+.rec-progress.rec-worse { color: #b3261e; font-weight: 600; }
+.rec-progress.rec-same { color: var(--muted, #5b6b66); }
