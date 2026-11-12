@@ -337,6 +337,16 @@ export function questionTemplates(sector: string | null, city: string | null): {
 
 }
 
+/** Satın alma sonrası sorular (garanti, iade, destek): her sektörde geçerli, marka adını içerir (raporda "markalı" sayılır). */
+export function postPurchaseTemplates(brand: string, en: boolean): { text: string; intent: Intent }[] {
+  const b = brand.trim();
+  if (!b) return [];
+  return (en
+    ? [`How does the ${b} warranty work?`, `How do I return or exchange something I bought from ${b}?`, `How can I reach ${b} customer support?`]
+    : [`${b} garantisi nasıl işliyor?`, `${b}'dan aldığım ürünü nasıl iade ederim?`, `${b} müşteri hizmetlerine nasıl ulaşırım?`]
+  ).map((text) => ({ text, intent: "post_purchase" as Intent }));
+}
+
 /** Örnek rakipler: markanın kendisi ve zaten ekli olanlar hariç. */
 export function competitorSuggestions(sector: string | null, brandName: string, existing: string[]): string[] {
   const def = sectorDef(sector);

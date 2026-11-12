@@ -6,7 +6,7 @@ import { test, before, after } from "node:test";
 import assert from "node:assert/strict";
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import { startStack } from "../../scripts/stack/stack.mjs";
-import { processNextRun } from "../src/worker.ts";
+import { processNextRun, processShoppingChecks } from "../src/worker.ts";
 
 let stack: Awaited<ReturnType<typeof startStack>>;
 let svc: SupabaseClient;
@@ -252,7 +252,7 @@ test("Migration çalıştırıcı: boş veritabanına uygular, ikinci kez uygula
   });
   const first = run();
   assert.equal(first.status, 0, first.stderr);
-  assert.match(first.stdout, /19 migration uygulandı/);
+  assert.match(first.stdout, /21 migration uygulandı/);
   const second = run();
   assert.equal(second.status, 0, second.stderr);
   assert.match(second.stdout, /güncel/);
@@ -516,4 +516,49 @@ test("Haftalık e-posta özeti: gerçek ölçümü olan kullanıcıya gider, haf
   await sendWeeklyDigests(svc, "re_test", { fetchFn: fakeResend as any, force: true });
   assert.ok(!sentTo.some((m) => m.to[0] === "a@test.local"), "abonelikten çıkan almamalı");
   assert.ok((await A.c.rpc("weekly_digest")).error, "özet verisi kullanıcıya kapalı olmalı");
+});
+
+test("Google Shopping: ücretli alanda istek → işçi SerpApi'yi arar → sıra/fiyat/rakip kaydedilir; günde bir; kota azsa durur", async () => {
+  const G = await user("shop@test.local");
+  const gws = ok(await svc.from("workspaces").insert({ name: "Shop Test", kind: "growth_lab", plan: "pro", paid_live_allowed: true }).select("id").single()) as any;
+  ok(await svc.from("workspace_members").insert({ workspace_id: gws.id, user_id: G.id, role: "owner" }));
+  const gb = ok(await G.c.from("brands").insert({ workspace_id: gws.id, name: "Marka A", country: "TR" }).select("id").single()) as any;
+  const own = ok(await G.c.from("products").insert({ workspace_id: gws.id, brand_id: gb.id, name: "Rüzgar 2", facts: "Koşu ayakkabısı, 280 gr", shopping_query: "koşu ayakkabısı" }).select("id").single()) as any;
+  const riv = ok(await G.c.from("products").insert({ workspace_id: gws.id, brand_id: gb.id, name: "Hızlı 3", rival_of: own.id, rival_brand: "Marka C" }).select("id").single()) as any;
+  // rakip ürüne ayrı istek yok
+  assert.ok((await G.c.rpc("request_shopping_check", { p_product: riv.id })).error);
+  ok(await G.c.rpc("request_shopping_check", { p_product: own.id }));
+  assert.equal(await processShoppingChecks({ db: svc, env: {} }), "SERPAPI_KEY yok");
+  const urls: string[] = [];
+  const fake = async (u: string) => {
+    urls.push(u);
+    if (u.includes("account.json")) return new Response(JSON.stringify({ total_searches_left: 200 }), { status: 200 });
+    return new Response(JSON.stringify({ shopping_results: [
+      { title: "Marka C Hızlı 3 Erkek Koşu Ayakkabısı", source: "Mağaza X", price: "2.499 TL" },
+      { title: "Marka A Rüzgar 2 Koşu Ayakkabısı", source: "Mağaza Y", price: "1.999 TL" },
+    ] }), { status: 200 });
+  };
+  const out = await processShoppingChecks({ db: svc, env: { SERPAPI_KEY: "k" }, fetchFn: fake as any }) as { productId: string; status: string }[];
+  const mine = out.find((o) => o.productId === own.id);
+  assert.equal(mine?.status, "found:2", JSON.stringify(out));
+  assert.ok(urls.some((u) => u.includes("q=ko%C5%9Fu+ayakkab%C4%B1s%C4%B1") && u.includes("gl=tr")));
+  const row = ok(await G.c.from("shopping_checks").select("own_position,own_price,own_seller,rivals,items").eq("product_id", own.id).single()) as any;
+  assert.equal(row.own_position, 2);
+  assert.equal(row.own_seller, "Mağaza Y");
+  assert.deepEqual(row.rivals.map((r: any) => [r.id, r.position]), [[riv.id, 1]]);
+  assert.equal(row.items.length, 2);
+  // başka kullanıcı göremez; istemci yazamaz; aynı gün ikinci istek yok; işçi tekrar aramaz
+  assert.equal((ok(await A.c.from("shopping_checks").select("id").eq("product_id", own.id)) as any[]).length, 0);
+  assert.ok((await G.c.from("shopping_checks").insert({ workspace_id: gws.id, product_id: own.id, query: "x", country: "TR" })).error);
+  assert.ok((await G.c.rpc("request_shopping_check", { p_product: own.id })).error);
+  urls.length = 0;
+  const again = await processShoppingChecks({ db: svc, env: { SERPAPI_KEY: "k" }, fetchFn: fake as any }) as any[];
+  assert.ok(!again.some((o) => o.productId === own.id));
+  // kalan hak azsa arama yapılmaz
+  const own2 = ok(await G.c.from("products").insert({ workspace_id: gws.id, brand_id: gb.id, name: "Fırtına", facts: "Yürüyüş ayakkabısı" }).select("id").single()) as any;
+  const low = async (u: string) => { urls.push(u); return new Response(JSON.stringify({ total_searches_left: 3 }), { status: 200 }); };
+  urls.length = 0;
+  const lowOut = await processShoppingChecks({ db: svc, env: { SERPAPI_KEY: "k" }, fetchFn: low as any }) as any[];
+  assert.equal(lowOut.find((o) => o.productId === own2.id)?.status ?? lowOut[0]?.status, "serpapi_quota_low");
+  assert.ok(urls.every((u) => u.includes("account.json")), "arama yapılmamalı");
 });

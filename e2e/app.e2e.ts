@@ -232,7 +232,7 @@ test("Banka sektörü: hazır sorular, örnek rakipler, düzenleme, gerçek sır
   // Soru düzenleme
   await page.getByRole("button", { name: "Düzenle" }).nth(1).click();
   const qForm = page.getByRole("form", { name: "Soruyu düzenle" });
-  await qForm.getByLabel("Soru").fill("Türkiye'de en iyi mobil bankacılık uygulaması hangisi sence?");
+  await qForm.getByLabel("Soru", { exact: true }).fill("Türkiye'de en iyi mobil bankacılık uygulaması hangisi sence?");
   await qForm.getByRole("button", { name: "Kaydet" }).click();
   await expect(page.getByText("Türkiye'de en iyi mobil bankacılık uygulaması hangisi sence?")).toBeVisible();
 

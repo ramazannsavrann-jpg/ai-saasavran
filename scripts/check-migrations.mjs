@@ -235,4 +235,32 @@ console.log("ok tanımsız paket atanamıyor");
   }
   console.log("ok 0018: rakip ürün yalnız kendi ürününe bağlanır; doğruluk kontrolü yalnız kendi ürününde" + (own ? "" : " (marka yok, atlandı)"));
 }
+{
+  // 0020: Google Shopping kontrolü (üretimdeki yetkiyi burada da ver; PGlite'ta anon rolü yok)
+  await db.exec(`grant execute on function request_shopping_check(uuid) to authenticated`);
+  const own = (await db.query(`select id from brands where workspace_id=$1 and not is_competitor limit 1`, [A])).rows[0];
+  if (own) {
+    await as(U1, `insert into products (workspace_id, brand_id, name, facts, shopping_query, shopping_requested_at) values ('${A}', '${own.id}', 'Model S', 'Ağırlık 9 kg, karbon kadro', 'karbon yol bisikleti', now())`);
+    const pr = (await db.query(`select id, shopping_requested_at, shopping_query from products where brand_id=$1 and name='Model S'`, [own.id])).rows[0];
+    assert.equal(pr.shopping_requested_at, null, "istemci Shopping isteğini doğrudan yazamaz");
+    assert.equal(pr.shopping_query, "karbon yol bisikleti");
+    await assert.rejects(as(U1, `select request_shopping_check('${pr.id}')`), "ücretsiz alanda kapalı");
+    await assert.rejects(as(U1, `insert into shopping_checks (workspace_id, product_id, query, country) values ('${A}', '${pr.id}', 'q', 'TR')`));
+    await assert.rejects(as(U1, `update products set shopping_query = 'x' where id='${pr.id}'`), "sorgu en az 2 karakter");
+    assert.equal((await db.query(`select count(*)::int n from pending_shopping_checks(5) where product_id=$1`, [pr.id])).rows[0].n, 0, "ücretsiz alan sıraya girmez");
+    const prevWs = (await db.query(`select kind, plan, subscription_status from workspaces where id=$1`, [A])).rows[0];
+    await db.query(`update workspaces set kind='business', plan='starter', subscription_status='active', paid_live_allowed = true where id=$1`, [A]);
+    await as(U1, `select request_shopping_check('${pr.id}')`);
+    const q = (await db.query(`select requested, shopping_query from pending_shopping_checks(5) where product_id=$1`, [pr.id])).rows[0];
+    assert.equal(q.requested, true);
+    await assert.rejects(as(U1, `select request_shopping_check('${pr.id}')`), "bekleyen istek varken ikinci istek yok");
+    await db.query(`insert into shopping_checks (workspace_id, product_id, query, country, own_position) values ($1, $2, 'q', 'TR', 3)`, [A, pr.id]);
+    assert.equal((await db.query(`select count(*)::int n from pending_shopping_checks(5) where product_id=$1`, [pr.id])).rows[0].n, 0, "yeni kontrol sonrası sıradan çıkar");
+    await assert.rejects(as(U1, `select request_shopping_check('${pr.id}')`), "günde bir kez");
+    assert.equal((await as(U1, `select own_position from shopping_checks where product_id='${pr.id}'`)).rows[0].own_position, 3, "üye kendi sonucunu okur");
+    await db.query(`update workspaces set paid_live_allowed = false, kind=$2, plan=$3, subscription_status=$4 where id=$1`, [A, prevWs.kind, prevWs.plan, prevWs.subscription_status]);
+    await db.query(`delete from products where id=$1`, [pr.id]);
+  }
+  console.log("ok 0020: Shopping isteği yalnız ücretli alanda ve fonksiyonla; günde bir; sonuçları yalnız sunucu yazar" + (own ? "" : " (marka yok, atlandı)"));
+}
 console.log("TÜM DB TESTLERİ GEÇTİ");

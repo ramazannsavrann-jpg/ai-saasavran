@@ -414,3 +414,4 @@ textarea { min-height: 7rem; resize: vertical; font: inherit; line-height: 1.45;
 
 .prod-vis { margin: 6px 0; padding: 8px 0; border-top: 1px dashed var(--line); }
 .chip-inline { display: inline-block; margin: 0 .5rem .25rem 0; }
+.shop-list { padding-left: 1.4em; margin: .3em 0; display: grid; gap: .25em; }

@@ -62,6 +62,14 @@
 - **Rakip ürün karşılaştırması (0018):** kendi ürününe en fazla 5 rakip ürün bağlanır; son ölçüm cevaplarında yan yana, motor bazında anılma/önerilme ve "ikisi birlikte geçtiğinde kim önerildi" sayımı. Ek API maliyeti yok. Rakip üründe doğruluk kontrolü yok.
 - **AI Shopping (araştırma):** ChatGPT'nin alışveriş kartları (ürün karuseli) API cevabında yer almıyor; bu yüzden ölçülmüyor. Ölçülen, metin cevaplarındaki ürün anılmasıdır.
 
+## v1.4 (12 Kasım 2026): Google Shopping
+
+- Ücretli alanlarda kendi ürünleri haftada bir (ya da "Şimdi kontrol et" ile günde en fazla bir) Google Shopping'de aranır (SerpApi, `SERPAPI_KEY`).
+- Kayıt: ürünün sırası, fiyatı, satıcısı, kaç ilanda geçtiği, rakip ürünlerin sırası ve ilk 20 ilan (`shopping_checks`, 0020).
+- İsteğe bağlı "alışveriş araması" (örn. "erkek koşu ayakkabısı"); boşsa marka + ürün adı aranır. Ülke markanın ülkesinden.
+- Bütçe: SerpApi ücretsiz paket ayda 250 arama. İşçi her çalıştırmada en fazla 5 arama yapar; kalan hak 10'un altına inince durur; anahtar/kota hatasında hemen durur; bir ürün 20 saatte en fazla bir kez denenir.
+- Sınır: Google'ın resmi Shopping okuma API'si yok; sonuçlar konuma ve kişiye göre değişebilir. ChatGPT'nin uygulama içi alışveriş karuseli hâlâ ölçülmüyor.
+
 ## v1.3 (12 Kasım 2026)
 
 - **Fiyatlar (0019):** Plus 29 $, Pro 149 $, Business 449 $ (tipik maliyetin yaklaşık 3 katı). Limitler ve tavanlar aynı. Paddle'da yeni fiyatlar yayın sırasında otomatik oluşur; site ödeme düğmeleri kurulumun ürettiği güncel kataloğu kullanır.
