@@ -709,3 +709,18 @@ test("AI alışveriş: ürünün geçtiği cevaplarda satış siteleri ve kendi 
   assert.equal(r.ownSite, 1);
   assert.deepEqual(r.marketplaces, [{ domain: "trendyol.com", answers: 2 }, { domain: "hepsiburada.com", answers: 1 }]);
 });
+
+test("Rakip ürün neden önerildi: yalnız rakibin önerilip sizinkinin önerilmediği cevaplardan, rakip adının geçtiği cümle", async () => {
+  const { rivalReasons } = await import("../src/insights.ts");
+  const answers = [
+    { id: "a1", prompt_id: "p1", provider: "openai", answer_text: "Öneriler:\n1. Model X\n2. Aero 5", cited_urls: [] },
+    { id: "a2", prompt_id: "p1", provider: "openai", answer_text: "Bu bütçede en iyisi:\n- **Güney Aero 5**: hafif karbon kadrosu ve uygun fiyatıyla öne çıkıyor.", cited_urls: [] },
+    { id: "a3", prompt_id: "p2", provider: "claude", answer_text: "Seçenekler:\n- Aero 5 uzun garantisiyle güven veriyor.", cited_urls: [] },
+    { id: "a4", prompt_id: "p3", provider: "claude", answer_text: "Bu konuda bir önerim yok.", cited_urls: [] },
+  ];
+  const [r] = rivalReasons(answers, { id: "o", name: "Kuzey Model X" }, [{ id: "r", name: "Aero 5", rival_brand: "Güney" }], { name: "Kuzey" });
+  assert.equal(r.answers, 2, "a1'de ikisi de önerildi: sayılmaz");
+  assert.deepEqual(r.quotes.map((q) => q.answerId), ["a2", "a3"]);
+  assert.equal(r.quotes[0].text, "Güney Aero 5: hafif karbon kadrosu ve uygun fiyatıyla öne çıkıyor.");
+  assert.equal(r.quotes[1].provider, "claude");
+});
