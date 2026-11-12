@@ -1,9 +1,10 @@
 import { useState, type FormEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useApp } from "../lib/app";
+import { useApp, useLoad } from "../lib/app";
+import { api, type AdminWorkspace } from "../lib/data";
 import { runtimeConfig, sb, friendlyError } from "../lib/supabase";
-import { Button, Empty, ErrorBox, Field } from "../components/ui";
-import { L } from "../lib/i18n";
+import { Button, Empty, ErrorBox, Field, Loading, Select } from "../components/ui";
+import { L, isEn } from "../lib/i18n";
 import { LangSwitch } from "../components/Shell";
 import { BillingPanel } from "../components/Billing";
 import { EmailPrefs } from "../components/EmailPrefs";
@@ -124,6 +125,7 @@ export function DemoLab() {
     <div className="stack">
       <header className="page-head">
         <h1>Demo Lab</h1>
+        <p><Link className="btn btn-quiet btn-small" to="/yonetim">{L("Müşteriler ve ücretsiz paket verme", "Customers and free plans")}</Link></p>
         <p className="lead">{L("Satış demosu ve test için hayali markalar. Buradaki ölçümler hiçbir yapay zekâ platformuna gitmez; tamamen simülasyondur ve gerçek müşteri çalışma alanlarına yazılamaz.", "Fictional brands for demos and testing. Nothing here contacts any AI platform; it is fully simulated and cannot write to real customer workspaces.")}</p>
       </header>
       {demos.length === 0 ? <Empty title={L("Henüz demo çalışma alanı yok", "No demo workspace yet")}><p>{L("Demo verisi sunucu tarafında otomatik yüklenir.", "Demo data is loaded automatically on the server.")}</p></Empty> : (
@@ -134,5 +136,62 @@ export function DemoLab() {
         </ul>
       )}
     </div>
+  );
+}
+
+const PLAN_NAMES: Record<string, string> = { free: "Free", starter: "Plus", pro: "Pro", agency: "Business" };
+
+/** Yönetici: müşteri çalışma alanları ve ücretsiz paket verme. */
+export function AdminCustomers() {
+  const { isAdmin, reload } = useApp();
+  const list = useLoad(() => (isAdmin ? api.adminWorkspaces() : Promise.resolve([])), [isAdmin]);
+  const [q, setQ] = useState("");
+  if (!isAdmin) return <Empty title={L("Bu sayfa yalnızca platform yöneticilerine açıktır", "This page is for platform admins only")} />;
+  const rows = (list.data ?? []).filter((w) => !q || `${w.name} ${w.owner_email ?? ""}`.toLocaleLowerCase("tr-TR").includes(q.toLocaleLowerCase("tr-TR")));
+  return (
+    <div className="stack">
+      <header className="page-head">
+        <h1>{L("Müşteriler", "Customers")}</h1>
+        <p className="lead">{L("Müşterilere ödeme almadan paket verebilirsiniz. Ödeme alınmaz; API maliyeti size yazılır. Paket kotaları ve aylık harcama tavanları aynen geçerlidir. Ücretli (Paddle) aboneliği olan alanlar abonelikten yönetilir.", "You can give customers a plan without payment. API costs are on you; plan quotas and monthly spend caps still apply. Workspaces with a paid (Paddle) subscription are managed by the subscription.")}</p>
+      </header>
+      <label className="field"><span>{L("Ara (ad veya e-posta)", "Search (name or email)")}</span><input value={q} onChange={(e) => setQ(e.target.value)} /></label>
+      {list.loading ? <Loading /> : list.error ? <ErrorBox message={list.error} /> : rows.length === 0 ? <Empty title={L("Müşteri yok", "No customers")} /> : (
+        <ul className="rows panel">{rows.map((w) => <AdminRow key={w.id} w={w} onChange={() => { list.reload(); reload(); }} />)}</ul>
+      )}
+    </div>
+  );
+}
+
+function AdminRow({ w, onChange }: { w: AdminWorkspace; onChange: () => void }) {
+  const [busy, setBusy] = useState(false);
+  const [err, setErr] = useState<string | null>(null);
+  const [msg, setMsg] = useState<string | null>(null);
+  async function save(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const f = new FormData(e.currentTarget);
+    const plan = String(f.get("plan"));
+    const until = String(f.get("until") || "") || null;
+    setBusy(true); setErr(null); setMsg(null);
+    try { await api.adminSetPlan(w.id, plan, plan === "free" ? null : until); setMsg(L("Kaydedildi.", "Saved.")); onChange(); }
+    catch (x) { setErr(friendlyError(x)); } finally { setBusy(false); }
+  }
+  return (
+    <li className="stack">
+      <span><strong>{w.name}</strong> <span className="q-meta">{w.owner_email ?? "?"} · {w.kind === "agency" ? L("Ajans", "Agency") : L("İşletme", "Business")} · {isEn() ? `${w.brands} brand(s)` : `${w.brands} marka`}</span></span>
+      <span className="muted">{L("Paket", "Plan")}: <strong>{PLAN_NAMES[w.plan] ?? w.plan}</strong>
+        {w.comped ? (w.comped_until ? (isEn() ? ` (free, until ${w.comped_until})` : ` (ücretsiz verildi, ${w.comped_until} tarihine kadar)`) : L(" (ücretsiz verildi, süresiz)", " (free, no end date)")) : ""}
+        {w.has_paddle ? L(" · Paddle aboneliği", " · Paddle subscription") : ""}{w.status === "paused" ? L(" · durduruldu", " · paused") : ""}</span>
+      {!w.has_paddle || !["active", "trialing", "past_due"].includes(w.subscription_status ?? "") ? (
+        <form className="stack" onSubmit={save} noValidate aria-label={isEn() ? `Plan for ${w.name}` : `${w.name} paketi`}>
+          <Select label={L("Yeni paket", "New plan")} name="plan" defaultValue={w.plan}>
+            {Object.entries(PLAN_NAMES).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
+          </Select>
+          <Field label={L("Bitiş tarihi (isteğe bağlı)", "End date (optional)")} name="until" type="date" defaultValue={w.comped_until ?? ""} hint={L("Boşsa süresiz. Tarih geçince paket kendiliğinden Free'ye döner.", "Empty means no end date. After the date the plan returns to Free automatically.")} />
+          <ErrorBox message={err} />
+          {msg && <p className="success-box" role="status">{msg}</p>}
+          <Button type="submit" variant="quiet" busy={busy}>{L("Paketi uygula", "Apply plan")}</Button>
+        </form>
+      ) : <p className="src-sup muted">{L("Bu alanın paketi Paddle aboneliğiyle yönetiliyor.", "This plan is managed by its Paddle subscription.")}</p>}
+    </li>
   );
 }

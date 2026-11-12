@@ -14,7 +14,7 @@ import { Loading } from "./components/ui";
 import { Forgot, Login, Signup } from "./pages/Auth";
 import { Dashboard, NewBrand, NewWorkspace } from "./pages/Dashboard";
 import { BrandPage } from "./pages/Brand";
-import { Account, DemoLab, ProductStatus } from "./pages/Misc";
+import { Account, AdminCustomers, DemoLab, ProductStatus } from "./pages/Misc";
 import { Privacy, Terms } from "./pages/Legal";
 import { L } from "./lib/i18n";
 
@@ -61,6 +61,7 @@ function App() {
         <Route path="/marka/:id" element={<BrandPage />} />
         <Route path="/hesap" element={<Account />} />
         <Route path="/demo-lab" element={<DemoLab />} />
+        <Route path="/yonetim" element={<AdminCustomers />} />
       </Route>
       <Route path="*" element={<Navigate to="/panel" replace />} />
     </Routes>

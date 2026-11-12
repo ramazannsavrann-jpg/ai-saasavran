@@ -34,6 +34,7 @@ export function Shell() {
           <NavLink to="/panel">{t("nav.dashboard")}</NavLink>
           <NavLink to="/durum-ic">{t("nav.status")}</NavLink>
           {isAdmin && <NavLink to="/demo-lab">{t("nav.demo")}</NavLink>}
+          {isAdmin && <NavLink to="/yonetim">{L("Müşteriler", "Customers")}</NavLink>}
           <NavLink to="/hesap">{t("nav.account")}</NavLink>
           <NavLink to="/hesap#paket" className="nav-upgrade">{paid ? L("Paketim", "My plan") : L("Paketi yükselt", "Upgrade")}</NavLink>
           <LangSwitch />

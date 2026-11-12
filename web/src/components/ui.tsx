@@ -93,7 +93,7 @@ export function Confirm({ label, onConfirm, children }: { label: string; onConfi
   return (
     <span className="confirm">
       {label}
-      <button className="link-btn danger" disabled={busy} onClick={async () => { setBusy(true); try { await onConfirm(); } finally { setBusy(false); setAsk(false); } }}>Evet, sil</button>
+      <button className="link-btn danger" disabled={busy} onClick={async () => { setBusy(true); try { await onConfirm(); } finally { setBusy(false); setAsk(false); } }}>{L("Evet, sil", "Yes, delete")}</button>
       <button className="link-btn" onClick={() => setAsk(false)}>{L("Vazgeç", "Cancel")}</button>
     </span>
   );
