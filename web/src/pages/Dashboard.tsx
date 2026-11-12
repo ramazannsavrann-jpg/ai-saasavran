@@ -4,7 +4,7 @@ import { useApp, useLoad } from "../lib/app";
 import { api, type Brand, type MeasurementType } from "../lib/data";
 import { friendlyError } from "../lib/supabase";
 import { PAUSE_TEXT } from "../lib/messages";
-import { numLoc, series, pct, usd } from "../lib/report";
+import { formatDateTime, MIN_SAMPLE, numLoc, rangeText, series, pct, usd } from "../lib/report";
 import { SECTORS } from "../lib/sectors";
 import { L, isEn } from "../lib/i18n";
 import { Button, DataNotice, Empty, ErrorBox, Field, Loading, Meter, Select, TypeBadge } from "../components/ui";
@@ -60,6 +60,8 @@ function WorkspaceView() {
         )}
       </section>
 
+      {countryGroups(own).map((g) => <CountryCompare key={g.name} name={g.name} brands={g.brands} type={type} live={ws.paid_live_allowed} />)}
+
       {u && (
         <section className="panel">
           <h2>{L("Bu ayki kullanım", "This month's usage")}</h2>
@@ -80,6 +82,50 @@ function WorkspaceView() {
         </section>
       )}
     </div>
+  );
+}
+
+/** Aynı adla birden çok ülkede takip edilen markalar (ör. "Marka A" TR ve DE). */
+function countryGroups(own: Brand[]): { name: string; brands: Brand[] }[] {
+  const by = new Map<string, Brand[]>();
+  for (const b of own) { const k = b.name.trim().toLocaleLowerCase("tr-TR"); by.set(k, [...(by.get(k) ?? []), b]); }
+  return [...by.values()].filter((bs) => new Set(bs.map((b) => (b.country || "TR").toUpperCase())).size > 1).map((bs) => ({ name: bs[0].name, brands: bs }));
+}
+
+/** Ülke karşılaştırması: aynı markanın her ülkedeki son ölçümü yan yana (canlı aramalı varsa o, yoksa aramasız). */
+function CountryCompare({ name, brands, type, live }: { name: string; brands: Brand[]; type: MeasurementType; live: boolean }) {
+  const data = useLoad(() => Promise.all(brands.map(async (b) => {
+    const lv = live ? series(await api.visibility(b.id, "live_search")) : [];
+    const mk = series(await api.visibility(b.id, type));
+    const lastLive = lv[lv.length - 1], lastMk = mk[mk.length - 1];
+    return { brand: b, live: lastLive ?? null, model: lastMk ?? null };
+  })), [brands.map((b) => b.id).join(","), type, live]);
+  const rows = data.data ?? [];
+  const hasLive = rows.some((r) => r.live);
+  const pick = (r: (typeof rows)[number]) => (hasLive ? r.live : r.model);
+  const max = Math.max(0.0001, ...rows.map((r) => pick(r)?.recommend.value ?? 0));
+  return (
+    <section className="panel">
+      <h2>{isEn() ? `${name} by country` : `${name}: ülkelere göre`}</h2>
+      <p className="muted">{hasLive ? L("Her ülkenin son canlı aramalı ölçümü (ChatGPT/Claude, o ülkeden arama). Önerilme oranı ve güven aralığı.", "Each country's latest live-search measurement (ChatGPT/Claude, searching from that country). Recommendation rate and confidence range.") : L("Her ülkenin son aramasız ölçümü (Gemini). Önerilme oranı ve güven aralığı.", "Each country's latest no-search measurement (Gemini). Recommendation rate and confidence range.")}</p>
+      {data.loading ? <Loading /> : (
+        <ul className="src-dom">
+          {[...rows].sort((a, b) => (pick(b)?.recommend.value ?? -1) - (pick(a)?.recommend.value ?? -1)).map((r) => {
+            const p = pick(r);
+            return (
+              <li key={r.brand.id}>
+                <Link to={`/marka/${r.brand.id}`} className="src-head"><span><strong>{(r.brand.country || "TR").toUpperCase()}</strong>{r.brand.city ? ` · ${r.brand.city}` : ""}</span><span className="num">{p ? pct(p.recommend.value) : "–"}</span></Link>
+                {p ? <>
+                  <div className="bar-track bar-target" aria-hidden="true"><div className="bar-fill" style={{ width: `${(100 * p.recommend.value) / max}%` }} /></div>
+                  <p className="src-sup muted">{isEn() ? `recommended in ${p.recommend.k} of ${p.recommend.n} answers (range ${rangeText(p.recommend)}), ${formatDateTime(p.at)}` : `${p.recommend.n} cevabın ${numLoc(p.recommend.k)} önerildi (aralık ${rangeText(p.recommend)}), ${formatDateTime(p.at)}`}{p.recommend.n < MIN_SAMPLE && L("; örneklem küçük", "; small sample")}</p>
+                </> : <p className="src-sup muted">{L("Bu ülkede henüz bu türde ölçüm yok.", "No measurement of this kind in this country yet.")}</p>}
+              </li>
+            );
+          })}
+        </ul>
+      )}
+      <p className="src-sup muted">{L("Ülkeler arasındaki fark, aralıklar örtüşmüyorsa anlamlıdır. Sorular ülkeye göre farklıysa doğrudan karşılaştırma yapmayın.", "A difference between countries is meaningful when the ranges don't overlap. If the questions differ by country, don't compare directly.")}</p>
+    </section>
   );
 }
 
