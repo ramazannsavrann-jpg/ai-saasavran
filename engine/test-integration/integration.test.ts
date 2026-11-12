@@ -252,7 +252,7 @@ test("Migration çalıştırıcı: boş veritabanına uygular, ikinci kez uygula
   });
   const first = run();
   assert.equal(first.status, 0, first.stderr);
-  assert.match(first.stdout, /21 migration uygulandı/);
+  assert.match(first.stdout, /22 migration uygulandı/);
   const second = run();
   assert.equal(second.status, 0, second.stderr);
   assert.match(second.stdout, /güncel/);
@@ -561,4 +561,22 @@ test("Google Shopping: ücretli alanda istek → işçi SerpApi'yi arar → sır
   const lowOut = await processShoppingChecks({ db: svc, env: { SERPAPI_KEY: "k" }, fetchFn: low as any }) as any[];
   assert.equal(lowOut.find((o) => o.productId === own2.id)?.status ?? lowOut[0]?.status, "serpapi_quota_low");
   assert.ok(urls.every((u) => u.includes("account.json")), "arama yapılmamalı");
+});
+
+test("Güvenlik: giriş yapmamış ziyaretçi oturum gerektiren fonksiyonları çağıramaz, tablolardan veri okuyamaz", async () => {
+  const anon = createClient(stack.url, stack.anonKey, { auth: { persistSession: false, autoRefreshToken: false } });
+  for (const [fn, args] of [
+    ["create_workspace", { p_name: "x", p_kind: "business" }],
+    ["billing_summary", { p_workspace: "00000000-0000-0000-0000-000000000000" }],
+    ["workspace_usage", { p_workspace: "00000000-0000-0000-0000-000000000000" }],
+    ["my_email_prefs", {}],
+    ["request_shopping_check", { p_product: "00000000-0000-0000-0000-000000000000" }],
+  ] as const) {
+    const r = await anon.rpc(fn, args as never);
+    assert.ok(r.error, `${fn} anon için açık kalmamalı`);
+  }
+  for (const t of ["workspaces", "brands", "products", "shopping_checks", "cost_ledger"]) {
+    const r = await anon.from(t).select("id").limit(1);
+    assert.ok(r.error || (r.data ?? []).length === 0, `${t} anon'a veri vermemeli`);
+  }
 });

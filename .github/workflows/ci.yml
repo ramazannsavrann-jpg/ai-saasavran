@@ -160,6 +160,10 @@ jobs:
         env:
           SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
         run: node scripts/migrate.mjs
+      - name: Güvenlik denetimi (RLS, ziyaretçi yetkileri, arama yolu)
+        env:
+          SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+        run: node scripts/security-audit.mjs
 
   labs-seed:
     name: Demo Lab ve Growth Lab'i hazırla
