@@ -252,7 +252,7 @@ test("Migration çalıştırıcı: boş veritabanına uygular, ikinci kez uygula
   });
   const first = run();
   assert.equal(first.status, 0, first.stderr);
-  assert.match(first.stdout, /26 migration uygulandı/);
+  assert.match(first.stdout, /27 migration uygulandı/);
   const second = run();
   assert.equal(second.status, 0, second.stderr);
   assert.match(second.stdout, /güncel/);
@@ -721,4 +721,27 @@ test("Ekip daveti: sahip davet eder, davetli aynı e-postayla kabul eder; koltuk
   const inv = ok(await S.c.from("workspace_invites").select("id").eq("token", t2).single()) as any;
   ok(await S.c.rpc("revoke_invite", { p_invite: inv.id }));
   assert.ok((await Y.c.rpc("accept_invite", { p_token: t2 })).error, "iptal edilen davet kullanılamaz");
+});
+
+test("Soru önerisi: yalnız editör; demo ve kısıtlı ülkede kapalı; günde 5; Gemini günlük sayacına yazılır", async () => {
+  const O = await user("oneri@test.local");
+  const X = await user("oneri-yabanci@test.local");
+  const ws = ok(await O.c.rpc("create_workspace", { p_name: "Öneri", p_kind: "business" })) as string;
+  const b = ok(await O.c.from("brands").insert({ workspace_id: ws, name: "Öneri Kafe", sector: "Kafe", city: "Antalya" }).select("id").single()) as any;
+  ok(await O.c.from("brands").insert({ workspace_id: ws, name: "Rakip Kafe", is_competitor: true, owner_brand_id: b.id }));
+  ok(await O.c.from("prompts").insert({ workspace_id: ws, brand_id: b.id, text: "Antalya'da kahve nerede içilir?", intent: "local" }));
+  assert.ok((await X.c.rpc("reserve_question_suggestion", { p_brand: b.id })).error, "üye olmayan kullanamaz");
+  const before = (ok(await svc.from("provider_daily_usage").select("calls").eq("provider", "gemini").eq("day", new Date().toISOString().slice(0, 10))) as any[])[0]?.calls ?? 0;
+  const ctx = ok(await O.c.rpc("reserve_question_suggestion", { p_brand: b.id })) as any;
+  assert.equal(ctx.name, "Öneri Kafe");
+  assert.deepEqual(ctx.competitors, ["Rakip Kafe"]);
+  assert.deepEqual(ctx.existing, ["Antalya'da kahve nerede içilir?"]);
+  const after = (ok(await svc.from("provider_daily_usage").select("calls").eq("provider", "gemini").eq("day", new Date().toISOString().slice(0, 10))) as any[])[0].calls;
+  assert.equal(after, before + 1);
+  for (let i = 0; i < 4; i++) ok(await O.c.rpc("reserve_question_suggestion", { p_brand: b.id }));
+  assert.ok((await O.c.rpc("reserve_question_suggestion", { p_brand: b.id })).error, "günde 5");
+  // kısıtlı ülke
+  const de = ok(await O.c.rpc("create_workspace", { p_name: "DE", p_kind: "business" })) as string;
+  const bd = ok(await O.c.from("brands").insert({ workspace_id: de, name: "Berlin Kafe", country: "DE" }).select("id").single()) as any;
+  assert.ok((await O.c.rpc("reserve_question_suggestion", { p_brand: bd.id })).error, "AEA'da kapalı");
 });

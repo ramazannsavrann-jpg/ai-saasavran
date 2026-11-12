@@ -3,7 +3,7 @@ import { SECTORS, competitorSuggestions, postPurchaseTemplates, questionTemplate
 import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useApp, useLoad } from "../lib/app";
 import { api, INTENT_LABEL, type Brand, type Intent, type MeasurementType, type Prompt, type Run, type Product, type ShoppingCheck } from "../lib/data";
-import { friendlyError } from "../lib/supabase";
+import { friendlyError, sb } from "../lib/supabase";
 import { L, isEn } from "../lib/i18n";
 import { ERROR_CLASS_TEXT, STOP_TEXT, runStatusText } from "../lib/messages";
 import { actionImpact, compareProducts, rivalReasons, conditionMap, lossCards, productVisibility, promptKind, shoppingSources, sourceDominance, splitByKind, type LossCard, type SourceRow } from "../../../engine/src/insights.ts";
@@ -1045,6 +1045,40 @@ function Competitors({ brand }: { brand: Brand }) {
   );
 }
 
+/** Yapay zekâyla soru önerisi: ücretsiz Gemini, markanın sektörü/şehri/rakiplerine göre müşteri gözüyle sorular (günde 5 istek). */
+function AiSuggestions({ brand, existing, onAdd, busy }: { brand: Brand; existing: Set<string>; onAdd: (text: string, intent: Intent) => Promise<void>; busy: boolean }) {
+  const [items, setItems] = useState<{ text: string; intent: Intent }[] | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [err, setErr] = useState<string | null>(null);
+  async function ask() {
+    setLoading(true); setErr(null);
+    try {
+      const { data } = await sb().auth.getSession();
+      const r = await fetch("/api/suggest", { method: "POST", headers: { "content-type": "application/json", Authorization: `Bearer ${data.session?.access_token ?? ""}` }, body: JSON.stringify({ brand_id: brand.id }) });
+      const j = await r.json().catch(() => ({}));
+      if (r.ok) setItems(j.questions ?? []);
+      else setErr(j.error === "region" ? L("Bulunduğunuz ülkede otomatik soru önerisi kullanılamıyor.", "Automatic suggestions aren't available in your country.")
+        : j.message || L("Şu an öneri alınamadı. Biraz sonra tekrar deneyin.", "Couldn't get suggestions right now. Try again shortly."));
+    } catch { setErr(L("Bağlantı hatası. Tekrar deneyin.", "Connection error. Try again.")); }
+    finally { setLoading(false); }
+  }
+  const shown = (items ?? []).filter((q) => !existing.has(q.text));
+  return (
+    <section className="panel stack">
+      <h2>{L("Yapay zekâyla soru öner", "Suggest questions with AI")}</h2>
+      <p className="muted">{L("Sektörünüze, şehrinize ve rakiplerinize göre müşterilerin soracağı soruları taslak olarak hazırlar. Marka adı içermez. Beğendiklerinizi ekleyin; ekledikten sonra düzenleyebilirsiniz. Günde 5 kez kullanılabilir.", "Drafts questions customers would ask, based on your industry, city and competitors. No brand names. Add the ones you like; you can edit them afterwards. Up to 5 times a day.")}</p>
+      <Button variant="quiet" onClick={ask} busy={loading}>{items ? L("Başka öneriler getir", "Get more suggestions") : L("Bana soru öner", "Suggest questions")}</Button>
+      <ErrorBox message={err} />
+      {items && (shown.length === 0 ? <p className="muted">{L("Yeni öneri kalmadı.", "No new suggestions left.")}</p> : (
+        <ul className="rows">{shown.map((q) => (
+          <li key={q.text}><span>{q.text}<span className="q-meta">{INTENT_LABEL[q.intent]}</span></span>
+            <button className="link-btn" disabled={busy} onClick={() => onAdd(q.text, q.intent)}>{L("Ekle", "Add")}</button></li>
+        ))}</ul>
+      ))}
+    </section>
+  );
+}
+
 function Questions({ brand }: { brand: Brand }) {
   const prompts = useLoad(() => api.prompts(brand.id), [brand.id]);
   const usage = useLoad(() => api.usage(brand.workspace_id), [brand.workspace_id]);
@@ -1092,6 +1126,8 @@ function Questions({ brand }: { brand: Brand }) {
             : <p className="muted small">{isEn() ? `Mix: ${act.length - nb} unbranded, ${nb} branded. A good start is about 80% unbranded questions, spread across researching, comparing and buying.` : `Dağılım: ${act.length - nb} markasız, ${nb} markalı. İyi bir başlangıç: soruların %80 kadarı markasız, bilgi arama, karşılaştırma ve satın alma arasında dağılmış.`}</p>;
         })()}
       </section>
+
+      {active < limit && brand.data_origin !== "simulated" && <AiSuggestions brand={brand} existing={existing} onAdd={add} busy={busy} />}
 
       {active < limit && ideas.length > 0 && (
         <section className="panel">
