@@ -259,7 +259,7 @@ test("Migration çalıştırıcı: boş veritabanına uygular, ikinci kez uygula
   });
   const first = run();
   assert.equal(first.status, 0, first.stderr);
-  assert.match(first.stdout, /30 migration uygulandı/);
+  assert.match(first.stdout, /31 migration uygulandı/);
   const second = run();
   assert.equal(second.status, 0, second.stderr);
   assert.match(second.stdout, /güncel/);
@@ -818,4 +818,26 @@ test("API/MCP anahtarı: yalnız Pro+/yönetici; özet saklanır; doğrulama, g�
   ok(await svc.from("workspaces").update({ plan: "pro" }).eq("id", ws));
   ok(await O.c.rpc("revoke_api_key", { p_key: rows[0].id }));
   assert.equal((ok(await svc.rpc("api_auth", { p_key_hash: h(key) })) as any).error, "invalid_key");
+});
+
+test("Hoş geldin e-postası: doğrulanmış yeni kullanıcıya bir kez, kayıt dilinde; istemci çağıramaz", async () => {
+  const { sendWelcomeEmails } = await import("../src/email.ts");
+  const c = createClient(stack.url, stack.anonKey, opts);
+  const { data, error } = await c.auth.signUp({ email: "hosgeldin@test.local", password: "Guclu-Sifre-123", options: { data: { lang: "tr" } } });
+  if (error) throw error;
+  const uid = data.user!.id;
+  stack.sql(`update auth.users set email_confirmed_at = coalesce(email_confirmed_at, now()) where id='${uid}'`);
+  assert.ok((await c.rpc("pending_welcome_emails", { p_limit: 50 })).error, "istemci çağıramaz");
+  const pend = ok(await svc.rpc("pending_welcome_emails", { p_limit: 500 })) as any[];
+  const me = pend.find((p) => p.user_id === uid);
+  assert.equal(me?.lang, "tr");
+  const sentTo: any[] = [];
+  const fake = (async (_u: string, init: any) => { sentTo.push(JSON.parse(init.body)); return new Response("{}", { status: 200 }); }) as any;
+  const r = await sendWelcomeEmails(svc, "re_test", { fetchFn: fake, max: 500 });
+  assert.ok(r.sent >= 1);
+  const mine = sentTo.find((m) => m.to[0] === "hosgeldin@test.local");
+  assert.match(mine.subject, /hoş geldiniz/i);
+  const again = ok(await svc.rpc("pending_welcome_emails", { p_limit: 500 })) as any[];
+  assert.ok(!again.some((p) => p.user_id === uid), "ikinci kez gönderilmez");
+  assert.deepEqual(await sendWelcomeEmails(svc, undefined), { sent: 0, failed: 0, skipped: "no_resend_key" });
 });

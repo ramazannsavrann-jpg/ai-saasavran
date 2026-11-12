@@ -4,7 +4,7 @@
 import { createClient } from "@supabase/supabase-js";
 import { maintain, processAudits, processProductChecks, processQueue, processShoppingChecks, processReanalysis, scheduleWeekly } from "../engine/src/worker.ts";
 import { seedLabs } from "../engine/src/labs.ts";
-import { sendWeeklyDigests } from "../engine/src/email.ts";
+import { sendWeeklyDigests, sendWelcomeEmails } from "../engine/src/email.ts";
 
 const { SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY } = process.env;
 if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
@@ -33,5 +33,8 @@ let digests: unknown = "RESEND_API_KEY yok";
 if (process.env.RESEND_API_KEY) {
   try { digests = await sendWeeklyDigests(db, process.env.RESEND_API_KEY); } catch (e) { digests = `hata: ${(e as Error).message}`; }
 }
-console.log(JSON.stringify({ maintenance, productChecks, shoppingChecks, weeklyScheduled: scheduled, audits, reanalyzed, digests, processed: results.length, results }, null, 2));
+// Hoş geldin e-postası (e-postasını doğrulayan yeni kullanıcıya bir kez)
+let welcome: unknown;
+try { welcome = await sendWelcomeEmails(db, process.env.RESEND_API_KEY); } catch (e) { welcome = `hata: ${(e as Error).message}`; }
+console.log(JSON.stringify({ maintenance, productChecks, shoppingChecks, weeklyScheduled: scheduled, audits, reanalyzed, digests, welcome, processed: results.length, results }, null, 2));
 if (results.some((r) => r.stop === "worker_error")) process.exit(1);

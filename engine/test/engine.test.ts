@@ -724,3 +724,17 @@ test("Rakip ürün neden önerildi: yalnız rakibin önerilip sizinkinin öneril
   assert.equal(r.quotes[0].text, "Güney Aero 5: hafif karbon kadrosu ve uygun fiyatıyla öne çıkıyor.");
   assert.equal(r.quotes[1].provider, "claude");
 });
+
+test("Hoş geldin e-postası: TR/EN içerik, adımlar, panel bağlantısı, HTML kaçışlı", async () => {
+  const { buildWelcome } = await import("../src/email.ts");
+  const tr = buildWelcome("tr"), en = buildWelcome("en");
+  assert.match(tr.subject, /hoş geldiniz/i);
+  assert.match(en.subject, /Welcome/);
+  for (const m of [tr, en]) {
+    assert.match(m.html, /https:\/\/aisaasavran\.com\/panel/);
+    assert.match(m.text, /1\. /);
+    assert.doesNotMatch(m.html, /"Bana soru öner"|"Suggest questions"/, "tırnaklar HTML'de kaçışlı olmalı");
+  }
+  assert.match(tr.text, /Bana soru öner/);
+  assert.match(tr.text, /Google Shopping/);
+});

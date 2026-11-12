@@ -99,3 +99,94 @@ export async function sendWeeklyDigests(
   }
   return { sent, failed };
 }
+
+/** Hoş geldin e-postası: yeni kullanıcıya neler yapabileceğini anlatır (EN/TR). */
+export function buildWelcome(lang: "en" | "tr"): { subject: string; html: string; text: string } {
+  const tr = lang === "tr";
+  const T = tr ? {
+    subject: "AI SaaSavran'a hoş geldiniz: ilk adımlar",
+    hello: "Hoş geldiniz! AI SaaSavran, müşterileriniz ChatGPT, Gemini ve Claude'a sorduğunda işletmenizin geçip geçmediğini ve rakiplerinizin yanında nerede durduğunu ölçer.",
+    stepsTitle: "Başlamak için 3 adım",
+    steps: [
+      "Markanızı ekleyin: sektörünüzü ve şehrinizi seçin.",
+      "Rakiplerinizi ve müşterilerinizin soracağı soruları ekleyin. Hazır soruları kullanabilir ya da \"Bana soru öner\" ile yapay zekâya taslak hazırlatabilirsiniz.",
+      "İlk ölçümü başlatın. Sonra her hafta kendiliğinden ölçülür.",
+    ],
+    canTitle: "Raporda neler var",
+    can: [
+      "Kaç cevapta anıldığınız ve önerildiğiniz; rakiplerle karşılaştırma ve haftalık değişim (güven aralığıyla).",
+      "Yapay zekânın baktığı kaynak siteler ve rakibinizi neden öne çıkardığı.",
+      "Kayıp nedeni kartları ve yapılacaklar listesi; web sitenizin yapay zekâya uygunluk kontrolü.",
+      "Her pazartesi e-postayla kısa özet.",
+    ],
+    paidTitle: "Ücretli paketlerde ayrıca",
+    paid: [
+      "ChatGPT ve Claude'un canlı web aramalı cevapları (müşterinin gördüğüne en yakın).",
+      "Ürün takibi: yapay zekâ ürününüz hakkında doğru bilgi veriyor mu, Google Shopping'de kaçıncı sıradasınız.",
+      "Paylaşılabilir rapor bağlantısı ve PDF; Pro'da ekip daveti ile yapay zekâ ajanları için API ve MCP.",
+    ],
+    cta: "Panele git", help: "Sorunuz olursa bu e-postayı yanıtlayın; size yardımcı olalım.",
+    foot: "Bu e-postayı AI SaaSavran'a kaydolduğunuz için bir kez aldınız.",
+  } : {
+    subject: "Welcome to AI SaaSavran: getting started",
+    hello: "Welcome! AI SaaSavran measures whether your business shows up when customers ask ChatGPT, Gemini and Claude, and where you stand next to your competitors.",
+    stepsTitle: "3 steps to get started",
+    steps: [
+      "Add your brand: choose your industry and city.",
+      "Add your competitors and the questions your customers would ask. Use the suggested questions or let the AI draft some with \"Suggest questions\".",
+      "Start your first measurement. After that it runs automatically every week.",
+    ],
+    canTitle: "What the report shows",
+    can: [
+      "How often you're mentioned and recommended, compared with competitors, week over week (with confidence ranges).",
+      "The websites the AI relied on and why it favoured a competitor.",
+      "Loss cards and a to-do list; a check of how AI-ready your website is.",
+      "A short summary by email every Monday.",
+    ],
+    paidTitle: "Paid plans also include",
+    paid: [
+      "ChatGPT and Claude answers with live web search (closest to what customers see).",
+      "Product tracking: is the AI accurate about your product, and where you rank on Google Shopping.",
+      "Shareable report links and PDF; on Pro, team invitations and API & MCP access for AI agents.",
+    ],
+    cta: "Go to your dashboard", help: "Questions? Just reply to this email and we'll help.",
+    foot: "You received this one-time email because you signed up for AI SaaSavran.",
+  };
+  const li = (xs: string[]) => xs.map((x) => `<li style="margin:4px 0">${esc(x)}</li>`).join("");
+  const html = `<!doctype html><html lang="${lang}"><body style="margin:0;background:#f4f6f5;font-family:Arial,sans-serif;color:#17211e">
+<div style="max-width:560px;margin:0 auto;padding:24px 16px">
+<p style="font-weight:bold;color:#11705e;font-size:18px;margin:0 0 16px">AI SaaSavran</p>
+<p>${esc(T.hello)}</p>
+<h2 style="font-size:16px;margin:20px 0 8px">${esc(T.stepsTitle)}</h2><ol style="padding-left:20px">${li(T.steps)}</ol>
+<h2 style="font-size:16px;margin:20px 0 8px">${esc(T.canTitle)}</h2><ul style="padding-left:20px">${li(T.can)}</ul>
+<h2 style="font-size:16px;margin:20px 0 8px">${esc(T.paidTitle)}</h2><ul style="padding-left:20px">${li(T.paid)}</ul>
+<p style="margin:24px 0"><a href="${SITE}/panel" style="background:#11705e;color:#fff;padding:10px 18px;border-radius:6px;text-decoration:none">${esc(T.cta)}</a></p>
+<p>${esc(T.help)}</p>
+<p style="color:#5b6b66;font-size:12px;margin-top:24px">${esc(T.foot)}</p>
+</div></body></html>`;
+  const text = [T.hello, "", T.stepsTitle, ...T.steps.map((s, i) => `${i + 1}. ${s}`), "", T.canTitle, ...T.can.map((s) => `- ${s}`), "", T.paidTitle, ...T.paid.map((s) => `- ${s}`), "", `${T.cta}: ${SITE}/panel`, "", T.help, "", T.foot].join("\n");
+  return { subject: T.subject, html, text };
+}
+
+/** Bekleyen hoş geldin e-postalarını gönderir (her işçi çalışmasında; kişi başı bir kez). */
+export async function sendWelcomeEmails(
+  db: SupabaseClient, apiKey: string | undefined, opts: { fetchFn?: FetchLike; max?: number } = {},
+): Promise<{ sent: number; failed: number; skipped?: string }> {
+  if (!apiKey) return { sent: 0, failed: 0, skipped: "no_resend_key" };
+  const fetchFn = opts.fetchFn ?? fetch;
+  const { data, error } = await db.rpc("pending_welcome_emails", { p_limit: opts.max ?? 50 });
+  if (error) throw new Error(error.message);
+  let sent = 0, failed = 0;
+  for (const u of (data ?? []) as { user_id: string; email: string; lang: string }[]) {
+    const lang = u.lang === "tr" ? "tr" : "en";
+    const m = buildWelcome(lang);
+    const res = await fetchFn("https://api.resend.com/emails", {
+      method: "POST",
+      headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
+      body: JSON.stringify({ from: "AI SaaSavran <report@aisaasavran.com>", to: [u.email], reply_to: "info@aisaasavran.com", subject: m.subject, html: m.html, text: m.text }),
+    });
+    if (res.ok) { await db.rpc("mark_welcome_sent", { p_user: u.user_id, p_lang: lang }); sent++; }
+    else { failed++; console.log("Hoş geldin e-postası gönderilemedi:", res.status); if (res.status === 401 || res.status === 403) break; }
+  }
+  return { sent, failed };
+}

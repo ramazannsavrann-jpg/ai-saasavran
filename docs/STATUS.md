@@ -62,6 +62,11 @@
 - **Rakip ürün karşılaştırması (0018):** kendi ürününe en fazla 5 rakip ürün bağlanır; son ölçüm cevaplarında yan yana, motor bazında anılma/önerilme ve "ikisi birlikte geçtiğinde kim önerildi" sayımı. Ek API maliyeti yok. Rakip üründe doğruluk kontrolü yok.
 - **AI Shopping (araştırma):** ChatGPT'nin alışveriş kartları (ürün karuseli) API cevabında yer almıyor; bu yüzden ölçülmüyor. Ölçülen, metin cevaplarındaki ürün anılmasıdır.
 
+## v1.12 (12 Kasım 2026): hoş geldin e-postası
+
+- 0031: e-postasını doğrulayan yeni kullanıcıya bir kez hoş geldin e-postası (işçi, Resend, report@aisaasavran.com; kayıt dilinde TR/EN): 3 başlangıç adımı, raporda neler var, ücretli paketlerde neler var. 12 Kasım 2026 öncesi kayıtlara gönderilmez.
+- Kayıtta arayüz dili kullanıcı bilgisine yazılır.
+
 ## v1.11 (12 Kasım 2026): API ve MCP
 
 - 0030: Pro/Business çalışma alanlarında API anahtarı (en fazla 5; yalnız SHA-256 özeti saklanır; sahip/yönetici oluşturur; günlük 1000 istek; iptal edilebilir).
