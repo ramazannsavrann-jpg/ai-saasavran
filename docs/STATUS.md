@@ -78,11 +78,17 @@
 - **Önceki ölçüme göre ilerleme**: anılmadığınız sorularda iyileşti / kötüleşti / aynı.
 - Kural tabanlı; yapay zekâ üretmez, ek API maliyeti yok.
 
+## v1.15 (12 Kasım 2026): görünürlük tahmini
+
+- "Zaman içinde" grafiğinin altında **Tahmin** kutusu (kesik çerçeve, "gerçek ölçüm değildir"): eğilim sürerse 30 gün sonraki önerilme oranı ve aralığı.
+- Ağırlıklı doğrusal eğilim (ağırlık = cevap sayısı); aralık = model belirsizliği + son ölçümün örneklem belirsizliği. Eğim aralığı sıfırı içeriyorsa "belirgin eğilim yok".
+- En az 4 ölçüm ve 14 gün yoksa tahmin gösterilmez. Simülasyonda gösterilmez. Ek API maliyeti yok.
+
 ## Yol haritası (12 Kasım 2026)
 
 1. Motor karşılaştırması ve öneri payı ✅ (v1.13)
 2. İyileştirme rehberi ✅ (v1.14)
-3. Görünürlük tahmini: gerçek ölçümden ayrı, "tahmin" etiketli; az ölçümde gösterilmez
+3. Görünürlük tahmini ✅ (v1.15)
 4. Marka algısı: yapay zekânın markaya atfettiği özellikler (premium, ucuz, güvenilir…) ve kaynakları (küçük API maliyeti)
 5. TruthGuard: yanlış bilgi, sahte istatistik, kaynak güvenilirliği denetimi (ayrı plan)
 6. Sonraki aşama: AI crawler analitiği, AI trafik ve dönüşüm, soru talebi (hacim), içerik iyileştirme, YouTube/Reddit kaynak ağı; global karşılaştırma (Global / yerel / ülkeler arası)

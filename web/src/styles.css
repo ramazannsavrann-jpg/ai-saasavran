@@ -443,3 +443,10 @@ pre.code { white-space: pre-wrap; word-break: break-all; padding: 8px 10px; back
 .rec-progress.rec-improved { color: var(--brand, #0f6e5c); font-weight: 600; }
 .rec-progress.rec-worse { color: #b3261e; font-weight: 600; }
 .rec-progress.rec-same { color: var(--muted, #5b6b66); }
+
+/* Görünürlük tahmini: gerçek ölçümden ayrı, kesik çerçeve */
+.forecast { margin-top: .75rem; padding: .75rem 1rem; border: 2px dashed var(--line, #c9d3cf); border-radius: 12px; }
+.forecast p { margin: .2rem 0; }
+.forecast-title { font-size: .85rem; color: var(--muted, #5b6b66); }
+.badge-forecast { display: inline-block; padding: .1rem .5rem; border-radius: 999px; background: #fff4d6; color: #7a5300; font-weight: 700; margin-right: .35rem; }
+.forecast-note { margin-top: .5rem; font-size: .9rem; }

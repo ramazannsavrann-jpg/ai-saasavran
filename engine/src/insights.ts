@@ -439,3 +439,40 @@ export function sourcesByEngine(answers: { provider: string; cited_urls: string[
       .map(([domain, count]) => ({ domain, count, only: [...per.keys()].every((p) => p === provider || !used(p, domain)) })),
   })).sort((a, b) => a.provider.localeCompare(b.provider));
 }
+
+// ---------------- Görünürlük tahmini ----------------
+export interface ForecastInput { at: string; k: number; n: number }
+export interface Forecast {
+  /** Tahmin edilen önerilme oranı (0–1) ve aralığı, `days` gün sonrası için */
+  value: number; low: number; high: number; days: number;
+  /** Haftalık eğim (oran puanı / hafta) ve eğilimin belirgin olup olmadığı */
+  perWeek: number; trend: "up" | "down" | "flat";
+  points: number; spanDays: number;
+}
+/**
+ * Doğrusal eğilim tahmini (ağırlıklı en küçük kareler; ağırlık = cevap sayısı). Gerçek ölçüm değildir.
+ * En az 4 ölçüm ve 14 günlük süre yoksa null döner. Eğilim, eğimin %95 aralığı sıfırı dışlıyorsa "up"/"down"; yoksa "flat".
+ */
+export function visibilityForecast(pts: ForecastInput[], days = 30, minPoints = 4, minSpanDays = 14): Forecast | null {
+  const xs = pts.filter((p) => p.n > 0).map((p) => ({ t: Date.parse(p.at) / 86_400_000, y: p.k / p.n, w: p.n })).sort((a, b) => a.t - b.t);
+  if (xs.length < minPoints) return null;
+  const t0 = xs[0].t, span = xs[xs.length - 1].t - t0;
+  if (span < minSpanDays) return null;
+  const W = xs.reduce((a, p) => a + p.w, 0);
+  const mt = xs.reduce((a, p) => a + p.w * (p.t - t0), 0) / W, my = xs.reduce((a, p) => a + p.w * p.y, 0) / W;
+  const sxx = xs.reduce((a, p) => a + p.w * (p.t - t0 - mt) ** 2, 0);
+  const sxy = xs.reduce((a, p) => a + p.w * (p.t - t0 - mt) * (p.y - my), 0);
+  const b = sxx > 0 ? sxy / sxx : 0, a = my - b * mt;
+  const resid = xs.reduce((acc, p) => acc + p.w * (p.y - (a + b * (p.t - t0))) ** 2, 0) / Math.max(1, W * (xs.length - 2) / xs.length);
+  const seB = sxx > 0 ? Math.sqrt(resid / sxx) : Infinity;
+  const tf = xs[xs.length - 1].t - t0 + days;
+  const yf = a + b * tf;
+  // Tahmin aralığı: model belirsizliği + son ölçümün örneklem belirsizliği
+  const last = xs[xs.length - 1];
+  const seFit = Math.sqrt(resid * (1 / W + (tf - mt) ** 2 / (sxx || 1)));
+  const seSample = Math.sqrt(Math.max(last.y * (1 - last.y), 0.01) / last.w);
+  const half = 1.96 * Math.sqrt(seFit ** 2 + seSample ** 2);
+  const clamp = (v: number) => Math.min(1, Math.max(0, v));
+  const trend: Forecast["trend"] = b - 1.96 * seB > 0 ? "up" : b + 1.96 * seB < 0 ? "down" : "flat";
+  return { value: clamp(yf), low: clamp(yf - half), high: clamp(yf + half), days, perWeek: b * 7, trend, points: xs.length, spanDays: Math.round(span) };
+}
