@@ -252,7 +252,7 @@ test("Migration çalıştırıcı: boş veritabanına uygular, ikinci kez uygula
   });
   const first = run();
   assert.equal(first.status, 0, first.stderr);
-  assert.match(first.stdout, /25 migration uygulandı/);
+  assert.match(first.stdout, /26 migration uygulandı/);
   const second = run();
   assert.equal(second.status, 0, second.stderr);
   assert.match(second.stdout, /güncel/);
@@ -679,4 +679,46 @@ test("Paylaşılan rapor: editör bağlantı üretir; bağlantıyla salt okunur 
   const t2 = ok(await O.c.rpc("create_report_share", { p_brand: b.id, p_days: 1 })) as string;
   ok(await svc.from("report_shares").update({ expires_at: "2020-01-01" }).eq("token", t2));
   assert.equal(ok(await svc.rpc("shared_report", { p_token: t2 })), null);
+});
+
+test("Ekip daveti: sahip davet eder, davetli aynı e-postayla kabul eder; koltuk sınırı; roller ve çıkarma kuralları", async () => {
+  const S = await user("sahip-ekip@test.local");
+  const E = await user("editor-ekip@test.local");
+  const Y = await user("baska-ekip@test.local");
+  const ws = ok(await S.c.rpc("create_workspace", { p_name: "Ekip", p_kind: "business" })) as string;
+  // Free: yalnız sahip
+  assert.ok((await S.c.rpc("create_invite", { p_workspace: ws, p_email: "editor-ekip@test.local", p_role: "editor" })).error, "Free pakette davet yok");
+  ok(await svc.from("workspaces").update({ plan: "starter" }).eq("id", ws));
+  assert.ok((await S.c.rpc("create_invite", { p_workspace: ws, p_email: "editor-ekip@test.local", p_role: "editor" })).error, "Plus pakette davet yok");
+  ok(await svc.from("workspaces").update({ plan: "pro" }).eq("id", ws));
+  assert.ok((await S.c.rpc("create_invite", { p_workspace: ws, p_email: "gecersiz", p_role: "editor" })).error);
+  const token = ok(await S.c.rpc("create_invite", { p_workspace: ws, p_email: " Editor-Ekip@test.local ", p_role: "editor" })) as string;
+  assert.ok((await S.c.rpc("create_invite", { p_workspace: ws, p_email: "editor-ekip@test.local", p_role: "viewer" })).error, "aynı adrese ikinci davet yok");
+  // davetli panelde görür; başkası göremez ve kabul edemez
+  const mine = ok(await E.c.rpc("my_invites")) as any[];
+  assert.equal(mine.length, 1);
+  assert.equal(mine[0].workspace_name, "Ekip");
+  assert.equal((ok(await Y.c.rpc("my_invites")) as any[]).length, 0);
+  assert.ok((await Y.c.rpc("accept_invite", { p_token: token })).error, "başka e-posta kabul edemez");
+  assert.equal(ok(await E.c.rpc("accept_invite", { p_token: token })), ws);
+  const team = ok(await E.c.rpc("workspace_team", { p_workspace: ws })) as any[];
+  assert.deepEqual(team.map((m) => [m.email, m.role]), [["sahip-ekip@test.local", "owner"], ["editor-ekip@test.local", "editor"]]);
+  assert.equal((ok(await Y.c.rpc("workspace_team", { p_workspace: ws })) as any[]).length, 0, "üye olmayan ekibi görmez");
+  // editör davet edemez, rol değiştiremez; sahip değiştirir
+  assert.ok((await E.c.rpc("create_invite", { p_workspace: ws, p_email: "x@test.local", p_role: "viewer" })).error);
+  assert.ok((await E.c.rpc("set_member_role", { p_workspace: ws, p_user: E.id, p_role: "admin" })).error);
+  ok(await S.c.rpc("set_member_role", { p_workspace: ws, p_user: E.id, p_role: "viewer" }));
+  assert.ok((await S.c.rpc("set_member_role", { p_workspace: ws, p_user: S.id, p_role: "viewer" })).error, "sahip rolü değişmez");
+  assert.ok((await E.c.rpc("remove_member", { p_workspace: ws, p_user: S.id })).error, "sahip çıkarılamaz");
+  // koltuk sınırı: Pro = 3 kişi (sahip + editör + 1 bekleyen davet)
+  ok(await S.c.rpc("create_invite", { p_workspace: ws, p_email: "dorduncu@test.local", p_role: "viewer" }));
+  assert.ok((await S.c.rpc("create_invite", { p_workspace: ws, p_email: "ucuncu@test.local", p_role: "viewer" })).error, "koltuk dolu");
+  const d4 = ok(await S.c.from("workspace_invites").select("id").eq("email", "dorduncu@test.local").single()) as any;
+  ok(await S.c.rpc("revoke_invite", { p_invite: d4.id }));
+  // kendi isteğiyle ayrılır; sonra koltuk açılır
+  ok(await E.c.rpc("remove_member", { p_workspace: ws, p_user: E.id }));
+  const t2 = ok(await S.c.rpc("create_invite", { p_workspace: ws, p_email: "ucuncu@test.local", p_role: "viewer" })) as string;
+  const inv = ok(await S.c.from("workspace_invites").select("id").eq("token", t2).single()) as any;
+  ok(await S.c.rpc("revoke_invite", { p_invite: inv.id }));
+  assert.ok((await Y.c.rpc("accept_invite", { p_token: t2 })).error, "iptal edilen davet kullanılamaz");
 });

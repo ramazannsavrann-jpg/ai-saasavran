@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useApp, useLoad } from "../lib/app";
 import { api, type AdminWorkspace } from "../lib/data";
 import { runtimeConfig, sb, friendlyError } from "../lib/supabase";
@@ -8,6 +8,7 @@ import { L, isEn } from "../lib/i18n";
 import { LangSwitch } from "../components/Shell";
 import { BillingPanel } from "../components/Billing";
 import { EmailPrefs } from "../components/EmailPrefs";
+import { TeamPanel } from "../components/Team";
 
 type Level = "works" | "partial" | "missing";
 const STATUS: { area: string; items: [Level, string, string][] }[] = [
@@ -95,6 +96,7 @@ export function Account() {
     <div className="stack narrow">
       <header className="page-head"><h1>{L("Hesap", "Account")}</h1><p className="muted">{session?.user.email}</p></header>
       <BillingPanel />
+      <TeamPanel />
       <EmailPrefs />
       <form className="panel stack" onSubmit={changePassword} noValidate>
         <h2>{L("Şifre değiştir", "Change password")}</h2>
@@ -193,5 +195,27 @@ function AdminRow({ w, onChange }: { w: AdminWorkspace; onChange: () => void }) 
         </form>
       ) : <p className="src-sup muted">{L("Bu alanın paketi Paddle aboneliğiyle yönetiliyor.", "This plan is managed by its Paddle subscription.")}</p>}
     </li>
+  );
+}
+
+/** Davet bağlantısı: giriş yapmış kullanıcı daveti kabul eder. */
+export function AcceptInvite() {
+  const { token = "" } = useParams();
+  const { reload, select, session } = useApp();
+  const nav = useNavigate();
+  const [err, setErr] = useState<string | null>(null);
+  const [busy, setBusy] = useState(false);
+  async function accept() {
+    setBusy(true); setErr(null);
+    try { const ws = await api.acceptInvite(token); await reload(); select(ws); nav("/panel", { replace: true }); }
+    catch (x) { setErr(friendlyError(x)); setBusy(false); }
+  }
+  return (
+    <div className="stack narrow">
+      <header className="page-head"><h1>{L("Ekip daveti", "Team invitation")}</h1>
+        <p className="muted">{isEn() ? `Signed in as ${session?.user.email}. The invitation must have been sent to this address.` : `${session?.user.email} olarak giriş yaptınız. Davet bu adrese gönderilmiş olmalı.`}</p></header>
+      <ErrorBox message={err} />
+      <Button onClick={accept} busy={busy}>{L("Daveti kabul et ve katıl", "Accept and join")}</Button>
+    </div>
   );
 }
