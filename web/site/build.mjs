@@ -100,11 +100,11 @@ const PLAN_ROWS = (en) => [
       ? ["1 brand, 15 questions, 3 competitors", "4 measurements a month (one a week, automatic)", "Gemini, model knowledge (no live search)", "Website check and recommendations"]
       : ["1 marka, 15 soru, 3 rakip", "Ayda 4 ölçüm (haftada bir, otomatik)", "Gemini, model bilgisi (canlı arama yok)", "Web sitesi kontrolü ve öneriler"], live: true },
   { name: "Plus", id: "starter", price: "$29", per: en ? "/month" : "/ay", items: en
-      ? ["1 brand, 25 questions, 5 competitors", "ChatGPT and Claude with live web search + Gemini", "Every week: ChatGPT and Gemini ask each question twice, Claude once", "Which websites the AI cited", "Products: AI accuracy check and weekly Google Shopping position", "2 team members, shareable report link and PDF"]
-      : ["1 marka, 25 soru, 5 rakip", "ChatGPT ve Claude canlı web araması + Gemini", "Her hafta: ChatGPT ve Gemini her soruyu 2 kez, Claude 1 kez sorar", "Yapay zekânın baktığı kaynak siteler", "Ürünler: yapay zekâ doğruluk kontrolü ve haftalık Google Shopping sırası", "2 kişilik ekip, paylaşılabilir rapor bağlantısı ve PDF"] },
+      ? ["1 brand, 25 questions, 5 competitors", "ChatGPT and Claude with live web search + Gemini", "Every week: ChatGPT and Gemini ask each question twice, Claude once", "Which websites the AI cited", "Products: AI accuracy check and weekly Google Shopping position", "Shareable report link and PDF"]
+      : ["1 marka, 25 soru, 5 rakip", "ChatGPT ve Claude canlı web araması + Gemini", "Her hafta: ChatGPT ve Gemini her soruyu 2 kez, Claude 1 kez sorar", "Yapay zekânın baktığı kaynak siteler", "Ürünler: yapay zekâ doğruluk kontrolü ve haftalık Google Shopping sırası", "Paylaşılabilir rapor bağlantısı ve PDF"] },
   { name: "Pro", id: "pro", price: "$149", per: en ? "/month" : "/ay", items: en
-      ? ["5 brands, 30 questions each", "8 competitors per brand", "5 team members", "Everything in Plus", "For multi-location businesses and freelancers"]
-      : ["5 marka, her biri 30 soru", "Marka başına 8 rakip", "5 kişilik ekip", "Plus'taki her şey", "Çok şubeli işletmeler ve serbest çalışanlar için"] },
+      ? ["5 brands, 30 questions each", "8 competitors per brand", "Team of 3", "Everything in Plus", "For multi-location businesses and freelancers"]
+      : ["5 marka, her biri 30 soru", "Marka başına 8 rakip", "3 kişilik ekip", "Plus'taki her şey", "Çok şubeli işletmeler ve serbest çalışanlar için"] },
   { name: "Business", id: "agency", price: "$449", per: en ? "/month" : "/ay", items: en
       ? ["15 brands, 30 questions each", "10 competitors per brand", "15 team members", "Everything in Pro", "For agencies managing client brands"]
       : ["15 marka, her biri 30 soru", "Marka başına 10 rakip", "15 kişilik ekip", "Pro'daki her şey", "Müşteri markalarını yöneten ajanslar için"] },

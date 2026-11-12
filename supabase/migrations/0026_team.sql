@@ -1,7 +1,8 @@
 -- 0026: Ekip daveti. Sahip/yönetici e-posta adresiyle davet eder; davet edilen kişi aynı e-postayla giriş yapınca
--- panelde daveti görür ve kabul eder (ya da davet bağlantısını açar). Paket başına kişi sınırı (sahip dahil).
+-- panelde daveti görür ve kabul eder (ya da davet bağlantısını açar). Paket başına kişi sınırı (sahip dahil):
+-- Free ve Plus yalnız sahip; Pro 3 kişi; Business 15 kişi.
 alter table plans add column max_members int not null default 1 check (max_members >= 1);
-update plans set max_members = case id when 'free' then 1 when 'starter' then 2 when 'pro' then 5 when 'agency' then 15 else 50 end;
+update plans set max_members = case id when 'free' then 1 when 'starter' then 1 when 'pro' then 3 when 'agency' then 15 else 50 end;
 
 create table workspace_invites (
   id           uuid primary key default gen_random_uuid(),
@@ -49,6 +50,7 @@ begin
   end if;
   select max_members into lim from plans where id = w.plan;
   if seats_used(p_workspace) >= lim then
+    if lim <= 1 then raise exception 'Ekip daveti Pro ve Business paketlerinde var.'; end if;
     raise exception 'Paketinizde en fazla % kişi olabilir (sahip dahil). Paketi yükseltin ya da bir daveti iptal edin.', lim;
   end if;
   insert into workspace_invites (workspace_id, email, role, invited_by) values (p_workspace, e, p_role, auth.uid()) returning token into t;
