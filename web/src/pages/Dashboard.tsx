@@ -7,6 +7,7 @@ import { PAUSE_TEXT } from "../lib/messages";
 import { formatDateTime, MIN_SAMPLE, numLoc, rangeText, series, pct, usd } from "../lib/report";
 import { SECTORS } from "../lib/sectors";
 import { L, isEn } from "../lib/i18n";
+import { MyInvites } from "../components/Team";
 import { Button, DataNotice, Empty, ErrorBox, Field, Loading, Meter, Select, TypeBadge } from "../components/ui";
 
 
@@ -31,6 +32,8 @@ function WorkspaceView() {
         <h1>{ws.name}</h1>
         <p className="muted">{ws.kind === "agency" ? L("Ajans hesabı", "Agency account") : ws.kind === "demo_lab" ? "Demo Lab" : ws.kind === "growth_lab" ? L("Growth Lab: AI SaaSavran'ın kendi görünürlüğü", "Growth Lab: AI SaaSavran's own visibility") : L("İşletme hesabı", "Business account")}{u && <>, {L(`${u.plan_name} paketi`, `${u.plan_name} plan`)}</>}</p>
       </header>
+
+      <MyInvites />
 
       {ws.status === "paused" && (
         <p className="error-box" role="alert">{PAUSE_TEXT[ws.paused_reason ?? ""] ?? L("Bu çalışma alanı durduruldu.", "This workspace is paused.")}</p>
@@ -171,6 +174,8 @@ export function NewWorkspace() {
     } catch (e) { setErr(friendlyError(e)); } finally { setBusy(false); }
   }
   return (
+    <div className="stack narrow">
+    <MyInvites />
     <form className="stack narrow" onSubmit={submit} noValidate>
       <header className="page-head"><h1>{L("Çalışma alanı oluşturun", "Create a workspace")}</h1><p className="muted">{L("Her çalışma alanının verisi diğerlerinden tamamen ayrıdır.", "Each workspace's data is completely separate.")}</p></header>
       <fieldset className="choice">
@@ -182,6 +187,7 @@ export function NewWorkspace() {
       <ErrorBox message={err} />
       <Button type="submit" busy={busy}>{L("Çalışma alanını oluştur", "Create workspace")}</Button>
     </form>
+    </div>
   );
 }
 

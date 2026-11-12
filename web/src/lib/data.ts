@@ -42,6 +42,9 @@ export interface SiteAudit {
 export interface BrandAction { id: string; brand_id: string; title: string; note: string | null; done_on: string; created_at: string }
 
 export interface Product { id: string; brand_id: string; name: string; price: string | null; facts: string | null; rival_of: string | null; rival_brand: string | null; check_requested_at: string | null; shopping_query: string | null; shopping_requested_at: string | null; created_at: string }
+export interface TeamMember { user_id: string; email: string; role: string; joined_at: string; is_me: boolean }
+export interface Invite { id: string; token: string; email: string; role: string; expires_at: string }
+export interface MyInvite { id: string; token: string; workspace_name: string; role: string; expires_at: string }
 export interface ReportShare { id: string; token: string; created_at: string; expires_at: string; revoked_at: string | null }
 export interface AdminWorkspace {
   id: string; name: string; kind: string; plan: string; status: string; subscription_status: string | null; comped: boolean; comped_until: string | null;
@@ -165,6 +168,16 @@ export const api = {
   },
   async createReportShare(brandId: string, days: number): Promise<string> { return must(await sb().rpc("create_report_share", { p_brand: brandId, p_days: days })); },
   async revokeReportShare(id: string) { must(await sb().rpc("revoke_report_share", { p_share: id })); },
+  async team(workspaceId: string): Promise<TeamMember[]> { return must(await sb().rpc("workspace_team", { p_workspace: workspaceId })); },
+  async invites(workspaceId: string): Promise<Invite[]> {
+    return must(await sb().from("workspace_invites").select("id,token,email,role,expires_at").eq("workspace_id", workspaceId).is("accepted_at", null).is("revoked_at", null).gt("expires_at", new Date().toISOString()).order("created_at", { ascending: false }));
+  },
+  async createInvite(workspaceId: string, email: string, role: string): Promise<string> { return must(await sb().rpc("create_invite", { p_workspace: workspaceId, p_email: email, p_role: role })); },
+  async revokeInvite(id: string) { must(await sb().rpc("revoke_invite", { p_invite: id })); },
+  async myInvites(): Promise<MyInvite[]> { return must(await sb().rpc("my_invites")); },
+  async acceptInvite(token: string): Promise<string> { return must(await sb().rpc("accept_invite", { p_token: token })); },
+  async setMemberRole(workspaceId: string, userId: string, role: string) { must(await sb().rpc("set_member_role", { p_workspace: workspaceId, p_user: userId, p_role: role })); },
+  async removeMember(workspaceId: string, userId: string) { must(await sb().rpc("remove_member", { p_workspace: workspaceId, p_user: userId })); },
   async isPlatformAdmin(): Promise<boolean> {
     return must(await sb().rpc("is_platform_admin"));
   },
