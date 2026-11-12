@@ -62,6 +62,24 @@
 - **Rakip ürün karşılaştırması (0018):** kendi ürününe en fazla 5 rakip ürün bağlanır; son ölçüm cevaplarında yan yana, motor bazında anılma/önerilme ve "ikisi birlikte geçtiğinde kim önerildi" sayımı. Ek API maliyeti yok. Rakip üründe doğruluk kontrolü yok.
 - **AI Shopping (araştırma):** ChatGPT'nin alışveriş kartları (ürün karuseli) API cevabında yer almıyor; bu yüzden ölçülmüyor. Ölçülen, metin cevaplarındaki ürün anılmasıdır.
 
+## v1.13 (12 Kasım 2026): motor karşılaştırması ve öneri payı
+
+- Raporda (birden çok motorlu canlı ölçümde) **Motor karşılaştırması**: aynı ölçümde her motorun her markayı kaç cevapta önerdiği, motorlar arası fark (puan).
+- **Motorlar arası tutarsızlık**: bir motor markayı hiç anmazken diğeri öneriyorsa ayrıca yazılır. "Anlamlı" ancak Wilson aralıkları ayrışınca denir; küçük örneklemde "fark büyük, örneklem küçük".
+- **Öneri payı (AI Market Share)**: her motorun yaptığı tüm marka önerileri içinde takip edilen markaların payı. Pazar payı değildir.
+- **Motorların baktığı siteler**: motor başına en çok kaynak gösterilen siteler; yalnız o motorun baktığı siteler işaretli.
+- Ek API maliyeti yok. Kulaklık pilot verisiyle test edildi (Marka E: ChatGPT 0/8, Claude 5/8 → "fark büyük, örneklem küçük").
+- Google Shopping: kılavuz/kitap/kılıf/yastık/"uyumlu" aksesuar ilanları ürün sayılmaz; model kodu markasız eşleşir (PR #25).
+
+## Yol haritası (12 Kasım 2026)
+
+1. Motor karşılaştırması ve öneri payı ✅ (v1.13)
+2. İyileştirme rehberi: sorun, kanıt, önerilen işlem, öncelik, sonraki ölçümde başarı kontrolü
+3. Görünürlük tahmini: gerçek ölçümden ayrı, "tahmin" etiketli; az ölçümde gösterilmez
+4. Marka algısı: yapay zekânın markaya atfettiği özellikler (premium, ucuz, güvenilir…) ve kaynakları (küçük API maliyeti)
+5. TruthGuard: yanlış bilgi, sahte istatistik, kaynak güvenilirliği denetimi (ayrı plan)
+6. Sonraki aşama: AI crawler analitiği, AI trafik ve dönüşüm, soru talebi (hacim), içerik iyileştirme, YouTube/Reddit kaynak ağı; global karşılaştırma (Global / yerel / ülkeler arası)
+
 ## v1.12 (12 Kasım 2026): hoş geldin e-postası
 
 - 0031: e-postasını doğrulayan yeni kullanıcıya bir kez hoş geldin e-postası (işçi, Resend, report@aisaasavran.com; kayıt dilinde TR/EN): 3 başlangıç adımı, raporda neler var, ücretli paketlerde neler var. 12 Kasım 2026 öncesi kayıtlara gönderilmez.

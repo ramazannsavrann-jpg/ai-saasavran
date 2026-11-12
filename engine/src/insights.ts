@@ -373,3 +373,69 @@ export function shoppingSources(answers: ProductAnswer[], productId: string, pro
   }
   return { marketplaces: [...counts.entries()].map(([domain, n]) => ({ domain, answers: n })).sort((x, y) => y.answers - x.answers), ownSite, productAnswers };
 }
+
+// ---------------- Motor karşılaştırması ve motorlar arası tutarsızlık ----------------
+export interface EngineVisRow { provider: string; brand_id: string; brand_name: string; is_target: boolean; n: number; mentioned: number; recommended: number }
+export interface EngineCell { k: number; n: number; mentioned: number; rate: number; low: number; high: number; /** Takip edilen markaların o motordaki tüm önerileri içindeki pay (0–1) */ share: number }
+export type GapLevel = "clear" | "large" | "none";
+export interface EngineCompareRow {
+  brandId: string; name: string; isTarget: boolean;
+  byEngine: Record<string, EngineCell>;
+  /** En yüksek ve en düşük önerilme oranı arasındaki fark (0–1) */
+  gap: number;
+  /** clear: güven aralıkları ayrışıyor (fark ölçüm oynaklığıyla açıklanamaz); large: fark ≥ 40 puan ama örneklem küçük; none */
+  level: GapLevel;
+  high: string | null; low: string | null;
+  /** Bir motor hiç anmıyor, diğeri öneriyor */
+  ignoredBy: string[];
+}
+
+/**
+ * Aynı ölçümde motorları yan yana koyar. Ek API çağrısı yok.
+ * Tutarsızlık "clear" ancak iki motorun Wilson aralıkları ayrışıyorsa verilir; aksi hâlde küçük örneklemde fark "large" olarak işaretlenir.
+ * Bir cevap birden fazla marka önerebilir; oranlar pazar payı değildir.
+ */
+export function engineComparison(rows: EngineVisRow[]): EngineCompareRow[] {
+  const engines = [...new Set(rows.map((r) => r.provider))];
+  const byBrand = new Map<string, EngineCompareRow>();
+  for (const r of rows) {
+    const b = byBrand.get(r.brand_id) ?? { brandId: r.brand_id, name: r.brand_name, isTarget: r.is_target, byEngine: {}, gap: 0, level: "none" as GapLevel, high: null, low: null, ignoredBy: [] };
+    b.byEngine[r.provider] = { k: r.recommended, n: r.n, mentioned: r.mentioned, rate: r.n ? r.recommended / r.n : 0, ...wilson(r.recommended, r.n), share: 0 };
+    byBrand.set(r.brand_id, b);
+  }
+  for (const e of engines) {
+    const total = [...byBrand.values()].reduce((a, b) => a + (b.byEngine[e]?.k ?? 0), 0);
+    for (const b of byBrand.values()) if (b.byEngine[e]) b.byEngine[e].share = total ? b.byEngine[e].k / total : 0;
+  }
+  const out: EngineCompareRow[] = [];
+  for (const b of byBrand.values()) {
+    const cells = engines.filter((e) => b.byEngine[e] && b.byEngine[e].n > 0).map((e) => [e, b.byEngine[e]] as const);
+    if (cells.length >= 2) {
+      const hi = cells.reduce((a, c) => (c[1].rate > a[1].rate ? c : a));
+      const lo = cells.reduce((a, c) => (c[1].rate < a[1].rate ? c : a));
+      b.gap = hi[1].rate - lo[1].rate;
+      b.high = hi[0]; b.low = lo[0];
+      b.level = hi[1].low > lo[1].high ? "clear" : b.gap >= 0.4 ? "large" : "none";
+      b.ignoredBy = cells.filter(([, c]) => c.mentioned === 0).map(([e]) => e).filter(() => cells.some(([, c]) => c.k > 0));
+    }
+    out.push(b);
+  }
+  return out.sort((x, y) => Number(y.isTarget) - Number(x.isTarget) || y.gap - x.gap || x.name.localeCompare(y.name));
+}
+
+/** Motor başına en çok kaynak gösterilen alan adları ve yalnız o motorun baktığı siteler. */
+export function sourcesByEngine(answers: { provider: string; cited_urls: string[] | null }[], top = 5): { provider: string; answers: number; domains: { domain: string; count: number; only: boolean }[] }[] {
+  const per = new Map<string, { answers: number; counts: Map<string, number> }>();
+  for (const a of answers) {
+    const e = per.get(a.provider) ?? { answers: 0, counts: new Map() };
+    e.answers++;
+    for (const d of new Set((a.cited_urls ?? []).map(domainOf).filter(Boolean))) e.counts.set(d, (e.counts.get(d) ?? 0) + 1);
+    per.set(a.provider, e);
+  }
+  const used = (p: string, d: string) => (per.get(p)?.counts.get(d) ?? 0) > 0;
+  return [...per.entries()].map(([provider, e]) => ({
+    provider, answers: e.answers,
+    domains: [...e.counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])).slice(0, top)
+      .map(([domain, count]) => ({ domain, count, only: [...per.keys()].every((p) => p === provider || !used(p, domain)) })),
+  })).sort((a, b) => a.provider.localeCompare(b.provider));
+}
