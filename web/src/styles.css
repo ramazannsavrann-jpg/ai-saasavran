@@ -427,3 +427,13 @@ textarea { min-height: 7rem; resize: vertical; font: inherit; line-height: 1.45;
 }
 .key-box { display: block; word-break: break-all; padding: 8px; background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius-s); font-size: .85rem; }
 pre.code { white-space: pre-wrap; word-break: break-all; padding: 8px 10px; background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius-s); font-size: .8rem; }
+
+/* Motor karşılaştırması */
+.table-wrap { overflow-x: auto; margin: .5rem 0 1rem; }
+.eng-table { width: 100%; border-collapse: collapse; font-size: .95rem; }
+.eng-table th, .eng-table td { text-align: left; padding: .45rem .5rem; border-bottom: 1px solid var(--line, #e3e8e6); white-space: nowrap; }
+.eng-table thead th { font-weight: 600; color: var(--muted, #5b6b66); }
+.eng-table tr.is-target th[scope="row"] { color: var(--brand, #0f6e5c); }
+.eng-table .gap-clear { color: #b3261e; font-weight: 700; }
+.eng-table .gap-large { color: #a15c00; font-weight: 600; }
+.eng-src { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }

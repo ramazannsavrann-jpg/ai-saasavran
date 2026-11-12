@@ -2,11 +2,11 @@ import { useMemo, useState, type FormEvent } from "react";
 import { SECTORS, competitorSuggestions, postPurchaseTemplates, questionTemplates, sectorDef } from "../lib/sectors";
 import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useApp, useLoad } from "../lib/app";
-import { api, INTENT_LABEL, type Brand, type Intent, type MeasurementType, type Prompt, type Run, type Product, type ShoppingCheck } from "../lib/data";
+import { api, INTENT_LABEL, type Brand, type Intent, type MeasurementType, type Prompt, type Run, type Product, type ShoppingCheck, type VisRow } from "../lib/data";
 import { friendlyError, sb } from "../lib/supabase";
 import { L, isEn } from "../lib/i18n";
 import { ERROR_CLASS_TEXT, STOP_TEXT, runStatusText } from "../lib/messages";
-import { actionImpact, compareProducts, rivalReasons, conditionMap, lossCards, productVisibility, promptKind, shoppingSources, sourceDominance, splitByKind, type LossCard, type SourceRow } from "../../../engine/src/insights.ts";
+import { actionImpact, compareProducts, engineComparison, sourcesByEngine, rivalReasons, conditionMap, lossCards, productVisibility, promptKind, shoppingSources, sourceDominance, splitByKind, type EngineCompareRow, type LossCard, type SourceRow } from "../../../engine/src/insights.ts";
 import { competitorsInRun, formatDate, formatDateTime, MIN_SAMPLE, numLoc, pct, providerLabel, rangeText, series, shareSummary, sourceOpportunities, topDomains, usd } from "../lib/report";
 import { Button, Confirm, DataNotice, Empty, ErrorBox, Field, Loading, Select, TypeBadge } from "../components/ui";
 import { CompareBars, TrendChart } from "../components/Chart";
@@ -700,6 +700,10 @@ function Report({ brand, type, onBrandChange }: { brand: Brand; type: Measuremen
             }))} />
           </section>
 
+          {engList.length > 1 && (
+            <EngineComparePanel rows={(vis.data ?? []).filter((r) => r.run_id === last.runId)} answers={answersAll.data ?? []} live={live} />
+          )}
+
           <section className="panel" id="kosul-haritasi">
             <h2>{L("Hangi koşulda görünüyorsunuz", "Where you show up, and where you don't")}</h2>
             <p className="muted">{isEn() ? `Recommendation rate by what the customer is doing, over the last ${recentIds.length} measurement${recentIds.length > 1 ? "s" : ""}. Groups under 20 answers are marked; don't draw conclusions from them.` : `Müşterinin ne yaptığına göre önerilme oranı, son ${recentIds.length} ölçümün toplamı. 20 cevabın altındaki gruplar işaretlidir; onlardan sonuç çıkarmayın.`}</p>
@@ -826,6 +830,84 @@ function Report({ brand, type, onBrandChange }: { brand: Brand; type: Measuremen
         </>
       )}
     </div>
+  );
+}
+
+/** Motor karşılaştırması: aynı ölçümde motorlar yan yana; motorlar arası tutarsızlık ve motora özgü kaynaklar. Ek API çağrısı yok. */
+function EngineComparePanel({ rows, answers, live }: { rows: VisRow[]; answers: { provider: string; cited_urls: string[] | null }[]; live: boolean }) {
+  const cmp = engineComparison(rows);
+  const engines = [...new Set(rows.map((r) => r.provider))].sort((x, y) => ENGINE_ORDER.indexOf(x) - ENGINE_ORDER.indexOf(y));
+  const flagged = cmp.filter((c) => c.level !== "none" || c.ignoredBy.length > 0);
+  const src = live ? sourcesByEngine(answers) : [];
+  const cell = (c: EngineCompareRow, e: string) => {
+    const x = c.byEngine[e];
+    return x ? <><span className="num">{x.k}/{x.n}</span> <span className="muted">({pct(x.rate)})</span></> : <span className="muted">–</span>;
+  };
+  return (
+    <section className="panel" id="motor-karsilastirma">
+      <h2>{L("Motor karşılaştırması", "Engine comparison")}</h2>
+      <p className="muted">{L("Aynı sorular, aynı ölçüm: her motorun her markayı kaç cevapta önerdiği. Bir cevap birden fazla marka önerebilir; bu oranlar pazar payı değildir.", "Same questions, same measurement: how many answers from each engine recommended each brand. One answer can recommend several brands; these rates are not market share.")}</p>
+      <div className="table-wrap">
+        <table className="eng-table">
+          <thead><tr><th>{L("Marka", "Brand")}</th>{engines.map((e) => <th key={e}>{providerLabel(e)}</th>)}<th>{L("Fark", "Gap")}</th></tr></thead>
+          <tbody>
+            {cmp.map((c) => (
+              <tr key={c.brandId} className={c.isTarget ? "is-target" : ""}>
+                <th scope="row">{c.name}{c.isTarget && <span className="muted"> {L("(siz)", "(you)")}</span>}</th>
+                {engines.map((e) => <td key={e}>{cell(c, e)}</td>)}
+                <td className={c.level === "clear" ? "gap-clear" : c.level === "large" ? "gap-large" : ""}>{c.high ? `${Math.round(c.gap * 100)} ${L("puan", "pts")}` : "–"}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <h3>{L("Öneri payı (sektördeki takip edilen markalar arasında)", "Share of recommendations (among tracked brands)")}</h3>
+      <p className="muted">{L("Her motorun yaptığı tüm marka önerileri içinde her markanın payı. Yalnız takip ettiğiniz markalar sayılır.", "Each brand's share of all brand recommendations an engine made. Only the brands you track are counted.")}</p>
+      <div className="eng-src">
+        {engines.map((e) => (
+          <div key={e}>
+            <p className="src-head"><strong>{providerLabel(e)}</strong></p>
+            <ol className="domains">{[...cmp].filter((c) => c.byEngine[e]).sort((x, y) => y.byEngine[e].share - x.byEngine[e].share).map((c) => (
+              <li key={c.brandId}><span>{c.name}{c.isTarget && <span className="muted"> {L("(siz)", "(you)")}</span>}</span><span className="num">{pct(c.byEngine[e].share)}</span></li>
+            ))}</ol>
+          </div>
+        ))}
+      </div>
+      {flagged.length > 0 && <h3>{L("Motorlar arası tutarsızlık", "Inconsistency between engines")}</h3>}
+      {flagged.length > 0 && (
+        <ul className="src-dom">
+          {flagged.map((c) => (
+            <li key={c.brandId} className={c.isTarget ? "src-target" : ""}>
+              <p className="src-head"><strong>{c.name}</strong> <span className="num">{Math.round(c.gap * 100)} {L("puan fark", "pt gap")}</span></p>
+              <p className="src-sup">
+                {c.ignoredBy.length > 0
+                  ? (isEn() ? `${c.ignoredBy.map(providerLabel).join(", ")} never mentioned it, while ${providerLabel(c.high!)} recommended it in ${c.byEngine[c.high!].k} of ${c.byEngine[c.high!].n} answers.` : `${c.ignoredBy.map(providerLabel).join(", ")} hiç anmadı; ${providerLabel(c.high!)} ise ${c.byEngine[c.high!].n} cevabın ${c.byEngine[c.high!].k} tanesinde önerdi.`)
+                  : (isEn() ? `${providerLabel(c.high!)} recommends it more often than ${providerLabel(c.low!)}.` : `${providerLabel(c.high!)} bu markayı ${providerLabel(c.low!)}'a göre daha sık öneriyor.`)}
+              </p>
+              <p className="src-sup muted">{c.level === "clear"
+                ? L("Güven aralıkları ayrışıyor: fark ölçüm oynaklığıyla açıklanamaz.", "The confidence ranges don't overlap: the gap isn't explained by measurement noise.")
+                : L("Fark büyük ama örneklem küçük; güven aralıkları hâlâ kesişiyor. Daha fazla soru ve ölçümle doğrulayın.", "The gap is large but the sample is small; the ranges still overlap. Confirm with more questions and measurements.")}</p>
+            </li>
+          ))}
+        </ul>
+      )}
+      {src.length > 1 && (
+        <>
+          <h3>{L("Motorların baktığı siteler", "Sites each engine read")}</h3>
+          <p className="muted">{L("Yalnız o motorun kaynak gösterdiği siteler işaretli. Bir motorda görünmüyorsanız, o motorun baktığı sitelerde yer almak işe yarayabilir.", "Sites cited by only that engine are marked. If an engine doesn't show you, getting featured on the sites it reads may help.")}</p>
+          <div className="eng-src">
+            {src.map((s) => (
+              <div key={s.provider}>
+                <p className="src-head"><strong>{providerLabel(s.provider)}</strong> <span className="muted">{isEn() ? `${s.answers} answers` : `${s.answers} cevap`}</span></p>
+                {s.domains.length === 0 ? <p className="muted">{L("Kaynak gösterilmedi.", "No sources cited.")}</p> : (
+                  <ol className="domains">{s.domains.map((d) => <li key={d.domain}><span>{d.domain}{d.only && <span className="muted"> {L("· yalnız bu motor", "· this engine only")}</span>}</span><span className="num muted">{d.count}</span></li>)}</ol>
+                )}
+              </div>
+            ))}
+          </div>
+        </>
+      )}
+    </section>
   );
 }
 
