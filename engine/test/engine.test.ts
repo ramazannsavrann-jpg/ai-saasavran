@@ -738,3 +738,17 @@ test("Hoş geldin e-postası: TR/EN içerik, adımlar, panel bağlantısı, HTML
   assert.match(tr.text, /Bana soru öner/);
   assert.match(tr.text, /Google Shopping/);
 });
+
+test("Ad eşleşmesi: ortak ilk kelime ('Marka A' / 'Marka B') ve ürün adları ilk kelimeyle yanlış eşleşmez", async () => {
+  const { analyzeResponse } = await import("../src/metrics.ts");
+  const r = (text: string) => ({ promptId: "p", provider: "openai", answerText: text, citedUrls: [] as string[] });
+  // iki markanın ilk kelimesi aynı: "Marka" tek başına hiçbirine sayılmaz
+  const two = analyzeResponse(r("1. Marka B Aero 5\n2. Başka bir şey"), [{ id: "a", name: "Marka A", aliases: [] }, { id: "b", name: "Marka B", aliases: [] }]);
+  assert.deepEqual(two.map((h) => [h.brandId, h.mentioned]), [["a", false], ["b", true]]);
+  // ürün: "Kuzey" markasının adı geçince "Kuzey Model X" ürünü anılmış sayılmaz
+  const prod = analyzeResponse(r("Kuzey markasının başka modelleri de var."), [{ id: "p", name: "Kuzey Model X", aliases: ["Model X"], exactOnly: true }]);
+  assert.equal(prod[0].mentioned, false);
+  // tek marka için ilk kelime eşleşmesi korunur (Garanti Bonus → Garanti BBVA)
+  const g = analyzeResponse(r("Garanti uygulaması çok iyi."), [{ id: "g", name: "Garanti BBVA", aliases: [] }]);
+  assert.equal(g[0].mentioned, true);
+});
