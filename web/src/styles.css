@@ -415,3 +415,13 @@ textarea { min-height: 7rem; resize: vertical; font: inherit; line-height: 1.45;
 .prod-vis { margin: 6px 0; padding: 8px 0; border-top: 1px dashed var(--line); }
 .chip-inline { display: inline-block; margin: 0 .5rem .25rem 0; }
 .shop-list { padding-left: 1.4em; margin: .3em 0; display: grid; gap: .25em; }
+
+/* Paylaşılan rapor: logolu başlık (PDF'te de görünür) */
+.shared-report { max-width: 860px; margin: 0 auto; }
+.report-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 8px 0 4px; }
+.report-logo { display: inline-flex; align-items: center; gap: 8px; font-weight: 700; color: var(--ink); text-decoration: none; font-size: 1.05rem; }
+.row-form { display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end; }
+@media print {
+  .shared-report .report-head { display: flex !important; border-bottom: 2px solid #11705e; margin-bottom: 8px; }
+  .no-print { display: none !important; }
+}

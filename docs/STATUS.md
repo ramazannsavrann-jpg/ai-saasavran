@@ -62,6 +62,11 @@
 - **Rakip ürün karşılaştırması (0018):** kendi ürününe en fazla 5 rakip ürün bağlanır; son ölçüm cevaplarında yan yana, motor bazında anılma/önerilme ve "ikisi birlikte geçtiğinde kim önerildi" sayımı. Ek API maliyeti yok. Rakip üründe doğruluk kontrolü yok.
 - **AI Shopping (araştırma):** ChatGPT'nin alışveriş kartları (ürün karuseli) API cevabında yer almıyor; bu yüzden ölçülmüyor. Ölçülen, metin cevaplarındaki ürün anılmasıdır.
 
+## v1.7 (12 Kasım 2026): paylaşılabilir rapor
+
+- 0025: marka sahibi raporu salt okunur bağlantıyla paylaşır (7/30/90 gün, iptal edilebilir, marka başına en fazla 10 etkin bağlantı). `/rapor/<anahtar>` giriş istemez, arama motorlarına kapalı; cevap metni yok (sayılar, rakipler, sorular, kaynak alan adları). "PDF olarak kaydet" logolu yazdırma görünümü.
+- `/yonetim` ve `/rapor/*` uygulama adreslerine eklendi (doğrudan açılınca 404 vermez).
+
 ## v1.6 (12 Kasım 2026): yönetim ve günlük örnek
 
 - Marka silme: marka adı yazılarak onaylanır; soruları, rakipleri, ürünleri ve ölçümleriyle silinir (harcama kaydı kalır).
