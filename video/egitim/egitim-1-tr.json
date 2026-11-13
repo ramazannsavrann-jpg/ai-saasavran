@@ -1,0 +1,93 @@
+{
+ "out": "v1tr",
+ "series": "Nasıl kullanılır · 1/10",
+ "cover": {
+  "badge": "Eğitim 1",
+  "title": "Markanız yapay zekâda geçiyor mu?",
+  "sub": "1 dakikada, üye olmadan ücretsiz öğrenin",
+  "dur": 4.29
+ },
+ "scenes": [
+  {
+   "step": "Adım 1",
+   "cap": "aisaasavran.com'a girin, \"Üye olmadan dene\"ye dokunun",
+   "imgs": [
+    "t1/a0_home.jpg"
+   ],
+   "top": 0,
+   "dur": 4.12
+  },
+  {
+   "step": "Adım 2",
+   "cap": "İşletmenizin adını ve ne iş yaptığınızı yazın",
+   "imgs": [
+    "t1/a2_type01.jpg",
+    "t1/a2_type02.jpg",
+    "t1/a2_type03.jpg",
+    "t1/a2_type04.jpg",
+    "t1/a2_type05.jpg",
+    "t1/a2_type06.jpg",
+    "t1/a2_type07.jpg",
+    "t1/a2_type08.jpg",
+    "t1/a2_type09.jpg",
+    "t1/a2_type10.jpg",
+    "t1/a2_type11.jpg",
+    "t1/a2_type12.jpg",
+    "t1/a2_type13.jpg",
+    "t1/a2_type14.jpg",
+    "t1/a2_type15.jpg",
+    "t1/a2_type16.jpg",
+    "t1/a2_type17.jpg",
+    "t1/a2_type18.jpg",
+    "t1/a2_type19.jpg",
+    "t1/a2_type20.jpg",
+    "t1/a2_type21.jpg"
+   ],
+   "top": 300,
+   "dur": 4.71
+  },
+  {
+   "step": "Adım 3",
+   "cap": "Başlat'a basın: 5 soru Gemini'ye soruluyor",
+   "imgs": [
+    "t1/a3_wait.jpg"
+   ],
+   "top": 800,
+   "dur": 5.33
+  },
+  {
+   "step": "Sonuç",
+   "cap": "5 cevabın kaçında anıldınız, kaçında önerildiniz?",
+   "imgs": [
+    "t1/a4_result.jpg"
+   ],
+   "top": 900,
+   "dur": 7.94
+  },
+  {
+   "step": "Cevaplar",
+   "cap": "Her sorunun cevabını açıp okuyun",
+   "imgs": [
+    "t1/a6_answer.jpg"
+   ],
+   "top": 1250,
+   "dur": 3.67
+  },
+  {
+   "step": "Rakipler",
+   "cap": "Sizin yerine anılan adlar da listelenir",
+   "imgs": [
+    "t1/a4_result.jpg"
+   ],
+   "top": 1400,
+   "dur": 4.9
+  }
+ ],
+ "end": {
+  "title": "Her hafta otomatik ölçün",
+  "sub": "Rakip karşılaştırması ve ChatGPT, Claude canlı arama için ücretsiz hesap açın.",
+  "next_label": "Sonraki eğitim",
+  "next": "Hesap açıp markanızı eklemek",
+  "dur": 14.6
+ }
+}

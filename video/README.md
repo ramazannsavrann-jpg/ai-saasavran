@@ -15,6 +15,7 @@ Bu dal (`seslendirme`) videoların tek kaynağıdır. Yeni oturumda buradan deva
 - 1080x1920, 30 fps, sahne başına ayrı mp4, concat + `-c:v copy` ile ses.
 - İlk sahne kapak tasarımında: ChatGPT · Claude · Gemini etiketleri, büyük soru, sarı rozet (t.badge, ör. "Aynı mı söylüyorlar?"). İlk kare boş değil (fade-in yok); en altta ölçülen gerçek adlar ve tarih/örneklem notu; sonda aisaasavran.com.
 - Etiketler ve açıklama hashtagleri: ölçülen marka/kanal adları.
+- Eğitim videoları: `sablon/egitim.py <ayar.json>` (adım etiketi + açıklama + gerçek site ekranı kartı); ekranlar Playwright + Chrome ile 390x844, ölçek 2,77 (1080 genişlik), JPEG 92 (`egitim/ekran-cek-*.py`). Ses Kore, atempo 1.08.
 - Şablon: `sablon/make.py <ayar.json>` (v2, 8 sahne: marka, motorlar, soru bazında kayıp, ürün, doğruluk+Shopping, kaynaklar, CTA; örnek ayarlar telefon videoları). `make.py <ayar> frames` önizleme, `make.py <ayar> s3 s4` yalnız o sahneler.
 - Gerçek marka adları her sahnenin altında ("names" alanı).
 
