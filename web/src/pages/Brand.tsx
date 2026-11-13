@@ -66,7 +66,7 @@ export function BrandPage() {
           <button aria-pressed={type === "live_search"} onClick={() => setView("canli")}>{L("Canlı aramalı (ChatGPT)", "Live search (ChatGPT)")}</button>
         </div>
       )}
-      {tab === "rapor" && <Report brand={b} type={type} onBrandChange={brand.reload} paid={!!current?.paid_live_allowed || current?.kind === "growth_lab"} />}
+      {tab === "rapor" && <Report brand={b} type={type} onBrandChange={brand.reload} paid={current?.kind === "growth_lab" || (!!current?.plan && current.plan !== "free")} />}
       {tab === "rapor" && current?.kind !== "demo_lab" && b.data_origin !== "simulated" && runList.some((r) => r.status === "done") && <ReportSharePanel brand={b} />}
       {tab === "oneriler" && <Advice brand={b} type={type} runs={runs.data ?? []} onBrandChange={brand.reload} />}
       {tab === "rakipler" && <Competitors brand={b} />}
