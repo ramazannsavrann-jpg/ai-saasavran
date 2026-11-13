@@ -133,7 +133,8 @@ export async function auditSite(website: string, brandNames: string[], fetchFn: 
     title_en: "Business details (structured data)", detail_en: hasOrg ? `Types found: ${[...h.types].filter((t) => !t.startsWith("__")).slice(0, 6).join(", ")}.` : "No schema.org business details (Organization / LocalBusiness). Name, address, phone and hours should be machine-readable." });
   if (h.types.has("__invalid__")) add({ id: "schema_invalid", ok: false, severity: "medium", title: "Hatalı yapılandırılmış veri", detail: "Sitedeki JSON-LD bloklarından en az biri okunamıyor (geçersiz JSON).", title_en: "Invalid structured data", detail_en: "At least one JSON-LD block on the site can't be parsed (invalid JSON)." });
   // AI alışveriş hazırlığı: yapay zekâ ürün önerirken ürün sayfasındaki yapılandırılmış ürün bilgisini (ad, fiyat, stok) kullanır.
-  const hasProduct = h.types.has("Product") || h.types.has("ProductGroup");
+  // Yazılım ve hizmet işletmelerinde "ürün" uygulamanın kendisidir: SoftwareApplication/WebApplication/Service + Offer da geçerli
+  const hasProduct = ["Product", "ProductGroup", "SoftwareApplication", "WebApplication", "MobileApplication", "Service"].some((t) => h.types.has(t));
   const hasOffer = h.types.has("Offer") || h.types.has("AggregateOffer");
   add({ id: "product_schema", ok: hasProduct && hasOffer, severity: hasProduct ? "medium" : "info", title: "Ürün bilgisi (AI alışveriş hazırlığı)",
     detail: hasProduct && hasOffer ? "Ana sayfada ürün ve fiyat yapılandırılmış verisi var." : hasProduct ? "Ürün bilgisi var ama fiyat ve stok (Offer) yok. Yapay zekâ alışveriş önerilerinde fiyatı ve stok durumunu bu alandan okur." : "Ana sayfada ürün yapılandırılmış verisi (Product + Offer) bulunamadı. Ürün satıyorsanız her ürün sayfasına ad, fiyat, para birimi, stok durumu ve mümkünse GTIN/SKU ekleyin. Bu kontrol yalnız ana sayfaya bakar.",
