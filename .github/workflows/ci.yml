@@ -63,7 +63,7 @@ jobs:
       # GitHub paket aynası zaman zaman yanıt vermiyor: en fazla 4 dakika bekle, olmazsa sistem paketleri olmadan kur (tarayıcı çalışır).
       - run: timeout 240 npx playwright install --with-deps chromium || npx playwright install chromium
       # Yayın kararı dış servislere bağlı olmasın: burada sabit test cevapları kullanılır.
-      # Gerçek Gemini ile aynı akış aşağıdaki bilgi amaçlı "e2e-gemini" işinde çalışır.
+      # Gerçek Gemini ile aynı akış her gece ayrı iş akışında çalışır (.github/workflows/gemini-nightly.yml).
       - name: Uçtan uca testler
         run: npx playwright test
       - name: Ekran görüntüleri
@@ -75,54 +75,6 @@ jobs:
             e2e/screenshots/
             test-results/
           retention-days: 14
-
-  # ---------------- Gerçek Gemini (bilgi amaçlı; Google'daki geçici sorunlar yayını durdurmaz) ----------------
-  e2e-gemini:
-    name: Uçtan uca, gerçek Gemini ile (bilgi amaçlı)
-    needs: integration
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-    continue-on-error: true
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-      - run: npm ci
-      - run: npm ci --prefix web
-      - run: npm run build --prefix web
-      # GitHub paket aynası zaman zaman yanıt vermiyor: en fazla 4 dakika bekle, olmazsa sistem paketleri olmadan kur (tarayıcı çalışır).
-      - run: timeout 240 npx playwright install --with-deps chromium || npx playwright install chromium
-      - name: Uçtan uca testler (gerçek Gemini, aramasız, ücretsiz)
-        env:
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-        run: npx playwright test
-      - name: Ekran görüntüleri
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: ekran-goruntuleri-gercek-gemini
-          path: e2e/screenshots/
-          retention-days: 14
-
-  gemini-smoke:
-    name: Gerçek Gemini bağlantı testi (bilgi amaçlı)
-    needs: test
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    continue-on-error: true
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-      - run: npm ci
-      - name: Gerçek Gemini bağlantı testi (anahtar yoksa atlanır)
-        env:
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          GEMINI_TIER: free
-          ALLOW_PAID_API: "false"
-        run: npm run smoke:gemini
 
   # ---------------- Yayın (yalnızca main dalı ve tüm testler geçtiyse) ----------------
   deploy-check:

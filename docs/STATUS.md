@@ -84,6 +84,10 @@
 - Ağırlıklı doğrusal eğilim (ağırlık = cevap sayısı); aralık = model belirsizliği + son ölçümün örneklem belirsizliği. Eğim aralığı sıfırı içeriyorsa "belirgin eğilim yok".
 - En az 4 ölçüm ve 14 gün yoksa tahmin gösterilmez. Simülasyonda gösterilmez. Ek API maliyeti yok.
 
+## v1.27 (14 Kasım 2026): gerçek Gemini testleri geceye alındı
+
+- Ücretsiz Gemini kotası canlıdaki Free paket ve ücretsiz kontrolle ortak. Her PR'da çalışan iki bilgi amaçlı gerçek Gemini testi kotayı tüketiyordu ("quota_exceeded"). Artık `.github/workflows/gemini-nightly.yml` ile her gece 05:17'de (TR) ve elle istenince çalışıyorlar; diğer testler her PR'da aynen sürüyor.
+
 ## v1.26 (14 Kasım 2026): görünürlük × ziyaretçi
 
 - Ücretli paketlerde "Yapay zekâdan gelen ziyaretçi" bölümünde motor seçmeli grafik: son 8 haftada o motordaki haftalık önerilme oranı ve o motordan gelen ziyaret yan yana. Ölçüm olmayan hafta "–".
