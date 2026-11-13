@@ -1302,7 +1302,7 @@ function Questions({ brand }: { brand: Brand }) {
             {ideas.map((s) => (
               <li key={s.text}>
                 <span><span className="q-text">{s.text}</span><span className="q-meta">{INTENT_LABEL[s.intent]}</span></span>
-                <button className="link-btn" disabled={busy} onClick={() => add(s.text, s.intent)}>{L("Ekle", "Add")}</button>
+                <button className="link-btn" disabled={busy} onClick={() => add(s.text, s.intent)} aria-label={L("Ekle", "Add")}>+ {L("Ekle", "Add")}</button>
               </li>
             ))}
           </ul>

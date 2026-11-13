@@ -24,19 +24,25 @@ export async function onRequestPost({ request, env }) {
     return json({ error: "limit", message: String(e?.message ?? "").slice(0, 200) }, r.status === 401 ? 401 : 429);
   }
   const ctx = await r.json();
-  try {
-    const g = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent`, {
-      method: "POST",
-      headers: { "content-type": "application/json", "x-goog-api-key": env.GEMINI_API_KEY },
-      body: JSON.stringify({ contents: [{ role: "user", parts: [{ text: buildSuggestPrompt(ctx) }] }], generationConfig: { maxOutputTokens: 1500, temperature: 0.9 } }),
-      signal: AbortSignal.timeout(25_000),
-    });
-    if (!g.ok) return json({ error: "provider" }, 502);
-    const j = await g.json();
-    const text = (j?.candidates?.[0]?.content?.parts ?? []).map((p) => p.text ?? "").join("");
-    const questions = parseSuggestions(text, ctx);
-    return questions.length ? json({ questions }) : json({ error: "provider" }, 502);
-  } catch {
-    return json({ error: "provider" }, 502);
+  // Bir kez yeniden dener (Gemini geçici yoğunluk / yarım cevap). JSON çıktı istenir; düşünme payı için çıktı sınırı geniş.
+  let last = "provider";
+  for (let attempt = 0; attempt < 2; attempt++) {
+    try {
+      const g = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent`, {
+        method: "POST",
+        headers: { "content-type": "application/json", "x-goog-api-key": env.GEMINI_API_KEY },
+        body: JSON.stringify({ contents: [{ role: "user", parts: [{ text: buildSuggestPrompt(ctx) }] }],
+          generationConfig: { maxOutputTokens: 4096, temperature: 0.9, responseMimeType: "application/json" } }),
+        signal: AbortSignal.timeout(25_000),
+      });
+      if (!g.ok) { last = `provider_${g.status}`; continue; }
+      const j = await g.json();
+      const text = (j?.candidates?.[0]?.content?.parts ?? []).filter((p) => !p.thought).map((p) => p.text ?? "").join("");
+      const questions = parseSuggestions(text, ctx);
+      if (questions.length) return json({ questions });
+      last = "provider_empty";
+    } catch { last = "provider_timeout"; }
   }
+  console.log("suggest failed:", last);
+  return json({ error: "provider", detail: last }, 502);
 }

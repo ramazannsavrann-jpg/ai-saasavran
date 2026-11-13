@@ -33,3 +33,11 @@ test("Soru önerisi: JSON ayıklanır; marka/rakip adı, mevcut, tekrar, kısa o
   ]);
   assert.deepEqual(parseSuggestions("bozuk cevap", ctx), []);
 });
+
+test("Soru önerisi: yarıda kesilmiş JSON cevabından tamamlanmış sorular kurtarılır", async () => {
+  const { parseSuggestions } = await import("../../functions/api/_suggest-lib.js");
+  const cut = '[{"text":"Küçük işletmeler için en iyi muhasebe programı hangisi?","intent":"comparison"},{"text":"Fatura kesmek için hangi uygulamayı önerirsin?","intent":"purchase"},{"text":"Yeni başlayanlar için kola';
+  const out = parseSuggestions(cut, { name: "Örnek", competitors: [], existing: [] });
+  assert.equal(out.length, 2);
+  assert.equal(out[1].intent, "purchase");
+});

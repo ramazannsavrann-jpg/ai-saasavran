@@ -34,6 +34,12 @@ export function parseSuggestions(text, ctx) {
   let arr = [];
   const m = String(text || "").match(/\[[\s\S]*\]/);
   if (m) { try { arr = JSON.parse(m[0]); } catch { arr = []; } }
+  // Cevap yarıda kesildiyse (ör. çıktı sınırı) tamamlanmış nesneleri tek tek kurtar
+  if (!Array.isArray(arr) || !arr.length) {
+    arr = [...String(text || "").matchAll(/\{[^{}]*"text"\s*:\s*"((?:[^"\\]|\\.)*)"[^{}]*\}/g)].map((x) => {
+      try { return JSON.parse(x[0]); } catch { return { text: x[1] }; }
+    });
+  }
   const names = [ctx.name, ...(ctx.competitors || [])].map(norm).filter((n) => n.length >= 3);
   const existing = new Set((ctx.existing || []).map(norm));
   const seen = new Set();
