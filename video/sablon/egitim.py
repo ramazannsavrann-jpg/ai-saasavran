@@ -58,13 +58,19 @@ def scene_img(sc, img):
     text_block(d, sc["cap"], font("ExtraBold", 58), 320, INK)
     d.rounded_rectangle([CARD_X - 10, CARD_Y - 10, CARD_X + CARD_W + 10, CARD_Y + CARD_H + 10], radius=44, fill=(40, 62, 55))
     crop, mask = screen_frame(img, sc.get("top", 0)); im.paste(crop, (CARD_X, CARD_Y), mask)
+    if CFG.get("sample") and not sc.get("no_sample"):
+        f = font("Bold", 30); lab = CFG["sample"]; w = d.textlength(lab, font=f) + 40
+        x1, y1 = CARD_X + CARD_W - 24, CARD_Y + CARD_H - 24
+        d.rounded_rectangle([x1 - w, y1 - 54, x1, y1], radius=27, fill=GOLD); d.text((x1 - w + 20, y1 - 46), lab, font=f, fill=BG)
     return im
 
 def cover_img(c):
+    """Kapak (YouTube küçük resmi): en üstte büyük "Eğitim N", altında konu adı."""
     im, d = base()
-    x = chip(d, 80, 300, c["badge"], fill=GOLD, col=BG, size=40)
-    y = text_block(d, c["title"], font("Black", 112), 440, INK)
-    y = text_block(d, c["sub"], font("SemiBold", 52), y + 40, ACC)
+    y = text_block(d, c["badge"], font("Black", 150), 460, GOLD)
+    d.rectangle([80, y + 20, 280, y + 34], fill=ACC)
+    y = text_block(d, c["title"], font("Black", 112), y + 90, INK)
+    if c.get("sub"): text_block(d, c["sub"], font("SemiBold", 52), y + 40, ACC)
     return im
 
 def end_img(e):
@@ -98,7 +104,7 @@ if __name__ == "__main__":
     items = [("p0", "cover", CFG["cover"])] + [(f"p{i+1}", "scene", s) for i, s in enumerate(CFG["scenes"])] + [(f"p{len(CFG['scenes'])+1}", "end", CFG["end"])]
     if len(sys.argv) > 2 and sys.argv[2] == "frames":
         for name, kind, s in items:
-            im = cover_img(s) if kind == "cover" else end_img(s) if kind == "end" else scene_img(s, s["imgs"][-1])
+            im = cover_img(s) if kind == "cover" else end_img(s) if kind == "end" else scene_img(dict(s, top=s["tops"][-1]) if s.get("tops") else s, s["imgs"][-1])
             im.save(f"frame_{name}.png")
         sys.exit()
     names = []
@@ -110,6 +116,8 @@ if __name__ == "__main__":
             if len(imgs) == 1: frames = [(scene_img(s, imgs[0]), s["dur"])]
             else:
                 hold = s.get("hold_last", 1.2); per = max(0.12, (s["dur"] - hold) / (len(imgs) - 1))
-                frames = [(scene_img(s, p), per) for p in imgs[:-1]] + [(scene_img(s, imgs[-1]), s["dur"] - per * (len(imgs) - 1))]
+                tops = s.get("tops")
+                def si(i, p): return scene_img(dict(s, top=tops[i]) if tops else s, p)
+                frames = [(si(i, p), per) for i, p in enumerate(imgs[:-1])] + [(si(len(imgs) - 1, imgs[-1]), s["dur"] - per * (len(imgs) - 1))]
         encode(frames, name, fade_in=(kind != "cover")); names.append(name)
     open("list.txt", "w").write("".join(f"file '{n}.mp4'\n" for n in names))
