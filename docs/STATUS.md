@@ -84,6 +84,11 @@
 - Ağırlıklı doğrusal eğilim (ağırlık = cevap sayısı); aralık = model belirsizliği + son ölçümün örneklem belirsizliği. Eğim aralığı sıfırı içeriyorsa "belirgin eğilim yok".
 - En az 4 ölçüm ve 14 gün yoksa tahmin gösterilmez. Simülasyonda gösterilmez. Ek API maliyeti yok.
 
+## v1.31 (14 Kasım 2026): yapay zekâ kaynak ağı
+
+- Raporda (canlı arama) "Yapay zekâ kaynak ağı": en çok kaynak gösterilen 8 site ↔ o sitelerin cevaplarında önerilen markalar (SVG ağ, çizgi kalınlığı = birlikte geçtiği cevap sayısı) ve liste.
+- Roller: ortak kaynak (≥2 motor), rakip kalesi (cevaplarında rakip öneriliyor, siz hiç), sizin kaleniz; rakip kaleleri için uyarı. Ek maliyet yok. Test: `engine/test/network.test.ts`.
+
 ## v1.30 (14 Kasım 2026): içerik planları
 
 - Öneriler sekmesinde "İçerik planları": markanın önerilmediği her soru için "İçerik planı oluştur". İşçi, o sorunun son 30 gündeki en güncel 4 gerçek cevabından ve kaynak sitelerinden küçük LLM ile plan çıkarır: sayfa başlığı, neden kazanabilir, bölümler, mutlaka yazılacaklar ("doğrulayın" işaretiyle; bilgi kartında olmayan sayı/iddia uydurulmaz), SSS, yapay zekânın baktığı siteler, önerilen rakipler.

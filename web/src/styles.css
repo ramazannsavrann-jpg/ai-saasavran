@@ -514,3 +514,16 @@ pre.code { white-space: pre-wrap; word-break: break-all; padding: 8px 10px; back
 .brief p { margin: .3rem 0; }
 .plain-ol { margin: .2rem 0 .4rem 1.2rem; padding: 0; }
 .badge-verify { display: inline-block; margin-left: .4rem; padding: 0 .4rem; border-radius: 999px; background: var(--sim); color: #fff; font-size: .72rem; }
+
+/* Kaynak ağı */
+.net-svg { display: block; margin: .4rem 0; font-size: 10px; }
+.net-edge { stroke: var(--line); stroke-opacity: .9; }
+.net-edge-you { stroke: var(--primary); stroke-opacity: .8; }
+.net-src { fill: var(--text, currentColor); }
+.net-dot { fill: var(--muted); }
+.net-dot.net-rival { fill: var(--danger); } .net-dot.net-yours { fill: var(--ok); } .net-dot.net-shared { fill: var(--sim); }
+.net-src.net-rival { fill: var(--danger); }
+.net-you { fill: var(--primary); } .net-brand { fill: var(--muted); }
+.net-you-t { font-weight: 700; fill: var(--primary); } .net-brand-t { fill: var(--text, currentColor); }
+.badge-net { display: inline-block; margin-left: .4rem; padding: 0 .45rem; border-radius: 999px; font-size: .72rem; color: #fff; background: var(--muted); }
+.badge-net.net-rival { background: var(--danger); } .badge-net.net-yours { background: var(--ok); } .badge-net.net-shared { background: var(--sim); }
