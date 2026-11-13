@@ -1,4 +1,22 @@
 {
-  "pages": {},
+  "pages": {
+    "https://aisaasavran.com/": "757c758b40a4a1c6",
+    "https://aisaasavran.com/pricing/": "860467175c22ccf0",
+    "https://aisaasavran.com/check/": "bd7631034338bcb9",
+    "https://aisaasavran.com/guides/": "41283ba20683c492",
+    "https://aisaasavran.com/guides/measure-brand-visibility-in-chatgpt/": "bde2b838c1d4a7ae",
+    "https://aisaasavran.com/guides/what-is-geo/": "6f7f989cc9746ece",
+    "https://aisaasavran.com/guides/local-business-ai-recommendations/": "508217ab2e14e4c6",
+    "https://aisaasavran.com/guides/why-chatgpt-recommends-your-competitor/": "ffc015c9e8137e9f",
+    "https://aisaasavran.com/guides/youtuber-ai-visibility/": "35907b6a30a4188a",
+    "https://aisaasavran.com/tr/": "2db2369bd5d6cc38",
+    "https://aisaasavran.com/tr/kontrol/": "97ad8a340a8d21a8",
+    "https://aisaasavran.com/rehber/": "0108a97c82ec03d4",
+    "https://aisaasavran.com/rehber/chatgpt-marka-gorunurlugu-olcme/": "82ede7c38b3fd7fa",
+    "https://aisaasavran.com/rehber/geo-nedir/": "5647a2c91b8bb69c",
+    "https://aisaasavran.com/rehber/yerel-isletme-yapay-zeka/": "3debdc5c9ae05921",
+    "https://aisaasavran.com/rehber/rakip-neden-oneriliyor/": "9a3215ff371110e7",
+    "https://aisaasavran.com/rehber/youtuber-yapay-zeka-gorunurlugu/": "200c9106073e09c5"
+  },
   "lastFull": "2026-11-13"
 }
