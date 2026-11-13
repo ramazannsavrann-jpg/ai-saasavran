@@ -10,6 +10,7 @@ import { buildProviders } from "./providers/registry.ts";
 import { SimulatedProvider } from "./providers/simulated.ts";
 import { auditSite } from "./audit.ts";
 import { classifyAnswer, CLASSIFY_WORST_USD, type Perception } from "./classify.ts";
+import { writeBrief } from "./brief.ts";
 import { cleanQuestions, discoverySeeds, parseDiscovery, serpGoogle, type FoundQuestion } from "./discovery.ts";
 import { buildWrongInfoEmail, findConflicts, judgeTruth, newWrongClaims, type TruthClaim } from "./truth.ts";
 import { SITE } from "./email.ts";
@@ -549,4 +550,30 @@ export async function processPromptDiscovery(deps: WorkerDeps, max = 3): Promise
     out.push({ runId: p.run_id, status: error && !clean.length ? "error" : "done", found: clean.length });
   }
   return out;
+}
+
+/** İçerik planları: istenen her soru için gerçek cevaplardan plan (küçük LLM; maliyet çalışma alanına yazılır). */
+export async function processContentBriefs(deps: { db: SupabaseClient; env: Record<string, string | undefined>; fetchFn?: FetchLike }, limit = 10): Promise<{ done: number; failed: number; spentUsd: number; skipped?: string }> {
+  const { db, env } = deps;
+  if (!env.OPENAI_API_KEY || env.ALLOW_PAID_API !== "true") return { done: 0, failed: 0, spentUsd: 0, skipped: "paid_api_off" };
+  const rows = must(await db.rpc("pending_content_briefs", { p_limit: limit }), "bekleyen plan") as { brief_id: string; workspace_id: string; brand_id: string; brand_name: string; website: string | null; fact_card: string | null; prompt_text: string; lang: string; answers: { provider: string; answer: string; cited: string[] }[]; competitors: string[] }[];
+  const model = env.OPENAI_MODEL || OPENAI_DEFAULT.model;
+  let done = 0, failed = 0, spent = 0;
+  for (const r of rows) {
+    const fail = async (error: string) => { failed++; must(await db.from("content_briefs").update({ status: "failed", error, done_at: new Date().toISOString() }).eq("id", r.brief_id), "plan kaydı"); };
+    if (!r.answers.length) { await fail("Bu soru için son 30 günde ölçülmüş cevap yok"); continue; }
+    try {
+      const lang = r.lang === "en" ? "en" : "tr";
+      const b = await writeBrief({ apiKey: env.OPENAI_API_KEY, model, price: OPENAI_DEFAULT.price, brand: r.brand_name, website: r.website, question: r.prompt_text, factCard: r.fact_card, competitors: r.competitors, answers: r.answers, lang, fetchFn: deps.fetchFn });
+      spent += b.costUsd;
+      if (b.costUsd > 0) must(await db.rpc("record_aux_call", { p_workspace: r.workspace_id, p_run: null, p_task: "content_brief", p_provider: "openai", p_model: model, p_in: b.inputTokens, p_out: b.outputTokens, p_cost: b.costUsd }), "record_aux_call");
+      if (!b.brief) { await fail("Plan okunamadı, tekrar deneyin"); continue; }
+      must(await db.from("content_briefs").update({ status: "done", brief: b.brief, cost_usd: b.costUsd, done_at: new Date().toISOString() }).eq("id", r.brief_id), "plan kaydı");
+      done++;
+    } catch (e) {
+      if (/HTTP (401|403|429)/.test(String((e as Error).message))) break;
+      await fail("Geçici hata, tekrar deneyin");
+    }
+  }
+  return { done, failed, spentUsd: Math.round(spent * 10000) / 10000 };
 }

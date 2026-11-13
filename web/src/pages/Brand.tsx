@@ -2,7 +2,7 @@ import { useMemo, useState, type FormEvent } from "react";
 import { SECTORS, competitorSuggestions, postPurchaseTemplates, questionTemplates, sectorDef } from "../lib/sectors";
 import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useApp, useLoad } from "../lib/app";
-import { api, INTENT_LABEL, type Brand, type BrandAction, type Intent, type MeasurementType, type Prompt, type Run, type Product, type ShoppingCheck, type VisRow } from "../lib/data";
+import { api, INTENT_LABEL, type Brand, type BrandAction, type PromptResult, type Intent, type MeasurementType, type Prompt, type Run, type Product, type ShoppingCheck, type VisRow } from "../lib/data";
 import { friendlyError, sb } from "../lib/supabase";
 import { L, isEn } from "../lib/i18n";
 import { ERROR_CLASS_TEXT, STOP_TEXT, runStatusText } from "../lib/messages";
@@ -982,6 +982,63 @@ function GoogleQuestions({ brand, existing, canAdd, onAdd, busy }: { brand: Bran
   );
 }
 
+/** İçerik planları: markanın önerilmediği sorular için gerçek cevaplardan hazırlanan sayfa planı (ücretli; istenince). */
+function BriefsPanel({ brand, results }: { brand: Brand; results: PromptResult[] }) {
+  const { current } = useApp();
+  const paid = current?.kind === "growth_lab" || (!!current?.plan && current.plan !== "free");
+  const briefs = useLoad(() => (paid ? api.contentBriefs(brand.id) : Promise.resolve([])), [brand.id, paid]);
+  const [open, setOpen] = useState<string | null>(null);
+  const [err, setErr] = useState<string | null>(null);
+  const lost = results.filter((r) => r.answers > 0 && r.target_recommended === 0);
+  if (!lost.length && !(briefs.data ?? []).length) return null;
+  const latest = new Map<string, NonNullable<typeof briefs.data>[number]>();
+  for (const b of briefs.data ?? []) if (!latest.has(b.prompt_id)) latest.set(b.prompt_id, b);
+  const req = async (pid: string) => { setErr(null); try { await api.requestBrief(brand.id, pid); briefs.reload(); } catch (e) { setErr(friendlyError(e)); } };
+  return (
+    <section className="panel" id="icerik-planlari">
+      <h2>{L("İçerik planları", "Content plans")}</h2>
+      <p className="muted">{L("Önerilmediğiniz her soru için, yapay zekânın o soruya verdiği gerçek cevaplardan ve kaynak sitelerinden sitenize yazılacak sayfanın planı: başlık, bölümler, yazılması gereken bilgiler, SSS ve yer almanız gereken siteler.", "For each question you're not recommended for: a page plan for your site built from the AI's real answers and cited sites — title, sections, facts to include, FAQ and sites to be on.")}</p>
+      {!paid ? <p className="muted">{L("Ücretli paketlerde.", "On paid plans.")} <Link to="/hesap#paket">{L("Paketler", "Plans")}</Link></p> : (
+        <>
+          <ErrorBox message={err} />
+          <ul className="src-dom">
+            {lost.map((r) => {
+              const b = latest.get(r.prompt_id);
+              return (
+                <li key={r.prompt_id}>
+                  <p className="src-head"><strong>{r.prompt_text}</strong></p>
+                  {r.top_competitor && <p className="src-sup muted">{L("Bu soruda öne çıkan: ", "Leading here: ")}{r.top_competitor}</p>}
+                  {!b ? <button className="link-btn" onClick={() => req(r.prompt_id)}>{L("İçerik planı oluştur", "Create content plan")}</button>
+                    : b.status === "queued" ? <p className="src-sup muted">{L("Plan hazırlanıyor (birkaç dakika ile bir saat).", "Preparing the plan (a few minutes to an hour).")}</p>
+                    : b.status === "failed" ? <p className="src-sup">{b.error} <button className="link-btn" onClick={() => req(r.prompt_id)}>{L("Tekrar dene", "Try again")}</button></p>
+                    : <button className="link-btn" aria-expanded={open === b.id} onClick={() => setOpen(open === b.id ? null : b.id)}>{open === b.id ? L("Planı gizle", "Hide plan") : L("Planı göster", "Show plan")}</button>}
+                  {b?.brief && open === b.id && (
+                    <div className="score-how brief">
+                      <p><strong>{L("Sayfa başlığı", "Page title")}:</strong> {b.brief.title}</p>
+                      {b.brief.angle && <p className="muted">{b.brief.angle}</p>}
+                      <p><strong>{L("Bölümler", "Sections")}</strong></p>
+                      <ol className="plain-ol">{b.brief.outline.map((x) => <li key={x}>{x}</li>)}</ol>
+                      {b.brief.mustInclude.length > 0 && <>
+                        <p><strong>{L("Mutlaka yazılacaklar", "Must include")}</strong></p>
+                        <ul className="plain">{b.brief.mustInclude.map((x) => <li key={x.item}>{x.item}{x.verify && <span className="badge-verify">{L("doğrulayın", "verify")}</span>}</li>)}</ul>
+                      </>}
+                      {b.brief.faq.length > 0 && <><p><strong>{L("SSS", "FAQ")}</strong></p><ul className="plain">{b.brief.faq.map((x) => <li key={x}>{x}</li>)}</ul></>}
+                      {b.brief.sites.length > 0 && <p><strong>{L("Yapay zekânın baktığı siteler", "Sites the AI relied on")}:</strong> {b.brief.sites.join(", ")}</p>}
+                      {b.brief.winners.length > 0 && <p className="muted">{L("Bu soruda önerilenler: ", "Recommended here: ")}{b.brief.winners.join(", ")}</p>}
+                      <p className="src-sup muted">{L("\"Doğrulayın\" işaretli maddeleri kendi doğru bilginizle doldurun; plan, bilgi kartınızda olmayan sayı veya iddia uydurmaz.", "Fill items marked \"verify\" with your own accurate facts; the plan doesn't invent numbers or claims that aren't in your fact card.")}</p>
+                    </div>
+                  )}
+                </li>
+              );
+            })}
+          </ul>
+          <p className="src-sup muted">{L("Marka başına 30 günde en fazla 20 plan; aynı soru için 7 günde bir.", "Up to 20 plans per brand every 30 days; once a week per question.")}</p>
+        </>
+      )}
+    </section>
+  );
+}
+
 const BOT_KIND: Record<BotKind, [string, string, string, string]> = {
   search: ["Arama botları", "Search bots", "Yapay zekâ aramasında görünmenizi sağlar; en önemlisi bunlar.", "They make you visible in AI search; these matter most."],
   user: ["Kullanıcı isteğiyle gelenler", "Fetched on a user's request", "Biri asistana sitenizle ilgili soru sorduğunda sayfayı anlık okur.", "Read a page live when someone asks an assistant about you."],
@@ -1596,6 +1653,7 @@ function Advice({ brand, type, runs, onBrandChange }: { brand: Brand; type: Meas
         )}
       </section>
 
+      {!sim && <BriefsPanel brand={brand} results={results.data ?? []} />}
       {!sim && <ActionsPanel key={rev} brand={brand} />}
 
       {!sim && (
