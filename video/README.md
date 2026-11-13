@@ -3,6 +3,8 @@
 Bu dal (`seslendirme`) videoların tek kaynağıdır. Yeni oturumda buradan devam edilir; sesler ve şablonlar her seferinde baştan aranmaz.
 
 ## Ses
+- **Türkçe (13 Kasım kararı):** Gemini TTS, ücretsiz AI Studio anahtarı (GEMINI_API_KEY, faturalandırma kapalı). Seçilen sesler: **Kore** (kadın, eğitim videoları) ve **Charon** (erkek, veri Shorts). Kullanılacak ses `video/ses-tr.txt` içinde. Çıktı `ses-tr.pcm` (24 kHz, 16 bit, mono) → `ffmpeg -f s16le -ar 24000 -ac 1 -i ses-tr.pcm`. Gemini olmazsa OpenAI ash'e düşer. Ücretsiz katmanda günlük istek sınırı var.
+- **Yayın düzeni:** veri analizli Shorts günde 1; fazlası ileri tarihe planlanır (günde en fazla 1–2). Eğitim serisi ayrıca (plan: ücretsiz kontrol, hesap+marka+soru, rakipler, ilk ölçüm, rapor okuma, kayıp nedeni, kaynaklar, öneriler, ürünler, paylaşım/otomatik ölçüm).
 - Motor: OpenAI TTS (`gpt-4o-mini-tts`), ses **ash**. Bu dala `video/narration-<dil>.txt` push edilince `.github/workflows/seslendirme.yml` mp3 üretir (artifact `seslendirme`).
 - ElevenLabs (ses "Aras", PfUjY8BsgGYwLKokwLKi) ücretsiz katmanı hesapta kapalı ("unusual activity"); kullanılmıyor.
 - Hız: indirildikten sonra Türkçe `atempo=1.24` (kullanıcı 13 Kasım: %24), İngilizce `atempo=1.2`. Video ≤ 58 sn olacak şekilde gerekirse 1.4'e kadar.

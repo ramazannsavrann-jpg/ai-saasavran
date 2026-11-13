@@ -9,14 +9,28 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: OpenAI TTS
+      - name: Seslendirme (TR = Gemini ücretsiz, EN = OpenAI)
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
           mkdir -p out
+          trvoice=$(cat video/ses-tr.txt 2>/dev/null || echo Charon)
           for f in video/narration-*.txt; do
             lang=$(basename "$f" .txt | sed 's/narration-//')
-            if [ "$lang" = "en" ]; then ins="Speak English. Energetic, upbeat, friendly YouTube Shorts host; brisk but clear."; else ins="Türkçe konuş. Enerjik, heyecanlı, samimi bir YouTube Shorts sunucusu gibi; tempolu ama anlaşılır. Doğal Türkçe vurgu ve tonlama. 'Savran' kelimesini acele etmeden, net söyle."; fi
+            if [ "$lang" = "tr" ]; then
+              ok=0
+              for m in gemini-2.5-flash-preview-tts gemini-3.1-flash-tts-preview gemini-3.8-flash-tts; do
+                jq -n --rawfile t "$f" --arg v "$trvoice" '{contents:[{parts:[{text:("Doğal, samimi ve enerjik bir Türk YouTube sunucusu gibi, akıcı İstanbul Türkçesiyle oku: " + $t)}]}],generationConfig:{responseModalities:["AUDIO"],speechConfig:{voiceConfig:{prebuiltVoiceConfig:{voiceName:$v}}}}}' > req.json
+                code=$(curl -sS -o resp.json -w "%{http_code}" "https://generativelanguage.googleapis.com/v1beta/models/$m:generateContent" -H "x-goog-api-key: $GEMINI_API_KEY" -H "Content-Type: application/json" -d @req.json)
+                echo "tr $trvoice $m HTTP $code"
+                if [ "$code" = "200" ]; then jq -r '.candidates[0].content.parts[0].inlineData.data' resp.json | base64 -d > out/ses-tr.pcm; echo "$m $trvoice" > out/ses-tr-model.txt; ok=1; break; fi
+                head -c 300 resp.json; echo
+              done
+              [ "$ok" = 1 ] && continue
+              echo "Gemini olmadı, OpenAI'ye düşülüyor"
+            fi
+            if [ "$lang" = "en" ]; then ins="Speak English. Energetic, upbeat, friendly YouTube Shorts host; brisk but clear."; else ins="Türkçe konuş. Enerjik, samimi bir YouTube Shorts sunucusu gibi; doğal Türkçe vurgu."; fi
             jq -n --rawfile t "$f" --arg ins "$ins" '{model:"gpt-4o-mini-tts", voice:"ash", input:$t, response_format:"mp3", instructions:$ins}' > req.json
             curl -sS --fail-with-body https://api.openai.com/v1/audio/speech -H "Authorization: Bearer $OPENAI_API_KEY" -H "Content-Type: application/json" -d @req.json -o "out/ses-$lang.mp3"
             ls -l "out/ses-$lang.mp3"
