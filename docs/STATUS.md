@@ -84,6 +84,12 @@
 - Ağırlıklı doğrusal eğilim (ağırlık = cevap sayısı); aralık = model belirsizliği + son ölçümün örneklem belirsizliği. Eğim aralığı sıfırı içeriyorsa "belirgin eğilim yok".
 - En az 4 ölçüm ve 14 gün yoksa tahmin gösterilmez. Simülasyonda gösterilmez. Ek API maliyeti yok.
 
+## v1.26 (14 Kasım 2026): görünürlük × ziyaretçi
+
+- Ücretli paketlerde "Yapay zekâdan gelen ziyaretçi" bölümünde motor seçmeli grafik: son 8 haftada o motordaki haftalık önerilme oranı ve o motordan gelen ziyaret yan yana. Ölçüm olmayan hafta "–".
+- En az 4 haftada ikisi de varsa "hafta hafta değişimlerin %X'inde aynı yönde" notu; neden-sonuç iddiası yok. Ek maliyet yok. Test: `engine/test/traffic.test.ts`.
+- Bot ölçümü canlıda doğrulandı: kendi sitemizde ilk gün OAI-SearchBot (IP doğrulandı), Applebot ve Bingbot kayıtları.
+
 ## v1.25 (13 Kasım 2026): yapay zekâ botları (bot ölçümü)
 
 - 18 bot tanınıyor (OAI-SearchBot, ChatGPT-User, GPTBot, Claude-SearchBot, Claude-User, ClaudeBot, PerplexityBot, Perplexity-User…), türüne göre: arama / kullanıcı isteği / eğitim. OpenAI ve Perplexity botları yayımlanan IP listeleriyle doğrulanır; IP saklanmaz.

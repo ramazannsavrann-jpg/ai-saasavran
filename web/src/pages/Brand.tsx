@@ -13,7 +13,7 @@ import { CompareBars, TrendChart } from "../components/Chart";
 import { buildRecommendations, type RecInput } from "../../../engine/src/recommendations.ts";
 import { untrackedNames } from "../../../engine/src/metrics.ts";
 import { campaignFor, taskProgress } from "../../../engine/src/campaign.ts";
-import { botSummary, snippet, SOURCE_PROVIDER, trafficSummary, workerCode, type AiSource, type BotKind } from "../../../engine/src/traffic.ts";
+import { botSummary, snippet, SOURCE_PROVIDER, trafficSummary, visibilityVsVisits, workerCode, type AiSource, type BotKind } from "../../../engine/src/traffic.ts";
 import { sourceMix, statSummary, truthSummary, type SourceMix, type SourceType } from "../../../engine/src/truth.ts";
 
 const TABS = [
@@ -900,6 +900,38 @@ function Report({ brand, type, onBrandChange, paid = false }: { brand: Brand; ty
   );
 }
 
+/** Görünürlük × ziyaretçi: aynı motorda haftalık önerilme oranı ve o motordan gelen ziyaret yan yana. */
+function VisVsTraffic({ vis, rows, today }: { vis: VisRow[]; rows: Parameters<typeof trafficSummary>[0]; today: string }) {
+  const options = (Object.keys(SOURCE_PROVIDER) as AiSource[]).filter((src) => vis.some((r) => r.provider === SOURCE_PROVIDER[src]) && rows.some((r) => r.source === src));
+  const [src, setSrc] = useState<AiSource | null>(null);
+  const cur = src && options.includes(src) ? src : options[0];
+  if (!cur) return null;
+  const pts = series(vis.filter((r) => r.provider === SOURCE_PROVIDER[cur]));
+  const { weeks, aligned } = visibilityVsVisits(pts, rows, cur, today);
+  const maxV = Math.max(1, ...weeks.map((w) => w.visits));
+  return (
+    <>
+      <h3>{L("Görünürlük ve ziyaretçi", "Visibility and visitors")}</h3>
+      {options.length > 1 && (
+        <div className="seg" role="group" aria-label={L("Motor", "Engine")}>
+          {options.map((o) => <button key={o} aria-pressed={o === cur} onClick={() => setSrc(o)}>{AI_SOURCE[o]}</button>)}
+        </div>
+      )}
+      <div className="vvt" role="img" aria-label={L("Haftalık önerilme oranı ve ziyaret", "Weekly recommendation rate and visits")}>
+        {weeks.map((w) => (
+          <div key={w.start} className="vvt-col" title={`${formatDate(w.start)}: ${w.visits} ${L("ziyaret", "visits")}${w.rate !== null ? `, ${L("önerilme", "recommended")} ${pct(w.rate)}` : ""}`}>
+            <span className="vvt-rate">{w.rate !== null ? pct(w.rate) : "–"}</span>
+            <span className="vvt-bar" style={{ height: `${Math.max(3, (100 * w.visits) / maxV)}%` }} />
+            <span className="vvt-n">{w.visits}</span>
+          </div>
+        ))}
+      </div>
+      <p className="src-sup muted">{isEn() ? `Top: ${AI_SOURCE[cur]} recommendation rate that week; bar: visits from ${AI_SOURCE[cur]}. "–" = no measurement that week.` : `Üstte: o haftaki ${AI_SOURCE[cur]} önerilme oranı; çubuk: ${AI_SOURCE[cur]}'den gelen ziyaret. "–" = o hafta ölçüm yok.`}
+        {aligned !== null && " " + (isEn() ? `In ${Math.round(aligned * 100)}% of week-to-week changes they moved in the same direction. This shows a relationship, not proof that one caused the other.` : `Hafta hafta değişimlerin %${Math.round(aligned * 100)}'inde ikisi aynı yönde hareket etti. Bu bir ilişki gösterir; birinin diğerine yol açtığının kanıtı değildir.`)}</p>
+    </>
+  );
+}
+
 const BOT_KIND: Record<BotKind, [string, string, string, string]> = {
   search: ["Arama botları", "Search bots", "Yapay zekâ aramasında görünmenizi sağlar; en önemlisi bunlar.", "They make you visible in AI search; these matter most."],
   user: ["Kullanıcı isteğiyle gelenler", "Fetched on a user's request", "Biri asistana sitenizle ilgili soru sorduğunda sayfayı anlık okur.", "Read a page live when someone asks an assistant about you."],
@@ -1005,6 +1037,7 @@ function AiTrafficPanel({ brand, paid, vis }: { brand: Brand; paid: boolean; vis
               <div className="traffic-bars" role="img" aria-label={L("Haftalık ziyaret", "Weekly visits")}>
                 {s.weekly.map((w) => <span key={w.start} title={`${formatDate(w.start)}: ${w.visits}`} style={{ height: `${Math.max(4, (100 * w.visits) / maxW)}%` }} />)}
               </div>
+              <VisVsTraffic vis={vis} rows={rows.data ?? []} today={today} />
               <h3>{L("Gelinen sayfalar", "Landing pages")}</h3>
               <ol className="domains">{s.topPages.map((p) => <li key={p.path}><span className="src-url">{p.path}</span><span className="num">{p.visits}</span></li>)}</ol>
               <p className="src-sup muted">{L("Önerilme oranı yükselirken ziyaretçi de artıyorsa görünürlüğünüz gerçek trafiğe dönüşüyor demektir. Bazı uygulamalar kaynak bilgisi göndermez; gerçek sayı bundan biraz yüksek olabilir.", "If visits grow as your recommendation rate rises, visibility is turning into real traffic. Some apps don't send referral data, so the real number may be a bit higher.")}</p>

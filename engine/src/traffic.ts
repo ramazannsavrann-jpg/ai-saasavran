@@ -94,3 +94,30 @@ export default {
   },
 };`;
 }
+
+// ---------------- Görünürlük × ziyaretçi ----------------
+export interface WeekPair { start: string; visits: number; rate: number | null; n: number }
+/**
+ * Son 8 hafta: o haftadaki ziyaret (bu kaynaktan) ve o haftadaki ölçümlerin önerilme oranı (k/n birleşik; ölçüm yoksa null).
+ * Neden-sonuç iddiası yok; yalnız yan yana gösterim. `aligned`: en az 4 haftada ikisi de varsa iki serinin aynı yönde
+ * hareket ettiği hafta geçişlerinin payı.
+ */
+export function visibilityVsVisits(points: { at: string; recommend: { k: number; n: number } }[], visits: VisitRow[], source: AiSource, today: string): { weeks: WeekPair[]; aligned: number | null } {
+  const t0 = Date.parse(today + "T00:00:00Z"), day = 86_400_000;
+  const age = (iso: string) => Math.floor((t0 - Date.parse(iso.slice(0, 10) + "T00:00:00Z")) / day);
+  const weeks: WeekPair[] = Array.from({ length: 8 }, (_, i) => {
+    const from = 7 * (7 - i) + 6, to = 7 * (7 - i);
+    const inW = (a: number) => a <= from && a >= to;
+    const ps = points.filter((p) => inW(age(p.at)));
+    const k = ps.reduce((a, p) => a + p.recommend.k, 0), n = ps.reduce((a, p) => a + p.recommend.n, 0);
+    return { start: new Date(t0 - from * day).toISOString().slice(0, 10), visits: visits.filter((v) => v.source === source && inW(age(v.day))).reduce((a, v) => a + v.visits, 0), rate: n ? k / n : null, n };
+  });
+  const both = weeks.filter((w) => w.rate !== null);
+  let same = 0, steps = 0;
+  for (let i = 1; i < both.length; i++) {
+    const dr = both[i].rate! - both[i - 1].rate!, dv = both[i].visits - both[i - 1].visits;
+    if (dr === 0 && dv === 0) continue;
+    steps++; if (Math.sign(dr) === Math.sign(dv)) same++;
+  }
+  return { weeks, aligned: both.length >= 4 && steps >= 3 ? same / steps : null };
+}

@@ -57,3 +57,18 @@ test("t.js: yalnız yapay zekâdan gelen ziyarette ve oturumda bir kez bildirir"
   run("https://claude.ai/", "https://site.com/", store);
   assert.equal(run("https://claude.ai/", "https://site.com/b", store).length, 0, "aynı oturumda ikinci kez yok");
 });
+
+test("Görünürlük × ziyaretçi: haftalık eşleme, ölçümsüz hafta null, 4 haftadan az veride yön oranı yok", async () => {
+  const { visibilityVsVisits } = await import("../src/traffic.ts");
+  const P = (at: string, k: number, n: number) => ({ at, recommend: { k, n } });
+  const V = (day: string, visits: number, source = "chatgpt" as const) => ({ day, source, path: "/", visits });
+  const today = "2026-11-14";
+  const pts = [P("2026-10-20T10:00:00Z", 2, 10), P("2026-10-27T10:00:00Z", 3, 10), P("2026-11-03T10:00:00Z", 5, 10), P("2026-11-12T10:00:00Z", 6, 10)];
+  const vis = [V("2026-10-21", 10), V("2026-10-28", 14), V("2026-11-04", 20), V("2026-11-13", 25), V("2026-11-13", 99, "gemini" as never)];
+  const r = visibilityVsVisits(pts, vis, "chatgpt", today);
+  assert.equal(r.weeks.length, 8);
+  assert.deepEqual(r.weeks.at(-1), { start: "2026-11-08", visits: 25, rate: 0.6, n: 10 });
+  assert.equal(r.weeks[0].rate, null);
+  assert.equal(r.aligned, 1, "üç geçişin üçü de aynı yönde");
+  assert.equal(visibilityVsVisits(pts.slice(0, 2), vis, "chatgpt", today).aligned, null);
+});
