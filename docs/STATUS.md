@@ -84,6 +84,13 @@
 - Ağırlıklı doğrusal eğilim (ağırlık = cevap sayısı); aralık = model belirsizliği + son ölçümün örneklem belirsizliği. Eğim aralığı sıfırı içeriyorsa "belirgin eğilim yok".
 - En az 4 ölçüm ve 14 gün yoksa tahmin gösterilmez. Simülasyonda gösterilmez. Ek API maliyeti yok.
 
+## v1.20 (13 Kasım 2026): marka algısı
+
+- "Önerildi mi?" kontrolü aynı çağrıda hedef markanın algısını çıkarır: duygu (olumlu/karışık/nötr/olumsuz) ve sabit listeden en fazla 5 nitelik (premium, uygun fiyatlı, güvenilir…). Migration 0034: `mentions.perception`.
+- Her nitelik cevaptan birebir alıntı ister; cevapta geçmeyen alıntı ve listede olmayan nitelik atılır (uydurma gösterilmez).
+- Yalnız ücretli paketler (ve Growth Lab), canlı aramalı ölçüm. Ek maliyet cevap başına ~0,0001 $ (gerçek sınıflandırma kaydı: 530 girdi / 66 çıktı token, 0,00009 $).
+- Eski cevaplar için işçi geriye dönük doldurur (ayrı çağrı, toplam tavan `PERCEPTION_BACKFILL_MAX_USD`, varsayılan 0,10 $). Raporda "Marka algısı" bölümü. Testler: `engine/test/perception.test.ts`.
+
 ## v1.19 (13 Kasım 2026): kazanma kampanyası
 
 - İyileştirme rehberindeki veri maddelerinde (anılmadığınız sorular, anılıp önerilmediğiniz sorular, motor farkı, kaynak siteleri, yanlış ürün bilgisi, Shopping, kendi site payı, site kontrolü maddeleri) "Kampanya başlat" düğmesi.
