@@ -13,7 +13,7 @@ import { CompareBars, TrendChart } from "../components/Chart";
 import { buildRecommendations, type RecInput } from "../../../engine/src/recommendations.ts";
 import { untrackedNames } from "../../../engine/src/metrics.ts";
 import { campaignFor, taskProgress } from "../../../engine/src/campaign.ts";
-import { sourceMix, truthSummary, type SourceMix, type SourceType } from "../../../engine/src/truth.ts";
+import { sourceMix, statSummary, truthSummary, type SourceMix, type SourceType } from "../../../engine/src/truth.ts";
 
 const TABS = [
   ["rapor", L("Rapor", "Report")], ["oneriler", L("Öneriler", "Recommendations")], ["rakipler", L("Rakipler", "Competitors")], ["sorular", L("Sorular", "Questions")], ["urunler", L("Ürünler", "Products")], ["olcumler", L("Ölçümler", "Runs")],
@@ -784,7 +784,8 @@ function Report({ brand, type, onBrandChange, paid = false }: { brand: Brand; ty
               </section>
             );
           })()}
-          {type !== "simulated" && <TruthGuardPanel brand={brand} paid={paid} mix={live && insightsReady ? sourceMix(answers.data!, ments.data!, insightBrands) : null} />}
+          {type !== "simulated" && <TruthGuardPanel brand={brand} paid={paid} mix={live && insightsReady ? sourceMix(answers.data!, ments.data!, insightBrands) : null}
+            stats={answers.data ? statSummary(answers.data, [brand.name, ...brand.aliases]) : null} />}
           {live && insightsReady && <PerceptionPanel summary={perceptionSummary(answers.data!, ments.data!, brand.id)} brand={brand.name} />}
           {!live && type !== "simulated" && (
             <section className="panel" id="kendi-site-payi">
@@ -902,7 +903,7 @@ const SOURCE_LABEL: Record<SourceType, [string, string]> = {
   forum: ["Forum / sözlük", "Forum"], social: ["Sosyal medya / video", "Social / video"], marketplace: ["Pazar yeri", "Marketplace"], other: ["Diğer siteler", "Other sites"],
 };
 /** TruthGuard: bilgi kartıyla doğruluk kontrolü ve kaynak türü dağılımı. Ücretli paketlere özel. */
-function TruthGuardPanel({ brand, paid, mix }: { brand: Brand; paid: boolean; mix: SourceMix | null }) {
+function TruthGuardPanel({ brand, paid, mix, stats }: { brand: Brand; paid: boolean; mix: SourceMix | null; stats: ReturnType<typeof statSummary> | null }) {
   const checks = useLoad(() => (paid && brand.fact_card ? api.truthChecks(brand.id) : Promise.resolve([])), [brand.id, paid, brand.fact_card ?? ""]);
   const sl = (t: SourceType) => (isEn() ? SOURCE_LABEL[t][1] : SOURCE_LABEL[t][0]);
   if (!paid) return (
@@ -941,6 +942,26 @@ function TruthGuardPanel({ brand, paid, mix }: { brand: Brand; paid: boolean; mi
           )}
           {s.unverifiable > 0 && <p className="src-sup muted">{L("\"Doğrulanamadı\" iddiaları azaltmak için bilgi kartınıza o konuları ekleyin.", "Add those topics to your fact card to reduce \"can't verify\" claims.")}</p>}
           <p className="src-sup muted">{L("Karşılaştırmayı küçük bir yapay zekâ modeli yapar ve yanılabilir; her iddia cevaptan birebir alıntıyla gösterilir.", "A small AI model does the comparison and can make mistakes; every claim is shown with an exact quote from the answer.")}</p>
+        </>
+      )}
+      {stats && (
+        <>
+          <h3>{L("Kaynaksız sayılar ve eski bilgi", "Unsourced numbers and outdated info")}</h3>
+          {stats.unsourced + stats.oldDates === 0
+            ? <p className="muted">{L("Bu ölçümde markanızla ilgili kaynaksız istatistik veya eski tarihli \"güncel\" bilgi bulunmadı.", "No unsourced statistics or outdated \"current\" info about your brand in this measurement.")}</p>
+            : (
+              <>
+                <p className="muted">{isEn() ? `${stats.unsourced} unsourced statistic${stats.unsourced === 1 ? "" : "s"} and ${stats.oldDates} outdated date${stats.oldDates === 1 ? "" : "s"} in ${stats.answersWithFlags} answers. A number with no source behind it may be made up; check it.` : `${stats.answersWithFlags} cevapta ${stats.unsourced} kaynaksız istatistik ve ${stats.oldDates} eski tarih. Arkasında kaynak olmayan bir sayı uydurma olabilir; kontrol edin.`}</p>
+                <ul className="src-dom">
+                  {stats.examples.map((e) => (
+                    <li key={e.kind + e.sentence}>
+                      <p className="src-head"><strong>{e.kind === "unsourced_stat" ? L("Kaynaksız istatistik", "Unsourced statistic") : L("Eski tarih", "Outdated date")}: {e.value}</strong> <span className="muted">{providerLabel(e.provider)}</span></p>
+                      <blockquote className="answer"><p>“{e.sentence}”</p></blockquote>
+                    </li>
+                  ))}
+                </ul>
+              </>
+            )}
         </>
       )}
       {mix && mix.total > 0 && (

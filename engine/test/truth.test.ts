@@ -80,3 +80,22 @@ test("Rehber ve kampanya: bilgi kartıyla çelişen iddia yüksek öncelikli mad
   assert.equal(r.priority, "yüksek");
   assert.ok(campaignFor(r, input)![0].includes("2015'te kuruldu"));
 });
+
+test("Kaynaksız istatistik: marka cümlesindeki yüzde/milyon/sıralama iddiası; fiyat, saat, teknik özellik ve kaynaklı cevap sayılmaz", async () => {
+  const { statFlags } = await import("../src/truth.ts");
+  const A = "Kafe Mavi İstanbul'daki kafelerin %40'ından fazlasını geride bırakıyor. Kafe Mavi'de filtre kahve 85 TL. Kafe Mavi 09:00'da açılır. Kahve Durağı 2 milyon müşteriye ulaştı. Kafe Mavi pazar lideri konumunda ve 1,5 milyon kullanıcıya hizmet veriyor.";
+  const f = statFlags(A, ["Kafe Mavi"], { cited: 0 });
+  assert.deepEqual(f.map((x) => x.value), ["%40", "1,5 milyon"]);
+  assert.equal(statFlags(A, ["Kafe Mavi"], { cited: 3 }).filter((x) => x.kind === "unsourced_stat").length, 0, "kaynak gösterildiyse kaynaksız değildir");
+  assert.equal(statFlags("Galaxy S26 Ultra 200MP kamera, 5000 mAh pil ve 60W şarj sunar.", ["Galaxy"], { cited: 0 }).length, 0);
+});
+
+test("Eski bilgi: güncel bağlamda eski yıl işaretlenir, tarihsel bilgi işaretlenmez", async () => {
+  const { statFlags, statSummary } = await import("../src/truth.ts");
+  const now = new Date("2026-11-13");
+  assert.equal(statFlags("Kafe Mavi 2009'da kuruldu.", ["Kafe Mavi"], { cited: 1, now }).length, 0);
+  const f = statFlags("2021 itibarıyla Kafe Mavi'nin en yeni şubesi Moda'dadır.", ["Kafe Mavi"], { cited: 1, now });
+  assert.equal(f[0].kind, "old_date"); assert.equal(f[0].value, "2021");
+  const s = statSummary([{ answer_text: "Kafe Mavi %30 büyüdü.", cited_urls: [], provider: "openai" }, { answer_text: "Başka bir şey.", cited_urls: [] }], ["Kafe Mavi"], now);
+  assert.deepEqual([s.unsourced, s.answersWithFlags, s.examples[0].provider], [1, 1, "openai"]);
+});

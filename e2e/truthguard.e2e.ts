@@ -14,7 +14,7 @@ const svc = () => createClient(stack.url, stack.serviceKey, { auth: { persistSes
 const must = <T,>(r: { data: T; error: { message: string } | null }) => { if (r.error) throw new Error(r.error.message); return r.data; };
 
 const A1 = "Kafe Mavi 2015 yılında kuruldu ve Kadıköy'de hizmet veriyor. Hafta içi 09:00-22:00 açık. Sakin ortamı ve kaliteli kahvesiyle öne çıkıyor; fiyatlar biraz yüksek. Alternatif olarak Kahve Durağı da önerilir.";
-const A2 = "Moda'da çalışmak için Kahve Durağı ve Kafe Mavi iyi seçenekler. Kafe Mavi'de filtre kahve 120 TL civarında, paket servis yok.";
+const A2 = "Moda'da çalışmak için Kahve Durağı ve Kafe Mavi iyi seçenekler. Kafe Mavi'de filtre kahve 120 TL civarında, paket servis yok. Kafe Mavi müşterilerin %72'si tarafından tavsiye ediliyor.";
 
 test("TruthGuard: ücretli pakette bilgi kartı, yanlış iddialar, kaynak türleri ve marka algısı görünür; Free'de yalnız tanıtım", async ({ page }) => {
   await page.goto("/kayit");
@@ -41,7 +41,8 @@ test("TruthGuard: ücretli pakette bilgi kartı, yanlış iddialar, kaynak türl
   const base = { workspace_id: ws, run_id: run.id, provider: "openai", model: "gpt-test", method: "api_with_search", data_origin: "live_api", measurement_type: "live_search" };
   const resp = must(await db.from("responses").insert([
     { ...base, prompt_id: prompts[0].id, repetition: 1, answer_text: A1, cited_urls: ["https://eksisozluk.com/kafe-mavi", "https://www.tripadvisor.com.tr/x", "https://kafemavi.com/menu"] },
-    { ...base, prompt_id: prompts[1].id, repetition: 1, answer_text: A2, cited_urls: ["https://www.reddit.com/r/istanbul/x", "https://www.instagram.com/p/abc", "https://kahveduragi.com"] },
+    { ...base, prompt_id: prompts[1].id, repetition: 1, answer_text: A2, cited_urls: [] },
+    { ...base, prompt_id: prompts[1].id, repetition: 2, answer_text: "Kahve Durağı öneririm.", cited_urls: ["https://www.reddit.com/r/istanbul/x", "https://www.instagram.com/p/abc", "https://kahveduragi.com"] },
   ]).select("id")) as { id: string }[];
   const P1 = { sentiment: "positive", traits: [{ trait: "high_quality", quote: "kaliteli kahvesiyle öne çıkıyor" }, { trait: "expensive", quote: "fiyatlar biraz yüksek" }] };
   must(await db.from("mentions").insert([
@@ -49,6 +50,8 @@ test("TruthGuard: ücretli pakette bilgi kartı, yanlış iddialar, kaynak türl
     { response_id: resp[0].id, workspace_id: ws, brand_id: comp.id, mentioned: true, recommended: true, cited: false, rank: 2, classifier: "llm:test" },
     { response_id: resp[1].id, workspace_id: ws, brand_id: brand.id, mentioned: true, recommended: false, cited: false, rank: null, classifier: "llm:test", perception: { sentiment: "neutral", traits: [] } },
     { response_id: resp[1].id, workspace_id: ws, brand_id: comp.id, mentioned: true, recommended: true, cited: true, rank: 1, classifier: "llm:test" },
+    { response_id: resp[2].id, workspace_id: ws, brand_id: brand.id, mentioned: false, recommended: false, cited: false, rank: null, classifier: "llm:test" },
+    { response_id: resp[2].id, workspace_id: ws, brand_id: comp.id, mentioned: true, recommended: true, cited: true, rank: 1, classifier: "llm:test" },
   ]));
   must(await db.from("truth_checks").insert([
     { workspace_id: ws, brand_id: brand.id, run_id: run.id, response_id: resp[0].id, prompt_id: prompts[0].id, provider: "openai", claims: [
@@ -73,6 +76,7 @@ test("TruthGuard: ücretli pakette bilgi kartı, yanlış iddialar, kaynak türl
   await expect(tg).toContainText("Doğrusu: Kuruluş: 2009");
   await expect(tg).toContainText("Paket servis yok");
   await expect(tg).toContainText("Forum / sözlük");
+  await expect(tg).toContainText("Kaynaksız istatistik: %72");
   await expect(page.locator("#marka-algisi")).toContainText("Kaliteli");
   await page.addStyleTag({ content: ".bottomnav{display:none!important}.topbar{position:static!important}" });
   await tg.screenshot({ path: `${SHOTS}/30-truthguard.png` });
