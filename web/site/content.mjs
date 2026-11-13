@@ -6,6 +6,10 @@ export const SITE = {
   url: "https://aisaasavran.com",
   email: "info@aisaasavran.com",
   updated: "2026-11-07",
+  // IndexNow anahtarı (gizli değildir; Bing/Yandex'e "bu sayfa değişti" bildirmek için sitede herkese açık durur).
+  indexnow: "81070e2ac780301303314203d3c9f558",
+  // Markanın resmî profilleri (Organization.sameAs) — yapay zekânın markayı tek bir varlık olarak tanıması için.
+  sameAs: ["https://www.youtube.com/@aisaasavran"],
 };
 
 // Rehberler: müşterilerin yapay zekâya sorduğu sorulara doğrudan cevap veren sayfalar.
