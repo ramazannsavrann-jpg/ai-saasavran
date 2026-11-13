@@ -36,7 +36,7 @@ const faqHtml = (faq, en = false) => faq.length ? `<section class="faq"><h2>${en
 // Arama sonucu başlığı ≤70 karakter: uzun başlıkta kısa başlık kullanılır (sayfadaki h1 tam başlık kalır)
 const seoTitle = (title, short, suffix = " | AI SaaSavran") => (title + suffix).length <= 70 ? title + suffix : title.length <= 70 ? title : short + suffix;
 
-function page({ path, title, description, body, schema = [], type = "website", lang = "en", alt = null, image = null }) {
+function page({ path, title, description, body, schema = [], type = "website", lang = "en", alt = null, image = null, noindex = false }) {
   const url = SITE.url + path;
   const en = lang === "en";
   const enPath = en ? path : alt, trPath = en ? alt : path;
@@ -48,7 +48,7 @@ function page({ path, title, description, body, schema = [], type = "website", l
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>${esc(title)}</title>
 <meta name="description" content="${esc(description)}">
-<link rel="canonical" href="${url}">
+${noindex ? `<meta name="robots" content="noindex">` : `<link rel="canonical" href="${url}">`}
 ${alternates}
 <meta property="og:type" content="${type}">
 <meta property="og:title" content="${esc(title)}">
@@ -489,6 +489,18 @@ write("/tr/kontrol/", page({ lang: "tr", alt: "/check/", path: "/tr/kontrol/", t
 write("/pricing/", page({ lang: "en", path: "/pricing/", title: "Pricing | AI SaaSavran", description: "AI SaaSavran plans: Free, Plus $29/month, Pro $149/month, Business $449/month.", body: `<section class="article"><h1>Pricing</h1><p>Start free. Paid plans add ChatGPT with live web search, more brands and more questions. Monthly billing, cancel anytime, 14-day money-back guarantee (<a href="/refund/">refund policy</a>).</p></section>${plansHtml(true)}`, schema: [APP] }));
 
 for (const l of Object.values(LEGAL)) write(l.path, page({ lang: l.lang, path: l.path, title: l.title, description: l.description, body: l.body }));
+
+// 404: Cloudflare Pages, 404.html yoksa olmayan her adrese ana sayfayı 200 ile verir (Google bunu "soft 404" sayar).
+// Bu dosya varken uygulama adresleri yine _redirects ile /app/'e gider; geri kalan bilinmeyen adresler gerçek 404 alır.
+writeFileSync(join(DIST, "404.html"), page({ lang: "tr", path: "/404", noindex: true, title: "Sayfa bulunamadı | AI SaaSavran", description: "Aradığınız sayfa bulunamadı. Page not found.", body: `
+<section class="article">
+  <h1>Sayfa bulunamadı</h1>
+  <p class="lede">Aradığınız sayfa taşınmış veya hiç olmamış olabilir.</p>
+  <ul><li><a href="/tr/">Ana sayfa</a></li><li><a href="/rehber/">Rehberler</a></li><li><a href="/tr/blog/">Blog</a></li><li><a href="/tr/kontrol/">Ücretsiz kontrol</a></li><li><a href="/giris">Giriş yap</a></li></ul>
+  <h2 lang="en">Page not found</h2>
+  <p lang="en">The page you are looking for may have moved or never existed.</p>
+  <ul lang="en"><li><a href="/">Home</a></li><li><a href="/guides/">Guides</a></li><li><a href="/blog/">Blog</a></li><li><a href="/check/">Free check</a></li></ul>
+</section>` }));
 
 writeFileSync(join(DIST, "_redirects"), ["/en / 301", "/en/ / 301", "/guides/ai-visibility-tools-compared/ /guides/ 301", "/rehber/yapay-zeka-gorunurluk-araclari/ /rehber/ 301", ...APP_ROUTES.map((r) => `${r} /app/ 200`)].join("\n") + "\n");
 console.log(`Statik sayfalar üretildi: ${urls.length} sayfa, uygulama /app/ altında`);
