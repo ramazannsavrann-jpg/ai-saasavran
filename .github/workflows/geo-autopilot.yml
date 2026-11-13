@@ -1,0 +1,85 @@
+# GEO Otopilot: aisaasavran.com'un yapay zekâdaki (ChatGPT, Claude, Gemini) görünürlüğünü ölçer ve artırır.
+#  - Ayın 1, 11 ve 21'i (10 günde bir) + bu dosya değişince + elle: TAM ölçüm (ücretli, çalıştırma başına en fazla 0,25 $)
+#  - Site her yayınlandığında (CI bitince): ÜCRETSİZ kontrol + değişen sayfaları Bing/Yandex'e bildirme (IndexNow)
+# Sonuçlar: "geo-veri" dalı (geçmiş), tam ölçümde bir GitHub Issue (rapor + yapılacaklar), çalıştırma Summary sayfası.
+name: GEO Otopilot
+on:
+  push:
+    branches: [main]
+    paths:
+      - scripts/geo-autopilot.ts
+      - .github/workflows/geo-autopilot.yml
+  schedule:
+    - cron: "17 6 1,11,21 * *"   # 09:17 İstanbul
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "full = ölçüm dahil (ücretli), light = yalnız ücretsiz kontrol"
+        default: full
+        type: choice
+        options: [full, light]
+permissions:
+  contents: write
+  issues: write
+concurrency:
+  group: geo-autopilot
+  cancel-in-progress: false
+jobs:
+  geo:
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Mod
+        id: m
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_run" ]; then echo "mode=light" >> "$GITHUB_OUTPUT";
+          elif [ "${{ github.event_name }}" = "workflow_dispatch" ]; then echo "mode=${{ inputs.mode }}" >> "$GITHUB_OUTPUT";
+          else echo "mode=full" >> "$GITHUB_OUTPUT"; fi
+          echo "date=$(date -u +%F)" >> "$GITHUB_OUTPUT"
+      - name: Veri dalını hazırla (geo-veri)
+        run: |
+          if git fetch --depth=1 origin geo-veri:geo-veri 2>/dev/null; then git worktree add geo-data geo-veri;
+          else git worktree add --orphan -b geo-veri geo-data; fi
+      - name: GEO Otopilot
+        env:
+          GEO_MODE: ${{ steps.m.outputs.mode }}
+          GEO_DATA_DIR: geo-data
+          GEO_DETAIL_DIR: geo-detail
+          GEO_CAP_USD: "0.25"
+          ALLOW_PAID_API: "true"
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: node scripts/geo-autopilot.ts
+      - name: Geçmişi kaydet
+        run: |
+          cd geo-data
+          git add -A
+          if git -c user.name="geo-otopilot" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" commit -q -m "GEO veri ${{ steps.m.outputs.date }} (${{ steps.m.outputs.mode }}) [skip ci]"; then
+            git push -q origin geo-veri
+          fi
+      - name: Ayrıntılar (gerçek rakip adları, tam cevaplar; 30 gün)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: geo-detay
+          path: geo-detail/
+          retention-days: 30
+          if-no-files-found: ignore
+      - name: Rapor (GitHub Issue)
+        if: steps.m.outputs.mode == 'full'
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh label create geo-otopilot --color 0E8A16 --description "GEO Otopilot raporları" --force
+          gh issue create --title "GEO Otopilot raporu — ${{ steps.m.outputs.date }}" --body-file geo-data/latest.md --label geo-otopilot
