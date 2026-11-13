@@ -73,9 +73,17 @@ def rtext(d, x, y, s, f, col): d.text((x - d.textlength(s, font=f), y), s, font=
 T = CFG["t"]
 def s1(t, dur):
     im, d = base()
-    y = text_block(d, T["hook"], font("ExtraBold", 100), 480, INK, 1.0)
-    y = text_block(d, T["hook2"], font("SemiBold", 50), y + 40, ACC, ease((t - 0.4) / 0.6))
-    text_block(d, T["note"], font("Medium", 38), y + 60, MUTED, ease((t - 1.4) / 0.6))
+    x = 80; y = 330
+    for e, c in (("ChatGPT", GOLD), ("Claude", ACC), ("Gemini", (150, 170, 240))):
+        f = font("Bold", 46); w = d.textlength(e, font=f) + 56
+        d.rounded_rectangle([x, y, x + w, y + 84], radius=42, outline=c, width=4); d.text((x + 28, y + 14), e, font=f, fill=c); x += w + 24
+    y = text_block(d, T["hook"], font("Black", 118), 520, INK, 1.0)
+    b = T.get("badge")
+    if b:
+        a = ease((t - 0.3) / 0.5); fb = font("ExtraBold", 64); w = d.textlength(b, font=fb) + 80
+        d.rounded_rectangle([80, y + 40, 80 + w, y + 160], radius=30, fill=mix(GOLD, a)); d.text((120, y + 62), b, font=fb, fill=BG if a > 0.5 else mix(GOLD, a)); y += 200
+    y = text_block(d, T["hook2"], font("SemiBold", 50), y + 40, ACC, ease((t - 0.6) / 0.6))
+    text_block(d, T["note"], font("Medium", 38), y + 40, MUTED, ease((t - 1.4) / 0.6))
     footer_note(d); return im
 def s2(t, dur):
     im, d = base(); tag(d, t, T["tag_brands"]); y = title(d, t, T["who"], T["who_sub"]) + 60; n = CFG["n2"]
