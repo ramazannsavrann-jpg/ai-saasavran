@@ -34,6 +34,8 @@ export interface RecInput {
   wrongClaims?: { product: string; claim: string; fact: string }[];
   /** Kendi site payı (canlı arama): kaynak gösterimlerinin kaçı sizin siteniz */
   ownShare?: { own: number; total: number; competitor: number } | null;
+  /** TruthGuard: yapay zekânın marka hakkında söylediği, bilgi kartıyla çelişen iddialar */
+  wrongBrandClaims?: { claim: string; fact: string }[];
   /** Google Shopping: kendi ürününüz rakip üründen geride */
   shoppingBehind?: { product: string; ownPos: number | null; rival: string; rivalPos: number }[];
 }
@@ -188,6 +190,17 @@ export function buildRecommendations(i: RecInput): Recommendation[] {
       action: en ? "Fix this fact on your product page, marketplace listings and structured data (Product/Offer). Old reviews and price sites that repeat it also matter."
         : "Bu bilgiyi ürün sayfanızda, pazar yeri ilanlarında ve yapılandırılmış veride (Product/Offer) düzeltin. Eski bilgiyi tekrarlayan inceleme ve fiyat siteleri de önemlidir.",
       check: en ? "Next accuracy check: is the claim now correct?" : "Sonraki doğruluk kontrolü: bu iddia doğru çıkıyor mu?",
+    });
+  }
+  if (i.wrongBrandClaims && i.wrongBrandClaims.length > 0) {
+    const w = i.wrongBrandClaims[0], n = i.wrongBrandClaims.length;
+    add({
+      id: "truth_wrong", priority: "yüksek",
+      title: en ? `AI says ${n} wrong thing${n > 1 ? "s" : ""} about your brand` : `Yapay zekâ markanız hakkında ${n} yanlış bilgi veriyor`,
+      why: en ? `"${w.claim}". Your fact card says: ${w.fact}` : `"${w.claim}". Bilgi kartınıza göre doğrusu: ${w.fact}`,
+      action: en ? "Correct this on your website (about, contact, pricing pages), business profiles and directory listings; outdated pages on other sites that repeat it matter too."
+        : "Bu bilgiyi sitenizde (hakkımızda, iletişim, fiyat sayfaları), işletme profillerinizde ve rehber kayıtlarında düzeltin; eski bilgiyi tekrarlayan başka sitelerdeki sayfalar da önemlidir.",
+      check: en ? "Next TruthGuard check: is the claim gone or correct?" : "Sonraki TruthGuard kontrolü: bu iddia kayboldu mu ya da doğru mu?",
     });
   }
   if (i.shoppingBehind && i.shoppingBehind.length > 0) {

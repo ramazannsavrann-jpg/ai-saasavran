@@ -84,6 +84,15 @@
 - Ağırlıklı doğrusal eğilim (ağırlık = cevap sayısı); aralık = model belirsizliği + son ölçümün örneklem belirsizliği. Eğim aralığı sıfırı içeriyorsa "belirgin eğilim yok".
 - En az 4 ölçüm ve 14 gün yoksa tahmin gösterilmez. Simülasyonda gösterilmez. Ek API maliyeti yok.
 
+## v1.21 (13 Kasım 2026): TruthGuard (1. aşama)
+
+- Yalnız ücretli paketler (ve Growth Lab). Free'de kısa tanıtım ve paket bağlantısı.
+- **Doğru bilgi kartı:** marka düzenleme formunda (en fazla 3.000 karakter). Kart değişince kontroller yeni kartla yeniden yapılır.
+- **Yanlış bilgi kontrolü:** işçi, markanın geçtiği en güncel cevabı (soru × motor başına haftada bir) kartla karşılaştırır: doğru / yanlış / doğrulanamadı, doğrusu ve cevaptan birebir alıntı. Alıntı cevapta yoksa iddia atılır. Maliyet çalışma alanının ücretli harcamasına yazılır (~0,0003 $/kontrol). Migration 0035.
+- **Kaynak türleri (kural tabanlı, ücretsiz):** sizin siteniz, rakip, resmî/kamu/eğitim, ansiklopedi, haber, inceleme, forum, sosyal medya, pazar yeri, diğer; tüm cevaplar ve rakibin öne geçtiği cevaplar ayrı. Forum + sosyal ≥%40 ise uyarı.
+- İyileştirme rehberinde "Yapay zekâ markanız hakkında N yanlış bilgi veriyor" maddesi ve kampanya görevleri. Testler: `engine/test/truth.test.ts`.
+- Sıradaki aşamalar: kaynaksız istatistik ve eski bilgi (kural tabanlı), motorlar arası çelişki ve yeni yanlış bilgi uyarısı.
+
 ## v1.20 (13 Kasım 2026): marka algısı
 
 - "Önerildi mi?" kontrolü aynı çağrıda hedef markanın algısını çıkarır: duygu (olumlu/karışık/nötr/olumsuz) ve sabit listeden en fazla 5 nitelik (premium, uygun fiyatlı, güvenilir…). Migration 0034: `mentions.perception`.

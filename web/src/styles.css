@@ -495,3 +495,5 @@ pre.code { white-space: pre-wrap; word-break: break-all; padding: 8px 10px; back
 .per-neg { background: var(--danger); }
 .own-legend .dot.per-neu { border: 1px solid var(--muted); }
 .per-item-neg .src-head strong { color: var(--danger); }
+.truth-bad { color: var(--danger); }
+.truth-item .src-head strong { color: var(--danger); }

@@ -51,7 +51,7 @@ export function siteKey(url: string | null | undefined): string {
 }
 const sameSite = (domain: string, brandDomain: string) => !!brandDomain && (domain === brandDomain || (!brandDomain.includes("/") && domain.endsWith("." + brandDomain)));
 
-function ownerOf(domain: string, brands: InsightBrand[]): { owner: SourceOwner; ownerName: string | null } {
+export function ownerOf(domain: string, brands: InsightBrand[]): { owner: SourceOwner; ownerName: string | null } {
   for (const b of brands) {
     if (sameSite(domain, siteKey(b.website))) return { owner: b.isTarget ? "target" : "competitor", ownerName: b.name };
   }

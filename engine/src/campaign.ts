@@ -53,6 +53,14 @@ export function campaignTasks(recId: string, i: RecInput): string[] | null {
       out.push(en ? "Update Product/Offer structured data" : "Product/Offer yapılandırılmış verisini güncelleyin");
       break;
     }
+    case "truth_wrong": {
+      const w = i.wrongBrandClaims ?? [];
+      if (!w.length) return null;
+      for (const c of w.slice(0, 5)) out.push(en ? `Correct on your site: "${c.claim}" → ${c.fact}` : `Sitenizde düzeltin: "${c.claim}" → ${c.fact}`);
+      out.push(en ? "Update your business profiles (Google, maps, directories) with the same facts" : "İşletme profillerinizi (Google, haritalar, rehberler) aynı bilgilerle güncelleyin");
+      out.push(en ? "Find and ask other sites that repeat the wrong information to update it" : "Yanlış bilgiyi tekrarlayan diğer siteleri bulup güncellemelerini isteyin");
+      break;
+    }
     case "shopping_behind": {
       const s = i.shoppingBehind ?? [];
       if (!s.length) return null;
