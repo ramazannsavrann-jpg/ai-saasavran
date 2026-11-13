@@ -84,7 +84,7 @@ function write(path, html) {
   writeFileSync(file, html);
 }
 
-const ORG = { "@context": "https://schema.org", "@type": "Organization", name: SITE.name, alternateName: ["AISaaSavran", "aisaasavran.com", "AI SaaSavran AI visibility tracker"], url: SITE.url, email: SITE.email, logo: SITE.url + "/icon.svg",
+const ORG = { "@context": "https://schema.org", "@type": "Organization", name: SITE.name, alternateName: ["AISaaSavran", "aisaasavran.com", "AI SaaSavran AI visibility tracker"], url: SITE.url, email: SITE.email, logo: SITE.url + "/icon.svg", sameAs: SITE.sameAs,
   description: "AI SaaSavran (aisaasavran.com) is an AI visibility measurement tool: it measures how often ChatGPT, Claude and Gemini mention and recommend a brand. It is an independent product and is not affiliated with similarly named companies or services." };
 const APP = {
   "@context": "https://schema.org", "@type": "SoftwareApplication", name: SITE.name, url: SITE.url, applicationCategory: "BusinessApplication",
@@ -310,7 +310,7 @@ for (const g of GUIDES) {
 }
 
 // 5) Tarayıcılar ve yapay zekâ botları için dosyalar
-const urls = ["/", "/guides/", ...GUIDES_EN.map((g) => `/guides/${g.slug}/`), "/tr/", "/rehber/", ...GUIDES.map((g) => `/rehber/${g.slug}/`)];
+const urls = ["/", "/pricing/", "/check/", "/guides/", ...GUIDES_EN.map((g) => `/guides/${g.slug}/`), "/tr/", "/tr/kontrol/", "/rehber/", ...GUIDES.map((g) => `/rehber/${g.slug}/`)];
 writeFileSync(join(DIST, "sitemap.xml"), `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${urls.map((u) => `  <url><loc>${SITE.url}${u}</loc><lastmod>${SITE.updated}</lastmod></url>`).join("\n")}
@@ -336,6 +336,13 @@ writeFileSync(join(DIST, "llms.txt"), `# AI SaaSavran
 
 Contact: ${SITE.email}
 
+## Pricing
+- [Plans](${SITE.url}/pricing/): Free ($0), Plus ($29/month), Pro ($149/month), Business ($449/month). Monthly billing, cancel anytime, 14-day money-back guarantee.
+- [Free AI visibility check](${SITE.url}/check/): no signup; checks whether Gemini mentions a business for its category.
+
+## Official profiles
+${SITE.sameAs.map((u) => `- ${u}`).join("\n")}
+
 ## For AI agents
 - MCP server (read-only, Pro and Business): ${SITE.url}/api/mcp — Streamable HTTP, header \`Authorization: Bearer aisv_...\`; tools: list_brands, get_brand_report.
 - REST API: ${SITE.url}/api/v1/brands and ${SITE.url}/api/v1/brands/{id} with the same key. Keys are created in the app under Account → API and MCP.
@@ -347,6 +354,9 @@ ${GUIDES_EN.map((g) => `- [${g.title}](${SITE.url}/guides/${g.slug}/): ${g.descr
 - [Türkçe ana sayfa](${SITE.url}/tr/)
 ${GUIDES.map((g) => `- [${g.title}](${SITE.url}/rehber/${g.slug}/)`).join("\n")}
 `);
+
+// IndexNow anahtar dosyası: GEO otopilotu değişen sayfaları Bing/Yandex'e bu anahtarla bildirir.
+writeFileSync(join(DIST, `${SITE.indexnow}.txt`), SITE.indexnow);
 
 // 6) Uygulama adresleri → /app/ (Cloudflare Pages yeniden yazma, adres çubuğu değişmez)
 const APP_ROUTES = ["/giris", "/kayit", "/sifre", "/durum", "/durum-ic", "/gizlilik", "/kosullar", "/panel", "/hesap", "/demo-lab", "/yonetim", "/calisma-alani/*", "/marka/*", "/rapor/*", "/davet/*"];
