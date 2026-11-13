@@ -15,11 +15,12 @@ jobs:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
           mkdir -p out
+          curl -sS "https://generativelanguage.googleapis.com/v1beta/models?pageSize=200" -H "x-goog-api-key: $GEMINI_API_KEY" | jq -r '.models[].name' | grep -i flash | head -30
           for f in video/kontrol/*.mp3; do
             n=$(basename "$f" .mp3)
             base64 -w0 "$f" > b64.txt
             jq -n --rawfile d b64.txt '{contents:[{parts:[{inline_data:{mime_type:"audio/mp3",data:$d}},{text:"Transcribe this audio verbatim, sentence by sentence. Return only JSON: an array of objects {\"start\": seconds as a number with one decimal, \"text\": the sentence}. Include every spoken word, including anything spoken before the main content."}]}],generationConfig:{responseMimeType:"application/json"}}' > req.json
-            for m in gemini-2.5-flash gemini-2.5-flash-lite; do
+            for m in gemini-flash-latest gemini-3.8-flash gemini-3.1-flash gemini-flash-lite-latest; do
               code=$(curl -sS -o resp.json -w "%{http_code}" "https://generativelanguage.googleapis.com/v1beta/models/$m:generateContent" -H "x-goog-api-key: $GEMINI_API_KEY" -H "Content-Type: application/json" -d @req.json)
               echo "$n $m HTTP $code"
               if [ "$code" = "200" ]; then jq -r '.candidates[0].content.parts[0].text' resp.json > "out/$n.json"; break; fi
