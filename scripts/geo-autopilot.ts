@@ -23,7 +23,7 @@ const env = process.env;
 const MODE = env.GEO_MODE === "full" ? "full" : "light";
 const DATA = env.GEO_DATA_DIR || "geo-data";
 const DETAIL = env.GEO_DETAIL_DIR || "geo-detail";
-const CAP_USD = Number(env.GEO_CAP_USD || "0.25");
+const CAP_USD = Number(env.GEO_CAP_USD || "0.40");
 const BASE: string = SITE.url;
 const HOST = new URL(BASE).host;
 const today = new Date().toISOString().slice(0, 10);
@@ -125,25 +125,27 @@ if (MODE === "full") {
   if (env.GEMINI_API_KEY) engines.push({ name: "Gemini", p: new GeminiProvider(env.GEMINI_API_KEY, { ...GEMINI_FREE_DEFAULT, billing: "free", useSearch: false }) });
   else engineStatus.Gemini = "anahtar yok";
 
-  for (const { name, p } of engines) {
-    let ok = 0, fail = 0;
-    for (const q of QUESTIONS) {
-      if (p.config.billing === "paid" && spent + worst(p.config) > CAP_USD) { fail++; answers.push({ engine: name, method: "-", qid: q.id, kind: q.kind, mentioned: false, recommended: false, cited: false, rank: null, domains: [], costUsd: 0, text: "", error: `atlandı: ${CAP_USD} $ tavan` }); continue; }
+  // Sorular dışta, motorlar içte: tavan dolarsa bir motor tamamen boş kalmasın
+  const tally: Record<string, { ok: number; fail: number }> = {};
+  for (const q of QUESTIONS) {
+    for (const { name, p } of engines) {
+      const tl = (tally[name] ??= { ok: 0, fail: 0 });
+      if (p.config.billing === "paid" && spent + worst(p.config) > CAP_USD) { tl.fail++; answers.push({ engine: name, method: "-", qid: q.id, kind: q.kind, mentioned: false, recommended: false, cited: false, rank: null, domains: [], costUsd: 0, text: "", error: `atlandı: ${CAP_USD} $ tavan` }); continue; }
       let r: ProviderResult | null = null; let err = "";
       for (let attempt = 1; attempt <= 2 && !r; attempt++) {
         try { r = await p.ask(q.id, q.q); }
         catch (e) { err = `${(e as { kind?: string }).kind ?? "hata"}: ${(e as Error).message.slice(0, 160)}`; if ((e as { kind?: string }).kind !== "transient") break; await new Promise((s) => setTimeout(s, 10_000)); }
       }
-      if (!r) { fail++; answers.push({ engine: name, method: "-", qid: q.id, kind: q.kind, mentioned: false, recommended: false, cited: false, rank: null, domains: [], costUsd: 0, text: "", error: err }); continue; }
-      ok++; spent += r.costUsd;
+      if (!r) { tl.fail++; answers.push({ engine: name, method: "-", qid: q.id, kind: q.kind, mentioned: false, recommended: false, cited: false, rank: null, domains: [], costUsd: 0, text: "", error: err }); continue; }
+      tl.ok++; spent += r.costUsd;
       const [hit] = analyzeResponse({ promptId: q.id, provider: name, answerText: r.answerText, citedUrls: r.citedUrls }, [US]);
       const t = normalize(r.answerText);
       // Tanıma sorusunda "doğru tanıyor": adı geçiyor + ne yaptığımızı (yapay zekâ cevaplarında görünürlük ölçümü) anlatıyor
-      const correct = q.kind === "knowledge" ? hit.mentioned && /(chatgpt|gemini|claude|yapay zeka|ai assistant|llm)/.test(t) && /(gorunur|visib|olc|measur|track|takip)/.test(t) : undefined;
+      const correct = q.kind === "knowledge" ? hit.mentioned && /(chatgpt|gemini|claude)/.test(t) && /(gorunurlu|gorunur|visibility|visible|mentioned|recommend|onerili|aniliyor|anilma)/.test(t) : undefined;
       answers.push({ engine: name, method: r.method, qid: q.id, kind: q.kind, mentioned: hit.mentioned, recommended: hit.recommended, cited: hit.cited || r.citedUrls.some((u) => hostOf(u).endsWith(HOST)), rank: hit.rank, correct, domains: [...new Set(r.citedUrls.map(hostOf).filter(Boolean))], costUsd: r.costUsd, text: r.answerText });
     }
-    engineStatus[name] = `${ok} cevap${fail ? `, ${fail} başarısız` : ""}`;
   }
+  for (const [name, t] of Object.entries(tally)) engineStatus[name] = `${t.ok} cevap${t.fail ? `, ${t.fail} başarısız` : ""}`;
   state.lastFull = today;
 }
 
@@ -159,9 +161,9 @@ const domainCount = new Map<string, number>();
 for (const a of disc) for (const d of a.domains) domainCount.set(d, (domainCount.get(d) ?? 0) + 1);
 const sources = [...domainCount.entries()].sort((a, b) => b[1] - a[1]).map(([d, n]) => {
   const kind = d.endsWith(HOST) ? "bizim site" : DIRECTORY.test(d) ? "dizin" : FORUM.test(d) ? "forum" : SOCIAL.test(d) ? "sosyal/video" : "blog/haber";
-  // Rakibin kendi sitesi ise adını herkese açık rapora yazma
+  // Blog/haber alan adlarının çoğu rakip araçların kendi siteleri: herkese açık raporda hiçbirinin adı yazılmaz
   const isComp = kind === "blog/haber" && compNorm.some((c) => c.length >= 4 && d.replace(/[^a-z0-9]/g, "").includes(c));
-  return { domain: d, publicDomain: isComp ? "(rakip sitesi)" : d, count: n, kind: isComp ? "rakip sitesi" : kind };
+  return { domain: d, publicDomain: kind === "blog/haber" ? "(blog/araç sitesi — ad gizli)" : d, count: n, kind: isComp ? "rakip sitesi" : kind };
 });
 
 const forClaude: string[] = [];   // site içinde yapılacaklar (zamanlanmış Claude görevi yapar, PR açar)
@@ -179,7 +181,8 @@ if (know.length && !know.some((a) => a.correct)) {
 }
 for (const s of sources.filter((s) => s.kind === "dizin").slice(0, 5)) forUser.push(`${s.domain} yapay zekânın kaynak gösterdiği bir araç dizini (${s.count} cevapta) → AI SaaSavran'ı ücretsiz listelet (form metnini Claude hazırlar)`);
 for (const s of sources.filter((s) => s.kind === "forum").slice(0, 3)) forUser.push(`${s.domain} kaynak gösteriliyor (${s.count} cevapta) → ilgili başlığa yardımcı, reklamsız bir cevap yaz (taslağı Claude hazırlar)`);
-for (const s of sources.filter((s) => s.kind === "blog/haber").slice(0, 5)) forUser.push(`${s.domain} "en iyi araçlar" türü kaynak (${s.count} cevapta) → yazara eklenme isteği e-postası gönder (taslağı Claude hazırlar)`);
+const blogs = sources.filter((s) => s.kind === "blog/haber" || s.kind === "rakip sitesi");
+if (blogs.length) forClaude.push(`Kaynak analizi: yapay zekâ ${blogs.length} blog/araç sitesini kaynak gösterdi (adlar gizli; çoğu rakip araçların kendi blogu). Bu sitelerin yazdığı türden tarafsız "nasıl seçilir / karşılaştırma ölçütleri" içeriğini kendi rehberlerimizde, rakip adı kullanmadan daha iyi anlat`);
 
 // ---------------------------------------------------------------- 6) Kayıt ve rapor
 const byEngine: Record<string, { asked: number; mentioned: number; recommended: number; cited: number; knows: boolean | null }> = {};
@@ -196,15 +199,16 @@ const summary = {
   competitorCount: competitors.length, topSources: sources.slice(0, 10).map((s) => ({ domain: s.publicDomain, kind: s.kind, count: s.count })),
 };
 writeFileSync(join(DATA, "state.json"), JSON.stringify(state, null, 2));
-appendFileSync(join(DATA, "history.jsonl"), JSON.stringify(summary) + "\n");
-writeFileSync(join(DATA, "latest.json"), JSON.stringify({ ...summary, forClaude, forUser, pageIssues: pages.filter((p) => p.issues.length).map((p) => ({ url: p.url, issues: p.issues })),
+if (MODE === "full") appendFileSync(join(DATA, "history.jsonl"), JSON.stringify(summary) + "\n");
+const OUT = MODE === "full" ? "latest" : "light-latest"; // ücretsiz kontrol son ölçüm raporunu ezmez
+writeFileSync(join(DATA, `${OUT}.json`), JSON.stringify({ ...summary, forClaude, forUser, pageIssues: pages.filter((p) => p.issues.length).map((p) => ({ url: p.url, issues: p.issues })),
   answers: answers.map(({ text, domains, ...a }) => ({ ...a, domains: domains.map((d) => sources.find((s) => s.domain === d)?.publicDomain ?? d), preview: a.mentioned ? text.slice(0, 300) : undefined })),
   questions: QUESTIONS }, null, 2));
 // Gerçek rakip adları ve tam cevaplar: yalnız Actions artifact'ına (depoya yazılmaz)
 writeFileSync(join(DETAIL, `detay-${today}.json`), JSON.stringify({ competitors, sources, answers }, null, 2));
 
 const pct = (n: number, d: number) => (d ? `${Math.round((100 * n) / d)}%` : "-");
-const history = readFileSync(join(DATA, "history.jsonl"), "utf8").trim().split("\n").map((l) => JSON.parse(l)).filter((h) => h.mode === "full");
+const history = (existsSync(join(DATA, "history.jsonl")) ? readFileSync(join(DATA, "history.jsonl"), "utf8") : "").trim().split("\n").filter(Boolean).map((l) => JSON.parse(l)).filter((h) => h.mode === "full");
 const prev = history.length >= 2 ? history[history.length - 2] : null;
 let md = `# GEO Otopilot raporu — ${today}\n\nMod: **${MODE === "full" ? "tam ölçüm" : "ücretsiz kontrol"}** · Harcanan: **${summary.costUsd} $** (tavan ${CAP_USD} $)\n\n`;
 md += `## Otomatik yapılanlar\n- IndexNow (Bing + Yandex): ${indexnow.sent} sayfa bildirildi — ${indexnow.note}\n- ${pages.length} sayfa kontrol edildi, ${summary.pagesWithIssues} sayfada sorun var\n- Site denetimi: ${summary.auditPassed}/${summary.auditTotal} kontrol geçti\n\n`;
@@ -218,6 +222,6 @@ if (MODE === "full") {
 }
 md += `## Claude'un sitede yapacakları (sonraki zamanlanmış görev, PR olarak)\n${forClaude.length ? forClaude.map((x) => `- ${x}`).join("\n") : "- Sorun yok"}\n\n`;
 md += `## Senin yapacakların (akşam, toplu)\n${forUser.length ? forUser.map((x, i) => `${i + 1}. ${x}`).join("\n") : "- Bu sefer yok"}\n`;
-writeFileSync(join(DATA, "latest.md"), md);
+writeFileSync(join(DATA, `${OUT}.md`), md);
 if (env.GITHUB_STEP_SUMMARY) appendFileSync(env.GITHUB_STEP_SUMMARY, md);
 console.log(md);

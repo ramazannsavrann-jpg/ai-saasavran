@@ -1,6 +1,6 @@
 # GEO Otopilot: aisaasavran.com'un yapay zekâdaki (ChatGPT, Claude, Gemini) görünürlüğünü ölçer ve artırır.
-#  - Ayın 1, 11 ve 21'i (10 günde bir) + bu dosya değişince + elle: TAM ölçüm (ücretli, çalıştırma başına en fazla 0,25 $)
-#  - Site her yayınlandığında (CI bitince): ÜCRETSİZ kontrol + değişen sayfaları Bing/Yandex'e bildirme (IndexNow)
+#  - Ayın 1, 11 ve 21'i (10 günde bir) + elle: TAM ölçüm (ücretli, çalıştırma başına en fazla 0,40 $)
+#  - Site her yayınlandığında (CI bitince) ve bu dosya değişince: ÜCRETSİZ kontrol + değişen sayfaları Bing/Yandex'e bildirme (IndexNow)
 # Sonuçlar: "geo-veri" dalı (geçmiş), tam ölçümde bir GitHub Issue (rapor + yapılacaklar), çalıştırma Summary sayfası.
 name: GEO Otopilot
 on:
@@ -41,7 +41,7 @@ jobs:
       - name: Mod
         id: m
         run: |
-          if [ "${{ github.event_name }}" = "workflow_run" ]; then echo "mode=light" >> "$GITHUB_OUTPUT";
+          if [ "${{ github.event_name }}" = "workflow_run" ] || [ "${{ github.event_name }}" = "push" ]; then echo "mode=light" >> "$GITHUB_OUTPUT";
           elif [ "${{ github.event_name }}" = "workflow_dispatch" ]; then echo "mode=${{ inputs.mode }}" >> "$GITHUB_OUTPUT";
           else echo "mode=full" >> "$GITHUB_OUTPUT"; fi
           echo "date=$(date -u +%F)" >> "$GITHUB_OUTPUT"
@@ -54,7 +54,7 @@ jobs:
           GEO_MODE: ${{ steps.m.outputs.mode }}
           GEO_DATA_DIR: geo-data
           GEO_DETAIL_DIR: geo-detail
-          GEO_CAP_USD: "0.25"
+          GEO_CAP_USD: "0.40"
           ALLOW_PAID_API: "true"
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
@@ -83,3 +83,11 @@ jobs:
         run: |
           gh label create geo-otopilot --color 0E8A16 --description "GEO Otopilot raporları" --force
           gh issue create --title "GEO Otopilot raporu — ${{ steps.m.outputs.date }}" --body-file geo-data/latest.md --label geo-otopilot
+      - name: Son raporu yenile (kod değişince, aynı Issue güncellenir)
+        if: github.event_name == 'push'
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          n=$(gh issue list --label geo-otopilot --state all --limit 1 --json number --jq '.[0].number')
+          if [ -n "$n" ] && [ -f geo-data/latest.md ]; then gh issue edit "$n" --body-file geo-data/latest.md; fi
