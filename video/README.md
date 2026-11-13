@@ -18,7 +18,7 @@ Bu dal (`seslendirme`) videoların tek kaynağıdır. Yeni oturumda buradan deva
 ## İçerik kuralları
 - Sonuçlarda markalar **harfli**: Marka A/B/C…, ürünler Model 1/2…. Harfler rastgele atanır (alfabetik değil).
 - Ölçülen markaların gerçek adları videonun altında **alfabetik liste** olarak yazılır; hangi harfin hangi marka olduğu verilmez.
-- Her videoda: "Bunlar yapay zekânın cevaplarıdır, AI SaaSavran'ın değerlendirmesi değildir", tarih, örneklem, "tüm pazarı temsil etmez".
+- Her videoda: "Bunlar yapay zekânın cevaplarıdır" (kullanıcı: "bizim görüşümüz değildir" denmesin), tarih, örneklem, "tüm pazarı temsil etmez".
 - Global video İngilizce, Türkiye videosu Türkçe; YouTube başlık/açıklama/etiketler iki dilli. Başlık ≤ 100 karakter.
 - Kulaklık videosu formatı esas: marka oranı, motor karşılaştırması, soru bazında kayıp, rakip ürün, ürün doğruluğu, Google Shopping sırası, kaynaklar.
 
