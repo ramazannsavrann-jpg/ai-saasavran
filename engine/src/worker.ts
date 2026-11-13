@@ -10,7 +10,8 @@ import { buildProviders } from "./providers/registry.ts";
 import { SimulatedProvider } from "./providers/simulated.ts";
 import { auditSite } from "./audit.ts";
 import { classifyAnswer, CLASSIFY_WORST_USD, type Perception } from "./classify.ts";
-import { judgeTruth, type TruthClaim } from "./truth.ts";
+import { buildWrongInfoEmail, findConflicts, judgeTruth, newWrongClaims, type TruthClaim } from "./truth.ts";
+import { SITE } from "./email.ts";
 import { buildProductQuestion, judgeProduct } from "./product.ts";
 import { matchShopping, searchShopping, shoppingQuery, shoppingSearchesLeft, ShoppingError, type ShoppingTarget } from "./shopping.ts";
 import { assertBillingAllowed } from "./providers/registry.ts";
@@ -439,12 +440,13 @@ export async function backfillPerception(deps: { db: SupabaseClient; env: Record
  * TruthGuard: bilgi kartı olan markalarda, markanın geçtiği en güncel cevapları (soru × motor başına haftada bir) kartla karşılaştırır.
  * Maliyet çalışma alanının ücretli harcamasına yazılır (record_aux_call; tavan aşılırsa alan durur). Saatlik en fazla `limit` kontrol.
  */
-export async function processTruthChecks(deps: { db: SupabaseClient; env: Record<string, string | undefined>; fetchFn?: FetchLike }, limit = 40): Promise<{ done: number; failed: number; spentUsd: number; skipped?: string }> {
+export async function processTruthChecks(deps: { db: SupabaseClient; env: Record<string, string | undefined>; fetchFn?: FetchLike }, limit = 40): Promise<{ done: number; failed: number; spentUsd: number; skipped?: string; newWrong?: number; emailed?: number }> {
   const { db, env } = deps;
   if (!env.OPENAI_API_KEY || env.ALLOW_PAID_API !== "true") return { done: 0, failed: 0, spentUsd: 0, skipped: "paid_api_off" };
   const rows = must(await db.rpc("pending_truth_checks", { p_limit: limit }), "bekleyen doğruluk") as { response_id: string; workspace_id: string; brand_id: string; run_id: string; prompt_id: string; provider: string; brand_name: string; fact_card: string; answer_text: string }[];
   const model = env.OPENAI_MODEL || OPENAI_DEFAULT.model;
   let done = 0, failed = 0, spent = 0;
+  const fresh = new Map<string, { workspace_id: string; brand_name: string; items: (TruthClaim & { provider: string })[] }>();
   for (const r of rows) {
     let claims: TruthClaim[] | null = null, cost = 0, tin = 0, tout = 0;
     try {
@@ -457,8 +459,59 @@ export async function processTruthChecks(deps: { db: SupabaseClient; env: Record
     }
     spent += cost;
     if (cost > 0) must(await db.rpc("record_aux_call", { p_workspace: r.workspace_id, p_run: r.run_id, p_task: "truth", p_provider: "openai", p_model: model, p_in: tin, p_out: tout, p_cost: cost }), "record_aux_call");
+    if (claims?.some((c) => c.status === "wrong")) {
+      // Yeni yanlış bilgi mi? Markanın son 60 gündeki yanlış iddialarıyla karşılaştır (bu çalışmada bulunanlar dahil)
+      const since = new Date(Date.now() - 60 * 86_400_000).toISOString();
+      const prev = (must(await db.from("truth_checks").select("claims").eq("brand_id", r.brand_id).eq("failed", false).gte("created_at", since), "önceki doğruluk") as { claims: TruthClaim[] }[]).flatMap((x) => x.claims);
+      const f = fresh.get(r.brand_id) ?? { workspace_id: r.workspace_id, brand_name: r.brand_name, items: [] };
+      const nw = newWrongClaims(claims, [...prev, ...f.items]);
+      if (nw.length) { f.items.push(...nw.map((c) => ({ ...c, provider: r.provider }))); fresh.set(r.brand_id, f); }
+    }
     must(await db.from("truth_checks").insert({ workspace_id: r.workspace_id, brand_id: r.brand_id, run_id: r.run_id, response_id: r.response_id, prompt_id: r.prompt_id, provider: r.provider, claims: claims ?? [], failed: !claims, cost_usd: cost }), "doğruluk kaydı");
     if (claims) done++; else failed++;
   }
-  return { done, failed, spentUsd: Math.round(spent * 10000) / 10000 };
+  // Yeni yanlış bilgi e-postası: marka başına tek e-posta, uyarı tercihi açık üyelere; Growth Lab'e gönderilmez
+  let emailed = 0;
+  if (env.RESEND_API_KEY) {
+    for (const [brandId, f] of fresh) {
+      const w = must(await db.from("workspaces").select("kind").eq("id", f.workspace_id).single(), "çalışma alanı") as { kind: string };
+      if (w.kind === "growth_lab") continue;
+      const rec = must(await db.rpc("drop_alert_recipients", { p_workspace: f.workspace_id }), "alıcılar") as { user_id: string; lang: string }[];
+      for (const u of rec) {
+        const email = (await db.auth.admin.getUserById(u.user_id)).data?.user?.email;
+        if (!email) continue;
+        const token = String((await db.rpc("ensure_email_token", { p_user: u.user_id })).data ?? "");
+        const m = buildWrongInfoEmail(u.lang === "tr" ? "tr" : "en", { id: brandId, name: f.brand_name }, f.items, SITE, token);
+        const res = await (deps.fetchFn ?? fetch)("https://api.resend.com/emails", {
+          method: "POST", headers: { Authorization: `Bearer ${env.RESEND_API_KEY}`, "Content-Type": "application/json" },
+          body: JSON.stringify({ from: "AI SaaSavran <report@aisaasavran.com>", to: [email], reply_to: "info@aisaasavran.com", subject: m.subject, html: m.html, text: m.text,
+            headers: { "List-Unsubscribe": `<${SITE}/api/unsubscribe?k=drop&t=${encodeURIComponent(token)}>`, "List-Unsubscribe-Post": "List-Unsubscribe=One-Click" } }),
+        });
+        if (res.ok) emailed++;
+      }
+    }
+  }
+  return { done, failed, spentUsd: Math.round(spent * 10000) / 10000, ...(fresh.size ? { newWrong: [...fresh.values()].reduce((a, f) => a + f.items.length, 0), emailed } : {}) };
+}
+
+/** TruthGuard 3. aşama: aynı soruya farklı motorların cevaplarında marka hakkında çelişen bilgiler (soru başına haftada bir). */
+export async function processEngineConflicts(deps: { db: SupabaseClient; env: Record<string, string | undefined>; fetchFn?: FetchLike }, limit = 20): Promise<{ done: number; failed: number; found: number; spentUsd: number; skipped?: string }> {
+  const { db, env } = deps;
+  if (!env.OPENAI_API_KEY || env.ALLOW_PAID_API !== "true") return { done: 0, failed: 0, found: 0, spentUsd: 0, skipped: "paid_api_off" };
+  const rows = must(await db.rpc("pending_engine_conflicts", { p_limit: limit }), "bekleyen çelişki") as { workspace_id: string; brand_id: string; prompt_id: string; brand_name: string; answers: { provider: string; answer: string }[] }[];
+  const model = env.OPENAI_MODEL || OPENAI_DEFAULT.model;
+  let done = 0, failed = 0, found = 0, spent = 0;
+  for (const r of rows) {
+    try {
+      const c = await findConflicts({ apiKey: env.OPENAI_API_KEY, model, price: OPENAI_DEFAULT.price, brand: r.brand_name, answers: r.answers, fetchFn: deps.fetchFn });
+      spent += c.costUsd;
+      if (c.costUsd > 0) must(await db.rpc("record_aux_call", { p_workspace: r.workspace_id, p_run: null, p_task: "truth_conflict", p_provider: "openai", p_model: model, p_in: c.inputTokens, p_out: c.outputTokens, p_cost: c.costUsd }), "record_aux_call");
+      must(await db.from("engine_conflicts").insert({ workspace_id: r.workspace_id, brand_id: r.brand_id, prompt_id: r.prompt_id, conflicts: c.conflicts ?? [], failed: !c.conflicts, cost_usd: c.costUsd }), "çelişki kaydı");
+      if (c.conflicts) { done++; found += c.conflicts.length; } else failed++;
+    } catch (e) {
+      failed++;
+      if (/HTTP (401|403|429)/.test(String((e as Error).message))) break;
+    }
+  }
+  return { done, failed, found, spentUsd: Math.round(spent * 10000) / 10000 };
 }

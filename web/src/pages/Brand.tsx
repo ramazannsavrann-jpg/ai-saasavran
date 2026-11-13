@@ -905,6 +905,9 @@ const SOURCE_LABEL: Record<SourceType, [string, string]> = {
 /** TruthGuard: bilgi kartıyla doğruluk kontrolü ve kaynak türü dağılımı. Ücretli paketlere özel. */
 function TruthGuardPanel({ brand, paid, mix, stats }: { brand: Brand; paid: boolean; mix: SourceMix | null; stats: ReturnType<typeof statSummary> | null }) {
   const checks = useLoad(() => (paid && brand.fact_card ? api.truthChecks(brand.id) : Promise.resolve([])), [brand.id, paid, brand.fact_card ?? ""]);
+  const confl = useLoad(() => (paid ? api.engineConflicts(brand.id) : Promise.resolve([])), [brand.id, paid]);
+  const conflicts = (confl.data ?? []).filter((c) => !c.failed).flatMap((c) => c.conflicts).slice(0, 6);
+  const checked = (confl.data ?? []).filter((c) => !c.failed).length;
   const sl = (t: SourceType) => (isEn() ? SOURCE_LABEL[t][1] : SOURCE_LABEL[t][0]);
   if (!paid) return (
     <section className="panel" id="truthguard">
@@ -942,6 +945,26 @@ function TruthGuardPanel({ brand, paid, mix, stats }: { brand: Brand; paid: bool
           )}
           {s.unverifiable > 0 && <p className="src-sup muted">{L("\"Doğrulanamadı\" iddiaları azaltmak için bilgi kartınıza o konuları ekleyin.", "Add those topics to your fact card to reduce \"can't verify\" claims.")}</p>}
           <p className="src-sup muted">{L("Karşılaştırmayı küçük bir yapay zekâ modeli yapar ve yanılabilir; her iddia cevaptan birebir alıntıyla gösterilir.", "A small AI model does the comparison and can make mistakes; every claim is shown with an exact quote from the answer.")}</p>
+        </>
+      )}
+      {checked > 0 && (
+        <>
+          <h3>{L("Motorlar arası çelişki", "Contradictions between engines")}</h3>
+          {conflicts.length === 0
+            ? <p className="muted">{isEn() ? `Last 30 days: ${checked} questions compared across engines; no contradictions about your brand.` : `Son 30 gün: ${checked} soruda motorların cevapları karşılaştırıldı; markanız hakkında çelişki yok.`}</p>
+            : (
+              <>
+                <p className="muted">{isEn() ? `Different engines say different things about your brand. At least one of them is wrong; your website should state the correct version clearly.` : `Farklı motorlar markanız hakkında farklı şeyler söylüyor. En az biri yanlış; doğrusunu sitenizde açıkça yazın.`}</p>
+                <ul className="src-dom">
+                  {conflicts.map((c, ix) => (
+                    <li key={ix} className="truth-item">
+                      <p className="src-head"><strong>{c.topic}</strong></p>
+                      {c.sides.map((x) => <p key={x.provider} className="src-sup"><span className="muted">{providerLabel(x.provider)}:</span> “{x.quote}”</p>)}
+                    </li>
+                  ))}
+                </ul>
+              </>
+            )}
         </>
       )}
       {stats && (

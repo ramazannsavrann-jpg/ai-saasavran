@@ -105,6 +105,10 @@ export const api = {
     const since = new Date(Date.now() - 30 * 86_400_000).toISOString();
     return must(await sb().from("truth_checks").select("provider,created_at,failed,claims").eq("brand_id", brandId).gte("created_at", since).order("created_at", { ascending: false }).limit(200));
   },
+  async engineConflicts(brandId: string): Promise<{ created_at: string; failed: boolean; conflicts: { topic: string; sides: { provider: string; quote: string }[] }[] }[]> {
+    const since = new Date(Date.now() - 30 * 86_400_000).toISOString();
+    return must(await sb().from("engine_conflicts").select("created_at,failed,conflicts").eq("brand_id", brandId).gte("created_at", since).order("created_at", { ascending: false }).limit(100));
+  },
   async deleteBrand(id: string) { must(await sb().from("brands").delete().eq("id", id)); },
   async prompts(brandId: string): Promise<Prompt[]> {
     return must(await sb().from("prompts").select("*").eq("brand_id", brandId).order("created_at"));

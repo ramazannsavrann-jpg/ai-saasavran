@@ -84,6 +84,12 @@
 - Ağırlıklı doğrusal eğilim (ağırlık = cevap sayısı); aralık = model belirsizliği + son ölçümün örneklem belirsizliği. Eğim aralığı sıfırı içeriyorsa "belirgin eğilim yok".
 - En az 4 ölçüm ve 14 gün yoksa tahmin gösterilmez. Simülasyonda gösterilmez. Ek API maliyeti yok.
 
+## v1.23 (13 Kasım 2026): TruthGuard 3. aşama
+
+- **Motorlar arası çelişki:** aynı soruya en az iki motorun markayı andığı en güncel cevapları karşılaştırılır (soru başına haftada bir, bilgi kartı gerekmez). Her taraf kendi cevabından birebir alıntıyla; tek taraflı veya uydurma alıntılı çelişki atılır. Migration 0036 (`engine_conflicts`). Maliyet soru başına ~0,0003 $, çalışma alanının ücretli harcamasına yazılır.
+- **Yeni yanlış bilgi e-postası:** TruthGuard, markanın son 60 günde görülmemiş yanlış bir iddiasını bulursa marka başına tek e-posta (TR/EN). Uyarı tercihi düşüş uyarısıyla ortak ("Uyarılar"), tek tıkla kapatılır. Growth Lab'e gönderilmez.
+- Testler: `engine/test/truth.test.ts`, `engine/test/truth-worker.test.ts`.
+
 ## v1.22 (13 Kasım 2026): TruthGuard 2. aşama
 
 - **Kaynaksız istatistik:** markanın geçtiği cümlelerde yüzde, milyon/milyar, kullanıcı sayısı, "lider / pazar payı" gibi iddialar; cevap hiç kaynak göstermediyse işaretlenir. Fiyat, saat ve teknik özellikler (MP, mAh, W, inç) sayılmaz.
