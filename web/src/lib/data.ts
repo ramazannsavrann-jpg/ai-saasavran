@@ -39,7 +39,7 @@ export interface SiteAudit {
   checks: { id: string; ok: boolean; severity: "high" | "medium" | "low" | "info"; title: string; detail: string; title_en?: string; detail_en?: string }[];
 }
 
-export interface BrandAction { id: string; brand_id: string; title: string; note: string | null; done_on: string; created_at: string }
+export interface BrandAction { id: string; brand_id: string; title: string; note: string | null; done_on: string; created_at: string; rec_id: string | null; tasks: { t: string; done: boolean }[] | null }
 
 export interface Product { id: string; brand_id: string; name: string; price: string | null; facts: string | null; rival_of: string | null; rival_brand: string | null; check_requested_at: string | null; shopping_query: string | null; shopping_requested_at: string | null; created_at: string }
 export interface ApiKey { id: string; name: string; prefix: string; created_at: string; last_used_at: string | null }
@@ -141,9 +141,10 @@ export const api = {
   },
   async requestAudit(brandId: string) { must(await sb().rpc("request_site_audit", { p_brand: brandId })); },
   async actions(brandId: string): Promise<BrandAction[]> {
-    return must(await sb().from("brand_actions").select("id,brand_id,title,note,done_on,created_at").eq("brand_id", brandId).order("done_on", { ascending: false }).limit(50));
+    return must(await sb().from("brand_actions").select("id,brand_id,title,note,done_on,created_at,rec_id,tasks").eq("brand_id", brandId).order("done_on", { ascending: false }).limit(50));
   },
-  async addAction(a: { workspace_id: string; brand_id: string; title: string; note: string | null; done_on: string }) { must(await sb().from("brand_actions").insert(a)); },
+  async addAction(a: { workspace_id: string; brand_id: string; title: string; note: string | null; done_on: string; rec_id?: string; tasks?: { t: string; done: boolean }[] }) { must(await sb().from("brand_actions").insert(a)); },
+  async updateActionTasks(id: string, tasks: { t: string; done: boolean }[]) { must(await sb().from("brand_actions").update({ tasks }).eq("id", id)); },
   async deleteAction(id: string) { must(await sb().from("brand_actions").delete().eq("id", id)); },
   async products(brandId: string): Promise<Product[]> {
     return must(await sb().from("products").select("id,brand_id,name,price,facts,rival_of,rival_brand,check_requested_at,shopping_query,shopping_requested_at,created_at").eq("brand_id", brandId).order("created_at"));

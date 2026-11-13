@@ -2,7 +2,7 @@ import { useMemo, useState, type FormEvent } from "react";
 import { SECTORS, competitorSuggestions, postPurchaseTemplates, questionTemplates, sectorDef } from "../lib/sectors";
 import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useApp, useLoad } from "../lib/app";
-import { api, INTENT_LABEL, type Brand, type Intent, type MeasurementType, type Prompt, type Run, type Product, type ShoppingCheck, type VisRow } from "../lib/data";
+import { api, INTENT_LABEL, type Brand, type BrandAction, type Intent, type MeasurementType, type Prompt, type Run, type Product, type ShoppingCheck, type VisRow } from "../lib/data";
 import { friendlyError, sb } from "../lib/supabase";
 import { L, isEn } from "../lib/i18n";
 import { ERROR_CLASS_TEXT, STOP_TEXT, runStatusText } from "../lib/messages";
@@ -10,8 +10,9 @@ import { actionImpact, compareProducts, engineComparison, engineScoreChanges, sc
 import { competitorsInRun, formatDate, formatDateTime, MIN_SAMPLE, numLoc, pct, providerLabel, rangeText, series, shareSummary, sourceOpportunities, topDomains, usd } from "../lib/report";
 import { Button, Confirm, DataNotice, Empty, ErrorBox, Field, Loading, Select, TypeBadge } from "../components/ui";
 import { CompareBars, TrendChart } from "../components/Chart";
-import { buildRecommendations } from "../../../engine/src/recommendations.ts";
+import { buildRecommendations, type RecInput } from "../../../engine/src/recommendations.ts";
 import { untrackedNames } from "../../../engine/src/metrics.ts";
+import { campaignFor, taskProgress } from "../../../engine/src/campaign.ts";
 
 const TABS = [
   ["rapor", L("Rapor", "Report")], ["oneriler", L("Öneriler", "Recommendations")], ["rakipler", L("Rakipler", "Competitors")], ["sorular", L("Sorular", "Questions")], ["urunler", L("Ürünler", "Products")], ["olcumler", L("Ölçümler", "Runs")],
@@ -1044,6 +1045,10 @@ function ActionsPanel({ brand }: { brand: Brand }) {
     } catch (x) { setErr(friendlyError(x)); } finally { setBusy(false); }
   }
   async function remove(id: string) { try { await api.deleteAction(id); actions.reload(); } catch (x) { setErr(friendlyError(x)); } }
+  async function toggleTask(a: BrandAction, ix: number) {
+    const tasks = (a.tasks ?? []).map((t, j) => (j === ix ? { ...t, done: !t.done } : t));
+    try { await api.updateActionTasks(a.id, tasks); actions.reload(); } catch (x) { setErr(friendlyError(x)); }
+  }
   const rateText = (p: { k: number; n: number; low: number; high: number }) => `${pct(p.n ? p.k / p.n : 0)} (${p.k}/${p.n}, ${pct(p.low)}–${pct(p.high)})`;
 
   return (
@@ -1062,7 +1067,22 @@ function ActionsPanel({ brand }: { brand: Brand }) {
           {(actions.data ?? []).map((a) => (
             <li key={a.id}>
               <p className="src-head"><strong>{a.title}</strong> <span className="muted num">{new Date(a.done_on + "T00:00:00").toLocaleDateString(isEn() ? "en-US" : "tr-TR", { day: "numeric", month: "short", year: "numeric" })}</span></p>
-              {a.note && <p className="src-sup muted">{a.note}</p>}
+              {a.note && <p className="src-sup muted">{a.tasks ? <>{L("Başarı ölçütü: ", "Success check: ")}{a.note}</> : a.note}</p>}
+              {a.tasks && (() => {
+                const pr = taskProgress(a.tasks);
+                return (
+                  <div className="camp">
+                    <p className="camp-head"><span className="badge-camp">{L("Kampanya", "Campaign")}</span> {pr.done}/{pr.total} {L("görev tamam", "tasks done")}{pr.done === pr.total && L(" · bitti", " · complete")}</p>
+                    <div className="camp-bar" aria-hidden><span style={{ width: `${pr.total ? (100 * pr.done) / pr.total : 0}%` }} /></div>
+                    <ul className="camp-tasks">
+                      {a.tasks.map((t, ix) => (
+                        <li key={ix}><label className="check-row"><input type="checkbox" checked={t.done} onChange={() => toggleTask(a, ix)} /><span className={t.done ? "done" : ""}>{t.t}</span></label></li>
+                      ))}
+                    </ul>
+                    <p className="src-sup muted">{L("Önce/sonra: kampanyanın başladığı günden önceki son ölçüm ile sonraki en güncel ölçüm karşılaştırılır.", "Before/after: the last measurement before the campaign started is compared with the latest one after it.")}</p>
+                  </div>
+                );
+              })()}
               {engines.length === 0 && <p className="src-sup muted">{L("Henüz tamamlanmış ölçüm yok.", "No completed measurements yet.")}</p>}
               {engines.map((en) => {
                 const im = actionImpact(en.points, a.done_on);
@@ -1123,21 +1143,36 @@ function Advice({ brand, type, runs, onBrandChange }: { brand: Brand; type: Meas
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
   const [msg, setMsg] = useState<string | null>(null);
+  const [rev, setRev] = useState(0);
+  const [campMsg, setCampMsg] = useState<string | null>(null);
+  const [campErr, setCampErr] = useState<string | null>(null);
+  const camps = useLoad(() => api.actions(brand.id), [brand.id, rev]);
   const sim = brand.data_origin === "simulated";
   const pendingAudit = brand.audit_requested_at && (!audit.data || audit.data.created_at < brand.audit_requested_at);
 
   if (audit.loading || prompts.loading || results.loading || prevResults.loading || evidence.loading) return <Loading />;
-  const recs = buildRecommendations({
+  const recInput = {
     brandName: brand.name, website: brand.website, city: brand.city, sector: brand.sector, aliases: brand.aliases,
     activePrompts: (prompts.data ?? []).filter((p) => p.active).length,
     completedRuns: runs.filter((r) => r.status === "done").length,
     autoWeekly: brand.auto_weekly || sim, measurementType: type,
     prompts: results.data ?? [],
     audit: sim ? null : audit.data ? { status: audit.data.status, checks: audit.data.checks } : null,
-    lang: isEn() ? "en" : "tr",
+    lang: (isEn() ? "en" : "tr") as "en" | "tr",
     previousPrompts: prevResults.data ?? [],
     ...(evidence.data ?? {}),
-  }).filter((r) => !(sim && r.id === "no_website"));
+  } satisfies RecInput as RecInput;
+  const recs = buildRecommendations(recInput).filter((r) => !(sim && r.id === "no_website"));
+  const activeRecs = new Set((camps.data ?? []).filter((a) => a.rec_id && a.tasks && taskProgress(a.tasks).done < a.tasks.length).map((a) => a.rec_id!));
+  async function startCampaign(r: (typeof recs)[number], tasks: string[]) {
+    setCampErr(null); setCampMsg(null);
+    try {
+      await api.addAction({ workspace_id: brand.workspace_id, brand_id: brand.id, title: r.title.slice(0, 200), note: r.check ? r.check.slice(0, 1000) : null, done_on: new Date().toISOString().slice(0, 10), rec_id: r.id, tasks: tasks.map((t) => ({ t, done: false })) });
+      setCampMsg(L("Kampanya başladı. Görevler aşağıda, \"Yaptıklarım ve sonuçları\" bölümünde.", "Campaign started. The tasks are below, under \"What I did, and what happened\"."));
+      camps.reload(); setRev((x) => x + 1);
+      setTimeout(() => document.getElementById("aksiyonlar")?.scrollIntoView({ behavior: "smooth" }), 50);
+    } catch (e) { setCampErr(friendlyError(e)); }
+  }
 
   async function check() {
     setBusy(true); setErr(null); setMsg(null);
@@ -1151,6 +1186,8 @@ function Advice({ brand, type, runs, onBrandChange }: { brand: Brand; type: Meas
       <section className="panel">
         <h2>{L("İyileştirme rehberi", "Improvement guide")}</h2>
         <p className="muted">{isEn() ? `Derived by rules from the latest measurement${!sim ? " and website check" : ""}; not generated by AI. Ordered by importance.` : `Son ölçüm${!sim ? " ve web sitesi kontrolü" : ""} sonuçlarından kurallarla çıkarıldı; yapay zekâ ile üretilmedi. Önem sırasına göre.`}</p>
+        {campMsg && <p className="success-box">{campMsg}</p>}
+        <ErrorBox message={campErr} />
         {recs.length === 0 ? <p>{L("Şu an önerimiz yok. Yeni ölçümlerden sonra tekrar bakın.", "No recommendations right now. Check again after new measurements.")}</p> : (
           <ol className="recs">
             {recs.map((r) => (
@@ -1160,13 +1197,20 @@ function Advice({ brand, type, runs, onBrandChange }: { brand: Brand; type: Meas
                 <p className="rec-action"><span>{L("Ne yapılmalı:", "What to do:")}</span> {r.action}</p>
                 {r.check && <p className="rec-check"><span>{L("Başarı ölçütü:", "Success check:")}</span> {r.check}</p>}
                 {r.progress && <p className={`rec-progress rec-${r.progress.status}`}>{r.progress.status === "improved" ? "↑ " : r.progress.status === "worse" ? "↓ " : "= "}{r.progress.text}</p>}
+                {!sim && (() => {
+                  const tasks = campaignFor(r, recInput);
+                  if (!tasks) return null;
+                  return activeRecs.has(r.id)
+                    ? <p className="rec-camp muted">{L("Bu madde için kampanya sürüyor.", "A campaign is running for this item.")} <a href="#aksiyonlar">{L("Görevlere git", "Go to tasks")}</a></p>
+                    : <Button variant="quiet" className="btn-small" onClick={() => startCampaign(r, tasks)}>{L(`Kampanya başlat (${tasks.length} görev)`, `Start campaign (${tasks.length} tasks)`)}</Button>;
+                })()}
               </li>
             ))}
           </ol>
         )}
       </section>
 
-      {!sim && <ActionsPanel brand={brand} />}
+      {!sim && <ActionsPanel key={rev} brand={brand} />}
 
       {!sim && (
         <section className="panel">
