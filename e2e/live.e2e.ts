@@ -56,6 +56,8 @@ test("Canlı site: açılıyor, doğru yapılandırılmış, güvenlik başlıkl
 
   // Doğrudan alt sayfa adresi (SPA yönlendirmesi) çalışıyor mu?
   expect((await request.get(`${base}/marka/olmayan-bir-marka`)).status()).toBe(200);
+  // Olmayan sayfa gerçek 404 vermeli (ana sayfa 200 ile dönerse Google "soft 404" sayar)
+  expect((await request.get(`${base}/bu-sayfa-yok-404-testi/`)).status()).toBe(404);
 
   // Supabase giriş sunucusu site anahtarını kabul ediyor mu? E-posta doğrulaması açık mı?
   const auth = await request.get(`${cfg.supabaseUrl}/auth/v1/settings`, { headers: { apikey: cfg.supabaseAnonKey } });
