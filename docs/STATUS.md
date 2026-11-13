@@ -84,6 +84,14 @@
 - Ağırlıklı doğrusal eğilim (ağırlık = cevap sayısı); aralık = model belirsizliği + son ölçümün örneklem belirsizliği. Eğim aralığı sıfırı içeriyorsa "belirgin eğilim yok".
 - En az 4 ölçüm ve 14 gün yoksa tahmin gösterilmez. Simülasyonda gösterilmez. Ek API maliyeti yok.
 
+## v1.25 (13 Kasım 2026): yapay zekâ botları (bot ölçümü)
+
+- 18 bot tanınıyor (OAI-SearchBot, ChatGPT-User, GPTBot, Claude-SearchBot, Claude-User, ClaudeBot, PerplexityBot, Perplexity-User…), türüne göre: arama / kullanıcı isteği / eğitim. OpenAI ve Perplexity botları yayımlanan IP listeleriyle doğrulanır; IP saklanmaz.
+- Kendi sitemiz: `functions/_middleware.js` (statik dosyalar `_routes.json` ile hariç), sayım cevabı geciktirmez.
+- Müşteriler: `/api/ai-bot` + WordPress eklentisi (`integrations/wordpress`, derlemede `/downloads/ai-saasavran-bot-sayaci.zip`; ziyaretçi sayacını da kurar) ve Cloudflare Worker kodu (raporda kopyalanır).
+- Migration 0038 (`ai_bot_hits`, `record_ai_bot`): gün × bot × sayfa; doğrulanan ve hata (4xx/5xx) alan istek sayısı; günlük sınırlar.
+- Raporda "Yapay zekâ botları": Free'de toplam; ücretli paketlerde bot türleri, doğrulama, hata uyarısı, 30 gündür gelmeyen önemli arama botu uyarısı, en çok okunan sayfalar, kurulum. Testler: `engine/test/bots.test.ts` (PHP eklentisi dahil).
+
 ## v1.24 (13 Kasım 2026): yapay zekâdan gelen ziyaretçi (1. aşama)
 
 - Müşteri sitesine tek satır kod: `<script async src="https://aisaasavran.com/t.js" data-site="…">`. Kod yalnız ziyaretçi ChatGPT, Gemini, Claude, Perplexity, Copilot, DeepSeek, Grok veya Meta AI'dan geldiyse (referrer veya utm_source) ve oturumda bir kez bildirir.

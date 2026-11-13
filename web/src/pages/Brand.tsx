@@ -13,7 +13,7 @@ import { CompareBars, TrendChart } from "../components/Chart";
 import { buildRecommendations, type RecInput } from "../../../engine/src/recommendations.ts";
 import { untrackedNames } from "../../../engine/src/metrics.ts";
 import { campaignFor, taskProgress } from "../../../engine/src/campaign.ts";
-import { snippet, SOURCE_PROVIDER, trafficSummary, type AiSource } from "../../../engine/src/traffic.ts";
+import { botSummary, snippet, SOURCE_PROVIDER, trafficSummary, workerCode, type AiSource, type BotKind } from "../../../engine/src/traffic.ts";
 import { sourceMix, statSummary, truthSummary, type SourceMix, type SourceType } from "../../../engine/src/truth.ts";
 
 const TABS = [
@@ -786,6 +786,7 @@ function Report({ brand, type, onBrandChange, paid = false }: { brand: Brand; ty
             );
           })()}
           {type !== "simulated" && <AiTrafficPanel brand={brand} paid={paid} vis={vis.data ?? []} />}
+          {type !== "simulated" && <AiBotsPanel brand={brand} paid={paid} />}
           {type !== "simulated" && <TruthGuardPanel brand={brand} paid={paid} mix={live && insightsReady ? sourceMix(answers.data!, ments.data!, insightBrands) : null}
             stats={answers.data ? statSummary(answers.data, [brand.name, ...brand.aliases]) : null} />}
           {live && insightsReady && <PerceptionPanel summary={perceptionSummary(answers.data!, ments.data!, brand.id)} brand={brand.name} />}
@@ -896,6 +897,75 @@ function Report({ brand, type, onBrandChange, paid = false }: { brand: Brand; ty
         </>
       )}
     </div>
+  );
+}
+
+const BOT_KIND: Record<BotKind, [string, string, string, string]> = {
+  search: ["Arama botları", "Search bots", "Yapay zekâ aramasında görünmenizi sağlar; en önemlisi bunlar.", "They make you visible in AI search; these matter most."],
+  user: ["Kullanıcı isteğiyle gelenler", "Fetched on a user's request", "Biri asistana sitenizle ilgili soru sorduğunda sayfayı anlık okur.", "Read a page live when someone asks an assistant about you."],
+  training: ["Eğitim botları", "Training bots", "Model eğitimi için veri toplar; görünürlüğe doğrudan etkisi azdır.", "Collect data for model training; little direct effect on visibility."],
+};
+/** Yapay zekâ botları: hangi bot hangi sayfayı okudu, hata aldı mı, önemli arama botu hiç gelmiyor mu. */
+function AiBotsPanel({ brand, paid }: { brand: Brand; paid: boolean }) {
+  const rows = useLoad(() => api.aiBots(brand.id), [brand.id]);
+  const [setup, setSetup] = useState(false);
+  const [copied, setCopied] = useState<string | null>(null);
+  if (rows.loading) return null;
+  const today = new Date(Date.now() + 3 * 3600_000).toISOString().slice(0, 10);
+  const s = botSummary(rows.data ?? [], today);
+  const has = s.total > 0;
+  const copy = async (k: string, v: string) => { try { await navigator.clipboard.writeText(v); setCopied(k); } catch { /* yok say */ } };
+  return (
+    <section className="panel" id="ai-botlar">
+      <h2>{L("Yapay zekâ botları", "AI crawlers")}</h2>
+      {has ? (
+        <>
+          <p className="muted">{isEn() ? `Last 30 days: AI bots read your site ${s.total} times.` : `Son 30 gün: yapay zekâ botları sitenizi ${s.total} kez okudu.`}</p>
+          {!paid ? (
+            <p className="muted">{L("Hangi botun hangi sayfaları okuduğu, engellenen istekler ve hiç gelmeyen önemli botlar ücretli paketlerde.", "Which bot read which pages, blocked requests and important bots that never came are on paid plans.")} <Link to="/hesap#paket">{L("Paketler", "Plans")}</Link></p>
+          ) : (
+            <>
+              {s.missingSearch.length > 0 && <p className="caution">{isEn() ? `Not seen in 30 days: ${s.missingSearch.join(", ")}. If these search bots can't read your site, that engine can't cite it. Check robots.txt and your firewall.` : `30 gündür hiç gelmedi: ${s.missingSearch.join(", ")}. Bu arama botları sitenizi okuyamazsa o motor sizi kaynak gösteremez. robots.txt ve güvenlik duvarı ayarlarınızı kontrol edin.`}</p>}
+              {s.errors > 0 && <p className="caution">{isEn() ? `${s.errors} bot requests got an error (403/404/5xx). A blocked bot can't read the page.` : `${s.errors} bot isteği hata aldı (403/404/5xx). Engellenen bot sayfayı okuyamaz.`}</p>}
+              {(["search", "user", "training"] as BotKind[]).map((k) => {
+                const list = s.bots.filter((b) => b.kind === k);
+                if (!list.length) return null;
+                return (
+                  <div key={k}>
+                    <h3>{isEn() ? BOT_KIND[k][1] : BOT_KIND[k][0]}</h3>
+                    <p className="src-sup muted">{isEn() ? BOT_KIND[k][3] : BOT_KIND[k][2]}</p>
+                    <ol className="domains">{list.map((b) => (
+                      <li key={b.bot}><span>{b.bot} <span className="muted">· {b.owner}{b.verified > 0 ? L(" · IP doğrulandı", " · IP verified") : ""}{b.errors > 0 ? ` · ${b.errors} ${L("hata", "errors")}` : ""}</span></span><span className="num">{b.hits}</span></li>
+                    ))}</ol>
+                  </div>
+                );
+              })}
+              <h3>{L("En çok okunan sayfalar", "Most-read pages")}</h3>
+              <ol className="domains">{s.topPages.map((p) => <li key={p.path}><span className="src-url">{p.path}</span><span className="num">{p.hits}</span></li>)}</ol>
+              <p className="src-sup muted">{L("Bot adı kendini tanıtma metninden okunur; \"IP doğrulandı\" yazanlar, şirketin yayımladığı IP listesiyle eşleşti. Diğerleri taklit olabilir.", "The bot name comes from its user agent; \"IP verified\" ones matched the company's published IP list. Others could be imitations.")}</p>
+            </>
+          )}
+        </>
+      ) : <p>{L("Yapay zekâ botlarının sitenizde hangi sayfaları okuduğunu görmek için sitenize küçük bir eklenti kurun. Botlar sayfadaki kodu çalıştırmadığı için ziyaretçi sayacından ayrı çalışır.", "To see which pages AI crawlers read on your site, install a small add-on on your site. Bots don't run page scripts, so this works separately from the visitor counter.")}</p>}
+      {brand.track_key && (
+        <>
+          <button className="link-btn" aria-expanded={setup || !has} onClick={() => setSetup(!setup)}>{has ? (setup ? L("Kurulumu gizle", "Hide setup") : L("Kurulum", "Setup")) : null}</button>
+          {(setup || !has) && (
+            <div className="score-how">
+              <p><strong>{L("Site anahtarınız", "Your site key")}:</strong></p>
+              <pre className="code-snippet">{brand.track_key}</pre>
+              <button className="link-btn" onClick={() => copy("key", brand.track_key!)}>{copied === "key" ? L("Kopyalandı", "Copied") : L("Anahtarı kopyala", "Copy key")}</button>
+              <p><strong>WordPress:</strong> {L("eklentiyi indirin → WordPress paneli → Eklentiler → Yeni ekle → Eklenti yükle → Etkinleştir → Ayarlar → AI SaaSavran → anahtarı yapıştırıp kaydedin. Eklenti ziyaretçi sayacını da kurar.", "download the plugin → WordPress admin → Plugins → Add new → Upload → Activate → Settings → AI SaaSavran → paste the key and save. It also installs the visitor counter.")}</p>
+              <p><a href="/downloads/ai-saasavran-bot-sayaci.zip" download>{L("WordPress eklentisini indir (.zip)", "Download the WordPress plugin (.zip)")}</a></p>
+              <p><strong>Cloudflare:</strong> {L("siteniz Cloudflare üzerindeyse bu kodu bir Worker olarak ekleyin:", "if your site is on Cloudflare, add this code as a Worker:")}</p>
+              <pre className="code-snippet">{workerCode(brand.track_key)}</pre>
+              <button className="link-btn" onClick={() => copy("worker", workerCode(brand.track_key!))}>{copied === "worker" ? L("Kopyalandı", "Copied") : L("Kodu kopyala", "Copy code")}</button>
+              <p className="src-sup muted">{L("Botun IP adresi yalnız gerçek bot olup olmadığını doğrulamak için kullanılır, saklanmaz. Ziyaretçilerinizin hiçbir bilgisi gönderilmez.", "The bot's IP is only used to verify it's the real bot and is not stored. Nothing about your human visitors is sent.")}</p>
+            </div>
+          )}
+        </>
+      )}
+    </section>
   );
 }
 
