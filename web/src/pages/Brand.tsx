@@ -13,6 +13,7 @@ import { CompareBars, TrendChart } from "../components/Chart";
 import { buildRecommendations, type RecInput } from "../../../engine/src/recommendations.ts";
 import { untrackedNames } from "../../../engine/src/metrics.ts";
 import { campaignFor, taskProgress } from "../../../engine/src/campaign.ts";
+import { sourceMix, truthSummary, type SourceMix, type SourceType } from "../../../engine/src/truth.ts";
 
 const TABS = [
   ["rapor", L("Rapor", "Report")], ["oneriler", L("Öneriler", "Recommendations")], ["rakipler", L("Rakipler", "Competitors")], ["sorular", L("Sorular", "Questions")], ["urunler", L("Ürünler", "Products")], ["olcumler", L("Ölçümler", "Runs")],
@@ -65,7 +66,7 @@ export function BrandPage() {
           <button aria-pressed={type === "live_search"} onClick={() => setView("canli")}>{L("Canlı aramalı (ChatGPT)", "Live search (ChatGPT)")}</button>
         </div>
       )}
-      {tab === "rapor" && <Report brand={b} type={type} onBrandChange={brand.reload} />}
+      {tab === "rapor" && <Report brand={b} type={type} onBrandChange={brand.reload} paid={!!current?.paid_live_allowed || current?.kind === "growth_lab"} />}
       {tab === "rapor" && current?.kind !== "demo_lab" && b.data_origin !== "simulated" && runList.some((r) => r.status === "done") && <ReportSharePanel brand={b} />}
       {tab === "oneriler" && <Advice brand={b} type={type} runs={runs.data ?? []} onBrandChange={brand.reload} />}
       {tab === "rakipler" && <Competitors brand={b} />}
@@ -406,6 +407,7 @@ function BrandEditForm({ brand, onDone }: { brand: Brand; onDone: (changed: bool
         city: String(f.get("city") || "").trim() || null,
         country: /^[A-Za-z]{2}$/.test(String(f.get("country") || "").trim()) ? String(f.get("country")).trim().toUpperCase() : null,
         ...(brand.data_origin !== "simulated" ? { auto_weekly: f.get("auto_weekly") === "on" } : {}),
+        ...(f.has("fact_card") ? { fact_card: String(f.get("fact_card") || "").trim().length >= 10 ? String(f.get("fact_card")).trim().slice(0, 3000) : null } : {}),
       });
       onDone(true);
     } catch (e) { setErr(friendlyError(e)); setBusy(false); }
@@ -428,6 +430,14 @@ function BrandEditForm({ brand, onDone }: { brand: Brand; onDone: (changed: bool
         <label className="check">
           <input type="checkbox" name="auto_weekly" defaultChecked={brand.auto_weekly} />
           <span>{L("Her hafta otomatik ölç", "Measure automatically every week")} <em className="muted">{L("(paket kotası yetmezse o hafta atlanır)", "(skipped that week if your plan quota runs out)")}</em></span>
+        </label>
+      )}
+      {brand.data_origin !== "simulated" && (
+        <label className="field" htmlFor="fact_card">
+          <span className="field-label">{L("Doğru bilgi kartı (TruthGuard)", "Fact card (TruthGuard)")}</span>
+          <textarea id="fact_card" name="fact_card" rows={5} maxLength={3000} defaultValue={brand.fact_card ?? ""}
+            placeholder={L("Örn. Kuruluş: 2009. Merkez: Kadıköy, İstanbul. Şubeler: Kadıköy, Moda. Hafta içi 08:00–22:00. Filtre kahve 85 TL. Paket servis var, rezervasyon yok.", "e.g. Founded 2009. HQ: Austin, TX. Locations: Austin, Dallas. Mon–Fri 8am–10pm. Drip coffee $4. Delivery yes, no reservations.")} />
+          <span className="field-hint">{L("Yapay zekânın markanız hakkında söyledikleri bu bilgilerle karşılaştırılır (ücretli paketler). Kısa ve kesin cümleler yazın; yazmadığınız konular \"doğrulanamadı\" sayılır.", "What the AI says about your brand is checked against these facts (paid plans). Write short, exact sentences; anything you leave out counts as \"can't verify\".")}</span>
         </label>
       )}
       <p className="muted">{L("Ad veya yazılışlar değişirse yeni ölçümler yeni adla yapılır; eski ölçümler olduğu gibi kalır.", "If the name or spellings change, past measurements are recalculated for free with the new details.")}</p>
@@ -588,7 +598,7 @@ function LossCardView({ card, brand, hasSite }: { card: LossCard; brand: string;
 
 const ENGINE_ORDER = ["openai", "claude", "gemini", "mock"];
 
-function Report({ brand, type, onBrandChange }: { brand: Brand; type: MeasurementType; onBrandChange: () => void }) {
+function Report({ brand, type, onBrandChange, paid = false }: { brand: Brand; type: MeasurementType; onBrandChange: () => void; paid?: boolean }) {
   const vis = useLoad(() => api.visibility(brand.id, type), [brand.id, type]);
   const [metric, setMetric] = useState<"recommend" | "mention">("recommend");
   // Canlı aramada birden çok motor olabilir (ChatGPT, Claude): oranlar motor bazında ayrı gösterilir, karıştırılmaz
@@ -774,6 +784,7 @@ function Report({ brand, type, onBrandChange }: { brand: Brand; type: Measuremen
               </section>
             );
           })()}
+          {type !== "simulated" && <TruthGuardPanel brand={brand} paid={paid} mix={live && insightsReady ? sourceMix(answers.data!, ments.data!, insightBrands) : null} />}
           {live && insightsReady && <PerceptionPanel summary={perceptionSummary(answers.data!, ments.data!, brand.id)} brand={brand.name} />}
           {!live && type !== "simulated" && (
             <section className="panel" id="kendi-site-payi">
@@ -882,6 +893,71 @@ function Report({ brand, type, onBrandChange }: { brand: Brand; type: Measuremen
         </>
       )}
     </div>
+  );
+}
+
+const SOURCE_LABEL: Record<SourceType, [string, string]> = {
+  own: ["Sizin siteniz", "Your site"], competitor: ["Rakip sitesi", "Competitor site"], official: ["Resmî / kamu / eğitim", "Official / government / education"],
+  encyclopedia: ["Ansiklopedi", "Encyclopedia"], news: ["Haber", "News"], review: ["İnceleme / karşılaştırma", "Reviews / comparison"],
+  forum: ["Forum / sözlük", "Forum"], social: ["Sosyal medya / video", "Social / video"], marketplace: ["Pazar yeri", "Marketplace"], other: ["Diğer siteler", "Other sites"],
+};
+/** TruthGuard: bilgi kartıyla doğruluk kontrolü ve kaynak türü dağılımı. Ücretli paketlere özel. */
+function TruthGuardPanel({ brand, paid, mix }: { brand: Brand; paid: boolean; mix: SourceMix | null }) {
+  const checks = useLoad(() => (paid && brand.fact_card ? api.truthChecks(brand.id) : Promise.resolve([])), [brand.id, paid, brand.fact_card ?? ""]);
+  const sl = (t: SourceType) => (isEn() ? SOURCE_LABEL[t][1] : SOURCE_LABEL[t][0]);
+  if (!paid) return (
+    <section className="panel" id="truthguard">
+      <h2>TruthGuard</h2>
+      <p className="muted">{L("Yapay zekâ markanız hakkında yanlış bilgi veriyor mu? Fiyat, adres, kuruluş yılı, hizmetler gibi iddialar sizin bilgilerinizle karşılaştırılır; kaynakların güvenilirliği gösterilir. Ücretli paketlerde.", "Is the AI saying wrong things about your brand? Claims about prices, address, founding year and services are checked against your facts, and source reliability is shown. On paid plans.")} <Link to="/hesap#paket">{L("Paketler", "Plans")}</Link></p>
+    </section>
+  );
+  const s = truthSummary(checks.data ?? []);
+  const total = s.correct + s.wrong + s.unverifiable;
+  return (
+    <section className="panel" id="truthguard">
+      <h2>TruthGuard</h2>
+      {!brand.fact_card ? (
+        <p>{L("Doğruluk kontrolü için önce markanın doğru bilgi kartını doldurun: sayfanın üstündeki \"Düzenle\" → \"Doğru bilgi kartı\". Kontrol sonraki saatlerde kendiliğinden yapılır.", "To check accuracy, first fill in the brand's fact card: \"Edit\" at the top → \"Fact card\". Checks then run automatically within hours.")}</p>
+      ) : checks.loading ? <Loading /> : s.checks === 0 ? (
+        <p className="muted">{L("Henüz kontrol yok. Markanızın geçtiği yeni cevaplar birkaç saat içinde (soru ve motor başına haftada bir) bilgi kartınızla karşılaştırılır.", "No checks yet. New answers that mention your brand are compared with your fact card within hours (once a week per question and engine).")}</p>
+      ) : (
+        <>
+          <p className="muted">{isEn() ? `Last 30 days: ${s.checks} answers checked against your fact card, ${total} claims about your brand.` : `Son 30 gün: ${s.checks} cevap bilgi kartınızla karşılaştırıldı, markanız hakkında ${total} iddia bulundu.`}</p>
+          <dl className="metrics">
+            <div><dt>{L("Yanlış", "Wrong")}</dt><dd className={`num ${s.wrong ? "truth-bad" : ""}`}>{s.wrong}</dd></div>
+            <div><dt>{L("Doğru", "Correct")}</dt><dd className="num">{s.correct}</dd></div>
+            <div><dt>{L("Doğrulanamadı", "Can't verify")}</dt><dd className="num">{s.unverifiable}</dd><dd className="range">{L("kartta yok", "not in your card")}</dd></div>
+          </dl>
+          {s.wrongClaims.length > 0 && (
+            <ul className="src-dom">
+              {s.wrongClaims.slice(0, 10).map((w) => (
+                <li key={w.claim + w.at} className="truth-item">
+                  <p className="src-head"><strong>{w.claim}</strong> <span className="muted">{providerLabel(w.provider)}</span></p>
+                  <p className="src-sup">{L("Doğrusu: ", "Correct: ")}{w.fact || "–"}</p>
+                  <blockquote className="answer"><p>“{w.quote}”</p></blockquote>
+                </li>
+              ))}
+            </ul>
+          )}
+          {s.unverifiable > 0 && <p className="src-sup muted">{L("\"Doğrulanamadı\" iddiaları azaltmak için bilgi kartınıza o konuları ekleyin.", "Add those topics to your fact card to reduce \"can't verify\" claims.")}</p>}
+          <p className="src-sup muted">{L("Karşılaştırmayı küçük bir yapay zekâ modeli yapar ve yanılabilir; her iddia cevaptan birebir alıntıyla gösterilir.", "A small AI model does the comparison and can make mistakes; every claim is shown with an exact quote from the answer.")}</p>
+        </>
+      )}
+      {mix && mix.total > 0 && (
+        <>
+          <h3>{L("Kaynakların türü", "Source types")}</h3>
+          <p className="muted">{L("Yapay zekânın bu ölçümde kaynak gösterdiği sitelerin türü (her cevapta her site bir kez).", "What kind of sites the AI cited in this measurement (each site once per answer).")}</p>
+          <ol className="domains">{mix.types.map((t) => <li key={t.type}><span>{sl(t.type)}</span><span className="num">{pct(t.share)} <span className="muted">({t.count})</span></span></li>)}</ol>
+          {mix.lost.total > 0 && (
+            <>
+              <p className="src-sup"><strong>{L("Rakibiniz sizin yerinize önerildiğinde:", "When a competitor was recommended instead of you:")}</strong></p>
+              <ol className="domains">{mix.lost.types.slice(0, 5).map((t) => <li key={t.type}><span>{sl(t.type)}</span><span className="num">{pct(t.share)} <span className="muted">({t.count})</span></span></li>)}</ol>
+              {(() => { const weak = mix.lost.types.filter((t) => t.type === "forum" || t.type === "social").reduce((a, t) => a + t.share, 0); return weak >= 0.4 ? <p className="caution">{isEn() ? `${pct(weak)} of these sources are forums or social media: less reliable sources are shaping these answers. Accurate content on review and news sites can change that.` : `Bu kaynakların %${Math.round(weak * 100)}'i forum veya sosyal medya: cevapları daha az güvenilir kaynaklar şekillendiriyor. İnceleme ve haber sitelerinde doğru içerik bunu değiştirebilir.`}</p> : null; })()}
+            </>
+          )}
+        </>
+      )}
+    </section>
   );
 }
 
@@ -1185,7 +1261,9 @@ function Advice({ brand, type, runs, onBrandChange }: { brand: Brand; type: Meas
     const wrongClaims = latest(checks).flatMap((c) => c.claims.filter((x) => x.status === "wrong").map((x) => ({ product: name(c.product_id), claim: x.claim, fact: x.fact })));
     const shoppingBehind = latest(shops).flatMap((sc) => sc.rivals.filter((r) => sc.own_position == null || r.position < sc.own_position).slice(0, 1)
       .map((r) => ({ product: name(sc.product_id), ownPos: sc.own_position, rival: name(r.id), rivalPos: r.position })));
-    return { engineGap, opportunitySites, wrongClaims, shoppingBehind, ownShare };
+    const tc = brand.fact_card ? await api.truthChecks(brand.id).catch(() => []) : [];
+    const wrongBrandClaims = truthSummary(tc).wrongClaims.slice(0, 5).map((w) => ({ claim: w.claim, fact: w.fact }));
+    return { engineGap, opportunitySites, wrongClaims, shoppingBehind, ownShare, wrongBrandClaims };
   }, [brand.id, type, lastRun?.id]);
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);

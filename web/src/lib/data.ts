@@ -10,6 +10,7 @@ export interface Brand {
   id: string; workspace_id: string; name: string; aliases: string[]; website: string | null;
   sector: string | null; city: string | null; country: string | null; is_competitor: boolean; owner_brand_id: string | null; data_origin: string;
   auto_weekly: boolean; audit_requested_at: string | null; reanalyze_requested_at: string | null;
+  fact_card?: string | null; fact_card_updated_at?: string | null;
 }
 export interface Prompt { id: string; brand_id: string; text: string; intent: Intent; segment: string | null; active: boolean; created_at: string }
 export type Intent = "informational" | "comparison" | "purchase" | "local" | "post_purchase";
@@ -99,6 +100,10 @@ export const api = {
   },
   async updateBrand(id: string, patch: Partial<Brand>) {
     must(await sb().from("brands").update(patch).eq("id", id));
+  },
+  async truthChecks(brandId: string): Promise<{ provider: string; created_at: string; failed: boolean; claims: { claim: string; status: "correct" | "wrong" | "unverifiable"; fact: string; quote: string }[] }[]> {
+    const since = new Date(Date.now() - 30 * 86_400_000).toISOString();
+    return must(await sb().from("truth_checks").select("provider,created_at,failed,claims").eq("brand_id", brandId).gte("created_at", since).order("created_at", { ascending: false }).limit(200));
   },
   async deleteBrand(id: string) { must(await sb().from("brands").delete().eq("id", id)); },
   async prompts(brandId: string): Promise<Prompt[]> {

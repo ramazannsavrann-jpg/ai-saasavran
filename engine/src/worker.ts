@@ -10,6 +10,7 @@ import { buildProviders } from "./providers/registry.ts";
 import { SimulatedProvider } from "./providers/simulated.ts";
 import { auditSite } from "./audit.ts";
 import { classifyAnswer, CLASSIFY_WORST_USD, type Perception } from "./classify.ts";
+import { judgeTruth, type TruthClaim } from "./truth.ts";
 import { buildProductQuestion, judgeProduct } from "./product.ts";
 import { matchShopping, searchShopping, shoppingQuery, shoppingSearchesLeft, ShoppingError, type ShoppingTarget } from "./shopping.ts";
 import { assertBillingAllowed } from "./providers/registry.ts";
@@ -430,6 +431,34 @@ export async function backfillPerception(deps: { db: SupabaseClient; env: Record
       failed++;
       if (/HTTP (401|403|429)/.test(String((e as Error).message))) break;
     }
+  }
+  return { done, failed, spentUsd: Math.round(spent * 10000) / 10000 };
+}
+
+/**
+ * TruthGuard: bilgi kartı olan markalarda, markanın geçtiği en güncel cevapları (soru × motor başına haftada bir) kartla karşılaştırır.
+ * Maliyet çalışma alanının ücretli harcamasına yazılır (record_aux_call; tavan aşılırsa alan durur). Saatlik en fazla `limit` kontrol.
+ */
+export async function processTruthChecks(deps: { db: SupabaseClient; env: Record<string, string | undefined>; fetchFn?: FetchLike }, limit = 40): Promise<{ done: number; failed: number; spentUsd: number; skipped?: string }> {
+  const { db, env } = deps;
+  if (!env.OPENAI_API_KEY || env.ALLOW_PAID_API !== "true") return { done: 0, failed: 0, spentUsd: 0, skipped: "paid_api_off" };
+  const rows = must(await db.rpc("pending_truth_checks", { p_limit: limit }), "bekleyen doğruluk") as { response_id: string; workspace_id: string; brand_id: string; run_id: string; prompt_id: string; provider: string; brand_name: string; fact_card: string; answer_text: string }[];
+  const model = env.OPENAI_MODEL || OPENAI_DEFAULT.model;
+  let done = 0, failed = 0, spent = 0;
+  for (const r of rows) {
+    let claims: TruthClaim[] | null = null, cost = 0, tin = 0, tout = 0;
+    try {
+      const j = await judgeTruth({ apiKey: env.OPENAI_API_KEY, model, price: OPENAI_DEFAULT.price, brand: r.brand_name, factCard: r.fact_card, answer: r.answer_text, fetchFn: deps.fetchFn });
+      claims = j.claims; cost = j.costUsd; tin = j.inputTokens; tout = j.outputTokens;
+    } catch (e) {
+      failed++;
+      if (/HTTP (401|403|429)/.test(String((e as Error).message))) break;
+      continue; // ağ hatası: kayıt yazılmaz, sonraki saatte tekrar denenir
+    }
+    spent += cost;
+    if (cost > 0) must(await db.rpc("record_aux_call", { p_workspace: r.workspace_id, p_run: r.run_id, p_task: "truth", p_provider: "openai", p_model: model, p_in: tin, p_out: tout, p_cost: cost }), "record_aux_call");
+    must(await db.from("truth_checks").insert({ workspace_id: r.workspace_id, brand_id: r.brand_id, run_id: r.run_id, response_id: r.response_id, prompt_id: r.prompt_id, provider: r.provider, claims: claims ?? [], failed: !claims, cost_usd: cost }), "doğruluk kaydı");
+    if (claims) done++; else failed++;
   }
   return { done, failed, spentUsd: Math.round(spent * 10000) / 10000 };
 }

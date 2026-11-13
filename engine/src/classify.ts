@@ -42,7 +42,7 @@ export function buildClassifyPrompt(answer: string, names: string[], target?: st
   return lines.join("\n");
 }
 
-const squash = (s: string) => s.toLowerCase().replace(/[\s"'“”‘’«»*_`]+/g, " ").trim();
+const squash = (s: string) => s.toLowerCase().replace(/i\u0307/g, "i").replace(/ı/g, "i").replace(/[\s"'“”‘’«»*_`]+/g, " ").trim();
 /** Algıyı okur; listede olmayan nitelikler ve cevapta birebir geçmeyen alıntılar atılır (uydurma alıntı gösterilmez). */
 export function parsePerception(text: string, answer: string): Perception | null {
   const m = text.match(/\{[\s\S]*\}/);
