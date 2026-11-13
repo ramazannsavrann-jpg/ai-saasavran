@@ -10,7 +10,7 @@ export interface Brand {
   id: string; workspace_id: string; name: string; aliases: string[]; website: string | null;
   sector: string | null; city: string | null; country: string | null; is_competitor: boolean; owner_brand_id: string | null; data_origin: string;
   auto_weekly: boolean; audit_requested_at: string | null; reanalyze_requested_at: string | null;
-  fact_card?: string | null; fact_card_updated_at?: string | null;
+  fact_card?: string | null; fact_card_updated_at?: string | null; track_key?: string;
 }
 export interface Prompt { id: string; brand_id: string; text: string; intent: Intent; segment: string | null; active: boolean; created_at: string }
 export type Intent = "informational" | "comparison" | "purchase" | "local" | "post_purchase";
@@ -108,6 +108,10 @@ export const api = {
   async engineConflicts(brandId: string): Promise<{ created_at: string; failed: boolean; conflicts: { topic: string; sides: { provider: string; quote: string }[] }[] }[]> {
     const since = new Date(Date.now() - 30 * 86_400_000).toISOString();
     return must(await sb().from("engine_conflicts").select("created_at,failed,conflicts").eq("brand_id", brandId).gte("created_at", since).order("created_at", { ascending: false }).limit(100));
+  },
+  async aiVisits(brandId: string): Promise<{ day: string; source: "chatgpt" | "perplexity" | "gemini" | "claude" | "copilot" | "deepseek" | "grok" | "meta" | "other_ai"; path: string; visits: number }[]> {
+    const since = new Date(Date.now() - 60 * 86_400_000).toISOString().slice(0, 10);
+    return must(await sb().from("ai_visits").select("day,source,path,visits").eq("brand_id", brandId).gte("day", since).limit(5000));
   },
   async deleteBrand(id: string) { must(await sb().from("brands").delete().eq("id", id)); },
   async prompts(brandId: string): Promise<Prompt[]> {

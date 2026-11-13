@@ -84,6 +84,13 @@
 - Ağırlıklı doğrusal eğilim (ağırlık = cevap sayısı); aralık = model belirsizliği + son ölçümün örneklem belirsizliği. Eğim aralığı sıfırı içeriyorsa "belirgin eğilim yok".
 - En az 4 ölçüm ve 14 gün yoksa tahmin gösterilmez. Simülasyonda gösterilmez. Ek API maliyeti yok.
 
+## v1.24 (13 Kasım 2026): yapay zekâdan gelen ziyaretçi (1. aşama)
+
+- Müşteri sitesine tek satır kod: `<script async src="https://aisaasavran.com/t.js" data-site="…">`. Kod yalnız ziyaretçi ChatGPT, Gemini, Claude, Perplexity, Copilot, DeepSeek, Grok veya Meta AI'dan geldiyse (referrer veya utm_source) ve oturumda bir kez bildirir.
+- `/api/ai-visit` → `record_ai_visit` (migration 0037): IP, çerez, tarayıcı bilgisi yok; gün × kaynak × sayfa sayacı. Kaynak site markanın sitesiyle eşleşmezse sayılmaz; marka başına günde 20.000 ziyaret ve 300 farklı sayfa sınırı; sayfa yolunda e-posta ve uzun sayılar maskelenir.
+- Raporda "Yapay zekâdan gelen ziyaretçi": son 30 gün / önceki 30 gün. Ücretli paketlerde kaynak dağılımı (motorun güncel önerilme oranıyla yan yana), 8 haftalık grafik, gelinen sayfalar. Kod parçası kopyalanabilir. Gizlilik metnine paragraf eklendi.
+- Testler: `engine/test/traffic.test.ts` (t.js tespiti dahil), ekran testi genişletildi. Sonraki aşama: bot ölçümü (Cloudflare kodu, WordPress eklentisi).
+
 ## v1.23 (13 Kasım 2026): TruthGuard 3. aşama
 
 - **Motorlar arası çelişki:** aynı soruya en az iki motorun markayı andığı en güncel cevapları karşılaştırılır (soru başına haftada bir, bilgi kartı gerekmez). Her taraf kendi cevabından birebir alıntıyla; tek taraflı veya uydurma alıntılı çelişki atılır. Migration 0036 (`engine_conflicts`). Maliyet soru başına ~0,0003 $, çalışma alanının ücretli harcamasına yazılır.
