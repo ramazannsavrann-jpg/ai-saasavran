@@ -5,7 +5,7 @@ Bu dal (`seslendirme`) videoların tek kaynağıdır. Yeni oturumda buradan deva
 ## Ses
 - Motor: OpenAI TTS (`gpt-4o-mini-tts`), ses **ash**. Bu dala `video/narration-<dil>.txt` push edilince `.github/workflows/seslendirme.yml` mp3 üretir (artifact `seslendirme`).
 - ElevenLabs (ses "Aras", PfUjY8BsgGYwLKokwLKi) ücretsiz katmanı hesapta kapalı ("unusual activity"); kullanılmıyor.
-- Hız: indirildikten sonra `ffmpeg -af atempo=1.2` (kullanıcı onayladı). Video ≤ 58 sn olacak şekilde gerekirse 1.4'e kadar.
+- Hız: indirildikten sonra Türkçe `atempo=1.24` (kullanıcı 13 Kasım: %24), İngilizce `atempo=1.2`. Video ≤ 58 sn olacak şekilde gerekirse 1.4'e kadar.
 - Okunuş: metinde **"Ey Ay Saa, Savran"** yazılır (virgül, "Savran"ı yavaşlatır). İngilizcede "A I Saa Savran".
 - Müzik: `sablon/music.py` (telifsiz, sentez). Ses altında sidechain ile kısılır (bkz. aşağıdaki ffmpeg).
 
@@ -13,7 +13,7 @@ Bu dal (`seslendirme`) videoların tek kaynağıdır. Yeni oturumda buradan deva
 - 1080x1920, 30 fps, sahne başına ayrı mp4, concat + `-c:v copy` ile ses.
 - İlk kare boş değil (s1'de fade-in yok); en altta tarih/örneklem notu; sonda aisaasavran.com + logo.
 - Şablon: `sablon/make.py <ayar.json>` (v2, 8 sahne: marka, motorlar, soru bazında kayıp, ürün, doğruluk+Shopping, kaynaklar, CTA; örnek ayarlar telefon videoları). `make.py <ayar> frames` önizleme, `make.py <ayar> s3 s4` yalnız o sahneler.
-- Gerçek marka adları her sahnenin altında ("names" alanı); Türkçe ses gerekirse atempo 1.3.
+- Gerçek marka adları her sahnenin altında ("names" alanı).
 
 ## İçerik kuralları
 - Sonuçlarda markalar **harfli**: Marka A/B/C…, ürünler Model 1/2…. Harfler rastgele atanır (alfabetik değil).
