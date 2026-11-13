@@ -113,6 +113,10 @@ export const api = {
     const since = new Date(Date.now() - 60 * 86_400_000).toISOString().slice(0, 10);
     return must(await sb().from("ai_visits").select("day,source,path,visits").eq("brand_id", brandId).gte("day", since).limit(5000));
   },
+  async aiBots(brandId: string): Promise<{ day: string; bot: string; path: string; hits: number; verified: number; errors: number }[]> {
+    const since = new Date(Date.now() - 30 * 86_400_000).toISOString().slice(0, 10);
+    return must(await sb().from("ai_bot_hits").select("day,bot,path,hits,verified,errors").eq("brand_id", brandId).gte("day", since).limit(5000));
+  },
   async deleteBrand(id: string) { must(await sb().from("brands").delete().eq("id", id)); },
   async prompts(brandId: string): Promise<Prompt[]> {
     return must(await sb().from("prompts").select("*").eq("brand_id", brandId).order("created_at"));

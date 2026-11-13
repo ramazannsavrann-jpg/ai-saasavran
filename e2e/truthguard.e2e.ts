@@ -72,6 +72,12 @@ test("TruthGuard: ücretli pakette bilgi kartı, yanlış iddialar, kaynak türl
     { workspace_id: ws, brand_id: brand.id, day: d(40), source: "chatgpt", path: "/", visits: 12 },
   ]));
 
+  must(await db.from("ai_bot_hits").insert([
+    { workspace_id: ws, brand_id: brand.id, day: d(1), bot: "OAI-SearchBot", path: "/", hits: 12, verified: 12, errors: 0 },
+    { workspace_id: ws, brand_id: brand.id, day: d(2), bot: "ChatGPT-User", path: "/menu", hits: 5, verified: 5, errors: 0 },
+    { workspace_id: ws, brand_id: brand.id, day: d(4), bot: "GPTBot", path: "/", hits: 20, verified: 0, errors: 3 },
+    { workspace_id: ws, brand_id: brand.id, day: d(6), bot: "ClaudeBot", path: "/iletisim", hits: 7, verified: 0, errors: 0 },
+  ]));
   // Free: yalnız tanıtım ve toplam ziyaret
   await page.goto(`/marka/${brand.id}?sekme=rapor&tur=canli`);
   await expect(page.locator("#ai-ziyaretci")).toContainText("31");
@@ -102,6 +108,12 @@ test("TruthGuard: ücretli pakette bilgi kartı, yanlış iddialar, kaynak türl
   await tr.getByRole("button", { name: "Sitenize eklenecek kodu göster" }).click();
   await expect(tr.locator(".code-snippet")).toContainText('data-site="');
   await tr.screenshot({ path: `${SHOTS}/34-ai-ziyaretci.png` });
+  const bt = page.locator("#ai-botlar");
+  await expect(bt).toContainText("44 kez okudu");
+  await expect(bt).toContainText("30 gündür hiç gelmedi: Claude-SearchBot, PerplexityBot");
+  await expect(bt).toContainText("3 bot isteği hata aldı");
+  await expect(bt).toContainText("IP doğrulandı");
+  await bt.screenshot({ path: `${SHOTS}/35-ai-botlar.png` });
 
   // Öneriler: yanlış bilgi maddesi ve kampanya
   await page.goto(`/marka/${brand.id}?sekme=oneriler&tur=canli`);
