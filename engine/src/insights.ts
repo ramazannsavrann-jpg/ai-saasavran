@@ -23,11 +23,37 @@ export function domainOf(url: string | null | undefined): string {
   if (!url) return "";
   try { return new URL(url.includes("://") ? url : `https://${url}`).hostname.replace(/^www\./, "").toLowerCase(); } catch { return ""; }
 }
-const sameSite = (domain: string, brandDomain: string) => !!brandDomain && (domain === brandDomain || domain.endsWith("." + brandDomain));
+/** Kullanıcı adının adreste geçtiği platformlar: alan adı herkesin ortak alanıdır, sahiplik kanal/profil yolundan anlaşılır. */
+const PROFILE_HOSTS = new Set(["youtube.com", "m.youtube.com", "instagram.com", "tiktok.com", "x.com", "twitter.com", "facebook.com", "linkedin.com"]);
+/**
+ * Kaynak anahtarı: normal sitelerde alan adı (www'suz); YouTube/Instagram gibi platformlarda alan adı + kanal/profil
+ * (ör. youtube.com/@kanal). youtube.com/@ad, /c/ad, /user/ad aynı kanal sayılır (youtube.com/@ad); /channel/ID ayrı tutulur.
+ * Kanal yolu olmayan platform adresi (ör. youtube.com/watch?v=…) yalnız alan adına iner ve kimseye ait sayılmaz.
+ */
+export function siteKey(url: string | null | undefined): string {
+  const host = domainOf(url);
+  if (!host) return "";
+  const base = host.replace(/^m\./, "");
+  if (!PROFILE_HOSTS.has(host) && !PROFILE_HOSTS.has(base)) return host;
+  let path = "";
+  try { path = new URL(url!.includes("://") ? url! : `https://${url}`).pathname; } catch { return base; }
+  const seg = path.split("/").filter(Boolean).map((x) => decodeURIComponent(x).toLowerCase());
+  if (!seg.length) return base;
+  if (base === "youtube.com") {
+    if (seg[0].startsWith("@")) return `${base}/${seg[0]}`;
+    if ((seg[0] === "c" || seg[0] === "user") && seg[1]) return `${base}/@${seg[1]}`;
+    if (seg[0] === "channel" && seg[1]) return `${base}/channel/${seg[1]}`;
+    return base;
+  }
+  if (base === "linkedin.com") return seg[1] && ["company", "in"].includes(seg[0]) ? `${base}/${seg[0]}/${seg[1]}` : base;
+  const reserved = new Set(["p", "reel", "reels", "explore", "stories", "watch", "video", "hashtag", "search", "share", "status", "i", "home", "intent"]);
+  return reserved.has(seg[0]) ? base : `${base}/${seg[0].replace(/^@/, "")}`;
+}
+const sameSite = (domain: string, brandDomain: string) => !!brandDomain && (domain === brandDomain || (!brandDomain.includes("/") && domain.endsWith("." + brandDomain)));
 
 function ownerOf(domain: string, brands: InsightBrand[]): { owner: SourceOwner; ownerName: string | null } {
   for (const b of brands) {
-    if (sameSite(domain, domainOf(b.website))) return { owner: b.isTarget ? "target" : "competitor", ownerName: b.name };
+    if (sameSite(domain, siteKey(b.website))) return { owner: b.isTarget ? "target" : "competitor", ownerName: b.name };
   }
   return { owner: "third_party", ownerName: null };
 }
@@ -37,7 +63,7 @@ function index(answers: InsightAnswer[], mentions: InsightMention[]) {
   for (const m of mentions) byResp.set(m.response_id, [...(byResp.get(m.response_id) ?? []), m]);
   return answers.map((a) => ({
     a,
-    domains: [...new Set((a.cited_urls ?? []).map(domainOf).filter(Boolean))],
+    domains: [...new Set((a.cited_urls ?? []).map(siteKey).filter(Boolean))],
     ments: byResp.get(a.id) ?? [],
   }));
 }
@@ -429,7 +455,7 @@ export function sourcesByEngine(answers: { provider: string; cited_urls: string[
   for (const a of answers) {
     const e = per.get(a.provider) ?? { answers: 0, counts: new Map() };
     e.answers++;
-    for (const d of new Set((a.cited_urls ?? []).map(domainOf).filter(Boolean))) e.counts.set(d, (e.counts.get(d) ?? 0) + 1);
+    for (const d of new Set((a.cited_urls ?? []).map(siteKey).filter(Boolean))) e.counts.set(d, (e.counts.get(d) ?? 0) + 1);
     per.set(a.provider, e);
   }
   const used = (p: string, d: string) => (per.get(p)?.counts.get(d) ?? 0) > 0;
@@ -475,4 +501,35 @@ export function visibilityForecast(pts: ForecastInput[], days = 30, minPoints = 
   const clamp = (v: number) => Math.min(1, Math.max(0, v));
   const trend: Forecast["trend"] = b - 1.96 * seB > 0 ? "up" : b + 1.96 * seB < 0 ? "down" : "flat";
   return { value: clamp(yf), low: clamp(yf - half), high: clamp(yf + half), days, perWeek: b * 7, trend, points: xs.length, spanDays: Math.round(span) };
+}
+
+
+// ---------------- Kendi site payı (owned-source share) ----------------
+export interface OwnedShare {
+  /** Kaynak gösterimi toplamı (her cevapta her site bir kez) */
+  total: number; own: number; competitor: number; thirdParty: number;
+  /** Sitenizin kaynak gösterildiği cevap sayısı ve kaynak gösteren toplam cevap */
+  answersCitingOwn: number; answersWithSources: number;
+  byEngine: { provider: string; total: number; own: number; competitor: number; thirdParty: number }[];
+}
+/** Yapay zekânın gösterdiği kaynakların ne kadarı sizin siteniz, rakiplerin siteleri ve üçüncü taraf siteler. Yalnız canlı aramada anlamlı. */
+export function ownedSourceShare(answers: (InsightAnswer & { provider?: string })[], brands: InsightBrand[]): OwnedShare {
+  const out: OwnedShare = { total: 0, own: 0, competitor: 0, thirdParty: 0, answersCitingOwn: 0, answersWithSources: 0, byEngine: [] };
+  const eng = new Map<string, OwnedShare["byEngine"][number]>();
+  for (const a of answers) {
+    const keys = [...new Set((a.cited_urls ?? []).map(siteKey).filter(Boolean))];
+    if (!keys.length) continue;
+    out.answersWithSources++;
+    const e = eng.get(a.provider ?? "") ?? { provider: a.provider ?? "", total: 0, own: 0, competitor: 0, thirdParty: 0 };
+    let citesOwn = false;
+    for (const k of keys) {
+      const o = ownerOf(k, brands).owner;
+      out.total++; e.total++;
+      if (o === "target") { out.own++; e.own++; citesOwn = true; } else if (o === "competitor") { out.competitor++; e.competitor++; } else { out.thirdParty++; e.thirdParty++; }
+    }
+    if (citesOwn) out.answersCitingOwn++;
+    eng.set(e.provider, e);
+  }
+  out.byEngine = [...eng.values()].sort((x, y) => x.provider.localeCompare(y.provider));
+  return out;
 }
