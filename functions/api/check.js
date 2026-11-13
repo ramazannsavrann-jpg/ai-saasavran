@@ -1,6 +1,6 @@
 // Üye olmadan ücretsiz kontrol: Gemini'ye (ücretsiz katman, internet araması yok) 5 soru sorar, markanın geçip geçmediğini ölçer.
 // Sınırlar veritabanında: kişi başına 30 günde 2 kontrol, günlük toplam tavan, ortak Gemini günlük tavanı.
-import { parseInput, buildQuestions, analyze, geminiRestricted } from "./_check-lib.js";
+import { parseInput, buildQuestions, analyze, geminiRestricted, visitorKind } from "./_check-lib.js";
 
 const MODEL = "gemini-3.5-flash-lite";
 const json = (b, s = 200) => new Response(JSON.stringify(b), { status: s, headers: { "content-type": "application/json", "cache-control": "no-store" } });
@@ -47,6 +47,9 @@ export async function onRequestPost({ request, env }) {
     p_calls: questions.length, p_daily_limit: 450,
   }));
   if (!res.startsWith("ok:")) return json({ error: res }, 429);
+  const kind = visitorKind(request.headers.get("user-agent"), { "x-aisv-test": request.headers.get("x-aisv-test") });
+  const country = String(request.cf?.country ?? request.headers.get("CF-IPCountry") ?? "").toUpperCase();
+  await rpc(env, "tag_free_check", { p_id: res.slice(3), p_kind: kind, p_country: country }).catch(() => {});
 
   const answers = await Promise.all(questions.map((q) => ask(env, q)));
   // Ücretsiz katman aynı anda gelen istekleri bazen reddediyor: boş dönenleri sırayla bir kez daha dene.

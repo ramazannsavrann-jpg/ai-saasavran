@@ -84,6 +84,12 @@
 - Ağırlıklı doğrusal eğilim (ağırlık = cevap sayısı); aralık = model belirsizliği + son ölçümün örneklem belirsizliği. Eğim aralığı sıfırı içeriyorsa "belirgin eğilim yok".
 - En az 4 ölçüm ve 14 gün yoksa tahmin gösterilmez. Simülasyonda gösterilmez. Ek API maliyeti yok.
 
+## v1.28 (14 Kasım 2026): ücretsiz kontrolü kim kullanıyor
+
+- Her ücretsiz kontrolde istemci türü (tarayıcı / bot / otomatik araç / bizim testimiz) ve ülke kaydedilir (migration 0039). Tür kullanıcı aracısından tahmin edilir, taklit edilebilir. Canlı denetim betiği `x-aisv-test` başlığıyla kendini "test" olarak işaretler.
+- Müşteriler sayfasında (yönetici) "Ücretsiz kontrol kullanımı": son 60 gün, türe göre sayılar, marka/kategori/şehir, ülke, tekrar gelen, sonuç. IP karması gösterilmez.
+- 14 Kasım itibarıyla 7 kontrolün 6'sı "AI SaaSavran" (kendi testlerimiz), 1'i "Peec AI" (EN); tamamı tür kaydı başlamadan önce.
+
 ## v1.27 (14 Kasım 2026): gerçek Gemini testleri geceye alındı
 
 - Ücretsiz Gemini kotası canlıdaki Free paket ve ücretsiz kontrolle ortak. Her PR'da çalışan iki bilgi amaçlı gerçek Gemini testi kotayı tüketiyordu ("quota_exceeded"). Artık `.github/workflows/gemini-nightly.yml` ile her gece 05:17'de (TR) ve elle istenince çalışıyorlar; diğer testler her PR'da aynen sürüyor.

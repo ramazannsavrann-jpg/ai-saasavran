@@ -181,6 +181,9 @@ export const api = {
   async requestShoppingCheck(id: string) { must(await sb().rpc("request_shopping_check", { p_product: id })); },
   async setShoppingQuery(id: string, q: string | null) { must(await sb().from("products").update({ shopping_query: q }).eq("id", id)); },
   async adminWorkspaces(): Promise<AdminWorkspace[]> { return must(await sb().rpc("admin_workspaces")); },
+  async adminFreeChecks(): Promise<{ created_at: string; lang: string; brand: string; category: string; city: string | null; visitor_kind: "browser" | "bot" | "script" | "test" | null; country: string | null; total: number | null; mentioned: number | null; recommended: number | null; repeat_visitor: boolean }[]> {
+    return must(await sb().rpc("admin_free_checks"));
+  },
   async adminSetPlan(workspaceId: string, plan: string, until: string | null) { must(await sb().rpc("admin_set_plan", { p_workspace: workspaceId, p_plan: plan, p_until: until })); },
   async reportShares(brandId: string): Promise<ReportShare[]> {
     return must(await sb().from("report_shares").select("id,token,created_at,expires_at,revoked_at").eq("brand_id", brandId).is("revoked_at", null).gt("expires_at", new Date().toISOString()).order("created_at", { ascending: false }));
