@@ -9,6 +9,7 @@ import { demoHtml } from "./demo.mjs";
 import { checkHtml } from "./check.mjs";
 import { GUIDES_EN, HOME_FAQ_EN } from "./content-en.mjs";
 import { POSTS } from "./blog.mjs";
+import { DEF, METHOD_PAGES } from "./method.mjs";
 
 const DIST = "dist";
 if (!existsSync(join(DIST, "index.html"))) throw new Error("Önce vite build çalışmalı");
@@ -75,9 +76,9 @@ ${body}
 </main>
 <footer class="foot">
   ${en ? `<p><b>AI SaaSavran</b> measures whether ChatGPT and Gemini recommend your business. Early access.</p>
-  <p><a href="/pricing/">Pricing</a> · <a href="/guides/">Guides</a> · <a href="/blog/">Blog</a> · <a href="/about/">About</a> · <a href="/terms/">Terms</a> · <a href="/privacy/">Privacy</a> · <a href="/refund/">Refunds</a> · <a href="/tr/">Türkçe</a></p>
+  <p><a href="/pricing/">Pricing</a> · <a href="/guides/">Guides</a> · <a href="/blog/">Blog</a> · <a href="/about/">About</a> · <a href="/methodology/">Methodology</a> · <a href="/terms/">Terms</a> · <a href="/privacy/">Privacy</a> · <a href="/refund/">Refunds</a> · <a href="/tr/">Türkçe</a></p>
   <p>Contact: <a href="mailto:${SITE.email}">${SITE.email}</a></p>` : `<p><b>AI SaaSavran</b>: markaların yapay zekâ asistanlarındaki görünürlüğünü ölçen araç. Erken erişim.</p>
-  <p><a href="/tr/#fiyatlar">Fiyatlar</a> · <a href="/rehber/">Rehberler</a> · <a href="/tr/blog/">Blog</a> · <a href="/tr/hakkimizda/">Hakkımızda</a> · <a href="/durum">Ürün durumu</a> · <a href="/kosullar">Kullanım koşulları</a> · <a href="/gizlilik">Gizlilik</a> · <a href="/iade/">İade</a> · <a href="/">English</a></p>
+  <p><a href="/tr/#fiyatlar">Fiyatlar</a> · <a href="/rehber/">Rehberler</a> · <a href="/tr/blog/">Blog</a> · <a href="/tr/hakkimizda/">Hakkımızda</a> · <a href="/tr/metodoloji/">Metodoloji</a> · <a href="/durum">Ürün durumu</a> · <a href="/kosullar">Kullanım koşulları</a> · <a href="/gizlilik">Gizlilik</a> · <a href="/iade/">İade</a> · <a href="/">English</a></p>
   <p>İletişim: <a href="mailto:${SITE.email}">${SITE.email}</a></p>`}
 </footer>
 <script src="/site/site.js" defer></script>
@@ -93,10 +94,12 @@ function write(path, html) {
 }
 
 const ORG = { "@context": "https://schema.org", "@type": "Organization", name: SITE.name, alternateName: ["AISaaSavran", "aisaasavran.com", "AI SaaSavran AI visibility tracker"], url: SITE.url, email: SITE.email, logo: SITE.url + "/icon.svg", sameAs: SITE.sameAs,
-  description: "AI SaaSavran (aisaasavran.com) is an AI visibility measurement tool: it measures how often ChatGPT, Claude and Gemini mention and recommend a brand. It is an independent product and is not affiliated with similarly named companies or services." };
+  description: `${DEF.en} It is an independent product (aisaasavran.com) and is not affiliated with similarly named companies or services.` };
+const WEBSITE = { "@context": "https://schema.org", "@type": "WebSite", name: SITE.name, url: SITE.url, inLanguage: ["en", "tr"], description: DEF.en, publisher: { "@type": "Organization", name: SITE.name, url: SITE.url } };
+const crumbs = (items) => ({ "@context": "https://schema.org", "@type": "BreadcrumbList", itemListElement: items.map(([name, path], i) => ({ "@type": "ListItem", position: i + 1, name, item: SITE.url + path })) });
 const APP = {
   "@context": "https://schema.org", "@type": "SoftwareApplication", name: SITE.name, url: SITE.url, applicationCategory: "BusinessApplication",
-  operatingSystem: "Web", alternateName: "aisaasavran.com", description: "AI SaaSavran (aisaasavran.com) measures how often ChatGPT, Claude and Gemini mention and recommend your business versus competitors. Plans: Free, Plus $29/month, Pro $149/month, Business $449/month.",
+  operatingSystem: "Web", alternateName: "aisaasavran.com", description: `${DEF.en} Plans: Free, Plus $29/month, Pro $149/month, Business $449/month.`,
   inLanguage: ["en", "tr"],
   offers: [["Free", 0], ["Plus", 29], ["Pro", 149], ["Business", 449]].map(([n, p]) => ({ "@type": "Offer", name: n, price: String(p), priceCurrency: "USD" })),
 };
@@ -198,7 +201,7 @@ ${demoHtml(false)}
 ${plansHtml(false)}
 ${faqHtml(HOME_FAQ)}
 `;
-write("/tr/", page({ lang: "tr", alt: "/", path: "/tr/", title: "AI SaaSavran: Markanız ChatGPT ve Gemini cevaplarında mı?", description: "Markanızın ChatGPT ve Gemini gibi yapay zekâ asistanlarında ne sıklıkla anıldığını ve önerildiğini ölçün. Türkçe, ücretsiz başlangıç paketi.", body: home, schema: [ORG, APP, faqLd(HOME_FAQ)] }));
+write("/tr/", page({ lang: "tr", alt: "/", path: "/tr/", title: "AI SaaSavran: Markanız ChatGPT, Gemini ve Claude'da mı?", description: DEF.tr, body: home, schema: [ORG, WEBSITE, APP, faqLd(HOME_FAQ)] }));
 
 
 // 3a) English home (default)
@@ -263,7 +266,7 @@ ${demoHtml(true)}
 ${plansHtml(true)}
 ${faqHtml(HOME_FAQ_EN, true)}
 `;
-write("/", page({ lang: "en", alt: "/tr/", path: "/", title: "AI SaaSavran: Does ChatGPT recommend your business?", description: "See whether ChatGPT and Gemini mention and recommend your business versus competitors, and which sources they rely on. Free plan for small businesses and agencies.", body: enHome, schema: [ORG, APP, faqLd(HOME_FAQ_EN)] }));
+write("/", page({ lang: "en", alt: "/tr/", path: "/", title: "AI SaaSavran: Does ChatGPT recommend your business?", description: DEF.en, body: enHome, schema: [ORG, WEBSITE, APP, faqLd(HOME_FAQ_EN)] }));
 
 // 4a) English guides
 const enList = `
@@ -288,7 +291,7 @@ for (const g of GUIDES_EN) {
   <nav class="related" aria-label="More guides"><h2>More guides</h2><ul>${others}</ul></nav>
 </article>`;
   const article = { "@context": "https://schema.org", "@type": "Article", headline: g.title, description: g.description, inLanguage: "en", datePublished: SITE.updated, dateModified: SITE.updated, author: { "@type": "Organization", name: SITE.name, url: SITE.url }, publisher: { "@type": "Organization", name: SITE.name, logo: { "@type": "ImageObject", url: SITE.url + "/icon.svg" } }, mainEntityOfPage: SITE.url + path };
-  write(path, page({ lang: "en", alt: `/rehber/${g.tr}/`, path, title: seoTitle(g.title, g.short), description: g.description, body, schema: [article, faqLd(g.faq)], type: "article" }));
+  write(path, page({ lang: "en", alt: `/rehber/${g.tr}/`, path, title: seoTitle(g.title, g.short), description: g.description, body, schema: [article, faqLd(g.faq), crumbs([["AI SaaSavran", "/"], ["Guides", "/guides/"], [g.short, path]])], type: "article" }));
 }
 
 // 4) Rehberler (Türkçe)
@@ -299,7 +302,7 @@ const list = `
   <p>Müşteriler artık hangi ürünü, mağazayı veya hizmeti seçeceklerini ChatGPT, Gemini ya da Claude'a soruyor. Yapay zekâ genellikle birkaç marka sayıyor; geri kalanlar görünmez kalıyor. Bu rehberler bu görünürlüğün doğru nasıl ölçüleceğini (tekrarlanan sorular, her motor ayrı, canlı web araması ve model bilgisi ayrımı), yapay zekânın neden sizin yerinize rakibinizi önerdiğini ve neleri değiştirebileceğinizi anlatıyor: yapay zekânın okuduğu kaynaklar, müşterinizin sorduğu sorular ve kendi sitenizin ne yaptığınızı ne kadar açık anlattığı. Küçük işletmeler, ajanslar, ürün markaları ve içerik üreticileri için yazıldı. İçlerindeki her sayı gerçek bir ölçümden geliyor; örneklem küçükse bunu söylüyoruz.</p>
   <ul class="guide-list">${GUIDES.map((g) => `<li><a href="/rehber/${g.slug}/"><b>${esc(g.title)}</b><span>${esc(g.description)}</span></a></li>`).join("")}</ul>
 </section>`;
-write("/rehber/", page({ lang: "tr", alt: "/guides/", path: "/rehber/", title: "Rehberler: Yapay zekâ görünürlüğü | AI SaaSavran", description: "ChatGPT ve Gemini'de markanızın görünürlüğünü ölçmek ve artırmak için Türkçe rehberler.", body: list, schema: [ORG] }));
+write("/rehber/", page({ lang: "tr", alt: "/guides/", path: "/rehber/", title: "Rehberler: Yapay zekâ görünürlüğü | AI SaaSavran", description: "ChatGPT, Gemini ve Claude'da markanızın görünürlüğünü ölçmek ve artırmak için Türkçe rehberler.", body: list, schema: [ORG] }));
 
 for (const g of GUIDES) {
   const path = `/rehber/${g.slug}/`;
@@ -316,7 +319,7 @@ for (const g of GUIDES) {
 </article>`;
   const article = { "@context": "https://schema.org", "@type": "Article", headline: g.title, description: g.description, inLanguage: "tr", datePublished: SITE.updated, dateModified: SITE.updated, author: { "@type": "Organization", name: SITE.name, url: SITE.url }, publisher: { "@type": "Organization", name: SITE.name, logo: { "@type": "ImageObject", url: SITE.url + "/icon.svg" } }, mainEntityOfPage: SITE.url + path };
   const enG = GUIDES_EN.find((x) => x.tr === g.slug);
-  write(path, page({ lang: "tr", alt: enG ? `/guides/${enG.slug}/` : "/guides/", path, title: seoTitle(g.title, g.short), description: g.description, body, schema: [article, faqLd(g.faq)], type: "article" }));
+  write(path, page({ lang: "tr", alt: enG ? `/guides/${enG.slug}/` : "/guides/", path, title: seoTitle(g.title, g.short), description: g.description, body, schema: [article, faqLd(g.faq), crumbs([["AI SaaSavran", "/tr/"], ["Rehberler", "/rehber/"], [g.short, path]])], type: "article" }));
 }
 
 // 4b) Blog (haftada bir yazı; gerçek ölçüm verilerinden). Yayın tarihi gelmemiş yazı üretilmez.
@@ -355,7 +358,7 @@ for (const lang of ["en", "tr"]) {
   ${others ? `<nav class="related" aria-label="${en ? "More posts" : "Diğer yazılar"}"><h2>${en ? "More posts" : "Diğer yazılar"}</h2><ul>${others}</ul></nav>` : ""}
 </article>`;
     const posting = { "@context": "https://schema.org", "@type": "BlogPosting", headline: p.title, description: p.description, inLanguage: lang, datePublished: p.date, dateModified: p.date, image: SITE.url + p.cover, author: { "@type": "Organization", name: SITE.name, url: SITE.url }, publisher: { "@type": "Organization", name: SITE.name, logo: { "@type": "ImageObject", url: SITE.url + "/icon.svg" } }, mainEntityOfPage: SITE.url + path };
-    write(path, page({ lang, alt: tw ? postPath(tw) : blogBase(en ? "tr" : "en"), path, title: seoTitle(p.title, p.short), description: p.description, body, schema: [posting, ...(p.faq?.length ? [faqLd(p.faq)] : [])], type: "article", image: p.cover }));
+    write(path, page({ lang, alt: tw ? postPath(tw) : blogBase(en ? "tr" : "en"), path, title: seoTitle(p.title, p.short), description: p.description, body, schema: [posting, crumbs([["AI SaaSavran", en ? "/" : "/tr/"], ["Blog", blogBase(lang)], [p.short, path]]), ...(p.faq?.length ? [faqLd(p.faq)] : [])], type: "article", image: p.cover }));
   }
   const rssEsc = (x) => esc(x);
   writeFileSync(join(DIST, `${blogBase(lang).slice(1)}rss.xml`), `<?xml version="1.0" encoding="UTF-8"?>
@@ -370,7 +373,7 @@ const ABOUT = {
   en: { path: "/about/", alt: "/tr/hakkimizda/", title: "About AI SaaSavran | AI visibility measurement", description: "AI SaaSavran measures how often ChatGPT, Gemini and Claude mention and recommend a brand or product, and which sources they rely on.", body: `
 <section class="article">
   <h1>About AI SaaSavran</h1>
-  <p class="lede"><b>AI SaaSavran measures how often AI assistants such as ChatGPT, Gemini and Claude mention and recommend a brand or product, compared with its competitors, and which sources they rely on.</b> It is an independent web application at aisaasavran.com.</p>
+  <p class="lede"><b>${DEF.en}</b> It is an independent web application at aisaasavran.com. How we measure: <a href="/methodology/">methodology</a>.</p>
   <h2>What it does</h2>
   <ul>
     <li>Asks AI assistants the questions your customers would ask, in Turkish or English, several times.</li>
@@ -398,7 +401,7 @@ const ABOUT = {
   tr: { path: "/tr/hakkimizda/", alt: "/about/", title: "AI SaaSavran hakkında | Yapay zekâ görünürlük ölçümü", description: "AI SaaSavran, ChatGPT, Gemini ve Claude'un bir markayı veya ürünü ne sıklıkla andığını ve önerdiğini, hangi kaynaklara baktığını ölçer.", body: `
 <section class="article">
   <h1>AI SaaSavran hakkında</h1>
-  <p class="lede"><b>AI SaaSavran, ChatGPT, Gemini ve Claude gibi yapay zekâ asistanlarının bir markayı veya ürünü rakiplerine göre ne sıklıkla andığını ve önerdiğini, hangi kaynaklara dayandığını ölçer.</b> aisaasavran.com adresinde çalışan bağımsız bir web uygulamasıdır.</p>
+  <p class="lede"><b>${DEF.tr}</b> aisaasavran.com adresinde çalışan bağımsız bir web uygulamasıdır. Nasıl ölçtüğümüz: <a href="/tr/metodoloji/">metodoloji</a>.</p>
   <h2>Ne yapar?</h2>
   <ul>
     <li>Müşterilerinizin soracağı soruları Türkçe veya İngilizce olarak yapay zekâ asistanlarına birkaç kez sorar.</li>
@@ -429,8 +432,24 @@ for (const [lang, a] of Object.entries(ABOUT)) {
   write(a.path, page({ lang, alt: a.alt, path: a.path, title: a.title, description: a.description, body: a.body, schema: [aboutLd] }));
 }
 
+// 4d) Metodoloji + marka görünürlüğü + ürün görünürlüğü (TR + EN)
+for (const m of METHOD_PAGES) {
+  const en = m.lang === "en";
+  const home = en ? ["AI SaaSavran", "/"] : ["AI SaaSavran", "/tr/"];
+  const siblings = METHOD_PAGES.filter((x) => x.lang === m.lang && x !== m).map((x) => `<li><a href="${x.path}">${esc(x.short)}</a></li>`).join("");
+  const body = `
+<article class="article">
+  <h1>${esc(m.title)}</h1>
+  ${m.body}
+  ${faqHtml(m.faq, en)}
+  <nav class="related" aria-label="${en ? "Related" : "İlgili"}"><h2>${en ? "Related" : "İlgili sayfalar"}</h2><ul>${siblings}<li><a href="${en ? "/guides/" : "/rehber/"}">${en ? "Guides" : "Rehberler"}</a></li><li><a href="${en ? "/about/" : "/tr/hakkimizda/"}">${en ? "About" : "Hakkımızda"}</a></li></ul></nav>
+  <aside class="next"><p><b>${en ? "See your own numbers." : "Kendi sonuçlarınızı görün."}</b></p><a class="btn" href="${en ? "/check/" : "/tr/kontrol/"}">${en ? "Free check" : "Ücretsiz kontrol"}</a></aside>
+</article>`;
+  write(m.path, page({ lang: m.lang, alt: m.alt, path: m.path, title: seoTitle(m.title, m.short), description: m.description, body, type: "article", schema: [crumbs([home, [m.short, m.path]]), faqLd(m.faq)] }));
+}
+
 // 5) Tarayıcılar ve yapay zekâ botları için dosyalar
-const urls = ["/", "/about/", "/pricing/", "/check/", "/guides/", ...GUIDES_EN.map((g) => `/guides/${g.slug}/`), "/blog/", ...posts.filter((p) => p.lang === "en").map(postPath), "/tr/", "/tr/hakkimizda/", "/tr/kontrol/", "/rehber/", ...GUIDES.map((g) => `/rehber/${g.slug}/`), "/tr/blog/", ...posts.filter((p) => p.lang === "tr").map(postPath)];
+const urls = ["/", "/about/", ...METHOD_PAGES.filter((m) => m.lang === "en").map((m) => m.path), "/pricing/", "/check/", "/guides/", ...GUIDES_EN.map((g) => `/guides/${g.slug}/`), "/blog/", ...posts.filter((p) => p.lang === "en").map(postPath), "/tr/", "/tr/hakkimizda/", ...METHOD_PAGES.filter((m) => m.lang === "tr").map((m) => m.path), "/tr/kontrol/", "/rehber/", ...GUIDES.map((g) => `/rehber/${g.slug}/`), "/tr/blog/", ...posts.filter((p) => p.lang === "tr").map(postPath)];
 writeFileSync(join(DIST, "sitemap.xml"), `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${urls.map((u) => `  <url><loc>${SITE.url}${u}</loc><lastmod>${SITE.updated}</lastmod></url>`).join("\n")}
@@ -452,9 +471,14 @@ Sitemap: ${SITE.url}/sitemap.xml
 `);
 writeFileSync(join(DIST, "llms.txt"), `# AI SaaSavran
 
-> AI SaaSavran measures how often ChatGPT, Claude and Gemini mention and recommend a business compared with its competitors, and which sources the AI relied on. For small businesses and agencies. Early access; free plan available. Each question is asked several times, results come with confidence ranges, and live-search and model-knowledge answers are labelled separately.
+> ${DEF.en} Brand visibility and product visibility are measured and reported separately. For businesses, product brands, agencies and content creators. Early access; free plan available. Each question is asked several times, results come with confidence ranges, and live-search and model-knowledge answers are labelled separately.
 
 Contact: ${SITE.email}
+
+## Methodology
+- [Methodology](${SITE.url}/methodology/): metric definitions (mention rate, recommendation rate, position, citation rate, share of recommendations, owned-source share), question sets, repetition, live search vs model knowledge, confidence ranges, limits, sample-data policy.
+- [Brand visibility](${SITE.url}/brand-visibility/): what is measured for brands in category questions.
+- [Product visibility](${SITE.url}/product-visibility/): products in AI buying answers, product accuracy, Google Shopping position.
 
 ## About
 - [About AI SaaSavran](${SITE.url}/about/): independent AI visibility measurement tool, launched 2026, based in Turkey; not affiliated with similarly named companies.
@@ -479,6 +503,7 @@ ${posts.filter((p) => p.lang === "en").map((p) => `- [${p.title}](${SITE.url}${p
 ## Türkçe
 - [Türkçe ana sayfa](${SITE.url}/tr/)
 - [Blog (Türkçe)](${SITE.url}/tr/blog/)
+- [Metodoloji](${SITE.url}/tr/metodoloji/) · [Marka görünürlüğü](${SITE.url}/tr/marka-gorunurlugu/) · [Ürün görünürlüğü](${SITE.url}/tr/urun-gorunurlugu/)
 ${posts.filter((p) => p.lang === "tr").map((p) => `- [${p.title}](${SITE.url}${postPath(p)})`).join("\n")}
 ${GUIDES.map((g) => `- [${g.title}](${SITE.url}/rehber/${g.slug}/)`).join("\n")}
 `);
