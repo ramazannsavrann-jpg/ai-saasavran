@@ -105,6 +105,8 @@ test("TruthGuard: ücretli pakette bilgi kartı, yanlış iddialar, kaynak türl
   await expect(tr).toContainText("Gelinen sayfalar");
   await expect(tr).toContainText("/menu");
   await expect(tr).toContainText("önceki 30 gün: 12");
+  await expect(tr).toContainText("Görünürlük ve ziyaretçi");
+  await expect(tr.locator(".vvt-col")).toHaveCount(8);
   await tr.getByRole("button", { name: "Sitenize eklenecek kodu göster" }).click();
   await expect(tr.locator(".code-snippet")).toContainText('data-site="');
   await tr.screenshot({ path: `${SHOTS}/34-ai-ziyaretci.png` });
