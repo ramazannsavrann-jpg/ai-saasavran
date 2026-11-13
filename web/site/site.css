@@ -145,3 +145,8 @@ tr.us td { background: var(--tint); font-weight: 600; }
 .tag.rec { background: var(--primary); color: #fff; }
 .tag.yes { background: var(--hit); }
 .tag.no { background: var(--line); color: var(--muted); }
+
+/* Blog */
+.video-link a { display: inline-flex; flex-direction: column; gap: 8px; text-decoration: none; font-weight: 600; }
+.video-link img { width: 100%; max-width: 280px; height: auto; border-radius: 12px; }
+.note { font-size: .9rem; opacity: .85; border-left: 3px solid currentColor; padding-left: 12px; }
