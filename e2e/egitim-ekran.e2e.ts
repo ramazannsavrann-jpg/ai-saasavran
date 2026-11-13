@@ -5,6 +5,8 @@
 import { test, expect, type Page } from "@playwright/test";
 import { createClient } from "@supabase/supabase-js";
 import { mkdirSync } from "node:fs";
+import { SimulatedProvider } from "../engine/src/providers/simulated.ts";
+import { analyzeResponse } from "../engine/src/metrics.ts";
 
 const BASE = process.env.SYNTH_URL?.replace(/\/$/, "");
 const SB_URL = process.env.SUPABASE_URL, SB_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -52,8 +54,7 @@ test.beforeAll(async () => {
 
 test.afterAll(async () => {
   const db = svc(); if (!userId) return;
-  await db.from("workspace_members").delete().eq("workspace_id", demoWs).eq("user_id", userId); // Demo Lab'in kendisine dokunulmaz
-  const { data: ws } = await db.from("workspace_members").select("workspace_id").eq("user_id", userId);
+    const { data: ws } = await db.from("workspace_members").select("workspace_id").eq("user_id", userId);
   for (const w of ws ?? []) {
     const { data: k } = await db.from("workspaces").select("kind").eq("id", w.workspace_id).single();
     if (k && k.kind !== "demo_lab" && k.kind !== "growth_lab") await db.from("workspaces").delete().eq("id", w.workspace_id);
@@ -97,16 +98,38 @@ test("Eğitim 2-4: kayıt, çalışma alanı, marka, sorular, rakipler, ölçüm
   await page.getByRole("tab", { name: tr ? "Rapor" : "Report" }).click(); await shot(page, "b13_rapor_bos"); await shot(page, "b13_rapor_bos_tam", true);
 });
 
-test("Eğitim 5-10: rapor sekmeleri (Demo Lab, hayali veri, adlar Marka A/B/C)", async ({ page }) => {
+test("Eğitim 5-10: rapor sekmeleri (geçici markaya simülasyon verisi, adlar Marka A/B/C)", async ({ page }) => {
   const db = svc();
-  const { error } = await db.from("workspace_members").insert({ workspace_id: demoWs, user_id: userId, role: "viewer" });
-  if (error) throw error;
+  const { data: mem } = await db.from("workspace_members").select("workspace_id").eq("user_id", userId);
+  const ws = mem![0].workspace_id;
+  const { data: brand } = await db.from("brands").select("id,name,aliases").eq("workspace_id", ws).eq("name", A).eq("is_competitor", false).single();
+  const { data: comps } = await db.from("brands").select("id,name,aliases").eq("owner_brand_id", brand!.id);
+  const { data: prompts } = await db.from("prompts").select("id,text").eq("brand_id", brand!.id).eq("active", true);
+  const refs = [brand!, ...(comps ?? [])].map((b) => ({ id: b.id, name: b.name, aliases: b.aliases ?? [] }));
+  const SRC = ["https://rehber.example.com/en-iyi-klinikler", "https://yorumlar.example.com/klinik-yorumlari", "https://karsilastirma.example.com/liste"];
+  const weeks = 6, now = Date.now();
+  for (let w = weeks - 1; w >= 0; w--) {
+    const at = new Date(now - w * 7 * 86_400_000).toISOString();
+    const boost = -0.25 + ((weeks - 1 - w) / (weeks - 1)) * 0.45;
+    const { data: run, error: e1 } = await db.from("runs").insert({ workspace_id: ws, brand_id: brand!.id, status: "done", data_origin: "simulated", measurement_type: "simulated",
+      max_cost_usd: 1, prompts_total: prompts!.length, calls_ok: prompts!.length, stop_reason: "completed", provider: "mock", model: "simulasyon-v1", trigger: "seed",
+      created_at: at, started_at: at, finished_at: at }).select("id").single();
+    if (e1) throw e1;
+    const sim = new SimulatedProvider(refs.map((r) => r.name), `${brand!.id}|w${w}`, { target: brand!.name, boost });
+    for (const [k, p] of prompts!.entries()) {
+      const res = await sim.ask(p.id, p.text);
+      const { data: resp, error: e2 } = await db.from("responses").insert({ workspace_id: ws, run_id: run!.id, prompt_id: p.id, provider: "mock", model: res.model, method: "simulation",
+        repetition: 1, answer_text: res.answerText, cited_urls: [SRC[k % 3], SRC[(k + 1) % 3]], data_origin: "simulated", measurement_type: "simulated", billing: "free", created_at: at }).select("id").single();
+      if (e2) throw e2;
+      const rows = analyzeResponse(res, refs).map((h) => ({ response_id: resp!.id, workspace_id: ws, brand_id: h.brandId, mentioned: h.mentioned, recommended: h.recommended, cited: false, rank: h.rank, classifier: "rules_v2" }));
+      if (rows.length) { const { error: e3 } = await db.from("mentions").insert(rows); if (e3) throw e3; }
+    }
+  }
   await login(page);
   await expect(page).not.toHaveURL(/\/giris/, { timeout: 30_000 });
   for (const [k, n] of [["rapor", "c01_rapor"], ["oneriler", "c02_oneriler"], ["rakipler", "c03_rakipler"], ["sorular", "c04_sorular"], ["urunler", "c05_urunler"], ["olcumler", "c06_olcumler"]] as const) {
-    await page.goto(`${BASE}/marka/${demoBrandId}?sekme=${k}`);
+    await page.goto(`${BASE}/marka/${brand!.id}?sekme=${k}`);
     await page.waitForLoadState("networkidle"); await page.waitForTimeout(2500);
-    await rename(page);
     await shot(page, n); await shot(page, `${n}_tam`, true);
   }
 });
