@@ -3,7 +3,7 @@
 Bu dal (`seslendirme`) videoların tek kaynağıdır. Yeni oturumda buradan devam edilir; sesler ve şablonlar her seferinde baştan aranmaz.
 
 ## Ses
-- **Türkçe (13 Kasım kararı):** Gemini TTS, ücretsiz AI Studio anahtarı (GEMINI_API_KEY, faturalandırma kapalı). Seçilen sesler: **Kore** (kadın, eğitim videoları) ve **Charon** (erkek, veri Shorts). Kullanılacak ses `video/ses-tr.txt` içinde. Çıktı `ses-tr.pcm` (24 kHz, 16 bit, mono) → `ffmpeg -f s16le -ar 24000 -ac 1 -i ses-tr.pcm`. Gemini olmazsa OpenAI ash'e düşer. Ücretsiz katmanda günlük istek sınırı var.
+- **Türkçe ve İngilizce (13 Kasım kararı):** Gemini TTS, ücretsiz AI Studio anahtarı (GEMINI_API_KEY, faturalandırma kapalı). Seçilen sesler: **Kore** (kadın, eğitim videoları) ve **Charon** (erkek, veri Shorts). Kullanılacak ses `video/ses-tr.txt` içinde. Çıktı `ses-tr.pcm` (24 kHz, 16 bit, mono) → `ffmpeg -f s16le -ar 24000 -ac 1 -i ses-tr.pcm`. Gemini olmazsa OpenAI ash'e düşer. Ücretsiz katmanda günlük istek sınırı var.
 - **Yayın düzeni:** veri analizli Shorts günde 1; fazlası ileri tarihe planlanır (günde en fazla 1–2). Eğitim serisi ayrıca (plan: ücretsiz kontrol, hesap+marka+soru, rakipler, ilk ölçüm, rapor okuma, kayıp nedeni, kaynaklar, öneriler, ürünler, paylaşım/otomatik ölçüm).
 - Motor: OpenAI TTS (`gpt-4o-mini-tts`), ses **ash**. Bu dala `video/narration-<dil>.txt` push edilince `.github/workflows/seslendirme.yml` mp3 üretir (artifact `seslendirme`).
 - ElevenLabs (ses "Aras", PfUjY8BsgGYwLKokwLKi) ücretsiz katmanı hesapta kapalı ("unusual activity"); kullanılmıyor.
@@ -33,3 +33,7 @@ ffmpeg -i v.mp4 -i voice.wav -i music.wav -filter_complex "[1:a]aresample=44100,
 
 ## Yükleme
 - Dosya `videolar` dalına konur, raw.githubusercontent.com linki `vidiq_video_upload`'a verilir; YouTube kanalı @aisaasavran (UCHL4sdkEenxkpuP4_Hq1RZw).
+
+## Eğitim videoları kuralı (13 Kasım)
+- Kendi markamız gösterilmez. Gerçek arayüz + uydurma ÖRNEK veri (Marka A/B…, Ürün 1/2…), ekranda "Örnek veri / Sample data" etiketi. Ekran çekerken API cevapları Playwright ile örnek veriyle değiştirilir; gerçek ölçüm yapılmaz.
+- Anlatımda eskiyecek bilgi yok: fiyat, kota sayısı, tarih, motor sürümü söylenmez; "yapay zekâ" denir. Böylece videolar ileride güncelleme gerektirmez.

@@ -18,13 +18,14 @@ jobs:
           trvoice=$(cat video/ses-tr.txt 2>/dev/null || echo Charon)
           for f in video/narration-*.txt; do
             lang=$(basename "$f" .txt | sed 's/narration-//')
-            if [ "$lang" = "tr" ]; then
+            if [ "$lang" = "tr" ] || [ "$lang" = "en" ]; then
               ok=0
+              if [ "$lang" = "en" ]; then pre="Read this like a natural, warm, energetic YouTube host, in clear American English: "; else pre="Doğal, samimi ve enerjik bir Türk YouTube sunucusu gibi, akıcı İstanbul Türkçesiyle oku: "; fi
               for m in gemini-2.5-flash-preview-tts gemini-3.1-flash-tts-preview gemini-3.8-flash-tts; do
-                jq -n --rawfile t "$f" --arg v "$trvoice" '{contents:[{parts:[{text:("Doğal, samimi ve enerjik bir Türk YouTube sunucusu gibi, akıcı İstanbul Türkçesiyle oku: " + $t)}]}],generationConfig:{responseModalities:["AUDIO"],speechConfig:{voiceConfig:{prebuiltVoiceConfig:{voiceName:$v}}}}}' > req.json
+                jq -n --rawfile t "$f" --arg v "$trvoice" --arg pre "$pre" '{contents:[{parts:[{text:($pre + $t)}]}],generationConfig:{responseModalities:["AUDIO"],speechConfig:{voiceConfig:{prebuiltVoiceConfig:{voiceName:$v}}}}}' > req.json
                 code=$(curl -sS -o resp.json -w "%{http_code}" "https://generativelanguage.googleapis.com/v1beta/models/$m:generateContent" -H "x-goog-api-key: $GEMINI_API_KEY" -H "Content-Type: application/json" -d @req.json)
-                echo "tr $trvoice $m HTTP $code"
-                if [ "$code" = "200" ]; then jq -r '.candidates[0].content.parts[0].inlineData.data' resp.json | base64 -d > out/ses-tr.pcm; echo "$m $trvoice" > out/ses-tr-model.txt; ok=1; break; fi
+                echo "$lang $trvoice $m HTTP $code"; sleep 2
+                if [ "$code" = "200" ]; then jq -r '.candidates[0].content.parts[0].inlineData.data' resp.json | base64 -d > out/ses-$lang.pcm; echo "$m $trvoice" > out/ses-$lang-model.txt; ok=1; break; fi
                 head -c 300 resp.json; echo
               done
               [ "$ok" = 1 ] && continue
