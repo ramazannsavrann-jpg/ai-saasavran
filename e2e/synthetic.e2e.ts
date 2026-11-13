@@ -34,7 +34,7 @@ test.beforeAll(async () => {
 });
 
 test.afterAll(async () => {
-  for (const f of cleanup.reverse()) await f().catch((e) => console.log("temizlik hatası:", e?.message ?? e));
+  for (const f of cleanup.reverse()) { try { await f(); } catch (e: any) { console.log("temizlik hatası:", e?.message ?? e); } }
   const db = svc();
   if (userId) {
     const { data: ws } = await db.from("workspace_members").select("workspace_id").eq("user_id", userId);
@@ -99,7 +99,7 @@ test("4. Paylaşılan rapor (Demo Lab, hayali marka) girişsiz açılıyor; PDF 
     .in("id", (await db.from("runs").select("brand_id").eq("workspace_id", demo!.id).eq("status", "done")).data!.map((r) => r.brand_id)).limit(1).single();
   const { data: share, error } = await db.from("report_shares").insert({ workspace_id: demo!.id, brand_id: brand!.id, created_by: userId, expires_at: new Date(Date.now() + 3600_000).toISOString() }).select("id,token").single();
   if (error) throw error;
-  cleanup.push(() => db.from("report_shares").delete().eq("id", share!.id));
+  cleanup.push(async () => { await db.from("report_shares").delete().eq("id", share!.id); });
   await page.goto(`${BASE}/rapor/${share!.token}`);
   await expect(page.getByRole("heading", { name: brand!.name, level: 1 })).toBeVisible({ timeout: 30_000 });
   await expect(page.getByRole("button", { name: "PDF olarak kaydet" })).toBeVisible();
