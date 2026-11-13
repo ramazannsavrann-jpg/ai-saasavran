@@ -33,6 +33,8 @@ jobs:
                 head -c 300 resp.json; echo
               done
               [ "$ok" = 1 ] && continue
+              # Eğitim videoları (e*) sabit Gemini sesiyle yapılır; ses değişmesin diye OpenAI'ye düşülmez.
+              case "$name" in e[0-9]*) echo "Gemini olmadı ($name), atlandı"; continue;; esac
               echo "Gemini olmadı, OpenAI'ye düşülüyor"
             fi
             if [ "$lang" = "en" ]; then ins="Speak English. Energetic, upbeat, friendly YouTube Shorts host; brisk but clear."; else ins="Türkçe konuş. Enerjik, samimi bir YouTube Shorts sunucusu gibi; doğal Türkçe vurgu."; fi
