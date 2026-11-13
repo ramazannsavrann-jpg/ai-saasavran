@@ -43,3 +43,11 @@ test("İyileştirme rehberi: veri yoksa yeni maddeler çıkmaz; İngilizce metin
   assert.equal(en.find((r) => r.id === "engine_gap")!.title, "Claude doesn't mention you at all");
   assert.equal(en.find((r) => r.id === "engine_gap")!.priority, "yüksek");
 });
+
+test("İyileştirme rehberi: kendi site payı düşükse madde çıkar; az veride ya da sitesizse çıkmaz", () => {
+  const r = buildRecommendations({ ...base, ownShare: { own: 0, total: 12, competitor: 4 } }).find((x) => x.id === "own_source_low")!;
+  assert.equal(r.priority, "yüksek"); assert.match(r.why, /%0'i sizin siteniz; rakiplerin kendi siteleri: %33/);
+  assert.ok(!buildRecommendations({ ...base, ownShare: { own: 0, total: 3, competitor: 0 } }).some((x) => x.id === "own_source_low"));
+  assert.ok(!buildRecommendations({ ...base, website: null, ownShare: { own: 0, total: 12, competitor: 0 } }).some((x) => x.id === "own_source_low"));
+  assert.ok(!buildRecommendations({ ...base, ownShare: { own: 3, total: 12, competitor: 0 } }).some((x) => x.id === "own_source_low"));
+});

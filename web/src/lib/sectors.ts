@@ -205,6 +205,51 @@ export const SECTOR_DEFS: SectorDef[] = [
       Q("Web sitesi yaptırmak için hangi ajansı önerirsin?", "purchase"),
     ],
   },
+  // İçerik üreticileri (YouTube kanalı, podcast, sosyal medya). Marka = kanal adı; web sitesi = youtube.com/@kanal.
+  { label: "İçerik üreticisi: yemek / tarif", local: false, competitors: [], questions: [
+    Q("Türkiye'de yemek tarifi için en iyi YouTube kanalları hangileri?", "comparison"),
+    Q("Yeni başlayanlar için pratik tarifler anlatan bir YouTube kanalı önerir misin?", "purchase"),
+    Q("Türk mutfağını iyi anlatan içerik üreticileri kimler?", "informational"),
+    Q("Hızlı ve ekonomik yemek tarifleri için kimi takip etmeliyim?", "purchase"),
+  ] },
+  { label: "İçerik üreticisi: teknoloji / inceleme", local: false, competitors: [], questions: [
+    Q("Türkiye'de telefon ve teknoloji incelemesi için en güvenilir YouTube kanalları hangileri?", "comparison"),
+    Q("Telefon almadan önce hangi YouTuber'ın incelemesini izlemeliyim?", "purchase"),
+    Q("Tarafsız teknoloji incelemesi yapan Türk içerik üreticileri kimler?", "informational"),
+  ] },
+  { label: "İçerik üreticisi: oyun", local: false, competitors: [], questions: [
+    Q("Türkiye'de en popüler oyun YouTuber'ları kimler?", "comparison"),
+    Q("Oyun rehberleri ve ipuçları için hangi kanalı önerirsin?", "purchase"),
+    Q("Eğlenceli oyun yayını yapan Türk yayıncılar kimler?", "informational"),
+  ] },
+  { label: "İçerik üreticisi: eğitim / ders", local: false, competitors: [], questions: [
+    Q("Ücretsiz ders anlatan en iyi Türkçe YouTube kanalları hangileri?", "comparison"),
+    Q("YKS'ye hazırlanmak için hangi YouTube kanalını önerirsin?", "purchase"),
+    Q("Yazılım öğrenmek için Türkçe içerik üreten kanallar hangileri?", "purchase"),
+  ] },
+  { label: "İçerik üreticisi: seyahat / gezi", local: false, competitors: [], questions: [
+    Q("Türkiye'de gezi videoları çeken en iyi YouTuber'lar kimler?", "comparison"),
+    Q("Uygun bütçeli seyahat ipuçları için kimi takip etmeliyim?", "purchase"),
+    Q("Türkiye'yi gezmek için ilham veren içerik üreticileri kimler?", "informational"),
+  ] },
+  { label: "İçerik üreticisi: finans / yatırım", local: false, competitors: [], questions: [
+    Q("Yeni başlayanlar için yatırımı anlatan en iyi Türkçe YouTube kanalları hangileri?", "comparison"),
+    Q("Kişisel finans ve bütçe yönetimi için kimi takip etmeliyim?", "purchase"),
+    Q("Ekonomiyi sade anlatan Türk içerik üreticileri kimler?", "informational"),
+  ] },
+  { label: "İçerik üreticisi: güzellik / moda", local: false, competitors: [], questions: [
+    Q("Türkiye'de makyaj ve cilt bakımı için en iyi YouTuber'lar kimler?", "comparison"),
+    Q("Uygun fiyatlı kozmetik önerileri için hangi kanalı izlemeliyim?", "purchase"),
+    Q("Moda ve kombin önerileri veren içerik üreticileri kimler?", "informational"),
+  ] },
+  { label: "İçerik üreticisi: spor / fitness", local: false, competitors: [], questions: [
+    Q("Evde spor için en iyi Türkçe YouTube kanalları hangileri?", "comparison"),
+    Q("Yeni başlayanlar için fitness programı anlatan kanal önerir misin?", "purchase"),
+    Q("Sağlıklı beslenme ve spor içerikleri üreten Türk YouTuber'lar kimler?", "informational"),
+  ] },
+  { label: "İçerik üreticisi: diğer", local: false, competitors: [], questions: [
+    Q("Bu konuda en iyi Türkçe YouTube kanalları hangileri?", "comparison"),
+  ] },
   { label: "Diğer", local: false, competitors: [], questions: [] },
 ];
 
@@ -305,6 +350,44 @@ export const SECTOR_DEFS_EN: SectorDef[] = [
   ] },
   { label: "Software / SaaS (other)", local: false, competitors: [], questions: [
     Q("What are the best tools for this kind of job?", "comparison"),
+  ] },
+  // Content creators (YouTube channel, podcast, social). Brand = channel name; website = youtube.com/@channel.
+  { label: "Content creator: food / recipes", local: false, competitors: [], questions: [
+    Q("What are the best YouTube channels for recipes?", "comparison"),
+    Q("Can you recommend a YouTube channel with easy recipes for beginners?", "purchase"),
+    Q("Who should I follow for quick, budget-friendly meals?", "purchase"),
+  ] },
+  { label: "Content creator: tech / reviews", local: false, competitors: [], questions: [
+    Q("Which YouTube channels have the most trustworthy phone and tech reviews?", "comparison"),
+    Q("Whose review should I watch before buying a new phone?", "purchase"),
+    Q("Which creators make unbiased tech reviews?", "informational"),
+  ] },
+  { label: "Content creator: gaming", local: false, competitors: [], questions: [
+    Q("Who are the most popular gaming YouTubers right now?", "comparison"),
+    Q("Which channel do you recommend for game guides and tips?", "purchase"),
+  ] },
+  { label: "Content creator: education", local: false, competitors: [], questions: [
+    Q("What are the best free educational YouTube channels?", "comparison"),
+    Q("Which YouTube channel do you recommend for learning to code?", "purchase"),
+  ] },
+  { label: "Content creator: travel", local: false, competitors: [], questions: [
+    Q("Who are the best travel YouTubers?", "comparison"),
+    Q("Who should I follow for budget travel tips?", "purchase"),
+  ] },
+  { label: "Content creator: finance / investing", local: false, competitors: [], questions: [
+    Q("What are the best YouTube channels to learn investing as a beginner?", "comparison"),
+    Q("Who should I follow for personal finance and budgeting?", "purchase"),
+  ] },
+  { label: "Content creator: beauty / fashion", local: false, competitors: [], questions: [
+    Q("Who are the best YouTubers for makeup and skincare?", "comparison"),
+    Q("Which channel should I watch for affordable beauty recommendations?", "purchase"),
+  ] },
+  { label: "Content creator: sports / fitness", local: false, competitors: [], questions: [
+    Q("What are the best YouTube channels for home workouts?", "comparison"),
+    Q("Can you recommend a channel with a beginner fitness program?", "purchase"),
+  ] },
+  { label: "Content creator: other", local: false, competitors: [], questions: [
+    Q("What are the best YouTube channels on this topic?", "comparison"),
   ] },
   { label: "Other", local: false, competitors: [], questions: [] },
 ];

@@ -455,3 +455,11 @@ pre.code { white-space: pre-wrap; word-break: break-all; padding: 8px 10px; back
 .rows li > span:first-child { flex: 1 1 auto; min-width: 0; overflow-wrap: anywhere; }
 .rows li > button, .rows li > .row-actions { flex: none; }
 .rows li > .link-btn { border: 1.5px solid var(--primary-ink); border-radius: 999px; padding: 6px 14px; min-height: 36px; white-space: nowrap; }
+/* Kendi site payı */
+.own-bar { display: flex; height: 18px; border-radius: 9px; overflow: hidden; background: var(--line, #e3e8e6); margin: .5rem 0; }
+.own-own { background: var(--brand, #0f6e5c); }
+.own-comp { background: #d9822b; }
+.own-third { background: #9db2ab; }
+.own-legend, .own-engines { list-style: none; padding: 0; margin: .25rem 0; }
+.own-legend li, .own-engines li { margin: .2rem 0; }
+.own-legend .dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: .3rem; vertical-align: middle; }

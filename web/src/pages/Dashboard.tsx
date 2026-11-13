@@ -229,7 +229,7 @@ export function NewBrand() {
       <header className="page-head"><h1>{L("Marka ekleyin", "Add a brand")}</h1><p className="muted">{L("Yapay zekâ cevaplarında arayacağımız markayı tanımlayın.", "Define the brand we'll look for in AI answers.")}</p></header>
       <Field label={L("Marka adı", "Brand name")} name="name" required maxLength={120} placeholder={demo ? L("Hayali bir ad", "A fictional name") : L("Örn. Ali Usta Döner", "e.g. Joe's Pizza")} />
       <Field label={L("Diğer yazılışlar", "Other spellings")} name="aliases" hint={L("Virgülle ayırın. Örn. Ali Usta, AliUsta", "Comma-separated, e.g. Joes Pizza, Joe's")} />
-      <Field label={L("Web sitesi", "Website")} name="website" type="url" inputMode="url" placeholder={L("ornek.com", "example.com")} />
+      <Field label={L("Web sitesi", "Website")} name="website" type="url" inputMode="url" placeholder={L("ornek.com", "example.com")} hint={L("İçerik üreticisiyseniz kanal adresinizi yazın: youtube.com/@kanaliniz", "Content creator? Enter your channel: youtube.com/@yourchannel")} />
       <Select label={L("Sektör", "Sector")} name="sector" defaultValue="">
         <option value="" disabled>{L("Seçin", "Choose")}</option>
         {SECTORS.map((s) => <option key={s}>{s}</option>)}

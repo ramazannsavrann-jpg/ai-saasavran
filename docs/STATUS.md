@@ -84,6 +84,14 @@
 - Ağırlıklı doğrusal eğilim (ağırlık = cevap sayısı); aralık = model belirsizliği + son ölçümün örneklem belirsizliği. Eğim aralığı sıfırı içeriyorsa "belirgin eğilim yok".
 - En az 4 ölçüm ve 14 gün yoksa tahmin gösterilmez. Simülasyonda gösterilmez. Ek API maliyeti yok.
 
+## v1.16 (13 Kasım 2026): kendi site payı ve kanal/profil adresleri
+
+- Raporda **Kendi site payı**: yapay zekânın gösterdiği kaynakların ne kadarı sizin siteniz/kanalınız, rakip siteleri, üçüncü taraf siteler; motor bazında. Aramasız ölçümde "veri yok (canlı arama gerekir)".
+- Kaynak anahtarı (siteKey): YouTube/Instagram/TikTok/X/Facebook/LinkedIn'de alan adı + kanal/profil. youtube.com/@ad, /c/ad, /user/ad aynı kanal; video adresi (watch) kimseye ait sayılmaz. Kaynak egemenliği ve motor kaynakları da bunu kullanır.
+- İyileştirme rehberine "kendi sitenizi neredeyse hiç kaynak göstermiyor" maddesi (≥5 kaynak ve %10 altı).
+- Günlük sahte müşteri testi (PR #29): canlı sitede yapay zekâsız akış testi, hata olursa issue.
+- Site denetiminde llms.txt kontrolü zaten vardı (bilgi düzeyinde).
+
 ## Yol haritası (12 Kasım 2026)
 
 1. Motor karşılaştırması ve öneri payı ✅ (v1.13)

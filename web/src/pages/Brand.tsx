@@ -6,7 +6,7 @@ import { api, INTENT_LABEL, type Brand, type Intent, type MeasurementType, type 
 import { friendlyError, sb } from "../lib/supabase";
 import { L, isEn } from "../lib/i18n";
 import { ERROR_CLASS_TEXT, STOP_TEXT, runStatusText } from "../lib/messages";
-import { actionImpact, compareProducts, engineComparison, visibilityForecast, sourcesByEngine, rivalReasons, conditionMap, lossCards, productVisibility, promptKind, shoppingSources, sourceDominance, splitByKind, type EngineCompareRow, type LossCard, type SourceRow } from "../../../engine/src/insights.ts";
+import { actionImpact, compareProducts, engineComparison, ownedSourceShare, visibilityForecast, sourcesByEngine, rivalReasons, conditionMap, lossCards, productVisibility, promptKind, shoppingSources, sourceDominance, splitByKind, type EngineCompareRow, type LossCard, type SourceRow } from "../../../engine/src/insights.ts";
 import { competitorsInRun, formatDate, formatDateTime, MIN_SAMPLE, numLoc, pct, providerLabel, rangeText, series, shareSummary, sourceOpportunities, topDomains, usd } from "../lib/report";
 import { Button, Confirm, DataNotice, Empty, ErrorBox, Field, Loading, Select, TypeBadge } from "../components/ui";
 import { CompareBars, TrendChart } from "../components/Chart";
@@ -745,6 +745,40 @@ function Report({ brand, type, onBrandChange }: { brand: Brand; type: Measuremen
             </section>
           )}
 
+          {live && insightsReady && (() => {
+            const o = ownedSourceShare(answers.data!, insightBrands);
+            const part = (n: number, t: number) => (t ? pct(n / t) : "–");
+            return (
+              <section className="panel" id="kendi-site-payi">
+                <h2>{L("Kendi site payı", "Owned-source share")}</h2>
+                <p className="muted">{L("Yapay zekânın gösterdiği kaynakların ne kadarı sizin siteniz (veya kanalınız), ne kadarı rakiplerin siteleri, ne kadarı üçüncü taraf siteler. Her cevapta her site bir kez sayılır.", "How much of the sources the AI cited are your own site (or channel), competitors' sites, or third-party sites. Each site counts once per answer.")}</p>
+                {o.total === 0 ? <p>{L("Bu ölçümde kaynak gösterilmedi.", "No sources were cited in this measurement.")}</p> : (
+                  <>
+                    <div className="own-bar" role="img" aria-label={L("Kaynak dağılımı", "Source split")}>
+                      <span className="own-own" style={{ flex: o.own }} /><span className="own-comp" style={{ flex: o.competitor }} /><span className="own-third" style={{ flex: o.thirdParty }} />
+                    </div>
+                    <ul className="own-legend">
+                      <li><span className="dot own-own" /> {L("Sizin siteniz", "Your site")}: <strong>{part(o.own, o.total)}</strong> <span className="muted">({o.own})</span></li>
+                      <li><span className="dot own-comp" /> {L("Rakip siteleri", "Competitor sites")}: <strong>{part(o.competitor, o.total)}</strong> <span className="muted">({o.competitor})</span></li>
+                      <li><span className="dot own-third" /> {L("Üçüncü taraf", "Third-party")}: <strong>{part(o.thirdParty, o.total)}</strong> <span className="muted">({o.thirdParty})</span></li>
+                    </ul>
+                    <p className="muted">{isEn() ? `Your site was cited in ${o.answersCitingOwn} of ${o.answersWithSources} answers that cited sources.` : `Kaynak gösteren ${o.answersWithSources} cevabın ${o.answersCitingOwn} tanesinde sitenize yer verildi.`}</p>
+                    {o.byEngine.length > 1 && (
+                      <ul className="own-engines">{o.byEngine.map((e) => <li key={e.provider}><strong>{providerLabel(e.provider)}</strong>: {L("siz", "you")} {part(e.own, e.total)} · {L("rakip", "rivals")} {part(e.competitor, e.total)} · {L("üçüncü taraf", "third-party")} {part(e.thirdParty, e.total)}</li>)}</ul>
+                    )}
+                    {!brand.website && <p className="src-sup muted">{L("Markaya web sitesi eklenmemiş: sitenizin payı hesaplanamaz. Marka ayarlarından ekleyin (YouTube kanalı için youtube.com/@kanal).", "No website on this brand: your share can't be computed. Add it in brand settings (for a YouTube channel use youtube.com/@channel).")}</p>}
+                  </>
+                )}
+              </section>
+            );
+          })()}
+          {!live && type !== "simulated" && (
+            <section className="panel" id="kendi-site-payi">
+              <h2>{L("Kendi site payı", "Owned-source share")}</h2>
+              <p className="muted">{L("Veri yok: kaynaklar yalnız canlı internet aramalı ölçümde oluşur (ChatGPT ve Claude, ücretli paketler).", "No data: sources only exist in live web-search measurements (ChatGPT and Claude, paid plans).")}</p>
+            </section>
+          )}
+
           {live && (
             <section className="panel" id="kaynak-egemenligi">
               <h2>{L("Kaynaklar kimi destekliyor", "Who the sources support")}</h2>
@@ -1010,11 +1044,14 @@ function Advice({ brand, type, runs, onBrandChange }: { brand: Brand; type: Meas
     const me = engineComparison(rows).find((c) => c.isTarget);
     const engineGap = me && me.high ? { ignoredBy: me.ignoredBy, high: me.high, highK: me.byEngine[me.high].k, highN: me.byEngine[me.high].n, level: me.level } : null;
     let opportunitySites: { domain: string; count: number }[] = [];
+    let ownShare: { own: number; total: number; competitor: number } | null = null;
     if (live) {
       const ans = await api.answers(lastRun.id);
       const ments = ans.length ? await api.mentionsFor(ans.map((a) => a.id)) : [];
       const host = (w: string | null) => (w ? w.replace(/^https?:\/\//, "").replace(/^www\./, "").split("/")[0].toLowerCase() : "");
       opportunitySites = sourceOpportunities(ans, ments, brand.id, [brand.website, ...comps.map((c) => c.website)].map(host).filter(Boolean)).filter((d) => !d.own);
+      const o = ownedSourceShare(ans, [{ id: brand.id, name: brand.name, website: brand.website, isTarget: true }, ...comps.map((c) => ({ id: c.id, name: c.name, website: c.website, isTarget: false }))]);
+      ownShare = { own: o.own, total: o.total, competitor: o.competitor };
     }
     const own = prods.filter((p) => !p.rival_of);
     const ids = prods.map((p) => p.id);
@@ -1024,7 +1061,7 @@ function Advice({ brand, type, runs, onBrandChange }: { brand: Brand; type: Meas
     const wrongClaims = latest(checks).flatMap((c) => c.claims.filter((x) => x.status === "wrong").map((x) => ({ product: name(c.product_id), claim: x.claim, fact: x.fact })));
     const shoppingBehind = latest(shops).flatMap((sc) => sc.rivals.filter((r) => sc.own_position == null || r.position < sc.own_position).slice(0, 1)
       .map((r) => ({ product: name(sc.product_id), ownPos: sc.own_position, rival: name(r.id), rivalPos: r.position })));
-    return { engineGap, opportunitySites, wrongClaims, shoppingBehind };
+    return { engineGap, opportunitySites, wrongClaims, shoppingBehind, ownShare };
   }, [brand.id, type, lastRun?.id]);
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
