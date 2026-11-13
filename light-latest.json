@@ -3,12 +3,12 @@
   "mode": "light",
   "costUsd": 0,
   "capUsd": 0.4,
-  "pages": 21,
-  "pagesWithIssues": 12,
+  "pages": 25,
+  "pagesWithIssues": 0,
   "auditPassed": 13,
   "auditTotal": 13,
   "indexnow": {
-    "sent": 21,
+    "sent": 25,
     "status": 200,
     "note": "kabul edildi"
   },
@@ -16,95 +16,9 @@
   "engineStatus": {},
   "competitorCount": 0,
   "topSources": [],
-  "forClaude": [
-    "Sayfa /guides/: az metin (~231 kelime)",
-    "Sayfa /guides/measure-brand-visibility-in-chatgpt/: açıklama uzun (178)",
-    "Sayfa /guides/what-is-geo/: başlık uzun (89 karakter)",
-    "Sayfa /guides/local-business-ai-recommendations/: başlık uzun (73 karakter)",
-    "Sayfa /guides/why-chatgpt-recommends-your-competitor/: başlık uzun (88 karakter)",
-    "Sayfa /guides/youtuber-ai-visibility/: başlık uzun (76 karakter)",
-    "Sayfa /blog/: az metin (~114 kelime)",
-    "Sayfa /rehber/: az metin (~202 kelime)",
-    "Sayfa /rehber/geo-nedir/: başlık uzun (86 karakter)",
-    "Sayfa /rehber/rakip-neden-oneriliyor/: başlık uzun (79 karakter)",
-    "Sayfa /rehber/youtuber-yapay-zeka-gorunurlugu/: başlık uzun (76 karakter)",
-    "Sayfa /tr/blog/: az metin (~111 kelime)"
-  ],
+  "forClaude": [],
   "forUser": [],
-  "pageIssues": [
-    {
-      "url": "https://aisaasavran.com/guides/",
-      "issues": [
-        "az metin (~231 kelime)"
-      ]
-    },
-    {
-      "url": "https://aisaasavran.com/guides/measure-brand-visibility-in-chatgpt/",
-      "issues": [
-        "açıklama uzun (178)"
-      ]
-    },
-    {
-      "url": "https://aisaasavran.com/guides/what-is-geo/",
-      "issues": [
-        "başlık uzun (89 karakter)"
-      ]
-    },
-    {
-      "url": "https://aisaasavran.com/guides/local-business-ai-recommendations/",
-      "issues": [
-        "başlık uzun (73 karakter)"
-      ]
-    },
-    {
-      "url": "https://aisaasavran.com/guides/why-chatgpt-recommends-your-competitor/",
-      "issues": [
-        "başlık uzun (88 karakter)"
-      ]
-    },
-    {
-      "url": "https://aisaasavran.com/guides/youtuber-ai-visibility/",
-      "issues": [
-        "başlık uzun (76 karakter)"
-      ]
-    },
-    {
-      "url": "https://aisaasavran.com/blog/",
-      "issues": [
-        "az metin (~114 kelime)"
-      ]
-    },
-    {
-      "url": "https://aisaasavran.com/rehber/",
-      "issues": [
-        "az metin (~202 kelime)"
-      ]
-    },
-    {
-      "url": "https://aisaasavran.com/rehber/geo-nedir/",
-      "issues": [
-        "başlık uzun (86 karakter)"
-      ]
-    },
-    {
-      "url": "https://aisaasavran.com/rehber/rakip-neden-oneriliyor/",
-      "issues": [
-        "başlık uzun (79 karakter)"
-      ]
-    },
-    {
-      "url": "https://aisaasavran.com/rehber/youtuber-yapay-zeka-gorunurlugu/",
-      "issues": [
-        "başlık uzun (76 karakter)"
-      ]
-    },
-    {
-      "url": "https://aisaasavran.com/tr/blog/",
-      "issues": [
-        "az metin (~111 kelime)"
-      ]
-    }
-  ],
+  "pageIssues": [],
   "answers": [],
   "questions": [
     {
