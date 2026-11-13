@@ -142,3 +142,60 @@ export function truthSummary(checks: { provider: string; created_at: string; fai
   }
   return out;
 }
+
+// ---------------- 2. aşama: kaynaksız istatistik ve eski bilgi (kural tabanlı, ücretsiz) ----------------
+export interface StatFlag { kind: "unsourced_stat" | "old_date"; sentence: string; value: string }
+
+const splitSentences = (t: string) => t.replace(/\s+/g, " ").split(/(?<=[.!?])\s+(?=[A-ZÇĞİÖŞÜ0-9"“(])/u).map((s) => s.trim()).filter(Boolean);
+const STAT = /(%\s?\d+(?:[.,]\d+)?|\d+(?:[.,]\d+)?\s?%|\d+(?:[.,]\d+)?\s?(?:milyon|milyar|bin|million|billion|thousand)\b|\d{1,3}(?:[.,]\d{3})+(?:\s?(?:kullanıcı|müşteri|users|customers|kişi|people))?|\d+(?:[.,]\d+)?\s?(?:kat|times|x)\b)/iu;
+const RANK = /\b(\d+\.|bir numara|number one|#1|lider|leader|en büyük|largest|en çok satan|best[- ]selling|pazar payı|market share)\b/iu;
+
+/**
+ * Markanın adının geçtiği cümlelerdeki sayısal iddialar. Canlı aramada cevap hiç kaynak göstermediyse ya da aramasız ölçümse
+ * "kaynaksız istatistik" sayılır (yapay zekâ bu sayıyı bir kaynağa dayandırmadı). Yıl, saat, fiyat ve model numaraları sayılmaz.
+ * Cümlede 4 haneli ve `now - maxAgeYears` öncesinde bir yıl varsa "eski tarih" olarak işaretlenir.
+ */
+export function statFlags(answer: string, names: string[], opts: { cited: number; now?: Date; maxAgeYears?: number } = { cited: 0 }): StatFlag[] {
+  const year = (opts.now ?? new Date()).getUTCFullYear(), maxAge = opts.maxAgeYears ?? 3;
+  const norm = (s: string) => s.toLocaleLowerCase("tr-TR");
+  const needles = names.filter((n) => n.trim().length >= 2).map(norm);
+  const out: StatFlag[] = [];
+  for (const s of splitSentences(answer.slice(0, 8000)).slice(0, 80)) {
+    const low = norm(s);
+    if (!needles.some((n) => low.includes(n))) continue;
+    const clean = s.replace(/\*\*/g, "");
+    if (opts.cited === 0) {
+      const m = clean.match(STAT);
+      // Fiyat (TL, $, €), saat (09:00), model (S26, 200MP, 5000 mAh, 60W, 6,9 inç) sayılmaz: bunlar bilgi kartı kontrolünün işi
+      if (m && (/%|milyon|milyar|bin\b|million|billion|thousand|kullanıcı|müşteri|users|customers|kişi|people|kat\b|times/iu.test(m[0]) || RANK.test(clean))
+        && !/(₺|\btl\b|\$|€|£|usd|eur)\s*$/iu.test(clean.slice(0, (m.index ?? 0) + m[0].length + 4))) {
+        out.push({ kind: "unsourced_stat", sentence: clean.slice(0, 240), value: m[0].trim() });
+      }
+    }
+    for (const y of clean.match(/\b(19[5-9]\d|20\d{2})\b/g) ?? []) {
+      const n = Number(y);
+      // "2009'da kuruldu" gibi tarihsel bilgiler eski sayılmaz; yalnız "güncel/şu an/son/latest/current" bağlamında eski yıl
+      if (n <= year - maxAge && /(güncel|şu an|şimdi|son model|en yeni|bu yıl|current|currently|latest|newest|this year|as of|itibarıyla)/iu.test(clean)) {
+        out.push({ kind: "old_date", sentence: clean.slice(0, 240), value: y });
+        break;
+      }
+    }
+  }
+  const seen = new Set<string>();
+  return out.filter((f) => { const k = f.kind + f.sentence; if (seen.has(k)) return false; seen.add(k); return true; }).slice(0, 10);
+}
+
+export interface StatSummary { unsourced: number; oldDates: number; answersWithFlags: number; examples: (StatFlag & { provider: string })[] }
+export function statSummary(answers: { answer_text: string; cited_urls: string[] | null; provider?: string }[], names: string[], now?: Date): StatSummary {
+  const out: StatSummary = { unsourced: 0, oldDates: 0, answersWithFlags: 0, examples: [] };
+  for (const a of answers) {
+    const f = statFlags(a.answer_text, names, { cited: (a.cited_urls ?? []).length, now });
+    if (!f.length) continue;
+    out.answersWithFlags++;
+    for (const x of f) {
+      if (x.kind === "unsourced_stat") out.unsourced++; else out.oldDates++;
+      if (out.examples.length < 6 && !out.examples.some((e) => e.sentence === x.sentence)) out.examples.push({ ...x, provider: a.provider ?? "" });
+    }
+  }
+  return out;
+}
