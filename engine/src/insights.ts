@@ -603,3 +603,40 @@ export function engineScoreChanges(byEngine: { provider: string; prev: ScoreInpu
 }
 
 function clamp01(v: number) { return Math.min(1, Math.max(0, v)); }
+
+// ---------------- Marka algısı ----------------
+export interface PerceptionSummary {
+  /** Algısı çıkarılmış cevap sayısı (hedef markanın geçtiği) */
+  answers: number;
+  sentiment: { positive: number; neutral: number; negative: number; mixed: number };
+  /** Nitelik başına cevap sayısı, payı (algılı cevaplar içinde) ve en fazla 2 örnek alıntı */
+  traits: { trait: string; count: number; share: number; quotes: string[]; byEngine: Record<string, number> }[];
+  byEngine: { provider: string; answers: number; positive: number; negative: number }[];
+}
+/** Hedef markanın algı kayıtlarını toplar. Duygu alanı olmayan (okunamamış) kayıtlar sayılmaz. Ek API çağrısı yok. */
+export function perceptionSummary(answers: { id: string; provider?: string }[], mentions: { response_id: string; brand_id: string; perception?: unknown }[], targetId: string): PerceptionSummary {
+  const prov = new Map(answers.map((a) => [a.id, a.provider ?? ""]));
+  const out: PerceptionSummary = { answers: 0, sentiment: { positive: 0, neutral: 0, negative: 0, mixed: 0 }, traits: [], byEngine: [] };
+  const tr = new Map<string, PerceptionSummary["traits"][number]>();
+  const eng = new Map<string, PerceptionSummary["byEngine"][number]>();
+  for (const m of mentions) {
+    if (m.brand_id !== targetId || !prov.has(m.response_id)) continue;
+    const p = m.perception as { sentiment?: string; traits?: { trait?: string; quote?: string }[] } | null | undefined;
+    if (!p || !p.sentiment || !(p.sentiment in out.sentiment)) continue;
+    const pv = prov.get(m.response_id)!;
+    out.answers++;
+    out.sentiment[p.sentiment as keyof PerceptionSummary["sentiment"]]++;
+    const e = eng.get(pv) ?? { provider: pv, answers: 0, positive: 0, negative: 0 };
+    e.answers++; if (p.sentiment === "positive") e.positive++; if (p.sentiment === "negative") e.negative++;
+    eng.set(pv, e);
+    for (const t of new Map((p.traits ?? []).filter((x) => x?.trait).map((x) => [x.trait!, x])).values()) {
+      const r = tr.get(t.trait!) ?? { trait: t.trait!, count: 0, share: 0, quotes: [], byEngine: {} };
+      r.count++; r.byEngine[pv] = (r.byEngine[pv] ?? 0) + 1;
+      if (t.quote && r.quotes.length < 2 && !r.quotes.includes(t.quote)) r.quotes.push(t.quote);
+      tr.set(t.trait!, r);
+    }
+  }
+  out.traits = [...tr.values()].map((r) => ({ ...r, share: out.answers ? r.count / out.answers : 0 })).sort((a, b) => b.count - a.count || a.trait.localeCompare(b.trait));
+  out.byEngine = [...eng.values()].sort((a, b) => a.provider.localeCompare(b.provider));
+  return out;
+}

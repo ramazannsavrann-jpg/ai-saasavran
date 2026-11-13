@@ -6,7 +6,7 @@ import { api, INTENT_LABEL, type Brand, type BrandAction, type Intent, type Meas
 import { friendlyError, sb } from "../lib/supabase";
 import { L, isEn } from "../lib/i18n";
 import { ERROR_CLASS_TEXT, STOP_TEXT, runStatusText } from "../lib/messages";
-import { actionImpact, compareProducts, engineComparison, engineScoreChanges, scoreChange, visibilityScore, type ScoreInput, type ScorePartKey, ownedSourceShare, visibilityForecast, sourcesByEngine, rivalReasons, conditionMap, lossCards, productVisibility, promptKind, shoppingSources, sourceDominance, splitByKind, type EngineCompareRow, type LossCard, type SourceRow } from "../../../engine/src/insights.ts";
+import { actionImpact, compareProducts, engineComparison, engineScoreChanges, perceptionSummary, scoreChange, visibilityScore, type ScoreInput, type ScorePartKey, ownedSourceShare, visibilityForecast, sourcesByEngine, rivalReasons, conditionMap, lossCards, productVisibility, promptKind, shoppingSources, sourceDominance, splitByKind, type EngineCompareRow, type LossCard, type SourceRow } from "../../../engine/src/insights.ts";
 import { competitorsInRun, formatDate, formatDateTime, MIN_SAMPLE, numLoc, pct, providerLabel, rangeText, series, shareSummary, sourceOpportunities, topDomains, usd } from "../lib/report";
 import { Button, Confirm, DataNotice, Empty, ErrorBox, Field, Loading, Select, TypeBadge } from "../components/ui";
 import { CompareBars, TrendChart } from "../components/Chart";
@@ -774,6 +774,7 @@ function Report({ brand, type, onBrandChange }: { brand: Brand; type: Measuremen
               </section>
             );
           })()}
+          {live && insightsReady && <PerceptionPanel summary={perceptionSummary(answers.data!, ments.data!, brand.id)} brand={brand.name} />}
           {!live && type !== "simulated" && (
             <section className="panel" id="kendi-site-payi">
               <h2>{L("Kendi site payı", "Owned-source share")}</h2>
@@ -881,6 +882,52 @@ function Report({ brand, type, onBrandChange }: { brand: Brand; type: Measuremen
         </>
       )}
     </div>
+  );
+}
+
+const TRAIT_LABEL: Record<string, [string, string]> = {
+  premium: ["Premium", "Premium"], affordable: ["Uygun fiyatlı", "Affordable"], expensive: ["Pahalı", "Expensive"], value_for_money: ["Fiyatına değer", "Value for money"],
+  high_quality: ["Kaliteli", "High quality"], low_quality: ["Düşük kalite", "Low quality"], reliable: ["Güvenilir", "Reliable"], unreliable: ["Güvenilmez", "Unreliable"],
+  innovative: ["Yenilikçi", "Innovative"], popular: ["Popüler", "Popular"], good_service: ["İyi hizmet", "Good service"], poor_service: ["Kötü hizmet", "Poor service"],
+  wide_range: ["Geniş seçenek", "Wide range"], limited_range: ["Sınırlı seçenek", "Limited range"], fast: ["Hızlı", "Fast"], slow: ["Yavaş", "Slow"],
+  eco_friendly: ["Çevreci", "Eco-friendly"], local: ["Yerel", "Local"], outdated: ["Eski / geride", "Outdated"],
+};
+const NEG_TRAITS = new Set(["expensive", "low_quality", "unreliable", "poor_service", "limited_range", "slow", "outdated"]);
+/** Marka algısı: yapay zekânın markaya yakıştırdığı nitelikler, cevaptan birebir alıntıyla. */
+function PerceptionPanel({ summary: s, brand }: { summary: ReturnType<typeof perceptionSummary>; brand: string }) {
+  const [open, setOpen] = useState<string | null>(null);
+  const tl = (t: string) => (TRAIT_LABEL[t] ? (isEn() ? TRAIT_LABEL[t][1] : TRAIT_LABEL[t][0]) : t);
+  return (
+    <section className="panel" id="marka-algisi">
+      <h2>{L("Marka algısı", "Brand perception")}</h2>
+      <p className="muted">{isEn() ? `How the AI describes ${brand} in answers that mention it. Each trait is backed by an exact quote from an answer; a small model labels them, so open the quotes before drawing conclusions.` : `Yapay zekâ ${brand} markasını, adının geçtiği cevaplarda nasıl anlatıyor. Her nitelik bir cevaptan birebir alıntıyla desteklenir; etiketleri küçük bir model koyar, sonuç çıkarmadan önce alıntılara bakın.`}</p>
+      {s.answers === 0 ? <p>{L("Bu ölçümde algı verisi yok. Algı, ücretli paketlerde canlı aramalı ölçümlerde çıkarılır; eski ölçümler için birkaç saat içinde doldurulur.", "No perception data in this measurement. Perception is extracted in live-search measurements on paid plans; older measurements are filled in within a few hours.")}</p> : (
+        <>
+          <div className="own-bar" role="img" aria-label={L("Duygu dağılımı", "Sentiment split")}>
+            <span className="per-pos" style={{ flex: s.sentiment.positive }} /><span className="per-mix" style={{ flex: s.sentiment.mixed }} /><span className="per-neu" style={{ flex: s.sentiment.neutral }} /><span className="per-neg" style={{ flex: s.sentiment.negative }} />
+          </div>
+          <ul className="own-legend">
+            <li><span className="dot per-pos" /> {L("Olumlu", "Positive")}: <strong>{s.sentiment.positive}</strong></li>
+            <li><span className="dot per-mix" /> {L("Karışık", "Mixed")}: <strong>{s.sentiment.mixed}</strong></li>
+            <li><span className="dot per-neu" /> {L("Nötr", "Neutral")}: <strong>{s.sentiment.neutral}</strong></li>
+            <li><span className="dot per-neg" /> {L("Olumsuz", "Negative")}: <strong>{s.sentiment.negative}</strong></li>
+          </ul>
+          <p className="muted">{isEn() ? `${s.answers} answers analysed.` : `${s.answers} cevap incelendi.`}{s.answers < MIN_SAMPLE && L(" Örneklem küçük; tek bir cevap tabloyu değiştirebilir.", " Small sample; a single answer can change the picture.")}</p>
+          {s.traits.length === 0 ? <p className="muted">{L("Belirgin bir nitelik yakıştırılmadı.", "No clear traits were attributed.")}</p> : (
+            <ul className="src-dom">
+              {s.traits.map((t) => (
+                <li key={t.trait} className={NEG_TRAITS.has(t.trait) ? "per-item-neg" : ""}>
+                  <p className="src-head"><strong>{tl(t.trait)}</strong> <span className="num">{pct(t.share)}</span></p>
+                  <p className="src-sup muted">{isEn() ? `${t.count} of ${s.answers} answers` : `${s.answers} cevabın ${t.count} tanesinde`}{Object.keys(t.byEngine).length > 1 && ` (${Object.entries(t.byEngine).map(([e, n]) => `${providerLabel(e)} ${n}`).join(", ")})`}</p>
+                  <button className="link-btn" aria-expanded={open === t.trait} onClick={() => setOpen(open === t.trait ? null : t.trait)}>{open === t.trait ? L("Alıntıyı gizle", "Hide quote") : L("Alıntıyı göster", "Show quote")}</button>
+                  {open === t.trait && t.quotes.map((q) => <blockquote key={q} className="answer"><p>“{q}”</p></blockquote>)}
+                </li>
+              ))}
+            </ul>
+          )}
+        </>
+      )}
+    </section>
   );
 }
 

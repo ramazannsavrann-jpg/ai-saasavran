@@ -114,9 +114,9 @@ export const api = {
     return must(await sb().from("responses").select("id,prompt_id,repetition,answer_text,model,provider,cited_urls").eq("run_id", runId).order("repetition"));
   },
   /** Bir ölçümdeki cevap başına marka sonuçları (kaynak fırsatları için). */
-  async mentionsFor(responseIds: string[]): Promise<{ response_id: string; brand_id: string; recommended: boolean; mentioned: boolean }[]> {
+  async mentionsFor(responseIds: string[]): Promise<{ response_id: string; brand_id: string; recommended: boolean; mentioned: boolean; perception?: unknown }[]> {
     if (!responseIds.length) return [];
-    return must(await sb().from("mentions").select("response_id,brand_id,recommended,mentioned").in("response_id", responseIds));
+    return must(await sb().from("mentions").select("response_id,brand_id,recommended,mentioned,perception").in("response_id", responseIds));
   },
   async deletePrompt(id: string) { must(await sb().from("prompts").delete().eq("id", id)); },
   async runs(brandId: string): Promise<Run[]> {

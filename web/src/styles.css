@@ -487,3 +487,11 @@ pre.code { white-space: pre-wrap; word-break: break-all; padding: 8px 10px; back
 .camp-tasks { list-style: none; margin: 0; padding: 0; }
 .camp-tasks li { margin: .25rem 0; }
 .camp-tasks .done { text-decoration: line-through; color: var(--muted); }
+
+/* Marka algısı */
+.per-pos { background: var(--ok); }
+.per-mix { background: var(--sim); }
+.per-neu { background: var(--line); }
+.per-neg { background: var(--danger); }
+.own-legend .dot.per-neu { border: 1px solid var(--muted); }
+.per-item-neg .src-head strong { color: var(--danger); }

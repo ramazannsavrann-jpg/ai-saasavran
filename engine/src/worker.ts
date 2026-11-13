@@ -9,7 +9,7 @@ import { runPrompts, type StopReason } from "./pipeline.ts";
 import { buildProviders } from "./providers/registry.ts";
 import { SimulatedProvider } from "./providers/simulated.ts";
 import { auditSite } from "./audit.ts";
-import { classifyAnswer, CLASSIFY_WORST_USD } from "./classify.ts";
+import { classifyAnswer, CLASSIFY_WORST_USD, type Perception } from "./classify.ts";
 import { buildProductQuestion, judgeProduct } from "./product.ts";
 import { matchShopping, searchShopping, shoppingQuery, shoppingSearchesLeft, ShoppingError, type ShoppingTarget } from "./shopping.ts";
 import { assertBillingAllowed } from "./providers/registry.ts";
@@ -169,10 +169,14 @@ export async function processNextRun(deps: WorkerDeps): Promise<WorkerResult | n
           }).select("id").single(), "cevap kaydı") as any;
           const hits = analyzeResponse(result, brands);
           const classifier = new Map<string, string>();
+          let perception: Perception | null = null;
           const seen = brands.filter((b) => hits.find((h) => h.brandId === b.id)?.mentioned);
           if (llmClassify && seen.length > 0 && guard.remainingUsd > CLASSIFY_WORST_USD) {
             try {
-              const c = await classifyAnswer({ apiKey: env.OPENAI_API_KEY!, model: classifyModel, price: OPENAI_DEFAULT.price, answer: result.answerText, names: seen.map((b) => b.name), fetchFn: deps.fetchFn });
+              // Marka algısı aynı çağrıda (ek çıktı tokenı); yalnız ücretli paketlerde ve hedef marka cevapta geçiyorsa
+              const wantPerception = ws.plan !== "free" && seen.some((b) => b.id === target.id);
+              const c = await classifyAnswer({ apiKey: env.OPENAI_API_KEY!, model: classifyModel, price: OPENAI_DEFAULT.price, answer: result.answerText, names: seen.map((b) => b.name), target: wantPerception ? target.name : null, fetchFn: deps.fetchFn });
+              if (c.perception) perception = c.perception;
               if (c.costUsd > 0) guard.commit(c.costUsd);
               must(await db.rpc("record_aux_call", { p_workspace: run.workspace_id, p_run: run.id, p_task: "classify", p_provider: "openai", p_model: c.model, p_in: c.inputTokens, p_out: c.outputTokens, p_cost: c.costUsd }), "record_aux_call");
               for (const b of seen) {
@@ -187,6 +191,7 @@ export async function processNextRun(deps: WorkerDeps): Promise<WorkerResult | n
           must(await db.from("mentions").insert(hits.map((h) => ({
             response_id: resp.id, workspace_id: run.workspace_id, brand_id: h.brandId,
             mentioned: h.mentioned, recommended: h.recommended, cited: h.cited, rank: h.rank, classifier: classifier.get(h.brandId) ?? "rules_v3",
+            ...(perception && h.brandId === target.id ? { perception } : {}),
           }))), "anılma kaydı");
         },
         onFailedCall: async (_pid, kind) => { failed++; lastFailKind = kind; await gate.recordFailure(run.workspace_id, provider.config, kind); },
@@ -352,7 +357,8 @@ export async function reanalyzeBrand(db: SupabaseClient, brandId: string): Promi
     for (const r of resp) {
       const hits = analyzeResponse({ promptId: r.prompt_id, provider: r.provider, answerText: r.answer_text, citedUrls: r.cited_urls ?? [] }, brands);
       // LLM ile sınıflandırılmış "önerildi" kararları korunur (kural tabanlı yeniden hesap onları ezmez)
-      const prev = must(await db.from("mentions").select("brand_id,recommended,classifier").eq("response_id", r.id), "önceki anılma") as { brand_id: string; recommended: boolean; classifier: string }[];
+      const prev = must(await db.from("mentions").select("brand_id,recommended,classifier,perception").eq("response_id", r.id), "önceki anılma") as { brand_id: string; recommended: boolean; classifier: string; perception: unknown }[];
+      const perc = new Map(prev.filter((x) => x.perception).map((x) => [x.brand_id, x.perception]));
       const llm = new Map(prev.filter((x) => x.classifier?.startsWith("llm:")).map((x) => [x.brand_id, x]));
       must(await db.from("mentions").delete().eq("response_id", r.id), "eski anılma");
       must(await db.from("mentions").insert(hits.map((h) => {
@@ -360,6 +366,7 @@ export async function reanalyzeBrand(db: SupabaseClient, brandId: string): Promi
         return {
           response_id: r.id, workspace_id: run.workspace_id, brand_id: h.brandId, mentioned: h.mentioned,
           recommended: k ? k.recommended : h.recommended, cited: h.cited, rank: k && !k.recommended ? null : h.rank, classifier: k ? k.classifier : "rules_v3",
+          ...(h.mentioned && perc.has(h.brandId) ? { perception: perc.get(h.brandId) } : {}),
         };
       })), "anılma");
       n++;
@@ -389,4 +396,40 @@ export async function reanalyzeRuns(db: SupabaseClient, kind: "growth_lab" = "gr
   let responses = 0;
   for (const b of brands) responses += await reanalyzeBrand(db, b.id);
   return { runs: brands.length, responses };
+}
+
+/**
+ * Marka algısı geriye dönük doldurma: algısı çıkarılmamış eski canlı cevaplar için ayrı küçük çağrı (yalnız algı kaydedilir,
+ * "önerildi" etiketlerine dokunulmaz). Toplam harcama PERCEPTION_BACKFILL_MAX_USD (varsayılan 0,10 $) ile sınırlı.
+ */
+export async function backfillPerception(deps: { db: SupabaseClient; env: Record<string, string | undefined>; fetchFn?: FetchLike }, limit = 40): Promise<{ done: number; failed: number; spentUsd: number; skipped?: string }> {
+  const { db, env } = deps;
+  if (env.LLM_CLASSIFY !== "true" || !env.OPENAI_API_KEY || env.ALLOW_PAID_API !== "true") return { done: 0, failed: 0, spentUsd: 0, skipped: "paid_api_off" };
+  const cap = Number(env.PERCEPTION_BACKFILL_MAX_USD || 0.10);
+  let spent = Number(must(await db.rpc("perception_spend"), "algı harcaması") ?? 0);
+  if (spent >= cap) return { done: 0, failed: 0, spentUsd: spent, skipped: "cap_reached" };
+  const rows = must(await db.rpc("pending_perception", { p_limit: limit }), "bekleyen algı") as { response_id: string; workspace_id: string; run_id: string; brand_id: string; brand_name: string; answer_text: string; names: string[] }[];
+  const model = env.OPENAI_MODEL || OPENAI_DEFAULT.model;
+  let done = 0, failed = 0;
+  for (const r of rows) {
+    if (spent + CLASSIFY_WORST_USD > cap) break;
+    try {
+      const c = await classifyAnswer({ apiKey: env.OPENAI_API_KEY, model, price: OPENAI_DEFAULT.price, answer: r.answer_text, names: r.names.length ? r.names : [r.brand_name], target: r.brand_name, fetchFn: deps.fetchFn });
+      spent += c.costUsd;
+      must(await db.rpc("record_aux_call", { p_workspace: r.workspace_id, p_run: r.run_id, p_task: "perception", p_provider: "openai", p_model: c.model, p_in: c.inputTokens, p_out: c.outputTokens, p_cost: c.costUsd }), "record_aux_call");
+      // Okunamazsa tekrar denenmesin diye boş algı işareti yazılır; arayüz duygu alanı olmayanı saymaz
+      must(await db.rpc("set_perception", { p_response: r.response_id, p_brand: r.brand_id, p_perception: c.perception ?? { failed: true } }), "algı kaydı");
+      if (c.perception) done++; else failed++;
+    } catch (e) {
+      const x = e as { costUsd?: number; inputTokens?: number; outputTokens?: number };
+      if (x.costUsd) {
+        spent += x.costUsd;
+        await db.rpc("record_aux_call", { p_workspace: r.workspace_id, p_run: r.run_id, p_task: "perception", p_provider: "openai", p_model: model, p_in: x.inputTokens ?? 0, p_out: x.outputTokens ?? 0, p_cost: x.costUsd });
+        await db.rpc("set_perception", { p_response: r.response_id, p_brand: r.brand_id, p_perception: { failed: true } });
+      }
+      failed++;
+      if (/HTTP (401|403|429)/.test(String((e as Error).message))) break;
+    }
+  }
+  return { done, failed, spentUsd: Math.round(spent * 10000) / 10000 };
 }
