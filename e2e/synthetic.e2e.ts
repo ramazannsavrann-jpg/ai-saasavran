@@ -47,6 +47,7 @@ test.afterAll(async () => {
 test("1. Ana sayfa ve ücretsiz kontrol formu açılıyor (gönderilmez)", async ({ page }) => {
   await page.goto(`${BASE}/`);
   await expect(page).toHaveTitle(/SaaSavran/);
+  await page.goto(`${BASE}/tr/kontrol/`);
   await expect(page.locator("form").first()).toBeVisible();
   for (const p of ["/gizlilik", "/kosullar", "/llms.txt"]) expect((await page.request.get(`${BASE}${p}`)).status(), p).toBe(200);
 });
