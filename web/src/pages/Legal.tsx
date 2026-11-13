@@ -51,6 +51,7 @@ export function Privacy() {
         <li><strong>Çalışma alanı içeriği:</strong> eklediğiniz marka ve rakip adları, web siteleri, sektör, şehir ve yazdığınız sorular.</li>
         <li><strong>Ölçüm sonuçları:</strong> sorularınıza yapay zekâ servislerinden gelen cevaplar ve bunlardan hesaplanan oranlar.</li>
         <li><strong>Kullanım kayıtları:</strong> ölçüm sayısı, hata kayıtları ve maliyet hesapları (kota ve güvenlik için).</li>
+        <li><strong>Yapay zekâ ziyaretçi sayacı (isteğe bağlı):</strong> müşterimiz kendi sitesine sayaç kodumuzu eklerse, o siteye bir yapay zekâ asistanından (ChatGPT, Gemini vb.) gelen ziyaretler için yalnız tarih, asistanın adı ve sayfa yolu sayılır. IP adresi, çerez, tarayıcı bilgisi veya ziyaretçiyi tanımlayan başka bir veri saklanmaz; sayfa yolundaki e-posta ve uzun sayılar maskelenir.</li>
       </ul>
       <p>Reklam veya analiz amaçlı çerez kullanmıyoruz. Ziyaretçi sayısını görmek için Cloudflare'ın çerez kullanmayan, kişiyi tanımlamayan sayfa görüntüleme sayımı (Cloudflare Web Analytics) açıktır. Tarayıcınızda yalnızca oturumunuzu açık tutmak ve seçtiğiniz çalışma alanını hatırlamak için gerekli bilgiler saklanır.</p>
 
@@ -143,6 +144,7 @@ function PrivacyEn() {
         <li><strong>Workspace content:</strong> brand and competitor names, websites, sector, city and the questions you write.</li>
         <li><strong>Measurement results:</strong> answers returned by AI services to your questions, and the rates calculated from them.</li>
         <li><strong>Usage records:</strong> number of measurements, error logs and cost records (for quotas and security).</li>
+        <li><strong>AI visitor counter (optional):</strong> if a customer adds our counter code to their own site, visits to that site coming from an AI assistant (ChatGPT, Gemini, etc.) are counted by date, assistant name and page path only. No IP address, cookie, browser details or anything else identifying the visitor is stored; emails and long numbers in page paths are masked.</li>
       </ul>
       <p>We don't use advertising or tracking cookies. Cloudflare Web Analytics counts page views without cookies and without identifying you. Your browser stores only what's needed to keep you signed in and remember your workspace and language.</p>
 

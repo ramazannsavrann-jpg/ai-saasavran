@@ -13,6 +13,7 @@ import { CompareBars, TrendChart } from "../components/Chart";
 import { buildRecommendations, type RecInput } from "../../../engine/src/recommendations.ts";
 import { untrackedNames } from "../../../engine/src/metrics.ts";
 import { campaignFor, taskProgress } from "../../../engine/src/campaign.ts";
+import { snippet, SOURCE_PROVIDER, trafficSummary, type AiSource } from "../../../engine/src/traffic.ts";
 import { sourceMix, statSummary, truthSummary, type SourceMix, type SourceType } from "../../../engine/src/truth.ts";
 
 const TABS = [
@@ -784,6 +785,7 @@ function Report({ brand, type, onBrandChange, paid = false }: { brand: Brand; ty
               </section>
             );
           })()}
+          {type !== "simulated" && <AiTrafficPanel brand={brand} paid={paid} vis={vis.data ?? []} />}
           {type !== "simulated" && <TruthGuardPanel brand={brand} paid={paid} mix={live && insightsReady ? sourceMix(answers.data!, ments.data!, insightBrands) : null}
             stats={answers.data ? statSummary(answers.data, [brand.name, ...brand.aliases]) : null} />}
           {live && insightsReady && <PerceptionPanel summary={perceptionSummary(answers.data!, ments.data!, brand.id)} brand={brand.name} />}
@@ -894,6 +896,68 @@ function Report({ brand, type, onBrandChange, paid = false }: { brand: Brand; ty
         </>
       )}
     </div>
+  );
+}
+
+const AI_SOURCE: Record<AiSource, string> = { chatgpt: "ChatGPT", perplexity: "Perplexity", gemini: "Gemini", claude: "Claude", copilot: "Copilot", deepseek: "DeepSeek", grok: "Grok", meta: "Meta AI", other_ai: L("Diğer", "Other") };
+/** Yapay zekâdan gelen ziyaretçi: müşteri sitesindeki küçük koddan günlük sayaçlar. Free'de yalnız toplam. */
+function AiTrafficPanel({ brand, paid, vis }: { brand: Brand; paid: boolean; vis: VisRow[] }) {
+  const rows = useLoad(() => api.aiVisits(brand.id), [brand.id]);
+  const [copied, setCopied] = useState(false);
+  const [showCode, setShowCode] = useState(false);
+  if (rows.loading) return null;
+  const today = new Date(Date.now() + 3 * 3600_000).toISOString().slice(0, 10);
+  const s = trafficSummary(rows.data ?? [], today);
+  const code = brand.track_key ? snippet(brand.track_key) : null;
+  const has = (rows.data ?? []).length > 0;
+  const recNow = (prov: string) => { const ps = series(vis.filter((r) => r.provider === prov)); const p = ps[ps.length - 1]; return p && p.recommend.n ? p.recommend.k / p.recommend.n : null; };
+  const maxW = Math.max(1, ...s.weekly.map((w) => w.visits));
+  return (
+    <section className="panel" id="ai-ziyaretci">
+      <h2>{L("Yapay zekâdan gelen ziyaretçi", "Visitors from AI assistants")}</h2>
+      {has ? (
+        <>
+          <dl className="metrics">
+            <div><dt>{L("Son 30 gün", "Last 30 days")}</dt><dd className="num">{s.last30}</dd><dd className="range">{s.prev30 ? `${L("önceki 30 gün", "previous 30 days")}: ${s.prev30}` : L("ziyaret", "visits")}</dd></div>
+          </dl>
+          {!paid ? (
+            <p className="muted">{L("Hangi asistandan (ChatGPT, Gemini, Claude…), hangi sayfalara geldikleri ve görünürlüğünüzle ilişkisi ücretli paketlerde.", "Which assistant they came from (ChatGPT, Gemini, Claude…), which pages they landed on and how it relates to your visibility are on paid plans.")} <Link to="/hesap#paket">{L("Paketler", "Plans")}</Link></p>
+          ) : (
+            <>
+              <h3>{L("Kaynak", "Source")}</h3>
+              <ol className="domains">
+                {s.bySource.map((b) => {
+                  const pv = SOURCE_PROVIDER[b.source], r = pv ? recNow(pv) : null;
+                  return <li key={b.source}><span>{AI_SOURCE[b.source]}{r !== null && <span className="muted"> · {L("önerilme", "recommended")} {pct(r)}</span>}</span><span className="num">{b.visits} <span className="muted">({pct(b.share)})</span></span></li>;
+                })}
+              </ol>
+              <h3>{L("Son 8 hafta", "Last 8 weeks")}</h3>
+              <div className="traffic-bars" role="img" aria-label={L("Haftalık ziyaret", "Weekly visits")}>
+                {s.weekly.map((w) => <span key={w.start} title={`${formatDate(w.start)}: ${w.visits}`} style={{ height: `${Math.max(4, (100 * w.visits) / maxW)}%` }} />)}
+              </div>
+              <h3>{L("Gelinen sayfalar", "Landing pages")}</h3>
+              <ol className="domains">{s.topPages.map((p) => <li key={p.path}><span className="src-url">{p.path}</span><span className="num">{p.visits}</span></li>)}</ol>
+              <p className="src-sup muted">{L("Önerilme oranı yükselirken ziyaretçi de artıyorsa görünürlüğünüz gerçek trafiğe dönüşüyor demektir. Bazı uygulamalar kaynak bilgisi göndermez; gerçek sayı bundan biraz yüksek olabilir.", "If visits grow as your recommendation rate rises, visibility is turning into real traffic. Some apps don't send referral data, so the real number may be a bit higher.")}</p>
+            </>
+          )}
+        </>
+      ) : (
+        <p>{L("ChatGPT, Gemini, Claude veya Perplexity'de bir bağlantıya tıklayıp sitenize kaç kişinin geldiğini görmek için aşağıdaki tek satırlık kodu sitenize ekleyin.", "To see how many people click through to your site from ChatGPT, Gemini, Claude or Perplexity, add the one-line code below to your site.")}</p>
+      )}
+      {code && (
+        <>
+          <button className="link-btn" aria-expanded={showCode || !has} onClick={() => setShowCode(!showCode)}>{has ? (showCode ? L("Kodu gizle", "Hide code") : L("Sitenize eklenecek kodu göster", "Show the code for your site")) : null}</button>
+          {(showCode || !has) && (
+            <div className="score-how">
+              <pre className="code-snippet">{code}</pre>
+              <button className="link-btn" onClick={async () => { try { await navigator.clipboard.writeText(code); setCopied(true); } catch { /* yok say */ } }}>{copied ? L("Kopyalandı", "Copied") : L("Kodu kopyala", "Copy code")}</button>
+              <p className="src-sup muted">{L("Kodu sitenizin her sayfasında, </head> etiketinden hemen önce yapıştırın. WordPress'te \"başlığa kod ekle\" türünde bir eklentiyle yapılabilir. Çerez kullanmaz, kişisel veri toplamaz; yalnız yapay zekâdan gelen ziyaretleri sayar.", "Paste it on every page, just before </head>. On WordPress, a \"header code\" plugin works. No cookies, no personal data; it only counts visits from AI assistants.")}
+                {brand.website ? "" : " " + L("Sayım için marka ayarlarında web sitenizin yazılı olması gerekir.", "Your website must be set in the brand settings for counting.")}</p>
+            </div>
+          )}
+        </>
+      )}
+    </section>
   );
 }
 

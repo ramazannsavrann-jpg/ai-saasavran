@@ -63,7 +63,19 @@ test("TruthGuard: ücretli pakette bilgi kartı, yanlış iddialar, kaynak türl
       { claim: "Paket servis yok", status: "wrong", fact: "Paket servis var", quote: "paket servis yok" }] },
   ]));
 
-  // Free: yalnız tanıtım
+  const d = (n: number) => new Date(Date.now() + 3 * 3600_000 - n * 86_400_000).toISOString().slice(0, 10);
+  must(await db.from("ai_visits").insert([
+    { workspace_id: ws, brand_id: brand.id, day: d(1), source: "chatgpt", path: "/", visits: 14 },
+    { workspace_id: ws, brand_id: brand.id, day: d(3), source: "chatgpt", path: "/menu", visits: 9 },
+    { workspace_id: ws, brand_id: brand.id, day: d(9), source: "gemini", path: "/", visits: 5 },
+    { workspace_id: ws, brand_id: brand.id, day: d(20), source: "perplexity", path: "/iletisim", visits: 3 },
+    { workspace_id: ws, brand_id: brand.id, day: d(40), source: "chatgpt", path: "/", visits: 12 },
+  ]));
+
+  // Free: yalnız tanıtım ve toplam ziyaret
+  await page.goto(`/marka/${brand.id}?sekme=rapor&tur=canli`);
+  await expect(page.locator("#ai-ziyaretci")).toContainText("31");
+  await expect(page.locator("#ai-ziyaretci")).toContainText("ücretli paketlerde");
   await page.goto(`/marka/${brand.id}?sekme=rapor&tur=canli`);
   const tg = page.locator("#truthguard");
   await expect(tg).toContainText("Ücretli paketlerde");
@@ -83,6 +95,13 @@ test("TruthGuard: ücretli pakette bilgi kartı, yanlış iddialar, kaynak türl
   await page.locator("#marka-algisi").getByRole("button", { name: "Alıntıyı göster" }).first().click();
   await page.locator("#marka-algisi").screenshot({ path: `${SHOTS}/31-marka-algisi.png` });
   await page.locator("#gorunurluk-skoru").screenshot({ path: `${SHOTS}/32-gorunurluk-skoru.png` });
+  const tr = page.locator("#ai-ziyaretci");
+  await expect(tr).toContainText("Gelinen sayfalar");
+  await expect(tr).toContainText("/menu");
+  await expect(tr).toContainText("önceki 30 gün: 12");
+  await tr.getByRole("button", { name: "Sitenize eklenecek kodu göster" }).click();
+  await expect(tr.locator(".code-snippet")).toContainText('data-site="');
+  await tr.screenshot({ path: `${SHOTS}/34-ai-ziyaretci.png` });
 
   // Öneriler: yanlış bilgi maddesi ve kampanya
   await page.goto(`/marka/${brand.id}?sekme=oneriler&tur=canli`);

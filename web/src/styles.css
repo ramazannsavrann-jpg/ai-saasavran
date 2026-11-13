@@ -497,3 +497,8 @@ pre.code { white-space: pre-wrap; word-break: break-all; padding: 8px 10px; back
 .per-item-neg .src-head strong { color: var(--danger); }
 .truth-bad { color: var(--danger); }
 .truth-item .src-head strong { color: var(--danger); }
+
+/* Yapay zekâdan gelen ziyaretçi */
+.traffic-bars { display: flex; align-items: flex-end; gap: 4px; height: 70px; margin: .3rem 0 .6rem; }
+.traffic-bars span { flex: 1; background: var(--primary); border-radius: 3px 3px 0 0; min-height: 3px; }
+.code-snippet { white-space: pre-wrap; word-break: break-all; font-size: .8rem; background: var(--tint); border: 1px solid var(--line); border-radius: var(--radius-m); padding: .5rem; margin: .3rem 0; }
