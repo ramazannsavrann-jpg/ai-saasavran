@@ -463,3 +463,15 @@ pre.code { white-space: pre-wrap; word-break: break-all; padding: 8px 10px; back
 .own-legend, .own-engines { list-style: none; padding: 0; margin: .25rem 0; }
 .own-legend li, .own-engines li { margin: .2rem 0; }
 .own-legend .dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: .3rem; vertical-align: middle; }
+
+/* AI Görünürlük Skoru */
+.score-card .score-row { display: flex; gap: 1rem; align-items: center; }
+.score-card h2 { margin: 0; font-size: 1.05rem; }
+.score-card p { margin: .2rem 0; }
+.score-num { flex: 0 0 auto; width: 5.5rem; height: 5.5rem; border-radius: 50%; display: flex; align-items: baseline; justify-content: center; padding-top: 1.55rem; box-sizing: border-box; border: 6px solid var(--line); }
+.score-num strong { font-size: 1.9rem; line-height: 1; }
+.score-num span { font-size: .8rem; color: var(--muted); }
+.score-high .score-num { border-color: var(--ok); }
+.score-mid .score-num { border-color: var(--sim); }
+.score-low .score-num { border-color: var(--danger); }
+.score-how { margin-top: .5rem; font-size: .92rem; }
