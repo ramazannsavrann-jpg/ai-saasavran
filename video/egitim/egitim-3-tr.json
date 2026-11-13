@@ -1,0 +1,81 @@
+{
+ "out": "e3tr",
+ "series": "Nasıl kullanılır · Eğitim 3",
+ "sample": "Örnek veri",
+ "cover": {
+  "badge": "Eğitim 3",
+  "title": "Soru ve rakip eklemek",
+  "sub": "",
+  "dur": 1.73
+ },
+ "scenes": [
+  {
+   "step": "Adım 1",
+   "cap": "Sorular sekmesini açın",
+   "imgs": [
+    "shots/tr/b08_sorular.jpg"
+   ],
+   "top": 0,
+   "dur": 6.49
+  },
+  {
+   "step": "Öneri",
+   "cap": "Bana soru öner: taslak sorular",
+   "imgs": [
+    "shots/tr/b08_sorular.jpg"
+   ],
+   "top": 820,
+   "dur": 5.8
+  },
+  {
+   "step": "Adım 2",
+   "cap": "Hazır sorulardan + Ekle",
+   "imgs": [
+    "shots/tr/b08_sorular_tam.jpg",
+    "shots/tr/b09_sorular_eklendi_tam.jpg"
+   ],
+   "top": 2210,
+   "dur": 4.97,
+   "tops": [
+    2210,
+    520
+   ],
+   "hold_last": 2.2
+  },
+  {
+   "step": "İpucu",
+   "cap": "Çoğu soruda marka adı geçmesin",
+   "imgs": [
+    "shots/tr/b09_sorular_eklendi_tam.jpg"
+   ],
+   "top": 1450,
+   "dur": 6.38
+  },
+  {
+   "step": "Adım 3",
+   "cap": "Rakipler sekmesi: rakip adını yazın",
+   "imgs": [
+    "shots/tr/b10_rakipler.jpg",
+    "shots/tr/b11_rakip_dolu.jpg"
+   ],
+   "top": 400,
+   "dur": 4.82
+  },
+  {
+   "step": "Sonuç",
+   "cap": "Kimin sizin yerinize önerildiğini görün",
+   "imgs": [
+    "shots/tr/b12_rakipler_eklendi.jpg"
+   ],
+   "top": 0,
+   "dur": 3.78
+  }
+ ],
+ "end": {
+  "title": "Hazırsınız",
+  "sub": "Sorular ve rakipler tamam. Sıra ilk ölçümde.",
+  "next_label": "Sonraki eğitim",
+  "next": "İlk ölçümü başlatmak",
+  "dur": 5.38
+ }
+}

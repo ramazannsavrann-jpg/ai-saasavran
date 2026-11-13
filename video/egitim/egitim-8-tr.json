@@ -1,0 +1,65 @@
+{
+ "out": "e8tr",
+ "series": "Nasıl kullanılır · Eğitim 8",
+ "sample": "Örnek veri",
+ "cover": {
+  "badge": "Eğitim 8",
+  "title": "İyileştirme önerileri",
+  "sub": "",
+  "dur": 5.55
+ },
+ "scenes": [
+  {
+   "step": "Rehber",
+   "cap": "Önem sırasıyla adımlar",
+   "imgs": [
+    "shots/tr/r_oneriler_tam.jpg"
+   ],
+   "top": 1603,
+   "dur": 1.97
+  },
+  {
+   "step": "Kanıt",
+   "cap": "Kanıt, ne yapmalı, başarı ölçütü",
+   "imgs": [
+    "shots/tr/r_oneriler_tam.jpg"
+   ],
+   "top": 2103,
+   "dur": 6.62
+  },
+  {
+   "step": "Kampanya",
+   "cap": "Görevlere bölün, takip edin",
+   "imgs": [
+    "shots/tr/r_oneriler_tam.jpg"
+   ],
+   "top": 2953,
+   "dur": 4.94
+  },
+  {
+   "step": "Takip",
+   "cap": "Yaptığınızı tarihiyle yazın",
+   "imgs": [
+    "shots/tr/r_oneriler_tam.jpg"
+   ],
+   "top": 5436,
+   "dur": 9.09
+  },
+  {
+   "step": "Site",
+   "cap": "Web sitesi kontrolü",
+   "imgs": [
+    "shots/tr/r_oneriler_tam.jpg"
+   ],
+   "top": 7888,
+   "dur": 10.02
+  }
+ ],
+ "end": {
+  "title": "Uygulayın, ölçün",
+  "sub": "Her ölçümde etkisini görün.",
+  "next_label": "Sonraki eğitim",
+  "next": "Marka algısı ve doğruluk",
+  "dur": 6.87
+ }
+}

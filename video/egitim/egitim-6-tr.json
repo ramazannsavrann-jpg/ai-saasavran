@@ -1,0 +1,56 @@
+{
+ "out": "e6tr",
+ "series": "Nasıl kullanılır · Eğitim 6",
+ "sample": "Örnek veri",
+ "cover": {
+  "badge": "Eğitim 6",
+  "title": "Soru bazında sonuç ve kayıp nedeni",
+  "sub": "",
+  "dur": 2.36
+ },
+ "scenes": [
+  {
+   "step": "Sorular",
+   "cap": "Her soru ayrı ayrı",
+   "imgs": [
+    "shots/tr/r_rapor_tam.jpg"
+   ],
+   "top": 28079,
+   "dur": 9.57
+  },
+  {
+   "step": "Kayıp nedeni",
+   "cap": "Kanıtlarıyla",
+   "imgs": [
+    "shots/tr/r_rapor_tam.jpg"
+   ],
+   "top": 30124,
+   "dur": 11.54
+  },
+  {
+   "step": "Cevap",
+   "cap": "Tam cevabı okuyun",
+   "imgs": [
+    "shots/tr/r_rapor_cevap_tam.jpg"
+   ],
+   "top": 28593,
+   "dur": 4.05
+  },
+  {
+   "step": "Koşullar",
+   "cap": "Hangi müşteride güçlüsünüz?",
+   "imgs": [
+    "shots/tr/r_rapor_tam.jpg"
+   ],
+   "top": 11238,
+   "dur": 9.77
+  }
+ ],
+ "end": {
+  "title": "Neden kaybettiğinizi biliyorsunuz",
+  "sub": "Sıradaki adım: yapay zekânın baktığı siteler.",
+  "next_label": "Sonraki eğitim",
+  "next": "Yapay zekânın baktığı kaynaklar",
+  "dur": 6.36
+ }
+}

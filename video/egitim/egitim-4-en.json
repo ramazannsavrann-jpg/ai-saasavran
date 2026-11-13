@@ -1,0 +1,74 @@
+{
+ "out": "e4en",
+ "series": "How to use · Tutorial 4",
+ "sample": "Sample data",
+ "cover": {
+  "badge": "Tutorial 4",
+  "title": "Run the first measurement",
+  "sub": "",
+  "dur": 1.87
+ },
+ "scenes": [
+  {
+   "step": "Step 1",
+   "cap": "Two measurement buttons",
+   "imgs": [
+    "shots/en/r_rapor.jpg"
+   ],
+   "top": 250,
+   "dur": 2.92
+  },
+  {
+   "step": "No search",
+   "cap": "What the model knows",
+   "imgs": [
+    "shots/en/r_rapor_aramasiz_tam.jpg"
+   ],
+   "top": 2284,
+   "dur": 4.25
+  },
+  {
+   "step": "Live search",
+   "cap": "Answers after searching the web",
+   "imgs": [
+    "shots/en/r_rapor_tam.jpg"
+   ],
+   "top": 3362,
+   "dur": 5.64
+  },
+  {
+   "step": "Step 2",
+   "cap": "Follow it in the runs tab",
+   "imgs": [
+    "shots/en/r_olcumler_tam.jpg"
+   ],
+   "top": 1250,
+   "dur": 6.89
+  },
+  {
+   "step": "Result",
+   "cap": "The report fills in",
+   "imgs": [
+    "shots/en/r_rapor_tam.jpg"
+   ],
+   "top": 2312,
+   "dur": 3.93
+  },
+  {
+   "step": "Weekly",
+   "cap": "See change over time",
+   "imgs": [
+    "shots/en/r_rapor_tam.jpg"
+   ],
+   "top": 4885,
+   "dur": 4.47
+  }
+ ],
+ "end": {
+  "title": "Measuring",
+  "sub": "It runs again automatically every week.",
+  "next_label": "Next tutorial",
+  "next": "Read the report",
+  "dur": 5.08
+ }
+}

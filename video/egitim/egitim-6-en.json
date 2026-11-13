@@ -1,0 +1,56 @@
+{
+ "out": "e6en",
+ "series": "How to use · Tutorial 6",
+ "sample": "Sample data",
+ "cover": {
+  "badge": "Tutorial 6",
+  "title": "Results by question, and why you lost",
+  "sub": "",
+  "dur": 3.87
+ },
+ "scenes": [
+  {
+   "step": "Questions",
+   "cap": "Every question separately",
+   "imgs": [
+    "shots/en/r_rapor_tam.jpg"
+   ],
+   "top": 28595,
+   "dur": 9.07
+  },
+  {
+   "step": "Why you lost",
+   "cap": "With evidence",
+   "imgs": [
+    "shots/en/r_rapor_tam.jpg"
+   ],
+   "top": 30827,
+   "dur": 11.36
+  },
+  {
+   "step": "Answer",
+   "cap": "Read the full answer",
+   "imgs": [
+    "shots/en/r_rapor_cevap_tam.jpg"
+   ],
+   "top": 29171,
+   "dur": 3.31
+  },
+  {
+   "step": "Conditions",
+   "cap": "Which customers favor you?",
+   "imgs": [
+    "shots/en/r_rapor_tam.jpg"
+   ],
+   "top": 11429,
+   "dur": 9.09
+  }
+ ],
+ "end": {
+  "title": "Now you know why",
+  "sub": "Next: the sites AI reads.",
+  "next_label": "Next tutorial",
+  "next": "The sources AI reads",
+  "dur": 5.94
+ }
+}

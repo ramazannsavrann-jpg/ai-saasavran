@@ -1,0 +1,1503 @@
+{
+"rapor": [
+[
+"BUTTON",
+"EN",
+0
+],
+[
+"H1",
+"Marka A",
+342
+],
+[
+"BUTTON",
+"Düzenle",
+508
+],
+[
+"BUTTON",
+"Ölçüm başlat (aramasız, ücretsiz)",
+658
+],
+[
+"BUTTON",
+"Canlı aramalı ölçüm (ChatGPT, ücretli)",
+818
+],
+[
+"BUTTON",
+"Rapor",
+1290
+],
+[
+"BUTTON",
+"Öneriler",
+1290
+],
+[
+"BUTTON",
+"Rakipler",
+1290
+],
+[
+"BUTTON",
+"Sorular",
+1290
+],
+[
+"BUTTON",
+"Ürünler",
+1290
+],
+[
+"BUTTON",
+"Ölçümler",
+1290
+],
+[
+"BUTTON",
+"Aramasız (Gemini)",
+1473
+],
+[
+"BUTTON",
+"Canlı aramalı (ChatGPT)",
+1473
+],
+[
+"BUTTON",
+"ChatGPT (OpenAI)",
+2185
+],
+[
+"BUTTON",
+"Claude (Anthropic)",
+2185
+],
+[
+"H2",
+"AI Görünürlük Skoru · ChatGPT (OpenAI)",
+2396
+],
+[
+"BUTTON",
+"Skor nasıl hesaplandı?",
+3072
+],
+[
+"BUTTON",
+"Özeti paylaş (WhatsApp, e-posta)",
+4680
+],
+[
+"BUTTON",
+"PDF olarak indir",
+4817
+],
+[
+"H2",
+"Zaman içinde",
+5107
+],
+[
+"BUTTON",
+"Önerilme",
+5081
+],
+[
+"BUTTON",
+"Anılma",
+5081
+],
+[
+"H2",
+"Rakiplerle karşılaştırma",
+6500
+],
+[
+"H2",
+"Motor karşılaştırması",
+7731
+],
+[
+"H3",
+"Öneri payı (sektördeki takip edilen markalar arasında)",
+8692
+],
+[
+"H3",
+"Motorların baktığı siteler",
+9841
+],
+[
+"H2",
+"Hangi koşulda görünüyorsunuz",
+11318
+],
+[
+"H3",
+"Etiketlere göre",
+12954
+],
+[
+"H2",
+"Yapay zekânın kaynak gösterdiği siteler",
+14299
+],
+[
+"H2",
+"Kendi site payı",
+15284
+],
+[
+"H2",
+"Yapay zekâdan gelen ziyaretçi",
+16255
+],
+[
+"BUTTON",
+"Kodu kopyala",
+16917
+],
+[
+"H2",
+"Yapay zekâ botları",
+17556
+],
+[
+"BUTTON",
+"Anahtarı kopyala",
+18308
+],
+[
+"BUTTON",
+"Kodu kopyala",
+20539
+],
+[
+"H2",
+"TruthGuard",
+20989
+],
+[
+"H3",
+"Kaynaksız sayılar ve eski bilgi",
+21344
+],
+[
+"H3",
+"Kaynakların türü",
+21610
+],
+[
+"H2",
+"Marka algısı",
+22484
+],
+[
+"BUTTON",
+"Alıntıyı göster",
+23593
+],
+[
+"BUTTON",
+"Alıntıyı göster",
+23915
+],
+[
+"BUTTON",
+"Alıntıyı göster",
+24237
+],
+[
+"H2",
+"Kaynaklar kimi destekliyor",
+24497
+],
+[
+"H2",
+"Kaynak fırsatları",
+27111
+],
+[
+"H2",
+"Soru bazında sonuç",
+28159
+],
+[
+"BUTTON",
+"Cevabı göster",
+28553
+],
+[
+"BUTTON",
+"Cevabı göster",
+29087
+],
+[
+"BUTTON",
+"Cevabı göster",
+29621
+],
+[
+"P",
+"Kayıp nedeni: kanıtlar",
+30204
+],
+[
+"BUTTON",
+"Cevabı göster",
+31857
+],
+[
+"BUTTON",
+"Cevabı göster",
+32391
+],
+[
+"P",
+"Kayıp nedeni: kanıtlar",
+32975
+],
+[
+"BUTTON",
+"Cevabı göster",
+34627
+],
+[
+"H2",
+"Raporu paylaş",
+34926
+],
+[
+"BUTTON",
+"Bağlantı oluştur",
+35712
+]
+],
+"rapor_aramasiz": [
+[
+"BUTTON",
+"EN",
+0
+],
+[
+"H1",
+"Marka A",
+342
+],
+[
+"BUTTON",
+"Düzenle",
+508
+],
+[
+"BUTTON",
+"Ölçüm başlat (aramasız, ücretsiz)",
+658
+],
+[
+"BUTTON",
+"Canlı aramalı ölçüm (ChatGPT, ücretli)",
+818
+],
+[
+"BUTTON",
+"Rapor",
+1290
+],
+[
+"BUTTON",
+"Öneriler",
+1290
+],
+[
+"BUTTON",
+"Rakipler",
+1290
+],
+[
+"BUTTON",
+"Sorular",
+1290
+],
+[
+"BUTTON",
+"Ürünler",
+1290
+],
+[
+"BUTTON",
+"Ölçümler",
+1290
+],
+[
+"BUTTON",
+"Aramasız (Gemini)",
+1473
+],
+[
+"BUTTON",
+"Canlı aramalı (ChatGPT)",
+1473
+],
+[
+"H2",
+"AI Görünürlük Skoru",
+2304
+],
+[
+"BUTTON",
+"Skor nasıl hesaplandı?",
+2927
+],
+[
+"BUTTON",
+"Özeti paylaş (WhatsApp, e-posta)",
+4352
+],
+[
+"BUTTON",
+"PDF olarak indir",
+4489
+],
+[
+"H2",
+"Zaman içinde",
+4778
+],
+[
+"BUTTON",
+"Önerilme",
+4752
+],
+[
+"BUTTON",
+"Anılma",
+4752
+],
+[
+"H2",
+"Rakiplerle karşılaştırma",
+6172
+],
+[
+"H2",
+"Hangi koşulda görünüyorsunuz",
+7402
+],
+[
+"H3",
+"Etiketlere göre",
+9038
+],
+[
+"H2",
+"Yapay zekâdan gelen ziyaretçi",
+10384
+],
+[
+"BUTTON",
+"Kodu kopyala",
+11045
+],
+[
+"H2",
+"Yapay zekâ botları",
+11685
+],
+[
+"BUTTON",
+"Anahtarı kopyala",
+12436
+],
+[
+"BUTTON",
+"Kodu kopyala",
+14667
+],
+[
+"H2",
+"TruthGuard",
+15117
+],
+[
+"H3",
+"Kaynaksız sayılar ve eski bilgi",
+15472
+],
+[
+"H2",
+"Kendi site payı",
+15888
+],
+[
+"H2",
+"Soru bazında sonuç",
+16324
+],
+[
+"BUTTON",
+"Cevabı göster",
+16718
+],
+[
+"BUTTON",
+"Cevabı göster",
+17252
+],
+[
+"BUTTON",
+"Cevabı göster",
+17786
+],
+[
+"BUTTON",
+"Cevabı göster",
+18505
+],
+[
+"BUTTON",
+"Cevabı göster",
+19039
+],
+[
+"BUTTON",
+"Cevabı göster",
+19759
+],
+[
+"H2",
+"Bu rapor neyi göstermez",
+20058
+],
+[
+"H2",
+"Raporu paylaş",
+20734
+],
+[
+"BUTTON",
+"Bağlantı oluştur",
+21519
+]
+],
+"oneriler": [
+[
+"BUTTON",
+"EN",
+0
+],
+[
+"H1",
+"Marka A",
+342
+],
+[
+"BUTTON",
+"Düzenle",
+508
+],
+[
+"BUTTON",
+"Ölçüm başlat (aramasız, ücretsiz)",
+658
+],
+[
+"BUTTON",
+"Canlı aramalı ölçüm (ChatGPT, ücretli)",
+818
+],
+[
+"BUTTON",
+"Rapor",
+1290
+],
+[
+"BUTTON",
+"Öneriler",
+1290
+],
+[
+"BUTTON",
+"Rakipler",
+1290
+],
+[
+"BUTTON",
+"Sorular",
+1290
+],
+[
+"BUTTON",
+"Ürünler",
+1290
+],
+[
+"BUTTON",
+"Ölçümler",
+1290
+],
+[
+"BUTTON",
+"Aramasız (Gemini)",
+1473
+],
+[
+"BUTTON",
+"Canlı aramalı (ChatGPT)",
+1473
+],
+[
+"H2",
+"İyileştirme rehberi",
+1683
+],
+[
+"BUTTON",
+"Kampanya başlat (5 görev)",
+3671
+],
+[
+"BUTTON",
+"Kampanya başlat (2 görev)",
+4610
+],
+[
+"H2",
+"Yaptıklarım ve sonuçları",
+5516
+],
+[
+"BUTTON",
+"Kaydet",
+6832
+],
+[
+"BUTTON",
+"Sil",
+7682
+],
+[
+"H2",
+"Web sitesi kontrolü",
+7968
+],
+[
+"BUTTON",
+"Siteyi kontrol et",
+7942
+]
+],
+"rakipler": [
+[
+"BUTTON",
+"EN",
+0
+],
+[
+"H1",
+"Marka A",
+342
+],
+[
+"BUTTON",
+"Düzenle",
+508
+],
+[
+"BUTTON",
+"Ölçüm başlat (aramasız, ücretsiz)",
+658
+],
+[
+"BUTTON",
+"Canlı aramalı ölçüm (ChatGPT, ücretli)",
+818
+],
+[
+"BUTTON",
+"Rapor",
+1290
+],
+[
+"BUTTON",
+"Öneriler",
+1290
+],
+[
+"BUTTON",
+"Rakipler",
+1290
+],
+[
+"BUTTON",
+"Sorular",
+1290
+],
+[
+"BUTTON",
+"Ürünler",
+1290
+],
+[
+"BUTTON",
+"Ölçümler",
+1290
+],
+[
+"H2",
+"Rakipler",
+1527
+],
+[
+"BUTTON",
+"Düzenle",
+1655
+],
+[
+"BUTTON",
+"Sil",
+1655
+],
+[
+"BUTTON",
+"Düzenle",
+1840
+],
+[
+"BUTTON",
+"Sil",
+1840
+],
+[
+"BUTTON",
+"Düzenle",
+2017
+],
+[
+"BUTTON",
+"Sil",
+2017
+],
+[
+"H2",
+"Rakip ekle",
+2305
+],
+[
+"BUTTON",
+"Rakibi ekle",
+3238
+]
+],
+"olcumler": [
+[
+"BUTTON",
+"EN",
+0
+],
+[
+"H1",
+"Marka A",
+342
+],
+[
+"BUTTON",
+"Düzenle",
+508
+],
+[
+"BUTTON",
+"Ölçüm başlat (aramasız, ücretsiz)",
+658
+],
+[
+"BUTTON",
+"Canlı aramalı ölçüm (ChatGPT, ücretli)",
+818
+],
+[
+"BUTTON",
+"Rapor",
+1290
+],
+[
+"BUTTON",
+"Öneriler",
+1290
+],
+[
+"BUTTON",
+"Rakipler",
+1290
+],
+[
+"BUTTON",
+"Sorular",
+1290
+],
+[
+"BUTTON",
+"Ürünler",
+1290
+],
+[
+"BUTTON",
+"Ölçümler",
+1290
+]
+],
+"sorular": [
+[
+"BUTTON",
+"EN",
+0
+],
+[
+"H1",
+"Marka A",
+342
+],
+[
+"BUTTON",
+"Düzenle",
+508
+],
+[
+"BUTTON",
+"Ölçüm başlat (aramasız, ücretsiz)",
+658
+],
+[
+"BUTTON",
+"Canlı aramalı ölçüm (ChatGPT, ücretli)",
+818
+],
+[
+"BUTTON",
+"Rapor",
+1290
+],
+[
+"BUTTON",
+"Öneriler",
+1290
+],
+[
+"BUTTON",
+"Rakipler",
+1290
+],
+[
+"BUTTON",
+"Sorular",
+1290
+],
+[
+"BUTTON",
+"Ürünler",
+1290
+],
+[
+"BUTTON",
+"Ölçümler",
+1290
+],
+[
+"H2",
+"Sorular",
+1527
+],
+[
+"BUTTON",
+"Düzenle",
+1929
+],
+[
+"BUTTON",
+"Pasifleştir",
+1929
+],
+[
+"BUTTON",
+"Sil",
+1929
+],
+[
+"BUTTON",
+"Düzenle",
+2281
+],
+[
+"BUTTON",
+"Pasifleştir",
+2281
+],
+[
+"BUTTON",
+"Sil",
+2281
+],
+[
+"BUTTON",
+"Düzenle",
+2696
+],
+[
+"BUTTON",
+"Pasifleştir",
+2696
+],
+[
+"BUTTON",
+"Sil",
+2696
+],
+[
+"BUTTON",
+"Düzenle",
+3151
+],
+[
+"BUTTON",
+"Pasifleştir",
+3151
+],
+[
+"BUTTON",
+"Sil",
+3151
+],
+[
+"BUTTON",
+"Düzenle",
+3572
+],
+[
+"BUTTON",
+"Pasifleştir",
+3572
+],
+[
+"BUTTON",
+"Sil",
+3572
+],
+[
+"BUTTON",
+"Düzenle",
+3889
+],
+[
+"BUTTON",
+"Pasifleştir",
+3889
+],
+[
+"BUTTON",
+"Sil",
+3889
+],
+[
+"H2",
+"Yapay zekâyla soru öner",
+4494
+],
+[
+"BUTTON",
+"Bana soru öner",
+4963
+],
+[
+"H2",
+"Hazır sorular",
+5245
+],
+[
+"BUTTON",
+"+ Ekle",
+5883
+],
+[
+"BUTTON",
+"+ Ekle",
+6137
+],
+[
+"BUTTON",
+"+ Ekle",
+6390
+],
+[
+"BUTTON",
+"+ Ekle",
+6610
+],
+[
+"BUTTON",
+"+ Ekle",
+6829
+],
+[
+"BUTTON",
+"+ Ekle",
+7083
+],
+[
+"H2",
+"Kendi sorunuzu ekleyin",
+7408
+],
+[
+"BUTTON",
+"Soruyu ekle",
+8458
+]
+],
+"rapor_claude": [
+[
+"BUTTON",
+"EN",
+1230
+],
+[
+"H1",
+"Marka A",
+342
+],
+[
+"BUTTON",
+"Düzenle",
+508
+],
+[
+"BUTTON",
+"Ölçüm başlat (aramasız, ücretsiz)",
+658
+],
+[
+"BUTTON",
+"Canlı aramalı ölçüm (ChatGPT, ücretli)",
+818
+],
+[
+"BUTTON",
+"Rapor",
+1290
+],
+[
+"BUTTON",
+"Öneriler",
+1290
+],
+[
+"BUTTON",
+"Rakipler",
+1290
+],
+[
+"BUTTON",
+"Sorular",
+1290
+],
+[
+"BUTTON",
+"Ürünler",
+1290
+],
+[
+"BUTTON",
+"Ölçümler",
+1290
+],
+[
+"BUTTON",
+"Aramasız (Gemini)",
+1473
+],
+[
+"BUTTON",
+"Canlı aramalı (ChatGPT)",
+1473
+],
+[
+"BUTTON",
+"ChatGPT (OpenAI)",
+2185
+],
+[
+"BUTTON",
+"Claude (Anthropic)",
+2185
+],
+[
+"H2",
+"AI Görünürlük Skoru · Claude (Anthropic)",
+2396
+],
+[
+"BUTTON",
+"Skor nasıl hesaplandı?",
+3072
+],
+[
+"BUTTON",
+"Özeti paylaş (WhatsApp, e-posta)",
+4680
+],
+[
+"BUTTON",
+"PDF olarak indir",
+4817
+],
+[
+"H2",
+"Zaman içinde",
+5107
+],
+[
+"BUTTON",
+"Önerilme",
+5081
+],
+[
+"BUTTON",
+"Anılma",
+5081
+],
+[
+"H2",
+"Rakiplerle karşılaştırma",
+6500
+],
+[
+"H2",
+"Motor karşılaştırması",
+7731
+],
+[
+"H3",
+"Öneri payı (sektördeki takip edilen markalar arasında)",
+8692
+],
+[
+"H3",
+"Motorların baktığı siteler",
+9841
+],
+[
+"H2",
+"Hangi koşulda görünüyorsunuz",
+11318
+],
+[
+"H3",
+"Etiketlere göre",
+12954
+],
+[
+"H2",
+"Yapay zekânın kaynak gösterdiği siteler",
+14299
+],
+[
+"H2",
+"Kendi site payı",
+15284
+],
+[
+"H2",
+"Yapay zekâdan gelen ziyaretçi",
+16255
+],
+[
+"BUTTON",
+"Kodu kopyala",
+16917
+],
+[
+"H2",
+"Yapay zekâ botları",
+17556
+],
+[
+"BUTTON",
+"Anahtarı kopyala",
+18308
+],
+[
+"BUTTON",
+"Kodu kopyala",
+20539
+],
+[
+"H2",
+"TruthGuard",
+20989
+],
+[
+"H3",
+"Kaynaksız sayılar ve eski bilgi",
+21344
+],
+[
+"H3",
+"Kaynakların türü",
+21610
+],
+[
+"H2",
+"Marka algısı",
+22399
+],
+[
+"BUTTON",
+"Alıntıyı göster",
+23509
+],
+[
+"BUTTON",
+"Alıntıyı göster",
+23831
+],
+[
+"BUTTON",
+"Alıntıyı göster",
+24152
+],
+[
+"H2",
+"Kaynaklar kimi destekliyor",
+24413
+],
+[
+"H2",
+"Kaynak fırsatları",
+27027
+],
+[
+"H2",
+"Soru bazında sonuç",
+27922
+],
+[
+"BUTTON",
+"Cevabı göster",
+28315
+],
+[
+"BUTTON",
+"Cevabı göster",
+28849
+],
+[
+"BUTTON",
+"Cevabı göster",
+29383
+],
+[
+"BUTTON",
+"Cevabı göster",
+29917
+],
+[
+"BUTTON",
+"Cevabı göster",
+30451
+],
+[
+"BUTTON",
+"Cevabı göster",
+30985
+],
+[
+"H2",
+"Raporu paylaş",
+31285
+],
+[
+"BUTTON",
+"Bağlantı oluştur",
+32070
+]
+],
+"rapor_cevap": [
+[
+"BUTTON",
+"EN",
+27440
+],
+[
+"H1",
+"Marka A",
+342
+],
+[
+"BUTTON",
+"Düzenle",
+508
+],
+[
+"BUTTON",
+"Ölçüm başlat (aramasız, ücretsiz)",
+658
+],
+[
+"BUTTON",
+"Canlı aramalı ölçüm (ChatGPT, ücretli)",
+818
+],
+[
+"BUTTON",
+"Rapor",
+1290
+],
+[
+"BUTTON",
+"Öneriler",
+1290
+],
+[
+"BUTTON",
+"Rakipler",
+1290
+],
+[
+"BUTTON",
+"Sorular",
+1290
+],
+[
+"BUTTON",
+"Ürünler",
+1290
+],
+[
+"BUTTON",
+"Ölçümler",
+1290
+],
+[
+"BUTTON",
+"Aramasız (Gemini)",
+1473
+],
+[
+"BUTTON",
+"Canlı aramalı (ChatGPT)",
+1473
+],
+[
+"BUTTON",
+"ChatGPT (OpenAI)",
+2185
+],
+[
+"BUTTON",
+"Claude (Anthropic)",
+2185
+],
+[
+"H2",
+"AI Görünürlük Skoru · ChatGPT (OpenAI)",
+2396
+],
+[
+"BUTTON",
+"Skor nasıl hesaplandı?",
+3072
+],
+[
+"BUTTON",
+"Özeti paylaş (WhatsApp, e-posta)",
+4680
+],
+[
+"BUTTON",
+"PDF olarak indir",
+4817
+],
+[
+"H2",
+"Zaman içinde",
+5107
+],
+[
+"BUTTON",
+"Önerilme",
+5081
+],
+[
+"BUTTON",
+"Anılma",
+5081
+],
+[
+"H2",
+"Rakiplerle karşılaştırma",
+6500
+],
+[
+"H2",
+"Motor karşılaştırması",
+7731
+],
+[
+"H3",
+"Öneri payı (sektördeki takip edilen markalar arasında)",
+8692
+],
+[
+"H3",
+"Motorların baktığı siteler",
+9841
+],
+[
+"H2",
+"Hangi koşulda görünüyorsunuz",
+11318
+],
+[
+"H3",
+"Etiketlere göre",
+12954
+],
+[
+"H2",
+"Yapay zekânın kaynak gösterdiği siteler",
+14299
+],
+[
+"H2",
+"Kendi site payı",
+15284
+],
+[
+"H2",
+"Yapay zekâdan gelen ziyaretçi",
+16255
+],
+[
+"BUTTON",
+"Kodu kopyala",
+16917
+],
+[
+"H2",
+"Yapay zekâ botları",
+17556
+],
+[
+"BUTTON",
+"Anahtarı kopyala",
+18308
+],
+[
+"BUTTON",
+"Kodu kopyala",
+20539
+],
+[
+"H2",
+"TruthGuard",
+20989
+],
+[
+"H3",
+"Kaynaksız sayılar ve eski bilgi",
+21344
+],
+[
+"H3",
+"Kaynakların türü",
+21610
+],
+[
+"H2",
+"Marka algısı",
+22484
+],
+[
+"BUTTON",
+"Alıntıyı göster",
+23593
+],
+[
+"BUTTON",
+"Alıntıyı göster",
+23915
+],
+[
+"BUTTON",
+"Alıntıyı göster",
+24237
+],
+[
+"H2",
+"Kaynaklar kimi destekliyor",
+24497
+],
+[
+"H2",
+"Kaynak fırsatları",
+27111
+],
+[
+"H2",
+"Soru bazında sonuç",
+28159
+],
+[
+"BUTTON",
+"Cevabı gizle",
+28553
+],
+[
+"BUTTON",
+"Cevabı göster",
+32243
+],
+[
+"BUTTON",
+"Cevabı göster",
+32777
+],
+[
+"P",
+"Kayıp nedeni: kanıtlar",
+33360
+],
+[
+"BUTTON",
+"Cevabı göster",
+35013
+],
+[
+"BUTTON",
+"Cevabı göster",
+35547
+],
+[
+"P",
+"Kayıp nedeni: kanıtlar",
+36131
+],
+[
+"BUTTON",
+"Cevabı göster",
+37783
+],
+[
+"H2",
+"Raporu paylaş",
+38082
+],
+[
+"BUTTON",
+"Bağlantı oluştur",
+38868
+]
+]
+}

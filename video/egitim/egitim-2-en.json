@@ -1,0 +1,68 @@
+{
+ "out": "e2en",
+ "series": "How to use · Tutorial 2",
+ "sample": "Sample data",
+ "cover": {
+  "badge": "Tutorial 2",
+  "title": "Create an account and add your brand",
+  "sub": "",
+  "dur": 2.01
+ },
+ "scenes": [
+  {
+   "step": "Step 1",
+   "cap": "Create account: with Google or email",
+   "imgs": [
+    "shots/en/b01_kayit.jpg",
+    "shots/en/b02_kayit_dolu.jpg"
+   ],
+   "top": 0,
+   "dur": 6.36
+  },
+  {
+   "step": "Step 2",
+   "cap": "Workspace: business or agency?",
+   "imgs": [
+    "shots/en/b03_calisma_alani.jpg",
+    "shots/en/b04_calisma_alani_dolu.jpg"
+   ],
+   "top": 0,
+   "dur": 7.02
+  },
+  {
+   "step": "Step 3",
+   "cap": "Type the brand name and other spellings",
+   "imgs": [
+    "shots/en/b05_marka.jpg",
+    "shots/en/b06_marka_dolu.jpg"
+   ],
+   "top": 0,
+   "dur": 5.65
+  },
+  {
+   "step": "Step 4",
+   "cap": "Website, sector, city → Add brand",
+   "imgs": [
+    "shots/en/b06_marka_dolu.jpg"
+   ],
+   "top": 700,
+   "dur": 3.59
+  },
+  {
+   "step": "Done",
+   "cap": "Your brand page is ready",
+   "imgs": [
+    "shots/en/b07_marka_sayfasi.jpg"
+   ],
+   "top": 0,
+   "dur": 5.21
+  }
+ ],
+ "end": {
+  "title": "Your brand is added",
+  "sub": "Now add the questions your customers ask, and your competitors.",
+  "next_label": "Next tutorial",
+  "next": "Add questions and competitors",
+  "dur": 5.34
+ }
+}

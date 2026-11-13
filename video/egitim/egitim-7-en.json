@@ -1,0 +1,56 @@
+{
+ "out": "e7en",
+ "series": "How to use · Tutorial 7",
+ "sample": "Sample data",
+ "cover": {
+  "badge": "Tutorial 7",
+  "title": "The sources AI reads",
+  "sub": "",
+  "dur": 4.89
+ },
+ "scenes": [
+  {
+   "step": "Sources",
+   "cap": "Sites the AI cited",
+   "imgs": [
+    "shots/en/r_rapor_tam.jpg"
+   ],
+   "top": 14229,
+   "dur": 8.1
+  },
+  {
+   "step": "Share",
+   "cap": "Yours, rivals', third parties'",
+   "imgs": [
+    "shots/en/r_rapor_tam.jpg"
+   ],
+   "top": 15155,
+   "dur": 2.96
+  },
+  {
+   "step": "Support",
+   "cap": "Who do sources support?",
+   "imgs": [
+    "shots/en/r_rapor_tam.jpg"
+   ],
+   "top": 24169,
+   "dur": 12.41
+  },
+  {
+   "step": "Opportunity",
+   "cap": "Sites to get featured on",
+   "imgs": [
+    "shots/en/r_rapor_tam.jpg"
+   ],
+   "top": 27548,
+   "dur": 7.93
+  }
+ ],
+ "end": {
+  "title": "Know your sources",
+  "sub": "Start with the opportunity sites.",
+  "next_label": "Next tutorial",
+  "next": "Improvement recommendations",
+  "dur": 6.04
+ }
+}

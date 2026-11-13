@@ -1,0 +1,56 @@
+{
+ "out": "e7tr",
+ "series": "Nasıl kullanılır · Eğitim 7",
+ "sample": "Örnek veri",
+ "cover": {
+  "badge": "Eğitim 7",
+  "title": "Yapay zekânın baktığı kaynaklar",
+  "sub": "",
+  "dur": 4.83
+ },
+ "scenes": [
+  {
+   "step": "Kaynaklar",
+   "cap": "Yapay zekânın gösterdiği siteler",
+   "imgs": [
+    "shots/tr/r_rapor_tam.jpg"
+   ],
+   "top": 14219,
+   "dur": 11.46
+  },
+  {
+   "step": "Pay",
+   "cap": "Sizin, rakibin, üçüncü taraf",
+   "imgs": [
+    "shots/tr/r_rapor_tam.jpg"
+   ],
+   "top": 15204,
+   "dur": 5.95
+  },
+  {
+   "step": "Destek",
+   "cap": "Kaynaklar kimi destekliyor?",
+   "imgs": [
+    "shots/tr/r_rapor_tam.jpg"
+   ],
+   "top": 24417,
+   "dur": 6.04
+  },
+  {
+   "step": "Fırsat",
+   "cap": "Yer almanız gereken siteler",
+   "imgs": [
+    "shots/tr/r_rapor_tam.jpg"
+   ],
+   "top": 27031,
+   "dur": 8.17
+  }
+ ],
+ "end": {
+  "title": "Kaynaklarınızı tanıyın",
+  "sub": "Önce fırsat sitelerinden başlayın.",
+  "next_label": "Sonraki eğitim",
+  "next": "İyileştirme önerileri",
+  "dur": 5.79
+ }
+}

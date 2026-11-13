@@ -1,0 +1,74 @@
+{
+ "out": "e5en",
+ "series": "How to use · Tutorial 5",
+ "sample": "Sample data",
+ "cover": {
+  "badge": "Tutorial 5",
+  "title": "Read the report",
+  "sub": "",
+  "dur": 1.11
+ },
+ "scenes": [
+  {
+   "step": "Score",
+   "cap": "AI visibility score",
+   "imgs": [
+    "shots/en/r_rapor_tam.jpg"
+   ],
+   "top": 2312,
+   "dur": 6.42
+  },
+  {
+   "step": "Summary",
+   "cap": "Recommended, mentioned, share",
+   "imgs": [
+    "shots/en/r_rapor_tam.jpg"
+   ],
+   "top": 3362,
+   "dur": 5.99
+  },
+  {
+   "step": "Warning",
+   "cap": "Small sample warning",
+   "imgs": [
+    "shots/en/r_rapor_tam.jpg"
+   ],
+   "top": 3962,
+   "dur": 5.25
+  },
+  {
+   "step": "Trend",
+   "cap": "Week by week",
+   "imgs": [
+    "shots/en/r_rapor_tam.jpg"
+   ],
+   "top": 4885,
+   "dur": 3.99
+  },
+  {
+   "step": "Competitors",
+   "cap": "Who gets recommended more?",
+   "imgs": [
+    "shots/en/r_rapor_tam.jpg"
+   ],
+   "top": 6337,
+   "dur": 4.28
+  },
+  {
+   "step": "Engines",
+   "cap": "Each AI side by side",
+   "imgs": [
+    "shots/en/r_rapor_tam.jpg"
+   ],
+   "top": 7842,
+   "dur": 4.27
+  }
+ ],
+ "end": {
+  "title": "You've read the report",
+  "sub": "Now let's look at the questions you lost.",
+  "next_label": "Next tutorial",
+  "next": "Why you lost",
+  "dur": 6.08
+ }
+}

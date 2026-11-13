@@ -1,0 +1,81 @@
+{
+ "out": "e3en",
+ "series": "How to use · Tutorial 3",
+ "sample": "Sample data",
+ "cover": {
+  "badge": "Tutorial 3",
+  "title": "Add questions and competitors",
+  "sub": "",
+  "dur": 1.97
+ },
+ "scenes": [
+  {
+   "step": "Step 1",
+   "cap": "Open the questions tab",
+   "imgs": [
+    "shots/en/b08_sorular.jpg"
+   ],
+   "top": 0,
+   "dur": 6.01
+  },
+  {
+   "step": "Suggest",
+   "cap": "Suggest questions: AI drafts",
+   "imgs": [
+    "shots/en/b08_sorular.jpg"
+   ],
+   "top": 820,
+   "dur": 4.63
+  },
+  {
+   "step": "Step 2",
+   "cap": "Add ready-made questions",
+   "imgs": [
+    "shots/en/b08_sorular_tam.jpg",
+    "shots/en/b09_sorular_eklendi_tam.jpg"
+   ],
+   "top": 2210,
+   "dur": 3.46,
+   "tops": [
+    2210,
+    520
+   ],
+   "hold_last": 2.2
+  },
+  {
+   "step": "Tip",
+   "cap": "Leave your brand name out of most",
+   "imgs": [
+    "shots/en/b09_sorular_eklendi_tam.jpg"
+   ],
+   "top": 1450,
+   "dur": 4.77
+  },
+  {
+   "step": "Step 3",
+   "cap": "Competitors tab: type a name",
+   "imgs": [
+    "shots/en/b10_rakipler.jpg",
+    "shots/en/b11_rakip_dolu.jpg"
+   ],
+   "top": 400,
+   "dur": 4.58
+  },
+  {
+   "step": "Result",
+   "cap": "See who's recommended instead of you",
+   "imgs": [
+    "shots/en/b12_rakipler_eklendi.jpg"
+   ],
+   "top": 0,
+   "dur": 2.62
+  }
+ ],
+ "end": {
+  "title": "You're set",
+  "sub": "Questions and competitors are done. Next: the first measurement.",
+  "next_label": "Next tutorial",
+  "next": "Run the first measurement",
+  "dur": 5.04
+ }
+}

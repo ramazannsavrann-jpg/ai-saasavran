@@ -1,0 +1,68 @@
+{
+ "out": "e2tr",
+ "series": "Nasıl kullanılır · Eğitim 2",
+ "sample": "Örnek veri",
+ "cover": {
+  "badge": "Eğitim 2",
+  "title": "Hesap açıp markanızı eklemek",
+  "sub": "",
+  "dur": 2.02
+ },
+ "scenes": [
+  {
+   "step": "Adım 1",
+   "cap": "Hesap oluştur: Google ile ya da e-postayla",
+   "imgs": [
+    "shots/tr/b01_kayit.jpg",
+    "shots/tr/b02_kayit_dolu.jpg"
+   ],
+   "top": 0,
+   "dur": 7.39
+  },
+  {
+   "step": "Adım 2",
+   "cap": "Çalışma alanı: işletme mi, ajans mı?",
+   "imgs": [
+    "shots/tr/b03_calisma_alani.jpg",
+    "shots/tr/b04_calisma_alani_dolu.jpg"
+   ],
+   "top": 0,
+   "dur": 7.79
+  },
+  {
+   "step": "Adım 3",
+   "cap": "Marka adını ve diğer yazılışlarını yazın",
+   "imgs": [
+    "shots/tr/b05_marka.jpg",
+    "shots/tr/b06_marka_dolu.jpg"
+   ],
+   "top": 0,
+   "dur": 6.25
+  },
+  {
+   "step": "Adım 4",
+   "cap": "Web sitesi, sektör, şehir → Markayı ekle",
+   "imgs": [
+    "shots/tr/b06_marka_dolu.jpg"
+   ],
+   "top": 700,
+   "dur": 4.52
+  },
+  {
+   "step": "Hazır",
+   "cap": "Marka sayfanız hazır",
+   "imgs": [
+    "shots/tr/b07_marka_sayfasi.jpg"
+   ],
+   "top": 0,
+   "dur": 4.91
+  }
+ ],
+ "end": {
+  "title": "Markanız eklendi",
+  "sub": "Şimdi müşterilerinizin soracağı soruları ve rakiplerinizi ekleyin.",
+  "next_label": "Sonraki eğitim",
+  "next": "Soru ve rakip eklemek",
+  "dur": 5.7
+ }
+}

@@ -1,0 +1,74 @@
+{
+ "out": "e4tr",
+ "series": "Nasıl kullanılır · Eğitim 4",
+ "sample": "Örnek veri",
+ "cover": {
+  "badge": "Eğitim 4",
+  "title": "İlk ölçümü başlatmak",
+  "sub": "",
+  "dur": 1.34
+ },
+ "scenes": [
+  {
+   "step": "Adım 1",
+   "cap": "İki ölçüm düğmesi",
+   "imgs": [
+    "shots/tr/r_rapor.jpg"
+   ],
+   "top": 250,
+   "dur": 2.91
+  },
+  {
+   "step": "Aramasız",
+   "cap": "Modelin bildiği",
+   "imgs": [
+    "shots/tr/r_rapor_aramasiz_tam.jpg"
+   ],
+   "top": 2224,
+   "dur": 4.48
+  },
+  {
+   "step": "Canlı arama",
+   "cap": "İnternette arayarak cevap",
+   "imgs": [
+    "shots/tr/r_rapor_tam.jpg"
+   ],
+   "top": 3366,
+   "dur": 6.87
+  },
+  {
+   "step": "Adım 2",
+   "cap": "Ölçümler sekmesinde izleyin",
+   "imgs": [
+    "shots/tr/r_olcumler_tam.jpg"
+   ],
+   "top": 1250,
+   "dur": 7.87
+  },
+  {
+   "step": "Sonuç",
+   "cap": "Rapor dolar, skor çıkar",
+   "imgs": [
+    "shots/tr/r_rapor_tam.jpg"
+   ],
+   "top": 2316,
+   "dur": 3.06
+  },
+  {
+   "step": "Her hafta",
+   "cap": "Değişimi zaman içinde görün",
+   "imgs": [
+    "shots/tr/r_rapor_tam.jpg"
+   ],
+   "top": 5027,
+   "dur": 4.93
+  }
+ ],
+ "end": {
+  "title": "Ölçüm başladı",
+  "sub": "Her hafta otomatik olarak tekrar ölçülür.",
+  "next_label": "Sonraki eğitim",
+  "next": "Raporu okumak",
+  "dur": 5.03
+ }
+}

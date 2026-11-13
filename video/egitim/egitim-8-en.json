@@ -1,0 +1,65 @@
+{
+ "out": "e8en",
+ "series": "How to use · Tutorial 8",
+ "sample": "Sample data",
+ "cover": {
+  "badge": "Tutorial 8",
+  "title": "Improvement recommendations",
+  "sub": "",
+  "dur": 2.06
+ },
+ "scenes": [
+  {
+   "step": "Guide",
+   "cap": "Steps by importance",
+   "imgs": [
+    "shots/en/r_oneriler_tam.jpg"
+   ],
+   "top": 1663,
+   "dur": 6.35
+  },
+  {
+   "step": "Evidence",
+   "cap": "Evidence, what to do, success check",
+   "imgs": [
+    "shots/en/r_oneriler_tam.jpg"
+   ],
+   "top": 2163,
+   "dur": 4.09
+  },
+  {
+   "step": "Campaign",
+   "cap": "Split into tasks, track them",
+   "imgs": [
+    "shots/en/r_oneriler_tam.jpg"
+   ],
+   "top": 3013,
+   "dur": 4.36
+  },
+  {
+   "step": "Tracking",
+   "cap": "Log what you did, with a date",
+   "imgs": [
+    "shots/en/r_oneriler_tam.jpg"
+   ],
+   "top": 5481,
+   "dur": 6.89
+  },
+  {
+   "step": "Website",
+   "cap": "Website check",
+   "imgs": [
+    "shots/en/r_oneriler_tam.jpg"
+   ],
+   "top": 8058,
+   "dur": 6.85
+  }
+ ],
+ "end": {
+  "title": "Act, then measure",
+  "sub": "See the effect in every measurement.",
+  "next_label": "Next tutorial",
+  "next": "Brand perception and accuracy",
+  "dur": 6.51
+ }
+}

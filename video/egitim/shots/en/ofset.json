@@ -1,0 +1,1548 @@
+{
+"rapor": [
+[
+"BUTTON",
+"TR",
+0
+],
+[
+"H1",
+"Brand A",
+342
+],
+[
+"BUTTON",
+"Edit",
+508
+],
+[
+"BUTTON",
+"Start measurement (no search, free)",
+658
+],
+[
+"BUTTON",
+"Live-search measurement (ChatGPT, paid)",
+818
+],
+[
+"BUTTON",
+"Report",
+1350
+],
+[
+"BUTTON",
+"Recommendations",
+1350
+],
+[
+"BUTTON",
+"Competitors",
+1350
+],
+[
+"BUTTON",
+"Questions",
+1350
+],
+[
+"BUTTON",
+"Products",
+1350
+],
+[
+"BUTTON",
+"Runs",
+1350
+],
+[
+"BUTTON",
+"No search (Gemini)",
+1533
+],
+[
+"BUTTON",
+"Live search (ChatGPT)",
+1533
+],
+[
+"BUTTON",
+"ChatGPT (OpenAI)",
+2181
+],
+[
+"BUTTON",
+"Claude (Anthropic)",
+2181
+],
+[
+"H2",
+"AI Visibility Score · ChatGPT (OpenAI)",
+2392
+],
+[
+"BUTTON",
+"How is the score calculated?",
+3068
+],
+[
+"BUTTON",
+"Share summary",
+4676
+],
+[
+"BUTTON",
+"Download PDF",
+4676
+],
+[
+"H2",
+"Over time",
+4965
+],
+[
+"BUTTON",
+"Recommended",
+4939
+],
+[
+"BUTTON",
+"Mentioned",
+4939
+],
+[
+"H2",
+"Competitor comparison",
+6417
+],
+[
+"H2",
+"Engine comparison",
+7922
+],
+[
+"H3",
+"Share of recommendations (among tracked brands)",
+8952
+],
+[
+"H3",
+"Sites each engine read",
+10102
+],
+[
+"H2",
+"Where you show up, and where you don't",
+11509
+],
+[
+"H3",
+"By tag",
+13149
+],
+[
+"H2",
+"Sites the AI cited",
+14309
+],
+[
+"H2",
+"Owned-source share",
+15235
+],
+[
+"H2",
+"Visitors from AI assistants",
+16206
+],
+[
+"BUTTON",
+"Copy code",
+16868
+],
+[
+"H2",
+"AI crawlers",
+17381
+],
+[
+"BUTTON",
+"Copy key",
+18064
+],
+[
+"BUTTON",
+"Copy code",
+20231
+],
+[
+"H2",
+"TruthGuard",
+20681
+],
+[
+"H3",
+"Unsourced numbers and outdated info",
+21037
+],
+[
+"H3",
+"Source types",
+21362
+],
+[
+"H2",
+"Brand perception",
+22236
+],
+[
+"BUTTON",
+"Show quote",
+23346
+],
+[
+"BUTTON",
+"Show quote",
+23667
+],
+[
+"BUTTON",
+"Show quote",
+23989
+],
+[
+"H2",
+"Who the sources support",
+24249
+],
+[
+"H2",
+"Other names in the answers",
+26932
+],
+[
+"BUTTON",
+"London 17",
+27356
+],
+[
+"H2",
+"Source opportunities",
+27628
+],
+[
+"H2",
+"Results by question",
+28675
+],
+[
+"BUTTON",
+"Show answer",
+29131
+],
+[
+"BUTTON",
+"Show answer",
+29727
+],
+[
+"BUTTON",
+"Show answer",
+30323
+],
+[
+"P",
+"Why you lost: the evidence",
+30907
+],
+[
+"BUTTON",
+"Show answer",
+32501
+],
+[
+"BUTTON",
+"Show answer",
+33097
+],
+[
+"P",
+"Why you lost: the evidence",
+33680
+],
+[
+"BUTTON",
+"Show answer",
+35275
+],
+[
+"H2",
+"Share the report",
+35574
+],
+[
+"BUTTON",
+"Create link",
+36359
+]
+],
+"rapor_aramasiz": [
+[
+"BUTTON",
+"TR",
+0
+],
+[
+"H1",
+"Brand A",
+342
+],
+[
+"BUTTON",
+"Edit",
+508
+],
+[
+"BUTTON",
+"Start measurement (no search, free)",
+658
+],
+[
+"BUTTON",
+"Live-search measurement (ChatGPT, paid)",
+818
+],
+[
+"BUTTON",
+"Report",
+1350
+],
+[
+"BUTTON",
+"Recommendations",
+1350
+],
+[
+"BUTTON",
+"Competitors",
+1350
+],
+[
+"BUTTON",
+"Questions",
+1350
+],
+[
+"BUTTON",
+"Products",
+1350
+],
+[
+"BUTTON",
+"Runs",
+1350
+],
+[
+"BUTTON",
+"No search (Gemini)",
+1533
+],
+[
+"BUTTON",
+"Live search (ChatGPT)",
+1533
+],
+[
+"H2",
+"AI Visibility Score",
+2364
+],
+[
+"BUTTON",
+"How is the score calculated?",
+2987
+],
+[
+"BUTTON",
+"Share summary",
+4526
+],
+[
+"BUTTON",
+"Download PDF",
+4526
+],
+[
+"H2",
+"Over time",
+4815
+],
+[
+"BUTTON",
+"Recommended",
+4789
+],
+[
+"BUTTON",
+"Mentioned",
+4789
+],
+[
+"H2",
+"Competitor comparison",
+6267
+],
+[
+"H2",
+"Where you show up, and where you don't",
+7772
+],
+[
+"H3",
+"By tag",
+9411
+],
+[
+"H2",
+"Visitors from AI assistants",
+10572
+],
+[
+"BUTTON",
+"Copy code",
+11233
+],
+[
+"H2",
+"AI crawlers",
+11746
+],
+[
+"BUTTON",
+"Copy key",
+12429
+],
+[
+"BUTTON",
+"Copy code",
+14597
+],
+[
+"H2",
+"TruthGuard",
+15047
+],
+[
+"H3",
+"Unsourced numbers and outdated info",
+15402
+],
+[
+"H2",
+"Owned-source share",
+15877
+],
+[
+"H2",
+"Other names in the answers",
+16313
+],
+[
+"BUTTON",
+"London 18",
+16738
+],
+[
+"H2",
+"Results by question",
+17009
+],
+[
+"BUTTON",
+"Show answer",
+17465
+],
+[
+"BUTTON",
+"Show answer",
+18060
+],
+[
+"BUTTON",
+"Show answer",
+18656
+],
+[
+"BUTTON",
+"Show answer",
+19376
+],
+[
+"BUTTON",
+"Show answer",
+19972
+],
+[
+"BUTTON",
+"Show answer",
+20691
+],
+[
+"H2",
+"What this report doesn't show",
+20990
+],
+[
+"H2",
+"Share the report",
+21735
+],
+[
+"BUTTON",
+"Create link",
+22520
+]
+],
+"oneriler": [
+[
+"BUTTON",
+"TR",
+0
+],
+[
+"H1",
+"Brand A",
+342
+],
+[
+"BUTTON",
+"Edit",
+508
+],
+[
+"BUTTON",
+"Start measurement (no search, free)",
+658
+],
+[
+"BUTTON",
+"Live-search measurement (ChatGPT, paid)",
+818
+],
+[
+"BUTTON",
+"Report",
+1350
+],
+[
+"BUTTON",
+"Recommendations",
+1350
+],
+[
+"BUTTON",
+"Competitors",
+1350
+],
+[
+"BUTTON",
+"Questions",
+1350
+],
+[
+"BUTTON",
+"Products",
+1350
+],
+[
+"BUTTON",
+"Runs",
+1350
+],
+[
+"BUTTON",
+"No search (Gemini)",
+1533
+],
+[
+"BUTTON",
+"Live search (ChatGPT)",
+1533
+],
+[
+"H2",
+"Improvement guide",
+1743
+],
+[
+"BUTTON",
+"Start campaign (5 tasks)",
+3800
+],
+[
+"BUTTON",
+"Start campaign (2 tasks)",
+4592
+],
+[
+"H2",
+"What I did, and what happened",
+5561
+],
+[
+"BUTTON",
+"Save",
+6878
+],
+[
+"BUTTON",
+"Delete",
+7851
+],
+[
+"H2",
+"Website check",
+8138
+],
+[
+"BUTTON",
+"Check site",
+8112
+]
+],
+"rakipler": [
+[
+"BUTTON",
+"TR",
+0
+],
+[
+"H1",
+"Brand A",
+342
+],
+[
+"BUTTON",
+"Edit",
+508
+],
+[
+"BUTTON",
+"Start measurement (no search, free)",
+658
+],
+[
+"BUTTON",
+"Live-search measurement (ChatGPT, paid)",
+818
+],
+[
+"BUTTON",
+"Report",
+1350
+],
+[
+"BUTTON",
+"Recommendations",
+1350
+],
+[
+"BUTTON",
+"Competitors",
+1350
+],
+[
+"BUTTON",
+"Questions",
+1350
+],
+[
+"BUTTON",
+"Products",
+1350
+],
+[
+"BUTTON",
+"Runs",
+1350
+],
+[
+"H2",
+"Competitors",
+1588
+],
+[
+"BUTTON",
+"Edit",
+1715
+],
+[
+"BUTTON",
+"Sil",
+1715
+],
+[
+"BUTTON",
+"Edit",
+1900
+],
+[
+"BUTTON",
+"Sil",
+1900
+],
+[
+"BUTTON",
+"Edit",
+2077
+],
+[
+"BUTTON",
+"Sil",
+2077
+],
+[
+"H2",
+"Add competitor",
+2365
+],
+[
+"BUTTON",
+"Add competitor",
+3299
+]
+],
+"olcumler": [
+[
+"BUTTON",
+"TR",
+0
+],
+[
+"H1",
+"Brand A",
+342
+],
+[
+"BUTTON",
+"Edit",
+508
+],
+[
+"BUTTON",
+"Start measurement (no search, free)",
+658
+],
+[
+"BUTTON",
+"Live-search measurement (ChatGPT, paid)",
+818
+],
+[
+"BUTTON",
+"Report",
+1350
+],
+[
+"BUTTON",
+"Recommendations",
+1350
+],
+[
+"BUTTON",
+"Competitors",
+1350
+],
+[
+"BUTTON",
+"Questions",
+1350
+],
+[
+"BUTTON",
+"Products",
+1350
+],
+[
+"BUTTON",
+"Runs",
+1350
+]
+],
+"sorular": [
+[
+"BUTTON",
+"TR",
+0
+],
+[
+"H1",
+"Brand A",
+342
+],
+[
+"BUTTON",
+"Edit",
+508
+],
+[
+"BUTTON",
+"Start measurement (no search, free)",
+658
+],
+[
+"BUTTON",
+"Live-search measurement (ChatGPT, paid)",
+818
+],
+[
+"BUTTON",
+"Report",
+1350
+],
+[
+"BUTTON",
+"Recommendations",
+1350
+],
+[
+"BUTTON",
+"Competitors",
+1350
+],
+[
+"BUTTON",
+"Questions",
+1350
+],
+[
+"BUTTON",
+"Products",
+1350
+],
+[
+"BUTTON",
+"Runs",
+1350
+],
+[
+"H2",
+"Questions",
+1588
+],
+[
+"BUTTON",
+"Edit",
+1990
+],
+[
+"BUTTON",
+"Deactivate",
+1990
+],
+[
+"BUTTON",
+"Sil",
+1990
+],
+[
+"BUTTON",
+"Edit",
+2312
+],
+[
+"BUTTON",
+"Deactivate",
+2312
+],
+[
+"BUTTON",
+"Sil",
+2312
+],
+[
+"BUTTON",
+"Edit",
+2664
+],
+[
+"BUTTON",
+"Deactivate",
+2664
+],
+[
+"BUTTON",
+"Sil",
+2664
+],
+[
+"BUTTON",
+"Edit",
+3079
+],
+[
+"BUTTON",
+"Deactivate",
+3079
+],
+[
+"BUTTON",
+"Sil",
+3079
+],
+[
+"BUTTON",
+"Edit",
+3500
+],
+[
+"BUTTON",
+"Deactivate",
+3500
+],
+[
+"BUTTON",
+"Sil",
+3500
+],
+[
+"BUTTON",
+"Edit",
+3886
+],
+[
+"BUTTON",
+"Deactivate",
+3886
+],
+[
+"BUTTON",
+"Sil",
+3886
+],
+[
+"H2",
+"Suggest questions with AI",
+4486
+],
+[
+"BUTTON",
+"Suggest questions",
+4955
+],
+[
+"H2",
+"Suggested questions",
+5237
+],
+[
+"BUTTON",
+"+ Add",
+5874
+],
+[
+"BUTTON",
+"+ Add",
+6128
+],
+[
+"BUTTON",
+"+ Add",
+6382
+],
+[
+"BUTTON",
+"+ Add",
+6602
+],
+[
+"BUTTON",
+"+ Add",
+6821
+],
+[
+"BUTTON",
+"+ Add",
+7109
+],
+[
+"BUTTON",
+"+ Add",
+7398
+],
+[
+"H2",
+"Kendi sorunuzu ekleyin",
+7723
+],
+[
+"BUTTON",
+"Soruyu ekle",
+8714
+]
+],
+"rapor_claude": [
+[
+"BUTTON",
+"TR",
+1066
+],
+[
+"H1",
+"Brand A",
+342
+],
+[
+"BUTTON",
+"Edit",
+508
+],
+[
+"BUTTON",
+"Start measurement (no search, free)",
+658
+],
+[
+"BUTTON",
+"Live-search measurement (ChatGPT, paid)",
+818
+],
+[
+"BUTTON",
+"Report",
+1350
+],
+[
+"BUTTON",
+"Recommendations",
+1350
+],
+[
+"BUTTON",
+"Competitors",
+1350
+],
+[
+"BUTTON",
+"Questions",
+1350
+],
+[
+"BUTTON",
+"Products",
+1350
+],
+[
+"BUTTON",
+"Runs",
+1350
+],
+[
+"BUTTON",
+"No search (Gemini)",
+1533
+],
+[
+"BUTTON",
+"Live search (ChatGPT)",
+1533
+],
+[
+"BUTTON",
+"ChatGPT (OpenAI)",
+2181
+],
+[
+"BUTTON",
+"Claude (Anthropic)",
+2181
+],
+[
+"H2",
+"AI Visibility Score · Claude (Anthropic)",
+2392
+],
+[
+"BUTTON",
+"How is the score calculated?",
+3068
+],
+[
+"BUTTON",
+"Share summary",
+4676
+],
+[
+"BUTTON",
+"Download PDF",
+4676
+],
+[
+"H2",
+"Over time",
+4965
+],
+[
+"BUTTON",
+"Recommended",
+4939
+],
+[
+"BUTTON",
+"Mentioned",
+4939
+],
+[
+"H2",
+"Competitor comparison",
+6417
+],
+[
+"H2",
+"Engine comparison",
+7922
+],
+[
+"H3",
+"Share of recommendations (among tracked brands)",
+8952
+],
+[
+"H3",
+"Sites each engine read",
+10102
+],
+[
+"H2",
+"Where you show up, and where you don't",
+11509
+],
+[
+"H3",
+"By tag",
+13149
+],
+[
+"H2",
+"Sites the AI cited",
+14309
+],
+[
+"H2",
+"Owned-source share",
+15235
+],
+[
+"H2",
+"Visitors from AI assistants",
+16206
+],
+[
+"BUTTON",
+"Copy code",
+16868
+],
+[
+"H2",
+"AI crawlers",
+17381
+],
+[
+"BUTTON",
+"Copy key",
+18064
+],
+[
+"BUTTON",
+"Copy code",
+20231
+],
+[
+"H2",
+"TruthGuard",
+20681
+],
+[
+"H3",
+"Unsourced numbers and outdated info",
+21037
+],
+[
+"H3",
+"Source types",
+21362
+],
+[
+"H2",
+"Brand perception",
+22152
+],
+[
+"BUTTON",
+"Show quote",
+23262
+],
+[
+"BUTTON",
+"Show quote",
+23583
+],
+[
+"BUTTON",
+"Show quote",
+23905
+],
+[
+"H2",
+"Who the sources support",
+24165
+],
+[
+"H2",
+"Other names in the answers",
+26848
+],
+[
+"BUTTON",
+"London 16",
+27272
+],
+[
+"H2",
+"Source opportunities",
+27543
+],
+[
+"H2",
+"Results by question",
+28438
+],
+[
+"BUTTON",
+"Show answer",
+28894
+],
+[
+"BUTTON",
+"Show answer",
+29490
+],
+[
+"BUTTON",
+"Show answer",
+30086
+],
+[
+"BUTTON",
+"Show answer",
+30682
+],
+[
+"BUTTON",
+"Show answer",
+31277
+],
+[
+"BUTTON",
+"Show answer",
+31873
+],
+[
+"H2",
+"Share the report",
+32172
+],
+[
+"BUTTON",
+"Create link",
+32958
+]
+],
+"rapor_cevap": [
+[
+"BUTTON",
+"TR",
+28019
+],
+[
+"H1",
+"Brand A",
+342
+],
+[
+"BUTTON",
+"Edit",
+508
+],
+[
+"BUTTON",
+"Start measurement (no search, free)",
+658
+],
+[
+"BUTTON",
+"Live-search measurement (ChatGPT, paid)",
+818
+],
+[
+"BUTTON",
+"Report",
+1350
+],
+[
+"BUTTON",
+"Recommendations",
+1350
+],
+[
+"BUTTON",
+"Competitors",
+1350
+],
+[
+"BUTTON",
+"Questions",
+1350
+],
+[
+"BUTTON",
+"Products",
+1350
+],
+[
+"BUTTON",
+"Runs",
+1350
+],
+[
+"BUTTON",
+"No search (Gemini)",
+1533
+],
+[
+"BUTTON",
+"Live search (ChatGPT)",
+1533
+],
+[
+"BUTTON",
+"ChatGPT (OpenAI)",
+2181
+],
+[
+"BUTTON",
+"Claude (Anthropic)",
+2181
+],
+[
+"H2",
+"AI Visibility Score · ChatGPT (OpenAI)",
+2392
+],
+[
+"BUTTON",
+"How is the score calculated?",
+3068
+],
+[
+"BUTTON",
+"Share summary",
+4676
+],
+[
+"BUTTON",
+"Download PDF",
+4676
+],
+[
+"H2",
+"Over time",
+4965
+],
+[
+"BUTTON",
+"Recommended",
+4939
+],
+[
+"BUTTON",
+"Mentioned",
+4939
+],
+[
+"H2",
+"Competitor comparison",
+6417
+],
+[
+"H2",
+"Engine comparison",
+7922
+],
+[
+"H3",
+"Share of recommendations (among tracked brands)",
+8952
+],
+[
+"H3",
+"Sites each engine read",
+10102
+],
+[
+"H2",
+"Where you show up, and where you don't",
+11509
+],
+[
+"H3",
+"By tag",
+13149
+],
+[
+"H2",
+"Sites the AI cited",
+14309
+],
+[
+"H2",
+"Owned-source share",
+15235
+],
+[
+"H2",
+"Visitors from AI assistants",
+16206
+],
+[
+"BUTTON",
+"Copy code",
+16868
+],
+[
+"H2",
+"AI crawlers",
+17381
+],
+[
+"BUTTON",
+"Copy key",
+18064
+],
+[
+"BUTTON",
+"Copy code",
+20231
+],
+[
+"H2",
+"TruthGuard",
+20681
+],
+[
+"H3",
+"Unsourced numbers and outdated info",
+21037
+],
+[
+"H3",
+"Source types",
+21362
+],
+[
+"H2",
+"Brand perception",
+22236
+],
+[
+"BUTTON",
+"Show quote",
+23346
+],
+[
+"BUTTON",
+"Show quote",
+23667
+],
+[
+"BUTTON",
+"Show quote",
+23989
+],
+[
+"H2",
+"Who the sources support",
+24249
+],
+[
+"H2",
+"Other names in the answers",
+26932
+],
+[
+"BUTTON",
+"London 17",
+27356
+],
+[
+"H2",
+"Source opportunities",
+27628
+],
+[
+"H2",
+"Results by question",
+28675
+],
+[
+"BUTTON",
+"Hide answer",
+29131
+],
+[
+"BUTTON",
+"Show answer",
+33066
+],
+[
+"BUTTON",
+"Show answer",
+33662
+],
+[
+"P",
+"Why you lost: the evidence",
+34246
+],
+[
+"BUTTON",
+"Show answer",
+35840
+],
+[
+"BUTTON",
+"Show answer",
+36436
+],
+[
+"P",
+"Why you lost: the evidence",
+37020
+],
+[
+"BUTTON",
+"Show answer",
+38614
+],
+[
+"H2",
+"Share the report",
+38913
+],
+[
+"BUTTON",
+"Create link",
+39699
+]
+]
+}

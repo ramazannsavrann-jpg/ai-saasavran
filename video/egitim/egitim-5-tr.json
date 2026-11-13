@@ -1,0 +1,74 @@
+{
+ "out": "e5tr",
+ "series": "Nasıl kullanılır · Eğitim 5",
+ "sample": "Örnek veri",
+ "cover": {
+  "badge": "Eğitim 5",
+  "title": "Raporu okumak",
+  "sub": "",
+  "dur": 1.52
+ },
+ "scenes": [
+  {
+   "step": "Skor",
+   "cap": "Yapay zekâ görünürlük skoru",
+   "imgs": [
+    "shots/tr/r_rapor_tam.jpg"
+   ],
+   "top": 2316,
+   "dur": 6.03
+  },
+  {
+   "step": "Özet",
+   "cap": "Önerilme, anılma, pay",
+   "imgs": [
+    "shots/tr/r_rapor_tam.jpg"
+   ],
+   "top": 3366,
+   "dur": 6.84
+  },
+  {
+   "step": "Uyarı",
+   "cap": "Örneklem küçükse uyarır",
+   "imgs": [
+    "shots/tr/r_rapor_tam.jpg"
+   ],
+   "top": 3966,
+   "dur": 5.4
+  },
+  {
+   "step": "Zaman",
+   "cap": "Haftadan haftaya değişim",
+   "imgs": [
+    "shots/tr/r_rapor_tam.jpg"
+   ],
+   "top": 5027,
+   "dur": 4.97
+  },
+  {
+   "step": "Rakipler",
+   "cap": "Kim daha çok öneriliyor?",
+   "imgs": [
+    "shots/tr/r_rapor_tam.jpg"
+   ],
+   "top": 6420,
+   "dur": 4.83
+  },
+  {
+   "step": "Motorlar",
+   "cap": "Her yapay zekâ yan yana",
+   "imgs": [
+    "shots/tr/r_rapor_tam.jpg"
+   ],
+   "top": 7651,
+   "dur": 5.08
+  }
+ ],
+ "end": {
+  "title": "Raporunuzu okudunuz",
+  "sub": "Şimdi kaybettiğiniz sorulara bakalım.",
+  "next_label": "Sonraki eğitim",
+  "next": "Kayıp nedenleri",
+  "dur": 6.53
+ }
+}
