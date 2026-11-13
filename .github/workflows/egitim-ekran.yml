@@ -1,0 +1,34 @@
+name: Eğitim ekranları
+# Eğitim videoları için canlı sitede geçici hesapla ekran görüntüsü alır, sonra hesabı siler. Yapay zekâ çağrısı yok.
+on:
+  push:
+    branches: [egitim-ekran]
+    paths: [".github/workflows/egitim-ekran.yml", "e2e/egitim-ekran.e2e.ts"]
+  workflow_dispatch:
+jobs:
+  shots:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        lang: [tr, en]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: npm }
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - name: Ekranları çek
+        env:
+          SYNTH_URL: https://aisaasavran.com
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          EGITIM_LANG: ${{ matrix.lang }}
+        run: npx playwright test e2e/egitim-ekran.e2e.ts
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: egitim-ekran-${{ matrix.lang }}
+          path: egitim-ekran/
+          retention-days: 3
