@@ -51,7 +51,7 @@ def base():
     return im, d
 
 def footer_note(d, a=1.0):
-    text_block(d, CFG["names"], font("SemiBold", 30), H - 160, INK, a)
+    text_block(d, CFG["names"], font("SemiBold", 28), H - 200, INK, a, gap=1.25)
     text_block(d, CFG["footer"], font("Medium", 28), H - 110, MUTED, a)
 
 
@@ -151,12 +151,37 @@ def s8(t, dur):
     s = T["free"]; text_block(d, s, font("SemiBold", 46), by + 180, ACC, a3, x=(W - d.textlength(s, font=font("SemiBold", 46))) / 2)
     text_block(d, T["disc"], font("Medium", 30), H - 420, MUTED, a3)
     footer_note(d, a3); return im
-FN = {"s1": s1, "s2": s2, "s3": s3, "s4": s4, "s5": s5, "s6": s6, "s7": s7, "s8": s8}
-SCENES = [(k, FN[k], CFG["dur"][k]) for k in FN]
+
+def s_subs(t, dur):
+    im, d = base(); tag(d, t, T["tag_subs"]); y = title(d, t, T["subs"], T["subs_sub"]) + 100; n = CFG["n2"]
+    rtext(d, W - 80, y - 54, T["col_ai"], font("Bold", 34), ACC); d.text((80, y - 54), T["col_subs"], font=font("Bold", 34), fill=MUTED)
+    for i, (name, subs, k) in enumerate(CFG["subs_rows"]):
+        p = ease((t - 0.5 - i * 0.25) / 0.9); hl = name in CFG.get("subs_hl", [])
+        d.text((80, y), name, font=font("Bold", 50), fill=GOLD if hl else INK)
+        d.text((360, y + 6), subs, font=font("Medium", 40), fill=MUTED)
+        rtext(d, W - 80, y, f"{round(k * p)}/{n}", font("Bold", 50), RED if k == 0 else INK)
+        bar(d, 80, y + 72, W - 80, k / n * p, GOLD if hl else ACC, 34); y += 160
+    text_block(d, T["subs_note"], font("SemiBold", 40), y + 20, ACC, ease((t - 2.2) / 0.6))
+    footer_note(d); return im
+def s_boxes(t, dur):
+    im, d = base(); tag(d, t, T["tag_box"]); y = title(d, t, T["box"]) + 50
+    for i, b in enumerate(CFG["boxes"]):
+        a = ease((t - 0.4 - i * 1.0) / 0.5); h = 110 + 66 * len(b["lines"])
+        d.rounded_rectangle([80, y, W - 80, y + h], radius=28, fill=mix((30, 48, 43), a))
+        d.text((112, y + 26), b["title"], font=font("Medium", 36), fill=mix(MUTED, a)); yy = y + 92
+        for txt, kind in b["lines"]:
+            col = {"good": ACC, "bad": RED, "gold": GOLD}.get(kind, INK)
+            d.text((112, yy), txt, font=font("Bold", 42), fill=mix(col, a)); yy += 66
+        y += h + 30
+    footer_note(d); return im
+
+FN = {"s1": s1, "s2": s2, "s3": s3, "s4": s4, "s5": s5, "s6": s6, "s7": s7, "s8": s8, "subs": s_subs, "boxes": s_boxes}
+ORDER = CFG.get("order", ["s1", "s2", "s3", "s4", "s5", "s6", "s7", "s8"])
+SCENES = [(f"p{i+1}", FN[k], CFG["dur"][f"p{i+1}"] if "order" in CFG else CFG["dur"][k]) for i, k in enumerate(ORDER)]
 def render(name, fn, dur):
     tmp = f"{name}.tmp.mp4"
     p = subprocess.Popen(["ffmpeg", "-y", "-v", "error", "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{W}x{H}", "-r", str(FPS), "-i", "-",
-                          "-vf", (f"fade=t=out:st={dur - 0.25}:d=0.25" if name == "s1" else f"fade=t=in:st=0:d=0.25,fade=t=out:st={dur - 0.25}:d=0.25"),
+                          "-vf", (f"fade=t=out:st={dur - 0.25}:d=0.25" if name in ("s1", "p1") else f"fade=t=in:st=0:d=0.25,fade=t=out:st={dur - 0.25}:d=0.25"),
                           "-c:v", "libx264", "-preset", "veryfast", "-crf", "20", "-pix_fmt", "yuv420p", tmp], stdin=subprocess.PIPE)
     for i in range(int(round(dur * FPS))):
         p.stdin.write(fn(i / FPS, dur).tobytes())
