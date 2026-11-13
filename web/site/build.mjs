@@ -8,6 +8,7 @@ import { LEGAL } from "./legal.mjs";
 import { demoHtml } from "./demo.mjs";
 import { checkHtml } from "./check.mjs";
 import { GUIDES_EN, HOME_FAQ_EN } from "./content-en.mjs";
+import { POSTS } from "./blog.mjs";
 
 const DIST = "dist";
 if (!existsSync(join(DIST, "index.html"))) throw new Error("Önce vite build çalışmalı");
@@ -32,7 +33,7 @@ const ld = (o) => `<script type="application/ld+json">${JSON.stringify(o).replac
 const faqLd = (faq) => ({ "@context": "https://schema.org", "@type": "FAQPage", mainEntity: faq.map(([q, a]) => ({ "@type": "Question", name: q, acceptedAnswer: { "@type": "Answer", text: a } })) });
 const faqHtml = (faq, en = false) => faq.length ? `<section class="faq"><h2>${en ? "FAQ" : "Sık sorulanlar"}</h2>${faq.map(([q, a]) => `<details><summary>${esc(q)}</summary><p>${esc(a)}</p></details>`).join("")}</section>` : "";
 
-function page({ path, title, description, body, schema = [], type = "website", lang = "en", alt = null }) {
+function page({ path, title, description, body, schema = [], type = "website", lang = "en", alt = null, image = null }) {
   const url = SITE.url + path;
   const en = lang === "en";
   const enPath = en ? path : alt, trPath = en ? alt : path;
@@ -49,7 +50,7 @@ ${alternates}
 <meta property="og:type" content="${type}">
 <meta property="og:title" content="${esc(title)}">
 <meta property="og:description" content="${esc(description)}">
-<meta property="og:url" content="${url}">
+<meta property="og:url" content="${url}">${image ? `\n<meta property="og:image" content="${SITE.url}${image}">\n<meta name="twitter:card" content="summary_large_image">` : ""}
 <meta property="og:locale" content="${en ? "en_US" : "tr_TR"}">
 <meta name="theme-color" content="#0F6E5C">
 <link rel="icon" href="/icon.svg" type="image/svg+xml">
@@ -60,16 +61,16 @@ ${schema.map(ld).join("\n")}
 <body>
 <header class="top">
   <a class="mark" href="${en ? "/" : "/tr/"}" aria-label="AI SaaSavran"><img src="/icon.svg" alt="" width="28" height="28"><span>AI <b>SaaSavran</b></span></a>
-  <nav aria-label="${en ? "Main menu" : "Ana menü"}">${en ? `<a href="/#pricing">Pricing</a><a href="/guides/">Guides</a>` : `<a href="/tr/#fiyatlar">Fiyatlar</a><a href="/rehber/">Rehberler</a><a href="/durum">Ürün durumu</a>`}<a class="lang" href="${alt ?? (en ? "/tr/" : "/")}" hreflang="${en ? "tr" : "en"}" lang="${en ? "tr" : "en"}">${en ? "Türkçe" : "English"}</a><a class="cta-sm" data-cta href="/giris">${en ? "Sign in" : "Giriş yap"}</a></nav>
+  <nav aria-label="${en ? "Main menu" : "Ana menü"}">${en ? `<a href="/#pricing">Pricing</a><a href="/guides/">Guides</a><a href="/blog/">Blog</a>` : `<a href="/tr/#fiyatlar">Fiyatlar</a><a href="/rehber/">Rehberler</a><a href="/tr/blog/">Blog</a><a href="/durum">Ürün durumu</a>`}<a class="lang" href="${alt ?? (en ? "/tr/" : "/")}" hreflang="${en ? "tr" : "en"}" lang="${en ? "tr" : "en"}">${en ? "Türkçe" : "English"}</a><a class="cta-sm" data-cta href="/giris">${en ? "Sign in" : "Giriş yap"}</a></nav>
 </header>
 <main>
 ${body}
 </main>
 <footer class="foot">
   ${en ? `<p><b>AI SaaSavran</b> measures whether ChatGPT and Gemini recommend your business. Early access.</p>
-  <p><a href="/pricing/">Pricing</a> · <a href="/guides/">Guides</a> · <a href="/terms/">Terms</a> · <a href="/privacy/">Privacy</a> · <a href="/refund/">Refunds</a> · <a href="/tr/">Türkçe</a></p>
+  <p><a href="/pricing/">Pricing</a> · <a href="/guides/">Guides</a> · <a href="/blog/">Blog</a> · <a href="/terms/">Terms</a> · <a href="/privacy/">Privacy</a> · <a href="/refund/">Refunds</a> · <a href="/tr/">Türkçe</a></p>
   <p>Contact: <a href="mailto:${SITE.email}">${SITE.email}</a></p>` : `<p><b>AI SaaSavran</b>: markaların yapay zekâ asistanlarındaki görünürlüğünü ölçen araç. Erken erişim.</p>
-  <p><a href="/tr/#fiyatlar">Fiyatlar</a> · <a href="/rehber/">Rehberler</a> · <a href="/durum">Ürün durumu</a> · <a href="/kosullar">Kullanım koşulları</a> · <a href="/gizlilik">Gizlilik</a> · <a href="/iade/">İade</a> · <a href="/">English</a></p>
+  <p><a href="/tr/#fiyatlar">Fiyatlar</a> · <a href="/rehber/">Rehberler</a> · <a href="/tr/blog/">Blog</a> · <a href="/durum">Ürün durumu</a> · <a href="/kosullar">Kullanım koşulları</a> · <a href="/gizlilik">Gizlilik</a> · <a href="/iade/">İade</a> · <a href="/">English</a></p>
   <p>İletişim: <a href="mailto:${SITE.email}">${SITE.email}</a></p>`}
 </footer>
 <script src="/site/site.js" defer></script>
@@ -309,8 +310,52 @@ for (const g of GUIDES) {
   write(path, page({ lang: "tr", alt: enG ? `/guides/${enG.slug}/` : "/guides/", path, title: `${g.title} | AI SaaSavran`, description: g.description, body, schema: [article, faqLd(g.faq)], type: "article" }));
 }
 
+// 4b) Blog (haftada bir yazı; gerçek ölçüm verilerinden). Yayın tarihi gelmemiş yazı üretilmez.
+const today = new Date().toISOString().slice(0, 10);
+const posts = POSTS.filter((p) => p.date <= today).sort((a, b) => (a.date < b.date ? 1 : -1));
+const blogBase = (lang) => (lang === "en" ? "/blog/" : "/tr/blog/");
+const postPath = (p) => `${blogBase(p.lang)}${p.slug}/`;
+const twin = (p) => posts.find((x) => x.pair === p.pair && x.lang !== p.lang);
+const fmtDate = (d, en) => new Date(d).toLocaleDateString(en ? "en-US" : "tr-TR", { day: "numeric", month: "long", year: "numeric" });
+for (const lang of ["en", "tr"]) {
+  const en = lang === "en";
+  const mine = posts.filter((p) => p.lang === lang);
+  const list = `
+<section class="article">
+  <h1>${en ? "Blog: what AI actually recommends" : "Blog: yapay zekâ gerçekte neyi öneriyor?"}</h1>
+  <p class="lede">${en ? "Every week we ask ChatGPT, Claude and Gemini the questions real customers ask, and write up the most interesting findings. Real measurements, small samples, clearly labelled." : "Her hafta ChatGPT, Claude ve Gemini'ye gerçek müşterilerin sorduğu soruları soruyor, en ilginç sonuçları yazıyoruz. Gerçek ölçümler, küçük örneklemler, açıkça etiketli."}</p>
+  <ul class="guide-list">${mine.map((p) => `<li><a href="${postPath(p)}"><b>${esc(p.title)}</b><span>${fmtDate(p.date, en)} · ${esc(p.description)}</span></a></li>`).join("")}</ul>
+  <p><a href="${blogBase(lang)}rss.xml">RSS</a></p>
+</section>`;
+  write(blogBase(lang), page({ lang, alt: blogBase(en ? "tr" : "en"), path: blogBase(lang), title: en ? "Blog: what AI recommends | AI SaaSavran" : "Blog: yapay zekâ ne öneriyor? | AI SaaSavran", description: en ? "Weekly findings from real measurements of what ChatGPT, Claude and Gemini recommend to customers." : "ChatGPT, Claude ve Gemini'nin müşterilere ne önerdiğine dair gerçek ölçümlerden haftalık bulgular.", body: list, schema: [ORG] }));
+  for (const p of mine) {
+    const path = postPath(p), tw = twin(p);
+    const others = mine.filter((x) => x !== p).slice(0, 5).map((x) => `<li><a href="${postPath(x)}">${esc(x.short)}</a></li>`).join("");
+    const body = `
+<article class="article">
+  <p class="crumb"><a href="${blogBase(lang)}">Blog</a></p>
+  <h1>${esc(p.title)}</h1>
+  <p class="meta">${fmtDate(p.date, en)} · AI SaaSavran</p>
+  ${p.body}
+  ${p.video ? `<p class="video-link"><a href="https://www.youtube.com/shorts/${p.video.id}" rel="noopener"><img src="${p.cover}" alt="${esc(p.video.title)}" width="360" height="640" loading="lazy"><span>▶ ${esc(p.video.title)}</span></a></p>` : ""}
+  <p class="note"><b>${en ? "Note:" : "Not:"}</b> ${en ? `These are the AI's answers on ${fmtDate(p.date, true)}. Small sample; not representative of the whole market. Letters were assigned at random. Brands measured (alphabetical): ${esc(p.names)}. Brand names belong to their owners.` : `Bunlar yapay zekânın ${fmtDate(p.date, false)} tarihli cevaplarıdır. Küçük örneklem, tüm pazarı temsil etmez. Harfler rastgele atanmıştır. Ölçülen markalar (alfabetik): ${esc(p.names)}. Marka adları sahiplerine aittir.`}</p>
+  ${faqHtml(p.faq ?? [], en)}
+  <aside class="next"><p><b>${en ? "What does AI say about your brand?" : "Yapay zekâ sizin markanız için ne diyor?"}</b> ${en ? "Measure it across ChatGPT, Gemini and Claude." : "ChatGPT, Gemini ve Claude'da ölçün."}</p><a class="btn" href="${en ? "/check/" : "/tr/kontrol/"}">${en ? "Free check" : "Ücretsiz kontrol"}</a></aside>
+  ${others ? `<nav class="related" aria-label="${en ? "More posts" : "Diğer yazılar"}"><h2>${en ? "More posts" : "Diğer yazılar"}</h2><ul>${others}</ul></nav>` : ""}
+</article>`;
+    const posting = { "@context": "https://schema.org", "@type": "BlogPosting", headline: p.title, description: p.description, inLanguage: lang, datePublished: p.date, dateModified: p.date, image: SITE.url + p.cover, author: { "@type": "Organization", name: SITE.name, url: SITE.url }, publisher: { "@type": "Organization", name: SITE.name, logo: { "@type": "ImageObject", url: SITE.url + "/icon.svg" } }, mainEntityOfPage: SITE.url + path };
+    write(path, page({ lang, alt: tw ? postPath(tw) : blogBase(en ? "tr" : "en"), path, title: `${p.short} | AI SaaSavran Blog`, description: p.description, body, schema: [posting, ...(p.faq?.length ? [faqLd(p.faq)] : [])], type: "article", image: p.cover }));
+  }
+  const rssEsc = (x) => esc(x);
+  writeFileSync(join(DIST, `${blogBase(lang).slice(1)}rss.xml`), `<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0"><channel><title>AI SaaSavran Blog${en ? "" : " (Türkçe)"}</title><link>${SITE.url}${blogBase(lang)}</link><description>${en ? "What ChatGPT, Claude and Gemini actually recommend — weekly real measurements." : "ChatGPT, Claude ve Gemini gerçekte neyi öneriyor — haftalık gerçek ölçümler."}</description><language>${lang}</language>
+${mine.map((p) => `<item><title>${rssEsc(p.title)}</title><link>${SITE.url}${postPath(p)}</link><guid>${SITE.url}${postPath(p)}</guid><pubDate>${new Date(p.date + "T08:00:00Z").toUTCString()}</pubDate><description>${rssEsc(p.description)}</description></item>`).join("\n")}
+</channel></rss>
+`);
+}
+
 // 5) Tarayıcılar ve yapay zekâ botları için dosyalar
-const urls = ["/", "/pricing/", "/check/", "/guides/", ...GUIDES_EN.map((g) => `/guides/${g.slug}/`), "/tr/", "/tr/kontrol/", "/rehber/", ...GUIDES.map((g) => `/rehber/${g.slug}/`)];
+const urls = ["/", "/pricing/", "/check/", "/guides/", ...GUIDES_EN.map((g) => `/guides/${g.slug}/`), "/blog/", ...posts.filter((p) => p.lang === "en").map(postPath), "/tr/", "/tr/kontrol/", "/rehber/", ...GUIDES.map((g) => `/rehber/${g.slug}/`), "/tr/blog/", ...posts.filter((p) => p.lang === "tr").map(postPath)];
 writeFileSync(join(DIST, "sitemap.xml"), `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${urls.map((u) => `  <url><loc>${SITE.url}${u}</loc><lastmod>${SITE.updated}</lastmod></url>`).join("\n")}
@@ -350,8 +395,13 @@ ${SITE.sameAs.map((u) => `- ${u}`).join("\n")}
 ## Guides
 ${GUIDES_EN.map((g) => `- [${g.title}](${SITE.url}/guides/${g.slug}/): ${g.description}`).join("\n")}
 
+## Blog (weekly findings from real measurements)
+${posts.filter((p) => p.lang === "en").map((p) => `- [${p.title}](${SITE.url}${postPath(p)}): ${p.description}`).join("\n")}
+
 ## Türkçe
 - [Türkçe ana sayfa](${SITE.url}/tr/)
+- [Blog (Türkçe)](${SITE.url}/tr/blog/)
+${posts.filter((p) => p.lang === "tr").map((p) => `- [${p.title}](${SITE.url}${postPath(p)})`).join("\n")}
 ${GUIDES.map((g) => `- [${g.title}](${SITE.url}/rehber/${g.slug}/)`).join("\n")}
 `);
 
