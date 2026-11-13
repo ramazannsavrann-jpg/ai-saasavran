@@ -475,3 +475,15 @@ pre.code { white-space: pre-wrap; word-break: break-all; padding: 8px 10px; back
 .score-mid .score-num { border-color: var(--sim); }
 .score-low .score-num { border-color: var(--danger); }
 .score-how { margin-top: .5rem; font-size: .92rem; }
+
+/* Kazanma kampanyası */
+.rec .btn-small { margin-top: .4rem; }
+.rec-camp { margin-top: .4rem; font-size: .9rem; }
+.camp { margin: .5rem 0; padding: .6rem .8rem; border: 1px solid var(--line); border-radius: var(--radius-m); background: var(--tint); }
+.camp-head { margin: 0 0 .35rem; font-weight: 600; }
+.badge-camp { display: inline-block; padding: .05rem .5rem; border-radius: 999px; background: var(--primary); color: #fff; font-size: .8rem; margin-right: .3rem; }
+.camp-bar { height: 6px; border-radius: 3px; background: var(--line); overflow: hidden; margin-bottom: .5rem; }
+.camp-bar span { display: block; height: 100%; background: var(--primary); }
+.camp-tasks { list-style: none; margin: 0; padding: 0; }
+.camp-tasks li { margin: .25rem 0; }
+.camp-tasks .done { text-decoration: line-through; color: var(--muted); }

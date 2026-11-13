@@ -84,6 +84,13 @@
 - Ağırlıklı doğrusal eğilim (ağırlık = cevap sayısı); aralık = model belirsizliği + son ölçümün örneklem belirsizliği. Eğim aralığı sıfırı içeriyorsa "belirgin eğilim yok".
 - En az 4 ölçüm ve 14 gün yoksa tahmin gösterilmez. Simülasyonda gösterilmez. Ek API maliyeti yok.
 
+## v1.19 (13 Kasım 2026): kazanma kampanyası
+
+- İyileştirme rehberindeki veri maddelerinde (anılmadığınız sorular, anılıp önerilmediğiniz sorular, motor farkı, kaynak siteleri, yanlış ürün bilgisi, Shopping, kendi site payı, site kontrolü maddeleri) "Kampanya başlat" düğmesi.
+- Görevler ölçüm verisinden üretilir (soru metni, site adı, yanlış iddia ve doğrusu); en fazla 8 görev. Ayar maddeleri (soru ekle, haftalık ölçüm…) kampanya değildir.
+- Kampanya bir aksiyon kaydıdır (migration 0033: `brand_actions.rec_id`, `tasks`): görevler işaretlenir, ilerleme çubuğu, önce/sonra karşılaştırması mevcut aksiyon takibiyle motor bazında.
+- Aynı madde için süren kampanya varken düğme yerine "kampanya sürüyor" yazar. Testler: `engine/test/campaign.test.ts`.
+
 ## v1.18 (13 Kasım 2026): düşüş uyarısı
 
 - Biten her ölçüm, aynı markanın aynı türdeki önceki ölçümüyle motor bazında karşılaştırılır (işçi, ek API yok, migration 0032).
