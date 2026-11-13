@@ -1,0 +1,145 @@
+{
+  "date": "2026-11-13",
+  "mode": "light",
+  "costUsd": 0,
+  "capUsd": 0.25,
+  "pages": 17,
+  "pagesWithIssues": 10,
+  "auditPassed": 13,
+  "auditTotal": 13,
+  "indexnow": {
+    "sent": 17,
+    "status": 202,
+    "note": "kabul edildi"
+  },
+  "engines": {},
+  "engineStatus": {},
+  "competitorCount": 0,
+  "topSources": [],
+  "forClaude": [
+    "Sayfa /guides/: az metin (~228 kelime)",
+    "Sayfa /guides/measure-brand-visibility-in-chatgpt/: açıklama uzun (178)",
+    "Sayfa /guides/what-is-geo/: başlık uzun (89 karakter)",
+    "Sayfa /guides/local-business-ai-recommendations/: başlık uzun (73 karakter)",
+    "Sayfa /guides/why-chatgpt-recommends-your-competitor/: başlık uzun (88 karakter)",
+    "Sayfa /guides/youtuber-ai-visibility/: başlık uzun (76 karakter)",
+    "Sayfa /rehber/: az metin (~199 kelime)",
+    "Sayfa /rehber/geo-nedir/: başlık uzun (86 karakter)",
+    "Sayfa /rehber/rakip-neden-oneriliyor/: başlık uzun (79 karakter)",
+    "Sayfa /rehber/youtuber-yapay-zeka-gorunurlugu/: başlık uzun (76 karakter)"
+  ],
+  "forUser": [],
+  "pageIssues": [
+    {
+      "url": "https://aisaasavran.com/guides/",
+      "issues": [
+        "az metin (~228 kelime)"
+      ]
+    },
+    {
+      "url": "https://aisaasavran.com/guides/measure-brand-visibility-in-chatgpt/",
+      "issues": [
+        "açıklama uzun (178)"
+      ]
+    },
+    {
+      "url": "https://aisaasavran.com/guides/what-is-geo/",
+      "issues": [
+        "başlık uzun (89 karakter)"
+      ]
+    },
+    {
+      "url": "https://aisaasavran.com/guides/local-business-ai-recommendations/",
+      "issues": [
+        "başlık uzun (73 karakter)"
+      ]
+    },
+    {
+      "url": "https://aisaasavran.com/guides/why-chatgpt-recommends-your-competitor/",
+      "issues": [
+        "başlık uzun (88 karakter)"
+      ]
+    },
+    {
+      "url": "https://aisaasavran.com/guides/youtuber-ai-visibility/",
+      "issues": [
+        "başlık uzun (76 karakter)"
+      ]
+    },
+    {
+      "url": "https://aisaasavran.com/rehber/",
+      "issues": [
+        "az metin (~199 kelime)"
+      ]
+    },
+    {
+      "url": "https://aisaasavran.com/rehber/geo-nedir/",
+      "issues": [
+        "başlık uzun (86 karakter)"
+      ]
+    },
+    {
+      "url": "https://aisaasavran.com/rehber/rakip-neden-oneriliyor/",
+      "issues": [
+        "başlık uzun (79 karakter)"
+      ]
+    },
+    {
+      "url": "https://aisaasavran.com/rehber/youtuber-yapay-zeka-gorunurlugu/",
+      "issues": [
+        "başlık uzun (76 karakter)"
+      ]
+    }
+  ],
+  "answers": [],
+  "questions": [
+    {
+      "id": "tr-arac",
+      "lang": "tr",
+      "kind": "discovery",
+      "q": "Bir markanın ChatGPT, Gemini ve Claude cevaplarında ne kadar görünür olduğunu ölçen araçlar hangileri? Kısa liste ver."
+    },
+    {
+      "id": "tr-geo",
+      "lang": "tr",
+      "kind": "discovery",
+      "q": "Türkiye'de yapay zekâ görünürlüğü (GEO) takibi için kullanılabilecek uygun fiyatlı yazılımlar hangileri?"
+    },
+    {
+      "id": "tr-ajans",
+      "lang": "tr",
+      "kind": "discovery",
+      "q": "Ajanslar müşterilerinin markasının yapay zekâ asistanlarında önerilip önerilmediğini hangi araçla takip edebilir?"
+    },
+    {
+      "id": "en-tools",
+      "lang": "en",
+      "kind": "discovery",
+      "q": "What are the best tools to track brand visibility in ChatGPT, Gemini and Claude? Give a short list."
+    },
+    {
+      "id": "en-smb",
+      "lang": "en",
+      "kind": "discovery",
+      "q": "Affordable AI search visibility (GEO) tracking tools for small businesses and agencies?"
+    },
+    {
+      "id": "en-compare",
+      "lang": "en",
+      "kind": "discovery",
+      "q": "Which tools measure how often AI assistants recommend my product compared with competitors?"
+    },
+    {
+      "id": "tr-tanima",
+      "lang": "tr",
+      "kind": "knowledge",
+      "q": "AI SaaSavran (aisaasavran.com) nedir, ne işe yarar?"
+    },
+    {
+      "id": "en-knows",
+      "lang": "en",
+      "kind": "knowledge",
+      "q": "What is AI SaaSavran (aisaasavran.com) and what does it do?"
+    }
+  ]
+}

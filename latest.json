@@ -1,21 +1,98 @@
 {
   "date": "2026-11-13",
-  "mode": "light",
-  "costUsd": 0,
+  "mode": "full",
+  "costUsd": 0.2363,
   "capUsd": 0.25,
-  "pages": 17,
+  "pages": 14,
   "pagesWithIssues": 10,
   "auditPassed": 13,
   "auditTotal": 13,
   "indexnow": {
-    "sent": 17,
-    "status": 202,
-    "note": "kabul edildi"
+    "sent": 0,
+    "status": 200,
+    "note": "anahtar dosyası sitede yok (site yayını bekleniyor)"
   },
-  "engines": {},
-  "engineStatus": {},
-  "competitorCount": 0,
-  "topSources": [],
+  "engines": {
+    "ChatGPT": {
+      "asked": 6,
+      "mentioned": 0,
+      "recommended": 0,
+      "cited": 0,
+      "knows": true
+    },
+    "Claude": {
+      "asked": 4,
+      "mentioned": 0,
+      "recommended": 0,
+      "cited": 0,
+      "knows": null
+    },
+    "Gemini": {
+      "asked": 6,
+      "mentioned": 0,
+      "recommended": 0,
+      "cited": 0,
+      "knows": false
+    }
+  },
+  "engineStatus": {
+    "ChatGPT": "8 cevap",
+    "Claude": "4 cevap, 4 başarısız",
+    "Gemini": "8 cevap"
+  },
+  "competitorCount": 15,
+  "topSources": [
+    {
+      "domain": "(blog/araç sitesi — ad gizli)",
+      "kind": "blog/haber",
+      "count": 5
+    },
+    {
+      "domain": "(rakip sitesi)",
+      "kind": "rakip sitesi",
+      "count": 4
+    },
+    {
+      "domain": "(rakip sitesi)",
+      "kind": "rakip sitesi",
+      "count": 3
+    },
+    {
+      "domain": "(blog/araç sitesi — ad gizli)",
+      "kind": "blog/haber",
+      "count": 2
+    },
+    {
+      "domain": "(blog/araç sitesi — ad gizli)",
+      "kind": "blog/haber",
+      "count": 2
+    },
+    {
+      "domain": "(blog/araç sitesi — ad gizli)",
+      "kind": "blog/haber",
+      "count": 2
+    },
+    {
+      "domain": "(blog/araç sitesi — ad gizli)",
+      "kind": "blog/haber",
+      "count": 2
+    },
+    {
+      "domain": "(blog/araç sitesi — ad gizli)",
+      "kind": "blog/haber",
+      "count": 2
+    },
+    {
+      "domain": "(blog/araç sitesi — ad gizli)",
+      "kind": "blog/haber",
+      "count": 1
+    },
+    {
+      "domain": "(blog/araç sitesi — ad gizli)",
+      "kind": "blog/haber",
+      "count": 1
+    }
+  ],
   "forClaude": [
     "Sayfa /guides/: az metin (~228 kelime)",
     "Sayfa /guides/measure-brand-visibility-in-chatgpt/: açıklama uzun (178)",
@@ -26,7 +103,14 @@
     "Sayfa /rehber/: az metin (~199 kelime)",
     "Sayfa /rehber/geo-nedir/: başlık uzun (86 karakter)",
     "Sayfa /rehber/rakip-neden-oneriliyor/: başlık uzun (79 karakter)",
-    "Sayfa /rehber/youtuber-yapay-zeka-gorunurlugu/: başlık uzun (76 karakter)"
+    "Sayfa /rehber/youtuber-yapay-zeka-gorunurlugu/: başlık uzun (76 karakter)",
+    "İçerik boşluğu (TR): hiçbir motor bizi anmadı → bu soruya doğrudan cevap veren rehber/SSS: \"Bir markanın ChatGPT, Gemini ve Claude cevaplarında ne kadar görünür olduğunu ölçen araçlar hangileri? Kısa liste ver.\"",
+    "İçerik boşluğu (TR): hiçbir motor bizi anmadı → bu soruya doğrudan cevap veren rehber/SSS: \"Türkiye'de yapay zekâ görünürlüğü (GEO) takibi için kullanılabilecek uygun fiyatlı yazılımlar hangileri?\"",
+    "İçerik boşluğu (TR): hiçbir motor bizi anmadı → bu soruya doğrudan cevap veren rehber/SSS: \"Ajanslar müşterilerinin markasının yapay zekâ asistanlarında önerilip önerilmediğini hangi araçla takip edebilir?\"",
+    "İçerik boşluğu (EN): hiçbir motor bizi anmadı → bu soruya doğrudan cevap veren rehber/SSS: \"What are the best tools to track brand visibility in ChatGPT, Gemini and Claude? Give a short list.\"",
+    "İçerik boşluğu (EN): hiçbir motor bizi anmadı → bu soruya doğrudan cevap veren rehber/SSS: \"Affordable AI search visibility (GEO) tracking tools for small businesses and agencies?\"",
+    "İçerik boşluğu (EN): hiçbir motor bizi anmadı → bu soruya doğrudan cevap veren rehber/SSS: \"Which tools measure how often AI assistants recommend my product compared with competitors?\"",
+    "Kaynak analizi: yapay zekâ birçok blog/araç sitesini kaynak gösterdi (adlar gizli; çoğu rakip araçların kendi blogu) → tarafsız \"nasıl seçilir / karşılaştırma ölçütleri\" içeriğini kendi rehberlerimizde, rakip adı kullanmadan daha iyi anlat"
   ],
   "forUser": [],
   "pageIssues": [
@@ -91,7 +175,363 @@
       ]
     }
   ],
-  "answers": [],
+  "answers": [
+    {
+      "engine": "ChatGPT",
+      "method": "api_with_search",
+      "qid": "tr-arac",
+      "kind": "discovery",
+      "mentioned": false,
+      "recommended": false,
+      "cited": false,
+      "rank": null,
+      "costUsd": 0.0114237,
+      "domains": [
+        "(blog/araç sitesi — ad gizli)"
+      ]
+    },
+    {
+      "engine": "ChatGPT",
+      "method": "api_with_search",
+      "qid": "tr-geo",
+      "kind": "discovery",
+      "mentioned": false,
+      "recommended": false,
+      "cited": false,
+      "rank": null,
+      "costUsd": 0.0225309,
+      "domains": [
+        "(blog/araç sitesi — ad gizli)",
+        "(blog/araç sitesi — ad gizli)",
+        "(rakip sitesi)"
+      ]
+    },
+    {
+      "engine": "ChatGPT",
+      "method": "api_with_search",
+      "qid": "tr-ajans",
+      "kind": "discovery",
+      "mentioned": false,
+      "recommended": false,
+      "cited": false,
+      "rank": null,
+      "costUsd": 0.022135000000000002,
+      "domains": [
+        "(rakip sitesi)",
+        "(blog/araç sitesi — ad gizli)"
+      ]
+    },
+    {
+      "engine": "ChatGPT",
+      "method": "api_with_search",
+      "qid": "en-tools",
+      "kind": "discovery",
+      "mentioned": false,
+      "recommended": false,
+      "cited": false,
+      "rank": null,
+      "costUsd": 0.022079,
+      "domains": [
+        "(blog/araç sitesi — ad gizli)",
+        "(blog/araç sitesi — ad gizli)",
+        "(rakip sitesi)"
+      ]
+    },
+    {
+      "engine": "ChatGPT",
+      "method": "api_with_search",
+      "qid": "en-smb",
+      "kind": "discovery",
+      "mentioned": false,
+      "recommended": false,
+      "cited": false,
+      "rank": null,
+      "costUsd": 0.032386,
+      "domains": [
+        "(blog/araç sitesi — ad gizli)",
+        "(rakip sitesi)",
+        "(rakip sitesi)"
+      ]
+    },
+    {
+      "engine": "ChatGPT",
+      "method": "api_with_search",
+      "qid": "en-compare",
+      "kind": "discovery",
+      "mentioned": false,
+      "recommended": false,
+      "cited": false,
+      "rank": null,
+      "costUsd": 0.0223962,
+      "domains": [
+        "(rakip sitesi)",
+        "(rakip sitesi)",
+        "(blog/araç sitesi — ad gizli)",
+        "(rakip sitesi)",
+        "(blog/araç sitesi — ad gizli)"
+      ]
+    },
+    {
+      "engine": "ChatGPT",
+      "method": "api_with_search",
+      "qid": "tr-tanima",
+      "kind": "knowledge",
+      "mentioned": true,
+      "recommended": true,
+      "cited": true,
+      "rank": 1,
+      "correct": true,
+      "costUsd": 0.0212446,
+      "domains": [
+        "aisaasavran.com"
+      ],
+      "preview": "**AI SaaSavran**, işletmelerin ChatGPT, Gemini ve bazı ücretli planlarda Claude gibi yapay zekâ araçlarının yanıtlarında ne kadar görünür olduğunu ölçen bir hizmet. Örneğin, müşterilerin sorabileceği “Bu alanda hangi işletmeyi önerirsiniz?” türü soruları yapay zekâya yöneltiyor; markanızın **adı geç"
+    },
+    {
+      "engine": "ChatGPT",
+      "method": "api_with_search",
+      "qid": "en-knows",
+      "kind": "knowledge",
+      "mentioned": true,
+      "recommended": true,
+      "cited": true,
+      "rank": 1,
+      "correct": false,
+      "costUsd": 0.0212017,
+      "domains": [
+        "aisaasavran.com"
+      ],
+      "preview": "**AI SaaSavran is an early-access tool for tracking how a business appears in AI-generated recommendations.** It asks customer-style questions in AI assistants and reports whether your brand is mentioned or recommended, which competitors appear instead, and—when live search is used—which websites th"
+    },
+    {
+      "engine": "Claude",
+      "method": "api_with_search",
+      "qid": "tr-arac",
+      "kind": "discovery",
+      "mentioned": false,
+      "recommended": false,
+      "cited": false,
+      "rank": null,
+      "costUsd": 0.0123592,
+      "domains": [
+        "(blog/araç sitesi — ad gizli)",
+        "(blog/araç sitesi — ad gizli)",
+        "(blog/araç sitesi — ad gizli)",
+        "(blog/araç sitesi — ad gizli)",
+        "(blog/araç sitesi — ad gizli)",
+        "(blog/araç sitesi — ad gizli)",
+        "(blog/araç sitesi — ad gizli)"
+      ]
+    },
+    {
+      "engine": "Claude",
+      "method": "api_with_search",
+      "qid": "tr-geo",
+      "kind": "discovery",
+      "mentioned": false,
+      "recommended": false,
+      "cited": false,
+      "rank": null,
+      "costUsd": 0.0239959,
+      "domains": [
+        "(blog/araç sitesi — ad gizli)",
+        "(blog/araç sitesi — ad gizli)",
+        "(blog/araç sitesi — ad gizli)",
+        "(blog/araç sitesi — ad gizli)",
+        "(blog/araç sitesi — ad gizli)",
+        "(blog/araç sitesi — ad gizli)",
+        "(blog/araç sitesi — ad gizli)",
+        "(blog/araç sitesi — ad gizli)",
+        "(blog/araç sitesi — ad gizli)"
+      ]
+    },
+    {
+      "engine": "Claude",
+      "method": "api_with_search",
+      "qid": "tr-ajans",
+      "kind": "discovery",
+      "mentioned": false,
+      "recommended": false,
+      "cited": false,
+      "rank": null,
+      "costUsd": 0.012259800000000001,
+      "domains": [
+        "(blog/araç sitesi — ad gizli)",
+        "(blog/araç sitesi — ad gizli)",
+        "(blog/araç sitesi — ad gizli)"
+      ]
+    },
+    {
+      "engine": "Claude",
+      "method": "api_with_search",
+      "qid": "en-tools",
+      "kind": "discovery",
+      "mentioned": false,
+      "recommended": false,
+      "cited": false,
+      "rank": null,
+      "costUsd": 0.012276800000000001,
+      "domains": [
+        "(blog/araç sitesi — ad gizli)",
+        "(blog/araç sitesi — ad gizli)",
+        "(blog/araç sitesi — ad gizli)",
+        "(blog/araç sitesi — ad gizli)",
+        "(blog/araç sitesi — ad gizli)"
+      ]
+    },
+    {
+      "engine": "Claude",
+      "method": "-",
+      "qid": "en-smb",
+      "kind": "discovery",
+      "mentioned": false,
+      "recommended": false,
+      "cited": false,
+      "rank": null,
+      "costUsd": 0,
+      "error": "atlandı: 0.25 $ tavan",
+      "domains": []
+    },
+    {
+      "engine": "Claude",
+      "method": "-",
+      "qid": "en-compare",
+      "kind": "discovery",
+      "mentioned": false,
+      "recommended": false,
+      "cited": false,
+      "rank": null,
+      "costUsd": 0,
+      "error": "atlandı: 0.25 $ tavan",
+      "domains": []
+    },
+    {
+      "engine": "Claude",
+      "method": "-",
+      "qid": "tr-tanima",
+      "kind": "knowledge",
+      "mentioned": false,
+      "recommended": false,
+      "cited": false,
+      "rank": null,
+      "costUsd": 0,
+      "error": "atlandı: 0.25 $ tavan",
+      "domains": []
+    },
+    {
+      "engine": "Claude",
+      "method": "-",
+      "qid": "en-knows",
+      "kind": "knowledge",
+      "mentioned": false,
+      "recommended": false,
+      "cited": false,
+      "rank": null,
+      "costUsd": 0,
+      "error": "atlandı: 0.25 $ tavan",
+      "domains": []
+    },
+    {
+      "engine": "Gemini",
+      "method": "api_no_search",
+      "qid": "tr-arac",
+      "kind": "discovery",
+      "mentioned": false,
+      "recommended": false,
+      "cited": false,
+      "rank": null,
+      "costUsd": 0,
+      "domains": []
+    },
+    {
+      "engine": "Gemini",
+      "method": "api_no_search",
+      "qid": "tr-geo",
+      "kind": "discovery",
+      "mentioned": false,
+      "recommended": false,
+      "cited": false,
+      "rank": null,
+      "costUsd": 0,
+      "domains": []
+    },
+    {
+      "engine": "Gemini",
+      "method": "api_no_search",
+      "qid": "tr-ajans",
+      "kind": "discovery",
+      "mentioned": false,
+      "recommended": false,
+      "cited": false,
+      "rank": null,
+      "costUsd": 0,
+      "domains": []
+    },
+    {
+      "engine": "Gemini",
+      "method": "api_no_search",
+      "qid": "en-tools",
+      "kind": "discovery",
+      "mentioned": false,
+      "recommended": false,
+      "cited": false,
+      "rank": null,
+      "costUsd": 0,
+      "domains": []
+    },
+    {
+      "engine": "Gemini",
+      "method": "api_no_search",
+      "qid": "en-smb",
+      "kind": "discovery",
+      "mentioned": false,
+      "recommended": false,
+      "cited": false,
+      "rank": null,
+      "costUsd": 0,
+      "domains": []
+    },
+    {
+      "engine": "Gemini",
+      "method": "api_no_search",
+      "qid": "en-compare",
+      "kind": "discovery",
+      "mentioned": false,
+      "recommended": false,
+      "cited": false,
+      "rank": null,
+      "costUsd": 0,
+      "domains": []
+    },
+    {
+      "engine": "Gemini",
+      "method": "api_no_search",
+      "qid": "tr-tanima",
+      "kind": "knowledge",
+      "mentioned": true,
+      "recommended": true,
+      "cited": false,
+      "rank": null,
+      "correct": false,
+      "costUsd": 0,
+      "domains": [],
+      "preview": "**AI SaaSavran** (genellikle *SaaSavran* veya *AI SaaSavran* olarak anılır), yapay zekâ teknolojilerini kullanarak yazılım (SaaS - Software as a Service) ürünleri ve dijital projeler geliştirmeyi amaçlayan bir girişim veya platformdur. \n\n\"SaaSavran\" ismi, Türkçe'deki **\"SaaS\"** (hizmet olarak yazılı"
+    },
+    {
+      "engine": "Gemini",
+      "method": "api_no_search",
+      "qid": "en-knows",
+      "kind": "knowledge",
+      "mentioned": true,
+      "recommended": false,
+      "cited": false,
+      "rank": null,
+      "correct": false,
+      "costUsd": 0,
+      "domains": [],
+      "preview": "Based on available domain data and current web intelligence, **AI SaaSavran** (operating at `aisaasavran.com`) is a digital platform or directory focused on the **Artificial Intelligence Software-as-a-Service (SaaS)** market. \n\nHere is a breakdown of what platforms like this typically are and what t"
+    }
+  ],
   "questions": [
     {
       "id": "tr-arac",
