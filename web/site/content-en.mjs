@@ -7,7 +7,7 @@ export const GUIDES_EN = [
     tr: "chatgpt-marka-gorunurlugu-olcme",
     title: "How to measure your brand's visibility in ChatGPT",
     short: "Measure visibility in ChatGPT",
-    description: "A step-by-step method to measure how often ChatGPT and Gemini mention and recommend your brand: question sets, repetition, live search vs. model knowledge, and confidence ranges.",
+    description: "A step-by-step method to measure how often ChatGPT and Gemini mention and recommend your brand: question sets, repetition, live search and confidence ranges.",
     body: `
 <p class="lede">Short answer: write 10–30 questions your customers would ask an AI assistant, ask each one several times, and count how often your brand is <b>mentioned</b>, <b>recommended</b> and <b>cited as a source</b>. Never judge from a single answer; assistants give different answers to the same question.</p>
 
@@ -156,6 +156,7 @@ export const GUIDES_EN = [
   },
   {
     slug: "youtuber-ai-visibility",
+    tr: "youtuber-yapay-zeka-gorunurlugu",
     title: "How YouTubers and content creators get recommended by ChatGPT",
     short: "AI visibility for creators",
     description: "Which channels does AI recommend when someone asks \"what's the best cooking channel?\" A measurement method and practical checklist for creators.",
@@ -183,6 +184,51 @@ export const GUIDES_EN = [
     faq: [
       ["Does AI cite YouTube videos?", "Yes, in live web search YouTube videos and channel pages can be cited. List articles, forums and news sites often matter just as much."],
       ["Does the channel with the most subscribers always win?", "No. The AI looks at fit to the question and what's on the web; a smaller but clearly focused channel can stand out for specific questions."],
+    ],
+  },
+  {
+    slug: "choose-ai-visibility-tool",
+    tr: "yapay-zeka-gorunurluk-araci-secimi",
+    title: "How to choose an AI visibility (GEO) tracking tool: 9 questions to ask",
+    short: "Choosing an AI visibility tool",
+    description: "What to check before you pick a tool that tracks your brand in ChatGPT, Gemini and Claude: engines, live search, repetition, sources, language and cost.",
+    body: `
+<p class="lede">Short answer: a good AI visibility tool asks the questions your customers ask, <b>several times</b>, in <b>each AI engine separately</b>, tells you whether the answer came from <b>live web search or the model's memory</b>, and shows <b>which sources</b> the AI relied on. Mention counts alone are not enough. Below are the 9 questions we suggest asking any tool, including ours.</p>
+
+<h2>1. Which AI engines does it measure, and are they reported separately?</h2>
+<p>ChatGPT, Gemini, Claude and others often recommend different brands for the same question. In our own phone measurement, one brand was recommended in 10 of 16 Claude answers and in none of ChatGPT's 16. A single blended "AI score" hides this. Ask for per-engine results.</p>
+
+<h2>2. Live web search or model knowledge?</h2>
+<p>An answer built from live search reflects today's web; an answer from model knowledge reflects older training data. Both matter, but they should never be mixed silently. The report should label every measurement.</p>
+
+<h2>3. How many times is each question asked?</h2>
+<p>AI assistants give different answers to the same question. One answer per question is an anecdote, not a measurement. Look for repetition and a range or confidence note, not a single exact-looking percentage.</p>
+
+<h2>4. Does it separate mention, recommendation and citation?</h2>
+<p>"Brand X is expensive" is a mention, not a recommendation. Being cited as a source is a third, different signal. A tool should count these separately.</p>
+
+<h2>5. Does it show the sources behind the answers?</h2>
+<p>Visibility is fixed off-site: review sites, comparison articles, forums, directories. You need the cited URLs, and ideally the split between your own site, competitors' sites and third-party sites.</p>
+
+<h2>6. Can it ask in your customers' language and country?</h2>
+<p>Answers to a Turkish question asked from Turkey can differ from an English question asked from the US. If your customers are local, the questions and search location must be local too.</p>
+
+<h2>7. Does it explain why a competitor was chosen?</h2>
+<p>Counting is step one. Useful tools also show which competitor was named instead of you, for which question, and what reason or source the AI gave.</p>
+
+<h2>8. Does it check product-level facts?</h2>
+<p>For product brands, the AI may quote the wrong price or spec. Checking claims against official data, and comparing with shopping results, catches problems that brand-level counts miss.</p>
+
+<h2>9. Is the cost transparent?</h2>
+<p>Live-search queries cost money for every tool. Check what the free plan really includes, how many questions and measurements you get, whether agencies can manage several brands, and whether usage limits stop before surprise costs.</p>
+
+<h2>Where AI SaaSavran fits</h2>
+<p>AI SaaSavran asks your customers' questions in Turkish or English and reports each engine separately. The free plan uses Gemini without live web search and labels it clearly; paid plans add ChatGPT and Claude with live web search and the sites they cited. Reports separate mention, recommendation and citation, show competitor comparisons and source shares, and include product accuracy checks. Plans are Free, Plus $29, Pro $149 and Business $449 a month. Perplexity is not supported yet, and we are in early access.</p>
+`,
+    faq: [
+      ["What is the most important feature of an AI visibility tool?", "Per-engine results built from repeated questions, with each answer labelled as live web search or model knowledge, plus the sources the AI cited."],
+      ["Can I measure AI visibility for free?", "Partly. Free plans usually use model knowledge without live search or a small number of questions. AI SaaSavran's free plan includes 1 brand, 15 questions and 4 measurements a month on Gemini without live search."],
+      ["Why do different AI engines give different results?", "They use different search providers, sources and training data. In our measurements the same brand was recommended often by one engine and never by another."],
     ],
   },
 ];

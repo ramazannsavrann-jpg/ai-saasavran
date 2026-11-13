@@ -205,6 +205,50 @@ export const GUIDES = [
       ["Abone sayısı yüksek olan kanal hep önerilir mi?", "Hayır. Yapay zekâ soruya uygunluğa ve internetteki bilgilere bakar; küçük ama konusunda net bir kanal belirli sorularda öne çıkabilir."],
     ],
   },
+  {
+    slug: "yapay-zeka-gorunurluk-araci-secimi",
+    title: "Yapay zekâ görünürlük (GEO) aracı nasıl seçilir? Sorulacak 9 soru",
+    short: "GEO aracı nasıl seçilir",
+    description: "Markanızı ChatGPT, Gemini ve Claude'da takip edecek aracı seçmeden önce bakın: motorlar, canlı arama, tekrar, kaynaklar, dil ve maliyet.",
+    body: `
+<p class="lede">Kısa cevap: İyi bir yapay zekâ görünürlük aracı, müşterinizin sorduğu soruları <b>birkaç kez</b>, <b>her motorda ayrı ayrı</b> sorar; cevabın <b>canlı web aramasından mı yoksa modelin hafızasından mı</b> geldiğini söyler ve yapay zekânın <b>hangi kaynaklara</b> baktığını gösterir. Sadece "kaç kez anıldı" sayısı yetmez. Aşağıda, bizimki dahil her araca sormanızı önerdiğimiz 9 soru var.</p>
+
+<h2>1. Hangi yapay zekâ motorlarını ölçüyor, sonuçlar ayrı mı?</h2>
+<p>ChatGPT, Gemini ve Claude aynı soruya çoğu zaman farklı markalar önerir. Kendi telefon ölçümümüzde bir markayı Claude 16 cevabın 14'ünde, ChatGPT 8'inde önerdi; başka bir markayı ChatGPT hiç önermedi. Tek bir karışık "yapay zekâ puanı" bu farkı gizler. Motor bazında sonuç isteyin.</p>
+
+<h2>2. Canlı web araması mı, model bilgisi mi?</h2>
+<p>Canlı aramayla verilen cevap bugünkü interneti, model bilgisiyle verilen cevap eski eğitim verisini yansıtır. İkisi de önemlidir ama sessizce karıştırılmamalı. Raporda her ölçümün türü yazmalı.</p>
+
+<h2>3. Her soru kaç kez soruluyor?</h2>
+<p>Yapay zekâ aynı soruya farklı cevaplar verir. Soru başına tek cevap bir anekdottur, ölçüm değildir. Tekrar ve aralık/güven notu arayın; tek ve kesin görünen bir yüzdeye güvenmeyin.</p>
+
+<h2>4. Anılma, önerilme ve kaynak gösterilme ayrı mı sayılıyor?</h2>
+<p>"X markası pahalı" demek bir anılmadır, öneri değildir. Kaynak olarak gösterilmek ise üçüncü ve farklı bir sinyaldir. Araç bunları ayrı saymalı.</p>
+
+<h2>5. Cevapların arkasındaki kaynakları gösteriyor mu?</h2>
+<p>Görünürlük çoğunlukla site dışında düzelir: inceleme siteleri, karşılaştırma yazıları, forumlar, dizinler. Kaynak gösterilen adresleri ve mümkünse kendi siteniz / rakip siteleri / üçüncü taraf siteler dağılımını görmeniz gerekir.</p>
+
+<h2>6. Müşterinizin dilinde ve ülkesinde soruyor mu?</h2>
+<p>Türkiye'den Türkçe sorulan bir soruya verilen cevap, ABD'den İngilizce sorulana verilenden farklı olabilir. Müşterileriniz yerelse sorular ve arama konumu da yerel olmalı.</p>
+
+<h2>7. Rakibin neden seçildiğini açıklıyor mu?</h2>
+<p>Saymak ilk adımdır. İşe yarayan araç, sizin yerinize hangi rakibin, hangi soruda, hangi gerekçe veya kaynakla önerildiğini de gösterir.</p>
+
+<h2>8. Ürün bilgilerinin doğruluğunu kontrol ediyor mu?</h2>
+<p>Ürün satan markalarda yapay zekâ yanlış fiyat veya özellik söyleyebilir. İddiaları resmî bilgilerle karşılaştırmak ve alışveriş sonuçlarıyla kıyaslamak, marka düzeyindeki sayımların kaçırdığı sorunları yakalar.</p>
+
+<h2>9. Maliyet şeffaf mı?</h2>
+<p>Canlı aramalı sorgular her araç için maliyetlidir. Ücretsiz paketin gerçekte neyi kapsadığına, kaç soru ve ölçüm hakkı verildiğine, ajansların birden fazla markayı yönetip yönetemediğine ve sürpriz maliyetten önce durduran limitler olup olmadığına bakın.</p>
+
+<h2>AI SaaSavran bu listede nerede?</h2>
+<p>AI SaaSavran müşterilerinizin sorularını Türkçe veya İngilizce sorar ve her motoru ayrı raporlar. Ücretsiz paket Gemini'yi canlı arama olmadan kullanır ve bunu açıkça yazar; ücretli paketlere canlı web aramalı ChatGPT ve Claude ile kaynak gösterilen siteler eklenir. Raporlar anılma, önerilme ve kaynak gösterilmeyi ayırır; rakip karşılaştırması, kaynak payları ve ürün doğruluğu kontrolü içerir. Paketler: Ücretsiz, Plus 29 $, Pro 149 $ ve Business 449 $ (aylık). Perplexity henüz desteklenmiyor; erken erişim aşamasındayız.</p>
+`,
+    faq: [
+      ["Yapay zekâ görünürlük aracında en önemli özellik nedir?", "Tekrarlanan sorulardan elde edilen motor bazında sonuçlar, her cevabın canlı arama mı model bilgisi mi olduğunun etiketlenmesi ve yapay zekânın gösterdiği kaynaklar."],
+      ["Yapay zekâ görünürlüğü ücretsiz ölçülebilir mi?", "Kısmen. Ücretsiz paketler genelde canlı arama olmadan model bilgisini veya az sayıda soruyu kullanır. AI SaaSavran'ın ücretsiz paketi ayda 1 marka, 15 soru ve 4 ölçüm içerir (Gemini, canlı aramasız)."],
+      ["Farklı yapay zekâ motorları neden farklı sonuç veriyor?", "Farklı arama sağlayıcıları, kaynaklar ve eğitim verileri kullanıyorlar. Kendi ölçümlerimizde aynı marka bir motorda sık, diğerinde hiç önerilmedi."],
+    ],
+  },
 ];
 
 export const HOME_FAQ = [
