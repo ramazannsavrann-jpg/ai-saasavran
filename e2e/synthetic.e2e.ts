@@ -86,7 +86,7 @@ test("3. Hesap sayfası açılıyor (şifre değiştirme, paket)", async ({ page
   await page.getByLabel("E-posta").fill(email);
   await page.getByLabel("Şifre").fill(password);
   await page.getByRole("button", { name: "Giriş yap", exact: true }).click();
-  await expect(page.getByText("Sentetik Kafe").first()).toBeVisible({ timeout: 30_000 });
+  await expect(page).not.toHaveURL(/\/giris/, { timeout: 30_000 });
   await page.goto(`${BASE}/hesap`);
   await expect(page.getByRole("heading", { name: "Şifre değiştir" })).toBeVisible();
   await expect(page.getByText(/Free|Ücretsiz/).first()).toBeVisible();
