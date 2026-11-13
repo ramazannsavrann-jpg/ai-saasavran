@@ -36,7 +36,7 @@ export function EmailPrefs() {
       </label>
       <label className="check-row">
         <input type="checkbox" checked={drop} onChange={(e) => toggleDrop(e.target.checked)} />
-        <span>{L("Düşüş uyarısı (önerilme oranınız bir ölçümden diğerine belirgin şekilde düşerse)", "Drop alert (when your recommendation rate falls clearly from one measurement to the next)")}</span>
+        <span>{L("Uyarılar: önerilme oranınız belirgin düşerse veya yapay zekâ markanız hakkında yeni bir yanlış bilgi verirse", "Alerts: when your recommendation rate falls clearly or the AI starts giving new wrong information about your brand")}</span>
       </label>
       {saved && <p className="muted" role="status">{saved}</p>}
     </section>

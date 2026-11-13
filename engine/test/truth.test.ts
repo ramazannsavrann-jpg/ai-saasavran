@@ -99,3 +99,27 @@ test("Eski bilgi: güncel bağlamda eski yıl işaretlenir, tarihsel bilgi işar
   const s = statSummary([{ answer_text: "Kafe Mavi %30 büyüdü.", cited_urls: [], provider: "openai" }, { answer_text: "Başka bir şey.", cited_urls: [] }], ["Kafe Mavi"], now);
   assert.deepEqual([s.unsourced, s.answersWithFlags, s.examples[0].provider], [1, 1, "openai"]);
 });
+
+test("Çelişki: her taraf kendi cevabında birebir geçmeli; tek taraflı çelişki atılır", async () => {
+  const { parseConflicts, buildConflictPrompt } = await import("../src/truth.ts");
+  const answers = [{ provider: "openai", answer: "Kafe Mavi'de filtre kahve 85 TL." }, { provider: "claude", answer: "Kafe Mavi filtre kahveyi 120 TL'ye satıyor." }];
+  assert.ok(buildConflictPrompt("Kafe Mavi", answers).includes("ANSWER from claude"));
+  const out = parseConflicts(JSON.stringify({ conflicts: [
+    { topic: "Filtre kahve fiyatı", sides: [{ engine: "openai", quote: "filtre kahve 85 TL" }, { engine: "claude", quote: "120 TL'ye satıyor" }] },
+    { topic: "Uydurma", sides: [{ engine: "openai", quote: "filtre kahve 85 TL" }, { engine: "claude", quote: "200 TL" }] },
+    { topic: "Yanlış motor", sides: [{ engine: "openai", quote: "85 TL" }, { engine: "gemini", quote: "85 TL" }] },
+  ] }), answers)!;
+  assert.deepEqual(out.map((c) => c.topic), ["Filtre kahve fiyatı"]);
+  assert.equal(parseConflicts("yok", answers), null);
+});
+
+test("Yeni yanlış bilgi: daha önce görülmüş (büyük/küçük harf farkıyla) iddia yeni sayılmaz; e-posta iki dilde ve kaçışlı", async () => {
+  const { newWrongClaims, buildWrongInfoEmail } = await import("../src/truth.ts");
+  const W = (claim: string, status: "wrong" | "correct" = "wrong") => ({ claim, status, fact: "f", quote: "q" });
+  const nw = newWrongClaims([W("2015'te KURULDU"), W("Paket servis yok"), W("Kadıköy'de", "correct"), W("paket servis yok")], [W("2015'te kuruldu")]);
+  assert.deepEqual(nw.map((c) => c.claim), ["Paket servis yok"]);
+  const m = buildWrongInfoEmail("tr", { id: "B", name: "Kafe <Mavi>" }, [{ ...nw[0], provider: "openai" }], "https://aisaasavran.com", "tok");
+  assert.match(m.subject, /yeni bir yanlış bilgi/); assert.match(m.text, /ChatGPT: "Paket servis yok"/); assert.match(m.text, /k=drop&t=tok/);
+  assert.ok(m.html.includes("Kafe &lt;Mavi&gt;"));
+  assert.match(buildWrongInfoEmail("en", { id: "B", name: "X" }, [{ ...nw[0], provider: "claude" }], "https://a", "t").subject, /new wrong information/);
+});
