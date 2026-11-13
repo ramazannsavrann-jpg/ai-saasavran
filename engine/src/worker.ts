@@ -10,6 +10,7 @@ import { buildProviders } from "./providers/registry.ts";
 import { SimulatedProvider } from "./providers/simulated.ts";
 import { auditSite } from "./audit.ts";
 import { classifyAnswer, CLASSIFY_WORST_USD, type Perception } from "./classify.ts";
+import { cleanQuestions, discoverySeeds, parseDiscovery, serpGoogle, type FoundQuestion } from "./discovery.ts";
 import { buildWrongInfoEmail, findConflicts, judgeTruth, newWrongClaims, type TruthClaim } from "./truth.ts";
 import { SITE } from "./email.ts";
 import { buildProductQuestion, judgeProduct } from "./product.ts";
@@ -514,4 +515,38 @@ export async function processEngineConflicts(deps: { db: SupabaseClient; env: Re
     }
   }
   return { done, failed, found, spentUsd: Math.round(spent * 10000) / 10000 };
+}
+
+/**
+ * Gerçek soru keşfi: istenen markalar için Google'daki "Diğer kişiler şunları da sordu" ve ilgili aramaları toplar (keşif başına
+ * en fazla 3 SerpApi araması). SerpApi'de kalan hak DISCOVERY_RESERVE'in (varsayılan 50) altındaysa Shopping'e bırakır ve bekler.
+ */
+export async function processPromptDiscovery(deps: WorkerDeps, max = 3): Promise<{ runId: string; status: string; found?: number }[] | string> {
+  const { db, env } = deps;
+  const key = env.SERPAPI_KEY;
+  if (!key) return "SERPAPI_KEY yok";
+  const pending = must(await db.rpc("pending_discovery", { p_limit: max }), "pending_discovery") as { run_id: string; brand_id: string; workspace_id: string; brand_name: string; sector: string; city: string | null; country: string | null; lang: string }[];
+  if (!pending.length) return [];
+  const reserve = Number(env.DISCOVERY_RESERVE || 50);
+  let left = await shoppingSearchesLeft(key, deps.fetchFn);
+  const out: { runId: string; status: string; found?: number }[] = [];
+  for (const p of pending) {
+    const seeds = discoverySeeds({ sector: p.sector, city: p.city, lang: p.lang });
+    if (left !== null && left - seeds.length < reserve) { out.push({ runId: p.run_id, status: "serpapi_quota_low" }); break; }
+    const found: FoundQuestion[] = [];
+    let searches = 0, error: string | null = null;
+    for (const seed of seeds) {
+      try { found.push(...parseDiscovery(await serpGoogle(seed, { apiKey: key, lang: p.lang, country: p.country, fetchFn: deps.fetchFn }), seed)); searches++; }
+      catch (e) { error = (e as Error).message.slice(0, 200); break; }
+    }
+    if (left !== null) left -= searches;
+    const existing = (must(await db.from("prompts").select("text").eq("brand_id", p.brand_id), "sorular") as { text: string }[]).map((x) => x.text);
+    const clean = cleanQuestions(found, existing);
+    if (clean.length) {
+      must(await db.from("prompt_suggestions").upsert(clean.map((q) => ({ workspace_id: p.workspace_id, brand_id: p.brand_id, text: q.text, source: q.source, seed: q.seed })), { onConflict: "brand_id,text", ignoreDuplicates: true }), "öneri kaydı");
+    }
+    must(await db.from("discovery_runs").update({ done_at: new Date().toISOString(), found: clean.length, searches, error: clean.length ? null : error }).eq("id", p.run_id), "keşif kaydı");
+    out.push({ runId: p.run_id, status: error && !clean.length ? "error" : "done", found: clean.length });
+  }
+  return out;
 }

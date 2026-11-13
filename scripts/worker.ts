@@ -2,7 +2,7 @@
 // Gerekli: SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY. İsteğe bağlı: GEMINI_API_KEY.
 // Ücretli API'ler ALLOW_PAID_API=true olmadan asla kullanılmaz.
 import { createClient } from "@supabase/supabase-js";
-import { backfillPerception, processEngineConflicts, processTruthChecks, maintain, processAudits, processProductChecks, processQueue, processShoppingChecks, processReanalysis, scheduleWeekly } from "../engine/src/worker.ts";
+import { backfillPerception, processEngineConflicts, processPromptDiscovery, processTruthChecks, maintain, processAudits, processProductChecks, processQueue, processShoppingChecks, processReanalysis, scheduleWeekly } from "../engine/src/worker.ts";
 import { seedLabs } from "../engine/src/labs.ts";
 import { sendWeeklyDigests, sendWelcomeEmails } from "../engine/src/email.ts";
 import { processDropAlerts } from "../engine/src/alerts.ts";
@@ -45,8 +45,11 @@ let truth: unknown;
 try { truth = await processTruthChecks(deps); } catch (e) { truth = `hata: ${(e as Error).message}`; }
 let conflicts: unknown;
 try { conflicts = await processEngineConflicts(deps); } catch (e) { conflicts = `hata: ${(e as Error).message}`; }
+// Gerçek soru keşfi (SerpApi, yalnız istenince)
+let discovery: unknown;
+try { discovery = await processPromptDiscovery(deps); } catch (e) { discovery = `hata: ${(e as Error).message}`; }
 // Düşüş uyarısı: biten her ölçüm önceki ölçümle bir kez karşılaştırılır (ek API yok)
 let dropAlerts: unknown;
 try { dropAlerts = await processDropAlerts(db, process.env.RESEND_API_KEY); } catch (e) { dropAlerts = `hata: ${(e as Error).message}`; }
-console.log(JSON.stringify({ maintenance, dropAlerts, perception, truth, conflicts, productChecks, shoppingChecks, weeklyScheduled: scheduled, audits, reanalyzed, digests, welcome, processed: results.length, results }, null, 2));
+console.log(JSON.stringify({ maintenance, dropAlerts, perception, truth, conflicts, discovery, productChecks, shoppingChecks, weeklyScheduled: scheduled, audits, reanalyzed, digests, welcome, processed: results.length, results }, null, 2));
 if (results.some((r) => r.stop === "worker_error")) process.exit(1);

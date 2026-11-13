@@ -117,6 +117,22 @@ test("TruthGuard: ücretli pakette bilgi kartı, yanlış iddialar, kaynak türl
   await expect(bt).toContainText("IP doğrulandı");
   await bt.screenshot({ path: `${SHOTS}/35-ai-botlar.png` });
 
+  // Gerçek sorular (Google): öneri ekleme ve keşif isteği
+  must(await db.from("brands").update({ sector: "kafe" }).eq("id", brand.id));
+  must(await db.from("prompt_suggestions").insert([
+    { workspace_id: ws, brand_id: brand.id, text: "Kadıköy'de laptopla çalışılacak kafe var mı?", source: "paa", seed: "Kadıköy kafe" },
+    { workspace_id: ws, brand_id: brand.id, text: "kadıköy kafe fiyatları", source: "related", seed: "Kadıköy kafe" },
+  ]));
+  await page.goto(`/marka/${brand.id}?sekme=sorular`);
+  await page.addStyleTag({ content: ".bottomnav{display:none!important}.topbar{position:static!important}" });
+  const gq = page.locator("#gercek-sorular");
+  await expect(gq).toContainText("laptopla çalışılacak kafe");
+  await gq.locator("li").filter({ hasText: "laptopla" }).getByRole("button", { name: "+ Ekle" }).click();
+  await expect(page.locator(".q-text").filter({ hasText: "laptopla" })).toHaveCount(1);
+  await gq.getByRole("button", { name: "Soruları keşfet" }).click();
+  await expect(gq).toContainText("Keşif sıraya alındı");
+  await gq.screenshot({ path: `${SHOTS}/36-gercek-sorular.png` });
+
   // Öneriler: yanlış bilgi maddesi ve kampanya
   await page.goto(`/marka/${brand.id}?sekme=oneriler&tur=canli`);
   await expect(page.getByText("Yapay zekâ markanız hakkında 4 yanlış bilgi veriyor")).toBeVisible();

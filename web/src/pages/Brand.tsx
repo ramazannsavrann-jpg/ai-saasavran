@@ -13,6 +13,7 @@ import { CompareBars, TrendChart } from "../components/Chart";
 import { buildRecommendations, type RecInput } from "../../../engine/src/recommendations.ts";
 import { untrackedNames } from "../../../engine/src/metrics.ts";
 import { campaignFor, taskProgress } from "../../../engine/src/campaign.ts";
+import { guessIntent } from "../../../engine/src/discovery.ts";
 import { botSummary, snippet, SOURCE_PROVIDER, trafficSummary, visibilityVsVisits, workerCode, type AiSource, type BotKind } from "../../../engine/src/traffic.ts";
 import { sourceMix, statSummary, truthSummary, type SourceMix, type SourceType } from "../../../engine/src/truth.ts";
 
@@ -932,6 +933,55 @@ function VisVsTraffic({ vis, rows, today }: { vis: VisRow[]; rows: Parameters<ty
   );
 }
 
+/** Gerçek soru keşfi: Google'da insanların sorduğu sorular (SerpApi). Ücretli paketlerde; marka başına 30 günde 2 keşif. */
+function GoogleQuestions({ brand, existing, canAdd, onAdd, busy }: { brand: Brand; existing: Set<string>; canAdd: boolean; onAdd: (t: string, i: Intent) => Promise<void>; busy: boolean }) {
+  const { current } = useApp();
+  const paid = current?.kind === "growth_lab" || (!!current?.plan && current.plan !== "free");
+  const sugg = useLoad(() => (paid ? api.promptSuggestions(brand.id) : Promise.resolve([])), [brand.id, paid]);
+  const runs = useLoad(() => (paid ? api.discoveryRuns(brand.id) : Promise.resolve([])), [brand.id, paid]);
+  const [err, setErr] = useState<string | null>(null);
+  const [msg, setMsg] = useState<string | null>(null);
+  const pending = (runs.data ?? []).some((r) => !r.done_at);
+  const last = (runs.data ?? []).find((r) => r.done_at);
+  const list = (sugg.data ?? []).filter((s) => !existing.has(s.text));
+  async function discover() {
+    setErr(null); setMsg(null);
+    try { await api.requestDiscovery(brand.id); setMsg(L("Keşif sıraya alındı. Sorular birkaç dakika ile bir saat içinde burada görünür.", "Discovery queued. Questions appear here within a few minutes to an hour.")); runs.reload(); }
+    catch (e) { setErr(friendlyError(e)); }
+  }
+  return (
+    <section className="panel" id="gercek-sorular">
+      <h2>{L("Gerçek sorular (Google)", "Real questions (Google)")}</h2>
+      <p className="muted">{L("İnsanların Google'da sektörünüzle ilgili sorduğu sorular (\"Diğer kişiler şunları da sordu\" ve ilgili aramalar). Yapay zekâya sorulan soruların sayısını hiçbir şirket yayımlamıyor; bu, gerçek talebe en yakın veri.", "Questions people ask Google about your sector (\"People also ask\" and related searches). No company publishes how often things are asked to AI assistants; this is the closest real demand data.")}</p>
+      {!paid ? (
+        <p className="muted">{L("Ücretli paketlerde.", "On paid plans.")} <Link to="/hesap#paket">{L("Paketler", "Plans")}</Link></p>
+      ) : (
+        <>
+          {!brand.sector && <p className="caution">{L("Keşif için önce markanın sektörünü yazın (Düzenle).", "Set the brand's sector first (Edit).")}</p>}
+          <Button variant="quiet" className="btn-small" disabled={pending || !brand.sector} onClick={discover}>{pending ? L("Keşif sırada…", "Discovery queued…") : L("Soruları keşfet", "Discover questions")}</Button>
+          {last && <p className="src-sup muted">{isEn() ? `Last discovery: ${formatDate(last.done_at!)} · ${last.found ?? 0} questions${last.error ? " · " + last.error : ""}` : `Son keşif: ${formatDate(last.done_at!)} · ${last.found ?? 0} soru${last.error ? " · " + last.error : ""}`}</p>}
+          {msg && <p className="success-box">{msg}</p>}
+          <ErrorBox message={err} />
+          {list.length > 0 && (
+            <ul className="rows">
+              {list.map((s) => (
+                <li key={s.id}>
+                  <span><span className="q-text">{s.text}</span><span className="q-meta">{s.source === "paa" ? L("Diğer kişiler şunları da sordu", "People also ask") : L("İlgili arama", "Related search")} · {INTENT_LABEL[guessIntent(s.text, brand.city)]}</span></span>
+                  <span>
+                    {canAdd && <button className="link-btn" disabled={busy} onClick={() => onAdd(s.text, guessIntent(s.text, brand.city))}>+ {L("Ekle", "Add")}</button>}
+                    <button className="link-btn" onClick={async () => { try { await api.dismissSuggestion(s.id); sugg.reload(); } catch (e) { setErr(friendlyError(e)); } }}>{L("Gizle", "Hide")}</button>
+                  </span>
+                </li>
+              ))}
+            </ul>
+          )}
+          {list.length > 0 && <p className="src-sup muted">{L("İlgili aramalar soru biçiminde değildir; eklerken düzenleyebilirsiniz. Marka başına 30 günde 2 keşif yapılabilir.", "Related searches aren't phrased as questions; you can edit them after adding. Up to 2 discoveries per brand every 30 days.")}</p>}
+        </>
+      )}
+    </section>
+  );
+}
+
 const BOT_KIND: Record<BotKind, [string, string, string, string]> = {
   search: ["Arama botları", "Search bots", "Yapay zekâ aramasında görünmenizi sağlar; en önemlisi bunlar.", "They make you visible in AI search; these matter most."],
   user: ["Kullanıcı isteğiyle gelenler", "Fetched on a user's request", "Biri asistana sitenizle ilgili soru sorduğunda sayfayı anlık okur.", "Read a page live when someone asks an assistant about you."],
@@ -1729,6 +1779,7 @@ function Questions({ brand }: { brand: Brand }) {
         })()}
       </section>
 
+      {brand.data_origin !== "simulated" && <GoogleQuestions brand={brand} existing={existing} canAdd={active < limit} onAdd={add} busy={busy} />}
       {active < limit && brand.data_origin !== "simulated" && <AiSuggestions brand={brand} existing={existing} onAdd={add} busy={busy} />}
 
       {active < limit && ideas.length > 0 && (

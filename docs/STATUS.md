@@ -84,6 +84,12 @@
 - Ağırlıklı doğrusal eğilim (ağırlık = cevap sayısı); aralık = model belirsizliği + son ölçümün örneklem belirsizliği. Eğim aralığı sıfırı içeriyorsa "belirgin eğilim yok".
 - En az 4 ölçüm ve 14 gün yoksa tahmin gösterilmez. Simülasyonda gösterilmez. Ek API maliyeti yok.
 
+## v1.29 (14 Kasım 2026): gerçek soru keşfi (Google)
+
+- Sorular sekmesinde "Gerçek sorular (Google)": markanın sektörü/şehri için 3 Google araması (SerpApi), "Diğer kişiler şunları da sordu" ve ilgili aramalar; tek tıkla soru listesine ekleme (amaç etiketi tahmini), gizleme.
+- Yalnız ücretli paketler ve Growth Lab; marka başına 30 günde 2 keşif; SerpApi'de 50'den az hak kaldıysa keşif bekler (Shopping'e kalır). Migration 0040 (`prompt_suggestions`, `discovery_runs`). Yapay zekâ kullanılmaz.
+- Testler: `engine/test/discovery.test.ts`, ekran testi genişletildi.
+
 ## v1.28 (14 Kasım 2026): ücretsiz kontrolü kim kullanıyor
 
 - Her ücretsiz kontrolde istemci türü (tarayıcı / bot / otomatik araç / bizim testimiz) ve ülke kaydedilir (migration 0039). Tür kullanıcı aracısından tahmin edilir, taklit edilebilir. Canlı denetim betiği `x-aisv-test` başlığıyla kendini "test" olarak işaretler.

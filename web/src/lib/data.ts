@@ -124,6 +124,14 @@ export const api = {
   async addPrompt(p: { workspace_id: string; brand_id: string; text: string; intent: Intent; segment?: string | null }) {
     must(await sb().from("prompts").insert(p));
   },
+  async promptSuggestions(brandId: string): Promise<{ id: string; text: string; source: "paa" | "related"; seed: string }[]> {
+    return must(await sb().from("prompt_suggestions").select("id,text,source,seed").eq("brand_id", brandId).eq("dismissed", false).order("created_at", { ascending: false }).limit(60));
+  },
+  async dismissSuggestion(id: string) { must(await sb().from("prompt_suggestions").update({ dismissed: true }).eq("id", id)); },
+  async discoveryRuns(brandId: string): Promise<{ requested_at: string; done_at: string | null; found: number | null; error: string | null }[]> {
+    return must(await sb().from("discovery_runs").select("requested_at,done_at,found,error").eq("brand_id", brandId).order("requested_at", { ascending: false }).limit(5));
+  },
+  async requestDiscovery(brandId: string) { must(await sb().rpc("request_prompt_discovery", { p_brand: brandId })); },
   async setPromptActive(id: string, active: boolean) { must(await sb().from("prompts").update({ active }).eq("id", id)); },
   async updatePrompt(id: string, patch: { text?: string; intent?: Intent; segment?: string | null }) { must(await sb().from("prompts").update(patch).eq("id", id)); },
   /** Bir ölçümdeki ham yapay zekâ cevapları (soru başına). */
