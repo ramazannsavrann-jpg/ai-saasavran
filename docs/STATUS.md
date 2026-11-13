@@ -84,6 +84,12 @@
 - Ağırlıklı doğrusal eğilim (ağırlık = cevap sayısı); aralık = model belirsizliği + son ölçümün örneklem belirsizliği. Eğim aralığı sıfırı içeriyorsa "belirgin eğilim yok".
 - En az 4 ölçüm ve 14 gün yoksa tahmin gösterilmez. Simülasyonda gösterilmez. Ek API maliyeti yok.
 
+## v1.22 (13 Kasım 2026): TruthGuard 2. aşama
+
+- **Kaynaksız istatistik:** markanın geçtiği cümlelerde yüzde, milyon/milyar, kullanıcı sayısı, "lider / pazar payı" gibi iddialar; cevap hiç kaynak göstermediyse işaretlenir. Fiyat, saat ve teknik özellikler (MP, mAh, W, inç) sayılmaz.
+- **Eski bilgi:** "güncel / şu an / en yeni / itibarıyla" bağlamında 3 yıldan eski yıl. "2009'da kuruldu" gibi tarihsel bilgi işaretlenmez.
+- Tamamen kural tabanlı, API maliyeti yok; ücretli paketlerde TruthGuard bölümünde, cevaptan alıntıyla. Ücretli paket koşulu düzeltildi (plan ≠ free). Ekran testi: `e2e/truthguard.e2e.ts`.
+
 ## v1.21 (13 Kasım 2026): TruthGuard (1. aşama)
 
 - Yalnız ücretli paketler (ve Growth Lab). Free'de kısa tanıtım ve paket bağlantısı.
