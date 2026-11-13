@@ -170,6 +170,37 @@ export const GUIDES = [
       ["ChatGPT'nin hangi sitelere baktığını nasıl görürüm?", "ChatGPT internette aradığında cevabın altında ya da içinde kaynak bağlantıları gösterir. AI SaaSavran canlı aramalı ölçümde bu kaynakları her cevap için kaydeder ve en çok gösterilen siteleri listeler."],
     ],
   },
+  {
+    slug: "youtuber-yapay-zeka-gorunurlugu",
+    title: "YouTuber'lar ve içerik üreticileri ChatGPT'de nasıl önerilir?",
+    short: "İçerik üreticileri için yapay zekâ",
+    description: "\"En iyi yemek kanalı hangisi?\" gibi sorularda yapay zekâ hangi kanalları öneriyor? İçerik üreticileri için ölçüm yöntemi ve pratik kontrol listesi.",
+    body: `
+<p class="lede">İzleyiciler artık "Yeni başlayanlar için yatırımı anlatan iyi bir YouTube kanalı önerir misin?" gibi soruları ChatGPT, Gemini ve Claude'a da soruyor. Yapay zekâ genellikle 3–5 kanal adı verir. Bu listede olmak, yeni izleyiciye ulaşmanın yeni yollarından biri.</p>
+
+<h2>Nasıl ölçülür?</h2>
+<ol>
+  <li>İzleyicinizin soracağı 10–20 soru yazın (konu, seviye, dil: "Türkçe", "yeni başlayan", "kısa video").</li>
+  <li>Kanalınızı ve benzer 3–5 kanalı ekleyin. Kanal adresinizi <b>youtube.com/@kanaliniz</b> biçiminde girin.</li>
+  <li>Soruları birkaç kez, tercihen canlı web aramasıyla sorun; kanalınızın <b>anılma</b>, <b>önerilme</b> ve <b>kaynak gösterilme</b> oranına bakın.</li>
+  <li>Önerilmediğiniz sorularda yerinize hangi kanalın önerildiğine ve yapay zekânın hangi sitelere (liste yazıları, forumlar, haberler) baktığına bakın.</li>
+</ol>
+
+<h2>Kontrol listesi</h2>
+<ul>
+  <li><b>Kanal açıklaması ve video açıklamaları:</b> Konunuzu ve kime hitap ettiğinizi açıkça yazın; anahtar kelimeleri doğal kullanın.</li>
+  <li><b>Altyazı/transkript:</b> Videolarınızın metni okunabilir olsun.</li>
+  <li><b>Kendi siteniz veya bağlantı sayfanız:</b> Kanalınızı anlatan, sosyal hesaplarınızı bağlayan tek bir sayfa.</li>
+  <li><b>Liste ve öneri yazıları:</b> "En iyi … kanalları" yazılarında, forumlarda ve haberlerde yer almak; yapay zekâ bu sayfaları sık kaynak gösterir.</li>
+  <li><b>Tutarlı ad:</b> Kanal adınızı her yerde aynı yazın.</li>
+</ul>
+<p>AI SaaSavran'da "İçerik üreticisi" sektörlerini seçince hazır sorular gelir; kendi site payı hesabında kanal adresiniz ayrı tanınır (başka kanallar "sizin siteniz" sayılmaz).</p>
+`,
+    faq: [
+      ["Yapay zekâ YouTube videolarını kaynak gösterir mi?", "Evet, canlı web aramasında YouTube videoları ve kanal sayfaları kaynak olarak gösterilebilir. Ama çoğu zaman liste yazıları, forumlar ve haber siteleri de belirleyicidir."],
+      ["Abone sayısı yüksek olan kanal hep önerilir mi?", "Hayır. Yapay zekâ soruya uygunluğa ve internetteki bilgilere bakar; küçük ama konusunda net bir kanal belirli sorularda öne çıkabilir."],
+    ],
+  },
 ];
 
 export const HOME_FAQ = [
