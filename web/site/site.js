@@ -32,7 +32,7 @@
     region: "Ücretsiz kontrol bulunduğunuz ülkede şu an kapalı (Avrupa Ekonomik Alanı, İsviçre, Birleşik Krallık). ChatGPT canlı aramalı ölçüm ücretli paketlerde kullanılabilir.",
     sum: function (m, r, n, b) { return "<strong>" + b + "</strong>, " + n + " cevabın <strong>" + m + "</strong> tanesinde anıldı, <strong>" + r + "</strong> tanesinde önerildi."; },
     zero: "Bu sorularda yapay zekâ işletmenizi hiç anmadı. Yeni ya da yerel markalarda bu sık görülür; neyin değiştirilebileceğini düzenli ölçümle görürsünüz.",
-    others: "Cevaplarda en çok geçen diğer adlar:", q: "Soru", yes: "Anıldı", rec: "Önerildi", no: "Geçmedi",
+    others: "Cevaplarda en çok geçen diğer adlar:", q: "Soru", yes: "Anıldı", rec: "Önerildi", no: "Geçmedi", na: "Cevap alınamadı", miss: function (k) { return k + " soruya yapay zekâdan cevap alınamadı; bunlar sonuca katılmadı. Biraz sonra tekrar deneyebilirsiniz."; },
     engine: "Gemini, model bilgisi (canlı web araması yok). Tek seferlik kontrol; yapay zekâ cevapları sorudan soruya değişir.",
     next: "Her hafta otomatik ölçmek, rakiplerle karşılaştırmak ve ChatGPT'nin canlı aramasını görmek için", cta: "ücretsiz hesap açın",
   } : {
@@ -43,7 +43,7 @@
     region: "The free check isn't available in your country yet (EEA, Switzerland, UK). ChatGPT live-search measurement is available on paid plans.",
     sum: function (m, r, n, b) { return "<strong>" + b + "</strong> was mentioned in <strong>" + m + "</strong> of " + n + " answers and recommended in <strong>" + r + "</strong>."; },
     zero: "The AI didn't mention your business for these questions. That's common for new or local brands; regular measurement shows what moves the needle.",
-    others: "Names that came up most in the answers:", q: "Question", yes: "Mentioned", rec: "Recommended", no: "Not mentioned",
+    others: "Names that came up most in the answers:", q: "Question", yes: "Mentioned", rec: "Recommended", no: "Not mentioned", na: "No answer", miss: function (k) { return "No answer came back for " + k + " question(s); they are not counted. You can try again a little later."; },
     engine: "Gemini, model knowledge (no live web search). A one-off check; AI answers vary from one request to the next.",
     next: "To measure weekly, compare with competitors and see ChatGPT's live search,", cta: "create a free account",
   };
@@ -61,11 +61,13 @@
         btn.disabled = false;
         if (!x.ok) { out.innerHTML = '<p class="check-msg">' + (T[x.j && x.j.error] || T.err) + "</p>"; return; }
         var j = x.j, h = '<div class="check-sum"><p>' + T.sum(j.mentioned, j.recommended, j.total, esc(body.brand)) + "</p>";
-        if (!j.mentioned) h += "<p>" + T.zero + "</p>";
+        var miss = j.questions.filter(function (q) { return !q.ok; }).length;
+        if (miss) h += "<p>" + T.miss(miss) + "</p>";
+        if (!j.mentioned && j.total) h += "<p>" + T.zero + "</p>";
         if (j.others && j.others.length) h += "<p>" + T.others + " " + j.others.map(esc).join(", ") + "</p>";
         h += '<p class="small">' + T.engine + "</p></div><ol class=\"check-qs\">";
         j.questions.forEach(function (q) {
-          var tag = q.recommended ? '<span class="tag rec">' + T.rec + "</span>" : q.mentioned ? '<span class="tag yes">' + T.yes + "</span>" : '<span class="tag no">' + T.no + "</span>";
+          var tag = !q.ok ? '<span class="tag na">' + T.na + "</span>" : q.recommended ? '<span class="tag rec">' + T.rec + "</span>" : q.mentioned ? '<span class="tag yes">' + T.yes + "</span>" : '<span class="tag no">' + T.no + "</span>";
           h += "<li><p><strong>" + esc(q.q) + "</strong> " + tag + "</p>" + (q.excerpt ? "<details><summary>…</summary><p>" + esc(q.excerpt) + "</p></details>" : "") + "</li>";
         });
         h += '</ol><p>' + T.next + ' <a href="/kayit">' + T.cta + "</a>.</p>";

@@ -13,7 +13,8 @@ export function parseInput(body) {
 
 const STOP = new Set(("if what it its the this these those here there for when which also however best top note some many most you your they them " +
   "we our and or but with without what's it's i ai llm llms geo seo api faq tip tips pros cons step steps option options key final summary overall " +
-  "bu şu bir ve ile için en çok daha ancak ayrıca örneğin not öneri sonuç kısaca").split(" "));
+  "bu şu bir ve ile için en çok daha ancak ayrıca örneğin not öneri sonuç kısaca " +
+  "türkçe ingilizce english turkish yapay saas sge aiso chatgpt gemini claude perplexity copilot").split(" "));
 const keepName = (n) => n.length >= 3 && !STOP.has(n.toLowerCase()) && !STOP.has(n.split(" ")[0].toLowerCase());
 
 export function buildQuestions({ lang, category, city }) {
