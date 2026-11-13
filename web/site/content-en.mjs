@@ -154,6 +154,37 @@ export const GUIDES_EN = [
       ["How do I see which sites ChatGPT used?", "When ChatGPT searches the web, it shows source links in or under the answer. AI SaaSavran's live-search measurement saves these sources for every answer and lists the most cited sites."],
     ],
   },
+  {
+    slug: "youtuber-ai-visibility",
+    title: "How YouTubers and content creators get recommended by ChatGPT",
+    short: "AI visibility for creators",
+    description: "Which channels does AI recommend when someone asks \"what's the best cooking channel?\" A measurement method and practical checklist for creators.",
+    body: `
+<p class="lede">Viewers now ask ChatGPT, Gemini and Claude things like "Can you recommend a good YouTube channel to learn investing?". The assistant usually names 3–5 channels. Being on that list is a new way to reach new viewers.</p>
+
+<h2>How to measure it</h2>
+<ol>
+  <li>Write 10–20 questions your audience would ask (topic, level, format: "beginner", "short videos").</li>
+  <li>Add your channel and 3–5 similar channels. Enter your channel as <b>youtube.com/@yourchannel</b>.</li>
+  <li>Ask each question several times, ideally with live web search; look at how often your channel is <b>mentioned</b>, <b>recommended</b> and <b>cited</b>.</li>
+  <li>Where you're not recommended, see which channel was named instead and which sites (list articles, forums, news) the AI read.</li>
+</ol>
+
+<h2>Checklist</h2>
+<ul>
+  <li><b>Channel and video descriptions:</b> say clearly what you cover and for whom.</li>
+  <li><b>Captions/transcripts:</b> make your videos' text readable.</li>
+  <li><b>Your own site or link page:</b> one page describing your channel and linking your profiles.</li>
+  <li><b>"Best channels" lists:</b> get featured in list articles, forums and news; AI often cites these.</li>
+  <li><b>Consistent name:</b> spell your channel name the same everywhere.</li>
+</ul>
+<p>In AI SaaSavran, the "Content creator" sectors come with ready-made questions, and your channel URL is recognized separately in the owned-source share (other channels aren't counted as yours).</p>
+`,
+    faq: [
+      ["Does AI cite YouTube videos?", "Yes, in live web search YouTube videos and channel pages can be cited. List articles, forums and news sites often matter just as much."],
+      ["Does the channel with the most subscribers always win?", "No. The AI looks at fit to the question and what's on the web; a smaller but clearly focused channel can stand out for specific questions."],
+    ],
+  },
 ];
 
 export const HOME_FAQ_EN = [
