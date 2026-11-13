@@ -8,6 +8,11 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+    inputs:
+      live_engines:
+        description: "Canlı aramada yalnız bu motorlar (ör. claude). Boş = varsayılan (openai,claude)"
+        required: false
+        default: ""
   schedule:
     - cron: "17 5-20 * * *"
 permissions:
@@ -42,4 +47,6 @@ jobs:
           ALLOW_PAID_API: "true"
           # "Önerildi mi" LLM kontrolü: yalnız ücretli OpenAI ölçümlerinde, cevap başına ~0,0003 $; paket tavanına sayılır.
           LLM_CLASSIFY: "true"
+          # Elle başlatmada tek motor seçilebilir (ör. Claude geçici hata verdiyse yalnız Claude'u tekrar çalıştırmak için)
+          LIVE_ENGINES: ${{ inputs.live_engines }}
         run: npm run worker
