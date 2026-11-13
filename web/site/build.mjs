@@ -36,6 +36,9 @@ const faqHtml = (faq, en = false) => faq.length ? `<section class="faq"><h2>${en
 // Arama sonucu başlığı ≤70 karakter: uzun başlıkta kısa başlık kullanılır (sayfadaki h1 tam başlık kalır)
 const seoTitle = (title, short, suffix = " | AI SaaSavran") => (title + suffix).length <= 70 ? title + suffix : title.length <= 70 ? title : short + suffix;
 
+// Kendi sitemizin yapay zekâdan gelen ziyaretçi sayacı (Growth Lab'deki "AI SaaSavran" markası; çerezsiz, kişisel veri yok)
+const OWN_TRACK_KEY = "552ec134-8c6a-4ffe-a923-2697cd66bf65";
+
 function page({ path, title, description, body, schema = [], type = "website", lang = "en", alt = null, image = null, noindex = false }) {
   const url = SITE.url + path;
   const en = lang === "en";
@@ -60,6 +63,7 @@ ${alternates}
 <link rel="preload" href="/site/fonts/instrument-sans-latin-ext-400-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/site/site.css">
 ${schema.map(ld).join("\n")}
+<script async src="/t.js" data-site="${OWN_TRACK_KEY}"></script>
 </head>
 <body>
 <header class="top">
