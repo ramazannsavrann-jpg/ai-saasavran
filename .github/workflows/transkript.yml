@@ -20,7 +20,7 @@ jobs:
             n=$(basename "$f" .mp3)
             base64 -w0 "$f" > b64.txt
             jq -n --rawfile d b64.txt '{contents:[{parts:[{inline_data:{mime_type:"audio/mp3",data:$d}},{text:"Transcribe this audio verbatim, sentence by sentence. Return only JSON: an array of objects {\"start\": seconds as a number with one decimal, \"text\": the sentence}. Include every spoken word, including anything spoken before the main content."}]}],generationConfig:{responseMimeType:"application/json"}}' > req.json
-            for m in gemini-flash-latest gemini-3.8-flash gemini-3.1-flash gemini-flash-lite-latest; do
+            for m in gemini-3.5-flash gemini-3.7-flash gemini-3.6-flash gemini-3.5-flash-lite gemini-flash-lite-latest gemini-3.1-flash-lite; do
               code=$(curl -sS -o resp.json -w "%{http_code}" "https://generativelanguage.googleapis.com/v1beta/models/$m:generateContent" -H "x-goog-api-key: $GEMINI_API_KEY" -H "Content-Type: application/json" -d @req.json)
               echo "$n $m HTTP $code"
               if [ "$code" = "200" ]; then jq -r '.candidates[0].content.parts[0].text' resp.json > "out/$n.json"; break; fi
