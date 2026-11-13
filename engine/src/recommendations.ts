@@ -32,6 +32,8 @@ export interface RecInput {
   engineGap?: { ignoredBy: string[]; high: string | null; highK: number; highN: number; level: "clear" | "large" | "none" } | null;
   /** Ürün doğruluk kontrolünde yanlış bulunan iddialar */
   wrongClaims?: { product: string; claim: string; fact: string }[];
+  /** Kendi site payı (canlı arama): kaynak gösterimlerinin kaçı sizin siteniz */
+  ownShare?: { own: number; total: number; competitor: number } | null;
   /** Google Shopping: kendi ürününüz rakip üründen geride */
   shoppingBehind?: { product: string; ownPos: number | null; rival: string; rivalPos: number }[];
 }
@@ -198,6 +200,19 @@ export function buildRecommendations(i: RecInput): Recommendation[] {
       action: en ? "Check your product feed in Merchant Center: title with the exact model name, price, stock, images, and reviews. Listings on major marketplaces also count."
         : "Merchant Center ürün akışınızı kontrol edin: tam model adı içeren başlık, fiyat, stok, görseller ve yorumlar. Büyük pazar yerlerindeki ilanlar da sayılır.",
       check: en ? "Next Shopping check: did your position improve?" : "Sonraki Shopping kontrolü: sıranız yükseldi mi?",
+    });
+  }
+
+  if (i.ownShare && i.website && i.ownShare.total >= 5 && i.ownShare.own / i.ownShare.total < 0.1) {
+    const o = i.ownShare, p = Math.round((o.own / o.total) * 100), pc = Math.round((o.competitor / o.total) * 100);
+    add({
+      id: "own_source_low", priority: pc > p ? "yüksek" : "orta",
+      title: en ? "AI rarely cites your own site" : "Yapay zekâ kendi sitenizi neredeyse hiç kaynak göstermiyor",
+      why: en ? `Only ${p}% of cited sources were your site${pc > 0 ? `; competitors' own sites: ${pc}%` : ""} (${o.total} citations).`
+        : `Kaynak gösterimlerinin yalnız %${p}'i sizin siteniz${pc > 0 ? `; rakiplerin kendi siteleri: %${pc}` : ""} (${o.total} kaynak).`,
+      action: en ? "Add pages that directly answer your customers' questions (FAQ, comparison, pricing, 'best for…' pages), with clear headings and structured data; make sure AI crawlers are allowed."
+        : "Müşterilerinizin sorularını doğrudan cevaplayan sayfalar ekleyin (SSS, karşılaştırma, fiyat, \"… için en iyisi\" sayfaları); net başlıklar ve yapılandırılmış veri kullanın; yapay zekâ botlarına izin verildiğinden emin olun.",
+      check: en ? "Next measurement: did your own-site share rise?" : "Sonraki ölçüm: kendi site payınız arttı mı?",
     });
   }
 
