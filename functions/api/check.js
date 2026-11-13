@@ -49,6 +49,12 @@ export async function onRequestPost({ request, env }) {
   if (!res.startsWith("ok:")) return json({ error: res }, 429);
 
   const answers = await Promise.all(questions.map((q) => ask(env, q)));
+  // Ücretsiz katman aynı anda gelen istekleri bazen reddediyor: boş dönenleri sırayla bir kez daha dene.
+  for (let i = 0; i < answers.length; i++) {
+    if (answers[i].text) continue;
+    await new Promise((r) => setTimeout(r, 1200));
+    answers[i] = await ask(env, questions[i]);
+  }
   const a = analyze(answers, input);
   if (a.total === 0) return json({ error: "provider" }, 502);
   await rpc(env, "finish_free_check", { p_id: res.slice(3), p_total: a.total, p_mentioned: a.mentioned, p_recommended: a.recommended }).catch(() => {});
