@@ -136,6 +136,21 @@ test("TruthGuard: ücretli pakette bilgi kartı, yanlış iddialar, kaynak türl
   // Öneriler: yanlış bilgi maddesi ve kampanya
   await page.goto(`/marka/${brand.id}?sekme=oneriler&tur=canli`);
   await expect(page.getByText("Yapay zekâ markanız hakkında 4 yanlış bilgi veriyor")).toBeVisible();
+  // İçerik planı: önerilmediğimiz soru için istek ve hazır plan
+  const ip = page.locator("#icerik-planlari");
+  await expect(ip).toContainText("Moda'da çalışmak için sakin kafe önerir misin?");
+  await ip.getByRole("button", { name: "İçerik planı oluştur" }).click();
+  await expect(ip).toContainText("Plan hazırlanıyor");
+  must(await db.from("content_briefs").update({ status: "done", done_at: new Date().toISOString(), brief: {
+    title: "Moda'da çalışmak için sessiz kafe: Kafe Mavi", angle: "Cevaplar priz, sessizlik ve uzun oturma iznini ödüllendiriyor.",
+    outline: ["Neden çalışmaya uygun", "Priz ve internet", "Sessiz saatler", "Fiyatlar", "Ulaşım"],
+    mustInclude: [{ item: "Paket servis var", verify: false }, { item: "Priz sayısı ve Wi-Fi hızı", verify: true }],
+    faq: ["Laptopla kaç saat oturulabilir?", "Wi-Fi şifresi isteniyor mu?"], sites: ["tripadvisor.com.tr", "eksisozluk.com"], winners: ["Kahve Durağı"] } }).eq("brand_id", brand.id));
+  await page.reload();
+  await page.addStyleTag({ content: ".bottomnav{display:none!important}.topbar{position:static!important}" });
+  await ip.getByRole("button", { name: "Planı göster" }).click();
+  await expect(ip).toContainText("doğrulayın");
+  await ip.screenshot({ path: `${SHOTS}/37-icerik-plani.png` });
   await page.addStyleTag({ content: ".bottomnav{display:none!important}.topbar{position:static!important}" });
   const rec = page.locator(".rec").filter({ hasText: "yanlış bilgi veriyor" });
   await rec.getByRole("button", { name: /Kampanya başlat/ }).click();

@@ -132,6 +132,10 @@ export const api = {
     return must(await sb().from("discovery_runs").select("requested_at,done_at,found,error").eq("brand_id", brandId).order("requested_at", { ascending: false }).limit(5));
   },
   async requestDiscovery(brandId: string) { must(await sb().rpc("request_prompt_discovery", { p_brand: brandId })); },
+  async contentBriefs(brandId: string): Promise<{ id: string; prompt_id: string; status: "queued" | "done" | "failed"; brief: { title: string; angle: string; outline: string[]; mustInclude: { item: string; verify: boolean }[]; faq: string[]; sites: string[]; winners: string[] } | null; error: string | null; created_at: string }[]> {
+    return must(await sb().from("content_briefs").select("id,prompt_id,status,brief,error,created_at").eq("brand_id", brandId).order("created_at", { ascending: false }).limit(60));
+  },
+  async requestBrief(brandId: string, promptId: string) { must(await sb().rpc("request_content_brief", { p_brand: brandId, p_prompt: promptId })); },
   async setPromptActive(id: string, active: boolean) { must(await sb().from("prompts").update({ active }).eq("id", id)); },
   async updatePrompt(id: string, patch: { text?: string; intent?: Intent; segment?: string | null }) { must(await sb().from("prompts").update(patch).eq("id", id)); },
   /** Bir ölçümdeki ham yapay zekâ cevapları (soru başına). */

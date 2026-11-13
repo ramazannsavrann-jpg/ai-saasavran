@@ -84,6 +84,11 @@
 - Ağırlıklı doğrusal eğilim (ağırlık = cevap sayısı); aralık = model belirsizliği + son ölçümün örneklem belirsizliği. Eğim aralığı sıfırı içeriyorsa "belirgin eğilim yok".
 - En az 4 ölçüm ve 14 gün yoksa tahmin gösterilmez. Simülasyonda gösterilmez. Ek API maliyeti yok.
 
+## v1.30 (14 Kasım 2026): içerik planları
+
+- Öneriler sekmesinde "İçerik planları": markanın önerilmediği her soru için "İçerik planı oluştur". İşçi, o sorunun son 30 gündeki en güncel 4 gerçek cevabından ve kaynak sitelerinden küçük LLM ile plan çıkarır: sayfa başlığı, neden kazanabilir, bölümler, mutlaka yazılacaklar ("doğrulayın" işaretiyle; bilgi kartında olmayan sayı/iddia uydurulmaz), SSS, yapay zekânın baktığı siteler, önerilen rakipler.
+- Yalnız ücretli paketler; marka başına 30 günde 20 plan, aynı soru için 7 günde bir; maliyet (~0,001 $/plan) çalışma alanının ücretli harcamasına yazılır. Migration 0041. Testler: `engine/test/brief.test.ts`, ekran testi.
+
 ## v1.29 (14 Kasım 2026): gerçek soru keşfi (Google)
 
 - Sorular sekmesinde "Gerçek sorular (Google)": markanın sektörü/şehri için 3 Google araması (SerpApi), "Diğer kişiler şunları da sordu" ve ilgili aramalar; tek tıkla soru listesine ekleme (amaç etiketi tahmini), gizleme.
