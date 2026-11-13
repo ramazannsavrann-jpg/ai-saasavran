@@ -1,0 +1,30 @@
+# AI SaaSavran video düzeni (kalıcı)
+
+Bu dal (`seslendirme`) videoların tek kaynağıdır. Yeni oturumda buradan devam edilir; sesler ve şablonlar her seferinde baştan aranmaz.
+
+## Ses
+- Motor: OpenAI TTS (`gpt-4o-mini-tts`), ses **ash**. Bu dala `video/narration-<dil>.txt` push edilince `.github/workflows/seslendirme.yml` mp3 üretir (artifact `seslendirme`).
+- ElevenLabs (ses "Aras", PfUjY8BsgGYwLKokwLKi) ücretsiz katmanı hesapta kapalı ("unusual activity"); kullanılmıyor.
+- Hız: indirildikten sonra `ffmpeg -af atempo=1.2` (kullanıcı onayladı). Video ≤ 58 sn olacak şekilde gerekirse 1.4'e kadar.
+- Okunuş: metinde **"Ey Ay Saa, Savran"** yazılır (virgül, "Savran"ı yavaşlatır). İngilizcede "A I Saa Savran".
+- Müzik: `sablon/music.py` (telifsiz, sentez). Ses altında sidechain ile kısılır (bkz. aşağıdaki ffmpeg).
+
+## Görüntü
+- 1080x1920, 30 fps, sahne başına ayrı mp4, concat + `-c:v copy` ile ses.
+- İlk kare boş değil (s1'de fade-in yok); en altta tarih/örneklem notu; sonda aisaasavran.com + logo.
+- Şablon: `sablon/make.py <ayar.json>` (ayar örnekleri: `sablon/ornek-*.json`). `make.py <ayar> frames` ile önizleme kareleri.
+
+## İçerik kuralları
+- Sonuçlarda markalar **harfli**: Marka A/B/C…, ürünler Model 1/2…. Harfler rastgele atanır (alfabetik değil).
+- Ölçülen markaların gerçek adları videonun altında **alfabetik liste** olarak yazılır; hangi harfin hangi marka olduğu verilmez.
+- Her videoda: "Bunlar yapay zekânın cevaplarıdır, AI SaaSavran'ın değerlendirmesi değildir", tarih, örneklem, "tüm pazarı temsil etmez".
+- Global video İngilizce, Türkiye videosu Türkçe; YouTube başlık/açıklama/etiketler iki dilli. Başlık ≤ 100 karakter.
+- Kulaklık videosu formatı esas: marka oranı, motor karşılaştırması, soru bazında kayıp, rakip ürün, ürün doğruluğu, Google Shopping sırası, kaynaklar.
+
+## Ses + müzik karışımı
+```
+ffmpeg -i v.mp4 -i voice.wav -i music.wav -filter_complex "[1:a]aresample=44100,volume=1.6,apad=whole_dur=$D,asplit=2[vo][sc];[2:a]volume=0.35,atrim=0:$D,afade=t=out:st=$(($D-1.5)):d=1.5[mu];[mu][sc]sidechaincompress=threshold=0.03:ratio=8:attack=20:release=300[duck];[duck][vo]amix=inputs=2:duration=first:normalize=0,alimiter=limit=0.95[a]" -map 0:v -map "[a]" -c:v copy -c:a aac -b:a 160k out.mp4
+```
+
+## Yükleme
+- Dosya `videolar` dalına konur, raw.githubusercontent.com linki `vidiq_video_upload`'a verilir; YouTube kanalı @aisaasavran (UCHL4sdkEenxkpuP4_Hq1RZw).
