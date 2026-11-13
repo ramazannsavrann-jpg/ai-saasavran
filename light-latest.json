@@ -3,12 +3,12 @@
   "mode": "light",
   "costUsd": 0,
   "capUsd": 0.4,
-  "pages": 17,
-  "pagesWithIssues": 10,
+  "pages": 21,
+  "pagesWithIssues": 12,
   "auditPassed": 13,
   "auditTotal": 13,
   "indexnow": {
-    "sent": 17,
+    "sent": 21,
     "status": 200,
     "note": "kabul edildi"
   },
@@ -17,23 +17,25 @@
   "competitorCount": 0,
   "topSources": [],
   "forClaude": [
-    "Sayfa /guides/: az metin (~228 kelime)",
+    "Sayfa /guides/: az metin (~231 kelime)",
     "Sayfa /guides/measure-brand-visibility-in-chatgpt/: açıklama uzun (178)",
     "Sayfa /guides/what-is-geo/: başlık uzun (89 karakter)",
     "Sayfa /guides/local-business-ai-recommendations/: başlık uzun (73 karakter)",
     "Sayfa /guides/why-chatgpt-recommends-your-competitor/: başlık uzun (88 karakter)",
     "Sayfa /guides/youtuber-ai-visibility/: başlık uzun (76 karakter)",
-    "Sayfa /rehber/: az metin (~199 kelime)",
+    "Sayfa /blog/: az metin (~114 kelime)",
+    "Sayfa /rehber/: az metin (~202 kelime)",
     "Sayfa /rehber/geo-nedir/: başlık uzun (86 karakter)",
     "Sayfa /rehber/rakip-neden-oneriliyor/: başlık uzun (79 karakter)",
-    "Sayfa /rehber/youtuber-yapay-zeka-gorunurlugu/: başlık uzun (76 karakter)"
+    "Sayfa /rehber/youtuber-yapay-zeka-gorunurlugu/: başlık uzun (76 karakter)",
+    "Sayfa /tr/blog/: az metin (~111 kelime)"
   ],
   "forUser": [],
   "pageIssues": [
     {
       "url": "https://aisaasavran.com/guides/",
       "issues": [
-        "az metin (~228 kelime)"
+        "az metin (~231 kelime)"
       ]
     },
     {
@@ -67,9 +69,15 @@
       ]
     },
     {
+      "url": "https://aisaasavran.com/blog/",
+      "issues": [
+        "az metin (~114 kelime)"
+      ]
+    },
+    {
       "url": "https://aisaasavran.com/rehber/",
       "issues": [
-        "az metin (~199 kelime)"
+        "az metin (~202 kelime)"
       ]
     },
     {
@@ -88,6 +96,12 @@
       "url": "https://aisaasavran.com/rehber/youtuber-yapay-zeka-gorunurlugu/",
       "issues": [
         "başlık uzun (76 karakter)"
+      ]
+    },
+    {
+      "url": "https://aisaasavran.com/tr/blog/",
+      "issues": [
+        "az metin (~111 kelime)"
       ]
     }
   ],
