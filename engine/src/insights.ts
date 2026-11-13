@@ -533,3 +533,73 @@ export function ownedSourceShare(answers: (InsightAnswer & { provider?: string }
   out.byEngine = [...eng.values()].sort((x, y) => x.provider.localeCompare(y.provider));
   return out;
 }
+
+// ---------------- AI Görünürlük Skoru (0–100) ----------------
+export interface ScoreInput {
+  recommend: { k: number; n: number };
+  mention: { k: number; n: number };
+  /** Takip edilen markalar arasında önerilerdeki pay (0–1) */
+  share: number;
+  /** Sitenin kaynak gösterilmesi; yalnız canlı aramada vardır, aramasız ölçümde null */
+  cite: { k: number; n: number } | null;
+}
+export type ScorePartKey = "recommend" | "mention" | "share" | "cite";
+export interface VisibilityScore {
+  score: number; low: number; high: number;
+  parts: { key: ScorePartKey; value: number; weight: number; points: number }[];
+  /** Kaynak bileşeni yoksa (aramasız ölçüm) ağırlığı diğerlerine oransal dağıtılır */
+  citeMissing: boolean;
+  n: number; lowSample: boolean;
+}
+/** Bileşen ağırlıkları (toplam 100). Önerilme en önemli sinyal; anılma ve pay destekleyici; kaynak yalnız canlı aramada. */
+export const SCORE_WEIGHTS: Record<ScorePartKey, number> = { recommend: 45, mention: 20, share: 20, cite: 15 };
+
+/**
+ * Tek skor: oranların ağırlıklı ortalaması × 100. Aralık, önerilme/anılma/kaynak oranlarının Wilson alt ve üst
+ * sınırlarıyla aynı formülden hesaplanır (pay sabit tutulur). Eğilim skora katılmaz; önceki ölçümle fark ayrıca gösterilir.
+ */
+export function visibilityScore(x: ScoreInput, minSample = 20): VisibilityScore | null {
+  const n = x.recommend.n;
+  if (!n) return null;
+  const citeMissing = !x.cite || x.cite.n === 0;
+  const keys: ScorePartKey[] = citeMissing ? ["recommend", "mention", "share"] : ["recommend", "mention", "share", "cite"];
+  const totalW = keys.reduce((a, k) => a + SCORE_WEIGHTS[k], 0);
+  const r = (s: { k: number; n: number }) => (s.n ? s.k / s.n : 0);
+  const w = (s: { k: number; n: number }) => (s.n ? wilson(s.k, s.n) : { low: 0, high: 0 });
+  const mid: Record<ScorePartKey, number> = { recommend: r(x.recommend), mention: r(x.mention), share: clamp01(x.share), cite: citeMissing ? 0 : r(x.cite!) };
+  const lo: Record<ScorePartKey, number> = { recommend: w(x.recommend).low, mention: w(x.mention).low, share: mid.share, cite: citeMissing ? 0 : w(x.cite!).low };
+  const hi: Record<ScorePartKey, number> = { recommend: w(x.recommend).high, mention: w(x.mention).high, share: mid.share, cite: citeMissing ? 0 : w(x.cite!).high };
+  const calc = (v: Record<ScorePartKey, number>) => keys.reduce((a, k) => a + v[k] * SCORE_WEIGHTS[k], 0) / totalW * 100;
+  const parts = keys.map((k) => ({ key: k, value: mid[k], weight: Math.round(SCORE_WEIGHTS[k] / totalW * 1000) / 10, points: Math.round(mid[k] * SCORE_WEIGHTS[k] / totalW * 1000) / 10 }));
+  return { score: Math.round(calc(mid)), low: Math.round(calc(lo)), high: Math.round(calc(hi)), parts, citeMissing, n, lowSample: n < minSample };
+}
+
+export interface ScoreChange {
+  prev: number; now: number; delta: number;
+  /** Fark ölçüm oynaklığı içinde mi (iki aralık çakışıyorsa evet) */
+  withinNoise: boolean;
+  /** En çok değişen bileşen (puan olarak) */
+  topPart: { key: ScorePartKey; delta: number } | null;
+}
+/** İki ölçüm arasındaki skor farkı ve onu en çok etkileyen bileşen. */
+export function scoreChange(prev: VisibilityScore | null, now: VisibilityScore | null): ScoreChange | null {
+  if (!prev || !now) return null;
+  let topPart: ScoreChange["topPart"] = null;
+  for (const p of now.parts) {
+    const q = prev.parts.find((z) => z.key === p.key);
+    if (!q) continue;
+    const d = Math.round((p.points - q.points) * 10) / 10;
+    if (!topPart || Math.abs(d) > Math.abs(topPart.delta)) topPart = { key: p.key, delta: d };
+  }
+  return { prev: prev.score, now: now.score, delta: now.score - prev.score, withinNoise: !(now.low > prev.high || now.high < prev.low), topPart: topPart && topPart.delta !== 0 ? topPart : null };
+}
+
+/** Motor bazında son iki ölçümün skor farkı; en büyük değişen motor ilk sırada. */
+export function engineScoreChanges(byEngine: { provider: string; prev: ScoreInput | null; now: ScoreInput | null }[]): { provider: string; change: ScoreChange }[] {
+  return byEngine
+    .map((e) => ({ provider: e.provider, change: scoreChange(e.prev ? visibilityScore(e.prev) : null, e.now ? visibilityScore(e.now) : null) }))
+    .filter((e): e is { provider: string; change: ScoreChange } => !!e.change)
+    .sort((a, b) => Math.abs(b.change.delta) - Math.abs(a.change.delta) || a.provider.localeCompare(b.provider));
+}
+
+function clamp01(v: number) { return Math.min(1, Math.max(0, v)); }

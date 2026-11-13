@@ -6,7 +6,7 @@ import { api, INTENT_LABEL, type Brand, type Intent, type MeasurementType, type 
 import { friendlyError, sb } from "../lib/supabase";
 import { L, isEn } from "../lib/i18n";
 import { ERROR_CLASS_TEXT, STOP_TEXT, runStatusText } from "../lib/messages";
-import { actionImpact, compareProducts, engineComparison, ownedSourceShare, visibilityForecast, sourcesByEngine, rivalReasons, conditionMap, lossCards, productVisibility, promptKind, shoppingSources, sourceDominance, splitByKind, type EngineCompareRow, type LossCard, type SourceRow } from "../../../engine/src/insights.ts";
+import { actionImpact, compareProducts, engineComparison, engineScoreChanges, scoreChange, visibilityScore, type ScoreInput, type ScorePartKey, ownedSourceShare, visibilityForecast, sourcesByEngine, rivalReasons, conditionMap, lossCards, productVisibility, promptKind, shoppingSources, sourceDominance, splitByKind, type EngineCompareRow, type LossCard, type SourceRow } from "../../../engine/src/insights.ts";
 import { competitorsInRun, formatDate, formatDateTime, MIN_SAMPLE, numLoc, pct, providerLabel, rangeText, series, shareSummary, sourceOpportunities, topDomains, usd } from "../lib/report";
 import { Button, Confirm, DataNotice, Empty, ErrorBox, Field, Loading, Select, TypeBadge } from "../components/ui";
 import { CompareBars, TrendChart } from "../components/Chart";
@@ -652,6 +652,7 @@ function Report({ brand, type, onBrandChange }: { brand: Brand; type: Measuremen
               {engList.map((e) => <button key={e} aria-pressed={e === eng} onClick={() => setEngPick(e)}>{providerLabel(e)}</button>)}
             </div>
           )}
+          <ScorePanel pts={pts} live={live} simulated={type === "simulated"} allRows={vis.data ?? []} engineName={eng ? providerLabel(eng) : null} />
           <section className="panel lead-result">
             <div className="lead-meta"><TypeBadge type={type} /><span className="muted">{formatDateTime(last.at)}, {last.providers.map(providerLabel).join(", ")}</span></div>
             <p className="lead-sentence">
@@ -879,6 +880,62 @@ function Report({ brand, type, onBrandChange }: { brand: Brand; type: Measuremen
         </>
       )}
     </div>
+  );
+}
+
+/** AI Görünürlük Skoru: oranların ağırlıklı ortalaması (0–100), aralığı ve önceki ölçüme göre fark. Ek API çağrısı yok. */
+const PART_LABEL: Record<ScorePartKey, string> = {
+  recommend: L("Önerilme", "Recommended"), mention: L("Anılma", "Mentioned"),
+  share: L("Önerilerdeki pay", "Share of recommendations"), cite: L("Sitenin kaynak gösterilmesi", "Your site cited"),
+};
+function ScorePanel({ pts, live, simulated, allRows, engineName }: { pts: ReturnType<typeof series>; live: boolean; simulated: boolean; allRows: VisRow[]; engineName: string | null }) {
+  const [how, setHow] = useState(false);
+  const toInput = (p: (typeof pts)[number] | undefined): ScoreInput | null => p ? ({ recommend: p.recommend, mention: p.mention, share: p.share, cite: live ? p.cite : null }) : null;
+  const last = pts[pts.length - 1], prev = pts[pts.length - 2];
+  const now = visibilityScore(toInput(last)!);
+  if (!now) return null;
+  const ch = scoreChange(prev ? visibilityScore(toInput(prev)!) : null, now);
+  // Motor bazında: her motorun kendi son iki ölçümü
+  const engs = [...new Set(allRows.map((r) => r.provider))];
+  const engCh = engs.length > 1 ? engineScoreChanges(engs.map((e) => {
+    const ps = series(allRows.filter((r) => r.provider === e));
+    return { provider: e, prev: toInput(ps[ps.length - 2]), now: toInput(ps[ps.length - 1]) };
+  })) : [];
+  const topEng = engCh.find((e) => e.change.delta !== 0 && !e.change.withinNoise);
+  const band = now.score >= 60 ? "high" : now.score >= 30 ? "mid" : "low";
+  return (
+    <section className={`panel score-card score-${band}`} id="gorunurluk-skoru">
+      <div className="score-row">
+        <div className="score-num" aria-label={L("AI Görünürlük Skoru", "AI Visibility Score")}><strong>{now.score}</strong><span>/100</span></div>
+        <div>
+          <h2>{L("AI Görünürlük Skoru", "AI Visibility Score")}{engineName && <span className="muted"> · {engineName}</span>}{simulated && <span className="muted"> · {L("simülasyon", "simulation")}</span>}</h2>
+          <p className="muted">{L("aralık", "range")} {now.low}–{now.high}</p>
+          {ch ? (
+            <p>{isEn()
+              ? <>Previous measurement {ch.prev} → now {ch.now} ({ch.delta > 0 ? "+" : ""}{ch.delta}).</>
+              : <>Önceki ölçüm {ch.prev} → şimdi {ch.now} ({ch.delta > 0 ? "+" : ""}{ch.delta}).</>}
+              {ch.withinNoise
+                ? <span className="muted"> {L("Fark ölçüm oynaklığı içinde, gerçek değişim olmayabilir.", "The change is within measurement noise; it may not be real.")}</span>
+                : ch.topPart && <> {isEn() ? `Biggest driver: ${PART_LABEL[ch.topPart.key].toLowerCase()} (${ch.topPart.delta > 0 ? "+" : ""}${ch.topPart.delta} pts).` : `En çok etkileyen: ${PART_LABEL[ch.topPart.key].toLowerCase()} (${ch.topPart.delta > 0 ? "+" : ""}${ch.topPart.delta} puan).`}</>}
+            </p>
+          ) : <p className="muted">{L("Karşılaştırma için ikinci ölçüm gerekir.", "A second measurement is needed for a comparison.")}</p>}
+          {topEng && <p className="muted">{isEn() ? `Largest ${topEng.change.delta > 0 ? "rise" : "drop"}: ${providerLabel(topEng.provider)} (${topEng.change.prev} → ${topEng.change.now}).` : `En büyük ${topEng.change.delta > 0 ? "artış" : "düşüş"}: ${providerLabel(topEng.provider)} (${topEng.change.prev} → ${topEng.change.now}).`}</p>}
+        </div>
+      </div>
+      {now.lowSample && <p className="caution">{isEn() ? `Not final: only ${now.n} answers. The score can move a lot between measurements.` : `Kesin değil: yalnız ${now.n} cevap var. Skor ölçümler arasında çok oynayabilir.`}</p>}
+      <button className="link-btn" aria-expanded={how} onClick={() => setHow(!how)}>{how ? L("Hesabı gizle", "Hide the calculation") : L("Skor nasıl hesaplandı?", "How is the score calculated?")}</button>
+      {how && (
+        <div className="score-how">
+          <ul className="plain">
+            {now.parts.map((p) => <li key={p.key}>{PART_LABEL[p.key]}: {pct(p.value)} × {L("ağırlık", "weight")} %{p.weight} = <strong>{p.points}</strong> {L("puan", "pts")}</li>)}
+          </ul>
+          <p className="muted">{now.citeMissing
+            ? L("Bu ölçümde kaynak verisi yok (canlı arama gerekir); kaynak bileşeni sıfır sayılmadı, ağırlığı diğerlerine oransal dağıtıldı.", "No source data in this measurement (needs live search); the source part wasn't counted as zero, its weight was spread across the others.")
+            : L("Ağırlıklar: önerilme 45, anılma 20, önerilerdeki pay 20, kaynak gösterilme 15.", "Weights: recommended 45, mentioned 20, share of recommendations 20, cited 15.")}
+            {" "}{L("Aralık, oranların %95 güven aralığından hesaplanır. Skor yalnız ölçtüğünüz sorular ve takip ettiğiniz rakiplerle ilgilidir; farklı soru setleri arasında karşılaştırılamaz.", "The range comes from the 95% intervals of the rates. The score only covers your questions and tracked competitors; it can't be compared across different question sets.")}</p>
+        </div>
+      )}
+    </section>
   );
 }
 

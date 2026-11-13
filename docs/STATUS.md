@@ -84,6 +84,14 @@
 - Ağırlıklı doğrusal eğilim (ağırlık = cevap sayısı); aralık = model belirsizliği + son ölçümün örneklem belirsizliği. Eğim aralığı sıfırı içeriyorsa "belirgin eğilim yok".
 - En az 4 ölçüm ve 14 gün yoksa tahmin gösterilmez. Simülasyonda gösterilmez. Ek API maliyeti yok.
 
+## v1.17 (13 Kasım 2026): AI Görünürlük Skoru
+
+- Raporun en üstünde 0–100 arası tek skor: önerilme %45, anılma %20, önerilerdeki pay %20, sitenin kaynak gösterilmesi %15.
+- Aramasız ölçümde kaynak bileşeni sıfır sayılmaz; ağırlığı diğerlerine oransal dağıtılır ve bu açıkça yazılır.
+- Skorun aralığı oranların %95 güven aralığından hesaplanır; 20 cevabın altında "kesin değil" uyarısı.
+- Önceki ölçümle fark, farkı en çok etkileyen bileşen ve fark oynaklık içindeyse uyarı. Birden çok motorda en büyük artış/düşüş gösteren motor.
+- "Skor nasıl hesaplandı?" bağlantısı her bileşenin puanını gösterir. Ek API maliyeti yok. Testler: `engine/test/score.test.ts`.
+
 ## v1.16 (13 Kasım 2026): kendi site payı ve kanal/profil adresleri
 
 - Raporda **Kendi site payı**: yapay zekânın gösterdiği kaynakların ne kadarı sizin siteniz/kanalınız, rakip siteleri, üçüncü taraf siteler; motor bazında. Aramasız ölçümde "veri yok (canlı arama gerekir)".
