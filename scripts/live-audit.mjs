@@ -54,7 +54,7 @@ await step("E-posta", "Abonelikten çıkma geçersiz bağlantıyı reddediyor", 
 
 // 4) Ücretsiz kontrol: gerçek Gemini ile uçtan uca (5 ücretsiz sorgu)
 await step("Ücretsiz kontrol", "Gerçek Gemini ile kontrol çalışıyor", async () => {
-  const r = await get("/api/check", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ lang: "tr", brand: "AI SaaSavran", category: "yapay zekâ görünürlük ölçüm aracı", city: "", website: "aisaasavran.com" }) });
+  const r = await get("/api/check", { method: "POST", headers: { "content-type": "application/json", "x-aisv-test": "live-audit" }, body: JSON.stringify({ lang: "tr", brand: "AI SaaSavran", category: "yapay zekâ görünürlük ölçüm aracı", city: "", website: "aisaasavran.com" }) });
   if (r.status === 429) return { ok: null, note: `sınır: ${r.json?.error} (kişi başı 30 günde 2 kontrol ya da günlük tavan)` };
   if (r.status === 451) return { ok: null, note: "test makinesinin ülkesinde ücretsiz Gemini kapalı" };
   const x = r.json ?? {};

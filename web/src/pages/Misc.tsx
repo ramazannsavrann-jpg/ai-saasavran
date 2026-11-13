@@ -179,7 +179,40 @@ export function AdminCustomers() {
       {list.loading ? <Loading /> : list.error ? <ErrorBox message={list.error} /> : rows.length === 0 ? <Empty title={L("Müşteri yok", "No customers")} /> : (
         <ul className="rows panel">{rows.map((w) => <AdminRow key={w.id} w={w} onChange={() => { list.reload(); reload(); }} />)}</ul>
       )}
+      <AdminFreeChecks />
     </div>
+  );
+}
+
+const KIND_LABEL: Record<string, [string, string]> = {
+  browser: ["Tarayıcı (büyük ihtimalle insan)", "Browser (likely human)"], bot: ["Bot", "Bot"],
+  script: ["Otomatik araç / kod", "Script / tool"], test: ["Bizim testimiz", "Our own test"], unknown: ["Bilinmiyor (eski kayıt)", "Unknown (older record)"],
+};
+/** Yönetici: kayıtsız ücretsiz kontrolü kimler kullanıyor (son 60 gün). IP gösterilmez. */
+function AdminFreeChecks() {
+  const list = useLoad(() => api.adminFreeChecks(), []);
+  const rows = list.data ?? [];
+  const kl = (k: string | null) => { const x = KIND_LABEL[k ?? "unknown"]; return isEn() ? x[1] : x[0]; };
+  const counts = new Map<string, number>();
+  for (const r of rows) counts.set(r.visitor_kind ?? "unknown", (counts.get(r.visitor_kind ?? "unknown") ?? 0) + 1);
+  return (
+    <section className="panel" id="ucretsiz-kontroller">
+      <h2>{L("Ücretsiz kontrol kullanımı (son 60 gün)", "Free check usage (last 60 days)")}</h2>
+      <p className="muted">{L("Kayıtsız ücretsiz kontrolü kim kullanıyor. Tür, tarayıcının kendini tanıtma bilgisinden tahmin edilir; taklit edilebilir. IP adresi gösterilmez.", "Who uses the sign-up-free check. The type is guessed from the browser's user agent and can be faked. IP addresses are not shown.")}</p>
+      {list.loading ? <Loading /> : list.error ? <ErrorBox message={list.error} /> : rows.length === 0 ? <p>{L("Henüz kullanım yok.", "No usage yet.")}</p> : (
+        <>
+          <ul className="plain">{[...counts.entries()].sort((a, b) => b[1] - a[1]).map(([k, n]) => <li key={k}>{kl(k)}: <strong>{n}</strong></li>)}</ul>
+          <ul className="rows">
+            {rows.map((r, i) => (
+              <li key={i}>
+                <p><strong>{r.brand}</strong> <span className="muted">· {r.category}{r.city ? ` · ${r.city}` : ""} · {r.lang.toUpperCase()}</span></p>
+                <p className="muted">{new Date(r.created_at).toLocaleString(isEn() ? "en-GB" : "tr-TR", { dateStyle: "short", timeStyle: "short" })} · {kl(r.visitor_kind)}{r.country ? ` · ${r.country}` : ""}{r.repeat_visitor ? L(" · tekrar gelen", " · returning") : ""}{r.total !== null ? ` · ${L("sonuç", "result")}: ${r.mentioned ?? 0}/${r.total} ${L("anıldı", "mentioned")}` : ` · ${L("sonuç yok", "no result")}`}</p>
+              </li>
+            ))}
+          </ul>
+        </>
+      )}
+    </section>
   );
 }
 

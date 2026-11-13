@@ -58,3 +58,18 @@ export function analyze(answers, { brand, domain }) {
 /** Ücretsiz Gemini'nin kullanılamadığı ülkeler (AEA, İsviçre, Birleşik Krallık): Google Gemini API ek koşulları. */
 const GEMINI_FREE_RESTRICTED = new Set(("AT BE BG HR CY CZ DK EE FI FR DE GR HU IE IT LV LT LU MT NL PL PT RO SK SI ES SE IS LI NO CH GB").split(" "));
 export const geminiRestricted = (country) => GEMINI_FREE_RESTRICTED.has(String(country ?? "").toUpperCase());
+
+
+/**
+ * İstemci türü (yalnız etiket, yetki vermez): "test" = bizim otomatik testlerimiz (x-aisv-test başlığı),
+ * "bot" = kendini bot/tarayıcı otomasyonu olarak tanıtan, "script" = komut satırı veya programlama kitaplığı, aksi halde "browser".
+ * Taklit edilebilir; kesin bot ayrımı için ileride Cloudflare Turnstile eklenebilir.
+ */
+export function visitorKind(ua, headers = {}) {
+  if (headers["x-aisv-test"]) return "test";
+  const s = String(ua ?? "");
+  if (!s) return "script";
+  if (/bot\b|bot\/|crawler|spider|slurp|HeadlessChrome|PhantomJS|Puppeteer|Playwright|Selenium|Lighthouse|GPTBot|ClaudeBot|PerplexityBot|-User\//i.test(s)) return "bot";
+  if (/^(curl|wget|python|python-requests|aiohttp|httpx|node-fetch|undici|axios|Go-http-client|Java\/|okhttp|libwww|PostmanRuntime|insomnia|Deno|Bun)/i.test(s) || !/Mozilla\//.test(s)) return "script";
+  return "browser";
+}
