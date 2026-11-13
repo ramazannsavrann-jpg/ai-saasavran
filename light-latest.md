@@ -1,6 +1,6 @@
 # GEO Otopilot raporu — 2026-11-13
 
-Mod: **ücretsiz kontrol** · Harcanan: **0 $** (tavan 0.25 $)
+Mod: **ücretsiz kontrol** · Harcanan: **0 $** (tavan 0.4 $)
 
 ## Otomatik yapılanlar
 - IndexNow (Bing + Yandex): 17 sayfa bildirildi — kabul edildi

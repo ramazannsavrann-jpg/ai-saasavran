@@ -2,14 +2,14 @@
   "date": "2026-11-13",
   "mode": "light",
   "costUsd": 0,
-  "capUsd": 0.25,
+  "capUsd": 0.4,
   "pages": 17,
   "pagesWithIssues": 10,
   "auditPassed": 13,
   "auditTotal": 13,
   "indexnow": {
     "sent": 17,
-    "status": 202,
+    "status": 200,
     "note": "kabul edildi"
   },
   "engines": {},
