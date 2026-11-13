@@ -12,7 +12,8 @@ Bu dal (`seslendirme`) videoların tek kaynağıdır. Yeni oturumda buradan deva
 ## Görüntü
 - 1080x1920, 30 fps, sahne başına ayrı mp4, concat + `-c:v copy` ile ses.
 - İlk kare boş değil (s1'de fade-in yok); en altta tarih/örneklem notu; sonda aisaasavran.com + logo.
-- Şablon: `sablon/make.py <ayar.json>` (ayar örnekleri: `sablon/ornek-*.json`). `make.py <ayar> frames` ile önizleme kareleri.
+- Şablon: `sablon/make.py <ayar.json>` (v2, 8 sahne: marka, motorlar, soru bazında kayıp, ürün, doğruluk+Shopping, kaynaklar, CTA; örnek ayarlar telefon videoları). `make.py <ayar> frames` önizleme, `make.py <ayar> s3 s4` yalnız o sahneler.
+- Gerçek marka adları her sahnenin altında ("names" alanı); Türkçe ses gerekirse atempo 1.3.
 
 ## İçerik kuralları
 - Sonuçlarda markalar **harfli**: Marka A/B/C…, ürünler Model 1/2…. Harfler rastgele atanır (alfabetik değil).
