@@ -19,7 +19,8 @@ test("Plan istemi: bilgi kartı ve cevaplar veri olarak, uydurma yasağı, dil",
 
 test("Plan okuma: eksik plan reddedilir, doğrulama işareti varsayılan true", () => {
   assert.equal(parseBrief('{"title":"X","outline":["tek"]}', []), null);
-  const b = parseBrief(JSON.stringify({ title: "Kadıköy'de çalışmak için sessiz kafe", angle: "Priz ve sessizlik", outline: ["Neden sessiz", "Priz ve internet"], mustInclude: [{ item: "Priz sayısı", verify: false }, { item: "Puan" }], faq: ["Wi-Fi var mı?"], winners: ["Kahve Durağı"] }), ["tripadvisor.com.tr"])!;
+  const b = parseBrief(JSON.stringify({ title: "Kadıköy'de çalışmak için sessiz kafe", angle: "Priz ve sessizlik", outline: ["Neden sessiz", "Priz ve internet"], mustInclude: [{ item: "Priz sayısı", verify: false }, { item: "Puan" }], faq: ["Wi-Fi var mı?"], winners: ["Kahve Durağı", "OPPO", "Oppo"] }), ["tripadvisor.com.tr"])!;
+  assert.deepEqual(b.winners, ["Kahve Durağı", "OPPO"], "büyük/küçük harf farkıyla tekrar eden marka bir kez");
   assert.deepEqual(b.mustInclude, [{ item: "Priz sayısı", verify: false }, { item: "Puan", verify: true }]);
   assert.deepEqual(b.sites, ["tripadvisor.com.tr"]);
 });

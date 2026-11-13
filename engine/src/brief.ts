@@ -52,7 +52,7 @@ export function parseBrief(text: string, sites: string[]): ContentBrief | null {
     title, angle, outline,
     mustInclude: arr(o.mustInclude).map((x: { item?: unknown; verify?: unknown }) => ({ item: str(x?.item, 200), verify: x?.verify !== false })).filter((x) => x.item).slice(0, 8),
     faq: arr(o.faq).map((x) => str(x, 200)).filter(Boolean).slice(0, 5),
-    winners: arr(o.winners).map((x) => str(x, 80)).filter(Boolean).slice(0, 5),
+    winners: arr(o.winners).map((x) => str(x, 80)).filter((x, i, a) => x && a.findIndex((y) => y.toLocaleLowerCase("tr-TR") === x.toLocaleLowerCase("tr-TR")) === i).slice(0, 5),
     sites,
   };
 }

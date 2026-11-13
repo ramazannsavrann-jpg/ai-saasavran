@@ -14,6 +14,7 @@ import { buildRecommendations, type RecInput } from "../../../engine/src/recomme
 import { untrackedNames } from "../../../engine/src/metrics.ts";
 import { campaignFor, taskProgress } from "../../../engine/src/campaign.ts";
 import { guessIntent } from "../../../engine/src/discovery.ts";
+import { sourceNetwork } from "../../../engine/src/network.ts";
 import { botSummary, snippet, SOURCE_PROVIDER, trafficSummary, visibilityVsVisits, workerCode, type AiSource, type BotKind } from "../../../engine/src/traffic.ts";
 import { sourceMix, statSummary, truthSummary, type SourceMix, type SourceType } from "../../../engine/src/truth.ts";
 
@@ -732,6 +733,7 @@ function Report({ brand, type, onBrandChange, paid = false }: { brand: Brand; ty
           {engList.length > 1 && (
             <EngineComparePanel rows={(vis.data ?? []).filter((r) => r.run_id === last.runId)} answers={answersAll.data ?? []} live={live} />
           )}
+          {live && answersAll.data && answersAll.data.length > 0 && <SourceNetworkPanel answers={answersAll.data} brands={insightBrands} />}
 
           <section className="panel" id="kosul-haritasi">
             <h2>{L("Hangi koşulda görünüyorsunuz", "Where you show up, and where you don't")}</h2>
@@ -1035,6 +1037,56 @@ function BriefsPanel({ brand, results }: { brand: Brand; results: PromptResult[]
           <p className="src-sup muted">{L("Marka başına 30 günde en fazla 20 plan; aynı soru için 7 günde bir.", "Up to 20 plans per brand every 30 days; once a week per question.")}</p>
         </>
       )}
+    </section>
+  );
+}
+
+/** Yapay zekâ kaynak ağı: hangi siteyi hangi motorlar kullanıyor, o sitenin cevaplarında kim öneriliyor. */
+function SourceNetworkPanel({ answers, brands }: { answers: { id: string; provider: string; cited_urls: string[] | null }[]; brands: { id: string; name: string; website: string | null; isTarget: boolean }[] }) {
+  const ments = useLoad(() => api.mentionsFor(answers.map((a) => a.id)), [answers]);
+  if (ments.loading || !ments.data) return null;
+  const net = sourceNetwork(answers, ments.data, brands, 8);
+  if (!net.length) return null;
+  const shown = brands.filter((b) => net.some((n) => n.brands.some((x) => x.id === b.id))).slice(0, 6);
+  const W = 340, rowH = 30, H = Math.max(net.length, shown.length) * rowH + 10, lx = 150, rx = 220;
+  const ly = (i: number) => 18 + i * rowH;
+  const span = (net.length - 1) * rowH, ry = (j: number) => 18 + (shown.length > 1 ? (j * span) / (shown.length - 1) : span / 2);
+  const max = Math.max(1, ...net.flatMap((n) => n.brands.map((b) => b.count)));
+  const role = (r: string) => r === "rival" ? L("rakip kalesi", "competitor stronghold") : r === "yours" ? L("sizin kaleniz", "your stronghold") : r === "shared" ? L("ortak kaynak", "shared source") : "";
+  const rivals = net.filter((n) => n.role === "rival");
+  return (
+    <section className="panel" id="kaynak-agi">
+      <h2>{L("Yapay zekâ kaynak ağı", "AI source network")}</h2>
+      <p className="muted">{L("Solda yapay zekânın en çok baktığı siteler, sağda bu sitelerin geçtiği cevaplarda önerilen markalar. Çizgi kalınlığı: kaç cevapta birlikte geçtiği.", "Left: the sites the AI relies on most; right: brands recommended in answers citing them. Line width: how many answers they share.")}</p>
+      <svg viewBox={`0 0 ${W} ${H}`} width="100%" role="img" aria-label={L("Kaynak ve marka ağı", "Source and brand network")} className="net-svg">
+        {net.map((n, i) => n.brands.map((b) => {
+          const j = shown.findIndex((x) => x.id === b.id);
+          if (j < 0) return null;
+          return <line key={n.domain + b.id} x1={lx} y1={ly(i)} x2={rx} y2={ry(j)} strokeWidth={1 + (5 * b.count) / max} className={b.isTarget ? "net-edge-you" : "net-edge"} />;
+        }))}
+        {net.map((n, i) => (
+          <g key={n.domain}>
+            <text x={lx - 8} y={ly(i) + 4} textAnchor="end" className={`net-src net-${n.role}`}>{n.domain.length > 22 ? n.domain.slice(0, 21) + "…" : n.domain}</text>
+            <circle cx={lx} cy={ly(i)} r={4} className={`net-dot net-${n.role}`} />
+          </g>
+        ))}
+        {shown.map((b, j) => (
+          <g key={b.id}>
+            <circle cx={rx} cy={ry(j)} r={5} className={b.isTarget ? "net-you" : "net-brand"} />
+            <text x={rx + 9} y={ry(j) + 4} className={b.isTarget ? "net-you-t" : "net-brand-t"}>{b.name.length > 14 ? b.name.slice(0, 13) + "…" : b.name}</text>
+          </g>
+        ))}
+      </svg>
+      <ul className="src-dom">
+        {net.map((n) => (
+          <li key={n.domain}>
+            <p className="src-head"><strong>{n.domain}</strong>{role(n.role) && <span className={`badge-net net-${n.role}`}>{role(n.role)}</span>}</p>
+            <p className="src-sup muted">{n.answers} {L("cevap", "answers")} · {n.engines.map(providerLabel).join(", ")}{n.brands.length ? ` · ${n.brands.map((b) => `${b.name} ${b.count}`).join(", ")}` : ""}</p>
+          </li>
+        ))}
+      </ul>
+      {rivals.length > 0 && <p className="caution">{isEn() ? `${rivals.map((r) => r.domain).join(", ")}: answers citing these sites recommend your competitors and never you. Getting listed or reviewed there is the most direct way into those answers.` : `${rivals.map((r) => r.domain).join(", ")}: bu siteleri kaynak gösteren cevaplar rakiplerinizi öneriyor, sizi hiç önermiyor. Bu sitelerde yer almak veya incelenmek o cevaplara girmenin en doğrudan yolu.`}</p>}
+      <p className="src-sup muted">{L("\"Ortak kaynak\": en az iki motorun baktığı site; burada yer almak birden fazla motoru etkiler.", "\"Shared source\": a site at least two engines rely on; being there affects several engines.")}</p>
     </section>
   );
 }
