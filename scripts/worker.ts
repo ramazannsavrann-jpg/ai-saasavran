@@ -5,6 +5,7 @@ import { createClient } from "@supabase/supabase-js";
 import { maintain, processAudits, processProductChecks, processQueue, processShoppingChecks, processReanalysis, scheduleWeekly } from "../engine/src/worker.ts";
 import { seedLabs } from "../engine/src/labs.ts";
 import { sendWeeklyDigests, sendWelcomeEmails } from "../engine/src/email.ts";
+import { processDropAlerts } from "../engine/src/alerts.ts";
 
 const { SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY } = process.env;
 if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
@@ -36,5 +37,8 @@ if (process.env.RESEND_API_KEY) {
 // Hoş geldin e-postası (e-postasını doğrulayan yeni kullanıcıya bir kez)
 let welcome: unknown;
 try { welcome = await sendWelcomeEmails(db, process.env.RESEND_API_KEY); } catch (e) { welcome = `hata: ${(e as Error).message}`; }
-console.log(JSON.stringify({ maintenance, productChecks, shoppingChecks, weeklyScheduled: scheduled, audits, reanalyzed, digests, welcome, processed: results.length, results }, null, 2));
+// Düşüş uyarısı: biten her ölçüm önceki ölçümle bir kez karşılaştırılır (ek API yok)
+let dropAlerts: unknown;
+try { dropAlerts = await processDropAlerts(db, process.env.RESEND_API_KEY); } catch (e) { dropAlerts = `hata: ${(e as Error).message}`; }
+console.log(JSON.stringify({ maintenance, dropAlerts, productChecks, shoppingChecks, weeklyScheduled: scheduled, audits, reanalyzed, digests, welcome, processed: results.length, results }, null, 2));
 if (results.some((r) => r.stop === "worker_error")) process.exit(1);

@@ -84,6 +84,13 @@
 - Ağırlıklı doğrusal eğilim (ağırlık = cevap sayısı); aralık = model belirsizliği + son ölçümün örneklem belirsizliği. Eğim aralığı sıfırı içeriyorsa "belirgin eğilim yok".
 - En az 4 ölçüm ve 14 gün yoksa tahmin gösterilmez. Simülasyonda gösterilmez. Ek API maliyeti yok.
 
+## v1.18 (13 Kasım 2026): düşüş uyarısı
+
+- Biten her ölçüm, aynı markanın aynı türdeki önceki ölçümüyle motor bazında karşılaştırılır (işçi, ek API yok, migration 0032).
+- Yalnız iki ölçümde de sorulan sorular sayılır. Uyarı için düşüş ≥10 puan, her iki ölçümde ≥10 cevap ve iki oran z-testinde %95 belirginlik gerekir.
+- E-posta (TR/EN): hangi motorda, önceki → yeni oran, kaybedilen sorular ve yerine önerilen rakip. Tek tıkla kapatma (`/api/unsubscribe?k=drop`), hesap sayfasında aç/kapat.
+- Yalnız müşteri çalışma alanları (Growth Lab hariç). Her ölçüm bir kez kontrol edilir (`drop_alerts` tablosu). Testler: `engine/test/drop-alert.test.ts`.
+
 ## v1.17 (13 Kasım 2026): AI Görünürlük Skoru
 
 - Raporun en üstünde 0–100 arası tek skor: önerilme %45, anılma %20, önerilerdeki pay %20, sitenin kaynak gösterilmesi %15.
