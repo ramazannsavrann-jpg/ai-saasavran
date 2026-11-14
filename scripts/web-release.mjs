@@ -4,6 +4,8 @@
 import { writeFileSync, existsSync, readFileSync } from "node:fs";
 
 const { SUPABASE_URL, SUPABASE_ANON_KEY, PADDLE_CLIENT_TOKEN } = process.env;
+// Turnstile site anahtarı herkese açıktır (gizli olan TURNSTILE_SECRET yalnız sunucuda). Biçimi doğrulanır; yoksa bot koruması kapalı kalır.
+const turnstileSiteKey = /^[0-9A-Za-z_-]{10,60}$/.test(process.env.TURNSTILE_SITE_KEY ?? "") ? process.env.TURNSTILE_SITE_KEY : null;
 if (!existsSync("web/dist/index.html") || !existsSync("web/dist/app/index.html")) throw new Error("Önce arayüzü derleyin: npm run build --prefix web");
 if (!SUPABASE_URL || !SUPABASE_ANON_KEY) throw new Error("SUPABASE_URL ve SUPABASE_ANON_KEY gerekli");
 if (/service_role|sb_secret_/.test(SUPABASE_ANON_KEY) || JSON.stringify(SUPABASE_ANON_KEY).includes('"role":"service_role"')) {
@@ -29,7 +31,7 @@ if (PADDLE_CLIENT_TOKEN) {
   paddle = { clientToken: PADDLE_CLIENT_TOKEN, environment: env, prices: catalog.prices };
 }
 writeFileSync("web/dist/config.json", JSON.stringify({
-  supabaseUrl: url.origin, supabaseAnonKey: SUPABASE_ANON_KEY, environment: "production", paddle,
+  supabaseUrl: url.origin, supabaseAnonKey: SUPABASE_ANON_KEY, environment: "production", paddle, ...(turnstileSiteKey ? { turnstileSiteKey } : {}),
 }));
 
 const csp = [
@@ -40,8 +42,8 @@ const csp = [
   "img-src 'self' data: https://*.paddle.com",
   "style-src 'self' 'unsafe-inline' https://cdn.paddle.com", // React satır içi genişlik stilleri (grafik çubukları)
   "font-src 'self'",
-  "script-src 'self' https://static.cloudflareinsights.com https://cdn.paddle.com",
-  "frame-src https://buy.paddle.com https://sandbox-buy.paddle.com",
+  "script-src 'self' https://static.cloudflareinsights.com https://cdn.paddle.com https://challenges.cloudflare.com",
+  "frame-src https://buy.paddle.com https://sandbox-buy.paddle.com https://challenges.cloudflare.com",
   "frame-ancestors 'none'",
   "base-uri 'self'",
   "form-action 'self'",

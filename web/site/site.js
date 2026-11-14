@@ -29,6 +29,7 @@
     person_limit: "Bu ayki 2 ücretsiz kontrol hakkınızı kullandınız. Düzenli ölçüm için ücretsiz hesap açabilirsiniz.",
     daily_limit: "Bugünkü ücretsiz kontrol kapasitesi doldu. Yarın tekrar deneyin ya da ücretsiz hesap açın.",
     err: "Kontrol şu an yapılamadı. Biraz sonra tekrar deneyin.",
+    bot: "Lütfen \"robot değilim\" doğrulamasını tamamlayıp tekrar deneyin.",
     region: "Ücretsiz kontrol bulunduğunuz ülkede şu an kapalı (Avrupa Ekonomik Alanı, İsviçre, Birleşik Krallık). ChatGPT canlı aramalı ölçüm ücretli paketlerde kullanılabilir.",
     sum: function (m, r, n, b) { return "<strong>" + b + "</strong>, " + n + " cevabın <strong>" + m + "</strong> tanesinde anıldı, <strong>" + r + "</strong> tanesinde önerildi."; },
     zero: "Bu sorularda yapay zekâ işletmenizi hiç anmadı. Yeni ya da yerel markalarda bu sık görülür; neyin değiştirilebileceğini düzenli ölçümle görürsünüz.",
@@ -40,6 +41,7 @@
     person_limit: "You've used your 2 free checks this month. Create a free account for regular measurement.",
     daily_limit: "Today's free check capacity is used up. Try again tomorrow or create a free account.",
     err: "The check couldn't run right now. Please try again in a moment.",
+    bot: "Please complete the \"I'm not a robot\" check and try again.",
     region: "The free check isn't available in your country yet (EEA, Switzerland, UK). ChatGPT live-search measurement is available on paid plans.",
     sum: function (m, r, n, b) { return "<strong>" + b + "</strong> was mentioned in <strong>" + m + "</strong> of " + n + " answers and recommended in <strong>" + r + "</strong>."; },
     zero: "The AI didn't mention your business for these questions. That's common for new or local brands; regular measurement shows what moves the needle.",
@@ -47,15 +49,33 @@
     engine: "Gemini, model knowledge (no live web search). A one-off check; AI answers vary from one request to the next.",
     next: "To measure weekly, compare with competitors and see ChatGPT's live search,", cta: "create a free account",
   };
+  // Bot koruması (Cloudflare Turnstile): site anahtarı config.json'da varsa görünür; yoksa form eskisi gibi çalışır.
+  var siteKey = "", widgetId = null;
+  fetch("/config.json").then(function (r) { return r.json(); }).then(function (c) {
+    if (!c || !c.turnstileSiteKey) return;
+    siteKey = c.turnstileSiteKey;
+    var box = document.createElement("div"); box.className = "check-human";
+    form.insertBefore(box, form.querySelector("button"));
+    window.aisvTurnstile = function () { widgetId = window.turnstile.render(box, { sitekey: siteKey, language: tr ? "tr" : "en", theme: "auto" }); };
+    var sc = document.createElement("script"); sc.async = true; sc.defer = true;
+    sc.src = "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=aisvTurnstile";
+    document.head.appendChild(sc);
+  }).catch(function () { /* ayar okunamadıysa koruma sunucuda yine geçerli */ });
   function esc(s) { return String(s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
   form.addEventListener("submit", function (e) {
     e.preventDefault();
     var fd = new FormData(form), body = { lang: tr ? "tr" : "en" };
     fd.forEach(function (v, k) { body[k] = String(v).trim(); });
     if ((body.brand || "").length < 2 || (body.category || "").length < 2) { out.innerHTML = '<p class="check-msg">' + T.input + "</p>"; return; }
+    if (siteKey) {
+      var tok = window.turnstile && widgetId !== null ? window.turnstile.getResponse(widgetId) : "";
+      if (!tok) { out.innerHTML = '<p class="check-msg">' + T.bot + "</p>"; return; }
+      body.cf_token = tok;
+    }
     var btn = form.querySelector("button"); btn.disabled = true;
     out.innerHTML = '<p class="check-msg">' + T.busy + "</p>";
     fetch("/api/check", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body) })
+      .then(function (r) { if (siteKey && window.turnstile && widgetId !== null) window.turnstile.reset(widgetId); return r; })
       .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, j: j }; }); })
       .then(function (x) {
         btn.disabled = false;

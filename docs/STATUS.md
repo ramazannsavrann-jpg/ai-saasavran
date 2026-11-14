@@ -345,3 +345,8 @@
 - **Sayfa kendiliğinden güncellenir:** bekleyen ölçüm varken 20 saniyede bir yeniden bakılır (önceden yalnız "Yenile" ile).
 - **Ölçümü hemen başlat (`/api/kick`):** kullanıcının sırada ölçümü varsa ölçüm işçisi hemen tetiklenir. `WORKER_DISPATCH_TOKEN` GitHub Secret'ı tanımlı değilse hiçbir şey yapmaz; ölçüm eskisi gibi saatlik sırada (08:17–23:17) işlenir ve rehber bunu açıkça söyler. **Anahtar henüz tanımlı değil.**
 - Doğrulama: `engine/test/kick.test.ts` (4 test), `e2e/app.e2e.ts` müşteri akışında rehberin her adımı.
+
+## v1.33 (14 Kasım 2026): bot koruması ve eğitim sayfası
+
+- **Ücretsiz kontrolde bot koruması (Cloudflare Turnstile):** `TURNSTILE_SITE_KEY` ve `TURNSTILE_SECRET` GitHub Secret'ları tanımlıysa form doğrulama kutusu gösterir ve sunucu doğrulamayan isteği 403 ile reddeder. **Anahtarlar henüz tanımlı değil; koruma kapalı, form eskisi gibi çalışıyor.**
+- **Eğitim sayfası:** `/tutorials/` ve `/tr/egitim/`: 8 dersin yazılı adımları. YouTube kimliği `web/site/tutorials.mjs` içinde ders başına girilir; kimlik yoksa bağlantı uydurulmaz, yalnız kanal bağlantısı görünür. **Ders videolarının kimlikleri henüz girilmedi.**
