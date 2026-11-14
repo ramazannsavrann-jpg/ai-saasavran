@@ -81,3 +81,7 @@ Derslerde marka gerçek adıyla anılabilir; tam sıralama tablolarında harf ku
 - Açıklama ve etiketler hem TR hem EN; ölçüm açıklamasına bağımsızlık satırı.
 - IZGARA: her satır = 2 video + 1 ayrı gönderi. Hep 3'lü set: önce TR Reels, sonra EN Reels, sonra ayrı gönderi (görsel/karusel, blog gibi). Teker teker, bir önceki yayına girdikten sonra. Toplu/aynı anda paylaşım YOK, set yarım bırakılmaz.
 - Üstte 3 sabitlenmiş gönderi ayrı satırdır, sayılmaz.
+
+## YouTube API otomasyonu (14 Kasım)
+Dil (TR/EN), "yapay içerik" işareti ve oynatma listeleri artık otomatik: `yt/yt_ayar.py` + `yt/ayar.json` + `.github/workflows/youtube-ayar.yml` (PR #70; birleşince main'de her gece 00:30 TR çalışır). Anahtarlar Secrets'ta: YT_CLIENT_ID, YT_CLIENT_SECRET, YT_REFRESH_TOKEN (Google projesi "My First Project", OAuth client "youtube-playground").
+Yeni video yükleyince ID'sini `yt/ayar.json`'a {lang, lists} ile ekle ve push et (anında çalışır). Eklenmeyenler başlık kuralıyla işlenir. Kota 10.000/gün; güncelleme başına 50.
