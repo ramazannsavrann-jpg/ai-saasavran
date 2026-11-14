@@ -11,13 +11,13 @@
   "s8"
  ],
  "dur": {
-  "p1": 5,
-  "p2": 5,
-  "p3": 5,
-  "p4": 5,
-  "p5": 5,
-  "p6": 5,
-  "p7": 5
+  "p1": 6.97,
+  "p2": 6.94,
+  "p3": 3.86,
+  "p4": 7.55,
+  "p5": 3.45,
+  "p6": 2.7,
+  "p7": 8.36
  },
  "names": "Hospitals measured: Acıbadem, Florence Nightingale, Liv Hospital, Medical Park, Medicana, Medipol, Memorial",
  "footer": "ChatGPT + Claude live web search, Gemini no search · 14 Nov 2026",

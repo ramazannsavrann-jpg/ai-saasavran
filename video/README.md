@@ -45,3 +45,9 @@ ffmpeg -i v.mp4 -i voice.wav -i music.wav -filter_complex "[1:a]aresample=44100,
 - Robot süpürge ayarları: `video/kasim/robot-tr.json`, `robot-en.json`; metin `narration-robot-*.txt`. Sahne kesimleri silencedetect ile gerçek duraklardan.
 - Durum (14 Kasım): robot süpürge TR+EN (14 Kasım 18:00), kahve makinesi TR+EN (15 Kasım 18:00), spor ayakkabı yalnız TR (16 Kasım 19:00) yayın planında. OpenAI bakiyesi bitti → global spor ayakkabı ölçümünde ChatGPT eksik (run 1e75387f: Claude 16, ChatGPT 1). Kullanıcı kararı: seri bakiye gelene kadar DURDU. Devamında: US ayakkabı için yalnız ChatGPT'yi yeniden ölç, sonra parfüm, gaming laptop, TV.
 - Yeni yayın saatleri: TR 19:00 (16:00Z), EN 23:00 (20:00Z). Kapak: s1 karesi JPEG → vidiq_upload_image → taslakta thumbnailImageId (doğrulama bitene kadar YouTube reddeder, video yine yüklenir).
+
+## Sağlık serisi (14 Kasım): özel hastane + saç ekimi
+- Ölçüm: Growth Lab 2, Acıbadem (hastane) ve Asmed (saç) ana marka, TR + US, 8 soru, 7 marka. Ayarlar `video/saglik/*.json` (`_map` alanı = harf↔marka eşlemesi, yayına girmez), `gen.py`.
+- Sahne süreleri: `sablon/sureler2.py` ("order" düzenli veri Shorts için). Sağlıkta "tıbbi tavsiye değildir" notu ve hastane kaynaklarında hastanelerin kendi siteleri hariç.
+- Yayın (14 Kasım ~19:40): YouTube hastane TR pPq8JNj07DQ, EN CWF4g0gvaXA; saç TR k6xkaHFZARY, EN dFep9TRYwPU; Instagram Reels dördü de.
+- Dikkat: başka oturum işçiyi `live_engines=claude` ile çalıştırırsa sıradaki ölçümler yalnız Claude ile yapılır; eksik motor için ayrı run + `live_engines=openai`.
