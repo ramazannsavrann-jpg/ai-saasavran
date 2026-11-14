@@ -78,7 +78,47 @@ def guess(title):
     return {"lang": lang, "lists": lists, "guessed": True}
 
 
+def channel_settings():
+    """Kanal açıklaması (iki dilli) ve banner. Açıklama farklıysa güncellenir; banner yalnız banner_apply true iken yüklenir."""
+    c = CFG.get("channel") or {}
+    if not c:
+        return
+    r = call("GET", "channels", {"part": "brandingSettings", "mine": "true"})
+    if not r or not r.get("items"):
+        return
+    item = r["items"][0]
+    bs = item.get("brandingSettings", {})
+    changed = False
+    desc = c.get("description")
+    if desc and bs.get("channel", {}).get("description") != desc:
+        bs.setdefault("channel", {})["description"] = desc
+        changed = True
+        print("· kanal açıklaması güncellenecek")
+    if c.get("banner_apply") and c.get("banner"):
+        path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), c["banner"])
+        print("· banner yükleniyor:", c["banner"])
+        if not DRY:
+            global quota
+            quota += 50
+            req = urllib.request.Request("https://www.googleapis.com/upload/youtube/v3/channelBanners/insert?uploadType=media",
+                                         method="POST", data=open(path, "rb").read(),
+                                         headers={"Authorization": f"Bearer {TOK}", "Content-Type": "image/jpeg"})
+            try:
+                with urllib.request.urlopen(req) as resp:
+                    url = json.load(resp).get("url")
+                if url:
+                    bs.setdefault("image", {})["bannerExternalUrl"] = url
+                    changed = True
+            except urllib.error.HTTPError as e:
+                print(f"  ! banner HTTP {e.code}: {e.read().decode()[:400]}")
+    if changed and not DRY:
+        body = {"id": item["id"], "brandingSettings": {k: v for k, v in bs.items() if k in ("channel", "image")}}
+        if call("PUT", "channels", {"part": "brandingSettings"}, body, cost=50) is not None:
+            print("· kanal ayarları kaydedildi ✓")
+
+
 def main():
+    channel_settings()
     ch = call("GET", "channels", {"part": "contentDetails,snippet", "mine": "true"})["items"][0]
     print("Kanal:", ch["snippet"]["title"])
     uploads = ch["contentDetails"]["relatedPlaylists"]["uploads"]
