@@ -380,3 +380,8 @@
 - **Müşteri paketlerinde** Perplexity Claude gibi her soruyu 1 kez sorar; Growth Lab'de 2 tekrar.
 - **Sitede hâlâ "Perplexity yok" yazan yerler** (durum sayfası, ürün içi not) motor açılınca güncellenecek.
 
+
+## v1.38 — Perplexity canlı sırada (yalnız Growth Lab)
+- `DEFAULT_LIVE_ENGINES` = openai,claude,perplexity; Perplexity anahtar ve ALLOW_PAID_API varsa çalışır.
+- Müşteri çalışma alanlarında kapalı (`engineAllowed`); paket tavanları gözden geçirilince `PERPLEXITY_FOR_CUSTOMERS=true` ile açılır.
+- Gerçek istek testi: 0,004 $/çağrı, 15 kaynak.

@@ -190,8 +190,15 @@ test("Kayıt defteri: Perplexity yalnız anahtar ve ALLOW_PAID_API varken açıl
   assert.match(off.status.find((s) => s.provider === "perplexity")!.reason, /ALLOW_PAID_API kapalı/);
   assert.match(buildProviders({}).status.find((s) => s.provider === "perplexity")!.reason, /PERPLEXITY_API_KEY yok/);
   const env = { OPENAI_API_KEY: "sk-o", ANTHROPIC_API_KEY: "sk-ant-x", PERPLEXITY_API_KEY: "pplx-x", ALLOW_PAID_API: "true" };
-  assert.deepEqual(chooseProviders("live_search", env, ["A"], "s").map((p) => p.config.provider), ["openai", "claude"], "varsayılan sıra değişmez");
-  assert.deepEqual(chooseProviders("live_search", { ...env, LIVE_ENGINES: "openai,claude,perplexity" }, ["A"], "s").map((p) => p.config.provider), ["openai", "claude", "perplexity"]);
+  assert.deepEqual(chooseProviders("live_search", env, ["A"], "s").map((p) => p.config.provider), ["openai", "claude", "perplexity"], "varsayılan sıra anahtar varsa Perplexity'yi de içerir");
+  assert.deepEqual(chooseProviders("live_search", { ...env, PERPLEXITY_API_KEY: undefined }, ["A"], "s").map((p) => p.config.provider), ["openai", "claude"], "anahtar yoksa sıra eskisi gibi");
+  assert.deepEqual(chooseProviders("live_search", { ...env, LIVE_ENGINES: "openai,claude" }, ["A"], "s").map((p) => p.config.provider), ["openai", "claude"], "LIVE_ENGINES ile çıkarılabilir");
+  // müşteri alanlarında Perplexity kapalı (paket tavanları ChatGPT + Claude'a göre); Growth Lab'de açık
+  const { engineAllowed } = await import("../src/worker.ts");
+  assert.equal(engineAllowed("perplexity", "growth_lab", {}), true);
+  assert.equal(engineAllowed("perplexity", "business", {}), false);
+  assert.equal(engineAllowed("perplexity", "agency", { PERPLEXITY_FOR_CUSTOMERS: "true" }), true);
+  assert.equal(engineAllowed("claude", "business", {}), true);
 });
 
 // ---------------- Ücretli API kilidi ----------------
