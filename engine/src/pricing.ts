@@ -94,7 +94,8 @@ const typical = {
   gemini: { inputTokens: 150, outputTokens: 700, searchCalls: 1 },
   // GERÇEK ÖLÇÜM (7 Kasım 2026, 30 canlı cevap, gpt-6-luna): ort. 17.400 girdi / 670 çıktı token, ~1,7 arama → 0,0194 $/cevap
   openai: { inputTokens: 17_400, outputTokens: 670, searchCalls: 1.7 },
-  perplexity: { inputTokens: 150, outputTokens: 700, searchCalls: 1 },
+  // GERÇEK ÖLÇÜM (14 Kasım 2026, 1 canlı çağrı): 4.105 girdi / 201 çıktı token, 2 arama, API toplam 0,00402 $ bildirdi. Arama bedeli bu toplamın içinde; burada yalnız token (≈0,0047 $, hafif temkinli).
+  perplexity: { inputTokens: 4_100, outputTokens: 200, searchCalls: 0 },
   // GERÇEK ÖLÇÜM (11 Kasım 2026, 20 canlı cevap, claude-haiku-5-5): 0,384 $ / 20 = 0,0192 $/cevap. Token dağılımı varsayımdır; toplam ölçüme eşitlenmiştir.
   claude: { inputTokens: 17_000, outputTokens: 700, searchCalls: 1.7 },
 };
@@ -106,7 +107,7 @@ export const SCENARIOS: Scenario[] = [
   },
   {
     name: "Kötü durum", geminiGroundingCharged: true,
-    calls: { ...typical, openai: { inputTokens: 40_000, outputTokens: 3_000, searchCalls: 2 }, claude: { inputTokens: 40_000, outputTokens: 3_000, searchCalls: 2 } },
+    calls: { ...typical, openai: { inputTokens: 40_000, outputTokens: 3_000, searchCalls: 2 }, claude: { inputTokens: 40_000, outputTokens: 3_000, searchCalls: 2 }, perplexity: { inputTokens: 8_000, outputTokens: 1_000, searchCalls: 2 } },
     overheadPerBrandUsd: 1.0, infraPerCustomerUsd: 2.5, paymentFeeRate: 0.05, paymentFeeFixedUsd: 0.5,
   },
 ];
@@ -125,9 +126,9 @@ export const PLANS: PlanSpec[] = [
   { name: "Pro (5 marka, 30 soru, ChatGPT canlı + Gemini)", priceUsd: 99, brands: 5, promptsPerBrand: 30, repetitions: 2, runsPerMonth: WEEKS_PER_MONTH, engines: ["gemini", "openai"] },
   { name: "Business (15 marka, 30 soru, ChatGPT canlı + Gemini)", priceUsd: 249, brands: 15, promptsPerBrand: 30, repetitions: 2, runsPerMonth: WEEKS_PER_MONTH, engines: ["gemini", "openai"] },
   // ---- 12 Kasım 2026 fiyatları (0019): 29 / 149 / 449 $ ----
-  { name: "Plus 29 $ (ChatGPT + Claude + Gemini)", priceUsd: 29, brands: 1, promptsPerBrand: 25, repetitions: 2, runsPerMonth: WEEKS_PER_MONTH, engines: ["gemini", "openai", "claude"], engineReps: { claude: 1 } },
-  { name: "Pro 149 $ (ChatGPT + Claude + Gemini)", priceUsd: 149, brands: 5, promptsPerBrand: 30, repetitions: 2, runsPerMonth: WEEKS_PER_MONTH, engines: ["gemini", "openai", "claude"], engineReps: { claude: 1 } },
-  { name: "Business 449 $ (ChatGPT + Claude + Gemini)", priceUsd: 449, brands: 15, promptsPerBrand: 30, repetitions: 2, runsPerMonth: WEEKS_PER_MONTH, engines: ["gemini", "openai", "claude"], engineReps: { claude: 1 } },
+  { name: "Plus 29 $ (ChatGPT + Claude + Perplexity + Gemini)", priceUsd: 29, brands: 1, promptsPerBrand: 25, repetitions: 2, runsPerMonth: WEEKS_PER_MONTH, engines: ["gemini", "openai", "claude", "perplexity"], engineReps: { claude: 1, perplexity: 1 } },
+  { name: "Pro 149 $ (ChatGPT + Claude + Perplexity + Gemini)", priceUsd: 149, brands: 5, promptsPerBrand: 30, repetitions: 2, runsPerMonth: WEEKS_PER_MONTH, engines: ["gemini", "openai", "claude", "perplexity"], engineReps: { claude: 1, perplexity: 1 } },
+  { name: "Business 449 $ (ChatGPT + Claude + Perplexity + Gemini)", priceUsd: 449, brands: 15, promptsPerBrand: 30, repetitions: 2, runsPerMonth: WEEKS_PER_MONTH, engines: ["gemini", "openai", "claude", "perplexity"], engineReps: { claude: 1, perplexity: 1 } },
   // ---- 11 Kasım 2026: Claude müşteri paketlerinde (ChatGPT 2 tekrar, Claude 1 tekrar) — işçi ve migration 0017 ile aynı ----
   { name: "Plus + Claude (1 marka, 25 soru)", priceUsd: 20, brands: 1, promptsPerBrand: 25, repetitions: 2, runsPerMonth: WEEKS_PER_MONTH, engines: ["gemini", "openai", "claude"], engineReps: { claude: 1 } },
   { name: "Pro + Claude (5 marka, 30 soru)", priceUsd: 99, brands: 5, promptsPerBrand: 30, repetitions: 2, runsPerMonth: WEEKS_PER_MONTH, engines: ["gemini", "openai", "claude"], engineReps: { claude: 1 } },

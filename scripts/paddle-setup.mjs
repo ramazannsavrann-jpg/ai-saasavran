@@ -4,8 +4,8 @@ const KEY = process.env.PADDLE_API_KEY;
 if (!KEY) { console.log("PADDLE_API_KEY yok; atlandı."); process.exit(0); }
 const BASE = KEY.includes("_sdbx_") ? "https://sandbox-api.paddle.com" : "https://api.paddle.com";
 const PLANS = [
-  { plan: "starter", name: "AI SaaSavran Plus", cents: 2900, description: "1 brand, 25 questions, 5 competitors. ChatGPT and Claude with live web search + Gemini, measured weekly." },
-  { plan: "pro", name: "AI SaaSavran Pro", cents: 14900, description: "5 brands, 30 questions each, 8 competitors per brand. ChatGPT and Claude with live web search + Gemini, measured weekly." },
+  { plan: "starter", name: "AI SaaSavran Plus", cents: 2900, description: "1 brand, 25 questions, 5 competitors. ChatGPT, Claude and Perplexity with live web search + Gemini, measured weekly." },
+  { plan: "pro", name: "AI SaaSavran Pro", cents: 14900, description: "5 brands, 30 questions each, 8 competitors per brand. ChatGPT, Claude and Perplexity with live web search + Gemini, measured weekly." },
   { plan: "agency", name: "AI SaaSavran Business", cents: 44900, description: "15 brands, 30 questions each, 10 competitors per brand. For agencies managing client brands." },
 ];
 async function api(method, path, body) {

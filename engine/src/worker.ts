@@ -84,14 +84,6 @@ export class DbUsageGate implements UsageGate {
 export const DEFAULT_LIVE_ENGINES = "openai,claude,perplexity";
 
 /**
- * Perplexity şimdilik yalnız Growth Lab'de (kendi araştırma alanımız) çalışır: müşteri paketlerinin harcama tavanları
- * ChatGPT + Claude'a göre hesaplı. Paket tavanları gözden geçirilince PERPLEXITY_FOR_CUSTOMERS=true ile müşterilere açılır.
- */
-export function engineAllowed(provider: string, wsKind: string | undefined, env: Record<string, string | undefined>): boolean {
-  return provider !== "perplexity" || wsKind === "growth_lab" || env.PERPLEXITY_FOR_CUSTOMERS === "true";
-}
-
-/**
  * Ölçüm türüne göre motor listesi. Canlı aramada ücretli arama yapan tüm etkin motorlar
  * (varsayılan: önce ChatGPT, sonra Claude); diğer türlerde tek motor.
  */
@@ -146,9 +138,9 @@ export async function processNextRun(deps: WorkerDeps): Promise<WorkerResult | n
     const brands: BrandRef[] = [target, ...comps].map((b) => ({ id: b.id, name: b.name, aliases: b.aliases ?? [], domain: domainOf(b.website) }));
     const day = now().toISOString().slice(0, 10);
     const all = chooseProviders(run.measurement_type, { ...env, SEARCH_COUNTRY: target.country || env.SEARCH_COUNTRY }, brands.map((b) => b.name), `${run.id}`, deps.fetchFn);
-    // Canlı aramada tüm etkin motorlar (ChatGPT + Claude). Müşteri paketlerinde Claude her soruyu 1 kez sorar
+    // Canlı aramada tüm etkin motorlar (ChatGPT + Claude + Perplexity). Müşteri paketlerinde Claude ve Perplexity her soruyu 1 kez sorar
     // (paket tavanları buna göre hesaplı: pricing.ts "+ Claude" satırları); Growth Lab'de her motor 2 tekrar.
-    const providers = run.measurement_type === "live_search" ? all.filter((p) => engineAllowed(p.config.provider, ws.kind, env)) : all.slice(0, 1);
+    const providers = run.measurement_type === "live_search" ? all : all.slice(0, 1);
     if (!providers.length) {
       return await finish({ status: "failed", stop: "provider_not_configured", ok: 0, failed: 0 }, undefined,
         run.measurement_type === "live_search" ? "Canlı arama sağlayıcısı etkin değil" : "Gemini anahtarı tanımlı değil");

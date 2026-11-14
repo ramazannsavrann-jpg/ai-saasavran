@@ -381,7 +381,8 @@
 - **Sitede hâlâ "Perplexity yok" yazan yerler** (durum sayfası, ürün içi not) motor açılınca güncellenecek.
 
 
-## v1.38 — Perplexity canlı sırada (yalnız Growth Lab)
-- `DEFAULT_LIVE_ENGINES` = openai,claude,perplexity; Perplexity anahtar ve ALLOW_PAID_API varsa çalışır.
-- Müşteri çalışma alanlarında kapalı (`engineAllowed`); paket tavanları gözden geçirilince `PERPLEXITY_FOR_CUSTOMERS=true` ile açılır.
-- Gerçek istek testi: 0,004 $/çağrı, 15 kaynak.
+## v1.38 — Perplexity tüm paketlerde (canlı ölçüm)
+- Müşteri yok, bu yüzden Perplexity Plus/Pro/Business paketlerine ve Growth Lab'e birlikte açıldı (`engineAllowed` kapısı kaldırıldı). Her soruyu 1 kez sorar (Claude gibi).
+- Migration 0043: aylık motor çağrısı kotaları Plus 620→760, Pro 3600→4200, Business 10800→12600. Harcama tavanları aynı (9 / 50 / 150 $).
+- Maliyet (gerçek ölçüm 0,004 $/çağrı): tipik aylık Perplexity Plus 0,51 $, Pro 3,06 $, Business 9,16 $. Kötü durumda 1,73 / 10,4 / 31,2 $. Tipik brüt kâr %63–64, kötü durumda %35–37.
+- Siteler, yöntem sayfası, paket metinleri, e-posta ve SSS "ChatGPT, Claude ve Perplexity" diyecek şekilde güncellendi. Eski blog yazıları (o günkü ölçümü anlatır) değişmedi.
