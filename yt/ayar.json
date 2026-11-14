@@ -9,7 +9,8 @@
     "Kasım Fırsatları": "tr",
     "Black Friday AI Picks": "en",
     "Yapay Zekâ Araştırmaları": "tr",
-    "AI Research Deep Dives": "en"
+    "AI Research Deep Dives": "en",
+    "AI Picks: US Edition": "en"
   },
   "videos": {
     "7_pB4v4mf_8": {
@@ -195,10 +196,34 @@
         "AI Research Deep Dives",
         "AI SaaSavran – English Content"
       ]
+    },
+    "I1zstVDBJXo": {
+      "lang": "en",
+      "lists": [
+        "AI Picks: US Edition",
+        "AI SaaSavran – English Content"
+      ]
+    },
+    "gFYospqVPZo": {
+      "lang": "en",
+      "lists": [
+        "AI Picks: US Edition",
+        "AI SaaSavran – English Content"
+      ]
+    },
+    "y8o15ib5g9A": {
+      "lang": "en",
+      "lists": [
+        "AI Picks: US Edition",
+        "AI SaaSavran – English Content"
+      ]
     }
   },
   "delete": [],
   "force": [
-    "V76gSO6nEME"
+    "V76gSO6nEME",
+    "I1zstVDBJXo",
+    "gFYospqVPZo",
+    "y8o15ib5g9A"
   ]
 }
