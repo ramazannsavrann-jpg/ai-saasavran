@@ -372,3 +372,11 @@
 - **Testler:** `engine/test/portfolio.test.ts`; `e2e/layout.e2e.ts` artık ikinci uzun adlı markayla "Genel bakış"ın 5 genişlikte taşmadığını da dener.
 - **Sıradaki ajans işleri:** API'den ölçüm sonuçları, müşteri bazlı erişim, müşteriye aylık markalı rapor e-postası.
 
+## v1.37 (14 Kasım 2026): Perplexity motoru (hazır, anahtar gelene kadar kapalı)
+
+- **Ne:** `engine/src/providers/perplexity.ts` artık gerçek bir adaptör: Perplexity Agent API (`POST /v1/agent`), web araması her soruda zorunlu, konum ülkeye göre. Cevaptaki alıntılar kaynak sayılır; maliyet cevabın `usage.cost.total_cost` alanından alınır (yoksa fiyat kartından tahmin).
+- **Doğrulama durumu:** istek/cevap biçimi resmî API dokümanından okundu; ama **gerçek anahtarla henüz denenmedi**. Birim testi elle yazılmış örnek cevapla çalışır. Model adı ve token fiyatı Agent API "Models" sayfasından teyit edilemedi (`PERPLEXITY_MODEL` ile değişir; fiyat kartı yalnız en kötü durum tavanı için ve bilinçli yüksek).
+- **Açma adımları:** (1) Perplexity hesabına kredi + `PERPLEXITY_API_KEY` GitHub Secret, (2) "Perplexity bağlantı testi" akışı (biçim ve model adı gerçek cevapla doğrulanır; en fazla 0,05 $), (3) test geçince canlı sıraya `LIVE_ENGINES=openai,claude,perplexity` (ya da varsayılan sıra) ve kota/maliyet kontrolü. Varsayılan sıra şimdilik değişmedi, bu yüzden hiçbir müşteri ölçümü etkilenmez.
+- **Müşteri paketlerinde** Perplexity Claude gibi her soruyu 1 kez sorar; Growth Lab'de 2 tekrar.
+- **Sitede hâlâ "Perplexity yok" yazan yerler** (durum sayfası, ürün içi not) motor açılınca güncellenecek.
+

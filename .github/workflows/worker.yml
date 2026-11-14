@@ -38,6 +38,8 @@ jobs:
           PLATFORM_ADMIN_EMAIL: ${{ secrets.PLATFORM_ADMIN_EMAIL }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          # Perplexity: anahtar varsa motor hazır olur; canlı sıraya girmesi için LIVE_ENGINES'e eklenmesi gerekir (bağlantı testi geçince).
+          PERPLEXITY_API_KEY: ${{ secrets.PERPLEXITY_API_KEY }}
           RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
           # Google Shopping (SerpApi): ücretli alanlarda ürün başına haftada 1 arama; SerpApi'de kalan hak 10'un altına inince durur.
           SERPAPI_KEY: ${{ secrets.SERPAPI_KEY }}

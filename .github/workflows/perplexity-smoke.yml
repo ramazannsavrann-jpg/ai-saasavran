@@ -1,0 +1,28 @@
+# Gerçek Perplexity (Agent API) bağlantı testi: en fazla 2 çağrı, toplam 0,05 $ tavan.
+# Yalnız bu dosya ya da test betiği değişince (ve elle) çalışır; her push'ta para harcamaz.
+# PERPLEXITY_API_KEY yoksa "atlandı" der ve başarıyla biter.
+name: Perplexity bağlantı testi
+on:
+  push:
+    paths:
+      - scripts/perplexity-smoke.ts
+      - .github/workflows/perplexity-smoke.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: perplexity-smoke
+  cancel-in-progress: false
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Perplexity'ye gerçek istek gönder
+        env:
+          PERPLEXITY_API_KEY: ${{ secrets.PERPLEXITY_API_KEY }}
+        run: node scripts/perplexity-smoke.ts

@@ -3,7 +3,7 @@
 
 import { GeminiProvider, GEMINI_FREE_DEFAULT } from "./gemini.ts";
 import { OpenAIProvider, OPENAI_DEFAULT } from "./openai.ts";
-import { PerplexityProvider } from "./perplexity.ts";
+import { PerplexityProvider, PERPLEXITY_DEFAULT } from "./perplexity.ts";
 import { ClaudeProvider, CLAUDE_DEFAULT } from "./claude.ts";
 import type { FetchLike, Provider } from "./types.ts";
 
@@ -60,9 +60,15 @@ export function buildProviders(env: Record<string, string | undefined>, fetchFn?
     status.push({ provider: "claude", enabled: true, reason: `${model}, ücretli, web araması ${useSearch ? "açık" : "kapalı"}` });
   }
 
-  // Perplexity — adaptör henüz yok
-  status.push({ provider: "perplexity", enabled: false, reason: "adaptör yok (Agent API şeması doğrulanmadı)" });
-  void PerplexityProvider;
+  // Perplexity (Agent API) — her zaman ücretli; yalnız anahtar ve ALLOW_PAID_API varken. Canlı aramada sıraya
+  // LIVE_ENGINES="openai,claude,perplexity" ile eklenir (varsayılan sıra değişmez).
+  if (!env.PERPLEXITY_API_KEY) status.push({ provider: "perplexity", enabled: false, reason: "PERPLEXITY_API_KEY yok" });
+  else if (!allowPaid) status.push({ provider: "perplexity", enabled: false, reason: "ücretli; ALLOW_PAID_API kapalı" });
+  else {
+    const model = env.PERPLEXITY_MODEL || PERPLEXITY_DEFAULT.model;
+    providers.push(new PerplexityProvider(env.PERPLEXITY_API_KEY, { ...PERPLEXITY_DEFAULT, model, searchCountry: env.SEARCH_COUNTRY }, fetchFn));
+    status.push({ provider: "perplexity", enabled: true, reason: `${model}, ücretli, web araması açık` });
+  }
 
   return { providers, status };
 }

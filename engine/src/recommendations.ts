@@ -156,7 +156,7 @@ export function buildRecommendations(i: RecInput): Recommendation[] {
   }
 
   // --- Kanıta dayalı ek maddeler (iyileştirme rehberi)
-  const prov = (p: string) => (p === "openai" ? "ChatGPT" : p === "claude" ? "Claude" : p === "gemini" ? "Gemini" : p);
+  const prov = (p: string) => (p === "openai" ? "ChatGPT" : p === "claude" ? "Claude" : p === "gemini" ? "Gemini" : p === "perplexity" ? "Perplexity" : p);
   if (i.engineGap && i.engineGap.ignoredBy.length > 0 && i.engineGap.high) {
     const g = i.engineGap, names = g.ignoredBy.map(prov).join(", ");
     add({

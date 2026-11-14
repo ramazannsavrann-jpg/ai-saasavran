@@ -4,7 +4,7 @@ import type { RecInput } from "./recommendations.ts";
 
 export interface CampaignTask { t: string; done: boolean }
 const MAX = 8;
-const prov = (p: string) => (p === "openai" ? "ChatGPT" : p === "claude" ? "Claude" : p === "gemini" ? "Gemini" : p);
+const prov = (p: string) => (p === "openai" ? "ChatGPT" : p === "claude" ? "Claude" : p === "gemini" ? "Gemini" : p === "perplexity" ? "Perplexity" : p);
 
 /** Madde kimliği için görev listesi; kampanyaya uygun değilse null. */
 export function campaignTasks(recId: string, i: RecInput): string[] | null {
