@@ -1,0 +1,1 @@
+We asked ChatGPT, Claude and Gemini the same question: which coffee machine should I buy? In our global test, Gemini recommended Nespresso in thirteen of sixteen answers. ChatGPT didn't recommend it once. Same question, same day, completely different answers. In this video, we break down what we learned from five hundred and forty AI answers.

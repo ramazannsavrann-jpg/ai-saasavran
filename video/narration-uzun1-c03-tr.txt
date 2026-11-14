@@ -1,0 +1,1 @@
+İlk büyük fark, kaç marka önerdikleri. Ölçtüğümüz markalardan bir cevapta ortalama kaç tanesi önerildi? Gemini'de ortalama üç virgül üç. Claude'da üç. ChatGPT'de ise sadece bir virgül altı. Üstelik ChatGPT, yüz doksan iki cevabın yirmi dokuzunda, ölçtüğümüz markaların hiçbirini önermedi.

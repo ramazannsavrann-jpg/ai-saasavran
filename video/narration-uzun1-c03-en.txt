@@ -1,0 +1,1 @@
+The first big difference is how many brands they recommend. Of the brands we measured, how many were recommended per answer, on average? Gemini: three point three. Claude: three. ChatGPT: just one point six. And in twenty-nine of its one hundred and ninety-two answers, ChatGPT recommended none of the brands we measured.
