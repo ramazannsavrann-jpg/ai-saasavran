@@ -177,19 +177,23 @@
         "AI SaaSavran – English Content"
       ]
     },
-    "yh7jy5Q6r3M": {
+    "RUnk8zNquTo": {
       "lang": "tr",
       "lists": [
         "Yapay Zekâ Araştırmaları",
         "AI SaaSavran – Türkçe İçerikler"
       ]
     },
-    "MG8pMAEdSqE": {
+    "V76gSO6nEME": {
       "lang": "en",
       "lists": [
         "AI Research Deep Dives",
         "AI SaaSavran – English Content"
       ]
     }
-  }
+  },
+  "delete": [
+    "yh7jy5Q6r3M",
+    "MG8pMAEdSqE"
+  ]
 }

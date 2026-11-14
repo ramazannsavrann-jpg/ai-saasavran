@@ -95,6 +95,10 @@ def main():
     for name, pid in pls.items():
         members[pid] = {i["contentDetails"]["videoId"] for i in paged("playlistItems", {"part": "contentDetails", "playlistId": pid})}
 
+    for vid in CFG.get("delete", []):
+        print("- sil (eski sürüm):", vid)
+        if not DRY:
+            call("DELETE", "videos", {"id": vid}, cost=50)
     vids = [i["contentDetails"]["videoId"] for i in paged("playlistItems", {"part": "contentDetails", "playlistId": uploads})]
     print(f"{len(vids)} video, {len(pls)} liste:", sorted(pls))
     rep = []
