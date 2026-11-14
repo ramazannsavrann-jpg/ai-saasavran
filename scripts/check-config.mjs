@@ -126,6 +126,12 @@ if (env.ANTHROPIC_API_KEY) {
   }
 }
 
+// --- Perplexity (isteğe bağlı; yalnız biçim kontrolü: gerçek bağlantı testi "Perplexity bağlantı testi" akışında)
+if (env.PERPLEXITY_API_KEY) {
+  const k = env.PERPLEXITY_API_KEY.trim();
+  add("PERPLEXITY_API_KEY", k.startsWith("pplx-"), k.startsWith("pplx-") ? "Biçim doğru (pplx- ile başlıyor); gerçek bağlantı testi ayrı akışta" : "Biçim yanlış (pplx- ile başlamalı)");
+}
+
 const lines = rows.map((r) => `${r.ok ? "✅" : "❌"} ${r.name}: ${r.msg}`);
 console.log(lines.join("\n"));
 if (env.GITHUB_STEP_SUMMARY) appendFileSync(env.GITHUB_STEP_SUMMARY, `## Ayar kontrolü\n\n${lines.map((l) => `- ${l}`).join("\n")}\n`);

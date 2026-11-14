@@ -694,7 +694,7 @@ function LossCardView({ card, brand, hasSite }: { card: LossCard; brand: string;
   );
 }
 
-const ENGINE_ORDER = ["openai", "claude", "gemini", "mock"];
+const ENGINE_ORDER = ["openai", "claude", "perplexity", "gemini", "mock"];
 
 function Report({ brand, type, onBrandChange, paid = false }: { brand: Brand; type: MeasurementType; onBrandChange: () => void; paid?: boolean }) {
   const vis = useLoad(() => api.visibility(brand.id, type), [brand.id, type]);
@@ -712,7 +712,7 @@ function Report({ brand, type, onBrandChange, paid = false }: { brand: Brand; ty
   const answersData = useMemo(() => (answersAll.data && eng ? answersAll.data.filter((x) => x.provider === eng) : answersAll.data), [answersAll.data, eng]);
   const answers = { ...answersAll, data: answersData };
   const live = type === "live_search";
-  const engine = type === "simulated" ? L("Simülasyonda", "In the simulation") : live ? (eng === "claude" ? L("Claude (canlı web aramasıyla)", "Claude (with live web search)") : L("ChatGPT (canlı web aramasıyla)", "ChatGPT (with live web search)")) : "Gemini";
+  const engine = type === "simulated" ? L("Simülasyonda", "In the simulation") : live ? (eng === "claude" ? L("Claude (canlı web aramasıyla)", "Claude (with live web search)") : eng === "perplexity" ? L("Perplexity (canlı web aramasıyla)", "Perplexity (with live web search)") : L("ChatGPT (canlı web aramasıyla)", "ChatGPT (with live web search)")) : "Gemini";
   const domains = live ? topDomains((answers.data ?? []).flatMap((a) => a.cited_urls ?? [])) : [];
   const comps = useLoad(() => api.competitors(brand.id), [brand.id, brand.aliases.join("|")]);
   const ments = useLoad(() => (live && answers.data ? api.mentionsFor(answers.data.map((a) => a.id)) : Promise.resolve([])), [live, answers.data]);

@@ -6,7 +6,7 @@ import { BudgetGuard, BudgetExceeded, ResponseCache } from "../src/budget.ts";
 import { MockProvider, MOCK_CONFIG } from "../src/providers/mock.ts";
 import { GeminiProvider, parseGeminiResponse, resolveGroundingUrl, GEMINI_FREE_DEFAULT } from "../src/providers/gemini.ts";
 import { parseOpenAIResponse, OPENAI_DEFAULT } from "../src/providers/openai.ts";
-import { PerplexityProvider } from "../src/providers/perplexity.ts";
+import { PerplexityProvider, PERPLEXITY_DEFAULT, parsePerplexityResponse } from "../src/providers/perplexity.ts";
 import { buildProviders, assertBillingAllowed, PaidApiBlocked } from "../src/providers/registry.ts";
 import { type ProviderResult, classifyHttpError } from "../src/providers/types.ts";
 import { runPrompts } from "../src/pipeline.ts";
@@ -137,8 +137,61 @@ test("OpenAI: Responses API cevabı ayrıştırılır, arama çağrısı başın
   assert.deepEqual(r.citedUrls, ["https://aliusta-demo.com/"]);
 });
 
-test("Perplexity: doğrulanmamış adaptör sahte cevap vermez, hata verir", async () => {
-  await assert.rejects(new PerplexityProvider().ask(), /doğrulanmadı/);
+// Örnek cevap, Agent API dokümanındaki alan adlarına göre ELLE yazıldı (gerçek cevap değil): message/output_text/url_citation,
+// search_results, usage.cost.total_cost. Gerçek biçim scripts/perplexity-smoke.ts ile anahtar gelince doğrulanır.
+const PPLX_SAMPLE = {
+  status: "completed",
+  output: [
+    { type: "search_results", queries: ["en iyi ön muhasebe programı"], results: [{ url: "https://bulunan.example/a" }, { url: "https://bulunan.example/b" }] },
+    { type: "message", role: "assistant", content: [{ type: "output_text", text: "Önerilenler: Aliusta, Beta.", annotations: [{ type: "url_citation", url: "https://aliusta-demo.com/", title: "x", start_index: 0, end_index: 5 }] }] },
+  ],
+  usage: { input_tokens: 120, output_tokens: 80, total_tokens: 200, cost: { total_cost: 0.0031 } },
+};
+
+test("Perplexity: Agent API cevabı çözülür; maliyet cevaptan, kaynak alıntıdan gelir", () => {
+  const r = parsePerplexityResponse(PPLX_SAMPLE, "p1", PERPLEXITY_DEFAULT);
+  assert.equal(r.provider, "perplexity");
+  assert.equal(r.answerText, "Önerilenler: Aliusta, Beta.");
+  assert.deepEqual(r.citedUrls, ["https://aliusta-demo.com/"]);
+  assert.deepEqual(r.searchQueries, ["en iyi ön muhasebe programı"]);
+  assert.equal(r.costUsd, 0.0031);
+  assert.equal(r.method, "api_with_search");
+  // alıntı yoksa aramanın bulduğu siteler kaynak sayılır; maliyet alanı yoksa fiyat kartından tahmin edilir
+  const noCite = { ...PPLX_SAMPLE, output: [PPLX_SAMPLE.output[0], { type: "message", content: [{ type: "output_text", text: "Cevap." }] }], usage: { input_tokens: 1_000_000, output_tokens: 0 } };
+  const r2 = parsePerplexityResponse(noCite, "p2", PERPLEXITY_DEFAULT);
+  assert.deepEqual(r2.citedUrls, ["https://bulunan.example/a", "https://bulunan.example/b"]);
+  assert.ok(Math.abs(r2.costUsd - (1 + 0.0025)) < 1e-9);
+});
+
+test("Perplexity: boş ya da tamamlanmamış cevap hata verir; istek biçimi ve hata sınıfları", async () => {
+  assert.throws(() => parsePerplexityResponse({ status: "failed", output: [] }, "p", PERPLEXITY_DEFAULT), /failed/);
+  assert.throws(() => parsePerplexityResponse({ status: "completed", output: [{ type: "message", content: [{ type: "output_text", text: " " }] }] }, "p", PERPLEXITY_DEFAULT), /boş/);
+  let body: any; let auth = "";
+  const ok = new PerplexityProvider("KEY9", PERPLEXITY_DEFAULT, async (url, init) => {
+    body = JSON.parse(String(init?.body)); auth = String((init?.headers as Record<string, string>).authorization);
+    assert.equal(String(url), "https://api.perplexity.ai/v1/agent");
+    return new Response(JSON.stringify(PPLX_SAMPLE), { status: 200 });
+  });
+  await ok.ask("p", "soru");
+  assert.equal(auth, "Bearer KEY9");
+  assert.equal(body.input, "soru");
+  assert.deepEqual(body.tools, [{ type: "web_search", user_location: { country: "TR" } }]);
+  assert.equal(body.tool_choice, "required");
+  const broke = new PerplexityProvider("KEY9", PERPLEXITY_DEFAULT, async () => new Response("insufficient credit KEY9", { status: 402 }));
+  await assert.rejects(broke.ask("p", "x"), (e: Error & { kind?: string }) => e.kind === "quota_exceeded" && !e.message.includes("KEY9"));
+  const bad = new PerplexityProvider("k", PERPLEXITY_DEFAULT, async () => new Response("Invalid API key", { status: 401 }));
+  await assert.rejects(bad.ask("p", "x"), (e: Error & { kind?: string }) => e.kind === "auth_error");
+});
+
+test("Kayıt defteri: Perplexity yalnız anahtar ve ALLOW_PAID_API varken açılır; canlı sıraya LIVE_ENGINES ile girer", async () => {
+  const { chooseProviders } = await import("../src/worker.ts");
+  const off = buildProviders({ PERPLEXITY_API_KEY: "pplx-x" });
+  assert.equal(off.providers.length, 0);
+  assert.match(off.status.find((s) => s.provider === "perplexity")!.reason, /ALLOW_PAID_API kapalı/);
+  assert.match(buildProviders({}).status.find((s) => s.provider === "perplexity")!.reason, /PERPLEXITY_API_KEY yok/);
+  const env = { OPENAI_API_KEY: "sk-o", ANTHROPIC_API_KEY: "sk-ant-x", PERPLEXITY_API_KEY: "pplx-x", ALLOW_PAID_API: "true" };
+  assert.deepEqual(chooseProviders("live_search", env, ["A"], "s").map((p) => p.config.provider), ["openai", "claude"], "varsayılan sıra değişmez");
+  assert.deepEqual(chooseProviders("live_search", { ...env, LIVE_ENGINES: "openai,claude,perplexity" }, ["A"], "s").map((p) => p.config.provider), ["openai", "claude", "perplexity"]);
 });
 
 // ---------------- Ücretli API kilidi ----------------

@@ -70,7 +70,7 @@ export function numLoc(n: number): string {
 }
 
 export const usd = (v: number) => `${v.toLocaleString(isEn() ? "en-US" : "tr-TR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} $`;
-const oneLabel = (p: string) => (p === "mock" ? L("simülasyon", "simulation") : p === "gemini" ? "Gemini" : p === "openai" ? "ChatGPT (OpenAI)" : p === "claude" ? "Claude (Anthropic)" : p);
+const oneLabel = (p: string) => (p === "mock" ? L("simülasyon", "simulation") : p === "gemini" ? "Gemini" : p === "openai" ? "ChatGPT (OpenAI)" : p === "claude" ? "Claude (Anthropic)" : p === "perplexity" ? "Perplexity" : p);
 /** Ölçümde birden çok motor varsa ("openai,claude") hepsi adıyla yazılır. */
 export const providerLabel = (p: string) => p.split(",").filter(Boolean).map(oneLabel).join(" + ");
 

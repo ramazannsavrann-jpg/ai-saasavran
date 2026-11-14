@@ -160,7 +160,7 @@ export async function processNextRun(deps: WorkerDeps): Promise<WorkerResult | n
       const llmClassify = env.LLM_CLASSIFY === "true" && provider.config.billing === "paid" && provider.config.useSearch && !!env.OPENAI_API_KEY;
       const outcome = await runPrompts({
         workspaceId: run.workspace_id, provider, prompts,
-        repetitions: provider.config.provider === "claude" && ws.kind !== "growth_lab" ? 1 : repetitions,
+        repetitions: (provider.config.provider === "claude" || provider.config.provider === "perplexity") && ws.kind !== "growth_lab" ? 1 : repetitions,
         guard, cache,
         gate, env, day, sleep: deps.sleep,
         onItem: async ({ result, repetition }) => {
