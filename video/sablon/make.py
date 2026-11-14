@@ -91,7 +91,7 @@ def s2(t, dur):
         p = ease((t - 0.5 - i * 0.25) / 0.9); col = GOLD if i == 0 else ACC
         d.text((80, y), name, font=font("Bold", 52), fill=GOLD if i == 0 else INK)
         rtext(d, W - 80, y, f"{round(k * p)}/{n}", font("Bold", 52), INK)
-        bar(d, 80, y + 74, W - 80, k / n * p, col); y += 170 if len(CFG['brands']) <= 5 else 148
+        bar(d, 80, y + 74, W - 80, k / n * p, col); y += {5:170,6:148}.get(len(CFG['brands']), 128) if len(CFG['brands'])>5 else 170
     footer_note(d); return im
 def s3(t, dur):
     im, d = base(); tag(d, t, T["tag_eng"]); y = title(d, t, T["eng"], T["eng_sub"]) + 90
@@ -104,7 +104,7 @@ def s3(t, dur):
         if hl: d.rounded_rectangle([60, y - 14, W - 60, y + 92], radius=20, fill=mix((40, 62, 55), al))
         d.text((80, y + 8), row[0], font=font("Bold", 50), fill=mix(INK, al))
         for v, x, c in zip(row[1:], xs, cols): rtext(d, x, y, str(v), font("ExtraBold", 64), mix(c if v else RED, al))
-        y += 125 if len(CFG['eng_rows']) <= 5 else 112
+        y += 125 if len(CFG['eng_rows']) <= 5 else (112 if len(CFG['eng_rows'])==6 else 98)
     text_block(d, T["eng_note"], font("SemiBold", 40), y + 30, ACC, ease((t - 2.4) / 0.6))
     footer_note(d); return im
 def s4(t, dur):
