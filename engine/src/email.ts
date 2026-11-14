@@ -121,7 +121,7 @@ export function buildWelcome(lang: "en" | "tr"): { subject: string; html: string
     ],
     paidTitle: "Ücretli paketlerde ayrıca",
     paid: [
-      "ChatGPT ve Claude'un canlı web aramalı cevapları (müşterinin gördüğüne en yakın).",
+      "ChatGPT, Claude ve Perplexity'nin canlı web aramalı cevapları (müşterinin gördüğüne en yakın).",
       "Ürün takibi: yapay zekâ ürününüz hakkında doğru bilgi veriyor mu, Google Shopping'de kaçıncı sıradasınız.",
       "Paylaşılabilir rapor bağlantısı ve PDF; Pro'da ekip daveti ile yapay zekâ ajanları için API ve MCP.",
     ],
@@ -145,7 +145,7 @@ export function buildWelcome(lang: "en" | "tr"): { subject: string; html: string
     ],
     paidTitle: "Paid plans also include",
     paid: [
-      "ChatGPT and Claude answers with live web search (closest to what customers see).",
+      "ChatGPT, Claude and Perplexity answers with live web search (closest to what customers see).",
       "Product tracking: is the AI accurate about your product, and where you rank on Google Shopping.",
       "Shareable report links and PDF; on Pro, team invitations and API & MCP access for AI agents.",
     ],

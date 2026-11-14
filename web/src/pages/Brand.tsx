@@ -891,7 +891,7 @@ function Report({ brand, type, onBrandChange, paid = false }: { brand: Brand; ty
           {!live && type !== "simulated" && (
             <section className="panel" id="kendi-site-payi">
               <h2>{L("Kendi site payı", "Owned-source share")}</h2>
-              <p className="muted">{L("Veri yok: kaynaklar yalnız canlı internet aramalı ölçümde oluşur (ChatGPT ve Claude, ücretli paketler).", "No data: sources only exist in live web-search measurements (ChatGPT and Claude, paid plans).")}</p>
+              <p className="muted">{L("Veri yok: kaynaklar yalnız canlı internet aramalı ölçümde oluşur (ChatGPT, Claude ve Perplexity, ücretli paketler).", "No data: sources only exist in live web-search measurements (ChatGPT, Claude and Perplexity, paid plans).")}</p>
             </section>
           )}
 

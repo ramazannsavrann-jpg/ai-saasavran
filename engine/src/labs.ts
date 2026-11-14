@@ -85,7 +85,7 @@ export const GROWTH_TEST = {
 /**
  * Video ve içerik konuları (Growth Lab): tüketicinin ilgilendiği, tanınmış markaların yarıştığı kategoriler.
  * Amaç: kendi verimiz birikir; videolarda ve ana sayfada marka adları gizlenerek (Marka A, B, C) kullanılır.
- * Ölçüm: her hafta ücretsiz Gemini (aramasız); ayda bir canlı aramalı (ChatGPT + Claude, toplam ücretli tavanla sınırlı).
+ * Ölçüm: her hafta ücretsiz Gemini (aramasız); ayda bir canlı aramalı (ChatGPT + Claude + Perplexity, toplam ücretli tavanla sınırlı).
  * Hedef marka seçimi önemsizdir: raporda kategorideki bütün markalar yan yana karşılaştırılır.
  */
 export const VIDEO_TOPICS: { brand: { name: string; aliases: string[]; website: string; sector: string }; competitors: Comp[]; prompts: [string, Intent][] }[] = [

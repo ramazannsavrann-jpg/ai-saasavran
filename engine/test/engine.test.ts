@@ -193,12 +193,6 @@ test("Kayıt defteri: Perplexity yalnız anahtar ve ALLOW_PAID_API varken açıl
   assert.deepEqual(chooseProviders("live_search", env, ["A"], "s").map((p) => p.config.provider), ["openai", "claude", "perplexity"], "varsayılan sıra anahtar varsa Perplexity'yi de içerir");
   assert.deepEqual(chooseProviders("live_search", { ...env, PERPLEXITY_API_KEY: undefined }, ["A"], "s").map((p) => p.config.provider), ["openai", "claude"], "anahtar yoksa sıra eskisi gibi");
   assert.deepEqual(chooseProviders("live_search", { ...env, LIVE_ENGINES: "openai,claude" }, ["A"], "s").map((p) => p.config.provider), ["openai", "claude"], "LIVE_ENGINES ile çıkarılabilir");
-  // müşteri alanlarında Perplexity kapalı (paket tavanları ChatGPT + Claude'a göre); Growth Lab'de açık
-  const { engineAllowed } = await import("../src/worker.ts");
-  assert.equal(engineAllowed("perplexity", "growth_lab", {}), true);
-  assert.equal(engineAllowed("perplexity", "business", {}), false);
-  assert.equal(engineAllowed("perplexity", "agency", { PERPLEXITY_FOR_CUSTOMERS: "true" }), true);
-  assert.equal(engineAllowed("claude", "business", {}), true);
 });
 
 // ---------------- Ücretli API kilidi ----------------

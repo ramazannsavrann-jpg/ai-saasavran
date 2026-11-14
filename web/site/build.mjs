@@ -112,8 +112,8 @@ const PLAN_ROWS = (en) => [
       ? ["1 brand, 15 questions, 3 competitors", "4 measurements a month (one a week, automatic)", "Gemini, model knowledge (no live search)", "Website check and recommendations"]
       : ["1 marka, 15 soru, 3 rakip", "Ayda 4 ölçüm (haftada bir, otomatik)", "Gemini, model bilgisi (canlı arama yok)", "Web sitesi kontrolü ve öneriler"], live: true },
   { name: "Plus", id: "starter", price: "$29", per: en ? "/month" : "/ay", items: en
-      ? ["1 brand, 25 questions, 5 competitors", "ChatGPT and Claude with live web search + Gemini", "Every week: ChatGPT and Gemini ask each question twice, Claude once", "Which websites the AI cited", "Products: AI accuracy check and weekly Google Shopping position", "Shareable report link and PDF"]
-      : ["1 marka, 25 soru, 5 rakip", "ChatGPT ve Claude canlı web araması + Gemini", "Her hafta: ChatGPT ve Gemini her soruyu 2 kez, Claude 1 kez sorar", "Yapay zekânın baktığı kaynak siteler", "Ürünler: yapay zekâ doğruluk kontrolü ve haftalık Google Shopping sırası", "Paylaşılabilir rapor bağlantısı ve PDF"] },
+      ? ["1 brand, 25 questions, 5 competitors", "ChatGPT, Claude and Perplexity with live web search + Gemini", "Every week: ChatGPT and Gemini ask each question twice, Claude and Perplexity once", "Which websites the AI cited", "Products: AI accuracy check and weekly Google Shopping position", "Shareable report link and PDF"]
+      : ["1 marka, 25 soru, 5 rakip", "ChatGPT, Claude ve Perplexity canlı web araması + Gemini", "Her hafta: ChatGPT ve Gemini her soruyu 2 kez, Claude ve Perplexity 1 kez sorar", "Yapay zekânın baktığı kaynak siteler", "Ürünler: yapay zekâ doğruluk kontrolü ve haftalık Google Shopping sırası", "Paylaşılabilir rapor bağlantısı ve PDF"] },
   { name: "Pro", id: "pro", price: "$149", per: en ? "/month" : "/ay", items: en
       ? ["5 brands, 30 questions each", "8 competitors per brand", "Team of 3", "API and MCP access for AI agents", "Everything in Plus", "For multi-location businesses and freelancers"]
       : ["5 marka, her biri 30 soru", "Marka başına 8 rakip", "3 kişilik ekip", "Yapay zekâ ajanları için API ve MCP erişimi", "Plus'taki her şey", "Çok şubeli işletmeler ve serbest çalışanlar için"] },
@@ -257,7 +257,7 @@ ${demoHtml(true)}
   <ul>
     <li class="ok">Gemini measurement (model knowledge, no live search), clearly labelled.</li>
     <li class="ok">Weekly automatic measurement, competitor comparison, website check, recommendations.</li>
-    <li class="ok">ChatGPT and Claude live-search measurement and source analysis: on paid plans, reported per engine.</li>
+    <li class="ok">ChatGPT, Claude and Perplexity live-search measurement and source analysis: on paid plans, reported per engine.</li>
     <li class="ok">Free check without signing up (2 a month).</li>
     <li class="ok">App in English and Turkish.</li>
     <li class="ok">Evidence for why a competitor was recommended instead, and which brands each source supports: in live-search measurements.</li>
@@ -378,7 +378,7 @@ const ABOUT = {
   <h2>What it does</h2>
   <ul>
     <li>Asks AI assistants the questions your customers would ask, in Turkish or English, several times.</li>
-    <li>Reports each engine separately: Gemini without live web search on the free plan; ChatGPT and Claude with live web search on paid plans.</li>
+    <li>Reports each engine separately: Gemini without live web search on the free plan; ChatGPT, Claude and Perplexity with live web search on paid plans.</li>
     <li>Separates mention, recommendation and citation; shows competitor comparisons, the sites the AI cited and the share of your own site among them.</li>
     <li>Checks product-level facts (price, specifications) and compares them with shopping results.</li>
     <li>Gives a site audit and an action list, and tracks whether changes improved results.</li>
@@ -406,7 +406,7 @@ const ABOUT = {
   <h2>Ne yapar?</h2>
   <ul>
     <li>Müşterilerinizin soracağı soruları Türkçe veya İngilizce olarak yapay zekâ asistanlarına birkaç kez sorar.</li>
-    <li>Her motoru ayrı raporlar: ücretsiz pakette canlı aramasız Gemini; ücretli paketlerde canlı web aramalı ChatGPT ve Claude.</li>
+    <li>Her motoru ayrı raporlar: ücretsiz pakette canlı aramasız Gemini; ücretli paketlerde canlı web aramalı ChatGPT, Claude ve Perplexity.</li>
     <li>Anılma, önerilme ve kaynak gösterilmeyi ayırır; rakip karşılaştırmasını, yapay zekânın gösterdiği siteleri ve bunlar içinde kendi sitenizin payını gösterir.</li>
     <li>Ürün düzeyinde bilgileri (fiyat, özellik) kontrol eder ve alışveriş sonuçlarıyla karşılaştırır.</li>
     <li>Site denetimi ve aksiyon listesi verir, yapılan değişikliklerin sonucu iyileştirip iyileştirmediğini takip eder.</li>
