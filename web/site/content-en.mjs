@@ -231,6 +231,45 @@ export const GUIDES_EN = [
       ["Why do different AI engines give different results?", "They use different search providers, sources and training data. In our measurements the same brand was recommended often by one engine and never by another."],
     ],
   },
+  {
+    slug: "ai-visibility-tracking-for-agencies",
+    tr: "ajanslar-icin-yapay-zeka-gorunurluk-takibi",
+    title: "How agencies track client brands in AI assistants",
+    short: "AI visibility tracking for agencies",
+    description: "How an agency can track whether client brands are recommended in ChatGPT, Gemini and Claude: a question set per brand, regular runs, reports and team access.",
+    body: `
+<p class="lede">Short answer: an agency builds a separate set of customer-style questions for each client brand, has each AI engine answer them <b>on a regular schedule</b> and <b>several times</b>, and reports the result next to the brand's competitors. Doing this by hand stops scaling once you manage a few brands. You need an AI visibility tool that holds many brands in one account, gives team members their own access, and produces a report you can send to the client.</p>
+
+<h2>1. Keep every client brand separate</h2>
+<p>Each brand has its own sector, competitors and customer questions. A dental clinic's questions ("Which clinic for implants in my city?") and an online shoe store's questions ("Recommend running shoes under $80") don't belong in the same report. Keep a question set, a competitor list and a report per brand.</p>
+
+<h2>2. Leave the brand name out of most questions</h2>
+<p>"Is X any good?" always makes the AI talk about X and gives a flattering result. Your client's customers ask without knowing the brand: "best", "which one", "can you recommend". Use branded questions only sparingly, to check whether the AI describes the brand correctly.</p>
+
+<h2>3. Measure regularly and repeatedly</h2>
+<p>An AI can give a different answer to the same question each time. A single screenshot is not a result you can present. Ask each question several times, repeat on a fixed schedule such as weekly, and show the trend. You want to notice a sudden drop before the client does.</p>
+
+<h2>4. Report each engine separately</h2>
+<p>ChatGPT, Gemini and Claude can recommend different brands for the same question. Show results per engine instead of one blended score, and say whether an answer came from live web search or from the model's training data; the two tell different stories.</p>
+
+<h2>5. Answer "why?" with evidence</h2>
+<p>The client will ask why a competitor was recommended. Show the sentence in which the AI praised the competitor, the sources it relied on and the questions the brand lost. The work plan comes from that evidence: which page lacks information, which comparison site the brand should appear on.</p>
+
+<h2>6. Team access and a report you can send</h2>
+<p>Several people at an agency work on the same brands, and sharing one password is not safe. Give each person their own access. Send the client a read-only report link that needs no login, or a PDF.</p>
+
+<h2>7. Tie the work to the measurements</h2>
+<p>When you publish content or list the brand in a directory, note the date. If later measurements move, you can tell the client what changed after which action. If nothing moves, say so honestly; changes in AI answers can take weeks.</p>
+
+<h2>What AI SaaSavran offers agencies</h2>
+<p>In AI SaaSavran you can open your workspace as an "Agency" and add client brands one by one. The Pro plan covers 5 brands and a team of 3; the Business plan covers 15 brands and a team of 15. Each brand gets its own questions, competitors, weekly automatic measurement, an email alert on a significant drop, per-engine reports, cited sources, PDF export and a shareable report link. On Pro and Business, results can also flow into your own dashboards through the API and MCP. You can start by trying one brand on the free plan.</p>
+`,
+    faq: [
+      ["How many client brands can an agency track in one account?", "In AI SaaSavran the Pro plan includes 5 brands and the Business plan 15. Each brand has its own questions, competitor list and report."],
+      ["How do I send a report to a client?", "Share a read-only report link that needs no login, or download the report as a PDF."],
+      ["Can teammates work on the same brands?", "Yes. Pro gives access to 3 people and Business to 15, each with their own login, so nobody shares a password."],
+    ],
+  },
 ];
 
 export const HOME_FAQ_EN = [

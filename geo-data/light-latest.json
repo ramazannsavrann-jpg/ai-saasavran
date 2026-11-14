@@ -1,0 +1,73 @@
+{
+  "date": "2026-11-14",
+  "mode": "light",
+  "costUsd": 0,
+  "capUsd": 0.4,
+  "pages": 33,
+  "pagesWithIssues": 0,
+  "auditPassed": 13,
+  "auditTotal": 13,
+  "indexnow": {
+    "sent": 33,
+    "status": 200,
+    "note": "kabul edildi"
+  },
+  "engines": {},
+  "engineStatus": {},
+  "competitorCount": 0,
+  "topSources": [],
+  "forClaude": [],
+  "forUser": [],
+  "pageIssues": [],
+  "answers": [],
+  "questions": [
+    {
+      "id": "tr-arac",
+      "lang": "tr",
+      "kind": "discovery",
+      "q": "Bir markanın ChatGPT, Gemini ve Claude cevaplarında ne kadar görünür olduğunu ölçen araçlar hangileri? Kısa liste ver."
+    },
+    {
+      "id": "tr-geo",
+      "lang": "tr",
+      "kind": "discovery",
+      "q": "Türkiye'de yapay zekâ görünürlüğü (GEO) takibi için kullanılabilecek uygun fiyatlı yazılımlar hangileri?"
+    },
+    {
+      "id": "tr-ajans",
+      "lang": "tr",
+      "kind": "discovery",
+      "q": "Ajanslar müşterilerinin markasının yapay zekâ asistanlarında önerilip önerilmediğini hangi araçla takip edebilir?"
+    },
+    {
+      "id": "en-tools",
+      "lang": "en",
+      "kind": "discovery",
+      "q": "What are the best tools to track brand visibility in ChatGPT, Gemini and Claude? Give a short list."
+    },
+    {
+      "id": "en-smb",
+      "lang": "en",
+      "kind": "discovery",
+      "q": "Affordable AI search visibility (GEO) tracking tools for small businesses and agencies?"
+    },
+    {
+      "id": "en-compare",
+      "lang": "en",
+      "kind": "discovery",
+      "q": "Which tools measure how often AI assistants recommend my product compared with competitors?"
+    },
+    {
+      "id": "tr-tanima",
+      "lang": "tr",
+      "kind": "knowledge",
+      "q": "AI SaaSavran (aisaasavran.com) nedir, ne işe yarar?"
+    },
+    {
+      "id": "en-knows",
+      "lang": "en",
+      "kind": "knowledge",
+      "q": "What is AI SaaSavran (aisaasavran.com) and what does it do?"
+    }
+  ]
+}
