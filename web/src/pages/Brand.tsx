@@ -1,4 +1,4 @@
-import { useMemo, useState, type FormEvent } from "react";
+import { useEffect, useMemo, useState, type FormEvent } from "react";
 import { SECTORS, competitorSuggestions, postPurchaseTemplates, questionTemplates, sectorDef } from "../lib/sectors";
 import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useApp, useLoad } from "../lib/app";
@@ -10,6 +10,7 @@ import { actionImpact, compareProducts, engineComparison, engineScoreChanges, pe
 import { competitorsInRun, formatDate, formatDateTime, MIN_SAMPLE, numLoc, pct, providerLabel, rangeText, series, shareSummary, sourceOpportunities, topDomains, usd } from "../lib/report";
 import { Button, Confirm, DataNotice, Empty, ErrorBox, Field, Loading, Select, TypeBadge } from "../components/ui";
 import { CompareBars, TrendChart } from "../components/Chart";
+import { StartGuide } from "../components/StartGuide";
 import { buildRecommendations, type RecInput } from "../../../engine/src/recommendations.ts";
 import { untrackedNames } from "../../../engine/src/metrics.ts";
 import { campaignFor, taskProgress } from "../../../engine/src/campaign.ts";
@@ -31,6 +32,14 @@ export function BrandPage() {
   const brand = useLoad(() => api.brand(id), [id]);
   const runs = useLoad(() => api.runs(id), [id]);
   const [editing, setEditing] = useState(false);
+  // Bekleyen ölçüm varken sonuç gelene kadar 20 saniyede bir sessizce yeniden bakılır (sayfa kendiliğinden güncellenir)
+  const waiting = (runs.data ?? []).some((r) => r.status === "queued" || r.status === "running");
+  useEffect(() => {
+    if (!waiting) return;
+    const t = setInterval(() => { if (document.visibilityState === "visible") runs.reload(); }, 20_000);
+    return () => clearInterval(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [waiting, id]);
 
   if (brand.loading) return <Loading />;
   if (brand.error || !brand.data) return <ErrorBox message={L("Marka bulunamadı veya bu markayı görme yetkiniz yok.", "Brand not found, or you don't have access to it.")} />;
@@ -58,6 +67,9 @@ export function BrandPage() {
           </>
         )}
       </header>
+      {!editing && !b.is_competitor && current && current.kind !== "demo_lab" && current.kind !== "growth_lab" && (
+        <StartGuide brand={b} runs={runList} onRunsChange={runs.reload} goTab={(k) => { const n = new URLSearchParams(params); n.set("sekme", k); setParams(n, { replace: true }); }} />
+      )}
       <nav className="tabs" role="tablist" aria-label={L("Marka bölümleri", "Brand sections")}>
         {TABS.map(([k, label]) => (
           <button key={k} role="tab" aria-selected={tab === k} className={tab === k ? "on" : ""} onClick={() => { const n = new URLSearchParams(params); n.set("sekme", k); setParams(n, { replace: true }); }}>{label}</button>
@@ -69,13 +81,13 @@ export function BrandPage() {
           <button aria-pressed={type === "live_search"} onClick={() => setView("canli")}>{L("Canlı aramalı (ChatGPT)", "Live search (ChatGPT)")}</button>
         </div>
       )}
-      {tab === "rapor" && <Report brand={b} type={type} onBrandChange={brand.reload} paid={current?.kind === "growth_lab" || (!!current?.plan && current.plan !== "free")} />}
+      {tab === "rapor" && <Report key={runList.filter((r) => r.status === "done").length} brand={b} type={type} onBrandChange={brand.reload} paid={current?.kind === "growth_lab" || (!!current?.plan && current.plan !== "free")} />}
       {tab === "rapor" && current?.kind !== "demo_lab" && b.data_origin !== "simulated" && runList.some((r) => r.status === "done") && <ReportSharePanel brand={b} />}
       {tab === "oneriler" && <Advice brand={b} type={type} runs={runs.data ?? []} onBrandChange={brand.reload} />}
       {tab === "rakipler" && <Competitors brand={b} />}
       {tab === "sorular" && <Questions brand={b} />}
       {tab === "urunler" && <Products brand={b} paidAllowed={!!current?.paid_live_allowed} />}
-      {tab === "olcumler" && <RunHistory runs={runs.data ?? []} loading={runs.loading} />}
+      {tab === "olcumler" && <RunHistory runs={runs.data ?? []} loading={runs.loading && !runs.data} />}
     </div>
   );
 }

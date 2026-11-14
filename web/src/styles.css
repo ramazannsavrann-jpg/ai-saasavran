@@ -527,3 +527,19 @@ pre.code { white-space: pre-wrap; word-break: break-all; padding: 8px 10px; back
 .net-you-t { font-weight: 700; fill: var(--primary); } .net-brand-t { fill: var(--text, currentColor); }
 .badge-net { display: inline-block; margin-left: .4rem; padding: 0 .45rem; border-radius: 999px; font-size: .72rem; color: #fff; background: var(--muted); }
 .badge-net.net-rival { background: var(--danger); } .badge-net.net-yours { background: var(--ok); } .badge-net.net-shared { background: var(--sim); }
+
+/* Başlangıç rehberi (ilk 5 dakika) */
+.visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.guide { border-color: var(--primary); border-width: 2px; }
+.guide-count { margin: 6px 0 10px; font-size: .9rem; }
+.guide-steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.guide-step { display: grid; grid-template-columns: 30px 1fr; gap: 10px; align-items: start; }
+.guide-mark { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; font-weight: 700; font-size: .9rem; border: 2px solid var(--line); color: var(--muted); }
+.guide-done .guide-mark { background: var(--primary); border-color: var(--primary); color: #fff; }
+.guide-now .guide-mark { border-color: var(--primary); color: var(--primary); }
+.guide-title { margin: 3px 0 0; font-weight: 600; }
+.guide-todo .guide-title, .guide-done .guide-title { color: var(--muted); font-weight: 500; }
+.guide-body p { margin: 6px 0; font-size: .95rem; }
+.guide-body ul { margin: 6px 0; padding-left: 20px; font-size: .95rem; }
+.guide-actions { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0 4px; }
+.guide-finish { margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--line); }
