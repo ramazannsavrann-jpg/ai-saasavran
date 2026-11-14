@@ -34,6 +34,12 @@ ffmpeg -i v.mp4 -i voice.wav -i music.wav -filter_complex "[1:a]aresample=44100,
 ## Yükleme
 - Dosya `videolar` dalına konur, raw.githubusercontent.com linki `vidiq_video_upload`'a verilir; YouTube kanalı @aisaasavran (UCHL4sdkEenxkpuP4_Hq1RZw).
 
+## İngilizce strateji: ABD odaklı (15 Kasım, kullanıcı kararı)
+- İngilizce içerik tutana kadar ABD hedefli: ABD markaları/ürünleri, ABD'den ölçüm (marka country=US → canlı arama konumu ABD; worker SEARCH_COUNTRY'yi marka ülkesinden alır). Başlık/etiket ABD aramalarına göre ("US edition", yerel marka adları).
+- İngilizce yayın saati: ABD akşamı 19:00 ET = 00:00Z = Türkiye 03:00 (kış saati; Mart'ta yaz saatine geçince 23:00Z). Shorts ve uzun videoların EN sürümü bu saatte. TR sürümler Türkiye prime saatinde kalır (Shorts 19:00, uzun 21:00).
+- Tutarsa sonra İngiltere (22:00 TR), Kanada, Avustralya.
+- Yeni ölçüm = harcama: bütçe limiti yükseltmek için kullanıcı onayı şart.
+
 ## Perplexity (15 Kasım)
 - AI SaaSavran artık Perplexity'yi de ölçüyor (tüm paketlerde). Bundan sonraki TÜM videolarda (Shorts, uzun, eğitim) ve açıklamalarda motor adları: ChatGPT, Gemini, Claude ve Perplexity. Perplexity'ye ait sayı/sıralama yalnız gerçek Perplexity ölçümü varsa gösterilir; yoksa "Perplexity de ölçülüyor" denir, rakam uydurulmaz. Kanal açıklamasında da Perplexity var.
 
