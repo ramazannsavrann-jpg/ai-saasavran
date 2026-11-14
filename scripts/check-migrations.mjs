@@ -251,6 +251,11 @@ console.log("ok tanımsız paket atanamıyor");
     const prevWs = (await db.query(`select kind, plan, subscription_status from workspaces where id=$1`, [A])).rows[0];
     await db.query(`update workspaces set kind='business', plan='starter', subscription_status='active', paid_live_allowed = true where id=$1`, [A]);
     await as(U1, `select request_shopping_check('${pr.id}')`);
+    // Ürün doğruluğu da abone (ücretli paket) alanında açık: yalnız Growth Lab'e özel değil
+    await db.exec(`grant execute on function request_product_check(uuid) to authenticated`);
+    await as(U1, `select request_product_check('${pr.id}')`);
+    assert.equal((await db.query(`select count(*)::int n from pending_product_checks(5) where product_id=$1`, [pr.id])).rows[0].n, 1, "abone alanında ürün doğruluğu sıraya girer");
+    await db.query(`update products set check_requested_at = null where id=$1`, [pr.id]);
     const q = (await db.query(`select requested, shopping_query from pending_shopping_checks(5) where product_id=$1`, [pr.id])).rows[0];
     assert.equal(q.requested, true);
     await assert.rejects(as(U1, `select request_shopping_check('${pr.id}')`), "bekleyen istek varken ikinci istek yok");

@@ -60,7 +60,8 @@ a { color: var(--primary-ink); text-underline-offset: 3px; }
   position: sticky; top: 0; z-index: 10; display: flex; align-items: center; gap: 12px;
   padding: 10px 16px; background: var(--surface); border-bottom: 1px solid var(--line);
 }
-.brandmark { display: flex; align-items: center; gap: 8px; color: var(--primary); text-decoration: none; font: 700 1.05rem var(--display); }
+.brandmark { display: flex; align-items: center; gap: 8px; flex: none; white-space: nowrap; color: var(--primary); text-decoration: none; font: 700 1.05rem var(--display); }
+.brandmark svg { flex: none; }
 .brandmark span { color: var(--ink); }
 .ws-switch { margin-left: auto; min-width: 0; }
 .ws-switch select { max-width: 52vw; padding: 8px 32px 8px 12px; font-weight: 600; }
@@ -76,12 +77,14 @@ a { color: var(--primary-ink); text-underline-offset: 3px; }
 .bottomnav a.active { color: var(--primary-ink); }
 .bottomnav a.active svg { stroke-width: 2.4; }
 .content { max-width: 760px; margin: 0 auto; padding: 20px 16px 32px; }
-@media (min-width: 900px) {
+.content, .panel { min-width: 0; overflow-wrap: anywhere; }
+@media (min-width: 1180px) {
   .shell { padding-bottom: 0; }
   .bottomnav { display: none; }
   .ws-switch { margin-left: 24px; }
-  .topnav { display: flex; gap: 4px; margin-left: auto; }
-  .topnav a { padding: 8px 12px; border-radius: var(--radius-s); color: var(--muted); text-decoration: none; font-weight: 500; }
+  .ws-switch select { max-width: 240px; }
+  .topnav { display: flex; align-items: center; gap: 4px; margin-left: auto; min-width: 0; overflow-x: auto; scrollbar-width: none; }
+  .topnav a { flex: none; white-space: nowrap; padding: 8px 12px; border-radius: var(--radius-s); color: var(--muted); text-decoration: none; font-weight: 500; }
   .topnav a.active { color: var(--primary-ink); background: var(--tint); }
   .content { padding-top: 32px; }
 }

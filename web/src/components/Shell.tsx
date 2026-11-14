@@ -46,6 +46,7 @@ export function Shell() {
         <NavLink to="/panel"><Icon d="M4 11l8-7 8 7v9h-5v-6H9v6H4z" />{t("nav.dashboard")}</NavLink>
         <NavLink to="/durum-ic"><Icon d="M12 3a9 9 0 100 18 9 9 0 000-18zm0 4v6m0 3v1" />{L("Durum", "Status")}</NavLink>
         {isAdmin && <NavLink to="/demo-lab"><Icon d="M9 3h6M10 3v6l-5 9a2 2 0 002 3h10a2 2 0 002-3l-5-9V3" />Demo</NavLink>}
+        {isAdmin && <NavLink to="/yonetim"><Icon d="M8 11a3 3 0 100-6 3 3 0 000 6zm8 0a3 3 0 100-6 3 3 0 000 6zM2 20a6 6 0 0112 0m2-6a6 6 0 016 6" />{L("Müşteri", "Clients")}</NavLink>}
         <NavLink to="/hesap#paket" className="nav-upgrade-b"><Icon d="M12 3l2.8 5.7 6.2.9-4.5 4.4 1 6.2L12 17.3 6.5 20.2l1-6.2L3 9.6l6.2-.9z" />{paid ? L("Paketim", "Plan") : L("Yükselt", "Upgrade")}</NavLink>
         <NavLink to="/hesap"><Icon d="M12 12a4 4 0 100-8 4 4 0 000 8zm-7 9a7 7 0 0114 0" />{t("nav.account")}</NavLink>
       </nav>
