@@ -10,6 +10,7 @@ import { MIN_SAMPLE, competitorsInRun, formatDate, formatDateTime, numLoc, pct, 
 interface Shared {
   brand: { name: string; sector: string | null; city: string | null; country: string };
   expires_at: string;
+  branding?: { name: string | null; logo: string | null; accent: string | null } | null;
   vis: Record<MeasurementType, VisRow[]>;
   questions: { text: string; answers: number; recommended: number; mentioned: number; top_competitor: string | null }[];
   sources: { domain: string; count: number }[];
@@ -33,10 +34,15 @@ export function SharedReport() {
   if (!data) return <main className="content"><Empty title={L("Bu rapor bağlantısı geçersiz ya da süresi dolmuş", "This report link is invalid or has expired")}><p>{L("Bağlantıyı paylaşan kişiden yenisini isteyin.", "Ask the person who shared it for a new link.")}</p></Empty></main>;
 
   const types = (["live_search", "model_knowledge"] as MeasurementType[]).filter((t) => (data.vis[t] ?? []).length > 0);
+  const br = data.branding && (data.branding.name || data.branding.logo) ? data.branding : null;
   return (
-    <main className="content shared-report">
+    <main className="content shared-report" style={br?.accent ? ({ "--brand": br.accent } as React.CSSProperties) : undefined}>
       <header className="report-head">
-        <a href="/" className="report-logo"><img src="/icon.svg" alt="" width={32} height={32} /><span>AI SaaSavran</span></a>
+        {br ? (
+          <span className="report-logo">{br.logo && <img src={br.logo} alt="" height={36} style={{ maxWidth: 140, objectFit: "contain" }} />}{br.name && <span>{br.name}</span>}</span>
+        ) : (
+          <a href="/" className="report-logo"><img src="/icon.svg" alt="" width={32} height={32} /><span>AI SaaSavran</span></a>
+        )}
         <button className="btn btn-quiet btn-small no-print" onClick={() => window.print()}>{L("PDF olarak kaydet", "Save as PDF")}</button>
       </header>
       <h1>{data.brand.name}</h1>
@@ -78,7 +84,7 @@ export function SharedReport() {
           <ul className="rows">{data.sources.map((s) => <li key={s.domain}><span>{s.domain}</span><span className="num">{s.count}</span></li>)}</ul>
         </section>
       )}
-      <p className="src-sup muted">{L("Ölçüm: yapay zekâ platformlarının resmî API'leri; tüketici uygulamasındaki cevaplar farklı olabilir. Oranlar güven aralığıyla verilir.", "Measured through the AI platforms' official APIs; answers in the consumer apps can differ. Rates come with confidence ranges.")} {isEn() ? `Link valid until ${formatDate(data.expires_at)}.` : `Bağlantı ${formatDate(data.expires_at)} tarihine kadar geçerli.`} <a href="/">aisaasavran.com</a></p>
+      <p className="src-sup muted">{L("Ölçüm: yapay zekâ platformlarının resmî API'leri; tüketici uygulamasındaki cevaplar farklı olabilir. Oranlar güven aralığıyla verilir.", "Measured through the AI platforms' official APIs; answers in the consumer apps can differ. Rates come with confidence ranges.")} {isEn() ? `Link valid until ${formatDate(data.expires_at)}.` : `Bağlantı ${formatDate(data.expires_at)} tarihine kadar geçerli.`} {!br && <a href="/">aisaasavran.com</a>}</p>
     </main>
   );
 }

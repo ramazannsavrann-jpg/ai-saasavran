@@ -268,4 +268,31 @@ console.log("ok tanımsız paket atanamıyor");
   }
   console.log("ok 0020: Shopping isteği yalnız ücretli alanda ve fonksiyonla; günde bir; sonuçları yalnız sunucu yazar" + (own ? "" : " (marka yok, atlandı)"));
 }
+// 0042: white-label rapor markalama yalnız Business abonesinde, yönetici tarafından ve doğrulanmış değerlerle
+{
+  const PNG = "data:image/png;base64,iVBORw0KGgo=";
+  await db.exec(`grant execute on function set_report_branding(uuid, text, text, text) to authenticated`);
+  const prev = (await db.query(`select kind, plan, subscription_status from workspaces where id=$1`, [A])).rows[0];
+  await assert.rejects(as(U1, `select set_report_branding('${A}', 'Ajans X', null, '#112233')`), /Business/, "Free/Plus alanda markalama kapalı");
+  await db.query(`update workspaces set kind='agency', plan='agency', subscription_status='active' where id=$1`, [A]);
+  await as(U1, `select set_report_branding('${A}', 'Ajans X', '${PNG}', '#112233')`);
+  const w = (await db.query(`select report_brand_name n, report_accent a, report_logo l from workspaces where id=$1`, [A])).rows[0];
+  assert.deepEqual([w.n, w.a, w.l], ["Ajans X", "#112233", PNG]);
+  await assert.rejects(as(U1, `select set_report_branding('${A}', 'Ajans X', null, 'red')`), "renk #rrggbb olmalı");
+  await assert.rejects(as(U1, `select set_report_branding('${A}', 'Ajans X', 'data:image/svg+xml;base64,PHN2Zz4=', null)`), "SVG logo kabul edilmez");
+  await assert.rejects(as(U1, `select set_report_branding('${A}', 'Ajans X', 'https://example.com/x.png', null)`), "yalnız veri adresi");
+  await assert.rejects(as(U1, `select set_report_branding('${A}', '${"x".repeat(61)}', null, null)`), "ad en fazla 60 karakter");
+  await assert.rejects(as(U2, `select set_report_branding('${A}', 'Sızma', null, null)`), "başka alan yazamaz");
+  const br = (await db.query(`select id from brands where workspace_id=$1 and not is_competitor limit 1`, [A])).rows[0];
+  if (br) {
+    const t = (await db.query(`insert into report_shares (workspace_id, brand_id, created_by, expires_at) values ($1, $2, $3, now() + interval '1 day') returning token`, [A, br.id, U1])).rows[0].token;
+    const rep = (await db.query(`select shared_report($1) r`, [t])).rows[0].r;
+    assert.equal(rep.branding.name, "Ajans X");
+    await db.query(`update workspaces set subscription_status='canceled' where id=$1`, [A]);
+    assert.equal((await db.query(`select shared_report($1) r`, [t])).rows[0].r.branding, null, "abonelik bitince marka görünmez");
+    await db.query(`delete from report_shares where token=$1`, [t]);
+  }
+  await db.query(`update workspaces set kind=$2, plan=$3, subscription_status=$4, report_brand_name=null, report_logo=null, report_accent=null where id=$1`, [A, prev.kind, prev.plan, prev.subscription_status]);
+  console.log("ok 0042: rapor markalama yalnız Business abonesinde; doğrulama ve rapor çıktısı");
+}
 console.log("TÜM DB TESTLERİ GEÇTİ");

@@ -47,6 +47,7 @@ export interface ApiKey { id: string; name: string; prefix: string; created_at: 
 export interface TeamMember { user_id: string; email: string; role: string; joined_at: string; is_me: boolean }
 export interface Invite { id: string; token: string; email: string; role: string; expires_at: string }
 export interface MyInvite { id: string; token: string; workspace_name: string; role: string; expires_at: string }
+export interface ReportBranding { report_brand_name: string | null; report_logo: string | null; report_accent: string | null }
 export interface ReportShare { id: string; token: string; created_at: string; expires_at: string; revoked_at: string | null }
 export interface AdminWorkspace {
   id: string; name: string; kind: string; plan: string; status: string; subscription_status: string | null; comped: boolean; comped_until: string | null;
@@ -215,6 +216,12 @@ export const api = {
     return must(await sb().from("report_shares").select("id,token,created_at,expires_at,revoked_at").eq("brand_id", brandId).is("revoked_at", null).gt("expires_at", new Date().toISOString()).order("created_at", { ascending: false }));
   },
   async createReportShare(brandId: string, days: number): Promise<string> { return must(await sb().rpc("create_report_share", { p_brand: brandId, p_days: days })); },
+  async reportBranding(ws: string): Promise<ReportBranding> {
+    return must(await sb().from("workspaces").select("report_brand_name,report_logo,report_accent").eq("id", ws).single());
+  },
+  async setReportBranding(ws: string, name: string, logo: string, accent: string) {
+    must(await sb().rpc("set_report_branding", { p_workspace: ws, p_name: name, p_logo: logo, p_accent: accent }));
+  },
   async revokeReportShare(id: string) { must(await sb().rpc("revoke_report_share", { p_share: id })); },
   async team(workspaceId: string): Promise<TeamMember[]> { return must(await sb().rpc("workspace_team", { p_workspace: workspaceId })); },
   async invites(workspaceId: string): Promise<Invite[]> {

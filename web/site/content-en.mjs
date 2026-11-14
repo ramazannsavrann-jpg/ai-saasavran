@@ -262,7 +262,7 @@ export const GUIDES_EN = [
 <p>When you publish content or list the brand in a directory, note the date. If later measurements move, you can tell the client what changed after which action. If nothing moves, say so honestly; changes in AI answers can take weeks.</p>
 
 <h2>What AI SaaSavran offers agencies</h2>
-<p>In AI SaaSavran you can open your workspace as an "Agency" and add client brands one by one. The Pro plan covers 5 brands and a team of 3; the Business plan covers 15 brands and a team of 15. Each brand gets its own questions, competitors, weekly automatic measurement, an email alert on a significant drop, per-engine reports, cited sources, PDF export and a shareable report link. On Pro and Business, results can also flow into your own dashboards through the API and MCP. You can start by trying one brand on the free plan.</p>
+<p>In AI SaaSavran you can open your workspace as an "Agency" and add client brands one by one. The Pro plan covers 5 brands and a team of 3; the Business plan covers 15 brands and a team of 15. Each brand gets its own questions, competitors, weekly automatic measurement, an email alert on a significant drop, per-engine reports, cited sources, PDF and CSV (Excel) export and a shareable report link. On Business, the report link and PDF carry your own agency name, logo and colour. On Pro and Business, results can also flow into your own dashboards through the API and MCP. You can start by trying one brand on the free plan.</p>
 `,
     faq: [
       ["How many client brands can an agency track in one account?", "In AI SaaSavran the Pro plan includes 5 brands and the Business plan 15. Each brand has its own questions, competitor list and report."],

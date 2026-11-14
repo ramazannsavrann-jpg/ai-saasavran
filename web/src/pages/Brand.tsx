@@ -11,6 +11,7 @@ import { competitorsInRun, formatDate, formatDateTime, MIN_SAMPLE, numLoc, pct, 
 import { Button, Confirm, DataNotice, Empty, ErrorBox, Field, Loading, Select, TypeBadge } from "../components/ui";
 import { CompareBars, TrendChart } from "../components/Chart";
 import { StartGuide } from "../components/StartGuide";
+import { downloadCsv, fileSlug } from "../lib/csv";
 import { buildRecommendations, type RecInput } from "../../../engine/src/recommendations.ts";
 import { untrackedNames } from "../../../engine/src/metrics.ts";
 import { campaignFor, taskProgress } from "../../../engine/src/campaign.ts";
@@ -83,6 +84,7 @@ export function BrandPage() {
       )}
       {tab === "rapor" && <Report key={runList.filter((r) => r.status === "done").length} brand={b} type={type} onBrandChange={brand.reload} paid={current?.kind === "growth_lab" || (!!current?.plan && current.plan !== "free")} />}
       {tab === "rapor" && current?.kind !== "demo_lab" && b.data_origin !== "simulated" && runList.some((r) => r.status === "done") && <ReportSharePanel brand={b} />}
+      {tab === "rapor" && current && (current.kind === "business" || current.kind === "agency") && b.data_origin !== "simulated" && <ReportBrandingPanel workspaceId={current.id} agency={current.plan === "agency"} />}
       {tab === "oneriler" && <Advice brand={b} type={type} runs={runs.data ?? []} onBrandChange={brand.reload} />}
       {tab === "rakipler" && <Competitors brand={b} />}
       {tab === "sorular" && <Questions brand={b} />}
@@ -92,13 +94,90 @@ export function BrandPage() {
   );
 }
 
+/** Küçük logoyu PNG veri adresine çevirir (en fazla 256 piksel); sunucu 120 bin karakter sınırı koyar. */
+async function logoToDataUrl(file: File): Promise<string> {
+  if (!/^image\/(png|jpeg|webp)$/.test(file.type)) throw new Error(L("Logo PNG, JPEG ya da WebP olmalı.", "The logo must be PNG, JPEG or WebP."));
+  const bmp = await createImageBitmap(file);
+  const k = Math.min(1, 256 / Math.max(bmp.width, bmp.height));
+  const c = document.createElement("canvas");
+  c.width = Math.max(1, Math.round(bmp.width * k)); c.height = Math.max(1, Math.round(bmp.height * k));
+  c.getContext("2d")?.drawImage(bmp, 0, 0, c.width, c.height);
+  for (const [type, q] of [["image/png", 1], ["image/webp", 0.85], ["image/webp", 0.6]] as const) {
+    const url = c.toDataURL(type, q);
+    if (url.startsWith(`data:${type}`) && url.length <= 110000) return url;
+  }
+  throw new Error(L("Logo çok büyük; daha sade ya da küçük bir dosya seçin.", "The logo is too large; choose a simpler or smaller file."));
+}
+
+/** Ajans markalaması (Business): paylaşılan raporda ve PDF'te ajansın adı, logosu ve rengi görünür. */
+function ReportBrandingPanel({ workspaceId, agency }: { workspaceId: string; agency: boolean }) {
+  const cur = useLoad(() => api.reportBranding(workspaceId), [workspaceId]);
+  const [name, setName] = useState<string | null>(null);
+  const [accent, setAccent] = useState<string | null>(null);
+  const [logo, setLogo] = useState<string | null>(null);
+  const [busy, setBusy] = useState(false);
+  const [err, setErr] = useState<string | null>(null);
+  const [saved, setSaved] = useState(false);
+  const nm = name ?? cur.data?.report_brand_name ?? "";
+  const ac = accent ?? cur.data?.report_accent ?? "#11705e";
+  const lg = logo ?? cur.data?.report_logo ?? "";
+  async function save() {
+    setBusy(true); setErr(null); setSaved(false);
+    try { await api.setReportBranding(workspaceId, nm, lg, nm || lg ? ac : ""); setSaved(true); cur.reload(); }
+    catch (x) { setErr(friendlyError(x)); } finally { setBusy(false); }
+  }
+  async function pick(f: File | undefined) {
+    if (!f) return;
+    setErr(null);
+    try { setLogo(await logoToDataUrl(f)); } catch (x) { setErr(x instanceof Error ? x.message : String(x)); }
+  }
+  return (
+    <section className="panel stack">
+      <h2>{L("Rapor markalama (ajans)", "Report branding (agency)")}</h2>
+      <p className="muted">{L("Paylaşılan rapor ve PDF'te AI SaaSavran yerine kendi adınız, logonuz ve renginiz görünür. Business paketinde.", "Shared reports and PDFs show your own name, logo and colour instead of AI SaaSavran. On the Business plan.")}</p>
+      {!agency ? (
+        <p className="src-sup muted">{L("Bu özellik Business paketinde açılır.", "This feature unlocks on the Business plan.")}</p>
+      ) : (
+        <>
+          <Field label={L("Ajans adı", "Agency name")} name="brand-name" maxLength={60} value={nm} onChange={(e) => setName(e.target.value)} />
+          <label className="field"><span>{L("Renk", "Colour")}</span><input type="color" value={ac} onChange={(e) => setAccent(e.target.value)} aria-label={L("Rapor rengi", "Report colour")} /></label>
+          <label className="field"><span>{L("Logo (PNG, JPEG ya da WebP)", "Logo (PNG, JPEG or WebP)")}</span><input type="file" accept="image/png,image/jpeg,image/webp" onChange={(e) => pick(e.target.files?.[0])} /></label>
+          {lg && <p className="src-sup"><img src={lg} alt={L("Logo önizleme", "Logo preview")} height={40} style={{ maxWidth: 160, objectFit: "contain" }} /> <button className="link-btn" onClick={() => setLogo("")}>{L("Logoyu kaldır", "Remove logo")}</button></p>}
+          <div className="row-form"><Button onClick={save} busy={busy}>{L("Kaydet", "Save")}</Button></div>
+          {saved && <p className="success-box" role="status">{L("Kaydedildi. Yeni açılan rapor bağlantıları bu markayla görünür.", "Saved. Report links now show this branding.")}</p>}
+          <ErrorBox message={err} />
+        </>
+      )}
+    </section>
+  );
+}
+
 /** Paylaşılabilir rapor bağlantısı: giriş yapmadan görülebilen salt okunur rapor (PDF olarak da kaydedilebilir). */
 function ReportSharePanel({ brand }: { brand: Brand }) {
   const shares = useLoad(() => api.reportShares(brand.id), [brand.id]);
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
   const [copied, setCopied] = useState<string | null>(null);
+  const [csvBusy, setCsvBusy] = useState(false);
   const url = (t: string) => `${location.origin}/rapor/${t}`;
+  async function exportCsv() {
+    setCsvBusy(true); setErr(null);
+    try {
+      const types: MeasurementType[] = ["live_search", "model_knowledge"];
+      const sets = await Promise.all(types.map((t) => api.visibility(brand.id, t)));
+      const rows: unknown[][] = [[L("Ölçüm tarihi", "Measured at"), L("Ölçüm türü", "Type"), L("Motor", "Engine"), L("Marka", "Brand"), L("Hedef marka", "Target brand"), L("Cevap sayısı", "Answers"), L("Anıldı", "Mentioned"), L("Önerildi", "Recommended"), L("Kaynak gösterdi", "Cited")]];
+      sets.forEach((vs, i) => vs.forEach((r) => rows.push([r.run_at, types[i], r.provider, r.brand_name, r.is_target ? 1 : 0, r.n, r.mentioned, r.recommended, r.cited])));
+      rows.push([]);
+      rows.push([L("Son ölçümün soru bazında sonucu", "Latest measurement, per question")]);
+      rows.push([L("Ölçüm türü", "Type"), L("Soru", "Question"), L("Cevap sayısı", "Answers"), L("Marka anıldı", "Brand mentioned"), L("Marka önerildi", "Brand recommended"), L("En çok önerilen rakip", "Top competitor")]);
+      for (let i = 0; i < types.length; i++) {
+        const last = series(sets[i]).at(-1);
+        if (!last) continue;
+        (await api.promptResults(last.runId)).forEach((q) => rows.push([types[i], q.prompt_text, q.answers, q.target_mentioned, q.target_recommended, q.top_competitor ?? ""]));
+      }
+      downloadCsv(`${fileSlug(brand.name)}-olcumler.csv`, rows, isEn() ? "," : ";");
+    } catch (x) { setErr(friendlyError(x)); } finally { setCsvBusy(false); }
+  }
   async function create(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const days = Number(new FormData(e.currentTarget).get("days") || 30);
@@ -136,6 +215,10 @@ function ReportSharePanel({ brand }: { brand: Brand }) {
           </li>
         ))}</ul>
       )}
+      <div className="row-form">
+        <Button variant="quiet" className="btn-small" busy={csvBusy} onClick={exportCsv}>{L("Ölçümleri CSV indir (Excel)", "Download measurements as CSV (Excel)")}</Button>
+      </div>
+      <p className="src-sup muted">{L("CSV: tüm ölçümlerin motor ve marka bazında sayıları ile son ölçümün soru bazında sonuçları. Excel'de açılır.", "CSV: counts per engine and brand for every measurement, plus per-question results of the latest one. Opens in Excel.")}</p>
     </section>
   );
 }
