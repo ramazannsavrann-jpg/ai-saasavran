@@ -162,6 +162,7 @@ jobs:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
           PADDLE_CLIENT_TOKEN: ${{ secrets.PADDLE_CLIENT_TOKEN }}
+          TURNSTILE_SITE_KEY: ${{ secrets.TURNSTILE_SITE_KEY }}
           PADDLE_CATALOG_FILE: ${{ runner.temp }}/paddle-catalog.json
         run: node scripts/web-release.mjs
       - name: Cloudflare Pages projesi (yoksa oluştur)
@@ -174,6 +175,7 @@ jobs:
           PADDLE_API_KEY: ${{ secrets.PADDLE_API_KEY }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           WORKER_DISPATCH_TOKEN: ${{ secrets.WORKER_DISPATCH_TOKEN }}
+          TURNSTILE_SECRET: ${{ secrets.TURNSTILE_SECRET }}
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
@@ -181,7 +183,7 @@ jobs:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         run: |
           umask 077
-          node -e 'const fs=require("fs");const e=process.env;const o={};const w=process.argv[2];if(fs.existsSync(w))o.PADDLE_WEBHOOK_SECRET=fs.readFileSync(w,"utf8");for(const k of ["PADDLE_API_KEY","GEMINI_API_KEY","WORKER_DISPATCH_TOKEN","SUPABASE_URL","SUPABASE_ANON_KEY","SUPABASE_SERVICE_ROLE_KEY"])if(e[k])o[k]=e[k];fs.writeFileSync(process.argv[1],JSON.stringify(o));console.log("Sunucu anahtarları: "+Object.keys(o).join(", "))' "$RUNNER_TEMP/pages-secrets.json" "$RUNNER_TEMP/whsec"
+          node -e 'const fs=require("fs");const e=process.env;const o={};const w=process.argv[2];if(fs.existsSync(w))o.PADDLE_WEBHOOK_SECRET=fs.readFileSync(w,"utf8");for(const k of ["PADDLE_API_KEY","GEMINI_API_KEY","WORKER_DISPATCH_TOKEN","TURNSTILE_SECRET","SUPABASE_URL","SUPABASE_ANON_KEY","SUPABASE_SERVICE_ROLE_KEY"])if(e[k])o[k]=e[k];fs.writeFileSync(process.argv[1],JSON.stringify(o));console.log("Sunucu anahtarları: "+Object.keys(o).join(", "))' "$RUNNER_TEMP/pages-secrets.json" "$RUNNER_TEMP/whsec"
           # Cloudflare API ara sıra 503 veriyor (13 Kasım 2026'da üç yayın bu yüzden düştü): 5 deneme, artan bekleme
           ok=0; for i in 1 2 3 4 5; do
             if npx --yes wrangler@4.161.0 pages secret bulk "$RUNNER_TEMP/pages-secrets.json" --project-name ai-saasavran > /dev/null; then ok=1; break; fi

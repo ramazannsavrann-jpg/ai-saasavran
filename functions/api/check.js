@@ -32,13 +32,28 @@ async function ask(env, q) {
   } catch { return { text: "" }; }
 }
 
+/** Cloudflare Turnstile (bot koruması). TURNSTILE_SECRET tanımlı değilse kontrol kapalıdır (her istek geçer). */
+async function humanCheck(env, token, ip) {
+  if (!env.TURNSTILE_SECRET) return true;
+  if (typeof token !== "string" || token.length < 10 || token.length > 2100) return false;
+  try {
+    const r = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
+      method: "POST", headers: { "content-type": "application/json" },
+      body: JSON.stringify({ secret: env.TURNSTILE_SECRET, response: token, remoteip: ip }), signal: AbortSignal.timeout(8_000),
+    });
+    return r.ok && (await r.json()).success === true;
+  } catch { return false; } // doğrulanamayan istek geçmez: ücretsiz kota botlara harcanmasın
+}
+
 export async function onRequestPost({ request, env }) {
   if (!env.GEMINI_API_KEY || !env.SUPABASE_URL) return json({ error: "unavailable" }, 503);
   // AEA, İsviçre ve Birleşik Krallık ziyaretçilerine ücretsiz Gemini ile hizmet verilmez (Google koşulları)
   if (geminiRestricted(request.cf?.country ?? request.headers.get("CF-IPCountry"))) return json({ error: "region" }, 451);
-  const input = parseInput(await request.json().catch(() => ({})));
+  const raw = await request.json().catch(() => ({}));
+  const input = parseInput(raw);
   if (input.error) return json({ error: "input" }, 400);
   const ip = request.headers.get("CF-Connecting-IP") ?? "unknown";
+  if (!(await humanCheck(env, raw?.cf_token, ip))) return json({ error: "bot" }, 403);
   const ipHash = await sha256(`${ip}|${env.SUPABASE_SERVICE_ROLE_KEY}`);
   const questions = buildQuestions(input);
 
