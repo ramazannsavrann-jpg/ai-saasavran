@@ -9,6 +9,7 @@ import { demoHtml } from "./demo.mjs";
 import { checkHtml } from "./check.mjs";
 import { GUIDES_EN, HOME_FAQ_EN } from "./content-en.mjs";
 import { POSTS } from "./blog.mjs";
+import { LESSONS, tutorialsHtml, tutorialsPath, tutorialsSchema } from "./tutorials.mjs";
 import { DEF, METHOD_PAGES } from "./method.mjs";
 
 const DIST = "dist";
@@ -76,9 +77,9 @@ ${body}
 </main>
 <footer class="foot">
   ${en ? `<p><b>AI SaaSavran</b> measures whether ChatGPT and Gemini recommend your business. Early access.</p>
-  <p><a href="/pricing/">Pricing</a> · <a href="/guides/">Guides</a> · <a href="/blog/">Blog</a> · <a href="/about/">About</a> · <a href="/methodology/">Methodology</a> · <a href="/terms/">Terms</a> · <a href="/privacy/">Privacy</a> · <a href="/refund/">Refunds</a> · <a href="/tr/">Türkçe</a></p>
+  <p><a href="/pricing/">Pricing</a> · <a href="/guides/">Guides</a> · <a href="/blog/">Blog</a> · <a href="/tutorials/">Tutorials</a> · <a href="/about/">About</a> · <a href="/methodology/">Methodology</a> · <a href="/terms/">Terms</a> · <a href="/privacy/">Privacy</a> · <a href="/refund/">Refunds</a> · <a href="/tr/">Türkçe</a></p>
   <p>Contact: <a href="mailto:${SITE.email}">${SITE.email}</a></p>` : `<p><b>AI SaaSavran</b>: markaların yapay zekâ asistanlarındaki görünürlüğünü ölçen araç. Erken erişim.</p>
-  <p><a href="/tr/#fiyatlar">Fiyatlar</a> · <a href="/rehber/">Rehberler</a> · <a href="/tr/blog/">Blog</a> · <a href="/tr/hakkimizda/">Hakkımızda</a> · <a href="/tr/metodoloji/">Metodoloji</a> · <a href="/durum">Ürün durumu</a> · <a href="/kosullar">Kullanım koşulları</a> · <a href="/gizlilik">Gizlilik</a> · <a href="/iade/">İade</a> · <a href="/">English</a></p>
+  <p><a href="/tr/#fiyatlar">Fiyatlar</a> · <a href="/rehber/">Rehberler</a> · <a href="/tr/blog/">Blog</a> · <a href="/tr/egitim/">Eğitim</a> · <a href="/tr/hakkimizda/">Hakkımızda</a> · <a href="/tr/metodoloji/">Metodoloji</a> · <a href="/durum">Ürün durumu</a> · <a href="/kosullar">Kullanım koşulları</a> · <a href="/gizlilik">Gizlilik</a> · <a href="/iade/">İade</a> · <a href="/">English</a></p>
   <p>İletişim: <a href="mailto:${SITE.email}">${SITE.email}</a></p>`}
 </footer>
 <script src="/site/site.js" defer></script>
@@ -448,8 +449,17 @@ for (const m of METHOD_PAGES) {
   write(m.path, page({ lang: m.lang, alt: m.alt, path: m.path, title: seoTitle(m.title, m.short), description: m.description, body, type: "article", schema: [crumbs([home, [m.short, m.path]]), faqLd(m.faq)] }));
 }
 
+// Eğitim sayfaları (yazılı adımlar + varsa YouTube bağlantısı)
+for (const lang of ["en", "tr"]) {
+  const en = lang === "en"; const path = tutorialsPath(lang);
+  write(path, page({ lang, alt: tutorialsPath(en ? "tr" : "en"), path,
+    title: en ? "Tutorials: how to use AI SaaSavran" : "Eğitim: AI SaaSavran nasıl kullanılır?",
+    description: en ? "Eight short step-by-step lessons: free check, adding a brand, questions and competitors, first measurement, reading the report, sources, recommendations." : "Sekiz kısa, adım adım ders: ücretsiz kontrol, marka ekleme, soru ve rakipler, ilk ölçüm, raporu okuma, kaynaklar, öneriler.",
+    body: tutorialsHtml(lang), schema: [tutorialsSchema(lang, SITE.url), crumbs([["AI SaaSavran", en ? "/" : "/tr/"], [en ? "Tutorials" : "Eğitim", path]])] }));
+}
+
 // 5) Tarayıcılar ve yapay zekâ botları için dosyalar
-const urls = ["/", "/about/", ...METHOD_PAGES.filter((m) => m.lang === "en").map((m) => m.path), "/pricing/", "/check/", "/guides/", ...GUIDES_EN.map((g) => `/guides/${g.slug}/`), "/blog/", ...posts.filter((p) => p.lang === "en").map(postPath), "/tr/", "/tr/hakkimizda/", ...METHOD_PAGES.filter((m) => m.lang === "tr").map((m) => m.path), "/tr/kontrol/", "/rehber/", ...GUIDES.map((g) => `/rehber/${g.slug}/`), "/tr/blog/", ...posts.filter((p) => p.lang === "tr").map(postPath)];
+const urls = ["/", "/about/", ...METHOD_PAGES.filter((m) => m.lang === "en").map((m) => m.path), "/pricing/", "/check/", "/guides/", ...GUIDES_EN.map((g) => `/guides/${g.slug}/`), "/blog/", ...posts.filter((p) => p.lang === "en").map(postPath), "/tutorials/", "/tr/", "/tr/hakkimizda/", ...METHOD_PAGES.filter((m) => m.lang === "tr").map((m) => m.path), "/tr/kontrol/", "/rehber/", ...GUIDES.map((g) => `/rehber/${g.slug}/`), "/tr/blog/", ...posts.filter((p) => p.lang === "tr").map(postPath), "/tr/egitim/"];
 writeFileSync(join(DIST, "sitemap.xml"), `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${urls.map((u) => `  <url><loc>${SITE.url}${u}</loc><lastmod>${SITE.updated}</lastmod></url>`).join("\n")}
@@ -494,6 +504,9 @@ ${SITE.sameAs.map((u) => `- ${u}`).join("\n")}
 - MCP server (read-only, Pro and Business): ${SITE.url}/api/mcp — Streamable HTTP, header \`Authorization: Bearer aisv_...\`; tools: list_brands, get_brand_report.
 - REST API: ${SITE.url}/api/v1/brands and ${SITE.url}/api/v1/brands/{id} with the same key. Keys are created in the app under Account → API and MCP.
 
+## Tutorials
+- [How to use AI SaaSavran](${SITE.url}/tutorials/): ${LESSONS.length} short step-by-step lessons (${LESSONS.map((l) => l.en.title).join("; ")}).
+
 ## Guides
 ${GUIDES_EN.map((g) => `- [${g.title}](${SITE.url}/guides/${g.slug}/): ${g.description}`).join("\n")}
 
@@ -503,6 +516,7 @@ ${posts.filter((p) => p.lang === "en").map((p) => `- [${p.title}](${SITE.url}${p
 ## Türkçe
 - [Türkçe ana sayfa](${SITE.url}/tr/)
 - [Blog (Türkçe)](${SITE.url}/tr/blog/)
+- [Eğitim: nasıl kullanılır?](${SITE.url}/tr/egitim/)
 - [Metodoloji](${SITE.url}/tr/metodoloji/) · [Marka görünürlüğü](${SITE.url}/tr/marka-gorunurlugu/) · [Ürün görünürlüğü](${SITE.url}/tr/urun-gorunurlugu/)
 ${posts.filter((p) => p.lang === "tr").map((p) => `- [${p.title}](${SITE.url}${postPath(p)})`).join("\n")}
 ${GUIDES.map((g) => `- [${g.title}](${SITE.url}/rehber/${g.slug}/)`).join("\n")}

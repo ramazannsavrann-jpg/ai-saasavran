@@ -153,3 +153,9 @@ tr.us td { background: var(--tint); font-weight: 600; }
 .note { font-size: .9rem; opacity: .85; border-left: 3px solid currentColor; padding-left: 12px; }
 /* Tablo: ilk sütundaki kelimeler ortadan bölünmesin */
 .article td:first-child, .article th:first-child { min-width: 7.5em; word-break: normal; overflow-wrap: normal; hyphens: manual; }
+
+/* Eğitim dersleri */
+.lesson { margin: 26px 0; padding-top: 18px; border-top: 1px solid var(--line); }
+.lesson ol { padding-left: 22px; display: grid; gap: 6px; }
+.toc { padding-left: 22px; display: grid; gap: 4px; }
+.check-human { min-height: 65px; }
