@@ -51,3 +51,15 @@ ffmpeg -i v.mp4 -i voice.wav -i music.wav -filter_complex "[1:a]aresample=44100,
 - Sahne süreleri: `sablon/sureler2.py` ("order" düzenli veri Shorts için). Sağlıkta "tıbbi tavsiye değildir" notu ve hastane kaynaklarında hastanelerin kendi siteleri hariç.
 - Yayın (14 Kasım ~19:40): YouTube hastane TR pPq8JNj07DQ, EN CWF4g0gvaXA; saç TR k6xkaHFZARY, EN dFep9TRYwPU; Instagram Reels dördü de.
 - Dikkat: başka oturum işçiyi `live_engines=claude` ile çalıştırırsa sıradaki ölçümler yalnız Claude ile yapılır; eksik motor için ayrı run + `live_engines=openai`.
+
+## Bağımsızlık notu (14 Kasım, kullanıcı onayı)
+Tüm veri/ölçüm videolarının açıklamasına (CTA'dan önce) şu satır eklenir:
+- TR: "Bu video bağımsız bir ölçümdür. Hiçbir markayla reklam veya iş birliğimiz yoktur."
+- EN: "Independent measurement. We have no sponsorship or partnership with any brand shown."
+YouTube "ücretli tanıtım" kutusu kapalı kalır. Daha önce yüklenen videolara vidIQ kredisi yenilenince (10 Aralık) eklenecek.
+
+## Uzun video serisi planı (14 Kasım)
+Yatay 16:9, 6–8 dk, TR + EN ayrı. Veri tek videoda harcanmaz; her video bir soruya odaklanır:
+1. Motor farkları (robot süpürge, kahve, parfüm)  2. Yapay zekâ hangi sitelere bakıyor (kaynaklar)
+3. Dev markalar neden görünmüyor  4. Soruyu değiştir, kazanan değişsin (niyet)  5. Türkiye vs dünya
+Derslerde marka gerçek adıyla anılabilir; tam sıralama tablolarında harf kuralı sürer. Haftada 1 uzun video.
