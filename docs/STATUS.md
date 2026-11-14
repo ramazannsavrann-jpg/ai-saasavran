@@ -350,3 +350,9 @@
 
 - **Ücretsiz kontrolde bot koruması (Cloudflare Turnstile):** `TURNSTILE_SITE_KEY` ve `TURNSTILE_SECRET` GitHub Secret'ları tanımlıysa form doğrulama kutusu gösterir ve sunucu doğrulamayan isteği 403 ile reddeder. **Anahtarlar henüz tanımlı değil; koruma kapalı, form eskisi gibi çalışıyor.**
 - **Eğitim sayfası:** `/tutorials/` ve `/tr/egitim/`: 8 dersin yazılı adımları. YouTube kimliği `web/site/tutorials.mjs` içinde ders başına girilir; kimlik yoksa bağlantı uydurulmaz, yalnız kanal bağlantısı görünür. **Ders videolarının kimlikleri henüz girilmedi.**
+
+## v1.34 (14 Kasım 2026): üst menü taşması düzeltildi
+
+- **Hata:** telefonda "masaüstü sitesi" modunda (yaklaşık 980 px) ve dar dizüstünde üst menü yazıları alt satıra kayıyordu ("Pan el", "SaaSavr an"). Üst menü artık yalnız sığdığı genişlikte (1180 px ve üzeri) açılır; altında alt menü kullanılır. Menü yazıları ve logo artık bölünmez. Yönetici için alt menüye "Müşteri" eklendi.
+- **Test:** `e2e/layout.e2e.ts` yönetici hesabı ve uzun adlarla 5 genişlikte (360, 412, 980, 1180, 1366) 7 sayfayı dener: menü yazısı bölünmemeli, sayfa yana taşmamalı. Eski stille test kırılıyor, yenisiyle geçiyor.
+- **Ürün doğruluğu ve Google Shopping:** ücretli paketlerde (aktif abonelik) zaten açık; "yalnız Growth Lab" notu yanlıştı. `scripts/check-migrations.mjs` artık abone alanında ürün doğruluğu isteğinin sıraya girdiğini de doğruluyor.
