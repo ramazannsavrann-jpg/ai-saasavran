@@ -338,3 +338,10 @@
 2. Veritabanında `update app_settings set live_search_enabled = true` (bilinçli, tek satırlık değişiklik).
 3. Yeni ölçümler otomatik olarak `live_search` türünde açılır; eski aramasız ölçümler ayrı türde kalır ve karışmaz.
 4. Kota ve aylık maliyet tavanları zaten veritabanında; aşılırsa çalışma alanı otomatik durur.
+
+## v1.32 (14 Kasım 2026): ilk 5 dakika rehberi ve hemen başlayan ölçüm
+
+- **Başlangıç rehberi:** marka sayfasının üstünde 5 adım (marka → en az 3 soru → rakip → ilk ölçüm → rapor), ilerleme çubuğu, tek dokunuşla hazır soru ekleme. Adımlar gerçek veriden okunur; iki tamamlanmış ölçümden sonra ya da "Rehberi kapat" ile kaybolur. Demo Lab ve Growth Lab'de gösterilmez.
+- **Sayfa kendiliğinden güncellenir:** bekleyen ölçüm varken 20 saniyede bir yeniden bakılır (önceden yalnız "Yenile" ile).
+- **Ölçümü hemen başlat (`/api/kick`):** kullanıcının sırada ölçümü varsa ölçüm işçisi hemen tetiklenir. `WORKER_DISPATCH_TOKEN` GitHub Secret'ı tanımlı değilse hiçbir şey yapmaz; ölçüm eskisi gibi saatlik sırada (08:17–23:17) işlenir ve rehber bunu açıkça söyler. **Anahtar henüz tanımlı değil.**
+- Doğrulama: `engine/test/kick.test.ts` (4 test), `e2e/app.e2e.ts` müşteri akışında rehberin her adımı.

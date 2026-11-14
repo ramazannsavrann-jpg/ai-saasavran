@@ -75,6 +75,10 @@ function must<T>(r: { data: T | null; error: { message: string } | null }): T {
   return r.data as T;
 }
 
+/** Kurulum rehberi gibi bileşenlerin veriyi yeniden okuması için: soru, rakip ya da ölçüm değişti. */
+export const CHANGED = "aisv:changed";
+const changed = () => { try { window.dispatchEvent(new Event(CHANGED)); } catch { /* tarayıcı dışı */ } };
+
 export const api = {
   async workspaces(): Promise<Workspace[]> {
     return must(await sb().from("workspaces").select("id,name,kind,plan,status,paused_reason,paid_live_allowed").order("created_at"));
@@ -96,7 +100,7 @@ export const api = {
     return must(await sb().from("brands").select("*").eq("owner_brand_id", brandId).eq("is_competitor", true).order("created_at"));
   },
   async addBrand(b: Partial<Brand> & { workspace_id: string; name: string; data_origin?: string }) {
-    return must(await sb().from("brands").insert(b).select("*").single()) as Brand;
+    const row = must(await sb().from("brands").insert(b).select("*").single()) as Brand; changed(); return row;
   },
   async updateBrand(id: string, patch: Partial<Brand>) {
     must(await sb().from("brands").update(patch).eq("id", id));
@@ -117,12 +121,12 @@ export const api = {
     const since = new Date(Date.now() - 30 * 86_400_000).toISOString().slice(0, 10);
     return must(await sb().from("ai_bot_hits").select("day,bot,path,hits,verified,errors").eq("brand_id", brandId).gte("day", since).limit(5000));
   },
-  async deleteBrand(id: string) { must(await sb().from("brands").delete().eq("id", id)); },
+  async deleteBrand(id: string) { must(await sb().from("brands").delete().eq("id", id)); changed(); },
   async prompts(brandId: string): Promise<Prompt[]> {
     return must(await sb().from("prompts").select("*").eq("brand_id", brandId).order("created_at"));
   },
   async addPrompt(p: { workspace_id: string; brand_id: string; text: string; intent: Intent; segment?: string | null }) {
-    must(await sb().from("prompts").insert(p));
+    must(await sb().from("prompts").insert(p)); changed();
   },
   async promptSuggestions(brandId: string): Promise<{ id: string; text: string; source: "paa" | "related"; seed: string }[]> {
     return must(await sb().from("prompt_suggestions").select("id,text,source,seed").eq("brand_id", brandId).eq("dismissed", false).order("created_at", { ascending: false }).limit(60));
@@ -136,7 +140,7 @@ export const api = {
     return must(await sb().from("content_briefs").select("id,prompt_id,status,brief,error,created_at").eq("brand_id", brandId).order("created_at", { ascending: false }).limit(60));
   },
   async requestBrief(brandId: string, promptId: string) { must(await sb().rpc("request_content_brief", { p_brand: brandId, p_prompt: promptId })); },
-  async setPromptActive(id: string, active: boolean) { must(await sb().from("prompts").update({ active }).eq("id", id)); },
+  async setPromptActive(id: string, active: boolean) { must(await sb().from("prompts").update({ active }).eq("id", id)); changed(); },
   async updatePrompt(id: string, patch: { text?: string; intent?: Intent; segment?: string | null }) { must(await sb().from("prompts").update(patch).eq("id", id)); },
   /** Bir ölçümdeki ham yapay zekâ cevapları (soru başına). */
   async answers(runId: string): Promise<{ id: string; prompt_id: string; repetition: number; answer_text: string; model: string; provider: string; cited_urls: string[] }[]> {
@@ -147,12 +151,22 @@ export const api = {
     if (!responseIds.length) return [];
     return must(await sb().from("mentions").select("response_id,brand_id,recommended,mentioned,perception").in("response_id", responseIds));
   },
-  async deletePrompt(id: string) { must(await sb().from("prompts").delete().eq("id", id)); },
+  async deletePrompt(id: string) { must(await sb().from("prompts").delete().eq("id", id)); changed(); },
   async runs(brandId: string): Promise<Run[]> {
     return must(await sb().from("runs").select("*").eq("brand_id", brandId).order("created_at", { ascending: false }).limit(30));
   },
   async requestRun(brandId: string, live = false): Promise<string> {
-    return must(await sb().rpc("request_run", { p_brand: brandId, p_live: live }));
+    const id = must(await sb().rpc("request_run", { p_brand: brandId, p_live: live })) as string;
+    // Ölçüm işçisini hemen tetikle (ayarlıysa); değilse ölçüm saatlik sırada işlenir. Sonuç, bekleme metni için saklanır.
+    let fast = false;
+    try {
+      const { data } = await sb().auth.getSession();
+      const r = await fetch("/api/kick", { method: "POST", headers: { Authorization: `Bearer ${data.session?.access_token ?? ""}` } });
+      fast = r.ok && (await r.json().catch(() => ({}))).started === true;
+    } catch { /* tetikleme başarısızsa ölçüm yine sırada */ }
+    try { sessionStorage.setItem("aisv-fast-run", fast ? "1" : "0"); } catch { /* yok say */ }
+    changed();
+    return id;
   },
   async paidBudget(ws: string): Promise<{ allowed: boolean; cap_usd: number; spent_usd: number } | null> {
     const rows = must(await sb().rpc("paid_budget", { p_workspace: ws })) as { allowed: boolean; cap_usd: number; spent_usd: number }[];

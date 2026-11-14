@@ -100,10 +100,17 @@ test("Müşteri akışı: kayıt → marka → rakip → soru → ölçüm → r
   // Sorular: şablondan 3 öneri ekle
   await expect(page.getByRole("heading", { name: "Lezzet Durağı Döner" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Hazır sorular" })).toBeVisible();
+  // İlk 5 dakika rehberi: adımlar gerçek veriden ilerler
+  const guide = page.getByRole("region", { name: "Başlangıç rehberi" });
+  await expect(guide.getByText("5 adımdan 1 tanesi tamam")).toBeVisible();
+  await expect(guide.getByRole("button", { name: "3 hazır soruyu ekle" })).toBeVisible();
+  await shot(page, "03b-baslangic-rehberi");
   for (let k = 0; k < 3; k++) {
     await page.getByRole("button", { name: "Ekle", exact: true }).first().click();
     await expect(page.getByText(`${k + 1} / 15 aktif`)).toBeVisible();
   }
+  await expect(guide.getByText("5 adımdan 2 tanesi tamam")).toBeVisible();
+  await expect(guide.getByRole("button", { name: "Rakip ekle" })).toBeVisible();
   await shot(page, "04-sorular");
 
   // Rakipler (Free: 3)
@@ -114,6 +121,8 @@ test("Müşteri akışı: kayıt → marka → rakip → soru → ölçüm → r
     await expect(page.getByText(name, { exact: true })).toBeVisible();
   }
   await expect(page.getByText("rakip sınırına ulaştınız")).toBeVisible();
+  await expect(guide.getByText("5 adımdan 3 tanesi tamam")).toBeVisible();
+  await expect(guide.getByRole("button", { name: "İlk ölçümü başlat" })).toBeVisible();
   await shot(page, "05-rakipler");
 
   // Ölçüm 1
@@ -121,6 +130,8 @@ test("Müşteri akışı: kayıt → marka → rakip → soru → ölçüm → r
   await expect(page.getByText("Henüz tamamlanmış ölçüm yok")).toBeVisible();
   await page.getByRole("button", { name: "Ölçüm başlat" }).click();
   await expect(page.getByRole("status").filter({ hasText: "sırada" })).toBeVisible();
+  await expect(guide.getByText("5 adımdan 4 tanesi tamam")).toBeVisible();
+  await expect(guide.getByText("Ölçümler her saat 17 geçe işlenir")).toBeVisible();
   await shot(page, "06-olcum-sirada");
   const r1 = await work([
     "Antalya'da öne çıkan döner noktaları:\n1. Kebapçı Halil\n2. Şirin Döner\n3. Lezzet Durağı Döner",
@@ -131,6 +142,9 @@ test("Müşteri akışı: kayıt → marka → rakip → soru → ölçüm → r
 
   // Ölçüm 2 (grafikte eğilim için)
   await page.reload();
+  await expect(page.getByRole("heading", { name: "Kurulum tamam" })).toBeVisible();
+  await expect(guide.getByRole("button", { name: "Raporu aç" })).toBeVisible();
+  await shot(page, "06b-kurulum-tamam");
   await page.getByRole("button", { name: "Ölçüm başlat" }).click();
   await expect(page.getByRole("status").filter({ hasText: "sırada" })).toBeVisible();
   const r2 = await work([
@@ -140,8 +154,9 @@ test("Müşteri akışı: kayıt → marka → rakip → soru → ölçüm → r
   ]);
   expect(r2?.status, JSON.stringify(r2)).toBe("done");
 
-  // Rapor
+  // Rapor (iki ölçümden sonra rehber artık görünmez)
   await page.reload();
+  await expect(page.getByRole("region", { name: "Başlangıç rehberi" })).toHaveCount(0);
   await expect(page.getByRole("note").filter({ hasText: "Canlı web araması yapılmadı" })).toBeVisible();
   await expect(page.locator(".lead-sentence")).toContainText("cevabın");
   await expect(page.getByText("Kaynak gösterilme")).toBeVisible();
