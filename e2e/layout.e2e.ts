@@ -42,12 +42,19 @@ test("üst menü ve sayfalar hiçbir genişlikte taşmaz", async ({ page }) => {
   await page.getByRole("button", { name: "Markayı ekle" }).click();
   await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
   const brandUrl = page.url();
-
   const db = createClient(stack.url, stack.serviceKey, { auth: { persistSession: false } });
   const users = await db.auth.admin.listUsers();
   const uid = users.data.users.find((u) => u.email === "yerlesim@ornek.test")!.id;
   const ins = await db.from("platform_admins").insert({ user_id: uid });
   expect(ins.error).toBeNull();
+  // İkinci uzun adlı marka (ücretsiz pakette arayüzden eklenemez, servis anahtarıyla eklenir): "Genel bakış" listesi 2+ markada çıkar
+  const first = await db.from("brands").select("workspace_id").limit(1).single();
+  const up = await db.from("workspaces").update({ plan: "pro" }).eq("id", first.data!.workspace_id);
+  expect(up.error).toBeNull();
+  const two = await db.from("brands").insert({ workspace_id: first.data!.workspace_id, name: "Çok Uzun Adlı İkinci Müşteri Markası Anonim Şirketi" });
+  expect(two.error).toBeNull();
+  await page.goto("/panel");
+  await expect(page.getByRole("heading", { name: "Genel bakış" })).toBeVisible();
 
   for (const width of [360, 412, 980, 1180, 1366]) {
     await page.setViewportSize({ width, height: 800 });

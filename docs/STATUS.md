@@ -364,3 +364,11 @@
 - **CSV:** Rapor sekmesinden Excel'de açılan dosya (UTF-8, Türkçede `;`): motor ve marka bazında tüm ölçümler ve son ölçümün soru bazında sonucu. Formül gibi başlayan hücreler etkisizleştirilir.
 - **Testler:** `check-migrations.mjs` (yetki, doğrulama, rapor çıktısı, abonelik bitince gizlenme), `engine/test/csv.test.ts`.
 - **Sıradaki ajans işleri:** ajans panosu (tüm markalar tek listede), API'den ölçüm sonuçları, müşteri bazlı erişim (en büyük iş), müşteriye aylık markalı rapor e-postası.
+
+## v1.36 (14 Kasım 2026): ajans panosu ("Genel bakış")
+
+- **Ne:** panoda 2 ve daha çok marka varsa "Genel bakış" listesi çıkar: her markanın son önerilme oranı, bir önceki ölçüme göre değişim (puan) ve durum. Anlamlı düşüş en üstte; üstte tek cümlelik özet ("N markada düşüş var: ...") ve CSV indirme.
+- **Durum kuralı** (`engine/src/portfolio.ts`): "Düştü/Yükseldi" yalnız güven aralıkları örtüşmüyorsa; 20'den az cevapta karar yok ("Örnek az"); önceki ölçüm yoksa "İlk ölçüm". Canlı aramalı ve aramasız ölçümler karıştırılmaz: markanın canlı aramalı ölçümü varsa o, yoksa aramasız gösterilir.
+- **Testler:** `engine/test/portfolio.test.ts`; `e2e/layout.e2e.ts` artık ikinci uzun adlı markayla "Genel bakış"ın 5 genişlikte taşmadığını da dener.
+- **Sıradaki ajans işleri:** API'den ölçüm sonuçları, müşteri bazlı erişim, müşteriye aylık markalı rapor e-postası.
+
