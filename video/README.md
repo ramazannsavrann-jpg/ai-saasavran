@@ -39,6 +39,8 @@ ffmpeg -i v.mp4 -i voice.wav -i music.wav -filter_complex "[1:a]aresample=44100,
 - İngilizce yayın saati: ABD akşamı 19:00 ET = 00:00Z = Türkiye 03:00 (kış saati; Mart'ta yaz saatine geçince 23:00Z). Shorts ve uzun videoların EN sürümü bu saatte. TR sürümler Türkiye prime saatinde kalır (Shorts 19:00, uzun 21:00).
 - Tutarsa sonra İngiltere (22:00 TR), Kanada, Avustralya.
 - Yeni ölçüm = harcama: bütçe limiti yükseltmek için kullanıcı onayı şart.
+- 15 Kasım: limit 25 $ (kullanıcı onayı). Growth Lab 2'de ABD ölçümleri: Walmart (perakende/Black Friday), Verizon (operatör), McDonald's (fast food); 8 soru, ChatGPT+Claude+Perplexity canlı arama (ABD), 48 cevap. Gemini ücretsiz kotası dolduğu için Gemini koşuları başarısız/sırada (videolarda Gemini yok).
+- Yayında (EN, 00:00Z): perakende I1zstVDBJXo (21 Kas), operatör gFYospqVPZo (22 Kas), fast food y8o15ib5g9A (23 Kas). Liste "AI Picks: US Edition". Çalışma klasörleri /home/claude/us1-3, `render.sh`. Şablon 3–4 motor destekli (engines listesinden kapak etiketleri).
 
 ## Perplexity (15 Kasım)
 - AI SaaSavran artık Perplexity'yi de ölçüyor (tüm paketlerde). Bundan sonraki TÜM videolarda (Shorts, uzun, eğitim) ve açıklamalarda motor adları: ChatGPT, Gemini, Claude ve Perplexity. Perplexity'ye ait sayı/sıralama yalnız gerçek Perplexity ölçümü varsa gösterilir; yoksa "Perplexity de ölçülüyor" denir, rakam uydurulmaz. Kanal açıklamasında da Perplexity var.
