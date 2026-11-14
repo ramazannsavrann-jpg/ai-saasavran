@@ -37,7 +37,7 @@ export function buildQuestions({ lang, category, city }) {
 }
 
 /** Cevapları marka için analiz eder: anıldı mı, önerildi mi, sıra; ve cevaplarda en çok geçen diğer adlar. */
-export function analyze(answers, { brand, domain }) {
+export function analyze(answers, { brand, domain, category = "", city = "" }) {
   const ref = { id: "t", name: brand, aliases: [], domain: domain || undefined };
   const rows = answers.map((a, i) => {
     if (!a.text) return { i, ok: false };
@@ -45,7 +45,10 @@ export function analyze(answers, { brand, domain }) {
     return { i, ok: true, mentioned: !!hit?.mentioned, recommended: !!hit?.recommended, rank: hit?.rank ?? null };
   });
   const okRows = rows.filter((r) => r.ok);
-  const others = untrackedNames(answers.filter((a) => a.text).map((a) => a.text), [{ name: brand, aliases: [] }], 16).filter((o) => keepName(o.name)).slice(0, 8);
+  // Sorulardaki kelimeler ad sayılmaz ("kafe" sorusunda "Kafeler", şehir adı)
+  const asked = [category, city].filter(Boolean).flatMap((x) => String(x).toLocaleLowerCase("tr-TR").split(/\s+/)).filter((w) => w.length >= 3);
+  const fromQuestion = (n) => { const l = n.toLocaleLowerCase("tr-TR"); return asked.some((w) => l.startsWith(w.slice(0, Math.max(3, w.length - 1)))); };
+  const others = untrackedNames(answers.filter((a) => a.text).map((a) => a.text), [{ name: brand, aliases: [] }], 16).filter((o) => keepName(o.name) && !fromQuestion(o.name)).slice(0, 8);
   return {
     total: okRows.length,
     mentioned: okRows.filter((r) => r.mentioned).length,

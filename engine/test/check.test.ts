@@ -27,3 +27,14 @@ test("Ücretsiz kontrol: anılma ve önerilme sayılır, diğer adlar çıkarıl
   assert.ok(!b.others.some((o: { name: string }) => ["If", "What", "It", "GEO", "Here"].includes(o.name)), JSON.stringify(b.others));
   assert.match(buildQuestions({ lang: "en", category: "AI visibility tool", city: "" })[1], /looking for an AI visibility tool\./);
 });
+
+test("ücretsiz kontrol: madde başı kelimeler ve sorudaki kelimeler marka sayılmaz", () => {
+  const answers = [
+    { text: "İzmir'de en iyi kafeler amacınıza göre değişir.\n\n* **Amacınıza göre:** sessiz mi kalabalık mı?\n* **Ders çalışmak için:** EspressoLab ve Kronotrop uygundur.\n\n1. **EspressoLab:** geniş ve priz bol.\n2. **Kronotrop (Alsancak):** nitelikli kahve." },
+    { text: "Kafeler arasında **Kronotrop** öne çıkar.\n- **Çalışmak için:** EspressoLab.\n- **Ders çalışmak isteyenler:** Starbucks da olur.\n- Kafeler genelde kalabalıktır." },
+  ];
+  const a = analyze(answers, { brand: "Deneme", domain: "", category: "kafe", city: "" });
+  const names = a.others.map((o: { name: string }) => o.name);
+  assert.ok(names.includes("EspressoLab") && names.includes("Kronotrop"), JSON.stringify(names));
+  for (const junk of ["Amacınıza", "Ders", "Çalışmak", "Kafeler"]) assert.ok(!names.includes(junk), `${junk}: ${JSON.stringify(names)}`);
+});

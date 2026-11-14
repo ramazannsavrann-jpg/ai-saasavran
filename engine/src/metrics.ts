@@ -254,10 +254,14 @@ export function untrackedNames(texts: string[], brands: { name: string; aliases:
           const n = normalize(name);
           if (!n || known.some((k) => ` ${n} `.includes(` ${k} `) || ` ${k} `.includes(` ${n} `))) continue;
           if (firsts.some((re) => re.test(name))) continue;
-          const atStart = m.index === 0;
+          // Cümle başı: kaldırılan ** / * işaretlerinin ve madde/numara işaretlerinin ardından gelen ilk kelime
+          const atStart = (m.index ?? 0) <= (sentence.match(/^[\s\d.)\-•–]*/u)?.[0].length ?? 0);
           const acronym = /^[\p{Lu}\p{N}]{2,6}$/u.test(name);
           const camel = /\p{Ll}\p{Lu}/u.test(name);
-          const strong = acronym || camel || words.length > 1 || !atStart || listLine;
+          // Liste satırının başındaki kelime ancak başlık gibi tek başına duruyorsa ad sayılır ("2. Kronotrop: …", "- EspressoLab (Alsancak)").
+          // Ardından küçük harfli kelime geliyorsa cümlenin ilk kelimesidir ("- Ders çalışmak için:", "* Kafeler genelde …").
+          const phraseStart = atStart && /^\s+\p{Ll}/u.test(sentence.slice((m.index ?? 0) + m[0].length));
+          const strong = acronym || camel || words.length > 1 || !atStart || (listLine && !phraseStart);
           const key = n;
           const v = counts.get(key) ?? { name, count: 0, strong: false };
           v.count++; v.strong ||= strong; counts.set(key, v);

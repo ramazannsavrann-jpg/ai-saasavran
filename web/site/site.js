@@ -30,6 +30,7 @@
     daily_limit: "Bugünkü ücretsiz kontrol kapasitesi doldu. Yarın tekrar deneyin ya da ücretsiz hesap açın.",
     err: "Kontrol şu an yapılamadı. Biraz sonra tekrar deneyin.",
     bot: "Lütfen \"robot değilim\" doğrulamasını tamamlayıp tekrar deneyin.",
+    botWait: "Doğrulama kutusu yükleniyor…",
     region: "Ücretsiz kontrol bulunduğunuz ülkede şu an kapalı (Avrupa Ekonomik Alanı, İsviçre, Birleşik Krallık). ChatGPT canlı aramalı ölçüm ücretli paketlerde kullanılabilir.",
     sum: function (m, r, n, b) { return "<strong>" + b + "</strong>, " + n + " cevabın <strong>" + m + "</strong> tanesinde anıldı, <strong>" + r + "</strong> tanesinde önerildi."; },
     zero: "Bu sorularda yapay zekâ işletmenizi hiç anmadı. Yeni ya da yerel markalarda bu sık görülür; neyin değiştirilebileceğini düzenli ölçümle görürsünüz.",
@@ -42,6 +43,7 @@
     daily_limit: "Today's free check capacity is used up. Try again tomorrow or create a free account.",
     err: "The check couldn't run right now. Please try again in a moment.",
     bot: "Please complete the \"I'm not a robot\" check and try again.",
+    botWait: "Loading the verification box…",
     region: "The free check isn't available in your country yet (EEA, Switzerland, UK). ChatGPT live-search measurement is available on paid plans.",
     sum: function (m, r, n, b) { return "<strong>" + b + "</strong> was mentioned in <strong>" + m + "</strong> of " + n + " answers and recommended in <strong>" + r + "</strong>."; },
     zero: "The AI didn't mention your business for these questions. That's common for new or local brands; regular measurement shows what moves the needle.",
@@ -55,8 +57,17 @@
     if (!c || !c.turnstileSiteKey) return;
     siteKey = c.turnstileSiteKey;
     var box = document.createElement("div"); box.className = "check-human";
+    // Kutu birkaç saniyede yüklenebilir: o sırada boş alan yerine bekleme yazısı göster
+    var wait = document.createElement("p"); wait.className = "check-human-wait"; wait.textContent = T.botWait;
+    box.appendChild(wait);
     form.insertBefore(box, form.querySelector("button"));
-    window.aisvTurnstile = function () { widgetId = window.turnstile.render(box, { sitekey: siteKey, language: tr ? "tr" : "en", theme: "auto" }); };
+    var gone = function () { if (wait.parentNode) wait.parentNode.removeChild(wait); };
+    if (window.MutationObserver) new MutationObserver(function (_, o) { if (box.querySelector("iframe")) { gone(); o.disconnect(); } }).observe(box, { childList: true, subtree: true });
+    window.aisvTurnstile = function () {
+      widgetId = window.turnstile.render(box, { sitekey: siteKey, language: tr ? "tr" : "en", theme: "auto",
+        // Doğrulama bitince "robot değilim" uyarısı kalmasın
+        callback: function () { gone(); var m = out.querySelector(".check-msg"); if (m && m.textContent === T.bot) out.innerHTML = ""; } });
+    };
     var sc = document.createElement("script"); sc.async = true; sc.defer = true;
     sc.src = "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=aisvTurnstile";
     document.head.appendChild(sc);
