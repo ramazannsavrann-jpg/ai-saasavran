@@ -3,12 +3,12 @@
   "mode": "light",
   "costUsd": 0,
   "capUsd": 0.4,
-  "pages": 33,
+  "pages": 35,
   "pagesWithIssues": 0,
   "auditPassed": 13,
   "auditTotal": 13,
   "indexnow": {
-    "sent": 33,
+    "sent": 35,
     "status": 200,
     "note": "kabul edildi"
   },
