@@ -65,6 +65,19 @@ Yatay 16:9, 6–8 dk, TR + EN ayrı. Veri tek videoda harcanmaz; her video bir s
 Derslerde marka gerçek adıyla anılabilir; tam sıralama tablolarında harf kuralı sürer. Haftada 1 uzun video.
 - Durum güncellemesi (14 Kasım akşam): Kasım Fırsatları / Black Friday AI Picks 6 kategori TR+EN TAMAM ve planlandı: 14 robot süpürge, 15 kahve (18:00), 16 spor ayakkabı, 17 parfüm, 18 gaming laptop, 19 TV (TR 19:00, EN 23:00). Parfüm/laptop/TV ölçümleri Growth Lab 2 (fd1b32d1) içinde. Ayarlar video/kasim/*.json.
 
-## INSTAGRAM KURALI (14 Kasım, tüm sohbetler için)
-- Izgarada her satır = 2 video (Reels) + 1 ayrı gönderi. Paylaşım hep 3'lü set: önce TR Reels, sonra EN Reels, sonra ayrı gönderi (görsel/karusel). Set yarım bırakılmaz, aynı anda toplu paylaşılmaz (sıra karışır), her biri bir öncekinin yayınlandığı doğrulanınca atılır.
-- Üstte 3 sabitlenmiş gönderi var; onlar ayrı satır, sayılmaz.
+
+## PAYLAŞIM KURALLARI (YouTube + Instagram) — 14 Kasım, HANGİ SOHBETTEN OLURSA OLSUN GEÇERLİ
+### YouTube (@aisaasavran)
+- Veri/ölçüm Shorts: herkese açık. Eğitim videoları: GİZLİ (private).
+- Başlık, açıklama, etiketler hem TR hem EN; başlık ≤ 100 karakter. Kapak: sorunun kendisi + motorların aynı şeyi söylemeyebileceği.
+- Grafiklerde markalar harfli (Marka/Hastane/Klinik A, B…; harfler rastgele). Gerçek adlar en altta alfabetik, hangi harf olduğu söylenmez. Adlar etiketlerde ve açıklamada hashtag olarak.
+- Notlar: "Bunlar yapay zekânın cevaplarıdır" ("bizim görüşümüz değildir" DENMEZ). Sağlıkta ek olarak "tıbbi tavsiye değildir".
+- Her ölçüm videosu açıklamasına: "Bu video bağımsız bir ölçümdür. Hiçbir markayla reklam veya iş birliğimiz yoktur." / "Independent measurement. We have no sponsorship or partnership with any brand shown."
+- Süre ≤ 58 sn (tek Instagram hikâyesine sığsın). TR seslendirme atempo 1.24, EN 1.2. "Ey Ay Saa, Savran".
+- Tempo: veri Shorts günde 1, fazlası ileri tarihe (günde 1–2). Saatler TR 19:00, EN 23:00 (TSİ). Kullanıcı "hemen yayınla" derse hemen.
+- Her yüklemede: yapay zekâ ile değiştirilmiş içerik işareti, ücretli tanıtım kapalı, video dili (TR/EN), doğru oynatma listesi.
+### Instagram (@aisaasavran)
+- Sadece marka/ürün/YouTuber/sektör ölçüm içerikleri; eğitim videoları Instagram'a gitmez.
+- Açıklama ve etiketler hem TR hem EN; ölçüm açıklamasına bağımsızlık satırı.
+- IZGARA: her satır = 2 video + 1 ayrı gönderi. Hep 3'lü set: önce TR Reels, sonra EN Reels, sonra ayrı gönderi (görsel/karusel, blog gibi). Teker teker, bir önceki yayına girdikten sonra. Toplu/aynı anda paylaşım YOK, set yarım bırakılmaz.
+- Üstte 3 sabitlenmiş gönderi ayrı satırdır, sayılmaz.
