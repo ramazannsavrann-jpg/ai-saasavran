@@ -34,8 +34,13 @@ ffmpeg -i v.mp4 -i voice.wav -i music.wav -filter_complex "[1:a]aresample=44100,
 ## Yükleme
 - Dosya `videolar` dalına konur, raw.githubusercontent.com linki `vidiq_video_upload`'a verilir; YouTube kanalı @aisaasavran (UCHL4sdkEenxkpuP4_Hq1RZw).
 
+## Perplexity (15 Kasım)
+- AI SaaSavran artık Perplexity'yi de ölçüyor (tüm paketlerde). Bundan sonraki TÜM videolarda (Shorts, uzun, eğitim) ve açıklamalarda motor adları: ChatGPT, Gemini, Claude ve Perplexity. Perplexity'ye ait sayı/sıralama yalnız gerçek Perplexity ölçümü varsa gösterilir; yoksa "Perplexity de ölçülüyor" denir, rakam uydurulmaz. Kanal açıklamasında da Perplexity var.
+
 ## Eğitim videoları kuralı (13 Kasım)
 - **14 Kasım kararı: eğitim videoları YouTube'a GİZLİ (private) yüklenir**, herkese açık yapılmaz (kullanıcı isteği). Veri Shorts herkese açık devam eder.
+- **15 Kasım kararı:** eğitim videolarının TAMAMI bitip YouTube'a yüklenene ve ilgili oynatma listelerine ("AI SaaSavran | Kullanım ve Eğitim Rehberi" / "AI SaaSavran | Tutorials & User Guide" + dil listesi) alınana kadar hepsi GİZLİ kalır; tek tek açılmaz. Hepsi tamamlanınca: videolar herkese açık yapılır, `web/src/lib/tutorial-videos.json` içine kimlikler yazılır ve `"public": true` yapılır → site /tr/egitim/, /tutorials/ ve /kayit (kayıt videosu = Eğitim 2) YouTube'dan gömülü oynatır (video siteye yüklenmez). Her yeni eğitim videosunun kimliği yüklenince bu dosyaya eklenir (public false kalarak).
+- Durum: Eğitim 1 (ücretsiz kontrol) TR pulZMgYWQqI, EN dgGNLhc6A3g yüklendi. Sıradaki: Eğitim 2 kayıt/hesap açma.
 - Kendi markamız gösterilmez. Gerçek arayüz + uydurma ÖRNEK veri (Marka A/B…, Ürün 1/2…), ekranda "Örnek veri / Sample data" etiketi. Ekran çekerken API cevapları Playwright ile örnek veriyle değiştirilir; gerçek ölçüm yapılmaz.
 - Anlatımda eskiyecek bilgi yok: fiyat, kota sayısı, tarih, motor sürümü söylenmez; "yapay zekâ" denir. Böylece videolar ileride güncelleme gerektirmez.
 
