@@ -6,6 +6,7 @@ Kota: videos.update ve playlistItems.insert 50'şer birim (günlük 10.000).
 Her şey idempotent: zaten doğru olan video/liste tekrar güncellenmez.
 """
 import json, os, re, sys, urllib.parse, urllib.request, urllib.error
+from datetime import datetime, timedelta, timezone
 
 API = "https://www.googleapis.com/youtube/v3"
 DRY = os.environ.get("DRY_RUN") == "1"
@@ -117,7 +118,9 @@ def main():
                 if not DRY and call("PUT", "videos", {"part": "snippet"}, body, cost=50) is not None:
                     line += " · dil✓"
             # 2) yapay içerik + ücretli tanıtım yok (status)
-            if not st.get("containsSyntheticMedia"):
+            # YouTube bu alanı okumada geri döndürmüyor: sadece son 3 günde yüklenenlere (ve force listesine) uygula
+            fresh = datetime.fromisoformat(sn["publishedAt"].replace("Z", "+00:00")) > datetime.now(timezone.utc) - timedelta(days=3)
+            if (fresh or vid in CFG.get("force", [])) and not st.get("containsSyntheticMedia"):
                 s = {"privacyStatus": st["privacyStatus"], "containsSyntheticMedia": True,
                      "selfDeclaredMadeForKids": st.get("selfDeclaredMadeForKids", False),
                      "embeddable": st.get("embeddable", True), "license": st.get("license", "youtube"),
