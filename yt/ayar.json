@@ -197,21 +197,21 @@
         "AI SaaSavran – English Content"
       ]
     },
-    "I1zstVDBJXo": {
+    "u6Q55aafSBs": {
       "lang": "en",
       "lists": [
         "AI Picks: US Edition",
         "AI SaaSavran – English Content"
       ]
     },
-    "gFYospqVPZo": {
+    "lS5i5me1Wuo": {
       "lang": "en",
       "lists": [
         "AI Picks: US Edition",
         "AI SaaSavran – English Content"
       ]
     },
-    "y8o15ib5g9A": {
+    "9rhhEWx2sSI": {
       "lang": "en",
       "lists": [
         "AI Picks: US Edition",
@@ -219,11 +219,15 @@
       ]
     }
   },
-  "delete": [],
-  "force": [
-    "V76gSO6nEME",
+  "delete": [
     "I1zstVDBJXo",
     "gFYospqVPZo",
     "y8o15ib5g9A"
+  ],
+  "force": [
+    "V76gSO6nEME",
+    "u6Q55aafSBs",
+    "lS5i5me1Wuo",
+    "9rhhEWx2sSI"
   ]
 }
