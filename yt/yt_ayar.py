@@ -149,6 +149,8 @@ def main():
             vid, sn, st = v["id"], v["snippet"], v["status"]
             rule = CFG["videos"].get(vid) or guess(sn["title"])
             lang = rule["lang"]
+            if lang == "en":
+                lang = "en-US"  # İngilizce içerik ABD hedefli (15 Kasım kararı)
             line = f"{vid} [{lang}{'?' if rule.get('guessed') else ''}] {sn['title'][:60]}"
             # 1) dil (snippet)
             if sn.get("defaultLanguage") != lang or sn.get("defaultAudioLanguage") != lang:
