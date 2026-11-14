@@ -356,3 +356,11 @@
 - **Hata:** telefonda "masaüstü sitesi" modunda (yaklaşık 980 px) ve dar dizüstünde üst menü yazıları alt satıra kayıyordu ("Pan el", "SaaSavr an"). Üst menü artık yalnız sığdığı genişlikte (1180 px ve üzeri) açılır; altında alt menü kullanılır. Menü yazıları ve logo artık bölünmez. Yönetici için alt menüye "Müşteri" eklendi.
 - **Test:** `e2e/layout.e2e.ts` yönetici hesabı ve uzun adlarla 5 genişlikte (360, 412, 980, 1180, 1366) 7 sayfayı dener: menü yazısı bölünmemeli, sayfa yana taşmamalı. Eski stille test kırılıyor, yenisiyle geçiyor.
 - **Ürün doğruluğu ve Google Shopping:** ücretli paketlerde (aktif abonelik) zaten açık; "yalnız Growth Lab" notu yanlıştı. `scripts/check-migrations.mjs` artık abone alanında ürün doğruluğu isteğinin sıraya girdiğini de doğruluyor.
+
+## v1.35 (14 Kasım 2026): ajans özellikleri, white-label rapor ve CSV
+
+- **Koddan denetim:** çok marka, ekip rolleri, paylaşım linki, PDF ve trend vardı; white-label, CSV, ajans panosu ve müşteri bazlı erişim yoktu. API yalnız marka listesi veriyordu.
+- **White-label (0042):** Business aboneliğindeki alan yöneticisi ajans adı, logo (PNG/JPEG/WebP, en fazla 256 px) ve renk kaydeder (`set_report_branding`, sunucuda doğrulanır; SVG ve dış adres kabul edilmez). Paylaşılan rapor ve PDF bu markayla çıkar, "AI SaaSavran" bağlantısı gizlenir. Abonelik bitince görünmez.
+- **CSV:** Rapor sekmesinden Excel'de açılan dosya (UTF-8, Türkçede `;`): motor ve marka bazında tüm ölçümler ve son ölçümün soru bazında sonucu. Formül gibi başlayan hücreler etkisizleştirilir.
+- **Testler:** `check-migrations.mjs` (yetki, doğrulama, rapor çıktısı, abonelik bitince gizlenme), `engine/test/csv.test.ts`.
+- **Sıradaki ajans işleri:** ajans panosu (tüm markalar tek listede), API'den ölçüm sonuçları, müşteri bazlı erişim (en büyük iş), müşteriye aylık markalı rapor e-postası.
