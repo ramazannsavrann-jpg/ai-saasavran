@@ -4,6 +4,8 @@ import { useApp, useLoad } from "../lib/app";
 import { api, type Brand, type MeasurementType } from "../lib/data";
 import { friendlyError } from "../lib/supabase";
 import { PAUSE_TEXT } from "../lib/messages";
+import { downloadCsv } from "../lib/csv";
+import { portfolioRows, type PortfolioStatus } from "../../../engine/src/portfolio.ts";
 import { formatDateTime, MIN_SAMPLE, numLoc, rangeText, series, pct, usd } from "../lib/report";
 import { SECTORS } from "../lib/sectors";
 import { L, isEn } from "../lib/i18n";
@@ -63,6 +65,8 @@ function WorkspaceView() {
         )}
       </section>
 
+      {own.length >= 2 && <Portfolio brands={own} type={type} live={ws.paid_live_allowed} wsName={ws.name} />}
+
       {countryGroups(own).map((g) => <CountryCompare key={g.name} name={g.name} brands={g.brands} type={type} live={ws.paid_live_allowed} />)}
 
       {u && (
@@ -85,6 +89,62 @@ function WorkspaceView() {
         </section>
       )}
     </div>
+  );
+}
+
+const STATUS_TEXT: Record<PortfolioStatus, () => string> = {
+  dropped: () => L("Düştü", "Dropped"), none: () => L("Ölçüm yok", "No measurement"), few_samples: () => L("Örnek az", "Few answers"),
+  new: () => L("İlk ölçüm", "First measurement"), steady: () => L("Sabit", "Steady"), rose: () => L("Yükseldi", "Rose"),
+};
+
+/** Genel bakış (2+ marka): her markanın son önerilme oranı ve bir önceki ölçüme göre değişimi; anlamlı düşüş en üstte. */
+function Portfolio({ brands, type, live, wsName }: { brands: Brand[]; type: MeasurementType; live: boolean; wsName: string }) {
+  const data = useLoad(() => Promise.all(brands.map(async (b) => {
+    const lv = live ? series(await api.visibility(b.id, "live_search")) : [];
+    const pts = lv.length ? lv : series(await api.visibility(b.id, type));
+    return { id: b.id, name: b.name, live: lv.length > 0, points: pts.map((p) => ({ at: p.at, recommend: p.recommend })) };
+  })), [brands.map((b) => b.id).join(","), type, live]);
+  const items = data.data ?? [];
+  const rows = portfolioRows(items);
+  const liveOf = (id: string) => items.find((i) => i.id === id)?.live ?? false;
+  const dropped = rows.filter((r) => r.status === "dropped");
+  const sign = (n: number) => (n > 0 ? `+${n}` : String(n));
+  function exportCsv() {
+    const head = [L("Marka", "Brand"), L("Ölçüm türü", "Type"), L("Son ölçüm", "Latest"), L("Cevap sayısı", "Answers"), L("Önerildi", "Recommended"), L("Önerilme %", "Recommended %"), L("Önceki %", "Previous %"), L("Değişim (puan)", "Change (points)"), L("Durum", "Status")];
+    const body = rows.map((r) => [r.name, liveOf(r.id) ? "live_search" : "model_knowledge", r.last?.at ?? "", r.last?.recommend.n ?? "", r.last?.recommend.k ?? "", r.last ? Math.round(r.last.recommend.value * 100) : "", r.prev ? Math.round(r.prev.recommend.value * 100) : "", r.deltaPp ?? "", STATUS_TEXT[r.status]()]);
+    downloadCsv(`${wsName.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "markalar"}-genel-bakis.csv`, [head, ...body], isEn() ? "," : ";");
+  }
+  return (
+    <section className="panel stack">
+      <div className="panel-head">
+        <h2>{L("Genel bakış", "Overview")}</h2>
+        <Button variant="quiet" className="btn-small" onClick={exportCsv} disabled={data.loading || rows.length === 0}>{L("CSV indir", "Download CSV")}</Button>
+      </div>
+      {data.loading ? <Loading /> : data.error ? <ErrorBox message={data.error} /> : (
+        <>
+          <p className={dropped.length ? "caution" : "muted"} role="status">
+            {dropped.length
+              ? (isEn() ? `${dropped.length} brand(s) dropped since the previous measurement: ${dropped.map((r) => r.name).join(", ")}.` : `${dropped.length} markada önceki ölçüme göre anlamlı düşüş var: ${dropped.map((r) => r.name).join(", ")}.`)
+              : L("Önceki ölçüme göre anlamlı düşüş yok.", "No significant drop since the previous measurement.")}
+          </p>
+          <ul className="brand-list">
+            {rows.map((r) => (
+              <li key={r.id}>
+                <Link to={`/marka/${r.id}`} className="brand-row">
+                  <span className="brand-row-name">{r.name}</span>
+                  <span className="brand-row-meta">{STATUS_TEXT[r.status]()}{r.deltaPp !== null && r.status !== "few_samples" ? ` (${sign(r.deltaPp)} ${L("puan", "pts")})` : ""}</span>
+                  <span className="brand-row-result">{r.last
+                    ? (isEn() ? `Recommended in ${r.last.recommend.k} of ${r.last.recommend.n} answers (${pct(r.last.recommend.value)}), ${liveOf(r.id) ? "live search" : "no search"}, ${formatDateTime(r.last.at)}`
+                              : `${r.last.recommend.n} cevabın ${numLoc(r.last.recommend.k)} önerildi (${pct(r.last.recommend.value)}), ${liveOf(r.id) ? "canlı aramalı" : "aramasız"}, ${formatDateTime(r.last.at)}`)
+                    : L("Henüz ölçüm yok", "No measurements yet")}</span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+          <p className="src-sup muted">{L("\"Düştü\" ve \"Yükseldi\" yalnız güven aralıkları örtüşmüyorsa yazılır; 20'den az cevapta karar verilmez. Canlı aramalı ve aramasız ölçümler birbirine karıştırılmaz: markanın canlı aramalı ölçümü varsa o, yoksa aramasız ölçüm gösterilir.", "\"Dropped\" and \"Rose\" appear only when the confidence ranges do not overlap; with fewer than 20 answers no call is made. Live and no-search measurements are never mixed: a brand's live-search measurement is shown when it has one, otherwise its no-search one.")}</p>
+        </>
+      )}
+    </section>
   );
 }
 
