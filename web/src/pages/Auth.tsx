@@ -1,4 +1,5 @@
 import { useEffect, useState, type FormEvent } from "react";
+import tutorialVideos from "../lib/tutorial-videos.json";
 import { Link, useNavigate } from "react-router-dom";
 import { sb, friendlyError, isEmail, authProviders } from "../lib/supabase";
 import { t, L, isEn, getLang } from "../lib/i18n";
@@ -81,6 +82,29 @@ export function Login() {
   );
 }
 
+// Kayıt nasıl yapılır? Eğitim 2 videosu (YouTube'dan gömülü). Kimlik yoksa hiçbir şey göstermez.
+function SignupVideo() {
+  const [open, setOpen] = useState(false);
+  const tv = tutorialVideos as unknown as { public?: boolean } & Record<string, { tr?: string | null; en?: string | null }>;
+  const id = tv.public === true ? tv["2"]?.[isEn() ? "en" : "tr"] : null;
+  if (!id || !/^[A-Za-z0-9_-]{11}$/.test(id)) return null;
+  return (
+    <div className="signup-video" style={{ marginTop: 16 }}>
+      {open ? (
+        <div style={{ maxWidth: 300, aspectRatio: "9 / 16", margin: "0 auto" }}>
+          <iframe src={`https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0`} title={L("Kayıt nasıl yapılır?", "How to sign up")}
+            style={{ width: "100%", height: "100%", border: 0, borderRadius: 12 }}
+            allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowFullScreen referrerPolicy="strict-origin-when-cross-origin" />
+        </div>
+      ) : (
+        <button type="button" className="btn ghost" onClick={() => setOpen(true)} style={{ width: "100%" }}>
+          ▶ {L("Kayıt nasıl yapılır? 1 dakikalık video", "How to sign up: 1-minute video")}
+        </button>
+      )}
+    </div>
+  );
+}
+
 export function Signup() {
   const nav = useNavigate();
   const [busy, setBusy] = useState(false);
@@ -118,6 +142,7 @@ export function Signup() {
           <ErrorBox message={err} />
           <Button type="submit" busy={busy}>{t("auth.signup")}</Button>
           <p className="auth-links"><span>{t("auth.haveAccount")} <Link to="/giris">{t("auth.login")}</Link></span></p>
+          <SignupVideo />
         </form>
       )}
     </AuthLayout>
