@@ -1,0 +1,27 @@
+name: youtube-ayar
+on:
+  push:
+    branches: [main, youtube-ayar]
+    paths: ["yt/**", ".github/workflows/youtube-ayar.yml"]
+  schedule:
+    - cron: "30 21 * * *"
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "1 = sadece rapor"
+        required: false
+        default: "0"
+concurrency: youtube-ayar
+jobs:
+  ayar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: YouTube ayarlarını uygula
+        env:
+          YT_CLIENT_ID: ${{ secrets.YT_CLIENT_ID }}
+          YT_CLIENT_SECRET: ${{ secrets.YT_CLIENT_SECRET }}
+          YT_REFRESH_TOKEN: ${{ secrets.YT_REFRESH_TOKEN }}
+          DRY_RUN: ${{ inputs.dry_run }}
+        run: python3 yt/yt_ayar.py
