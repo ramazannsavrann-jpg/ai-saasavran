@@ -74,7 +74,7 @@ T = CFG["t"]
 def s1(t, dur):
     im, d = base()
     x = 80; y = 330
-    for e, c in (("ChatGPT", GOLD), ("Claude", ACC), ("Gemini", (150, 170, 240))):
+    for e, c in zip([x[0] for x in CFG.get("engines", [])] or ["ChatGPT", "Claude", "Gemini"], (GOLD, ACC, (150, 170, 240), (230, 160, 210))):
         f = font("Bold", 46); w = d.textlength(e, font=f) + 56
         d.rounded_rectangle([x, y, x + w, y + 84], radius=42, outline=c, width=4); d.text((x + 28, y + 14), e, font=f, fill=c); x += w + 24
     y = text_block(d, T["hook"], font("Black", 118), 520, INK, 1.0)
@@ -95,15 +95,16 @@ def s2(t, dur):
     footer_note(d); return im
 def s3(t, dur):
     im, d = base(); tag(d, t, T["tag_eng"]); y = title(d, t, T["eng"], T["eng_sub"]) + 90
-    xs = [600, 790, 980]; cols = [GOLD, ACC, (150, 170, 240)]
+    four = len(CFG["engines"]) >= 4 or any(len(e[0]) > 8 for e in CFG["engines"])
+    xs = [520, 680, 840, 1010] if len(CFG["engines"]) >= 4 else ([620, 810, 1010] if four else [600, 790, 980]); cols = [GOLD, ACC, (150, 170, 240), (230, 160, 210)]
     for (lab, sub), x, c in zip(CFG["engines"], xs, cols):
-        rtext(d, x, y - 80, lab, font("Bold", 36), c); rtext(d, x, y - 36, sub, font("Medium", 28), MUTED)
+        rtext(d, x, y - 80, lab, font("Bold", 28 if four else 36), c); rtext(d, x, y - 36, sub, font("Medium", 26 if four else 28), MUTED)
     y += 20
     for i, row in enumerate(CFG["eng_rows"]):
         al = ease((t - 0.5 - i * 0.3) / 0.5); hl = row[0] in CFG["eng_hl"]
         if hl: d.rounded_rectangle([60, y - 14, W - 60, y + 92], radius=20, fill=mix((40, 62, 55), al))
         d.text((80, y + 8), row[0], font=font("Bold", 50), fill=mix(INK, al))
-        for v, x, c in zip(row[1:], xs, cols): rtext(d, x, y, str(v), font("ExtraBold", 64), mix(c if v else RED, al))
+        for v, x, c in zip(row[1:], xs, cols): rtext(d, x, y, str(v), font("ExtraBold", 56 if four else 64), mix(c if v else RED, al))
         y += 125 if len(CFG['eng_rows']) <= 5 else (112 if len(CFG['eng_rows'])==6 else 98)
     text_block(d, T["eng_note"], font("SemiBold", 40), y + 30, ACC, ease((t - 2.4) / 0.6))
     footer_note(d); return im
