@@ -2,31 +2,194 @@
   "_not": "Her video: dil (tr/en) ve oynatma listeleri. Listede olmayan videolar baslik kuralina gore islenir (bkz. yt_ayar.py).",
   "create_playlists": {
     "Kasım Fırsatları": "tr",
-    "Black Friday AI Picks": "en"
+    "Black Friday AI Picks": "en",
+    "Yapay Zekâ Araştırmaları": "tr",
+    "AI Research Deep Dives": "en"
   },
   "videos": {
-    "7_pB4v4mf_8": {"lang": "tr", "lists": ["Yapay Zekâ Ürün Karşılaştırmaları", "AI SaaSavran – Türkçe İçerikler"]},
-    "tjxoJ8io2T8": {"lang": "tr", "lists": ["Yapay Zekâ Marka Karşılaştırmaları", "AI SaaSavran – Türkçe İçerikler"]},
-    "uaHrZGj07wc": {"lang": "tr", "lists": []},
-    "L5FWXmAxwHo": {"lang": "tr", "lists": ["Yapay Zekâ Ürün Karşılaştırmaları", "AI SaaSavran – Türkçe İçerikler"]},
-    "xNPcVCHRXiA": {"lang": "en", "lists": ["AI Product Comparisons", "AI SaaSavran – English Content"]},
-    "F20blDA33KE": {"lang": "tr", "lists": ["Yapay Zekâ YouTuber Karşılaştırmaları", "AI SaaSavran – Türkçe İçerikler"]},
-    "x208D7cnUbM": {"lang": "en", "lists": ["AI YouTuber Comparisons", "AI SaaSavran – English Content"]},
-    "pulZMgYWQqI": {"lang": "tr", "lists": ["AI SaaSavran | Kullanım ve Eğitim Rehberi", "AI SaaSavran – Türkçe İçerikler"]},
-    "dgGNLhc6A3g": {"lang": "en", "lists": ["AI SaaSavran | Tutorials & User Guide", "AI SaaSavran – English Content"]},
-    "m7gJPErAnVs": {"lang": "tr", "lists": ["AI SaaSavran | Platform Tanıtımı", "AI SaaSavran – Türkçe İçerikler"]},
-    "kFSHcfetl-c": {"lang": "en", "lists": ["AI SaaSavran | Platform Overview", "AI SaaSavran – English Content"]},
-    "3WdwTF5YpCs": {"lang": "tr", "lists": ["Kasım Fırsatları", "Yapay Zekâ Ürün Karşılaştırmaları", "AI SaaSavran – Türkçe İçerikler"]},
-    "FBlGDqhVjtU": {"lang": "en", "lists": ["Black Friday AI Picks", "AI Product Comparisons", "AI SaaSavran – English Content"]},
-    "fkwCp3TsqKs": {"lang": "tr", "lists": ["Kasım Fırsatları", "Yapay Zekâ Ürün Karşılaştırmaları", "AI SaaSavran – Türkçe İçerikler"]},
-    "ZYNeDmq2AgY": {"lang": "en", "lists": ["Black Friday AI Picks", "AI Product Comparisons", "AI SaaSavran – English Content"]},
-    "o18sSW647Lo": {"lang": "tr", "lists": ["Kasım Fırsatları", "Yapay Zekâ Marka Karşılaştırmaları", "AI SaaSavran – Türkçe İçerikler"]},
-    "SFuU-Uk87FU": {"lang": "en", "lists": ["Black Friday AI Picks", "AI Brand Comparisons", "AI SaaSavran – English Content"]},
-    "GMNSobJ6uKw": {"lang": "tr", "lists": ["Kasım Fırsatları", "Yapay Zekâ Marka Karşılaştırmaları", "AI SaaSavran – Türkçe İçerikler"]},
-    "l4g3ypUSFEc": {"lang": "en", "lists": ["Black Friday AI Picks", "AI Brand Comparisons", "AI SaaSavran – English Content"]},
-    "Y8kZ7TS8QxQ": {"lang": "tr", "lists": ["Kasım Fırsatları", "Yapay Zekâ Ürün Karşılaştırmaları", "AI SaaSavran – Türkçe İçerikler"]},
-    "pkailNVRIvw": {"lang": "en", "lists": ["Black Friday AI Picks", "AI Product Comparisons", "AI SaaSavran – English Content"]},
-    "IJAKblEgZmc": {"lang": "tr", "lists": ["Kasım Fırsatları", "Yapay Zekâ Ürün Karşılaştırmaları", "AI SaaSavran – Türkçe İçerikler"]},
-    "C8-AwaEXMak": {"lang": "en", "lists": ["Black Friday AI Picks", "AI Product Comparisons", "AI SaaSavran – English Content"]}
+    "7_pB4v4mf_8": {
+      "lang": "tr",
+      "lists": [
+        "Yapay Zekâ Ürün Karşılaştırmaları",
+        "AI SaaSavran – Türkçe İçerikler"
+      ]
+    },
+    "tjxoJ8io2T8": {
+      "lang": "tr",
+      "lists": [
+        "Yapay Zekâ Marka Karşılaştırmaları",
+        "AI SaaSavran – Türkçe İçerikler"
+      ]
+    },
+    "uaHrZGj07wc": {
+      "lang": "tr",
+      "lists": []
+    },
+    "L5FWXmAxwHo": {
+      "lang": "tr",
+      "lists": [
+        "Yapay Zekâ Ürün Karşılaştırmaları",
+        "AI SaaSavran – Türkçe İçerikler"
+      ]
+    },
+    "xNPcVCHRXiA": {
+      "lang": "en",
+      "lists": [
+        "AI Product Comparisons",
+        "AI SaaSavran – English Content"
+      ]
+    },
+    "F20blDA33KE": {
+      "lang": "tr",
+      "lists": [
+        "Yapay Zekâ YouTuber Karşılaştırmaları",
+        "AI SaaSavran – Türkçe İçerikler"
+      ]
+    },
+    "x208D7cnUbM": {
+      "lang": "en",
+      "lists": [
+        "AI YouTuber Comparisons",
+        "AI SaaSavran – English Content"
+      ]
+    },
+    "pulZMgYWQqI": {
+      "lang": "tr",
+      "lists": [
+        "AI SaaSavran | Kullanım ve Eğitim Rehberi",
+        "AI SaaSavran – Türkçe İçerikler"
+      ]
+    },
+    "dgGNLhc6A3g": {
+      "lang": "en",
+      "lists": [
+        "AI SaaSavran | Tutorials & User Guide",
+        "AI SaaSavran – English Content"
+      ]
+    },
+    "m7gJPErAnVs": {
+      "lang": "tr",
+      "lists": [
+        "AI SaaSavran | Platform Tanıtımı",
+        "AI SaaSavran – Türkçe İçerikler"
+      ]
+    },
+    "kFSHcfetl-c": {
+      "lang": "en",
+      "lists": [
+        "AI SaaSavran | Platform Overview",
+        "AI SaaSavran – English Content"
+      ]
+    },
+    "3WdwTF5YpCs": {
+      "lang": "tr",
+      "lists": [
+        "Kasım Fırsatları",
+        "Yapay Zekâ Ürün Karşılaştırmaları",
+        "AI SaaSavran – Türkçe İçerikler"
+      ]
+    },
+    "FBlGDqhVjtU": {
+      "lang": "en",
+      "lists": [
+        "Black Friday AI Picks",
+        "AI Product Comparisons",
+        "AI SaaSavran – English Content"
+      ]
+    },
+    "fkwCp3TsqKs": {
+      "lang": "tr",
+      "lists": [
+        "Kasım Fırsatları",
+        "Yapay Zekâ Ürün Karşılaştırmaları",
+        "AI SaaSavran – Türkçe İçerikler"
+      ]
+    },
+    "ZYNeDmq2AgY": {
+      "lang": "en",
+      "lists": [
+        "Black Friday AI Picks",
+        "AI Product Comparisons",
+        "AI SaaSavran – English Content"
+      ]
+    },
+    "o18sSW647Lo": {
+      "lang": "tr",
+      "lists": [
+        "Kasım Fırsatları",
+        "Yapay Zekâ Marka Karşılaştırmaları",
+        "AI SaaSavran – Türkçe İçerikler"
+      ]
+    },
+    "SFuU-Uk87FU": {
+      "lang": "en",
+      "lists": [
+        "Black Friday AI Picks",
+        "AI Brand Comparisons",
+        "AI SaaSavran – English Content"
+      ]
+    },
+    "GMNSobJ6uKw": {
+      "lang": "tr",
+      "lists": [
+        "Kasım Fırsatları",
+        "Yapay Zekâ Marka Karşılaştırmaları",
+        "AI SaaSavran – Türkçe İçerikler"
+      ]
+    },
+    "l4g3ypUSFEc": {
+      "lang": "en",
+      "lists": [
+        "Black Friday AI Picks",
+        "AI Brand Comparisons",
+        "AI SaaSavran – English Content"
+      ]
+    },
+    "Y8kZ7TS8QxQ": {
+      "lang": "tr",
+      "lists": [
+        "Kasım Fırsatları",
+        "Yapay Zekâ Ürün Karşılaştırmaları",
+        "AI SaaSavran – Türkçe İçerikler"
+      ]
+    },
+    "pkailNVRIvw": {
+      "lang": "en",
+      "lists": [
+        "Black Friday AI Picks",
+        "AI Product Comparisons",
+        "AI SaaSavran – English Content"
+      ]
+    },
+    "IJAKblEgZmc": {
+      "lang": "tr",
+      "lists": [
+        "Kasım Fırsatları",
+        "Yapay Zekâ Ürün Karşılaştırmaları",
+        "AI SaaSavran – Türkçe İçerikler"
+      ]
+    },
+    "C8-AwaEXMak": {
+      "lang": "en",
+      "lists": [
+        "Black Friday AI Picks",
+        "AI Product Comparisons",
+        "AI SaaSavran – English Content"
+      ]
+    },
+    "yh7jy5Q6r3M": {
+      "lang": "tr",
+      "lists": [
+        "Yapay Zekâ Araştırmaları",
+        "AI SaaSavran – Türkçe İçerikler"
+      ]
+    },
+    "MG8pMAEdSqE": {
+      "lang": "en",
+      "lists": [
+        "AI Research Deep Dives",
+        "AI SaaSavran – English Content"
+      ]
+    }
   }
 }
