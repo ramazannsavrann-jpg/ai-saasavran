@@ -249,6 +249,44 @@ export const GUIDES = [
       ["Farklı yapay zekâ motorları neden farklı sonuç veriyor?", "Farklı arama sağlayıcıları, kaynaklar ve eğitim verileri kullanıyorlar. Kendi ölçümlerimizde aynı marka bir motorda sık, diğerinde hiç önerilmedi."],
     ],
   },
+  {
+    slug: "ajanslar-icin-yapay-zeka-gorunurluk-takibi",
+    title: "Ajanslar müşteri markalarını yapay zekâda nasıl takip eder?",
+    short: "Ajanslar için yapay zekâ takibi",
+    description: "Müşteri markalarının ChatGPT, Gemini ve Claude'da önerilip önerilmediğini ajans olarak takip etmek: marka başına sorular, düzenli ölçüm, rapor, ekip.",
+    body: `
+<p class="lede">Kısa cevap: Ajans, her müşteri markası için müşterinin ağzından ayrı bir soru seti kurar; bu soruları her yapay zekâ motorunda <b>düzenli aralıklarla</b> ve <b>birkaç kez</b> sordurur; sonucu markanın rakipleriyle yan yana raporlar. Bunu elle yapmak marka sayısı arttıkça sürdürülemez. Çok markayı tek hesapta yöneten, ekip erişimi ve müşteriye gönderilebilir raporu olan bir yapay zekâ görünürlük aracı gerekir.</p>
+
+<h2>1. Her müşteri markasını ayrı tutun</h2>
+<p>Her markanın sektörü, rakipleri ve müşteri soruları farklıdır. Diş kliniğinin soruları ("Antalya'da implant için hangi klinik?") ile e-ticaret markasının soruları ("1000 TL altı koşu ayakkabısı önerir misin?") aynı rapora karışmamalı. Marka başına ayrı soru seti, ayrı rakip listesi ve ayrı rapor tutun.</p>
+
+<h2>2. Soruların çoğu markasız olsun</h2>
+<p>"X iyi mi?" sorusu her zaman X'ten bahsettirir ve yanıltıcı derecede iyi sonuç verir. Müşterinin müşterisi markayı bilmeden sorar: "en iyi", "hangisi", "önerir misin". Markalı soruları yalnız markanın doğru tanınıp tanınmadığını kontrol etmek için az sayıda kullanın.</p>
+
+<h2>3. Ölçümü düzenli ve tekrarlı yapın</h2>
+<p>Yapay zekâ aynı soruya her seferinde farklı cevap verebilir. Tek bir ekran görüntüsü müşteriye sunulacak bir sonuç değildir. Her soruyu birkaç kez sordurun, haftalık gibi sabit aralıklarla tekrarlayın ve eğilimi gösterin. Ani bir düşüşü müşteriden önce sizin fark etmeniz gerekir.</p>
+
+<h2>4. Motorları ayrı raporlayın</h2>
+<p>ChatGPT, Gemini ve Claude aynı soruya farklı markalar önerebilir. Müşteriye tek bir karışık puan yerine motor bazında sonuç gösterin. Ayrıca cevabın canlı web aramasından mı yoksa modelin eğitim bilgisinden mi geldiğini belirtin; iki sonuç farklı şeyler anlatır.</p>
+
+<h2>5. "Neden?" sorusuna kanıtla cevap verin</h2>
+<p>Müşteri "rakip neden önerildi?" diye soracaktır. Yapay zekânın rakibi öven cümlesini, baktığı kaynak siteleri ve markanın kaybettiği soruları gösterin. İş planı bu kanıttan çıkar: hangi sayfada eksik bilgi var, hangi karşılaştırma sitesinde yer alınmalı.</p>
+
+<h2>6. Ekip erişimi ve müşteriye gönderilebilir rapor</h2>
+<p>Ajansta birden fazla kişi aynı markalarla çalışır; herkesin aynı şifreyi kullanması güvenli değildir. Kişi bazında erişim verin. Müşteriye ise giriş gerektirmeyen, salt okunur bir rapor bağlantısı ya da PDF gönderin.</p>
+
+<h2>7. Yapılan işi ölçümle bağlayın</h2>
+<p>Bir içerik yayınladığınızda veya bir dizine kaydolduğunuzda tarihini not edin. Sonraki ölçümlerde değişim görünürse müşteriye "şu işten sonra önerilme oranı değişti" diyebilirsiniz. Değişim yoksa bunu da dürüstçe söyleyin; yapay zekâ cevaplarındaki değişim haftalar sürebilir.</p>
+
+<h2>AI SaaSavran ajanslar için ne sunar?</h2>
+<p>AI SaaSavran'da çalışma alanını "Ajans" olarak açıp müşteri markalarını ayrı ayrı ekleyebilirsiniz. Pro paket 5 marka ve 3 kişilik ekip, Business paket 15 marka ve 15 kişilik ekip içerir. Her marka için soru seti, rakipler, haftalık otomatik ölçüm, anlamlı düşüşte e-posta uyarısı, motor bazında rapor, kaynak siteler, PDF ve paylaşılabilir rapor bağlantısı vardır. Pro ve Business paketlerde sonuçlar API ve MCP ile kendi panellerinize de aktarılabilir. Ücretsiz paketle bir markayı deneyerek başlayabilirsiniz.</p>
+`,
+    faq: [
+      ["Ajans kaç müşteri markasını tek hesapta takip edebilir?", "AI SaaSavran'da Pro paket 5 marka, Business paket 15 marka içerir. Her marka ayrı soru seti, rakip listesi ve rapora sahiptir."],
+      ["Müşteriye rapor nasıl gönderilir?", "Giriş gerektirmeyen salt okunur rapor bağlantısı paylaşılabilir ya da rapor PDF olarak indirilebilir."],
+      ["Ekip arkadaşları aynı markalarda çalışabilir mi?", "Evet. Pro pakette 3, Business pakette 15 kişiye kendi hesaplarıyla erişim verilebilir; şifre paylaşmak gerekmez."],
+    ],
+  },
 ];
 
 export const HOME_FAQ = [
