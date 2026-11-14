@@ -35,5 +35,11 @@ ffmpeg -i v.mp4 -i voice.wav -i music.wav -filter_complex "[1:a]aresample=44100,
 - Dosya `videolar` dalına konur, raw.githubusercontent.com linki `vidiq_video_upload`'a verilir; YouTube kanalı @aisaasavran (UCHL4sdkEenxkpuP4_Hq1RZw).
 
 ## Eğitim videoları kuralı (13 Kasım)
+- **14 Kasım kararı: eğitim videoları YouTube'a GİZLİ (private) yüklenir**, herkese açık yapılmaz (kullanıcı isteği). Veri Shorts herkese açık devam eder.
 - Kendi markamız gösterilmez. Gerçek arayüz + uydurma ÖRNEK veri (Marka A/B…, Ürün 1/2…), ekranda "Örnek veri / Sample data" etiketi. Ekran çekerken API cevapları Playwright ile örnek veriyle değiştirilir; gerçek ölçüm yapılmaz.
 - Anlatımda eskiyecek bilgi yok: fiyat, kota sayısı, tarih, motor sürümü söylenmez; "yapay zekâ" denir. Böylece videolar ileride güncelleme gerektirmez.
+
+## Kasım Fırsatları / Black Friday AI Picks serisi (14 Kasım)
+- TR adı "Kasım Fırsatları" (TR içerikte Black Friday denmez), EN adı "Black Friday AI Picks". Sıra: robot süpürge (yayında), kahve makinesi, spor ayakkabı, parfüm, gaming laptop, televizyon.
+- Her kategori: TR (sahip marka country=TR) + global (US) ayrı ölçüm; 8 soru, marka adı geçmez; ChatGPT+Claude canlı arama, Gemini aramasız. Sıralamada harfler rastgele, gerçek isimler altta alfabetik. Fiyat/indirim sadece güncel kaynakla doğrulanırsa.
+- Robot süpürge ayarları: `video/kasim/robot-tr.json`, `robot-en.json`; metin `narration-robot-*.txt`. Sahne kesimleri silencedetect ile gerçek duraklardan.
