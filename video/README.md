@@ -64,3 +64,7 @@ Yatay 16:9, 6–8 dk, TR + EN ayrı. Veri tek videoda harcanmaz; her video bir s
 3. Dev markalar neden görünmüyor  4. Soruyu değiştir, kazanan değişsin (niyet)  5. Türkiye vs dünya
 Derslerde marka gerçek adıyla anılabilir; tam sıralama tablolarında harf kuralı sürer. Haftada 1 uzun video.
 - Durum güncellemesi (14 Kasım akşam): Kasım Fırsatları / Black Friday AI Picks 6 kategori TR+EN TAMAM ve planlandı: 14 robot süpürge, 15 kahve (18:00), 16 spor ayakkabı, 17 parfüm, 18 gaming laptop, 19 TV (TR 19:00, EN 23:00). Parfüm/laptop/TV ölçümleri Growth Lab 2 (fd1b32d1) içinde. Ayarlar video/kasim/*.json.
+
+## INSTAGRAM KURALI (14 Kasım, tüm sohbetler için)
+- Izgarada her satır = 2 video (Reels) + 1 ayrı gönderi. Paylaşım hep 3'lü set: önce TR Reels, sonra EN Reels, sonra ayrı gönderi (görsel/karusel). Set yarım bırakılmaz, aynı anda toplu paylaşılmaz (sıra karışır), her biri bir öncekinin yayınlandığı doğrulanınca atılır.
+- Üstte 3 sabitlenmiş gönderi var; onlar ayrı satır, sayılmaz.
