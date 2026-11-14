@@ -47,6 +47,7 @@ jobs:
           echo "date=$(date -u +%F)" >> "$GITHUB_OUTPUT"
       - name: Veri dalını hazırla (geo-veri)
         run: |
+          rm -rf geo-data
           if git fetch --depth=1 origin geo-veri:geo-veri 2>/dev/null; then git worktree add geo-data geo-veri;
           else git worktree add --orphan -b geo-veri geo-data; fi
       - name: GEO Otopilot

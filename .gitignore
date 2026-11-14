@@ -9,3 +9,7 @@ e2e/screenshots/
 test-results/
 playwright-report/
 web/public/downloads/
+
+# GEO Otopilot çalışma klasörleri (veri geo-veri dalında)
+geo-data/
+geo-detail/
