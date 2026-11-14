@@ -1,0 +1,259 @@
+{
+ "out": "sac-tr",
+ "n2": 48,
+ "order": [
+  "s1",
+  "s2",
+  "s3",
+  "s4",
+  "boxes",
+  "s7",
+  "s8"
+ ],
+ "dur": {
+  "p1": 5,
+  "p2": 5,
+  "p3": 5,
+  "p4": 5,
+  "p5": 5,
+  "p6": 5,
+  "p7": 5
+ },
+ "names": "Ölçülen klinikler: Asmed, Clinicana, Cosmedica, Dr. Serkan Aygın, Estenove, Smile Hair Clinic, Vera Clinic",
+ "footer": "ChatGPT + Claude canlı arama, Gemini aramasız · 14.11.2026",
+ "brands": [
+  [
+   "Klinik C",
+   21
+  ],
+  [
+   "Klinik G",
+   15
+  ],
+  [
+   "Klinik D",
+   13
+  ],
+  [
+   "Klinik E",
+   11
+  ],
+  [
+   "Klinik F",
+   6
+  ],
+  [
+   "Klinik A",
+   5
+  ],
+  [
+   "Klinik B",
+   0
+  ]
+ ],
+ "engines": [
+  [
+   "ChatGPT",
+   "/16"
+  ],
+  [
+   "Claude",
+   "/16"
+  ],
+  [
+   "Gemini",
+   "/16"
+  ]
+ ],
+ "eng_rows": [
+  [
+   "Klinik C",
+   2,
+   4,
+   15
+  ],
+  [
+   "Klinik G",
+   1,
+   7,
+   7
+  ],
+  [
+   "Klinik D",
+   0,
+   7,
+   6
+  ],
+  [
+   "Klinik E",
+   1,
+   6,
+   4
+  ],
+  [
+   "Klinik F",
+   0,
+   6,
+   0
+  ],
+  [
+   "Klinik A",
+   0,
+   2,
+   3
+  ],
+  [
+   "Klinik B",
+   0,
+   0,
+   0
+  ]
+ ],
+ "eng_hl": [
+  "Klinik C",
+  "Klinik B"
+ ],
+ "questions": [
+  [
+   "DHI saç ekimi için en iyisi?",
+   [
+    [
+     "Klinik G",
+     "5/6",
+     false
+    ],
+    [
+     "Klinik D",
+     "3/6",
+     false
+    ],
+    [
+     "Klinik C",
+     "2/6",
+     true
+    ]
+   ]
+  ],
+  [
+   "Sık ve doğal görünümlü ekim?",
+   [
+    [
+     "Klinik C",
+     "4/6",
+     false
+    ],
+    [
+     "Klinik D",
+     "2/6",
+     false
+    ],
+    [
+     "Klinik E",
+     "0/6",
+     true
+    ]
+   ]
+  ],
+  [
+   "Uygun fiyatlı ama güvenilir?",
+   [
+    [
+     "Klinik A",
+     "1/6",
+     true
+    ],
+    [
+     "Klinik C",
+     "1/6",
+     true
+    ],
+    [
+     "Klinik G",
+     "0/6",
+     true
+    ]
+   ]
+  ]
+ ],
+ "boxes": [
+  {
+   "title": "ChatGPT'nin tavrı",
+   "lines": [
+    [
+     "16 cevabın 13'ünde hiçbir klinik önermedi",
+     "bad"
+    ],
+    [
+     "“Tek bir en iyi yok” dedi",
+     null
+    ]
+   ]
+  },
+  {
+   "title": "Hiç önerilmeyen",
+   "lines": [
+    [
+     "Klinik B: 48 cevabın hiçbirinde",
+     "bad"
+    ]
+   ]
+  }
+ ],
+ "sources": [
+  [
+   "medikalakademi.com.tr",
+   12
+  ],
+  [
+   "ishrs.org",
+   7
+  ],
+  [
+   "saglik.gov.tr",
+   7
+  ],
+  [
+   "konhaber.com",
+   7
+  ],
+  [
+   "antalyaism.saglik.gov.tr",
+   5
+  ]
+ ],
+ "t": {
+  "hook": "Yapay zekâ hangi saç ekim kliniğini öneriyor?",
+  "badge": "Aynı mı söylüyorlar?",
+  "hook2": "Saç ekimi · 7 klinik · 8 soru",
+  "note": "Bunlar yapay zekânın cevaplarıdır. Tıbbi tavsiye değildir.",
+  "tag_brands": "Önerilme sayısı",
+  "who": "Kim önerildi?",
+  "who_sub": "3 motor, 48 cevabın kaçında",
+  "tag_eng": "Motor karşılaştırması",
+  "eng": "Motorlar aynı düşünmüyor",
+  "eng_sub": "Önerildiği cevap sayısı",
+  "eng_note": "Klinik C: Gemini 15, ChatGPT 2.",
+  "tag_q": "Soru bazında",
+  "byq": "Soru değişince lider değişiyor",
+  "byq_sub": "Önerildiği cevap / toplam cevap",
+  "tag_box": "Sürpriz",
+  "box": "ChatGPT çoğunlukla isim vermedi",
+  "tag_src": "Kaynaklar",
+  "src": "Yapay zekâ nereye baktı?",
+  "src_sub": "Siteyi kaynak gösteren cevap (32 canlı aramalı cevap)",
+  "src_note": "Bakanlık kayıtları, meslek dernekleri ve haber siteleri.",
+  "cta": "Yapay zekâ sizin kliniğiniz için ne diyor?",
+  "cta2": "ChatGPT, Gemini ve Claude'da ölçün.",
+  "free": "Üye olmadan ücretsiz kontrol",
+  "disc": "Yapay zekâ motorlarının 14 Kasım 2026 tarihli cevapları. Tıbbi tavsiye değildir. Küçük örneklem, tüm pazarı temsil etmez. Harfler rastgele atanmıştır."
+ },
+ "_map": {
+  "Asmed": "Klinik C",
+  "Clinicana": "Klinik F",
+  "Cosmedica": "Klinik G",
+  "Dr. Serkan Aygın": "Klinik D",
+  "Estenove": "Klinik B",
+  "Smile Hair Clinic": "Klinik E",
+  "Vera Clinic": "Klinik A"
+ }
+}

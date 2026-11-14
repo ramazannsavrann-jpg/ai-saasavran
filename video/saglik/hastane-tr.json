@@ -1,0 +1,258 @@
+{
+ "out": "hastane-tr",
+ "n2": 48,
+ "order": [
+  "s1",
+  "s2",
+  "s3",
+  "s4",
+  "boxes",
+  "s7",
+  "s8"
+ ],
+ "dur": {
+  "p1": 5,
+  "p2": 5,
+  "p3": 5,
+  "p4": 5,
+  "p5": 5,
+  "p6": 5,
+  "p7": 5
+ },
+ "names": "Ölçülen hastaneler: Acıbadem, Florence Nightingale, Liv Hospital, Medical Park, Medicana, Medipol, Memorial",
+ "footer": "ChatGPT + Claude canlı arama, Gemini aramasız · 14.11.2026",
+ "brands": [
+  [
+   "Hastane A",
+   36
+  ],
+  [
+   "Hastane E",
+   31
+  ],
+  [
+   "Hastane G",
+   25
+  ],
+  [
+   "Hastane F",
+   16
+  ],
+  [
+   "Hastane C",
+   16
+  ],
+  [
+   "Hastane D",
+   14
+  ],
+  [
+   "Hastane B",
+   13
+  ]
+ ],
+ "engines": [
+  [
+   "ChatGPT",
+   "/16"
+  ],
+  [
+   "Claude",
+   "/16"
+  ],
+  [
+   "Gemini",
+   "/16"
+  ]
+ ],
+ "eng_rows": [
+  [
+   "Hastane A",
+   9,
+   13,
+   14
+  ],
+  [
+   "Hastane E",
+   8,
+   9,
+   14
+  ],
+  [
+   "Hastane G",
+   3,
+   11,
+   11
+  ],
+  [
+   "Hastane F",
+   0,
+   7,
+   9
+  ],
+  [
+   "Hastane C",
+   4,
+   8,
+   4
+  ],
+  [
+   "Hastane D",
+   0,
+   4,
+   10
+  ],
+  [
+   "Hastane B",
+   3,
+   5,
+   5
+  ]
+ ],
+ "eng_hl": [
+  "Hastane D"
+ ],
+ "questions": [
+  [
+   "Antalya'da hangi özel hastane?",
+   [
+    [
+     "Hastane E",
+     "5/6",
+     false
+    ],
+    [
+     "Hastane G",
+     "5/6",
+     false
+    ],
+    [
+     "Hastane A",
+     "0/6",
+     true
+    ]
+   ]
+  ],
+  [
+   "Kalp ameliyatı için en iyisi?",
+   [
+    [
+     "Hastane A",
+     "5/6",
+     false
+    ],
+    [
+     "Hastane B",
+     "5/6",
+     false
+    ],
+    [
+     "Hastane G",
+     "0/6",
+     true
+    ]
+   ]
+  ],
+  [
+   "Fiyat performans açısından?",
+   [
+    [
+     "Hastane G",
+     "6/6",
+     false
+    ],
+    [
+     "Hastane A",
+     "4/6",
+     false
+    ],
+    [
+     "Hastane B",
+     "0/6",
+     true
+    ]
+   ]
+  ]
+ ],
+ "boxes": [
+  {
+   "title": "İlk sırada önerilen (48 cevap)",
+   "lines": [
+    [
+     "Hastane A ve G: 11'er kez",
+     "gold"
+    ],
+    [
+     "Hastane E: 3 · Hastane C: 3",
+     null
+    ]
+   ]
+  },
+  {
+   "title": "ChatGPT'nin tavrı",
+   "lines": [
+    [
+     "16 cevabın 4'ünde hiçbir hastane önermedi",
+     "bad"
+    ],
+    [
+     "“Tek bir en iyi yok” dedi",
+     null
+    ]
+   ]
+  }
+ ],
+ "sources": [
+  [
+   "saglikaktuel.com",
+   4
+  ],
+  [
+   "my1health.com",
+   3
+  ],
+  [
+   "tamliste.tr",
+   3
+  ],
+  [
+   "yenisafak.com",
+   3
+  ]
+ ],
+ "t": {
+  "hook": "Yapay zekâ hangi özel hastaneyi öneriyor?",
+  "badge": "Aynı mı söylüyorlar?",
+  "hook2": "Özel hastaneler · 7 hastane · 8 soru",
+  "note": "Bunlar yapay zekânın cevaplarıdır. Tıbbi tavsiye değildir.",
+  "tag_brands": "Önerilme sayısı",
+  "who": "Kim önerildi?",
+  "who_sub": "3 motor, 48 cevabın kaçında",
+  "tag_eng": "Motor karşılaştırması",
+  "eng": "Motorlar aynı düşünmüyor",
+  "eng_sub": "Önerildiği cevap sayısı",
+  "eng_note": "Hastane D: Gemini 10, ChatGPT 0.",
+  "tag_q": "Soru bazında",
+  "byq": "Soru değişince lider değişiyor",
+  "byq_sub": "Önerildiği cevap / toplam cevap",
+  "tag_box": "İlk sıra",
+  "box": "Kim birinci, kim yok?",
+  "tag_src": "Kaynaklar",
+  "src": "Yapay zekâ nereye baktı?",
+  "src_sub": "Siteyi kaynak gösteren cevap (32 canlı aramalı cevap, hastane siteleri hariç)",
+  "src_note": "Sağlık portalları, haber siteleri ve listeler.",
+  "cta": "Yapay zekâ sizin hastaneniz için ne diyor?",
+  "cta2": "ChatGPT, Gemini ve Claude'da ölçün.",
+  "free": "Üye olmadan ücretsiz kontrol",
+  "disc": "Yapay zekâ motorlarının 14 Kasım 2026 tarihli cevapları. Tıbbi tavsiye değildir. Küçük örneklem, tüm pazarı temsil etmez. Harfler rastgele atanmıştır."
+ },
+ "_map": {
+  "Acıbadem": "Hastane A",
+  "Florence Nightingale": "Hastane B",
+  "Liv Hospital": "Hastane F",
+  "Medical Park": "Hastane G",
+  "Medicana": "Hastane D",
+  "Medipol": "Hastane C",
+  "Memorial": "Hastane E"
+ }
+}

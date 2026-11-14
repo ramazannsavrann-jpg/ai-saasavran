@@ -1,0 +1,263 @@
+{
+ "out": "sac-en",
+ "n2": 48,
+ "order": [
+  "s1",
+  "s2",
+  "s3",
+  "s4",
+  "boxes",
+  "s7",
+  "s8"
+ ],
+ "dur": {
+  "p1": 5,
+  "p2": 5,
+  "p3": 5,
+  "p4": 5,
+  "p5": 5,
+  "p6": 5,
+  "p7": 5
+ },
+ "names": "Clinics measured: Asmed, Clinicana, Cosmedica, Dr. Serkan Aygın, Estenove, Smile Hair Clinic, Vera Clinic",
+ "footer": "ChatGPT + Claude live web search, Gemini no search · 14 Nov 2026",
+ "brands": [
+  [
+   "Clinic F",
+   23
+  ],
+  [
+   "Clinic D",
+   14
+  ],
+  [
+   "Clinic C",
+   12
+  ],
+  [
+   "Clinic G",
+   9
+  ],
+  [
+   "Clinic E",
+   7
+  ],
+  [
+   "Clinic B",
+   1
+  ],
+  [
+   "Clinic A",
+   0
+  ]
+ ],
+ "engines": [
+  [
+   "ChatGPT",
+   "/16"
+  ],
+  [
+   "Claude",
+   "/16"
+  ],
+  [
+   "Gemini",
+   "/16"
+  ]
+ ],
+ "eng_rows": [
+  [
+   "Clinic F",
+   3,
+   4,
+   16
+  ],
+  [
+   "Clinic D",
+   0,
+   6,
+   8
+  ],
+  [
+   "Clinic C",
+   0,
+   2,
+   10
+  ],
+  [
+   "Clinic G",
+   0,
+   4,
+   5
+  ],
+  [
+   "Clinic E",
+   0,
+   5,
+   2
+  ],
+  [
+   "Clinic B",
+   0,
+   0,
+   1
+  ],
+  [
+   "Clinic A",
+   0,
+   0,
+   0
+  ]
+ ],
+ "eng_hl": [
+  "Clinic F",
+  "Clinic A"
+ ],
+ "questions": [
+  [
+   "Best DHI clinic in Turkey?",
+   [
+    [
+     "Clinic G",
+     "4/6",
+     false
+    ],
+    [
+     "Clinic F",
+     "2/6",
+     false
+    ],
+    [
+     "Clinic A",
+     "0/6",
+     true
+    ]
+   ]
+  ],
+  [
+   "Best clinic in Istanbul?",
+   [
+    [
+     "Clinic E",
+     "4/6",
+     false
+    ],
+    [
+     "Clinic D",
+     "4/6",
+     false
+    ],
+    [
+     "Clinic F",
+     "3/6",
+     false
+    ]
+   ]
+  ],
+  [
+   "Most trusted clinic in Turkey?",
+   [
+    [
+     "Clinic D",
+     "3/6",
+     false
+    ],
+    [
+     "Clinic F",
+     "2/6",
+     false
+    ],
+    [
+     "Clinic E",
+     "0/6",
+     true
+    ]
+   ]
+  ]
+ ],
+ "boxes": [
+  {
+   "title": "Ranked first (48 answers)",
+   "lines": [
+    [
+     "Clinic F: 7 times",
+     "gold"
+    ],
+    [
+     "Clinic G: 3 times",
+     null
+    ]
+   ]
+  },
+  {
+   "title": "ChatGPT's stance",
+   "lines": [
+    [
+     "No clinic recommended in 13 of 16",
+     "bad"
+    ],
+    [
+     "“There's no single best”",
+     null
+    ]
+   ]
+  }
+ ],
+ "sources": [
+  [
+   "ishrs.org",
+   11
+  ],
+  [
+   "barchart.com",
+   10
+  ],
+  [
+   "jpost.com",
+   7
+  ],
+  [
+   "turkhairindex.com",
+   7
+  ],
+  [
+   "istanbul-care.com",
+   6
+  ]
+ ],
+ "t": {
+  "hook": "Which hair transplant clinic in Turkey does AI recommend?",
+  "badge": "Do they agree?",
+  "hook2": "Hair transplant · 7 clinics · 8 questions",
+  "note": "These are the AI's answers. Not medical advice.",
+  "tag_brands": "Recommendations",
+  "who": "Who got recommended?",
+  "who_sub": "3 engines, out of 48 answers",
+  "tag_eng": "Engine comparison",
+  "eng": "The engines disagree",
+  "eng_sub": "Answers recommending each clinic",
+  "eng_note": "Clinic F: Gemini 16, ChatGPT 3.",
+  "tag_q": "By question",
+  "byq": "The winner changes by question",
+  "byq_sub": "Answers recommending / total answers",
+  "tag_box": "First place",
+  "box": "Who's first, who's missing?",
+  "tag_src": "Sources",
+  "src": "Where did AI look?",
+  "src_sub": "Answers citing each site (32 live-search answers)",
+  "src_note": "A surgeons' society, press-release and news sites.",
+  "cta": "What does AI say about your clinic?",
+  "cta2": "Measure it in ChatGPT, Gemini and Claude.",
+  "free": "Free check, no sign-up",
+  "disc": "AI engine answers from 14 November 2026. Not medical advice. Small sample, not the whole market. Letters assigned at random."
+ },
+ "_map": {
+  "Asmed": "Clinic F",
+  "Clinicana": "Clinic A",
+  "Cosmedica": "Clinic C",
+  "Dr. Serkan Aygın": "Clinic G",
+  "Estenove": "Clinic B",
+  "Smile Hair Clinic": "Clinic D",
+  "Vera Clinic": "Clinic E"
+ }
+}
