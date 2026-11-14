@@ -1,8 +1,10 @@
 name: youtube-ayar
 on:
   push:
-    branches: [youtube-ayar]
+    branches: [main, youtube-ayar]
     paths: ["yt/**", ".github/workflows/youtube-ayar.yml"]
+  schedule:
+    - cron: "30 21 * * *"
   workflow_dispatch:
     inputs:
       dry_run:
