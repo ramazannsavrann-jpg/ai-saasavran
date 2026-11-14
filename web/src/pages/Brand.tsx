@@ -989,7 +989,7 @@ function Report({ brand, type, onBrandChange, paid = false }: { brand: Brand; ty
             <ul className="plain">
               <li>{L("Yapay zekânın internette arayarak verdiği güncel cevaplar bu ölçümde yok.", "Up-to-date answers the AI gives after searching the web aren't part of this measurement.")}</li>
               <li>{L("Hangi web sitelerinin cevapları etkilediği (kaynak analizi) canlı arama olmadan bilinemez.", "Which websites shaped the answers (source analysis) can't be known without live search.")}</li>
-              <li>{L("Perplexity ölçülmedi.", "Perplexity isn't measured.")}</li>
+              <li>{L("Perplexity bu ölçümde yok; canlı aramalı ölçümde ayrı gösterilir.", "Perplexity isn't part of this measurement; it appears separately in live-search runs.")}</li>
             </ul>
           </section>}
         </>
