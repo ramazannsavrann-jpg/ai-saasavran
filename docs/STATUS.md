@@ -7,6 +7,12 @@
 > **Erken erişim.** Ödeme (Paddle) ve haftalık e-posta (Resend) kodu hazır ve testli, ancak gerçek bir ödeme
 > ve gerçek bir gelen kutusu teslimi uçtan uca henüz doğrulanmadı. Hukuki metinleri avukat incelemedi.
 
+## v1.32 (15 Kasım 2026): başarısız ölçüm telafisi
+- Müşteri ölçümü geçici hatayla (kota, sağlayıcı hatası) hiç sonuç almadan biterse işçi 30 dk sonra aynı ölçümü yeniden sıraya koyar (`schedule_recovery_runs`, 0044). En çok 3 deneme, 7 gün içinde; kalıcı hatalarda (anahtar, geçersiz istek) denemez.
+- Telafi ölçümü başarıyla bitince ekip sahibine/yöneticisine bir kez "sonuçlarınız hazır" e-postası gider (TR/EN, motor bazında gerçek anılma/önerilme sayıları). `engine/src/recovery.ts`.
+- Telafi ölçümleri Free pakette aylık ölçüm hakkından düşmez.
+- Neden: ilk dış kullanıcının (11 Kasım) ölçümü Gemini geçici hatası yüzünden sonuçsuz kalmış, kullanıcı geri dönmemişti.
+
 ## 11 Kasım 2026 denetimi: yapılan düzeltmeler
 
 | Konu | Önce | Şimdi |

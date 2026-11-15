@@ -841,3 +841,41 @@ test("Hoş geldin e-postası: doğrulanmış yeni kullanıcıya bir kez, kayıt 
   assert.ok(!again.some((p) => p.user_id === uid), "ikinci kez gönderilmez");
   assert.deepEqual(await sendWelcomeEmails(svc, undefined), { sent: 0, failed: 0, skipped: "no_resend_key" });
 });
+
+test("Telafi: geçici hatayla sonuçsuz kalan müşteri ölçümü yeniden sıraya girer, bitince bir kez e-posta gider", async () => {
+  const { scheduleRecovery, sendRecoveryEmails } = await import("../src/recovery.ts");
+  const W = await user("telafi@test.local");
+  stack.sql(`update auth.users set email_confirmed_at = coalesce(email_confirmed_at, now()) where id='${W.id}'`);
+  const ws = ok(await W.c.rpc("create_workspace", { p_name: "Telafi Spor", p_kind: "business" })) as string;
+  const b = ok(await W.c.from("brands").insert({ workspace_id: ws, name: "Telafi Spor", city: "Ankara" }).select("id").single()) as any;
+  ok(await W.c.from("prompts").insert({ workspace_id: ws, brand_id: b.id, text: "Ankara'daki en iyi spor salonları?", intent: "local" }));
+  const runId = ok(await W.c.rpc("request_run", { p_brand: b.id })) as string;
+  const fail = await processNextRun({ db: svc, env: ENV, sleep: noSleep, fetchFn: fakeGemini("busy", 503) as any });
+  assert.equal(fail?.runId, runId);
+  assert.equal(stack.sql(`select status from runs where id='${runId}'`), "failed");
+  assert.equal(await scheduleRecovery(svc), 0, "30 dk dolmadan tekrar yok");
+  assert.match((await W.c.rpc("schedule_recovery_runs", {})).error?.message ?? "", /permission denied/);
+  stack.sql(`update runs set finished_at = now() - interval '40 minutes' where id='${runId}'`);
+  assert.equal(await scheduleRecovery(svc), 1);
+  assert.equal(await scheduleRecovery(svc), 0, "bekleyen varken ikinci kez eklenmez");
+  const retry = stack.sql(`select id from runs where retry_of='${runId}' and trigger='recovery' and status='queued'`);
+  assert.ok(retry);
+  const done = await processNextRun({ db: svc, env: ENV, sleep: noSleep, fetchFn: fakeGemini("Ankara'da Telafi Spor ve Demir Gym öne çıkar. Telafi Spor'u öneririm.") as any });
+  assert.equal(done?.runId, retry);
+  assert.equal(stack.sql(`select status from runs where id='${retry}'`), "done");
+  assert.equal(await scheduleRecovery(svc), 0, "başarılı ölçümden sonra tekrar yok");
+  const mails: any[] = [];
+  const fake = (async (_u: string, init: any) => { mails.push(JSON.parse(init.body)); return new Response("{}", { status: 200 }); }) as any;
+  const r = await sendRecoveryEmails(svc, "re_test", { fetchFn: fake });
+  const mine = mails.filter((m) => m.to[0] === "telafi@test.local");
+  assert.equal(mine.length, 1);
+  assert.ok(r.sent >= 1);
+  assert.match(mine[0].text, /Gemini: mentioned in 1 and recommended in 1 of 1 answers/);
+  assert.ok(!(ok(await svc.rpc("pending_recovery_emails", { p_limit: 50 })) as any[]).some((p) => p.run_id === retry), "ikinci kez gönderilmez");
+  // en çok 3 deneme
+  stack.sql(`update runs set status='failed', calls_ok=0, finished_at=now()-interval '2 hours' where id='${retry}'`);
+  assert.equal(await scheduleRecovery(svc), 1);
+  const third = stack.sql(`select id from runs where retry_of='${retry}'`);
+  stack.sql(`update runs set status='failed', calls_ok=0, finished_at=now()-interval '2 hours' where id='${third}'`);
+  assert.equal(await scheduleRecovery(svc), 0, "3 denemeden sonra durur");
+});
