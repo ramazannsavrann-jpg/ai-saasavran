@@ -217,10 +217,77 @@
         "AI Picks: US Edition",
         "AI SaaSavran – English Content"
       ]
+    },
+    "ScFjuvDZz9s": {
+      "lang": "tr",
+      "lists": [
+        "AI SaaSavran | Kullanım ve Eğitim Rehberi",
+        "AI SaaSavran – Türkçe İçerikler"
+      ]
+    },
+    "d8kTwSOnc-I": {
+      "lang": "en",
+      "lists": [
+        "AI SaaSavran | Tutorials & User Guide",
+        "AI SaaSavran – English Content"
+      ]
+    },
+    "Wk0to-_aj_I": {
+      "lang": "tr",
+      "lists": [
+        "AI SaaSavran | Kullanım ve Eğitim Rehberi",
+        "AI SaaSavran – Türkçe İçerikler"
+      ]
+    },
+    "brQsvjAI7XA": {
+      "lang": "en",
+      "lists": [
+        "AI SaaSavran | Tutorials & User Guide",
+        "AI SaaSavran – English Content"
+      ]
+    },
+    "5jzuc-vBtpw": {
+      "lang": "tr",
+      "lists": [
+        "AI SaaSavran | Kullanım ve Eğitim Rehberi",
+        "AI SaaSavran – Türkçe İçerikler"
+      ]
+    },
+    "MSDFkbbZmXU": {
+      "lang": "en",
+      "lists": [
+        "AI SaaSavran | Tutorials & User Guide",
+        "AI SaaSavran – English Content"
+      ]
+    },
+    "kiRo17X4d8I": {
+      "lang": "tr",
+      "lists": [
+        "AI SaaSavran | Kullanım ve Eğitim Rehberi",
+        "AI SaaSavran – Türkçe İçerikler"
+      ]
+    },
+    "oMSJy9XWwtM": {
+      "lang": "en",
+      "lists": [
+        "AI SaaSavran | Tutorials & User Guide",
+        "AI SaaSavran – English Content"
+      ]
     }
   },
   "delete": [],
   "force": [],
-  "thumbnails": {},
+  "thumbnails": {
+    "pulZMgYWQqI": "egitim1-tr.jpg",
+    "dgGNLhc6A3g": "egitim1-en.jpg",
+    "ScFjuvDZz9s": "egitim2-tr.jpg",
+    "d8kTwSOnc-I": "egitim2-en.jpg",
+    "Wk0to-_aj_I": "egitim3-tr.jpg",
+    "brQsvjAI7XA": "egitim3-en.jpg",
+    "5jzuc-vBtpw": "egitim4-tr.jpg",
+    "MSDFkbbZmXU": "egitim4-en.jpg",
+    "kiRo17X4d8I": "egitim5-tr.jpg",
+    "oMSJy9XWwtM": "egitim5-en.jpg"
+  },
   "tutorials_private": true
 }

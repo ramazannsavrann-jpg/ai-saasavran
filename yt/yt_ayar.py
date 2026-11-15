@@ -139,6 +139,9 @@ def set_thumbnails():
 
 
 def main():
+    if not call("GET", "channels", {"part": "id", "mine": "true"}):
+        print("YouTube API erişilemedi (kota dolu olabilir); hiçbir şey yapılmadı.")
+        return
     channel_settings()
     set_thumbnails()
     ch = call("GET", "channels", {"part": "contentDetails,snippet", "mine": "true"})["items"][0]
@@ -147,7 +150,7 @@ def main():
 
     pls = {norm(p["snippet"]["title"]): p["id"] for p in paged("playlists", {"part": "snippet", "mine": "true"})}
     for name, lang in CFG.get("create_playlists", {}).items():
-        if norm(name) not in pls:
+        if pls and norm(name) not in pls:  # liste okunamadıysa (pls boş) asla yeni liste açma: çift liste olmasın
             print("+ liste oluştur:", name)
             if not DRY:
                 r = call("POST", "playlists", {"part": "snippet,status"},
