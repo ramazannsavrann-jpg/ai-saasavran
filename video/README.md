@@ -52,6 +52,11 @@ ffmpeg -i v.mp4 -i voice.wav -i music.wav -filter_complex "[1:a]aresample=44100,
 - 15 Kasım: limit 25 $ (kullanıcı onayı). Growth Lab 2'de ABD ölçümleri: Walmart (perakende/Black Friday), Verizon (operatör), McDonald's (fast food); 8 soru, ChatGPT+Claude+Perplexity canlı arama (ABD), 48 cevap. Gemini ücretsiz kotası dolduğu için Gemini koşuları başarısız/sırada (videolarda Gemini yok).
 - Yayında (EN, 00:00Z): perakende I1zstVDBJXo (21 Kas), operatör gFYospqVPZo (22 Kas), fast food y8o15ib5g9A (23 Kas). Liste "AI Picks: US Edition". Çalışma klasörleri /home/claude/us1-3, `render.sh`. Şablon 3–4 motor destekli (engines listesinden kapak etiketleri).
 
+## Google Shopping verisi (15 Kasım, kullanıcı kuralı)
+- Ürün karşılaştırmalı videolarda (telefon, kulaklık, robot süpürge, TV, laptop, parfüm, ayakkabı gibi belirli ürün/model içeren her video) Google Shopping verisi de konur: aynı aramada Google Shopping sırası, fiyat/satıcı ve yapay zekâ önerisiyle farkı ("AI 1. öneriyor, Shopping'de 7. sırada" gibi).
+- Kaynak: `shopping_checks` tablosu (ürün başına; worker SerpAPI ile doldurur, ülke TR/US). Ölçümde ürünler (products) tanımlı değilse önce ürünleri ekleyip Shopping kontrolünü çalıştır; veri yoksa uydurma, sahneyi koyma ve açıklamada belirtme.
+- Mağaza/operatör/restoran gibi ürün olmayan kategorilerde Shopping sahnesi yok.
+
 ## Perplexity (15 Kasım)
 - AI SaaSavran artık Perplexity'yi de ölçüyor (tüm paketlerde). Bundan sonraki TÜM videolarda (Shorts, uzun, eğitim) ve açıklamalarda motor adları: ChatGPT, Gemini, Claude ve Perplexity. Perplexity'ye ait sayı/sıralama yalnız gerçek Perplexity ölçümü varsa gösterilir; yoksa "Perplexity de ölçülüyor" denir, rakam uydurulmaz. Kanal açıklamasında da Perplexity var.
 
