@@ -6,6 +6,7 @@ import { backfillPerception, processContentBriefs, processEngineConflicts, proce
 import { seedLabs } from "../engine/src/labs.ts";
 import { sendWeeklyDigests, sendWelcomeEmails } from "../engine/src/email.ts";
 import { processDropAlerts } from "../engine/src/alerts.ts";
+import { scheduleRecovery, sendRecoveryEmails } from "../engine/src/recovery.ts";
 
 const { SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY } = process.env;
 if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
@@ -22,6 +23,9 @@ if (process.env.PLATFORM_ADMIN_EMAIL) {
 let maintenance: unknown;
 try { maintenance = await maintain(deps); } catch (e) { maintenance = `hata: ${(e as Error).message}`; }
 const scheduled = await scheduleWeekly(deps);
+// Telafi: geçici hatayla sonuçsuz kalan müşteri ölçümleri 30 dk sonra yeniden sıraya girer (0044)
+let recoveryQueued: unknown;
+try { recoveryQueued = await scheduleRecovery(db); } catch (e) { recoveryQueued = `hata: ${(e as Error).message}`; }
 const audits = await processAudits(deps);
 let productChecks: unknown;
 try { productChecks = await processProductChecks(deps); } catch (e) { productChecks = `hata: ${(e as Error).message}`; }
@@ -54,5 +58,8 @@ try { briefs = await processContentBriefs(deps); } catch (e) { briefs = `hata: $
 // Düşüş uyarısı: biten her ölçüm önceki ölçümle bir kez karşılaştırılır (ek API yok)
 let dropAlerts: unknown;
 try { dropAlerts = await processDropAlerts(db, process.env.RESEND_API_KEY); } catch (e) { dropAlerts = `hata: ${(e as Error).message}`; }
-console.log(JSON.stringify({ maintenance, dropAlerts, perception, truth, conflicts, discovery, briefs, productChecks, shoppingChecks, weeklyScheduled: scheduled, audits, reanalyzed, digests, welcome, processed: results.length, results }, null, 2));
+// Telafi ölçümü bitince müşteriye "sonuçlarınız hazır" e-postası (bir kez)
+let recoveryEmails: unknown;
+try { recoveryEmails = await sendRecoveryEmails(db, process.env.RESEND_API_KEY); } catch (e) { recoveryEmails = `hata: ${(e as Error).message}`; }
+console.log(JSON.stringify({ maintenance, recoveryQueued, recoveryEmails, dropAlerts, perception, truth, conflicts, discovery, briefs, productChecks, shoppingChecks, weeklyScheduled: scheduled, audits, reanalyzed, digests, welcome, processed: results.length, results }, null, 2));
 if (results.some((r) => r.stop === "worker_error")) process.exit(1);
