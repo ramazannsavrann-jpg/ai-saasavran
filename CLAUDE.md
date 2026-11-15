@@ -52,6 +52,19 @@ npm run pricing         # paket maliyet tablosu
 - Veritabanı değişikliklerini sahibine yaptırma; migration veya araçla kendin uygula.
 - Önemli değişiklikte `docs/STATUS.md`'yi güncelle.
 
+## Her özellik / karar / düzeltmeden sonra kontrol listesi (sorulmasa da yapılır)
+Bir özellik eklenince, değişince, kaldırılınca ya da yeni bir karar alınınca PR'dan önce:
+1. Site metinleri: `web/site/content.mjs` (TR) ve `content-en.mjs` (EN) birlikte güncel mi?
+   Özellik listesi, paket/fiyat tablosu, SSS, motor listesi (ChatGPT, Gemini, Claude, Perplexity, Google AI).
+2. Panel içi metinler (`web/src`), e-postalar (`engine/src/email.ts`), `method.mjs`, `legal.mjs`,
+   eğitim sayfası (`tutorials.mjs`) yeni durumla çelişiyor mu?
+3. Paket kotası/fiyatı değiştiyse `docs/PRICING.md` + `npm run pricing` çıktısı ile site aynı mı?
+4. Site, artık doğru olmayan bir şey söylüyor mu ("henüz yok", eski motor/paket adı, eski rakam)?
+5. Mobil görünüm: dar ekranda taşma, iki satıra kayan menü, kırık görsel var mı (Playwright mobil test).
+6. Yeni hesaplama varsa mantığı ve birimleri test et; uydurma veri gerçek gibi görünmesin.
+7. `docs/STATUS.md` güncelle; kalıcı bir kural/karar değiştiyse bu CLAUDE.md'yi de güncelle.
+PR açıklamasında bu kontrollerden neyin değiştiğini kısaca yaz.
+
 ## Video ve sosyal medya
 - Video kurulumu ve şablonlar: `seslendirme` dalında `video/README.md` + `video/sablon/`.
 - Paylaşım kuralları (Instagram 3'lü set: TR Reels → EN Reels → ayrı gönderi; YouTube oynatma listeleri,
