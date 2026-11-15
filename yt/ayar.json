@@ -3,7 +3,7 @@
   "channel": {
     "description": "Yapay zekâ markanızı öneriyor mu?\n\nAI SaaSavran, markaların ve ürünlerin ChatGPT, Gemini, Claude ve Perplexity'de nasıl göründüğünü ölçer. Bu kanalda gerçek ölçümlerden çıkan sonuçları paylaşıyoruz: hangi marka öneriliyor, hangisi hiç geçmiyor, yapay zekâ hangi sitelere bakıyor ve motorlar neden farklı cevap veriyor.\n\nKısa videolar, karşılaştırmalar, araştırmalar ve kullanım rehberleri.\n\nBağımsız ölçümdür; hiçbir markayla reklam veya iş birliğimiz yoktur.\nMarkanızı ücretsiz kontrol edin: aisaasavran.com\n\n—\n\nDoes AI recommend your brand?\n\nAI SaaSavran measures how brands and products appear on ChatGPT, Gemini, Claude and Perplexity. On this channel we share what real measurements show: which brands get recommended, which never appear, which websites AI relies on, and why the engines give different answers.\n\nShorts, comparisons, deep dives and tutorials.\n\nIndependent measurement; no sponsorship or partnership with any brand.\nCheck your brand for free: aisaasavran.com",
     "banner": "yt/banner.jpg",
-    "banner_apply": true
+    "banner_apply": false
   },
   "create_playlists": {
     "Kasım Fırsatları": "tr",
@@ -219,15 +219,6 @@
       ]
     }
   },
-  "delete": [
-    "I1zstVDBJXo",
-    "gFYospqVPZo",
-    "y8o15ib5g9A"
-  ],
-  "force": [
-    "V76gSO6nEME",
-    "u6Q55aafSBs",
-    "lS5i5me1Wuo",
-    "9rhhEWx2sSI"
-  ]
+  "delete": [],
+  "force": []
 }
