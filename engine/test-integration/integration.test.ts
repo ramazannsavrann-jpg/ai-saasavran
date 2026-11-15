@@ -259,7 +259,7 @@ test("Migration çalıştırıcı: boş veritabanına uygular, ikinci kez uygula
   });
   const first = run();
   assert.equal(first.status, 0, first.stderr);
-  assert.match(first.stdout, /43 migration uygulandı/);
+  assert.match(first.stdout, /44 migration uygulandı/);
   const second = run();
   assert.equal(second.status, 0, second.stderr);
   assert.match(second.stdout, /güncel/);
@@ -850,20 +850,26 @@ test("Telafi: geçici hatayla sonuçsuz kalan müşteri ölçümü yeniden sıra
   const b = ok(await W.c.from("brands").insert({ workspace_id: ws, name: "Telafi Spor", city: "Ankara" }).select("id").single()) as any;
   ok(await W.c.from("prompts").insert({ workspace_id: ws, brand_id: b.id, text: "Ankara'daki en iyi spor salonları?", intent: "local" }));
   const runId = ok(await W.c.rpc("request_run", { p_brand: b.id })) as string;
-  const fail = await processNextRun({ db: svc, env: ENV, sleep: noSleep, fetchFn: fakeGemini("busy", 503) as any });
+  // Kuyrukta önceki testlerden ölçüm kalmış olabilir: bizimki işlenene kadar işle
+  const until = async (id: string, f: any) => { for (let k = 0; k < 30; k++) { const r = await processNextRun({ db: svc, env: ENV, sleep: noSleep, fetchFn: f }); if (!r || r.runId === id) return r; } return null; };
+  const fail = await until(runId, fakeGemini("busy", 503));
   assert.equal(fail?.runId, runId);
   assert.equal(stack.sql(`select status from runs where id='${runId}'`), "failed");
-  assert.equal(await scheduleRecovery(svc), 0, "30 dk dolmadan tekrar yok");
+  const retries = (id: string) => Number(stack.sql(`select count(*) from runs where retry_of='${id}'`));
+  await scheduleRecovery(svc);
+  assert.equal(retries(runId), 0, "30 dk dolmadan tekrar yok");
   assert.match((await W.c.rpc("schedule_recovery_runs", {})).error?.message ?? "", /permission denied/);
   stack.sql(`update runs set finished_at = now() - interval '40 minutes' where id='${runId}'`);
-  assert.equal(await scheduleRecovery(svc), 1);
-  assert.equal(await scheduleRecovery(svc), 0, "bekleyen varken ikinci kez eklenmez");
+  assert.ok(await scheduleRecovery(svc) >= 1);
+  await scheduleRecovery(svc);
+  assert.equal(retries(runId), 1, "bekleyen varken ikinci kez eklenmez");
   const retry = stack.sql(`select id from runs where retry_of='${runId}' and trigger='recovery' and status='queued'`);
   assert.ok(retry);
-  const done = await processNextRun({ db: svc, env: ENV, sleep: noSleep, fetchFn: fakeGemini("Ankara'da Telafi Spor ve Demir Gym öne çıkar. Telafi Spor'u öneririm.") as any });
+  const done = await until(retry, fakeGemini("Ankara'da Telafi Spor ve Demir Gym öne çıkar. Telafi Spor'u öneririm."));
   assert.equal(done?.runId, retry);
   assert.equal(stack.sql(`select status from runs where id='${retry}'`), "done");
-  assert.equal(await scheduleRecovery(svc), 0, "başarılı ölçümden sonra tekrar yok");
+  await scheduleRecovery(svc);
+  assert.equal(retries(retry), 0, "başarılı ölçümden sonra tekrar yok");
   const mails: any[] = [];
   const fake = (async (_u: string, init: any) => { mails.push(JSON.parse(init.body)); return new Response("{}", { status: 200 }); }) as any;
   const r = await sendRecoveryEmails(svc, "re_test", { fetchFn: fake });
@@ -874,8 +880,10 @@ test("Telafi: geçici hatayla sonuçsuz kalan müşteri ölçümü yeniden sıra
   assert.ok(!(ok(await svc.rpc("pending_recovery_emails", { p_limit: 50 })) as any[]).some((p) => p.run_id === retry), "ikinci kez gönderilmez");
   // en çok 3 deneme
   stack.sql(`update runs set status='failed', calls_ok=0, finished_at=now()-interval '2 hours' where id='${retry}'`);
-  assert.equal(await scheduleRecovery(svc), 1);
+  await scheduleRecovery(svc);
+  assert.equal(retries(retry), 1);
   const third = stack.sql(`select id from runs where retry_of='${retry}'`);
   stack.sql(`update runs set status='failed', calls_ok=0, finished_at=now()-interval '2 hours' where id='${third}'`);
-  assert.equal(await scheduleRecovery(svc), 0, "3 denemeden sonra durur");
+  await scheduleRecovery(svc);
+  assert.equal(retries(third), 0, "3 denemeden sonra durur");
 });
