@@ -220,5 +220,32 @@
     }
   },
   "delete": [],
-  "force": []
+  "force": [],
+  "thumbnails": {
+    "3WdwTF5YpCs": "robot-tr.jpg",
+    "FBlGDqhVjtU": "robot-en.jpg",
+    "fkwCp3TsqKs": "kahve-tr.jpg",
+    "ZYNeDmq2AgY": "kahve-en.jpg",
+    "o18sSW647Lo": "ayakkabi-tr.jpg",
+    "SFuU-Uk87FU": "ayakkabi-en.jpg",
+    "GMNSobJ6uKw": "parfum-tr.jpg",
+    "l4g3ypUSFEc": "parfum-en.jpg",
+    "Y8kZ7TS8QxQ": "laptop-tr.jpg",
+    "pkailNVRIvw": "laptop-en.jpg",
+    "IJAKblEgZmc": "tv-tr.jpg",
+    "C8-AwaEXMak": "tv-en.jpg",
+    "RUnk8zNquTo": "uzun1-tr.jpg",
+    "V76gSO6nEME": "uzun1-en.jpg",
+    "L5FWXmAxwHo": "telefon-tr.jpg",
+    "xNPcVCHRXiA": "telefon-en.jpg",
+    "F20blDA33KE": "youtuber-tr.jpg",
+    "x208D7cnUbM": "youtuber-en.jpg",
+    "pPq8JNj07DQ": "saglik-hastane-tr.jpg",
+    "CWF4g0gvaXA": "saglik-hastane-en.jpg",
+    "k6xkaHFZARY": "saglik-sac-tr.jpg",
+    "dFep9TRYwPU": "saglik-sac-en.jpg",
+    "u6Q55aafSBs": "kapak-us-retail.jpg",
+    "lS5i5me1Wuo": "kapak-us-carrier-en.jpg",
+    "9rhhEWx2sSI": "kapak-us-fastfood-en.jpg"
+  }
 }

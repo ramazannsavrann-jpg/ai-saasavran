@@ -117,8 +117,30 @@ def channel_settings():
             print("· kanal ayarları kaydedildi ✓")
 
 
+def set_thumbnails():
+    """thumbnails: {videoId: kapak dosya adı (videolar dalı kapak/)} — her biri bir kez yüklenir, sonra listeden çıkarılır."""
+    global quota
+    base = "https://raw.githubusercontent.com/ramazannsavrann-jpg/ai-saasavran/videolar/kapak/"
+    for vid, name in (CFG.get("thumbnails") or {}).items():
+        if quota > 9000:
+            print("! kota sınırı, kapaklar yarına"); return
+        print("· kapak:", vid, name)
+        if DRY:
+            continue
+        try:
+            img = urllib.request.urlopen(base + name).read()
+            quota += 50
+            req = urllib.request.Request(f"https://www.googleapis.com/upload/youtube/v3/thumbnails/set?videoId={vid}&uploadType=media",
+                                         method="POST", data=img, headers={"Authorization": f"Bearer {TOK}", "Content-Type": "image/jpeg"})
+            urllib.request.urlopen(req).read()
+            print("  ✓")
+        except urllib.error.HTTPError as e:
+            print(f"  ! HTTP {e.code}: {e.read().decode()[:300]}")
+
+
 def main():
     channel_settings()
+    set_thumbnails()
     ch = call("GET", "channels", {"part": "contentDetails,snippet", "mine": "true"})["items"][0]
     print("Kanal:", ch["snippet"]["title"])
     uploads = ch["contentDetails"]["relatedPlaylists"]["uploads"]
