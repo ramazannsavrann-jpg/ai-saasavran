@@ -173,7 +173,17 @@ def main():
             lang = rule["lang"]
             if lang == "en":
                 lang = "en-US"  # İngilizce içerik ABD hedefli (15 Kasım kararı)
-            line = f"{vid} [{lang}{'?' if rule.get('guessed') else ''}] {sn['title'][:60]}"
+            is_tut = bool(re.search(r"\b(eğitim|tutorial)\b", sn["title"], re.I))
+            line = f"{vid} [{lang}{'?' if rule.get('guessed') else ''}] {st['privacyStatus']} {sn['title'] if is_tut else sn['title'][:60]}"
+            # 0) eğitim videoları seri bitene kadar gizli kalır (kullanıcı kuralı, 15 Kasım)
+            if is_tut and CFG.get("tutorials_private") and st["privacyStatus"] != "private" and not DRY:
+                s0 = {"privacyStatus": "private", "selfDeclaredMadeForKids": st.get("selfDeclaredMadeForKids", False),
+                      "embeddable": st.get("embeddable", True), "license": st.get("license", "youtube"),
+                      "publicStatsViewable": st.get("publicStatsViewable", True), "containsSyntheticMedia": True}
+                if call("PUT", "videos", {"part": "status"}, {"id": vid, "status": s0}, cost=50) is not None:
+                    line += " · →gizli✓"
+            if is_tut:
+                line += " · listeler: " + ", ".join(n for n, pid in pls.items() if vid in members.get(pid, set()))
             # 1) dil (snippet)
             if sn.get("defaultLanguage") != lang or sn.get("defaultAudioLanguage") != lang:
                 body = {"id": vid, "snippet": {"title": sn["title"], "description": sn.get("description", ""),

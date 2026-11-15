@@ -221,5 +221,6 @@
   },
   "delete": [],
   "force": [],
-  "thumbnails": {}
+  "thumbnails": {},
+  "tutorials_private": true
 }
