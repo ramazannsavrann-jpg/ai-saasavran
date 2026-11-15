@@ -13,15 +13,25 @@ Bu dal (`seslendirme`) videoların tek kaynağıdır. Yeni oturumda buradan deva
 
 ## Görüntü
 - 1080x1920, 30 fps, sahne başına ayrı mp4, concat + `-c:v copy` ile ses.
-- İlk sahne kapak tasarımında: ChatGPT · Claude · Gemini etiketleri, büyük soru, sarı rozet (t.badge, ör. "Aynı mı söylüyorlar?"). İlk kare boş değil (fade-in yok); en altta ölçülen gerçek adlar ve tarih/örneklem notu; sonda aisaasavran.com.
+- İlk sahne kapak tasarımında: ChatGPT · Claude · Gemini etiketleri, büyük soru, sarı rozet (t.badge, ör. "Aynı mı söylüyorlar?"). İlk kare boş değil (fade-in yok); sonda aisaasavran.com. Ekranın en altına hiçbir şey yazılmaz (bkz. GÜVENLİ ALAN).
 - Etiketler ve açıklama hashtagleri: ölçülen marka/kanal adları.
 - Eğitim videoları: `sablon/egitim.py <ayar.json>` (adım etiketi + açıklama + gerçek site ekranı kartı); ekranlar Playwright + Chrome ile 390x844, ölçek 2,77 (1080 genişlik), JPEG 92 (`egitim/ekran-cek-*.py`). Ses Kore, atempo 1.08.
 - Şablon: `sablon/make.py <ayar.json>` (v2, 8 sahne: marka, motorlar, soru bazında kayıp, ürün, doğruluk+Shopping, kaynaklar, CTA; örnek ayarlar telefon videoları). `make.py <ayar> frames` önizleme, `make.py <ayar> s3 s4` yalnız o sahneler.
-- Gerçek marka adları her sahnenin altında ("names" alanı).
+- Gerçek marka adları **marka kartında** ("names" alanı), alt kısımda değil (bkz. MARKA KARTI).
+
+## MARKA KARTI + GÜVENLİ ALAN (15 Kasım, kullanıcı kararı — tüm Shorts/Reels için kalıcı)
+- **Sahne sırası:** 1) kanca (soru + motorlar + rozet) → 2) **marka kartı** → 3) sonuç sahneleri → kapanış.
+- **Marka kartı:** ölçülen gerçek adlar ekranın ortasında büyük etiketler halinde (alfabetik), altında "Sonuçlarda harflerle gösterilir / Shown as letters in the results" ve yöntem/tarih notu (`footer`). `make.py` bu sahneyi (`names`) kancadan sonra kendisi ekler; `order` içine "names" yazılırsa oradaki yeri kullanılır. Anlatımda kart için kısa bir cümle olur ("Bu markaları sorduk." / "We asked about these brands.").
+- **Güvenli alan:** Shorts/Reels arayüzü (başlık, kanal adı, beğen/yorum düğmeleri, "Videonuzu paylaşın") ekranın bazı yerlerini kapatır. Bu alanlara **hiçbir yazı, grafik, rakam** konmaz — hiçbir sahnede:
+  - üst 160 px,
+  - y > 1400 (alt kısım),
+  - y > 1000 iken x > 900 (sağdaki düğme şeridi).
+  İçerik x 80–880, y 160–1390 arasında kalır (`XR`, `YB`, `BLOCKED` sabitleri).
+- **Otomatik kontrol:** `make.py <ayar> frames` ve render, her sahnenin son karesini kontrol eder; kapalı bölgede içerik varsa "GÜVENLİ ALAN HATASI" verip durur. Uzun yazılar sığana kadar otomatik küçülür. Yeni sahne eklerken de bu sabitler kullanılır.
 
 ## İçerik kuralları
 - Sonuçlarda markalar **harfli**: Marka A/B/C…, ürünler Model 1/2…. Harfler rastgele atanır (alfabetik değil).
-- Ölçülen markaların gerçek adları videonun altında **alfabetik liste** olarak yazılır; hangi harfin hangi marka olduğu verilmez.
+- Ölçülen markaların gerçek adları **kancadan sonraki marka kartında** alfabetik yazılır; hangi harfin hangi marka olduğu verilmez.
 - Her videoda: "Bunlar yapay zekânın cevaplarıdır" (kullanıcı: "bizim görüşümüz değildir" denmesin), tarih, örneklem, "tüm pazarı temsil etmez".
 - Global video İngilizce, Türkiye videosu Türkçe; YouTube başlık/açıklama/etiketler iki dilli. Başlık ≤ 100 karakter.
 - Kulaklık videosu formatı esas: marka oranı, motor karşılaştırması, soru bazında kayıp, rakip ürün, ürün doğruluğu, Google Shopping sırası, kaynaklar.
@@ -83,7 +93,7 @@ Derslerde marka gerçek adıyla anılabilir; tam sıralama tablolarında harf ku
 ### YouTube (@aisaasavran)
 - Veri/ölçüm Shorts: herkese açık. Eğitim videoları: GİZLİ (private).
 - Başlık, açıklama, etiketler hem TR hem EN; başlık ≤ 100 karakter. Kapak: sorunun kendisi + motorların aynı şeyi söylemeyebileceği.
-- Grafiklerde markalar harfli (Marka/Hastane/Klinik A, B…; harfler rastgele). Gerçek adlar en altta alfabetik, hangi harf olduğu söylenmez. Adlar etiketlerde ve açıklamada hashtag olarak.
+- Grafiklerde markalar harfli (Marka/Hastane/Klinik A, B…; harfler rastgele). Gerçek adlar kancadan sonraki marka kartında alfabetik, hangi harf olduğu söylenmez. Adlar etiketlerde ve açıklamada hashtag olarak.
 - Notlar: "Bunlar yapay zekânın cevaplarıdır" ("bizim görüşümüz değildir" DENMEZ). Sağlıkta ek olarak "tıbbi tavsiye değildir".
 - Her ölçüm videosu açıklamasına: "Bu video bağımsız bir ölçümdür. Hiçbir markayla reklam veya iş birliğimiz yoktur." / "Independent measurement. We have no sponsorship or partnership with any brand shown."
 - Süre ≤ 58 sn (tek Instagram hikâyesine sığsın). TR seslendirme atempo 1.24, EN 1.2. "Ey Ay Saa, Savran".
