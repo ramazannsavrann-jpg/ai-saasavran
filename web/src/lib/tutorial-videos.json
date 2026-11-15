@@ -1,0 +1,36 @@
+{
+  "_not": "Eğitim videolarının YouTube kimlikleri (ders numarası → tr/en). /tr/egitim/, /tutorials/ ve /kayit sayfaları buradan okur. KURAL (kullanıcı, 15 Kasım): eğitim videoları hepsi bitip YouTube'a yüklenene ve oynatma listelerine alınana kadar GİZLİ kalır; o zamana kadar 'public': false. Hepsi tamamlanınca videolar herkese açık yapılır ve burası true olur; sitede oynatıcılar ancak o zaman görünür (gizli video sitede oynamaz).",
+  "public": false,
+  "1": {
+    "tr": "pulZMgYWQqI",
+    "en": "dgGNLhc6A3g"
+  },
+  "2": {
+    "tr": "ScFjuvDZz9s",
+    "en": "d8kTwSOnc-I"
+  },
+  "3": {
+    "tr": "kiRo17X4d8I",
+    "en": "oMSJy9XWwtM"
+  },
+  "4": {
+    "tr": "5jzuc-vBtpw",
+    "en": "MSDFkbbZmXU"
+  },
+  "5": {
+    "tr": null,
+    "en": null
+  },
+  "6": {
+    "tr": null,
+    "en": null
+  },
+  "7": {
+    "tr": null,
+    "en": null
+  },
+  "8": {
+    "tr": null,
+    "en": null
+  }
+}

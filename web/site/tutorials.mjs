@@ -1,8 +1,11 @@
 // "Eğitim videolarımız" sayfası (/tutorials/ ve /tr/egitim/): siteyi adım adım anlatan kısa dersler.
 // Her dersin yazılı adımları sayfada durur (video olmadan da okunur). Video yayınlandığında ilgili dersin
-// `video` alanına YouTube kimliği yazılır: { tr: "XXXXXXXXXXX", en: "YYYYYYYYYYY" }. Kimlik yoksa bağlantı uydurulmaz;
+// kimliği web/src/lib/tutorial-videos.json dosyasına yazılır; sayfada YouTube'dan gömülü oynatıcı çıkar. Kimlik yoksa bağlantı uydurulmaz;
 // yalnız kanal bağlantısı gösterilir. Örneklerde kendi markamız ya da gerçek marka adı kullanılmaz.
+import { readFileSync } from "node:fs";
 export const CHANNEL = "https://www.youtube.com/@aisaasavran";
+// Video kimlikleri tek yerde: web/src/lib/tutorial-videos.json (kayıt sayfası da buradan okur).
+const VIDEOS = JSON.parse(readFileSync(new URL("../src/lib/tutorial-videos.json", import.meta.url), "utf8"));
 
 export const LESSONS = [
   { n: 1, video: { tr: null, en: null },
@@ -31,6 +34,8 @@ export const LESSONS = [
     en: { title: "Improvement recommendations", steps: ["The \"Recommendations\" tab lists what to do, most important first.", "Each recommendation states the evidence, what to do and how success is checked.", "Turn a recommendation into a campaign, split it into tasks and tick them off.", "Log each change with its date; the next measurement shows its effect.", "The \"Website check\" tests whether your site is open to AI crawlers."], cta: ["/kayit", "Create a free account"] } },
 ];
 
+if (VIDEOS.public === true) for (const l of LESSONS) l.video = { ...l.video, ...(VIDEOS[String(l.n)] || {}) };
+
 const YT_ID = /^[A-Za-z0-9_-]{11}$/;
 const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
@@ -41,7 +46,8 @@ export function tutorialsHtml(lang) {
   const items = LESSONS.map((l) => {
     const t = l[lang]; const id = l.video?.[lang];
     const watch = YT_ID.test(id ?? "")
-      ? `<p class="video-link"><a href="https://www.youtube.com/shorts/${id}" rel="noopener">${en ? "Watch this lesson on YouTube (under 1 minute)" : "Bu dersi YouTube'da izleyin (1 dakikadan kısa)"}</a></p>` : "";
+      ? `<div class="video-embed" style="max-width:320px;aspect-ratio:9/16;margin:12px 0"><iframe src="https://www.youtube-nocookie.com/embed/${id}?rel=0" title="${esc(t.title)}" loading="lazy" style="width:100%;height:100%;border:0;border-radius:12px" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>
+  <p class="video-link"><a href="https://www.youtube.com/watch?v=${id}" rel="noopener">${en ? "Open on YouTube" : "YouTube'da aç"}</a></p>` : "";
     return `<section class="lesson" id="${en ? "lesson" : "ders"}-${l.n}">
   <h2>${en ? "Tutorial" : "Eğitim"} ${l.n}: ${esc(t.title)}</h2>
   <ol>${t.steps.map((s) => `<li>${esc(s)}</li>`).join("")}</ol>
