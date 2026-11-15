@@ -69,3 +69,6 @@ PR açıklamasında bu kontrollerden neyin değiştiğini kısaca yaz.
 - Video kurulumu ve şablonlar: `seslendirme` dalında `video/README.md` + `video/sablon/`.
 - Paylaşım kuralları (Instagram 3'lü set: TR Reels → EN Reels → ayrı gönderi; YouTube oynatma listeleri,
   açıklama metinleri): aynı dosyada "PAYLAŞIM KURALLARI" bölümü. Yeni video işinden önce oku.
+- Shorts/Reels düzeni (15 Kasım, bundan sonraki videolar): kanca → **marka kartı** (ölçülen gerçek adlar
+  ortada, büyük etiketler) → sonuçlar. Shorts arayüzünün kapattığı yerlere (üst 160 px, y>1400, y>1000 iken
+  x>900) hiçbir sahnede yazı/grafik konmaz. Ayrıntı: README'de "MARKA KARTI + GÜVENLİ ALAN".
