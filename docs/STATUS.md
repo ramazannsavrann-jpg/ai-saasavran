@@ -11,6 +11,10 @@
 > iddia yazabiliyordu (Trojan ölçümü). Artık iddianın dili cevaptakinden farklıysa cevaptaki alıntı gösterilir; bilgi
 > kartından farklı dilde yazılmış "resmî bilgi" boş bırakılır (`guessLang`, kural tabanlı, API yok).
 
+> **18 Kasım (site örneği):** Ana sayfa (TR+EN) örnek cevap kartı akıllı saat ölçümüne geçti (gerçek sayılarla).
+> "Bugünün ölçümü" hassas/araştırma alanlarını göstermez: `workspaces.hide_from_examples` (0047); Growth Lab 3
+> (ABD prezervatif araştırması) gizli.
+
 > **18 Kasım (içgörü kartları + site metni):** (1) Kendi site payı panelinde "Siteniz kaynak gösterildi, rakip de
 > önerildi" kartı (`ownCitedRivals`). (2) Ürünler sekmesinde Google Shopping altında "Yapay zekâ ↔ Google Shopping"
 > kartı: yapay zekânın en çok önerdiği marka, Shopping'in 1. sırası, sizin iki taraftaki sıranız (`aiVsShopping`).
