@@ -52,7 +52,7 @@ function tokens(s: string): string[] { return normalize(s).split(" ").filter((t)
  * Marka verildiyse marka adı da başlıkta ya da satıcı adında geçmeli (aynı adlı başka markanın ürünü sayılmasın).
  */
 /** Ürünün kendisi olmayan ilanlar: kitap/kılavuz, kılıf, yastık, kablo, yedek parça, "uyumlu" aksesuar. */
-const NOT_PRODUCT = /\b(user guide|guide|manual|book|kitap|kilavuz\w*|rehber\w*|kilif\w*|case|cover|kapak\w*|pads?|ear ?pads?|yastig\w*|yastik\w*|sunger\w*|kablo\w*|cable|stand\w*|aski\w*|sticker|etiket\w*|compatible|uyumlu|replacement|yedek|aksesuar\w*|accessor\w*|koruyucu|protector|skin)\b/;
+const NOT_PRODUCT = /\b(user guide|guide|manual|book|kitap|kilavuz\w*|rehber\w*|kilif\w*|case for|cases|protective case|phone case|cover|kapak\w*|pads?|ear ?pads?|yastig\w*|yastik\w*|sunger\w*|kablo\w*|cable|stand\w*|aski\w*|sticker|etiket\w*|compatible|uyumlu|replacement|yedek|aksesuar\w*|accessor\w*|koruyucu|protector|skin)\b/;
 /** Harf ve rakamı birlikte içeren, en az 5 karakterlik bir model kodu (ör. WH-1000XM6'daki 1000xm6): markası yazmasa da yeterince ayırt edicidir. */
 export function isModelCode(name: string): boolean {
   return normalize(name).split(/[\s.]+/).some((w) => w.length >= 5 && /\d/.test(w) && /[a-z]/.test(w));
@@ -64,6 +64,10 @@ export function titleMatches(title: string, target: { name: string; brand?: stri
   if (!words.length) return false;
   if (!words.every((w) => hasName(t, w))) return false;
   if (NOT_PRODUCT.test(t) && !NOT_PRODUCT.test(normalize(target.name))) return false;
+  // "... for Apple Watch Series 12" / "fits ..." = o ürün İÇİN satılan aksesuar (şarj aleti, kayış, AppleCare). 17 Kasım: 11 $'lık
+  // bir aksesuar Apple Watch'un kendisi sayılmıştı; saat ilanlarındaki "Aluminum Case" ise kasadır, kılıf değil.
+  const forIdx = t.search(/\b(for|fits)\b/);
+  if (forIdx >= 0 && hasName(t.slice(forIdx), words[0]) && !hasName(t.slice(0, forIdx), words[0])) return false;
   if (target.brand && !isModelCode(target.name)) {
     const b = normalize(target.brand);
     const inTitle = hasName(t, b);
