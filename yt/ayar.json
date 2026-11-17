@@ -282,11 +282,21 @@
         "AI Product Comparisons",
         "AI SaaSavran – English Content"
       ]
+    },
+    "kLKaNZCQcI8": {
+      "lang": "en",
+      "lists": [
+        "Black Friday AI Picks",
+        "AI Picks: US Edition",
+        "AI Product Comparisons",
+        "AI SaaSavran – English Content"
+      ]
     }
   },
   "delete": [],
   "force": [
-    "Uw56ankOGhQ"
+    "Uw56ankOGhQ",
+    "kLKaNZCQcI8"
   ],
   "thumbnails": {
     "pulZMgYWQqI": "egitim1-tr.jpg",
@@ -299,7 +309,8 @@
     "MSDFkbbZmXU": "egitim4-en.jpg",
     "kiRo17X4d8I": "egitim5-tr.jpg",
     "oMSJy9XWwtM": "egitim5-en.jpg",
-    "Uw56ankOGhQ": "smartwatch-us-en.jpg"
+    "Uw56ankOGhQ": "smartwatch-us-en.jpg",
+    "kLKaNZCQcI8": "security-camera-us-en.jpg"
   },
   "tutorials_private": true
 }
