@@ -1,4 +1,4 @@
-# GEO Otopilot raporu — 2026-11-15
+# GEO Otopilot raporu — 2026-11-17
 
 Mod: **ücretsiz kontrol** · Harcanan: **0 $** (tavan 0.4 $)
 
