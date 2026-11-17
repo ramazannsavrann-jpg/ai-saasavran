@@ -6,7 +6,7 @@ import { api, INTENT_LABEL, type Brand, type BrandAction, type PromptResult, typ
 import { friendlyError, sb } from "../lib/supabase";
 import { L, isEn } from "../lib/i18n";
 import { ERROR_CLASS_TEXT, STOP_TEXT, runStatusText } from "../lib/messages";
-import { actionImpact, compareProducts, engineComparison, engineScoreChanges, perceptionSummary, scoreChange, visibilityScore, type ScoreInput, type ScorePartKey, ownedSourceShare, visibilityForecast, sourcesByEngine, rivalReasons, conditionMap, lossCards, productVisibility, promptKind, shoppingSources, sourceDominance, splitByKind, type EngineCompareRow, type LossCard, type SourceRow } from "../../../engine/src/insights.ts";
+import { actionImpact, compareProducts, engineComparison, engineScoreChanges, perceptionSummary, scoreChange, visibilityScore, type ScoreInput, type ScorePartKey, ownedSourceShare, ownCitedRivals, visibilityForecast, sourcesByEngine, rivalReasons, conditionMap, lossCards, productVisibility, promptKind, shoppingSources, sourceDominance, splitByKind, type EngineCompareRow, type LossCard, type SourceRow } from "../../../engine/src/insights.ts";
 import { competitorsInRun, formatDate, formatDateTime, MIN_SAMPLE, numLoc, pct, providerLabel, rangeText, series, shareSummary, sourceOpportunities, topDomains, usd } from "../lib/report";
 import { Button, Confirm, DataNotice, Empty, ErrorBox, Field, Loading, Select, TypeBadge } from "../components/ui";
 import { CompareBars, TrendChart } from "../components/Chart";
@@ -14,6 +14,7 @@ import { StartGuide } from "../components/StartGuide";
 import { downloadCsv, fileSlug } from "../lib/csv";
 import { buildRecommendations, type RecInput } from "../../../engine/src/recommendations.ts";
 import { relatedBrand, untrackedNames } from "../../../engine/src/metrics.ts";
+import { aiVsShopping, type AiShopBrand } from "../../../engine/src/shopping.ts";
 import { campaignFor, taskProgress } from "../../../engine/src/campaign.ts";
 import { guessIntent } from "../../../engine/src/discovery.ts";
 import { sourceNetwork } from "../../../engine/src/network.ts";
@@ -308,8 +309,8 @@ function ProductVisibilityView({ vis, loading, hasRuns }: { vis: ReturnType<type
 }
 
 /** Google Shopping görünürlüğü: haftalık (ya da istekle) Google Shopping araması; ürününüzün ve rakip ürünlerin sırası, fiyatı, satıcısı. */
-function ShoppingView({ product, rivals, checks, paidAllowed, manualShopping, onChange, onError, onMsg }: {
-  product: Product; rivals: Product[]; checks: ShoppingCheck[]; paidAllowed: boolean; manualShopping: boolean;
+function ShoppingView({ product, rivals, checks, paidAllowed, manualShopping, aiBrands, onChange, onError, onMsg }: {
+  product: Product; rivals: Product[]; checks: ShoppingCheck[]; paidAllowed: boolean; manualShopping: boolean; aiBrands: AiShopBrand[];
   onChange: () => void; onError: (m: string) => void; onMsg: (m: string) => void;
 }) {
   const [busy, setBusy] = useState(false);
@@ -350,6 +351,23 @@ function ShoppingView({ product, rivals, checks, paidAllowed, manualShopping, on
         <p className="src-sup">{last.own_position
           ? (isEn() ? `Your product is #${last.own_position} of ${last.items.length} listings${last.own_price ? `, ${last.own_price}` : ""}${last.own_seller ? ` (${last.own_seller})` : ""}.${last.own_count > 1 ? ` It appears in ${last.own_count} listings.` : ""}` : `Ürününüz ${last.items.length} ilan içinde ${last.own_position}. sırada${last.own_price ? `, ${last.own_price}` : ""}${last.own_seller ? ` (${last.own_seller})` : ""}.${last.own_count > 1 ? ` Toplam ${last.own_count} ilanda geçiyor.` : ""}`)
           : (isEn() ? `Your product is not among the first ${last.items.length} listings.` : `Ürününüz ilk ${last.items.length} ilan arasında yok.`)}{change}</p>
+        {aiBrands.length > 1 && last.items.length > 0 && (() => {
+          const c = aiVsShopping(aiBrands, last.items);
+          if (!c.aiTop && !c.ownAiRank) return null;
+          const parts: string[] = [];
+          if (c.aiTop) parts.push(isEn() ? `AI's most recommended brand: ${c.aiTop}.` : `Yapay zekânın en çok önerdiği marka: ${c.aiTop}.`);
+          if (c.shopTop) parts.push(isEn() ? `Google Shopping's #1 listing for this search: ${c.shopTop}.` : `Bu aramada Google Shopping'in 1. sırası: ${c.shopTop}.`);
+          parts.push(isEn()
+            ? `You: ${c.ownAiRank ? `#${c.ownAiRank} in AI recommendations` : "not recommended by AI"}, ${c.ownShopPos ? `#${c.ownShopPos} on Shopping` : "not in the Shopping results"}.`
+            : `Siz: yapay zekâda ${c.ownAiRank ? `${c.ownAiRank}. sırada` : "önerilmiyorsunuz"}, Shopping'de ${c.ownShopPos ? `${c.ownShopPos}. sırada` : "listede yoksunuz"}.`);
+          return (
+            <div className="loss-card">
+              <p className="loss-title">{c.differ ? L("Yapay zekâ ile Google Shopping farklı markayı öne çıkarıyor", "AI and Google Shopping put different brands first") : L("Yapay zekâ ↔ Google Shopping", "AI ↔ Google Shopping")}</p>
+              <p>{parts.join(" ")}</p>
+              <p className="loss-note muted">{L("Yapay zekâ sırası son canlı ölçümdeki önerilme sayısından, Shopping sırası tek bir aramadan gelir. Shopping sırası satış sıralaması değildir.", "The AI order comes from recommendation counts in the latest live measurement; the Shopping order from a single search. Shopping order is not a sales ranking.")}</p>
+            </div>
+          );
+        })()}
         {last.rivals.length > 0 && <p className="src-sup">{L("Rakip ürünler: ", "Competitor products: ")}{last.rivals.map((r) => isEn() ? `${nameOf(r.id)} #${r.position}${r.price ? ` (${r.price})` : ""}` : `${nameOf(r.id)} ${r.position}. sırada${r.price ? ` (${r.price})` : ""}`).join(", ")}.</p>}
         {items.length > 0 && <ol className="src-sup shop-list">{items.map((i) => (
           <li key={i.position} value={i.position}>{i.match ? <strong>{i.title}</strong> : i.title}<span className="muted">{i.source ? ` · ${i.source}` : ""}{i.price ? ` · ${i.price}` : ""}{i.match?.kind === "own" ? L(" · sizin ürününüz", " · your product") : i.match?.kind === "rival" ? L(" · rakip ürün", " · competitor product") : ""}</span></li>
@@ -382,6 +400,21 @@ function Products({ brand, paidAllowed, manualShopping }: { brand: Brand; paidAl
     .map((t) => (runs.data ?? []).find((r) => r.status === "done" && r.measurement_type === t)?.id).filter((x): x is string => !!x);
   const visAnswers = useLoad(() => Promise.all(lastIds.map((id) => api.answers(id))).then((a) => a.flat()), [lastIds.join(",")]);
   const visComps = useLoad(() => api.competitors(brand.id), [brand.id]);
+  const visLive = useLoad(() => api.visibility(brand.id, "live_search"), [brand.id]);
+  // Yapay zekâ ↔ Shopping: son canlı ölçümde her markanın önerilme sayısı (motorlar toplamı)
+  const aiBrands: AiShopBrand[] = (() => {
+    const rows = visLive.data ?? [];
+    const lastRun = [...rows].sort((a, b) => b.run_at.localeCompare(a.run_at))[0]?.run_id;
+    if (!lastRun) return [];
+    const all = [brand, ...(visComps.data ?? [])];
+    const m = new Map<string, AiShopBrand>();
+    for (const r of rows.filter((x) => x.run_id === lastRun)) {
+      const b = all.find((x) => x.id === r.brand_id);
+      const cur = m.get(r.brand_id) ?? { name: r.brand_name, aliases: b?.aliases ?? [], recommended: 0, isTarget: r.is_target };
+      cur.recommended += r.recommended; m.set(r.brand_id, cur);
+    }
+    return [...m.values()];
+  })();
   const [busy, setBusy] = useState<string | null>(null);
   const [err, setErr] = useState<string | null>(null);
   const [msg, setMsg] = useState<string | null>(null);
@@ -438,7 +471,7 @@ function Products({ brand, paidAllowed, manualShopping }: { brand: Brand; paidAl
                       </div>
                     );
                   })()}
-                  <ShoppingView product={p} rivals={rivals} checks={(shop.data ?? []).filter((c) => c.product_id === p.id)} paidAllowed={paidAllowed} manualShopping={manualShopping}
+                  <ShoppingView product={p} rivals={rivals} checks={(shop.data ?? []).filter((c) => c.product_id === p.id)} paidAllowed={paidAllowed} manualShopping={manualShopping} aiBrands={aiBrands}
                     onChange={() => { products.reload(); shop.reload(); }} onError={setErr} onMsg={setMsg} />
                   <RivalCompare own={p} rivals={rivals} brand={brand} answers={visAnswers.data ?? null} hasRuns={lastIds.length > 0} onChange={products.reload} onError={setErr} />
                   <ProductVisibilityView loading={runs.loading || visAnswers.loading || visComps.loading} hasRuns={lastIds.length > 0}
@@ -891,6 +924,21 @@ function Report({ brand, type, onBrandChange, paid = false }: { brand: Brand; ty
                       <li><span className="dot own-third" /> {L("Üçüncü taraf", "Third-party")}: <strong>{part(o.thirdParty, o.total)}</strong> <span className="muted">({o.thirdParty})</span></li>
                     </ul>
                     <p className="muted">{isEn() ? `Your site was cited in ${o.answersCitingOwn} of ${o.answersWithSources} answers that cited sources.` : `Kaynak gösteren ${o.answersWithSources} cevabın ${o.answersCitingOwn} tanesinde sitenize yer verildi.`}</p>
+                    {(() => {
+                      const r = ownCitedRivals(answers.data!, ments.data!, insightBrands);
+                      if (!r.citingOwn || !r.rivals.length) return null;
+                      const top = r.rivals[0];
+                      return (
+                        <div className="loss-card" id="kendi-site-rakip">
+                          <p className="loss-title">{L("Siteniz kaynak gösterildi, rakip de önerildi", "Your site was cited, a competitor was recommended too")}</p>
+                          <p>{isEn()
+                            ? `In the ${r.citingOwn} answers that cited your site, you were recommended in ${r.ownRecommended}; ${top.name} was recommended in ${top.count}.${r.rivalOnly ? ` In ${r.rivalOnly} of them only competitors were recommended.` : ""}`
+                            : `Sitenizin kaynak gösterildiği ${r.citingOwn} cevabın ${r.ownRecommended} tanesinde siz, ${top.count} tanesinde ${top.name} önerildi.${r.rivalOnly ? ` Bunların ${r.rivalOnly} tanesinde yalnız rakip önerildi.` : ""}`}</p>
+                          {r.rivals.length > 1 && <p className="src-sup">{L("Bu cevaplarda önerilen diğer rakipler: ", "Other competitors recommended in these answers: ")}{r.rivals.slice(1, 4).map((x) => `${x.name} (${x.count})`).join(", ")}</p>}
+                          <p className="loss-note muted">{L("Kaynak gösterilmesi, yapay zekânın o sayfadaki sonucu benimsediği anlamına gelmez. Sayfanızda rakiplerle karşılaştırma ya da genel rehber içeriği varsa yapay zekâ oradan rakipleri de alabilir.", "Being cited doesn't mean the AI adopted that page's conclusion. If your page compares competitors or is a general guide, the AI may pick competitors from it too.")}</p>
+                        </div>
+                      );
+                    })()}
                     {o.byEngine.length > 1 && (
                       <ul className="own-engines">{o.byEngine.map((e) => <li key={e.provider}><strong>{providerLabel(e.provider)}</strong>: {L("siz", "you")} {part(e.own, e.total)} · {L("rakip", "rivals")} {part(e.competitor, e.total)} · {L("üçüncü taraf", "third-party")} {part(e.thirdParty, e.total)}</li>)}</ul>
                     )}

@@ -640,3 +640,41 @@ export function perceptionSummary(answers: { id: string; provider?: string }[], 
   out.byEngine = [...eng.values()].sort((a, b) => a.provider.localeCompare(b.provider));
   return out;
 }
+
+// ---------------- Kendi siteniz kaynak gösterildi ama rakip önerildi ----------------
+export interface OwnCitedResult {
+  /** Sitenizin kaynak gösterildiği cevap sayısı */
+  citingOwn: number;
+  /** Bu cevapların kaçında siz önerildiniz */
+  ownRecommended: number;
+  /** Siz önerilmediniz ama en az bir rakip önerildi */
+  rivalOnly: number;
+  /** Bu cevaplarda önerilen rakipler (çoktan aza) */
+  rivals: { id: string; name: string; count: number }[];
+}
+/**
+ * Yapay zekâ cevabında sizin siteniz kaynak gösterildiğinde kim önerildi? Kaynak gösterilmesi, o sayfadaki
+ * sonucun benimsendiği anlamına gelmez; bu yalnız birlikte görülmeyi sayar. Ek API çağrısı yok.
+ */
+export function ownCitedRivals(answers: InsightAnswer[], mentions: InsightMention[], brands: InsightBrand[]): OwnCitedResult {
+  const target = brands.find((b) => b.isTarget);
+  const out: OwnCitedResult = { citingOwn: 0, ownRecommended: 0, rivalOnly: 0, rivals: [] };
+  if (!target?.website) return out;
+  const byResp = new Map<string, InsightMention[]>();
+  for (const m of mentions) { const l = byResp.get(m.response_id) ?? []; l.push(m); byResp.set(m.response_id, l); }
+  const counts = new Map<string, number>();
+  for (const a of answers) {
+    const keys = [...new Set((a.cited_urls ?? []).map(siteKey).filter(Boolean))];
+    if (!keys.some((k) => ownerOf(k, brands).owner === "target")) continue;
+    out.citingOwn++;
+    const ms = byResp.get(a.id) ?? [];
+    const own = ms.some((m) => m.brand_id === target.id && m.recommended);
+    const rivals = ms.filter((m) => m.brand_id !== target.id && m.recommended).map((m) => m.brand_id);
+    if (own) out.ownRecommended++;
+    else if (rivals.length) out.rivalOnly++;
+    for (const id of new Set(rivals)) counts.set(id, (counts.get(id) ?? 0) + 1);
+  }
+  out.rivals = [...counts].map(([id, count]) => ({ id, name: brands.find((b) => b.id === id)?.name ?? "?", count }))
+    .sort((x, y) => y.count - x.count || x.name.localeCompare(y.name));
+  return out;
+}

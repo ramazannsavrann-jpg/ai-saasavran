@@ -11,6 +11,12 @@
 > iddia yazabiliyordu (Trojan ölçümü). Artık iddianın dili cevaptakinden farklıysa cevaptaki alıntı gösterilir; bilgi
 > kartından farklı dilde yazılmış "resmî bilgi" boş bırakılır (`guessLang`, kural tabanlı, API yok).
 
+> **18 Kasım (içgörü kartları + site metni):** (1) Kendi site payı panelinde "Siteniz kaynak gösterildi, rakip de
+> önerildi" kartı (`ownCitedRivals`). (2) Ürünler sekmesinde Google Shopping altında "Yapay zekâ ↔ Google Shopping"
+> kartı: yapay zekânın en çok önerdiği marka, Shopping'in 1. sırası, sizin iki taraftaki sıranız (`aiVsShopping`).
+> İkisi de mevcut veriden; ek API yok. Ana sayfaya (TR+EN) "Raporda neler var?" bölümü: motor farkı, kanıt kartları,
+> kaynak etkisi, TruthGuard, yapay zekâ ↔ Shopping, aynı şirket birleştirme. Hero motor listesi güncellendi.
+
 > **17 Kasım (PDF temizliği):** Marka sayfası PDF'e kaydedilirken paylaşım paneli, Google soruları paneli,
 > düğmeler ve formlar artık çıkmıyor (`no-print`); "Cevaplarda geçen diğer adlar" PDF'te düz liste olarak kalıyor. Playwright yerleşim testi PDF görünümünü de denetliyor.
 

@@ -145,7 +145,7 @@ const home = `
 <section class="hero">
   <div class="hero-copy">
     <h1>Müşteriniz yapay zekâya sorduğunda markanız cevapta mı?</h1>
-    <p class="lede">AI SaaSavran, müşterilerinizin ChatGPT ve Gemini'ye soracağı soruları sorar; markanızın anılıp anılmadığını, önerilip önerilmediğini ve sizin yerinize hangi rakibin önerildiğini ölçer.</p>
+    <p class="lede">AI SaaSavran, müşterilerinizin ChatGPT, Claude, Perplexity ve Gemini'ye soracağı soruları sorar; markanızın anılıp anılmadığını, önerilip önerilmediğini ve sizin yerinize hangi rakibin önerildiğini ölçer.</p>
     <p class="actions"><a class="btn" href="/kayit">Ücretsiz başla</a><a class="btn ghost" href="/tr/kontrol/">Üye olmadan dene</a></p>
     <p class="small">Ücretsiz paket: 1 marka, 15 soru, ayda 4 ölçüm. Kart bilgisi istenmez. <a href="#fiyatlar">Fiyatlar</a></p>
   </div>
@@ -172,6 +172,19 @@ ${demoHtml(false)}
   </div>
 </section>
 
+<section class="band">
+  <h2>Raporda neler var?</h2>
+  <div class="trio">
+    <div><h3>Motor farkı</h3><p>Aynı soruda Claude sizi öneriyor, ChatGPT önermiyor mu? Her motor ayrı gösterilir, büyük farklar işaretlenir.</p></div>
+    <div><h3>Neden önerilmediniz?</h3><p>Önerilmediğiniz her soru için kanıt kartı: yerinize kim önerildi, cevap hangi sitelere dayandı.</p></div>
+    <div><h3>Kaynak etkisi</h3><p>Hangi site hangi markanın önerilmesine katkı veriyor? Kendi siteniz kaynak gösterilip yine de rakip önerildiyse ayrıca belirtilir.</p></div>
+    <div><h3>Bilgi doğruluğu (TruthGuard)</h3><p>Yapay zekânın ürünleriniz hakkında söylediklerini sizin girdiğiniz resmî bilgilerle karşılaştırır: doğru, yanlış, doğrulanamadı.</p></div>
+    <div><h3>Yapay zekâ ↔ Google Shopping</h3><p>Yapay zekânın en çok önerdiği marka ile Google Shopping'de 1. sıradaki aynı mı? Ürünleriniz haftada bir aranır.</p></div>
+    <div><h3>Aynı şirket, tek rakip</h3><p>Bir rakibin alt markası ya da sahibi olan şirket cevaplarda ayrı adla geçerse birleştirmeniz önerilir; aynı şirket iki kez sayılmaz.</p></div>
+  </div>
+  <p class="small">Motor farkı, kaynak etkisi, TruthGuard ve Google Shopping canlı aramalı ölçümde, ücretli paketlerdedir.</p>
+</section>
+
 <section class="honest">
   <h2>Kendi markamızı ölçtük: 20 cevabın 0'ı</h2>
   <p>AI SaaSavran'ı kendi ürünümüzle, ChatGPT'nin canlı web aramasıyla ölçtük. Yeni bir marka olarak hiçbir cevapta önerilmedik; rakiplerimiz 20 cevabın 5 ila 8'inde önerildi. Sonuçları saklamıyoruz, çünkü ürünün ne işe yaradığını en iyi bu gösteriyor: nerede olduğunuzu bilmeden ilerleyemezsiniz.</p>
@@ -195,6 +208,7 @@ ${demoHtml(false)}
     <li class="ok">ChatGPT, Claude ve Perplexity ile canlı aramalı ölçüm ve kaynak analizi: ücretli paketlerde, motor bazında.</li>
     <li class="ok">Üye olmadan ücretsiz kontrol (ayda 2 kez).</li>
     <li class="ok">Önerilmediğiniz sorular için kanıtlar ve "kaynaklar kimi destekliyor" tablosu: canlı aramalı ölçümde.</li>
+    <li class="ok">Ürünler: TruthGuard bilgi doğruluğu kontrolü ve haftalık Google Shopping sırası (ücretli paketlerde).</li>
     <li class="no">Ayrı PDF dosyası üretilmez; PDF, tarayıcının yazdır penceresiyle alınır.</li>
   </ul>
   <p><a href="/durum">Ayrıntılı ürün durumu</a></p>
@@ -210,7 +224,7 @@ const enHome = `
 <section class="hero">
   <div class="hero-copy">
     <h1>When customers ask AI for a recommendation, are you in the answer?</h1>
-    <p class="lede">AI SaaSavran asks ChatGPT and Gemini the questions your customers ask, then shows whether your business is mentioned, recommended, or passed over for a competitor, and which websites the AI relied on.</p>
+    <p class="lede">AI SaaSavran asks ChatGPT, Claude, Perplexity and Gemini the questions your customers ask, then shows whether your business is mentioned, recommended, or passed over for a competitor, and which websites the AI relied on.</p>
     <p class="actions"><a class="btn" href="/kayit">Start free</a><a class="btn ghost" href="/check/">Try it without signing up</a></p>
     <p class="small">Free plan: 1 brand, 15 questions, 4 measurements a month. No card. <a href="#pricing">See pricing</a></p>
   </div>
@@ -237,6 +251,19 @@ ${demoHtml(true)}
   </div>
 </section>
 
+<section class="band">
+  <h2>What's in the report</h2>
+  <div class="trio">
+    <div><h3>Engine gaps</h3><p>Does Claude recommend you while ChatGPT doesn't? Every engine is shown separately and large gaps are flagged.</p></div>
+    <div><h3>Why you weren't recommended</h3><p>An evidence card for each question you lost: who was recommended instead and which sites the answer relied on.</p></div>
+    <div><h3>Source impact</h3><p>Which site helps which brand get recommended? If your own site was cited and a competitor was still recommended, we point it out.</p></div>
+    <div><h3>Fact check (TruthGuard)</h3><p>Compares what AI says about your products with the official facts you enter: correct, wrong, or can't be verified.</p></div>
+    <div><h3>AI ↔ Google Shopping</h3><p>Is AI's most recommended brand also #1 on Google Shopping? Your products are searched once a week.</p></div>
+    <div><h3>One company, one competitor</h3><p>When a competitor's sub-brand or parent company shows up under another name, you're prompted to merge them, so one company isn't counted twice.</p></div>
+  </div>
+  <p class="small">Engine gaps, source impact, TruthGuard and Google Shopping are part of live-search measurement on paid plans.</p>
+</section>
+
 <section class="honest">
   <h2>We measured ourselves first: 0 out of 20</h2>
   <p>We ran AI SaaSavran on our own brand with ChatGPT's live web search. As a new brand we were recommended in none of 20 answers; established competitors appeared in 5 to 8. We publish it because it shows why measurement comes first: you can't improve what you can't see.</p>
@@ -261,6 +288,7 @@ ${demoHtml(true)}
     <li class="ok">Free check without signing up (2 a month).</li>
     <li class="ok">App in English and Turkish.</li>
     <li class="ok">Evidence on questions where a competitor was recommended instead of you, and which brands each source supports: in live-search measurements.</li>
+    <li class="ok">Products: TruthGuard fact check and weekly Google Shopping position (paid plans).</li>
     <li class="no">No separate PDF file is generated; PDFs are saved from the browser's print dialog.</li>
   </ul>
 </section>
