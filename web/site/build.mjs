@@ -150,14 +150,14 @@ const home = `
     <p class="small">Ücretsiz paket: 1 marka, 15 soru, ayda 4 ölçüm. Kart bilgisi istenmez. <a href="#fiyatlar">Fiyatlar</a></p>
   </div>
   <figure class="answer-card" aria-label="Örnek yapay zekâ cevabı">
-    <figcaption><span class="q">Türkiye'de en iyi mobil bankacılık uygulaması hangisi?</span></figcaption>
+    <figcaption><span class="q">What is the best smartwatch to buy this Black Friday?</span></figcaption>
     <blockquote>
-      <p>1. <mark class="hit">Banka C</mark>'nin mobil uygulaması …</p>
-      <p>2. <mark class="hit">Banka A</mark> …</p>
-      <p>3. <mark class="hit alt">Banka B</mark> …</p>
+      <p>1. <mark class="hit">Apple Watch</mark> …</p>
+      <p>2. <mark class="hit">Garmin</mark> …</p>
+      <p>3. <mark class="hit alt">Samsung Galaxy Watch</mark> …</p>
     </blockquote>
-    <p class="cite">Kaynaklar: bankaların kendi siteleri · bddk.gov.tr</p>
-    <p class="caption">Temsilî gösterim, gerçek ölçümümüze dayanır (ChatGPT, canlı web aramasıyla, 7 Kasım 2026, 10 cevap). Banka adları gizlendi.</p>
+    <p class="cite">Kaynaklar: techradar.com · tomsguide.com · wired.com</p>
+    <p class="caption">Temsilî gösterim, gerçek ölçümümüze dayanır: ChatGPT, Claude ve Perplexity, ABD'den canlı web aramasıyla, 17 Kasım 2026, 48 cevap. Önerildiği cevap sayısı: Apple Watch 42, Garmin 37, Galaxy Watch 27, Pixel Watch 26, Amazfit 7.</p>
   </figure>
 </section>
 <section class="demo daily" id="daily" data-lang="tr" hidden aria-labelledby="daily-h"></section>
@@ -229,14 +229,14 @@ const enHome = `
     <p class="small">Free plan: 1 brand, 15 questions, 4 measurements a month. No card. <a href="#pricing">See pricing</a></p>
   </div>
   <figure class="answer-card" aria-label="Example AI answer">
-    <figcaption><span class="q">What are the best tools to track brand visibility in AI answers?</span></figcaption>
+    <figcaption><span class="q">What is the best smartwatch to buy this Black Friday?</span></figcaption>
     <blockquote>
-      <p>1. <mark class="hit">Tool A</mark> …</p>
-      <p>2. <mark class="hit">Tool B</mark> …</p>
-      <p>3. <mark class="hit alt">Tool C</mark> …</p>
+      <p>1. <mark class="hit">Apple Watch</mark> …</p>
+      <p>2. <mark class="hit">Garmin</mark> …</p>
+      <p>3. <mark class="hit alt">Samsung Galaxy Watch</mark> …</p>
     </blockquote>
-    <p class="cite">Sources: the tools' own websites and help centres</p>
-    <p class="caption">Illustration based on our real measurement (ChatGPT with live web search, 7 Nov 2026, 20 answers): Tool A 8/20, Tool B 7/20, Tool C 7/20. We were 0/20. Tool names are hidden.</p>
+    <p class="cite">Sources: techradar.com · tomsguide.com · wired.com</p>
+    <p class="caption">Illustration based on our real measurement: ChatGPT, Claude and Perplexity with live web search from the US, 17 Nov 2026, 48 answers. Recommended in: Apple Watch 42, Garmin 37, Galaxy Watch 27, Pixel Watch 26, Amazfit 7.</p>
   </figure>
 </section>
 <section class="demo daily" id="daily" data-lang="en" hidden aria-labelledby="daily-h"></section>
