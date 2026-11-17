@@ -7,6 +7,9 @@
 > **Erken erişim.** Ödeme (Paddle) ve haftalık e-posta (Resend) kodu hazır ve testli, ancak gerçek bir ödeme
 > ve gerçek bir gelen kutusu teslimi uçtan uca henüz doğrulanmadı. Hukuki metinleri avukat incelemedi.
 
+> **17 Kasım (PDF temizliği):** Marka sayfası PDF'e kaydedilirken paylaşım paneli, Google soruları paneli,
+> düğmeler ve formlar artık çıkmıyor (`no-print`); "Cevaplarda geçen diğer adlar" PDF'te düz liste olarak kalıyor. Playwright yerleşim testi PDF görünümünü de denetliyor.
+
 > **17 Kasım (rakip birleştirme):** "Cevaplarda geçen diğer adlar" bölümüne "Bir rakibin diğer adı / alt markası"
 > seçeneği eklendi. Cevap bir adı bilinen bir rakibin alt markası gibi anlatıyorsa ("premium version of MACFit") panel
 > "… ile birleştir" önerir (`relatedBrand`, kural tabanlı, API yok). Kullanıcı onaylamadan birleştirme yapılmaz;

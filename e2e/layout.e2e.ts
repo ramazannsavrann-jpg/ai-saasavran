@@ -67,4 +67,23 @@ test("üst menü ve sayfalar hiçbir genişlikte taşmaz", async ({ page }) => {
     await page.goto("/panel");
     await page.screenshot({ path: `${SHOTS}/40-ust-menu-${width}.png` });
   }
+
+  // PDF / yazdırma görünümü: yalnız rapor içeriği. Düğme, form, paylaşım ve ayar panelleri PDF'e girmez.
+  await page.setViewportSize({ width: 412, height: 900 });
+  for (const url of [brandUrl, `${brandUrl.split("?")[0]}?sekme=sorular`]) {
+    await page.goto(url);
+    await page.waitForLoadState("networkidle");
+    await page.emulateMedia({ media: "print" });
+    const leaks = await page.evaluate(() => {
+      const vis = (el: Element) => { const r = (el as HTMLElement).getBoundingClientRect(); return r.width > 0 && r.height > 0 && getComputedStyle(el).visibility !== "hidden"; };
+      const ctrls = [...document.querySelectorAll("button:not(.chip), input, select, textarea, form, .btn")].filter(vis).map((e) => (e.textContent || e.tagName).trim().slice(0, 40));
+      const panels = [...document.querySelectorAll("h2")].filter(vis).map((h) => h.textContent?.trim() ?? "")
+        .filter((t) => /Raporu paylaş|Markayı sil|Gerçek sorular \(Google\)/i.test(t));
+      return { ctrls, panels };
+    });
+    expect(leaks.ctrls, `PDF'te düğme/form görünüyor (${url})`).toEqual([]);
+    expect(leaks.panels, `PDF'te ayar/paylaşım paneli görünüyor (${url})`).toEqual([]);
+    await page.screenshot({ path: `${SHOTS}/41-pdf-${url.includes("sorular") ? "sorular" : "marka"}.png`, fullPage: true });
+    await page.emulateMedia({ media: "screen" });
+  }
 });

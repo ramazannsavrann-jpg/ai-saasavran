@@ -192,7 +192,7 @@ function ReportSharePanel({ brand }: { brand: Brand }) {
     } catch { /* kullanıcı vazgeçti */ }
   }
   return (
-    <section className="panel stack">
+    <section className="panel stack no-print">
       <h2>{L("Raporu paylaş", "Share the report")}</h2>
       <p className="muted">{L("Bağlantıyı bilen herkes giriş yapmadan raporu görür: son ölçümün sayıları, rakip karşılaştırması, sorular ve kaynak siteler. Cevap metinleri gösterilmez. Rapor sayfasında \"PDF olarak kaydet\" düğmesi var. İstediğiniz zaman iptal edebilirsiniz.", "Anyone with the link can view the report without signing in: latest numbers, competitor comparison, questions and source sites. Answer texts are not shown. The report page has a \"Save as PDF\" button. You can revoke it anytime.")}</p>
       <form className="row-form" onSubmit={create} aria-label={L("Paylaşım bağlantısı oluştur", "Create share link")}>
@@ -1064,7 +1064,7 @@ function GoogleQuestions({ brand, existing, canAdd, onAdd, busy }: { brand: Bran
     catch (e) { setErr(friendlyError(e)); }
   }
   return (
-    <section className="panel" id="gercek-sorular">
+    <section className="panel no-print" id="gercek-sorular">
       <h2>{L("Gerçek sorular (Google)", "Real questions (Google)")}</h2>
       <p className="muted">{L("İnsanların Google'da sektörünüzle ilgili sorduğu sorular (\"Diğer kişiler şunları da sordu\" ve ilgili aramalar). Yapay zekâya sorulan soruların sayısını hiçbir şirket yayımlamıyor; bu, gerçek talebe en yakın veri.", "Questions people ask Google about your sector (\"People also ask\" and related searches). No company publishes how often things are asked to AI assistants; this is the closest real demand data.")}</p>
       {!paid ? (

@@ -385,11 +385,13 @@ form > .btn, .stack > .btn { width: 100%; }
 @media print {
   @page { margin: 14mm; }
   body { background: #fff !important; color: #000 !important; }
-  header, nav, footer, .topnav, .share-row, .run-buttons, form, button, .btn, .chip-actions, .skip-link { display: none !important; }
+  header, nav, footer, .topnav, .bottomnav, .share-row, .run-buttons, form, button, .btn, select, input, textarea, .chip-actions, .skip-link, .no-print { display: none !important; }
   .panel, .card { box-shadow: none !important; border: 1px solid #ccc !important; break-inside: avoid; }
   a { color: #000 !important; text-decoration: none !important; }
   main, .content { padding: 0 !important; max-width: none !important; }
   .chart, .bars li { break-inside: avoid; }
+  /* "Cevaplarda geçen diğer adlar": ad çipleri düğmedir; PDF'te düz yazı olarak kalır */
+  .name-chips .chip { display: inline-block !important; border: 1px solid #ccc !important; background: none !important; color: #000 !important; }
 }
 
 .check-row { display: flex; gap: 10px; align-items: flex-start; cursor: pointer; }
