@@ -291,12 +291,30 @@
         "AI Product Comparisons",
         "AI SaaSavran – English Content"
       ]
+    },
+    "l4AQgjOEzgw": {
+      "lang": "tr",
+      "lists": [
+        "Kasım Fırsatları",
+        "Yapay Zekâ Ürün Karşılaştırmaları",
+        "AI SaaSavran – Türkçe İçerikler"
+      ]
+    },
+    "o-D7BHM7iKA": {
+      "lang": "tr",
+      "lists": [
+        "Kasım Fırsatları",
+        "Yapay Zekâ Ürün Karşılaştırmaları",
+        "AI SaaSavran – Türkçe İçerikler"
+      ]
     }
   },
   "delete": [],
   "force": [
     "Uw56ankOGhQ",
-    "kLKaNZCQcI8"
+    "kLKaNZCQcI8",
+    "l4AQgjOEzgw",
+    "o-D7BHM7iKA"
   ],
   "thumbnails": {
     "pulZMgYWQqI": "egitim1-tr.jpg",
@@ -310,7 +328,9 @@
     "kiRo17X4d8I": "egitim5-tr.jpg",
     "oMSJy9XWwtM": "egitim5-en.jpg",
     "Uw56ankOGhQ": "smartwatch-us-en.jpg",
-    "kLKaNZCQcI8": "security-camera-us-en.jpg"
+    "kLKaNZCQcI8": "security-camera-us-en.jpg",
+    "l4AQgjOEzgw": "smartwatch-us-tr.jpg",
+    "o-D7BHM7iKA": "security-camera-us-tr.jpg"
   },
   "tutorials_private": true
 }
