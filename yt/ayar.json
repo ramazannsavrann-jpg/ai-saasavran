@@ -273,10 +273,21 @@
         "AI SaaSavran | Tutorials & User Guide",
         "AI SaaSavran – English Content"
       ]
+    },
+    "Uw56ankOGhQ": {
+      "lang": "en",
+      "lists": [
+        "Black Friday AI Picks",
+        "AI Picks: US Edition",
+        "AI Product Comparisons",
+        "AI SaaSavran – English Content"
+      ]
     }
   },
   "delete": [],
-  "force": [],
+  "force": [
+    "Uw56ankOGhQ"
+  ],
   "thumbnails": {
     "pulZMgYWQqI": "egitim1-tr.jpg",
     "dgGNLhc6A3g": "egitim1-en.jpg",
@@ -287,7 +298,8 @@
     "5jzuc-vBtpw": "egitim4-tr.jpg",
     "MSDFkbbZmXU": "egitim4-en.jpg",
     "kiRo17X4d8I": "egitim5-tr.jpg",
-    "oMSJy9XWwtM": "egitim5-en.jpg"
+    "oMSJy9XWwtM": "egitim5-en.jpg",
+    "Uw56ankOGhQ": "smartwatch-us-en.jpg"
   },
   "tutorials_private": true
 }
