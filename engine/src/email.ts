@@ -115,8 +115,8 @@ export function buildWelcome(lang: "en" | "tr"): { subject: string; html: string
     canTitle: "Raporda neler var",
     can: [
       "Kaç cevapta anıldığınız ve önerildiğiniz; rakiplerle karşılaştırma ve haftalık değişim (güven aralığıyla).",
-      "Yapay zekânın baktığı kaynak siteler ve rakibinizi neden öne çıkardığı.",
-      "Kayıp nedeni kartları ve yapılacaklar listesi; web sitenizin yapay zekâya uygunluk kontrolü.",
+      "Yapay zekânın kaynak gösterdiği siteler ve rakibiniz önerildiğinde hangi sitelerin birlikte göründüğü.",
+      "Önerilmediğiniz sorular için kanıt kartları ve yapılacaklar listesi; web sitenizin yapay zekâya uygunluk kontrolü.",
       "Her pazartesi e-postayla kısa özet.",
     ],
     paidTitle: "Ücretli paketlerde ayrıca",
@@ -139,8 +139,8 @@ export function buildWelcome(lang: "en" | "tr"): { subject: string; html: string
     canTitle: "What the report shows",
     can: [
       "How often you're mentioned and recommended, compared with competitors, week over week (with confidence ranges).",
-      "The websites the AI relied on and why it favoured a competitor.",
-      "Loss cards and a to-do list; a check of how AI-ready your website is.",
+      "The websites the AI cited, and which sites appeared when a competitor was recommended.",
+      "Evidence cards for questions where you weren't recommended, and a to-do list; a check of how AI-ready your website is.",
       "A short summary by email every Monday.",
     ],
     paidTitle: "Paid plans also include",

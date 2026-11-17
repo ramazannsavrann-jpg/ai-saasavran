@@ -149,10 +149,10 @@ export function buildRecommendations(i: RecInput): Recommendation[] {
     add(en
       ? { id: "model_knowledge_note", priority: "düşük", title: "Changes can take time to show",
         why: "These measurements were made without live web search; model knowledge only updates with new training.",
-        action: "Improvements to your site show up first in assistants that search the web. In no-search measurement, change can take weeks or months; that's normal." }
+        action: "Improvements to your site show up first in assistants that search the web. No-search measurement reflects the model's training data; when or whether a change shows up there isn't known in advance." }
       : { id: "model_knowledge_note", priority: "düşük", title: "Değişikliklerin etkisi zaman alabilir",
         why: "Bu ölçümler canlı web araması olmadan yapıldı; modelin bilgisi ancak yeni eğitimlerle güncellenir.",
-        action: "Sitenizde yaptığınız iyileştirmeler önce canlı arama yapan asistanlarda etkisini gösterir. Aramasız ölçümde değişim haftalar veya aylar sürebilir; bu normaldir." });
+        action: "Sitenizde yaptığınız iyileştirmeler önce canlı arama yapan asistanlarda etkisini gösterir. Aramasız ölçüm modelin eğitim verisini yansıtır; değişikliğin orada ne zaman ya da yansıyıp yansımayacağı önceden bilinemez." });
   }
 
   // --- Kanıta dayalı ek maddeler (iyileştirme rehberi)

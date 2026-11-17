@@ -1,6 +1,6 @@
 // Yapay zekâ kaynak ağı: hangi siteyi hangi motorlar kaynak gösteriyor ve o sitenin geçtiği cevaplarda hangi markalar öneriliyor.
-// Rol etiketleri: "shared" (en az iki motorun ortak kaynağı), "rival" (rakibin kalesi: o sitenin cevaplarında rakip öneriliyor, siz hiç),
-// "yours" (sizin kaleniz), "neutral". API çağrısı yok.
+// Rol etiketleri: "shared" (en az iki motorun ortak kaynağı), "rival" (o sitenin cevaplarında yalnız rakip öneriliyor, siz hiç),
+// "yours" (o sitenin cevaplarında siz öneriliyorsunuz), "neutral". API çağrısı yok.
 import { siteKey, type InsightBrand } from "./insights.ts";
 
 export interface NetAnswer { id: string; provider: string; cited_urls: string[] | null }
