@@ -88,7 +88,7 @@ export function BrandPage() {
       {tab === "oneriler" && <Advice brand={b} type={type} runs={runs.data ?? []} onBrandChange={brand.reload} />}
       {tab === "rakipler" && <Competitors brand={b} />}
       {tab === "sorular" && <Questions brand={b} />}
-      {tab === "urunler" && <Products brand={b} paidAllowed={!!current?.paid_live_allowed} />}
+      {tab === "urunler" && <Products brand={b} paidAllowed={!!current?.paid_live_allowed} manualShopping={current?.kind === "growth_lab"} />}
       {tab === "olcumler" && <RunHistory runs={runs.data ?? []} loading={runs.loading && !runs.data} />}
     </div>
   );
@@ -308,8 +308,8 @@ function ProductVisibilityView({ vis, loading, hasRuns }: { vis: ReturnType<type
 }
 
 /** Google Shopping görünürlüğü: haftalık (ya da istekle) Google Shopping araması; ürününüzün ve rakip ürünlerin sırası, fiyatı, satıcısı. */
-function ShoppingView({ product, rivals, checks, paidAllowed, onChange, onError, onMsg }: {
-  product: Product; rivals: Product[]; checks: ShoppingCheck[]; paidAllowed: boolean;
+function ShoppingView({ product, rivals, checks, paidAllowed, manualShopping, onChange, onError, onMsg }: {
+  product: Product; rivals: Product[]; checks: ShoppingCheck[]; paidAllowed: boolean; manualShopping: boolean;
   onChange: () => void; onError: (m: string) => void; onMsg: (m: string) => void;
 }) {
   const [busy, setBusy] = useState(false);
@@ -364,14 +364,15 @@ function ShoppingView({ product, rivals, checks, paidAllowed, onChange, onError,
           <Button type="submit" variant="quiet" busy={busy}>{L("Kaydet", "Save")}</Button>
         </form>
       ) : <p className="src-sup"><span className="muted">{L("Aranan: ", "Searching: ")}</span>{product.shopping_query ?? L("marka ve ürün adı", "brand and product name")} <button className="link-btn" onClick={() => setEditing(true)}>{L("değiştir", "change")}</button></p>}
-      {paidAllowed && <button className="link-btn" disabled={pending || busy} onClick={request}>{pending ? L("Kontrol sırada", "Check queued") : L("Şimdi kontrol et", "Check now")}</button>}
+      {/* Elle kontrol yalnız test alanında (Growth Lab); müşteride haftada bir otomatik (17 Kasım kararı, SerpApi hakkı) */}
+      {paidAllowed && manualShopping && <button className="link-btn" disabled={pending || busy} onClick={request}>{pending ? L("Kontrol sırada", "Check queued") : L("Şimdi kontrol et", "Check now")}</button>}
       <p className="src-sup muted">{L("Google Shopping sonuçları konuma ve kişiye göre değişebilir; bu, markanızın ülkesinden yapılmış tek bir aramanın anlık görüntüsüdür. İlan başlıkları ürün adınızla eşleştirilir; farklı yazılmış ilanlar sayılmayabilir.", "Google Shopping results can vary by location and person; this is a snapshot of one search from your brand's country. Listing titles are matched to your product name; listings written differently may be missed.")}</p>
     </div>
   );
 }
 
 /** Ürün Doğruluğu (pilot): doğru bilgileri girilen ürünü ChatGPT'ye sorar, cevaptaki iddiaları bu bilgilerle karşılaştırır. */
-function Products({ brand, paidAllowed }: { brand: Brand; paidAllowed: boolean }) {
+function Products({ brand, paidAllowed, manualShopping }: { brand: Brand; paidAllowed: boolean; manualShopping: boolean }) {
   const products = useLoad(() => api.products(brand.id), [brand.id]);
   const checks = useLoad(() => api.productChecks((products.data ?? []).map((p) => p.id)), [(products.data ?? []).map((p) => p.id).join(",")]);
   const shop = useLoad(() => api.shoppingChecks((products.data ?? []).filter((p) => !p.rival_of).map((p) => p.id)), [(products.data ?? []).map((p) => `${p.id}:${p.shopping_requested_at ?? ""}`).join(",")]);
@@ -437,7 +438,7 @@ function Products({ brand, paidAllowed }: { brand: Brand; paidAllowed: boolean }
                       </div>
                     );
                   })()}
-                  <ShoppingView product={p} rivals={rivals} checks={(shop.data ?? []).filter((c) => c.product_id === p.id)} paidAllowed={paidAllowed}
+                  <ShoppingView product={p} rivals={rivals} checks={(shop.data ?? []).filter((c) => c.product_id === p.id)} paidAllowed={paidAllowed} manualShopping={manualShopping}
                     onChange={() => { products.reload(); shop.reload(); }} onError={setErr} onMsg={setMsg} />
                   <RivalCompare own={p} rivals={rivals} brand={brand} answers={visAnswers.data ?? null} hasRuns={lastIds.length > 0} onChange={products.reload} onError={setErr} />
                   <ProductVisibilityView loading={runs.loading || visAnswers.loading || visComps.loading} hasRuns={lastIds.length > 0}
