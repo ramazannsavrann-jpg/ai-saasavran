@@ -37,6 +37,13 @@ test("Shopping: başlık eşleşmesi tüm kelimeleri ve markayı ister; Türkçe
   assert.equal(titleMatches("Sony Wh-1000XM5 Kulak Üstü Kulaklık", { name: "WH-1000XM6", brand: "Sony" }), false, "önceki model");
   assert.equal(titleMatches("Marka A Kılıf Pro Taşıma Çantası", { name: "Kılıf Pro", brand: "Marka A" }), true, "ürün adının kendisi aksesuar kelimesi içeriyorsa");
   assert.equal(titleMatches("Marka A Rüzgar 2'yi alın", { name: "Rüzgar 2", brand: "Marka A" }), true);
+  // 17 Kasım canlı ABD ölçümü: saat ilanındaki "Case" kasadır; "for ..." ilanları aksesuardır
+  assert.equal(titleMatches("Apple Watch Series 11 GPS Case Sport Band", { name: "Apple Watch Series 11", brand: "Apple Watch" }), true, "saat kasası kılıf değil");
+  assert.equal(titleMatches("Apple Watch Series 12 GPS 42mm Black Aluminum Case with Black Sport Band - S/M", { name: "Apple Watch Series 12", brand: "Apple Watch" }), true);
+  assert.equal(titleMatches("Charger for Apple Watch Series 12, Magnetic USB-C Cable", { name: "Apple Watch Series 12", brand: "Apple Watch" }), false, "aksesuar: for ...");
+  assert.equal(titleMatches("AppleCare+ for Apple Watch Series 11", { name: "Apple Watch Series 11", brand: "Apple Watch" }), false, "garanti paketi");
+  assert.equal(titleMatches("Protective Case for Apple Watch Series 12 46mm", { name: "Apple Watch Series 12", brand: "Apple Watch" }), false, "koruyucu kılıf");
+  assert.equal(titleMatches("Sport Band Compatible with Apple Watch Series 12", { name: "Apple Watch Series 12", brand: "Apple Watch" }), false, "uyumlu kayış");
 });
 
 test("Shopping: kendi ürününüz ve rakip ürün sırası, fiyatı, satıcısı bulunur", () => {
