@@ -11,7 +11,8 @@ Güncel durum: `docs/STATUS.md` · Mimari: `docs/ARCHITECTURE.md` · Fiyat: `doc
 - Yalnızca Android telefon kullanıyor, bilgisayarı yok; yazılımda yeni. Türkçe konuş.
 - Kendisinin yapması gereken her adımı tek tek yaz; adres, ad, değer, secret adı gibi her şeyi
   ayrı satırda kopyala-yapıştır hazır ver.
-- PR'ları kendisi birleştirir (kolay, her zaman gönderilebilir). Panel/secret gibi elle işleri akşama topla.
+- Birleştirme için izin istenmez (18 Kasım kararı): testler geçince Claude dalı `main`'e kendisi birleştirir ve
+  sonucu bildirir. Panel/secret gibi elle işleri akşama topla.
 - Uzun işlerde kısa ara durum mesajı ver.
 
 ## Değişmez kurallar
