@@ -3,7 +3,6 @@ We measured five brands: Amazfit, Apple Watch, Garmin, Pixel Watch and Galaxy Wa
 Apple Watch was recommended in forty-two of forty-eight answers. Garmin came second. Amazfit, just seven.
 But each AI picks differently. ChatGPT never recommended Amazfit. Claude did, five times.
 Change the question, and the winner changes. For running, Pixel Watch got zero. For battery life, Garmin wins every time.
-Then we searched each watch by name on Google Shopping. Apple Watch, Garmin and Pixel Watch come up first. Amazfit's watch shows up eighteenth.
-Did AI get the facts right? We checked seventy-two claims against Apple's official specs. Twenty-seven were correct. None were wrong.
+Did AI get the facts right? We checked seventy-two claims against Apple's official specs. Twenty-seven were correct, none were wrong. And on Google Shopping, the top result for smartwatch is Amazfit, the brand AI recommended least.
 And where does AI look? Each line links a review site to the brands it helped recommend. Tech review sites, not brand websites, shape the answers.
 These are the AI's answers. What does AI say about your brand? Measure it free at A I Saa Savran dot com.
