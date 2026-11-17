@@ -816,3 +816,26 @@ test("Alt marka ipucu: 'Mars Athletic … premium version of MACFit' → MACFit;
   assert.equal(relatedBrand(["Neolife Gym is a local gym. MACFit is a chain."], "Neolife Gym", brands), null);
   assert.equal(relatedBrand(["MAC/One, MACFit markası olan Mars Athletic Club'ın lüks kulübüdür."], "Mars Athletic Club", brands), "MACFit");
 });
+
+test("TruthGuard: İngilizce cevaptan çevrilmiş (Çince/İspanyolca/Almanca) iddia, cevaptaki alıntıyla değiştirilir", async () => {
+  const { parseTruth, guessLang } = await import("../src/truth.ts");
+  const answer = "Trojan RAW or ONE UltraFeel — worth trying if you want to compare other thin latex options. Magnum is a large-fit condom line. **Width:** ~60mm (at the head)";
+  const card = "Official facts: Magnum is Trojan's large-size line, not a separate brand. Trojan Raw Pure Feel is non-latex.";
+  const json = JSON.stringify({ claims: [
+    { claim: "Trojan RAW 是一种薄型乳胶产品。", status: "unverifiable", fact: "Trojan Raw Pure Feel 是非乳胶产品。", quote: "Trojan RAW or ONE UltraFeel" },
+    { claim: "Magnum es una línea de tallas grandes de Trojan.", status: "correct", fact: "Magnum es la línea de Trojan de tamaño grande.", quote: "Magnum is a large-fit condom line" },
+    { claim: "Trojan Magnum ist etwa 60 mm breit (am Kopf).", status: "unverifiable", fact: "", quote: "**Width:** ~60mm (at the head)" },
+    { claim: "Magnum is a large-fit line from Trojan.", status: "correct", fact: "Magnum is Trojan's large-size line, not a separate brand.", quote: "Magnum is a large-fit condom line" },
+  ] });
+  const out = parseTruth(json, answer, card)!;
+  assert.equal(out.length, 4);
+  assert.equal(out[0].claim, "Trojan RAW or ONE UltraFeel");
+  assert.equal(out[0].fact, "");
+  assert.equal(out[1].claim, "Magnum is a large-fit condom line");
+  assert.equal(out[1].fact, "");
+  assert.equal(out[2].claim, "**Width:** ~60mm (at the head)");
+  assert.equal(out[3].claim, "Magnum is a large-fit line from Trojan.");
+  assert.equal(out[3].fact, "Magnum is Trojan's large-size line, not a separate brand.");
+  assert.equal(guessLang("Bu ürün çok iyi ve ucuz bir seçenek."), "tr");
+  assert.equal(guessLang("Apple Watch"), null);
+});
