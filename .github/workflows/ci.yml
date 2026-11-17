@@ -34,7 +34,8 @@ jobs:
   integration:
     name: Entegrasyon (gerçek Postgres + Supabase Auth + PostgREST)
     needs: test
-    runs-on: ubuntu-latest
+    # Postgres 16 ikilileri (scripts/stack) ubuntu-24.04'te var; ubuntu-latest 26.04'e geçince kayboldu (17 Kasım 2026)
+    runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
@@ -50,7 +51,8 @@ jobs:
   e2e:
     name: Mobil uçtan uca test
     needs: integration
-    runs-on: ubuntu-latest
+    # Postgres 16 ikilileri (scripts/stack) ubuntu-24.04'te var; ubuntu-latest 26.04'e geçince kayboldu (17 Kasım 2026)
+    runs-on: ubuntu-24.04
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
