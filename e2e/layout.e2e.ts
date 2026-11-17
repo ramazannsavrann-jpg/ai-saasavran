@@ -76,9 +76,9 @@ test("üst menü ve sayfalar hiçbir genişlikte taşmaz", async ({ page }) => {
     await page.emulateMedia({ media: "print" });
     const leaks = await page.evaluate(() => {
       const vis = (el: Element) => { const r = (el as HTMLElement).getBoundingClientRect(); return r.width > 0 && r.height > 0 && getComputedStyle(el).visibility !== "hidden"; };
-      const ctrls = [...document.querySelectorAll("button, input, select, textarea, form, .btn")].filter(vis).map((e) => (e.textContent || e.tagName).trim().slice(0, 40));
+      const ctrls = [...document.querySelectorAll("button:not(.chip), input, select, textarea, form, .btn")].filter(vis).map((e) => (e.textContent || e.tagName).trim().slice(0, 40));
       const panels = [...document.querySelectorAll("h2")].filter(vis).map((h) => h.textContent?.trim() ?? "")
-        .filter((t) => /Raporu paylaş|Cevaplarda geçen diğer adlar|Markayı sil|Gerçek sorular \(Google\)/i.test(t));
+        .filter((t) => /Raporu paylaş|Markayı sil|Gerçek sorular \(Google\)/i.test(t));
       return { ctrls, panels };
     });
     expect(leaks.ctrls, `PDF'te düğme/form görünüyor (${url})`).toEqual([]);

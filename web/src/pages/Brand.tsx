@@ -2124,7 +2124,7 @@ function UntrackedNames({ brand, competitors, texts, onChange }: { brand: Brand;
     } catch (e) { setErr(friendlyError(e)); } finally { setBusy(false); }
   }
   return (
-    <section className="panel no-print">
+    <section className="panel">
       <h2>{L("Cevaplarda geçen diğer adlar", "Other names in the answers")}</h2>
       <p className="muted">{L("Bu adlar cevaplarda geçiyor ama takip etmiyorsunuz. Markanızın başka bir yazılışıysa ya da bir rakipse işaretleyin; geçmiş ölçümler ücretsiz olarak yeniden hesaplanır.", "These names appear in answers but you don't track them. Mark them as another spelling of your brand or as a competitor; past measurements are recalculated for free.")}</p>
       {brand.reanalyze_requested_at && <p className="success-box">{L("Geçmiş ölçümler yeni bilgilerle yeniden hesaplanıyor; en geç bir saat içinde rapora yansır.", "Past measurements are being recalculated with the new details; the report updates within an hour.")}</p>}
