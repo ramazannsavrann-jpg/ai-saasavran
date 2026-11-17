@@ -6,7 +6,8 @@ name: Ölçüm işçisi
 on:
   # Yalnızca ana dal: taslak dallardaki kod gerçek veritabanına dokunmasın
   push:
-    branches: [main]
+    # olcum-tetik: bu dala gönderim işçiyi hemen başlatır (main'i ve siteyi değiştirmez)
+    branches: [main, olcum-tetik]
   workflow_dispatch:
     inputs:
       live_engines:
