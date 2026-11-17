@@ -259,7 +259,10 @@ test("Migration çalıştırıcı: boş veritabanına uygular, ikinci kez uygula
   });
   const first = run();
   assert.equal(first.status, 0, first.stderr);
-  assert.match(first.stdout, /44 migration uygulandı/);
+  // Sayı klasörden okunur: her yeni migration'da testin elle güncellenmesi gerekmez (17 Kasım: 0045'te kırılmıştı)
+  const { readdirSync } = await import("node:fs");
+  const count = readdirSync(join(root, "supabase/migrations")).filter((f) => f.endsWith(".sql")).length;
+  assert.match(first.stdout, new RegExp(`${count} migration uygulandı`));
   const second = run();
   assert.equal(second.status, 0, second.stderr);
   assert.match(second.stdout, /güncel/);
