@@ -65,6 +65,10 @@ Bir özellik eklenince, değişince, kaldırılınca ya da yeni bir karar alın�
 7. `docs/STATUS.md` güncelle; kalıcı bir kural/karar değiştiyse bu CLAUDE.md'yi de güncelle.
 PR açıklamasında bu kontrollerden neyin değiştiğini kısaca yaz.
 
+## Elle yazılan rapor / e-posta
+- Aynı şirketin markaları (ör. MACFit, MAC/One, Mars Athletic) tek rakip sayılır; bağlantı kaynaktan doğrulanır.
+- Motor adları çevrilmez (Gemini, ChatGPT, Claude, Perplexity). E-posta alıcının dilinde yazılır.
+
 ## Video ve sosyal medya
 - Video kurulumu ve şablonlar: `seslendirme` dalında `video/README.md` + `video/sablon/`.
 - Paylaşım kuralları (Instagram 3'lü set: TR Reels → EN Reels → ayrı gönderi; YouTube oynatma listeleri,

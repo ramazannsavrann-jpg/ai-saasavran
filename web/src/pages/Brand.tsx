@@ -13,7 +13,7 @@ import { CompareBars, TrendChart } from "../components/Chart";
 import { StartGuide } from "../components/StartGuide";
 import { downloadCsv, fileSlug } from "../lib/csv";
 import { buildRecommendations, type RecInput } from "../../../engine/src/recommendations.ts";
-import { untrackedNames } from "../../../engine/src/metrics.ts";
+import { relatedBrand, untrackedNames } from "../../../engine/src/metrics.ts";
 import { campaignFor, taskProgress } from "../../../engine/src/campaign.ts";
 import { guessIntent } from "../../../engine/src/discovery.ts";
 import { sourceNetwork } from "../../../engine/src/network.ts";
@@ -2113,20 +2113,24 @@ function UntrackedNames({ brand, competitors, texts, onChange }: { brand: Brand;
   const [err, setErr] = useState<string | null>(null);
   const names = untrackedNames(texts, [brand, ...competitors]).filter((n) => !hidden.includes(n.name));
   if (names.length === 0 && !msg && !brand.reanalyze_requested_at) return null;
-  async function act(name: string, kind: "alias" | "competitor") {
+  const [pick, setPick] = useState<string | null>(null);
+  async function act(name: string, kind: "alias" | "competitor" | "rival_alias", rival?: Brand) {
     setBusy(true); setErr(null); setMsg(null);
     try {
       if (kind === "alias") await api.updateBrand(brand.id, { aliases: [...brand.aliases, name] });
+      else if (kind === "rival_alias" && rival) await api.updateBrand(rival.id, { aliases: [...rival.aliases, name] });
       else await api.addBrand({ workspace_id: brand.workspace_id, name, is_competitor: true, owner_brand_id: brand.id, data_origin: brand.data_origin } as never);
-      setHidden((h) => [...h, name]); setOpen(null);
-      setMsg(kind === "alias" ? L(`"${name}" markanızın diğer adı olarak eklendi.`, `"${name}" added as another name for your brand.`) : L(`"${name}" rakip olarak eklendi.`, `"${name}" added as a competitor.`));
+      setHidden((h) => [...h, name]); setOpen(null); setPick(null);
+      setMsg(kind === "alias" ? L(`"${name}" markanızın diğer adı olarak eklendi.`, `"${name}" added as another name for your brand.`)
+        : kind === "rival_alias" && rival ? L(`"${name}" artık ${rival.name} olarak sayılacak.`, `"${name}" will now count as ${rival.name}.`)
+        : L(`"${name}" rakip olarak eklendi.`, `"${name}" added as a competitor.`));
       onChange();
     } catch (e) { setErr(friendlyError(e)); } finally { setBusy(false); }
   }
   return (
     <section className="panel">
       <h2>{L("Cevaplarda geçen diğer adlar", "Other names in the answers")}</h2>
-      <p className="muted">{L("Bu adlar cevaplarda geçiyor ama takip etmiyorsunuz. Markanızın başka bir yazılışıysa ya da bir rakipse işaretleyin; geçmiş ölçümler ücretsiz olarak yeniden hesaplanır.", "These names appear in answers but you don't track them. Mark them as another spelling of your brand or as a competitor; past measurements are recalculated for free.")}</p>
+      <p className="muted">{L("Bu adlar cevaplarda geçiyor ama takip etmiyorsunuz. Markanızın başka bir yazılışıysa, bir rakipse ya da bir rakibin alt markası / bağlı olduğu şirketse (ör. aynı zincirin lüks kulübü) işaretleyin; aynı şirket iki ayrı rakip gibi sayılmaz. Geçmiş ölçümler ücretsiz olarak yeniden hesaplanır.", "These names appear in answers but you don't track them. Mark them as another spelling of your brand, as a competitor, or as a sub-brand or parent company of a competitor (e.g. the same chain's premium club), so one company isn't counted as two rivals. Past measurements are recalculated for free.")}</p>
       {brand.reanalyze_requested_at && <p className="success-box">{L("Geçmiş ölçümler yeni bilgilerle yeniden hesaplanıyor; en geç bir saat içinde rapora yansır.", "Past measurements are being recalculated with the new details; the report updates within an hour.")}</p>}
       {msg && <p className="success-box">{msg}</p>}
       <ErrorBox message={err} />
@@ -2139,7 +2143,26 @@ function UntrackedNames({ brand, competitors, texts, onChange }: { brand: Brand;
             {open === n.name && (
               <div className="chip-actions">
                 <Button variant="quiet" className="btn-small" busy={busy} onClick={() => act(n.name, "alias")}>{L("Benim markamın diğer adı", "Another name for my brand")}</Button>
+                {(() => {
+                  const rel = relatedBrand(texts, n.name, competitors);
+                  const relB = competitors.find((c) => c.name === rel);
+                  return relB ? (
+                    <>
+                      <p className="muted">{L(`Cevaplarda ${relB.name} ile aynı şirketin bir markası gibi anlatılıyor.`, `The answers describe it as part of the same company as ${relB.name}.`)}</p>
+                      <Button variant="quiet" className="btn-small" busy={busy} onClick={() => act(n.name, "rival_alias", relB)}>{L(`${relB.name} ile birleştir`, `Merge with ${relB.name}`)}</Button>
+                    </>
+                  ) : null;
+                })()}
                 <Button variant="quiet" className="btn-small" busy={busy} onClick={() => act(n.name, "competitor")}>{L("Rakip olarak ekle", "Add as competitor")}</Button>
+                {competitors.length > 0 && (pick === n.name ? (
+                  <select className="btn-small" aria-label={L("Hangi rakip?", "Which competitor?")} defaultValue="" disabled={busy}
+                    onChange={(e) => { const r = competitors.find((c) => c.id === e.target.value); if (r) act(n.name, "rival_alias", r); }}>
+                    <option value="" disabled>{L("Hangi rakibin adı?", "Which competitor?")}</option>
+                    {competitors.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
+                  </select>
+                ) : (
+                  <Button variant="quiet" className="btn-small" busy={busy} onClick={() => setPick(n.name)}>{L("Bir rakibin diğer adı / alt markası", "Another name or sub-brand of a competitor")}</Button>
+                ))}
                 <button className="link-btn" onClick={() => { setHidden((h) => [...h, n.name]); setOpen(null); }}>{L("Önemsiz, gizle", "Not relevant, hide")}</button>
               </div>
             )}
