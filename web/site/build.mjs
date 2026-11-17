@@ -192,10 +192,10 @@ ${demoHtml(false)}
   <ul>
     <li class="ok">Gemini ile ölçüm (internete bakmadan, model bilgisiyle). Raporda açıkça yazar.</li>
     <li class="ok">Haftalık otomatik ölçüm, web sitesi kontrolü, kural tabanlı öneriler.</li>
-    <li class="ok">ChatGPT ile canlı aramalı ölçüm ve kaynak analizi: ücretli paketlerde.</li>
+    <li class="ok">ChatGPT, Claude ve Perplexity ile canlı aramalı ölçüm ve kaynak analizi: ücretli paketlerde, motor bazında.</li>
     <li class="ok">Üye olmadan ücretsiz kontrol (ayda 2 kez).</li>
-    <li class="ok">Kayıp nedeni kanıtları ve "kaynaklar kimi destekliyor" tablosu: canlı aramalı ölçümde.</li>
-    <li class="no">Perplexity: henüz yok. PDF, tarayıcının yazdır penceresiyle alınır.</li>
+    <li class="ok">Önerilmediğiniz sorular için kanıtlar ve "kaynaklar kimi destekliyor" tablosu: canlı aramalı ölçümde.</li>
+    <li class="no">Ayrı PDF dosyası üretilmez; PDF, tarayıcının yazdır penceresiyle alınır.</li>
   </ul>
   <p><a href="/durum">Ayrıntılı ürün durumu</a></p>
 </section>
@@ -260,8 +260,8 @@ ${demoHtml(true)}
     <li class="ok">ChatGPT, Claude and Perplexity live-search measurement and source analysis: on paid plans, reported per engine.</li>
     <li class="ok">Free check without signing up (2 a month).</li>
     <li class="ok">App in English and Turkish.</li>
-    <li class="ok">Evidence for why a competitor was recommended instead, and which brands each source supports: in live-search measurements.</li>
-    <li class="no">Perplexity: not yet. PDFs are saved from the browser's print dialog.</li>
+    <li class="ok">Evidence on questions where a competitor was recommended instead of you, and which brands each source supports: in live-search measurements.</li>
+    <li class="no">No separate PDF file is generated; PDFs are saved from the browser's print dialog.</li>
   </ul>
 </section>
 ${plansHtml(true)}

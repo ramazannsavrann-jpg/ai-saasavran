@@ -687,7 +687,7 @@ function LossCardView({ card, brand, hasSite }: { card: LossCard; brand: string;
   if (!hasSite) lines.push(L("Markanıza web sitesi eklenmemiş; sitenizin kaynak gösterilip gösterilmediği ölçülemedi.", "No website is set for your brand, so we couldn't check whether your site was cited."));
   return (
     <div className="loss-card">
-      <p className="loss-title">{L("Kayıp nedeni: kanıtlar", "Why you lost: the evidence")}</p>
+      <p className="loss-title">{L("Önerilmediğiniz soru: kanıtlar", "Not recommended here: the evidence")}</p>
       <ul>{lines.map((l) => <li key={l}>{l}</li>)}</ul>
       <p className="loss-note muted">{isEn() ? `Based on ${card.answers} answers. This is evidence, not a proven cause; AI answers vary between runs.` : `${card.answers} cevaba dayanır. Bunlar kanıttır, kesin neden değildir; yapay zekâ cevapları ölçümden ölçüme değişir.`}</p>
     </div>
@@ -847,10 +847,10 @@ function Report({ brand, type, onBrandChange, paid = false }: { brand: Brand; ty
           {live && (
             <section className="panel">
               <h2>{L("Yapay zekânın kaynak gösterdiği siteler", "Sites the AI cited")}</h2>
-              <p className="muted">{L("ChatGPT bu cevapları verirken internette bu sitelere baktı. Rakibinizi öneren sitelerde yer almak görünürlüğünüzü artırır.", "ChatGPT read these sites before answering. Getting featured on sites that recommend your competitors raises your visibility.")}</p>
+              <p className="muted">{L("Bu ölçümdeki cevaplarda yapay zekânın kaynak olarak gösterdiği siteler. Sayı, o siteye verilen bağlantı sayısıdır (cevap sayısı değil). Kaynak listesi motorun okuduğu her siteyi göstermez; burada yer almanın görünürlüğü artıracağı kesin değildir.", "Sites the AI cited as sources in this measurement's answers. The number is links to that site (not answers). The list doesn't show every site the engine read, and being listed here isn't guaranteed to raise your visibility.")}</p>
               {answers.loading ? <Loading /> : domains.length === 0 ? <p>{L("Bu ölçümde kaynak gösterilmedi.", "No sources were cited in this measurement.")}</p> : (
                 <ol className="domains">
-                  {domains.map((d) => <li key={d.domain}><span>{d.domain}</span><span className="num muted">{d.count} kez</span></li>)}
+                  {domains.map((d) => <li key={d.domain}><span>{d.domain}</span><span className="num muted">{d.count} {L("bağlantı", d.count === 1 ? "link" : "links")}</span></li>)}
                 </ol>
               )}
             </section>
@@ -921,10 +921,10 @@ function Report({ brand, type, onBrandChange, paid = false }: { brand: Brand; ty
           {live && (
             <section className="panel">
               <h2>{L("Kaynak fırsatları", "Source opportunities")}</h2>
-              <p className="muted">{L("Rakibiniz önerilirken sizin önerilmediğiniz cevaplarda ChatGPT'nin baktığı siteler. Rakiplerin kendi siteleri ayrıca işaretlendi; diğerleri, yer almaya çalışabileceğiniz yerlerdir (içerik, liste, inceleme, basın).", "Sites ChatGPT read in answers that recommended a competitor but not you. Competitors' own sites are marked; the rest are places worth getting featured on (content, lists, reviews, press).")}</p>
+              <p className="muted">{L("Rakibiniz önerilip sizin önerilmediğiniz cevaplarda yapay zekânın kaynak gösterdiği siteler; sayı bağlantı sayısıdır. Rakiplerin kendi siteleri ayrıca işaretlendi; diğerleri yer almayı deneyebileceğiniz yerlerdir (içerik, liste, inceleme, basın). Birlikte görülmek neden olduğunu kanıtlamaz.", "Sites the AI cited in answers that recommended a competitor but not you; the number is links. Competitors' own sites are marked; the rest are places you could try to get featured on (content, lists, reviews, press). Appearing together isn't proof of cause.")}</p>
               {ments.loading || comps.loading ? <Loading /> : opps.length === 0 ? <p>{L("Bu ölçümde böyle bir cevap yok.", "No such answers in this measurement.")}</p> : (
                 <ol className="domains">
-                  {opps.map((d) => <li key={d.domain}><span>{d.domain}{d.own && <span className="muted"> {L("(rakibin kendi sitesi)", "(competitor's own site)")}</span>}</span><span className="num muted">{d.count} kez</span></li>)}
+                  {opps.map((d) => <li key={d.domain}><span>{d.domain}{d.own && <span className="muted"> {L("(rakibin kendi sitesi)", "(competitor's own site)")}</span>}</span><span className="num muted">{d.count} {L("bağlantı", d.count === 1 ? "link" : "links")}</span></li>)}
                 </ol>
               )}
             </section>
@@ -1147,7 +1147,7 @@ function SourceNetworkPanel({ answers, brands }: { answers: { id: string; provid
   const ly = (i: number) => 18 + i * rowH;
   const span = (net.length - 1) * rowH, ry = (j: number) => 18 + (shown.length > 1 ? (j * span) / (shown.length - 1) : span / 2);
   const max = Math.max(1, ...net.flatMap((n) => n.brands.map((b) => b.count)));
-  const role = (r: string) => r === "rival" ? L("rakip kalesi", "competitor stronghold") : r === "yours" ? L("sizin kaleniz", "your stronghold") : r === "shared" ? L("ortak kaynak", "shared source") : "";
+  const role = (r: string) => r === "rival" ? L("yalnız rakip önerildi", "only rivals recommended") : r === "yours" ? L("siz önerildiniz", "you were recommended") : r === "shared" ? L("ortak kaynak", "shared source") : "";
   const rivals = net.filter((n) => n.role === "rival");
   return (
     <section className="panel" id="kaynak-agi">
@@ -1180,8 +1180,8 @@ function SourceNetworkPanel({ answers, brands }: { answers: { id: string; provid
           </li>
         ))}
       </ul>
-      {rivals.length > 0 && <p className="caution">{isEn() ? `${rivals.map((r) => r.domain).join(", ")}: answers citing these sites recommend your competitors and never you. Getting listed or reviewed there is the most direct way into those answers.` : `${rivals.map((r) => r.domain).join(", ")}: bu siteleri kaynak gösteren cevaplar rakiplerinizi öneriyor, sizi hiç önermiyor. Bu sitelerde yer almak veya incelenmek o cevaplara girmenin en doğrudan yolu.`}</p>}
-      <p className="src-sup muted">{L("\"Ortak kaynak\": en az iki motorun baktığı site; burada yer almak birden fazla motoru etkiler.", "\"Shared source\": a site at least two engines rely on; being there affects several engines.")}</p>
+      {rivals.length > 0 && <p className="caution">{isEn() ? `${rivals.map((r) => r.domain).join(", ")}: in this measurement, answers citing these sites recommended your competitors and never you. Being listed or reviewed there is worth trying, but appearing together isn't proof of cause; check the result in later measurements.` : `${rivals.map((r) => r.domain).join(", ")}: bu ölçümde bu siteleri kaynak gösteren cevaplar rakiplerinizi önerdi, sizi hiç önermedi. Bu sitelerde yer almak denemeye değer; ancak birlikte görülmek neden olduğunu kanıtlamaz, sonucu sonraki ölçümlerde kontrol edin.`}</p>}
+      <p className="src-sup muted">{L("\"Ortak kaynak\": bu ölçümde en az iki motorun kaynak gösterdiği site. Motorların bu siteyi gelecekte de kullanacağı kesin değildir.", "\"Shared source\": a site at least two engines cited in this measurement. There's no guarantee the engines will keep using it.")}</p>
     </section>
   );
 }
@@ -1580,7 +1580,7 @@ function EngineComparePanel({ rows, answers, live }: { rows: VisRow[]; answers: 
                   : (isEn() ? `${providerLabel(c.high!)} recommends it more often than ${providerLabel(c.low!)}.` : `${providerLabel(c.high!)} bu markayı ${providerLabel(c.low!)}'a göre daha sık öneriyor.`)}
               </p>
               <p className="src-sup muted">{c.level === "clear"
-                ? L("Güven aralıkları ayrışıyor: fark ölçüm oynaklığıyla açıklanamaz.", "The confidence ranges don't overlap: the gap isn't explained by measurement noise.")
+                ? L("Güven aralıkları çakışmıyor: fark bu örneklemde rastlantıdan beklenenden büyük. Nedenini göstermez.", "The confidence ranges don't overlap: the gap is larger than chance would suggest in this sample. It doesn't show the cause.")
                 : L("Fark büyük ama örneklem küçük; güven aralıkları hâlâ kesişiyor. Daha fazla soru ve ölçümle doğrulayın.", "The gap is large but the sample is small; the ranges still overlap. Confirm with more questions and measurements.")}</p>
             </li>
           ))}

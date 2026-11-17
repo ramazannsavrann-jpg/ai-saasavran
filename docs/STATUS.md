@@ -7,6 +7,14 @@
 > **Erken erişim.** Ödeme (Paddle) ve haftalık e-posta (Resend) kodu hazır ve testli, ancak gerçek bir ödeme
 > ve gerçek bir gelen kutusu teslimi uçtan uca henüz doğrulanmadı. Hukuki metinleri avukat incelemedi.
 
+## v1.33 (17 Kasım 2026): temkinli yorum dili (Paket 1)
+- Nedensellik iddia eden ifadeler düzeltildi: "görünürlüğü artırır", "birden fazla motoru etkiler", "oynaklıkla açıklanamaz", "en doğrudan yol". Birlikte görülmenin neden kanıtı olmadığı yazılıyor.
+- "Kayıp nedeni" → "Önerilmediğiniz soru: kanıtlar"; "rakip kalesi / sizin kaleniz" → "yalnız rakip önerildi / siz önerildiniz".
+- Kaynak listeleri artık her motoru "ChatGPT" diye anmıyor; sayının bağlantı sayısı olduğu (cevap değil) yazılıyor.
+- Aramasız ölçümde "haftalar/aylar içinde yansır" ima eden cümle kaldırıldı.
+- Ana sayfa "Bugün ne çalışıyor" listesi düzeltildi (TR/EN): "Perplexity henüz yok" yazıyordu.
+- Sıradaki düzeltmeler (Perplexity notundan, 17 Kasım incelemesi): marka adayı filtresi (RAM/GB/GPU), site kontrolü (başlıkta marka varyasyonu, ülke/dil seçici sayfası, "bu sayfada bulunamadı"), TruthGuard durumları (başarısız/kontrol edilmedi/bulgu yok), sayım tutarlılığı, skor yöntem sürümü ve aralık metni, Perplexity kaynak sayımı (atıf yoksa arama sonuçlarını kaynak sayıyor), soru kaynağı etiketi (DB değişikliği), paylaşılan raporda bütçe olmadığını doğrulayan test, `docs/PRICING.md` güncel fiyatlar ($29/$149/$449).
+
 ## v1.32 (15 Kasım 2026): başarısız ölçüm telafisi
 - Müşteri ölçümü geçici hatayla (kota, sağlayıcı hatası) hiç sonuç almadan biterse işçi 30 dk sonra aynı ölçümü yeniden sıraya koyar (`schedule_recovery_runs`, 0044). En çok 3 deneme, 7 gün içinde; kalıcı hatalarda (anahtar, geçersiz istek) denemez.
 - Telafi ölçümü başarıyla bitince ekip sahibine/yöneticisine bir kez "sonuçlarınız hazır" e-postası gider (TR/EN, motor bazında gerçek anılma/önerilme sayıları). `engine/src/recovery.ts`.
