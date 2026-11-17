@@ -1,0 +1,8 @@
+Amerika'da yapay zekâ hangi akıllı saati öneriyor? ChatGPT, Claude ve Perplexity'ye aynı sekiz soruyu, Amerika'dan canlı internet aramasıyla sorduk.
+Beş markayı ölçtük: Amazfit, Apple Watch, Garmin, Pixel Watch ve Galaxy Watch.
+Apple Watch, kırk sekiz cevabın kırk ikisinde önerildi. Garmin ikinci. Amazfit ise yalnızca yedi.
+Ama her yapay zekâ farklı seçiyor. ChatGPT, Amazfit'i hiç önermedi. Claude beş kez önerdi.
+Soru değişince kazanan değişiyor. Koşu sorusunda Pixel Watch sıfır aldı. Pil ömründe her seferinde Garmin kazandı.
+Peki bilgiler doğru mu? Yetmiş iki iddiayı Apple'ın resmî özellikleriyle karşılaştırdık. Yirmi yedisi doğru, hiçbiri yanlış değil. Google Shopping'de akıllı saat aramasının bir numarası ise Amazfit; yapay zekânın en az önerdiği marka.
+Yapay zekâ nereye bakıyor? Her çizgi, bir inceleme sitesini önerilmesine katkı verdiği markalara bağlıyor. Cevapları markaların kendi siteleri değil, teknoloji inceleme siteleri şekillendiriyor.
+Bunlar yapay zekânın cevaplarıdır. Yapay zekâ sizin markanız için ne diyor? Ey Ay Saa, Savran'da ücretsiz ölçün.

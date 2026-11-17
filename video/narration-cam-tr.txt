@@ -1,0 +1,8 @@
+Amerika'da yapay zekâ hangi güvenlik kamerasını öneriyor? ChatGPT, Claude ve Perplexity'ye aynı sekiz soruyu, Amerika'dan canlı internet aramasıyla sorduk.
+Beş markayı ölçtük: Arlo, Eufy, Google Nest, Ring ve Wyze.
+Eufy birinci oldu; kırk sekiz cevabın yirmi dördünde önerildi. Ring ve Wyze on dokuzla berabere. Arlo on dört.
+Ama her yapay zekâ farklı seçiyor. Claude, Wyze'ı on beş kez önerdi. ChatGPT ise yalnızca iki kez.
+Soru değişince kazanan değişiyor. Aboneliksiz kamerada Eufy kazandı, Ring sıfır aldı. Gece görüşünde Arlo önde.
+Peki bilgiler doğru mu? Otuz altı iddiayı Ring'in resmî sayfalarıyla karşılaştırdık. Beşi doğru, hiçbiri yanlış değil. Google Shopping'de ev güvenlik kamerası aramasının bir numarası ise Arlo; yapay zekânın en az önerdiği marka.
+Yapay zekâ nereye bakıyor? Her çizgi, bir inceleme sitesini önerilmesine katkı verdiği markalara bağlıyor. Cevapları inceleme ve güvenlik siteleri şekillendiriyor.
+Bunlar yapay zekânın cevaplarıdır. Yapay zekâ sizin markanız için ne diyor? Ey Ay Saa, Savran'da ücretsiz ölçün.
