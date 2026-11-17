@@ -1,6 +1,6 @@
 import { useState, type ReactNode, type InputHTMLAttributes, type SelectHTMLAttributes } from "react";
 import { Link } from "react-router-dom";
-import { t, L } from "../lib/i18n";
+import { t, L, isEn } from "../lib/i18n";
 import type { MeasurementType } from "../lib/data";
 
 export function Field({ label, hint, error, ...props }: InputHTMLAttributes<HTMLInputElement> & { label: string; hint?: string; error?: string }) {
@@ -57,11 +57,14 @@ export function TypeBadge({ type }: { type: MeasurementType }) {
 }
 
 /** Canlı arama yapılmadığını / simülasyon olduğunu belirten zorunlu uyarı. */
-export function DataNotice({ type }: { type: MeasurementType }) {
+export function DataNotice({ type, engines }: { type: MeasurementType; engines?: string[] }) {
   if (type === "live_search") return (
     <aside className="notice notice-live" role="note">
       <strong>{L("Canlı web aramalı ölçüm", "Live web-search measurement")}</strong>
-      <p>{L("Bu sonuçlar ChatGPT'ye (OpenAI API) internette arama açıkken sorulan sorulardan geliyor. Cevaplar aramanın yapıldığı ana göre değişebilir; tek ölçümü kesin sonuç gibi okumayın.", "These results come from questions asked to ChatGPT (OpenAI API) with web search on. Answers depend on when the search ran; don't read a single measurement as final.")}</p>
+      <p>{engines && engines.length
+        ? (isEn() ? `These results come from questions asked to AI assistants with live web search on (in this measurement: ${engines.join(", ")}). Answers depend on when the search ran; don't read a single measurement as final.`
+          : `Bu sonuçlar, internette arama açıkken yapay zekâ asistanlarına sorulan sorulardan geliyor (bu ölçümde: ${engines.join(", ")}). Cevaplar aramanın yapıldığı ana göre değişebilir; tek ölçümü kesin sonuç gibi okumayın.`)
+        : L("Bu sonuçlar, internette arama açıkken yapay zekâ asistanlarına sorulan sorulardan geliyor. Cevaplar aramanın yapıldığı ana göre değişebilir; tek ölçümü kesin sonuç gibi okumayın.", "These results come from questions asked to AI assistants with live web search on. Answers depend on when the search ran; don't read a single measurement as final.")}</p>
     </aside>
   );
   const sim = type === "simulated";

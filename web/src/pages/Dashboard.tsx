@@ -45,8 +45,8 @@ function WorkspaceView() {
         <aside className="notice notice-live" role="note">
           <strong>{L("Bu alanda iki tür ölçüm var", "This workspace has two kinds of measurement")}</strong>
           {isEn()
-            ? <p><b>No search (Gemini, free):</b> what the AI knows without looking at the web. <b>Live search (ChatGPT, paid trial):</b> the answer it gives after searching the web; closest to what customers actually see.</p>
-            : <p><b>Aramasız (Gemini, ücretsiz):</b> yapay zekânın internete bakmadan bildiği. <b>Canlı aramalı (ChatGPT, ücretli deneme):</b> internete bakarak verdiği cevap; müşterinin gerçekte gördüğüne en yakın olan budur.</p>}
+            ? <p><b>No search (Gemini, free):</b> what the AI knows without looking at the web. <b>Live search (paid):</b> the answers AI assistants (today ChatGPT, Claude and Perplexity) give after searching the web; closest to what customers actually see.</p>
+            : <p><b>Aramasız (Gemini, ücretsiz):</b> yapay zekânın internete bakmadan bildiği. <b>Canlı arama (ücretli):</b> yapay zekâ asistanlarının (bugün ChatGPT, Claude ve Perplexity) internete bakarak verdiği cevaplar; müşterinin gerçekte gördüğüne en yakın olan budur.</p>}
         </aside>
       ) : <DataNotice type={type} />}
 
@@ -208,7 +208,7 @@ function BrandRow({ brand, type, live }: { brand: Brand; type: MeasurementType; 
         {vis.loading || lv.loading ? <span className="brand-row-result">…</span> : !last && !llast ? <span className="brand-row-result">{L("Henüz ölçüm yok", "No measurements yet")}</span> : (
           <>
             {last && <span className="brand-row-result">{line(last, live ? L("Aramasız (Gemini)", "No search (Gemini)") : L("Son ölçümde", "Latest"))}</span>}
-            {llast && <span className="brand-row-result">{line(llast, L("Canlı aramalı (ChatGPT)", "Live search (ChatGPT)"))}</span>}
+            {llast && <span className="brand-row-result">{line(llast, L("Canlı arama", "Live search"))}</span>}
           </>
         )}
         {last && !live && <TypeBadge type={type} />}
