@@ -10,6 +10,14 @@
 > **17 Kasım:** Strateji notlarının kodla eşleştirmesi, iş bölümü (marka/ürün ↔ kamu) ve iki oturumun çakışmama
 > kuralları: [`docs/OZELLIK-HARITASI.md`](OZELLIK-HARITASI.md). Yeni özellik önermeden önce okuyun.
 
+## v1.34 (17 Kasım 2026): Google Shopping düzeltmeleri ve müşteri kuralı
+- Eşleştirme: saat ilanındaki "Case" (kasa) kılıf sayılmıyor; "for ..." ilanları aksesuar (Apple Watch 11 $ hatası).
+- Rakip ürünler kendi adıyla aranabilir (0045) — **yalnız Growth Lab'de** (video/araştırma).
+- **Karar (sahip, 17 Kasım):** müşteri yalnız kendi ürünlerini, haftada bir otomatik görür; "Şimdi kontrol et" ve rakip araması
+  müşteride kapalı (0046). Sebep: SerpApi hakkı ortak. Paket bazında kota sonra kararlaştırılacak.
+- Hizmet sektörü (spor salonu, hastane vb.) Google Shopping'de yer almaz; karşılığı ileride Google Haritalar sırası olabilir (fikir).
+- TruthGuard: iddialar cevabın dilinde yazılır (İngilizce cevaptan Rusça iddia çıkıyordu).
+
 ## v1.33 (17 Kasım 2026): temkinli yorum dili (Paket 1)
 - Nedensellik iddia eden ifadeler düzeltildi: "görünürlüğü artırır", "birden fazla motoru etkiler", "oynaklıkla açıklanamaz", "en doğrudan yol". Birlikte görülmenin neden kanıtı olmadığı yazılıyor.
 - "Kayıp nedeni" → "Önerilmediğiniz soru: kanıtlar"; "rakip kalesi / sizin kaleniz" → "yalnız rakip önerildi / siz önerildiniz".
