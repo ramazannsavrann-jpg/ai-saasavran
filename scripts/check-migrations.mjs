@@ -263,6 +263,19 @@ console.log("ok tanımsız paket atanamıyor");
     assert.equal((await db.query(`select count(*)::int n from pending_shopping_checks(5) where product_id=$1`, [pr.id])).rows[0].n, 0, "yeni kontrol sonrası sıradan çıkar");
     await assert.rejects(as(U1, `select request_shopping_check('${pr.id}')`), "günde bir kez");
     assert.equal((await as(U1, `select own_position from shopping_checks where product_id='${pr.id}'`)).rows[0].own_position, 3, "üye kendi sonucunu okur");
+    // 0045: rakip ürün kendi adıyla ve kendi markasıyla aranır; yalnız istek üzerine (haftalık otomatiğe girmez)
+    await db.query(`delete from shopping_checks where product_id=$1`, [pr.id]);
+    await db.query(`update products set shopping_requested_at = null where id=$1`, [pr.id]);
+    const rv = (await db.query(`insert into products (workspace_id, brand_id, name, rival_of, rival_brand) values ($1, $2, 'Rakip X 2', $3, 'Rakip Marka') returning id`, [A, own.id, pr.id])).rows[0];
+    assert.equal((await db.query(`select count(*)::int n from pending_shopping_checks(20) where product_id=$1`, [rv.id])).rows[0].n, 0, "rakip istek olmadan sıraya girmez");
+    await as(U1, `select request_shopping_check('${pr.id}')`);
+    const rq = (await db.query(`select brand_name, product_name, requested, rivals from pending_shopping_checks(20) where product_id=$1`, [rv.id])).rows[0];
+    assert.ok(rq, "kendi ürün istenince rakip de sıraya girer");
+    assert.equal(rq.brand_name, "Rakip Marka", "rakip kendi markasıyla aranır");
+    assert.equal(rq.requested, true);
+    assert.deepEqual(rq.rivals, []);
+    await assert.rejects(as(U1, `select request_shopping_check('${rv.id}')`), "rakip doğrudan istenemez");
+    await db.query(`delete from products where id=$1`, [rv.id]);
     await db.query(`update workspaces set paid_live_allowed = false, kind=$2, plan=$3, subscription_status=$4 where id=$1`, [A, prevWs.kind, prevWs.plan, prevWs.subscription_status]);
     await db.query(`delete from products where id=$1`, [pr.id]);
   }
