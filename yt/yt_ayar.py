@@ -12,6 +12,7 @@ API = "https://www.googleapis.com/youtube/v3"
 DRY = os.environ.get("DRY_RUN") == "1"
 CFG = json.load(open(os.path.join(os.path.dirname(__file__), "ayar.json"), encoding="utf-8"))
 quota = 0
+tut_status = []  # (video, son gizlilik durumu, başlık): rapor sonunda özetlenir
 
 
 def token():
@@ -179,11 +180,17 @@ def main():
             is_tut = bool(re.search(r"\b(eğitim|tutorial)\b", sn["title"], re.I))
             line = f"{vid} [{lang}{'?' if rule.get('guessed') else ''}] {st['privacyStatus']} {sn['title'] if is_tut else sn['title'][:60]}"
             # 0) eğitim videoları seri bitene kadar gizli kalır (kullanıcı kuralı, 15 Kasım)
-            if is_tut and CFG.get("tutorials_private") and st["privacyStatus"] != "private" and not DRY:
+            # priv = bu çalışmadan sonraki gerçek durum. Sonraki adımlar eski st["privacyStatus"]'u değil bunu yazar;
+            # aksi halde 2. adım gizliye alınan videoyu yeniden herkese açıyordu (17 Kasım hatası).
+            priv = st["privacyStatus"]
+            keep_private = is_tut and bool(CFG.get("tutorials_private"))
+            # Zamanlanmış yayın (publishAt) da kaldırılır: yoksa gizli eğitim videosu o saatte kendiliğinden açılır.
+            if keep_private and (priv != "private" or st.get("publishAt")) and not DRY:
                 s0 = {"privacyStatus": "private", "selfDeclaredMadeForKids": st.get("selfDeclaredMadeForKids", False),
                       "embeddable": st.get("embeddable", True), "license": st.get("license", "youtube"),
                       "publicStatsViewable": st.get("publicStatsViewable", True), "containsSyntheticMedia": True}
                 if call("PUT", "videos", {"part": "status"}, {"id": vid, "status": s0}, cost=50) is not None:
+                    priv = "private"
                     line += " · →gizli✓"
             if is_tut:
                 line += " · listeler: " + ", ".join(n for n, pid in pls.items() if vid in members.get(pid, set()))
@@ -198,11 +205,11 @@ def main():
             # YouTube bu alanı okumada geri döndürmüyor: sadece son 3 günde yüklenenlere (ve force listesine) uygula
             fresh = datetime.fromisoformat(sn["publishedAt"].replace("Z", "+00:00")) > datetime.now(timezone.utc) - timedelta(days=3)
             if (fresh or vid in CFG.get("force", [])) and not st.get("containsSyntheticMedia"):
-                s = {"privacyStatus": st["privacyStatus"], "containsSyntheticMedia": True,
+                s = {"privacyStatus": "private" if keep_private else priv, "containsSyntheticMedia": True,
                      "selfDeclaredMadeForKids": st.get("selfDeclaredMadeForKids", False),
                      "embeddable": st.get("embeddable", True), "license": st.get("license", "youtube"),
                      "publicStatsViewable": st.get("publicStatsViewable", True)}
-                if st.get("publishAt"):
+                if st.get("publishAt") and not keep_private:
                     s["publishAt"] = st["publishAt"]
                 if not DRY and call("PUT", "videos", {"part": "status"}, {"id": vid, "status": s}, cost=50) is not None:
                     line += " · yapay✓"
@@ -220,12 +227,27 @@ def main():
                                         cost=50) is not None:
                         members[pid].add(vid)
                         line += f" · +{name[:22]}"
+            if is_tut:
+                line += f" · son durum: {priv}"
+                tut_status.append((vid, priv, sn["title"]))
             rep.append(line)
             print(line)
             if quota > 9000:
                 print("Kota sınırına yaklaşıldı, kalanlar yarın.")
+                print_tutorials()
                 return
+    print_tutorials()
     print(f"Bitti. Kullanılan kota ≈ {quota}")
+
+
+def print_tutorials():
+    """Eğitim videolarının özeti: gizli olmayan varsa açıkça yazılır."""
+    if not tut_status:
+        return
+    open_ = [t for t in tut_status if t[1] != "private"]
+    print(f"EĞİTİM VİDEOLARI: {len(tut_status)} video, gizli olmayan {len(open_)}")
+    for vid, priv, title in open_:
+        print(f"  ! gizli değil: {vid} {priv} {title}")
 
 
 if __name__ == "__main__":
