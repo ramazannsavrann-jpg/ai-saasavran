@@ -209,7 +209,8 @@ jobs:
     name: Canlı site kontrolü
     needs: deploy-web
     if: needs.deploy-web.result == 'success'
-    runs-on: ubuntu-latest
+    # Playwright ubuntu 26.04'te chromium desteklemiyor; ubuntu-latest 26.04'e geçti (17 Kasım 2026)
+    runs-on: ubuntu-24.04
     timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
