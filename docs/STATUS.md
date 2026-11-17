@@ -7,6 +7,9 @@
 > **Erken erişim.** Ödeme (Paddle) ve haftalık e-posta (Resend) kodu hazır ve testli, ancak gerçek bir ödeme
 > ve gerçek bir gelen kutusu teslimi uçtan uca henüz doğrulanmadı. Hukuki metinleri avukat incelemedi.
 
+> **17 Kasım:** Strateji notlarının kodla eşleştirmesi, iş bölümü (marka/ürün ↔ kamu) ve iki oturumun çakışmama
+> kuralları: [`docs/OZELLIK-HARITASI.md`](OZELLIK-HARITASI.md). Yeni özellik önermeden önce okuyun.
+
 ## v1.33 (17 Kasım 2026): temkinli yorum dili (Paket 1)
 - Nedensellik iddia eden ifadeler düzeltildi: "görünürlüğü artırır", "birden fazla motoru etkiler", "oynaklıkla açıklanamaz", "en doğrudan yol". Birlikte görülmenin neden kanıtı olmadığı yazılıyor.
 - "Kayıp nedeni" → "Önerilmediğiniz soru: kanıtlar"; "rakip kalesi / sizin kaleniz" → "yalnız rakip önerildi / siz önerildiniz".
