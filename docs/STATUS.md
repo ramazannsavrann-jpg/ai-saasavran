@@ -7,6 +7,10 @@
 > **Erken erişim.** Ödeme (Paddle) ve haftalık e-posta (Resend) kodu hazır ve testli, ancak gerçek bir ödeme
 > ve gerçek bir gelen kutusu teslimi uçtan uca henüz doğrulanmadı. Hukuki metinleri avukat incelemedi.
 
+> **18 Kasım (TruthGuard dil):** Model "Never translate" kuralına rağmen İngilizce cevaptan Çince/İspanyolca/Almanca
+> iddia yazabiliyordu (Trojan ölçümü). Artık iddianın dili cevaptakinden farklıysa cevaptaki alıntı gösterilir; bilgi
+> kartından farklı dilde yazılmış "resmî bilgi" boş bırakılır (`guessLang`, kural tabanlı, API yok).
+
 > **17 Kasım (PDF temizliği):** Marka sayfası PDF'e kaydedilirken paylaşım paneli, Google soruları paneli,
 > düğmeler ve formlar artık çıkmıyor (`no-print`); "Cevaplarda geçen diğer adlar" PDF'te düz liste olarak kalıyor. Playwright yerleşim testi PDF görünümünü de denetliyor.
 

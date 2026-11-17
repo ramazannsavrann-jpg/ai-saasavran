@@ -26,20 +26,56 @@ export function buildTruthPrompt(o: { brand: string; factCard: string; answer: s
 const squash = (s: string) => s.toLowerCase().replace(/i\u0307/g, "i").replace(/ı/g, "i").replace(/[\s"'“”‘’«»*_`]+/g, " ").trim();
 
 /** Sonucu okur; geçersiz durumlar ve cevapta birebir geçmeyen alıntılar atılır. Okunamazsa null. */
-export function parseTruth(text: string, answer: string): TruthClaim[] | null {
+const STOP: Record<string, string[]> = {
+  en: ["the", "is", "and", "of", "with", "for", "are", "a", "to", "in", "has", "its", "it", "offers", "sells"],
+  tr: ["ve", "bir", "ile", "için", "olarak", "bu", "da", "de", "çok", "en", "sunar", "olan", "değil"],
+  es: ["el", "la", "los", "las", "es", "y", "de", "con", "para", "una", "un", "del", "ofrece", "que"],
+  de: ["der", "die", "das", "ist", "und", "mit", "für", "ein", "eine", "etwa", "von", "bietet"],
+  fr: ["le", "la", "les", "est", "et", "avec", "pour", "une", "un", "des", "du", "propose"],
+  it: ["il", "lo", "gli", "è", "e", "con", "per", "una", "di", "offre"],
+  pt: ["o", "os", "é", "e", "com", "para", "uma", "um", "do", "da", "oferece"],
+};
+/** Kısa bir metnin dilini kabaca tahmin eder (yazı sistemi + sık kelimeler). Emin değilse null. */
+export function guessLang(t: string): string | null {
+  if (/[\u3040-\u30ff\u4e00-\u9fff]/u.test(t)) return "zh";
+  if (/[\uac00-\ud7af]/u.test(t)) return "ko";
+  if (/[\u0400-\u04ff]/u.test(t)) return "ru";
+  if (/[\u0600-\u06ff]/u.test(t)) return "ar";
+  if (/[\u0370-\u03ff]/u.test(t)) return "el";
+  const words = t.toLocaleLowerCase().split(/[^\p{L}]+/u).filter(Boolean);
+  if (/[ğışİ]/u.test(t)) return "tr";
+  let best: string | null = null, max = 0, second = 0;
+  for (const [lang, list] of Object.entries(STOP)) {
+    const n = words.filter((w) => list.includes(w)).length;
+    if (n > max) { second = max; max = n; best = lang; } else if (n > second) second = n;
+  }
+  return max >= 2 && max > second ? best : null;
+}
+
+/** Model iddiayı cevabın dilinden başka bir dile çevirdiyse (ör. İngilizce cevaptan Çince iddia) cevaptaki alıntı kullanılır. */
+function sameLang(a: string, b: string, fallback?: string | null): boolean {
+  const x = guessLang(a), y = guessLang(b) ?? fallback ?? null;
+  return !x || !y || x === y;
+}
+
+export function parseTruth(text: string, answer: string, factCard?: string): TruthClaim[] | null {
   const m = text.match(/\{[\s\S]*\}/);
   if (!m) return null;
   let o: { claims?: unknown };
   try { o = JSON.parse(m[0]); } catch { return null; }
   if (!o || !Array.isArray(o.claims)) return null;
   const hay = squash(answer.slice(0, 6000));
+  const answerLang = guessLang(answer.slice(0, 3000));
   const out: TruthClaim[] = [];
   for (const c of o.claims.slice(0, 8) as Record<string, unknown>[]) {
     const status = String(c?.status ?? "").toLowerCase();
     const claim = String(c?.claim ?? "").trim().slice(0, 200), quote = String(c?.quote ?? "").trim().slice(0, 200);
     if (!claim || !["correct", "wrong", "unverifiable"].includes(status)) continue;
     if (quote.length < 3 || !hay.includes(squash(quote))) continue;
-    out.push({ claim, status: status as TruthStatus, fact: String(c?.fact ?? "").trim().slice(0, 200), quote });
+    let fact = String(c?.fact ?? "").trim().slice(0, 200);
+    const translated = !sameLang(claim, quote, answerLang);
+    if (factCard && fact && !sameLang(fact, factCard.slice(0, 600))) fact = "";
+    out.push({ claim: translated ? quote : claim, status: status as TruthStatus, fact, quote });
   }
   return out;
 }
@@ -57,7 +93,7 @@ export async function judgeTruth(opts: {
   const json = (await res.json()) as { output?: { type: string; content?: { type: string; text?: string }[] }[]; usage?: { input_tokens?: number; output_tokens?: number } };
   const text = (json.output ?? []).filter((x) => x.type === "message").flatMap((x) => x.content ?? []).filter((c) => c.type === "output_text").map((c) => c.text ?? "").join("");
   const inputTokens = json.usage?.input_tokens ?? 0, outputTokens = json.usage?.output_tokens ?? 0;
-  return { claims: parseTruth(text, opts.answer), inputTokens, outputTokens, costUsd: estimateCost({ ...opts.price, perCall: 0 }, inputTokens, outputTokens) };
+  return { claims: parseTruth(text, opts.answer, opts.factCard), inputTokens, outputTokens, costUsd: estimateCost({ ...opts.price, perCall: 0 }, inputTokens, outputTokens) };
 }
 
 // ---------------- Kaynak güvenilirliği (kural tabanlı) ----------------
