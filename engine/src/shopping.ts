@@ -165,3 +165,34 @@ export async function shoppingSearchesLeft(apiKey: string, fetchFn?: FetchLike):
     return typeof n === "number" ? n : null;
   } catch { return null; }
 }
+
+// ---------------- Yapay zekâ ↔ Google Shopping karşılaştırması ----------------
+export interface AiShopBrand { name: string; aliases: string[]; recommended: number; isTarget: boolean }
+export interface AiShopCompare {
+  /** Yapay zekânın en çok önerdiği marka (takip edilenler arasında) */
+  aiTop: string | null;
+  /** Sizin yapay zekâdaki sıranız (1 = en çok önerilen); hiç önerilmediyseniz null */
+  ownAiRank: number | null;
+  /** Shopping listesinde ilk sıradaki ilanın markası (takip edilen markalardan biriyse) */
+  shopTop: string | null;
+  /** Sizin markanızın Shopping'deki ilk sırası */
+  ownShopPos: number | null;
+  /** Yapay zekânın 1 numarası ile Shopping'in 1 numarası farklı mı */
+  differ: boolean;
+}
+/**
+ * Marka düzeyinde: yapay zekânın önerdiği sıra ile Google Shopping'de bir aramanın sırası. İlan başlığında marka adı
+ * (ya da takma adı) geçiyorsa o markaya sayılır. Shopping sırası satış değil, tek bir aramanın anlık görüntüsüdür.
+ */
+export function aiVsShopping(brands: AiShopBrand[], items: { title: string; position: number }[]): AiShopCompare {
+  const ranked = [...brands].filter((b) => b.recommended > 0).sort((a, b) => b.recommended - a.recommended);
+  const aiTop = ranked[0] && (ranked.length === 1 || ranked[0].recommended > ranked[1].recommended) ? ranked[0].name : null;
+  const ownIdx = ranked.findIndex((b) => b.isTarget);
+  const ownAiRank = ownIdx < 0 ? null : 1 + ranked.filter((b) => b.recommended > ranked[ownIdx].recommended).length;
+  const brandOf = (title: string) => brands.find((b) => [b.name, ...b.aliases].some((n) => normalize(n).length >= 2 && hasName(normalize(title), normalize(n))))?.name ?? null;
+  const sorted = [...items].sort((a, b) => a.position - b.position);
+  const shopTop = sorted[0] ? brandOf(sorted[0].title) : null;
+  const target = brands.find((b) => b.isTarget);
+  const ownShopPos = target ? sorted.find((i) => brandOf(i.title) === target.name)?.position ?? null : null;
+  return { aiTop, ownAiRank, shopTop, ownShopPos, differ: !!aiTop && !!shopTop && aiTop !== shopTop };
+}

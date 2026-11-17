@@ -839,3 +839,31 @@ test("TruthGuard: İngilizce cevaptan çevrilmiş (Çince/İspanyolca/Almanca) i
   assert.equal(guessLang("Bu ürün çok iyi ve ucuz bir seçenek."), "tr");
   assert.equal(guessLang("Apple Watch"), null);
 });
+
+test("Kendi site kaynak + rakip önerisi: Trojan sitesi kaynak, SKYN hepsinde önerildi", async () => {
+  const { ownCitedRivals } = await import("../src/insights.ts");
+  const brands = [{ id: "t", name: "Trojan", website: "trojanbrands.com", isTarget: true }, { id: "s", name: "SKYN", website: "skyn.com", isTarget: false }];
+  const answers = [
+    { id: "a1", prompt_id: "p", cited_urls: ["https://www.trojanbrands.com/x", "https://cdc.gov"] },
+    { id: "a2", prompt_id: "p", cited_urls: ["https://trojanbrands.com/y"] },
+    { id: "a3", prompt_id: "p", cited_urls: ["https://walmart.com"] },
+  ];
+  const ments = [
+    { response_id: "a1", brand_id: "t", recommended: true, mentioned: true }, { response_id: "a1", brand_id: "s", recommended: true, mentioned: true },
+    { response_id: "a2", brand_id: "t", recommended: false, mentioned: true }, { response_id: "a2", brand_id: "s", recommended: true, mentioned: true },
+    { response_id: "a3", brand_id: "s", recommended: true, mentioned: true },
+  ];
+  const r = ownCitedRivals(answers, ments, brands);
+  assert.deepEqual([r.citingOwn, r.ownRecommended, r.rivalOnly], [2, 1, 1]);
+  assert.deepEqual(r.rivals, [{ id: "s", name: "SKYN", count: 2 }]);
+  assert.equal(ownCitedRivals(answers, ments, [{ ...brands[0], website: null }, brands[1]]).citingOwn, 0);
+});
+
+test("Yapay zekâ ↔ Shopping: AI 1 numarası SKYN, Shopping 1. sıra Trojan; siz AI'da 2., Shopping'de 1.", async () => {
+  const { aiVsShopping } = await import("../src/shopping.ts");
+  const brands = [{ name: "Trojan", aliases: ["Magnum"], recommended: 35, isTarget: true }, { name: "SKYN", aliases: ["LifeStyles"], recommended: 37, isTarget: false }, { name: "ONE Condoms", aliases: [], recommended: 0, isTarget: false }];
+  const r = aiVsShopping(brands, [{ title: "Kimono Maxx 12 Pack", position: 3 }, { title: "Trojan Condoms", position: 1 }, { title: "LifeStyles Ultra Sensitive", position: 2 }]);
+  assert.deepEqual(r, { aiTop: "SKYN", ownAiRank: 2, shopTop: "Trojan", ownShopPos: 1, differ: true });
+  const tie = aiVsShopping([{ ...brands[0], recommended: 37 }, brands[1]], [{ title: "TROJAN MAGNUM XL", position: 1 }]);
+  assert.equal(tie.aiTop, null); assert.equal(tie.ownAiRank, 1); assert.equal(tie.shopTop, "Trojan"); assert.equal(tie.differ, false);
+});
