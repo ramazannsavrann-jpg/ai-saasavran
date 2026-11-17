@@ -79,7 +79,7 @@ export function BrandPage() {
       {hasLive && current?.kind !== "demo_lab" && (tab === "rapor" || tab === "oneriler") && (
         <div className="seg type-switch" role="group" aria-label={L("Ölçüm türü", "Measurement type")}>
           <button aria-pressed={type === "model_knowledge"} onClick={() => setView("aramasiz")}>{L("Aramasız (Gemini)", "No search (Gemini)")}</button>
-          <button aria-pressed={type === "live_search"} onClick={() => setView("canli")}>{L("Canlı aramalı (ChatGPT)", "Live search (ChatGPT)")}</button>
+          <button aria-pressed={type === "live_search"} onClick={() => setView("canli")}>{L("Canlı arama", "Live search")}</button>
         </div>
       )}
       {tab === "rapor" && <Report key={runList.filter((r) => r.status === "done").length} brand={b} type={type} onBrandChange={brand.reload} paid={current?.kind === "growth_lab" || (!!current?.plan && current.plan !== "free")} />}
@@ -651,7 +651,7 @@ function RunControl({ brand, runs, onChange, paidAllowed, workspaceId }: { brand
       ) : paidAllowed && brand.data_origin !== "simulated" ? (
         <div className="run-buttons">
           <Button busy={busy === "free"} disabled={!!busy} onClick={() => start(false)}>{L("Ölçüm başlat (aramasız, ücretsiz)", "Start measurement (no search, free)")}</Button>
-          <Button variant="quiet" busy={busy === "live"} disabled={!!busy || left < 0.05} onClick={() => start(true)}>{L("Canlı aramalı ölçüm (ChatGPT, ücretli)", "Live-search measurement (ChatGPT, paid)")}</Button>
+          <Button variant="quiet" busy={busy === "live"} disabled={!!busy || left < 0.05} onClick={() => start(true)}>{L("Canlı aramalı ölçüm (ücretli)", "Live-search measurement (paid)")}</Button>
           {b && <p className="muted paid-note">{isEn()
             ? <>Paid trial budget: {usd(Number(b.spent_usd))} of {usd(Number(b.cap_usd))} used. One measurement costs about {usd(0.019 * 2 * Math.max(runs[0]?.prompts_total ?? 10, 1))}. It stops automatically at the cap.</>
             : <>Ücretli deneme bütçesi: {usd(Number(b.spent_usd))} / {usd(Number(b.cap_usd))} kullanıldı. Bir ölçüm yaklaşık {usd(0.019 * 2 * Math.max(runs[0]?.prompts_total ?? 10, 1))} tutar. Tavana gelince kendiliğinden durur.</>}</p>}
@@ -695,14 +695,18 @@ function LossCardView({ card, brand, hasSite }: { card: LossCard; brand: string;
 }
 
 const ENGINE_ORDER = ["openai", "claude", "perplexity", "gemini", "mock"];
+/** Canlı aramada bugün ölçülen motorlar; yeni motor eklenince buraya yazılır. */
+const LIVE_ENGINES = ["openai", "claude", "perplexity"];
 
 function Report({ brand, type, onBrandChange, paid = false }: { brand: Brand; type: MeasurementType; onBrandChange: () => void; paid?: boolean }) {
   const vis = useLoad(() => api.visibility(brand.id, type), [brand.id, type]);
   const [metric, setMetric] = useState<"recommend" | "mention">("recommend");
   // Canlı aramada birden çok motor olabilir (ChatGPT, Claude): oranlar motor bazında ayrı gösterilir, karıştırılmaz
   const engList = [...new Set((vis.data ?? []).map((r) => r.provider))].sort((x, y) => ENGINE_ORDER.indexOf(x) - ENGINE_ORDER.indexOf(y));
-  const [engPick, setEngPick] = useState<string | null>(null);
-  const eng = engList.length > 1 ? (engPick && engList.includes(engPick) ? engPick : engList[0]) : null;
+  // Varsayılan "Toplu": aynı türdeki (canlı) bütün motorların cevapları birlikte sayılır; sonra motor bazında detay
+  const [engPick, setEngPick] = useState<string>("all");
+  const eng = engList.length > 1 && engList.includes(engPick) ? engPick : null;
+  const engKey = eng ?? (engList.length === 1 ? engList[0] : null);
   const rows = eng ? (vis.data ?? []).filter((r) => r.provider === eng) : vis.data;
   const pts = series(rows ?? []);
   const last = pts[pts.length - 1];
@@ -712,7 +716,7 @@ function Report({ brand, type, onBrandChange, paid = false }: { brand: Brand; ty
   const answersData = useMemo(() => (answersAll.data && eng ? answersAll.data.filter((x) => x.provider === eng) : answersAll.data), [answersAll.data, eng]);
   const answers = { ...answersAll, data: answersData };
   const live = type === "live_search";
-  const engine = type === "simulated" ? L("Simülasyonda", "In the simulation") : live ? (eng === "claude" ? L("Claude (canlı web aramasıyla)", "Claude (with live web search)") : eng === "perplexity" ? L("Perplexity (canlı web aramasıyla)", "Perplexity (with live web search)") : L("ChatGPT (canlı web aramasıyla)", "ChatGPT (with live web search)")) : "Gemini";
+  const engine = type === "simulated" ? L("Simülasyonda", "In the simulation") : live ? (!engKey ? L("Canlı arama yapan yapay zekâlar (toplu)", "AI assistants with live search (combined)") : engKey === "claude" ? L("Claude (canlı web aramasıyla)", "Claude (with live web search)") : engKey === "perplexity" ? L("Perplexity (canlı web aramasıyla)", "Perplexity (with live web search)") : L("ChatGPT (canlı web aramasıyla)", "ChatGPT (with live web search)")) : "Gemini";
   const domains = live ? topDomains((answers.data ?? []).flatMap((a) => a.cited_urls ?? [])) : [];
   const comps = useLoad(() => api.competitors(brand.id), [brand.id, brand.aliases.join("|")]);
   const ments = useLoad(() => (live && answers.data ? api.mentionsFor(answers.data.map((a) => a.id)) : Promise.resolve([])), [live, answers.data]);
@@ -747,7 +751,7 @@ function Report({ brand, type, onBrandChange, paid = false }: { brand: Brand; ty
 
   return (
     <div className="stack">
-      <DataNotice type={type} />
+      <DataNotice type={type} engines={live && last ? last.providers.map(providerLabel) : undefined} />
       {!last ? (
         <Empty title={L("Henüz tamamlanmış ölçüm yok", "No completed measurements yet")}>
           {isEn()
@@ -758,10 +762,13 @@ function Report({ brand, type, onBrandChange, paid = false }: { brand: Brand; ty
         <>
           {engList.length > 1 && (
             <div className="seg" role="group" aria-label={L("Yapay zekâ motoru", "AI engine")}>
+              <button aria-pressed={!eng} onClick={() => setEngPick("all")}>{L("Toplu", "Combined")}</button>
               {engList.map((e) => <button key={e} aria-pressed={e === eng} onClick={() => setEngPick(e)}>{providerLabel(e)}</button>)}
             </div>
           )}
-          <ScorePanel pts={pts} live={live} simulated={type === "simulated"} allRows={vis.data ?? []} engineName={eng ? providerLabel(eng) : null} />
+          {engList.length > 1 && !eng && <p className="src-sup muted">{L("Toplu: bu ölçümdeki bütün canlı aramalı motorların cevapları birlikte sayılır. Motorların cevap sayısı farklı olabilir; motor bazında sonuç için yukarıdan bir motor seçin.", "Combined: answers from every live-search engine in this measurement are counted together. Engines may have different answer counts; pick an engine above for its own result.")}</p>}
+          {live && (() => { const miss = LIVE_ENGINES.filter((e) => !last.providers.includes(e)); return miss.length > 0 && <p className="src-sup muted">{isEn() ? `Not in this measurement: ${miss.map(providerLabel).join(", ")} (the measurement may predate that engine, or it didn't respond).` : `Bu ölçümde yer almayan: ${miss.map(providerLabel).join(", ")} (ölçüm o motor eklenmeden önce yapılmış ya da motor yanıt vermemiş olabilir).`}</p>; })()}
+          <ScorePanel pts={pts} live={live} simulated={type === "simulated"} allRows={vis.data ?? []} engineName={engKey ? providerLabel(engKey) : engList.length > 1 ? L("Toplu", "Combined") : null} />
           <section className="panel lead-result">
             <div className="lead-meta"><TypeBadge type={type} /><span className="muted">{formatDateTime(last.at)}, {last.providers.map(providerLabel).join(", ")}</span></div>
             <p className="lead-sentence">
