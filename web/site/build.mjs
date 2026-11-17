@@ -150,7 +150,7 @@ const home = `
     <p class="small">Ücretsiz paket: 1 marka, 15 soru, ayda 4 ölçüm. Kart bilgisi istenmez. <a href="#fiyatlar">Fiyatlar</a></p>
   </div>
   <figure class="answer-card" aria-label="Örnek yapay zekâ cevabı">
-    <figcaption><span class="q">What is the best smartwatch to buy this Black Friday?</span></figcaption>
+    <figcaption><span class="q" lang="en">What is the best smartwatch to buy this Black Friday?</span> <span class="small">(ABD'de İngilizce soruldu: "Black Friday'de hangi akıllı saati almalıyım?")</span></figcaption>
     <blockquote>
       <p>1. <mark class="hit">Apple Watch</mark> …</p>
       <p>2. <mark class="hit">Garmin</mark> …</p>
