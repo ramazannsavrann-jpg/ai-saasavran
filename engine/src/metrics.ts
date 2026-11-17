@@ -272,3 +272,47 @@ export function untrackedNames(texts: string[], brands: { name: string; aliases:
   return [...counts.values()].filter((v) => v.strong && (v.count >= 2 || /\p{Ll}\p{Lu}|^[\p{Lu}\p{N}]{2,6}$/u.test(v.name)))
     .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name, "tr")).slice(0, limit).map(({ name, count }) => ({ name, count }));
 }
+
+const RELATION_RE = /(?<!\p{L})(?:(?:version|edition|brand|line|arm|tier|concept|division|subsidiary|sister|parent|part|owned|operated|run|premium)(?!\p{L})[^.\n]{0,30}?(?<!\p{L})(?:of|by)|markas[ıi]|kolu|surumu|versiyonu|bunyesinde|catisi altinda|kardes|grubuna|grubundan|ait)(?!\p{L})/iu;
+
+/**
+ * Takip edilmeyen bir ad, cevapta bilinen bir markanın alt markası / üst şirketi gibi anlatılıyor mu?
+ * Ör. "Mars Athletic / MAC Platinum … The upscale, premium version of MACFit." → "MACFit".
+ * Yalnız öneri içindir: kullanıcı onaylamadan hiçbir şey birleştirilmez.
+ */
+export function relatedBrand(texts: string[], name: string, brands: { name: string; aliases: string[] }[]): string | null {
+  const n = normalize(name);
+  if (!n) return null;
+  const hits = new Map<string, number>();
+  for (const raw of texts) {
+    const text = raw.replace(/\[([^\]]*)\]\([^)]*\)/g, "$1");
+    // Cevabı maddelere böl: en üst düzey madde/numara satırı ya da boş satır yeni bölüm başlatır; alt maddeler aynı bölümde kalır
+    const items: string[] = [];
+    let cur = "";
+    for (const line of text.split("\n")) {
+      if (/^ ?(?:[-*•]|\d+[.)])\s+/.test(line) || line.trim() === "") { if (cur.trim()) items.push(cur); cur = ""; }
+      cur += line + "\n";
+    }
+    if (cur.trim()) items.push(cur);
+    for (const item of items) {
+      for (const part of item.split(/(?<=[.!?])\s+(?=\p{Lu})/u)) {
+        const segN = normalize(item);
+        if (!segN.includes(n)) break;
+        const partN = normalize(part.replace(/[*_#`>]/g, " "));
+        for (const b of brands) {
+          for (const k of [b.name, ...b.aliases]) {
+            const kn = normalize(k);
+            if (kn.length < 3 || kn === n || n.includes(kn) || kn.includes(n)) continue;
+            const at = partN.indexOf(kn);
+            if (at < 0) continue;
+            const near = partN.slice(Math.max(0, at - 45), at + kn.length + 45);
+            if (RELATION_RE.test(near)) hits.set(b.name, (hits.get(b.name) ?? 0) + 1);
+          }
+        }
+      }
+    }
+  }
+  let best: string | null = null, max = 0;
+  for (const [k, v] of hits) if (v > max) { best = k; max = v; }
+  return best;
+}

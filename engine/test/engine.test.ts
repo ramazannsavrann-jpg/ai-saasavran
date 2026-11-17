@@ -806,3 +806,13 @@ test("Ad eşleşmesi: ortak ilk kelime ('Marka A' / 'Marka B') ve ürün adları
   const g = analyzeResponse(r("Garanti uygulaması çok iyi."), [{ id: "g", name: "Garanti BBVA", aliases: [] }]);
   assert.equal(g[0].mentioned, true);
 });
+
+test("Alt marka ipucu: 'Mars Athletic … premium version of MACFit' → MACFit; ilgisiz ad → yok", async () => {
+  const { relatedBrand } = await import("../src/metrics.ts");
+  const g = "*   **MACFit (Tunalı, Panora):**\n    *   *Pros:* Flexible memberships.\n*   **Mars Athletic / MAC Platinum (Ansera):**\n    *   *The Vibe:* The upscale, premium version of MACFit.\n    *   *Pros:* Luxurious locker rooms.\n*   **Bilkent Sports Center:**\n    *   *The Vibe:* Massive university complex, cheaper than MACFit.";
+  const brands = [{ name: "Bobgym", aliases: [] }, { name: "MACFit", aliases: [] }];
+  assert.equal(relatedBrand([g], "Mars Athletic", brands), "MACFit");
+  assert.equal(relatedBrand([g], "Bilkent Sports Center", brands), null);
+  assert.equal(relatedBrand(["Neolife Gym is a local gym. MACFit is a chain."], "Neolife Gym", brands), null);
+  assert.equal(relatedBrand(["MAC/One, MACFit markası olan Mars Athletic Club'ın lüks kulübüdür."], "Mars Athletic Club", brands), "MACFit");
+});
