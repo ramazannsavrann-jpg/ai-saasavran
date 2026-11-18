@@ -62,3 +62,32 @@ const final = out.sort((a, b) => b.at.localeCompare(a.at)).filter((m) => (seen.h
 mkdirSync("web/site/data", { recursive: true });
 writeFileSync("web/site/data/measurements.json", JSON.stringify({ updated: new Date().toISOString().slice(0, 10), items: final }, null, 1) + "\n");
 console.log(`Ölçüm sayfaları: ${final.length} soru (${final.filter((m) => m.lang === "tr").length} TR, ${final.filter((m) => m.lang === "en").length} EN)`);
+
+// ---------- Kendi markamızın son ölçümü → web/site/data/self.json (ana sayfa kutusu ve karşılaştırma tablosu; web/site/self.mjs) ----------
+// Yalnız markasız sorular (soruda "saasavran" geçmeyenler), son bitmiş canlı aramalı ölçüm. Bulunamazsa dosya değiştirilmez.
+{
+  const SELF_BRAND = "1d757724-5db7-45f8-962c-dc6c87f395be";
+  const ENG: Record<string, string> = { openai: "ChatGPT", claude: "Claude", perplexity: "Perplexity", gemini: "Gemini" };
+  const run = (await db.from("runs").select("id,finished_at,created_at").eq("brand_id", SELF_BRAND).eq("status", "done")
+    .eq("measurement_type", "live_search").order("created_at", { ascending: false }).limit(1)).data?.[0];
+  if (run) {
+    const ps = (must(await db.from("prompts").select("id,text").eq("brand_id", SELF_BRAND)) as any[]).filter((p) => !/saasavran/i.test(p.text));
+    const pids = new Set(ps.map((p) => p.id));
+    const rs = (must(await db.from("responses").select("id,prompt_id,provider,data_origin").eq("run_id", run.id)) as any[])
+      .filter((r) => pids.has(r.prompt_id) && r.data_origin !== "simulated");
+    if (rs.length >= 6) {
+      const ms = must(await db.from("mentions").select("response_id,brand_id,recommended").in("response_id", rs.map((r) => r.id))) as any[];
+      const names = new Map((must(await db.from("brands").select("id,name").in("id", [...new Set(ms.map((m) => m.brand_id))])) as any[]).map((b) => [b.id, b.name]));
+      const rec = new Map<string, number>();
+      for (const m of ms) if (m.recommended && m.brand_id !== SELF_BRAND) { const n = names.get(m.brand_id); if (n) rec.set(n, (rec.get(n) ?? 0) + 1); }
+      const ours = ms.filter((m) => m.recommended && m.brand_id === SELF_BRAND).length;
+      const self = {
+        at: String(run.finished_at ?? run.created_at).slice(0, 10), questions: new Set(rs.map((r) => r.prompt_id)).size, answers: rs.length,
+        engines: [...new Set(rs.map((r) => ENG[r.provider] ?? r.provider))], ours,
+        brands: [...rec.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])).slice(0, 8),
+      };
+      writeFileSync("web/site/data/self.json", JSON.stringify(self, null, 1) + "\n");
+      console.log(`Kendi ölçümümüz: ${self.answers} cevabın ${ours} tanesinde önerildik (${self.at}).`);
+    } else console.log("Kendi ölçümümüz: yeterli cevap yok; self.json değişmedi.");
+  } else console.log("Kendi ölçümümüz: bitmiş canlı ölçüm yok; self.json değişmedi.");
+}
