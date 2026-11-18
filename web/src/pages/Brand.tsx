@@ -48,7 +48,8 @@ export function BrandPage() {
   const b = brand.data;
   const runList = runs.data ?? [];
   const hasLive = runList.some((r) => r.measurement_type === "live_search" && r.status === "done");
-  const view = params.get("tur") === "canli" && hasLive ? "live_search" : null;
+  // Canlı ölçüm varsa rapor canlı görünümle açılır; "aramasiz" seçilirse model bilgisi (18 Kasım denetimi)
+  const view = hasLive && params.get("tur") !== "aramasiz" ? "live_search" : null;
   const type: MeasurementType = current?.kind === "demo_lab" ? "simulated" : view ?? "model_knowledge";
   const setView = (v: "canli" | "aramasiz") => { const n = new URLSearchParams(params); n.set("tur", v); setParams(n, { replace: true }); };
 
@@ -265,7 +266,7 @@ function RivalCompare({ own, rivals, brand, answers, hasRuns, onChange, onError 
       ))}
       {answers && rivals.length > 0 && rivalReasons(answers, own, rivals, { name: brand.name }).filter((x) => x.quotes.length > 0).map((x) => (
         <div key={x.rivalId} className="loss-card">
-          <p className="loss-title">{isEn() ? `Why ${rows.find((r) => r.id === x.rivalId)?.name} was recommended instead of yours (${x.answers} answer${x.answers > 1 ? "s" : ""})` : `${rows.find((r) => r.id === x.rivalId)?.name} sizin yerinize neden önerildi (${x.answers} cevap)`}</p>
+          <p className="loss-title">{isEn() ? `What the answers said where ${rows.find((r) => r.id === x.rivalId)?.name} was recommended instead of yours (${x.answers} answer${x.answers > 1 ? "s" : ""})` : `${rows.find((r) => r.id === x.rivalId)?.name} sizin yerinize önerildiğinde cevaplarda geçen ifadeler (${x.answers} cevap)`}</p>
           <ul>{x.quotes.map((q) => <li key={q.answerId}><span className="muted">{providerLabel(q.provider)}: </span>“{q.text}”</li>)}</ul>
           <p className="src-sup muted">{L("Cevaplardan birebir alıntı. Bu özellikler sizin ürününüzde de varsa sitenizde ve ürün sayfanızda açıkça yazın.", "Verbatim quotes from the answers. If your product has these strengths too, state them clearly on your site and product page.")}</p>
         </div>
@@ -1028,7 +1029,7 @@ function Report({ brand, type, onBrandChange, paid = false }: { brand: Brand; ty
                     {p.top_competitor && <p className="q-comp">{p.target_recommended ? L("Sizinle birlikte en çok önerilen rakip", "Competitor most recommended alongside you") : L("Sizin yerinize önerilen rakip", "Competitor recommended instead")}: {p.top_competitor}</p>}
                     {losses.get(p.prompt_id) && <LossCardView card={losses.get(p.prompt_id)!} brand={brand.name} hasSite={!!brand.website} />}
                     {type === "model_knowledge" && !p.target_recommended && p.top_competitor && (
-                      <p className="q-comp muted">{L("Neden önerilmediğinize dair kaynak kanıtı yalnız canlı aramalı ölçümde (ChatGPT, ücretli paketler) çıkar.", "Source evidence for why you weren't recommended is only available in live-search measurements (ChatGPT, paid plans).")}</p>
+                      <p className="q-comp muted">{L("Önerilmediğiniz cevaplarda hangi kaynakların kullanıldığı yalnız canlı aramalı ölçümde (ücretli paketler) görünür.", "Which sources were used in answers that didn't recommend you is only visible in live-search measurements (paid plans).")}</p>
                     )}
                     <button className="link-btn" aria-expanded={open === p.prompt_id} onClick={() => setOpen(open === p.prompt_id ? null : p.prompt_id)}>
                       {open === p.prompt_id ? L("Cevabı gizle", "Hide answer") : L("Cevabı göster", "Show answer")}
@@ -1037,7 +1038,7 @@ function Report({ brand, type, onBrandChange, paid = false }: { brand: Brand; ty
                       <div className="answers">
                         {(answers.data ?? []).filter((a) => a.prompt_id === p.prompt_id).map((a) => (
                           <blockquote key={a.repetition} className="answer">
-                            <p className="answer-meta">{type === "simulated" ? L("Simülasyon cevabı", "Simulated answer") : live ? L(`ChatGPT cevabı (${a.model}, canlı arama)`, `ChatGPT answer (${a.model}, live search)`) : L(`Gemini cevabı (${a.model}, aramasız)`, `Gemini answer (${a.model}, no search)`)}{(answers.data ?? []).filter((x) => x.prompt_id === p.prompt_id).length > 1 && L(`, tekrar ${a.repetition}`, `, repeat ${a.repetition}`)}</p>
+                            <p className="answer-meta">{type === "simulated" ? L("Simülasyon cevabı", "Simulated answer") : live ? L(`${providerLabel(a.provider)} cevabı (${a.model}, canlı arama)`, `${providerLabel(a.provider)} answer (${a.model}, live search)`) : L(`${providerLabel(a.provider)} cevabı (${a.model}, aramasız)`, `${providerLabel(a.provider)} answer (${a.model}, no search)`)}{(answers.data ?? []).filter((x) => x.prompt_id === p.prompt_id).length > 1 && L(`, tekrar ${a.repetition}`, `, repeat ${a.repetition}`)}</p>
                             <Highlighted text={a.answer_text} names={[brand.name, ...brand.aliases, ...(brand.name.split(/\s+/).length > 1 && brand.name.split(/\s+/)[0].length >= 4 ? [brand.name.split(/\s+/)[0]] : [])]} />
                             {live && (a.cited_urls ?? []).length > 0 && (
                               <ul className="answer-sources">{a.cited_urls.map((u) => <li key={u}><a href={u} target="_blank" rel="noopener noreferrer nofollow">{(() => { try { return new URL(u).hostname.replace(/^www\./, ""); } catch { return u; } })()}</a></li>)}</ul>
@@ -1492,7 +1493,7 @@ function TruthGuardPanel({ brand, paid, mix, stats }: { brand: Brand; paid: bool
             <>
               <p className="src-sup"><strong>{L("Rakibiniz sizin yerinize önerildiğinde:", "When a competitor was recommended instead of you:")}</strong></p>
               <ol className="domains">{mix.lost.types.slice(0, 5).map((t) => <li key={t.type}><span>{sl(t.type)}</span><span className="num">{pct(t.share)} <span className="muted">({t.count})</span></span></li>)}</ol>
-              {(() => { const weak = mix.lost.types.filter((t) => t.type === "forum" || t.type === "social").reduce((a, t) => a + t.share, 0); return weak >= 0.4 ? <p className="caution">{isEn() ? `${pct(weak)} of these sources are forums or social media: less reliable sources are shaping these answers. Accurate content on review and news sites can change that.` : `Bu kaynakların %${Math.round(weak * 100)}'i forum veya sosyal medya: cevapları daha az güvenilir kaynaklar şekillendiriyor. İnceleme ve haber sitelerinde doğru içerik bunu değiştirebilir.`}</p> : null; })()}
+              {(() => { const weak = mix.lost.types.filter((t) => t.type === "forum" || t.type === "social").reduce((a, t) => a + t.share, 0); return weak >= 0.4 ? <p className="caution">{isEn() ? `${pct(weak)} of these sources are forums or social media. Accurate content on review and news sites gives AI answers more reliable sources to draw on.` : `Bu kaynakların %${Math.round(weak * 100)}'i forum veya sosyal medya. İnceleme ve haber sitelerindeki doğru içerik, yapay zekâya daha güvenilir kaynak sunar.`}</p> : null; })()}
             </>
           )}
         </>
@@ -1771,7 +1772,7 @@ const SEV_LABEL = { high: L("Önemli", "Important"), medium: L("Orta", "Medium")
 function Advice({ brand, type, runs, onBrandChange }: { brand: Brand; type: MeasurementType; runs: Run[]; onBrandChange: () => void }) {
   const audit = useLoad(() => api.latestAudit(brand.id), [brand.id, brand.audit_requested_at]);
   const prompts = useLoad(() => api.prompts(brand.id), [brand.id]);
-  const lastRun = runs.find((r) => r.status === "done");
+  const lastRun = runs.find((r) => r.status === "done" && r.measurement_type === type);
   const results = useLoad(() => (lastRun ? api.promptResults(lastRun.id) : Promise.resolve([])), [lastRun?.id]);
   // İyileştirme rehberi için kanıtlar (ek API çağrısı yok): önceki ölçüm, motor farkı, kaynak fırsatları, ürün doğruluğu, Shopping
   const prevRun = runs.filter((r) => r.status === "done")[1];
