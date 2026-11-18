@@ -100,6 +100,12 @@
 > **17 Kasım:** Strateji notlarının kodla eşleştirmesi, iş bölümü (marka/ürün ↔ kamu) ve iki oturumun çakışmama
 > kuralları: [`docs/OZELLIK-HARITASI.md`](OZELLIK-HARITASI.md). Yeni özellik önermeden önce okuyun.
 
+## Ana sayfa yeni tasarım (18 Kasım 2026)
+- `/` ve `/tr/`: koyu üst bant, gerçek akıllı saat ölçümünün çubuk grafiği (17 Kasım, 48 cevap), 3 soru kartı, "Nasıl çalışır" adımları, rapor özellikleri simgeli kartlar, şeffaflık kutusu sayı kutularıyla, Plus'ta "Önerilen" etiketi, sonda çağrı bandı.
+- Ana butonlar artık üye olmadan kontrol sayfasına gider (`/tr/kontrol/`, `/check/`); ikinci buton hesap açma.
+- "Şu an neler kullanılabilir" listesi ana sayfadan kaldırıldı; bilgi rapor bölümü notunda ve `/durum` sayfasında.
+- Kontrol: 252 sayfa 360 px'te tarandı (yana taşma, kutudan taşan yazı, görünen kod yok); ana sayfalar 360/412/980/1180/1366 px'te.
+
 ## v1.34 (17 Kasım 2026): Google Shopping düzeltmeleri ve müşteri kuralı
 - Eşleştirme: saat ilanındaki "Case" (kasa) kılıf sayılmıyor; "for ..." ilanları aksesuar (Apple Watch 11 $ hatası).
 - Rakip ürünler kendi adıyla aranabilir (0045) — **yalnız Growth Lab'de** (video/araştırma).
