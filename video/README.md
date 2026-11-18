@@ -120,7 +120,7 @@ Derslerde marka gerçek adıyla anılabilir; tam sıralama tablolarında harf ku
 
 ### Hızlı yayın akışı (18 Kasım, kullanıcı isteği: yayın sonrası bekleme olmasın)
 1. Video `videolar` dalına (commit'e sabit raw link) → `vidiq_video_upload` → `vidiq_social_post_draft_create` (YouTube, public, başlık/açıklama/etiketler) → kullanıcı onayı → `vidiq_social_post_publish`. Ücretli tanıtım bu yolla kapalı yüklenir.
-2. Yayın biter bitmez: `gh api -X POST repos/ramazannsavrann-jpg/ai-saasavran/actions/workflows/youtube-ayar.yml/dispatches -f ref=main` → dil, "yapay içerik" işareti ve dil listesi başlık kuralıyla 1–2 dk içinde uygulanır (ayar.json'da kayıt beklemeden). Kullanıcıya bu bitince haber verilir.
+2. Yayın biter bitmez: `gh api -X POST repos/ramazannsavrann-jpg/ai-saasavran/actions/workflows/youtube-ayar.yml/dispatches -f ref=main -f "inputs[only]=<id1>,<id2>"` (`only` = yalnız yeni videolar; kota korunur. Gece çalışması tam kalır, kapak/gizli koruması sürer. `youtube-ayar` dalına push TAM çalışma başlatır, kotayı yer — kullanma) → dil, "yapay içerik" işareti ve dil listesi başlık kuralıyla 1–2 dk içinde uygulanır (ayar.json'da kayıt beklemeden). Kullanıcıya bu bitince haber verilir.
 3. Konu listesi (ör. "AI Picks: US Edition") için `yt/ayar.json` kaydı ayrı PR ile eklenir; kullanıcı bunu beklemez, testler geçince birleştirilir ve gece çalışmasında da uygulanır.
 
 ### Instagram (@aisaasavran)
