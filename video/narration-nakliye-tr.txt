@@ -1,0 +1,8 @@
+ABD'de yapay zekâ hangi nakliye firmasını öneriyor? New York'ta taşınacak biri gibi ChatGPT, Claude, Perplexity ve Gemini'ye sekiz soru sorduk.
+Bu yedi firma öne çıktı.
+Canlı aramalı kırk sekiz cevapta Firma D açık ara önde: on dokuz cevapta geçti.
+Ama motorlar anlaşamıyor. Canlı arama yapmayan Gemini, Firma D'yi bir kez bile anmadı. Firma A ise Gemini'nin her cevabında var, Perplexity'de hiç yok.
+Soru değişince kazanan değişiyor. Manhattan'ın en güvenilir firması sorulunca Firma D altı cevabın altısında. Son dakika taşınmada ise hiç yok.
+Yedi firmadan yalnızca üçü, dört yapay zekânın hepsinde geçti.
+Yapay zekâ nereye bakıyor? Firmaların kendi siteleri değil, karşılaştırma siteleri ve Yelp öne çıkıyor.
+Bunlar yapay zekânın cevaplarıdır. Yapay zekâ sizin markanız için ne diyor? Ücretsiz ölçün... Ey Ay Saa Savran... nokta com.
