@@ -1,0 +1,305 @@
+{
+ "out": "en",
+ "lang": "en",
+ "order": [
+  "s1",
+  "names",
+  "s2",
+  "s3",
+  "s4",
+  "boxes",
+  "s7",
+  "s8"
+ ],
+ "n": 16,
+ "n2": 48,
+ "names": "Movers: Dumbo Moving, FlatRate Moving, Intense Movers, JP Urban Moving, Piece of Cake Moving, Roadway Moving, Solidarity Movers",
+ "names_list": [
+  "Dumbo Moving",
+  "FlatRate Moving",
+  "Intense Movers",
+  "JP Urban Moving",
+  "Piece of Cake Moving",
+  "Roadway Moving",
+  "Solidarity Movers"
+ ],
+ "footer": "ChatGPT, Claude, Perplexity live web search (US) · Gemini no live search · 18 Nov 2026",
+ "brands": [
+  [
+   "Company D",
+   19
+  ],
+  [
+   "Company A",
+   10
+  ],
+  [
+   "Company F",
+   10
+  ],
+  [
+   "Company C",
+   8
+  ],
+  [
+   "Company E",
+   7
+  ],
+  [
+   "Company B",
+   6
+  ],
+  [
+   "Company G",
+   6
+  ]
+ ],
+ "engines": [
+  [
+   "ChatGPT",
+   "/16"
+  ],
+  [
+   "Claude",
+   "/16"
+  ],
+  [
+   "Perplexity",
+   "/16"
+  ],
+  [
+   "Gemini",
+   "/12"
+  ]
+ ],
+ "gemini_label": "no live search",
+ "eng_rows": [
+  [
+   "Company D",
+   6,
+   9,
+   4,
+   0
+  ],
+  [
+   "Company A",
+   3,
+   7,
+   0,
+   12
+  ],
+  [
+   "Company F",
+   2,
+   6,
+   2,
+   12
+  ],
+  [
+   "Company C",
+   1,
+   5,
+   2,
+   0
+  ],
+  [
+   "Company E",
+   2,
+   3,
+   2,
+   0
+  ],
+  [
+   "Company B",
+   1,
+   3,
+   2,
+   6
+  ],
+  [
+   "Company G",
+   3,
+   2,
+   1,
+   3
+  ]
+ ],
+ "eng_hl": [
+  "Company D",
+  "Company A"
+ ],
+ "questions": [
+  [
+   "Most reliable in Manhattan?",
+   [
+    [
+     "Company D",
+     "6/6",
+     false
+    ],
+    [
+     "Company A",
+     "2/6",
+     false
+    ],
+    [
+     "Company B",
+     "0/6",
+     true
+    ]
+   ]
+  ],
+  [
+   "Last-minute move this week?",
+   [
+    [
+     "Company G",
+     "4/6",
+     false
+    ],
+    [
+     "Company D",
+     "0/6",
+     true
+    ]
+   ]
+  ],
+  [
+   "Small local movers worth hiring?",
+   [
+    [
+     "Company E",
+     "4/6",
+     false
+    ],
+    [
+     "Company A",
+     "3/6",
+     false
+    ],
+    [
+     "Company B",
+     "0/6",
+     true
+    ]
+   ]
+  ],
+  [
+   "Moving to another state?",
+   [
+    [
+     "Company B",
+     "1/6",
+     false
+    ],
+    [
+     "Company D",
+     "0/6",
+     true
+    ],
+    [
+     "Company A",
+     "0/6",
+     true
+    ]
+   ]
+  ]
+ ],
+ "boxes": [
+  {
+   "title": "No. 1 with live search",
+   "lines": [
+    [
+     "Company D: 19/48 live search",
+     "good"
+    ],
+    [
+     "Company D: 0/12 on Gemini",
+     "bad"
+    ]
+   ]
+  },
+  {
+   "title": "Gemini's favorite",
+   "lines": [
+    [
+     "Company A: 12/12 on Gemini",
+     "good"
+    ],
+    [
+     "Company A: 0/16 on Perplexity",
+     "bad"
+    ]
+   ]
+  },
+  {
+   "title": "Mentioned on all four engines",
+   "lines": [
+    [
+     "Company B, F, G · only 3 of the 7",
+     "gold"
+    ]
+   ]
+  }
+ ],
+ "sources": [
+  [
+   "movebuddha.com",
+   11
+  ],
+  [
+   "movd.nyc",
+   8
+  ],
+  [
+   "yelp.com",
+   7
+  ],
+  [
+   "freightwaves.com",
+   6
+  ],
+  [
+   "extraspace.com",
+   6
+  ]
+ ],
+ "dur": {
+  "p1": 7.73,
+  "p2": 1.62,
+  "p3": 5.26,
+  "p4": 9.96,
+  "p5": 7.52,
+  "p6": 2.72,
+  "p7": 4.44,
+  "p8": 7.65
+ },
+ "t": {
+  "hook": "Which moving company does AI recommend?",
+  "badge": "Do they agree?",
+  "hook2": "US edition · New York City · 7 movers · 8 questions",
+  "note": "These are the AI's answers.",
+  "names_title": "Movers that came up",
+  "tag_brands": "Mentions",
+  "who": "Who came up most?",
+  "who_sub": "ChatGPT + Claude + Perplexity, 48 live-search answers",
+  "tag_eng": "Engine comparison",
+  "eng": "The engines disagree",
+  "eng_sub": "Answers mentioning each mover",
+  "eng_note": "Gemini has no live search: it never mentioned Company D.",
+  "tag_q": "By question",
+  "byq": "New question, new winner",
+  "byq_sub": "6 answers per question (live search)",
+  "tag_box": "All four engines",
+  "box": "Same mover, different AI",
+  "tag_src": "Sources",
+  "src": "Where does AI look?",
+  "src_sub": "Answers citing each site (of 48)",
+  "src_note": "Comparison sites beat the movers' own websites.",
+  "cta": "What does AI say about your brand?",
+  "cta2": "Track it weekly across ChatGPT, Gemini, Claude and Perplexity.",
+  "free": "Free check, no signup",
+  "disc": "AI answers from 18 Nov 2026 (US). 60 answers; 4 Gemini answers failed. Small sample, not representative of the whole market. Letters assigned at random. Brand names belong to their owners."
+ },
+ "_map": "A=JP Urban Moving, B=FlatRate Moving, C=Intense Movers, D=Roadway Moving, E=Solidarity Movers, F=Piece of Cake Moving, G=Dumbo Moving (yayına girmez)"
+}
