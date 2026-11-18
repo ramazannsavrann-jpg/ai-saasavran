@@ -1,0 +1,459 @@
+{
+ "out": "en",
+ "lang": "en",
+ "order": [
+  "s1",
+  "names",
+  "s2",
+  "s3",
+  "s4",
+  "boxes",
+  "net",
+  "s8"
+ ],
+ "n": 16,
+ "n2": 48,
+ "names": "Cafes: Anchorhead Coffee, Espresso Vivace, Milstead & Co., Monorail Espresso, Starbucks, Storyville Coffee, Victrola Coffee",
+ "names_list": [
+  "Anchorhead Coffee",
+  "Espresso Vivace",
+  "Milstead & Co.",
+  "Monorail Espresso",
+  "Starbucks",
+  "Storyville Coffee",
+  "Victrola Coffee"
+ ],
+ "footer": "ChatGPT, Claude, Perplexity: live web search (US) · Gemini: model knowledge · 18 Nov 2026",
+ "brands": [
+  [
+   "Espresso Vivace",
+   27
+  ],
+  [
+   "Victrola",
+   21
+  ],
+  [
+   "Storyville",
+   18
+  ],
+  [
+   "Milstead",
+   15
+  ],
+  [
+   "Monorail",
+   13
+  ],
+  [
+   "Anchorhead",
+   9
+  ],
+  [
+   "Starbucks",
+   6
+  ]
+ ],
+ "engines": [
+  [
+   "ChatGPT",
+   "/16"
+  ],
+  [
+   "Claude",
+   "/16"
+  ],
+  [
+   "Perplexity",
+   "/16"
+  ],
+  [
+   "Gemini",
+   "/14"
+  ]
+ ],
+ "gemini_label": "From memory",
+ "eng_rows": [
+  [
+   "Espresso Vivace",
+   10,
+   8,
+   9,
+   5
+  ],
+  [
+   "Victrola",
+   3,
+   12,
+   6,
+   7
+  ],
+  [
+   "Storyville",
+   3,
+   12,
+   3,
+   2
+  ],
+  [
+   "Milstead",
+   7,
+   0,
+   8,
+   9
+  ],
+  [
+   "Monorail",
+   3,
+   6,
+   4,
+   9
+  ],
+  [
+   "Anchorhead",
+   0,
+   8,
+   1,
+   13
+  ],
+  [
+   "Starbucks",
+   2,
+   2,
+   2,
+   10
+  ]
+ ],
+ "eng_hl": [
+  "Starbucks",
+  "Anchorhead"
+ ],
+ "questions": [
+  [
+   "Best coffee shop in Seattle?",
+   [
+    [
+     "Espresso Vivace",
+     "6/6",
+     false
+    ],
+    [
+     "Milstead",
+     "2/6",
+     false
+    ],
+    [
+     "Starbucks",
+     "0/6",
+     true
+    ]
+   ]
+  ],
+  [
+   "Near Pike Place Market?",
+   [
+    [
+     "Storyville",
+     "6/6",
+     false
+    ],
+    [
+     "Anchorhead",
+     "2/6",
+     false
+    ],
+    [
+     "Starbucks",
+     "0/6",
+     true
+    ]
+   ]
+  ],
+  [
+   "Where should a tourist go?",
+   [
+    [
+     "Starbucks",
+     "6/6",
+     false
+    ],
+    [
+     "Espresso Vivace",
+     "4/6",
+     false
+    ],
+    [
+     "Storyville",
+     "4/6",
+     false
+    ]
+   ]
+  ],
+  [
+   "Local roasters worth visiting?",
+   [
+    [
+     "Victrola",
+     "6/6",
+     false
+    ],
+    [
+     "Milstead",
+     "2/6",
+     false
+    ],
+    [
+     "Starbucks",
+     "0/6",
+     true
+    ]
+   ]
+  ]
+ ],
+ "boxes": [
+  {
+   "title": "Starbucks",
+   "lines": [
+    [
+     "Live search: 6/48, all from the tourist question",
+     "bad"
+    ],
+    [
+     "Gemini (from memory): 10/14",
+     "gold"
+    ]
+   ]
+  },
+  {
+   "title": "Strong on one AI, missing on another",
+   "lines": [
+    [
+     "Milstead: 0/16 on Claude",
+     "bad"
+    ],
+    [
+     "Anchorhead: Gemini 13/14 · ChatGPT 0/16",
+     "gold"
+    ]
+   ]
+  }
+ ],
+ "net": {
+  "left": [
+   [
+    "en.wikipedia.org",
+    8
+   ],
+   [
+    "yelp.com",
+    6
+   ],
+   [
+    "theinfatuation.com",
+    6
+   ],
+   [
+    "visitseattle.org",
+    6
+   ],
+   [
+    "talkofthehouse.com",
+    4
+   ],
+   [
+    "remembrew.com",
+    3
+   ]
+  ],
+  "right": [
+   "Espresso Vivace",
+   "Victrola",
+   "Storyville",
+   "Milstead",
+   "Monorail",
+   "Anchorhead",
+   "Starbucks"
+  ],
+  "links": [
+   [
+    0,
+    0,
+    4
+   ],
+   [
+    0,
+    1,
+    5
+   ],
+   [
+    0,
+    4,
+    3
+   ],
+   [
+    0,
+    5,
+    3
+   ],
+   [
+    0,
+    2,
+    5
+   ],
+   [
+    0,
+    6,
+    1
+   ],
+   [
+    1,
+    0,
+    4
+   ],
+   [
+    1,
+    1,
+    5
+   ],
+   [
+    1,
+    4,
+    4
+   ],
+   [
+    1,
+    5,
+    4
+   ],
+   [
+    1,
+    2,
+    6
+   ],
+   [
+    2,
+    0,
+    4
+   ],
+   [
+    2,
+    1,
+    2
+   ],
+   [
+    2,
+    3,
+    3
+   ],
+   [
+    2,
+    4,
+    1
+   ],
+   [
+    3,
+    0,
+    4
+   ],
+   [
+    3,
+    1,
+    3
+   ],
+   [
+    3,
+    3,
+    4
+   ],
+   [
+    3,
+    4,
+    3
+   ],
+   [
+    3,
+    2,
+    1
+   ],
+   [
+    3,
+    6,
+    2
+   ],
+   [
+    4,
+    0,
+    4
+   ],
+   [
+    4,
+    1,
+    2
+   ],
+   [
+    4,
+    4,
+    2
+   ],
+   [
+    4,
+    5,
+    2
+   ],
+   [
+    4,
+    2,
+    2
+   ],
+   [
+    5,
+    0,
+    3
+   ],
+   [
+    5,
+    3,
+    3
+   ]
+  ]
+ },
+ "sources": [],
+ "dur": {
+  "p1": 10.04,
+  "p2": 1.59,
+  "p3": 6.41,
+  "p4": 7.21,
+  "p5": 9.34,
+  "p6": 4.74,
+  "p7": 3.78,
+  "p8": 7.59
+ },
+ "t": {
+  "hook": "Which Seattle coffee shop does AI recommend?",
+  "badge": "Do they agree?",
+  "hook2": "US edition · Starbucks' hometown · 7 cafes · 8 questions",
+  "note": "These are the AI's answers.",
+  "names_title": "Cafes that came up",
+  "names_sub": "In alphabetical order",
+  "tag_brands": "Mentions",
+  "who": "Who came up most?",
+  "who_sub": "ChatGPT + Claude + Perplexity, 48 live-search answers",
+  "tag_eng": "Engine comparison",
+  "eng": "The engines disagree",
+  "eng_sub": "Answers mentioning each cafe",
+  "eng_note": "Starbucks: 6/48 with live search, 10/14 on Gemini.",
+  "tag_q": "By question",
+  "byq": "New question, new winner",
+  "byq_sub": "6 answers per question (live search)",
+  "tag_box": "Starbucks",
+  "box": "Starbucks in its own city",
+  "tag_net": "AI source network",
+  "net": "Which sites shape the answers?",
+  "net_sub": "Line width = answers citing the site that mentioned the cafe",
+  "net_note": "All 6 answers citing Yelp mentioned Storyville.",
+  "cta": "What does AI say about your brand?",
+  "cta2": "Track it weekly across ChatGPT, Gemini, Claude and Perplexity.",
+  "free": "Free check, no signup",
+  "disc": "AI answers from 18 Nov 2026 (US). 62 answers; 2 Gemini answers failed. Small sample, not representative of the whole market. Brand names belong to their owners."
+ }
+}
