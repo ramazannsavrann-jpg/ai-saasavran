@@ -17,7 +17,7 @@ export function Shell() {
       <header className="topbar">
         <NavLink to="/panel" className="brandmark" aria-label={L("AI SaaSavran ana panel", "AI SaaSavran dashboard")}>
           <svg viewBox="0 0 32 32" width="28" height="28" aria-hidden><rect width="32" height="32" rx="8" fill="currentColor" /><circle cx="16" cy="16" r="5" fill="var(--paper)" /><circle cx="16" cy="16" r="10" fill="none" stroke="var(--paper)" strokeWidth="2" strokeDasharray="3 3" /></svg>
-          <span>SaaSavran</span>
+          <span>AI SaaSavran</span>
         </NavLink>
         {current && (
           <label className="ws-switch">

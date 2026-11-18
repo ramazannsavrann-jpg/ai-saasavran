@@ -728,7 +728,9 @@ export function allQuestionIdeas(sector: string | null, city: string | null, bra
 /** Yeni markaya otomatik eklenen ilk sorular (19 Kasım): önce sektör soruları, eksik kalırsa genel sorular; en fazla n. */
 export function starterQuestions(sector: string | null, city: string | null, brand: string, n = 5): { text: string; intent: Intent }[] {
   const seen = new Set<string>(), out: { text: string; intent: Intent }[] = [];
-  for (const q of [...questionTemplates(sector, city, brand), ...poolQuestions(sector), ...genericTemplates(brand, sectorIsEn(sector))]) {
+  // Otomatik eklemede havuzdan yalnız öneri/karşılaştırma/satın alma soruları ("Döner hangi ülkenin?" gibi bilgi soruları fikir olarak kalır)
+  const pool = poolQuestions(sector).filter((q) => q.intent !== "informational");
+  for (const q of [...questionTemplates(sector, city, brand), ...pool, ...genericTemplates(brand, sectorIsEn(sector))]) {
     if (out.length >= n) break;
     if (!seen.has(q.text)) { seen.add(q.text); out.push(q); }
   }
