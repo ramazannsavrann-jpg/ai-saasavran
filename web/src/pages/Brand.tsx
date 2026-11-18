@@ -1240,7 +1240,7 @@ function BriefsPanel({ brand, results }: { brand: Brand; results: PromptResult[]
                       {b.brief.faq.length > 0 && <><p><strong>{L("SSS", "FAQ")}</strong></p><ul className="plain">{b.brief.faq.map((x) => <li key={x}>{x}</li>)}</ul></>}
                       {b.brief.sites.length > 0 && <p><strong>{L("Yapay zekânın baktığı siteler", "Sites the AI relied on")}:</strong> {b.brief.sites.join(", ")}</p>}
                       {b.brief.winners.length > 0 && <p className="muted">{L("Bu soruda önerilenler: ", "Recommended here: ")}{b.brief.winners.join(", ")}</p>}
-                      <p className="src-sup muted">{L("\"Doğrulayın\" işaretli maddeleri kendi doğru bilginizle doldurun; plan, bilgi kartınızda olmayan sayı veya iddia uydurmaz.", "Fill items marked \"verify\" with your own accurate facts; the plan doesn't invent numbers or claims that aren't in your fact card.")}</p>
+                      <p className="src-sup muted">{L("\"Doğrulayın\" işaretli maddeleri kendi doğru bilginizle doldurun; plan, bilgi kartınızda olmayan sayı veya iddia eklemez.", "Fill items marked \"verify\" with your own accurate facts; the plan doesn't invent numbers or claims that aren't in your fact card.")}</p>
                     </div>
                   )}
                 </li>
@@ -1521,7 +1521,7 @@ function TruthGuardPanel({ brand, paid, mix, stats }: { brand: Brand; paid: bool
             ? <p className="muted">{L("Bu ölçümde markanızla ilgili kaynaksız istatistik veya eski tarihli \"güncel\" bilgi bulunmadı.", "No unsourced statistics or outdated \"current\" info about your brand in this measurement.")}</p>
             : (
               <>
-                <p className="muted">{isEn() ? `${stats.unsourced} unsourced statistic${stats.unsourced === 1 ? "" : "s"} and ${stats.oldDates} outdated date${stats.oldDates === 1 ? "" : "s"} in ${stats.answersWithFlags} answers. A number with no source behind it may be made up; check it.` : `${stats.answersWithFlags} cevapta ${stats.unsourced} kaynaksız istatistik ve ${stats.oldDates} eski tarih. Arkasında kaynak olmayan bir sayı uydurma olabilir; kontrol edin.`}</p>
+                <p className="muted">{isEn() ? `${stats.unsourced} unsourced statistic${stats.unsourced === 1 ? "" : "s"} and ${stats.oldDates} outdated date${stats.oldDates === 1 ? "" : "s"} in ${stats.answersWithFlags} answers. A number with no source behind it may be made up; check it.` : `${stats.answersWithFlags} cevapta ${stats.unsourced} kaynaksız istatistik ve ${stats.oldDates} eski tarih. Arkasında kaynak olmayan bir sayı doğrulanmamış olabilir; kontrol edin.`}</p>
                 <ul className="src-dom">
                   {stats.examples.map((e) => (
                     <li key={e.kind + e.sentence}>
