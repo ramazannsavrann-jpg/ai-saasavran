@@ -89,7 +89,7 @@ export function BrandPage() {
         </div>
       )}
       {tab === "rapor" && type === "model_knowledge" && current?.kind !== "demo_lab" && (
-        <p className="caution">{L("Aramasız ölçüm: Gemini internete bakmadan, kendi bildiğinden cevap verir. Küçük ve yerel işletmeleri çoğu zaman tanımaz; bu yüzden cevaplarda markanız hakkında uydurma bilgi olabilir. Gerçek müşterinin gördüğüne en yakın sonuç canlı aramalı ölçümdür.", "No-search measurement: Gemini answers from its own knowledge without the web. It often doesn't know small and local businesses, so answers may contain made-up details about your brand. Live search is closest to what real customers see.")}</p>
+        <p className="caution">{L("Aramasız ölçüm: Gemini internete bakmadan, kendi bildiğinden cevap verir. Küçük ve yerel işletmeleri her zaman tanımayabilir; bu yüzden cevaplardaki bilgiler eksik ya da hatalı olabilir. Doğru bilgi kartını doldurursanız hatalı bilgileri ayrıca işaretleriz. Gerçek müşterinin gördüğüne en yakın sonuç canlı aramalı ölçümdür.", "No-search measurement: Gemini answers from its own knowledge without the web. It may not know small and local businesses, so details in the answers may be incomplete or inaccurate. Fill in your fact card and we'll flag inaccurate details. Live search is closest to what real customers see.")}</p>
       )}
       {tab === "rapor" && <Report key={runList.filter((r) => r.status === "done").length} brand={b} type={type} runs={runList} onBrandChange={brand.reload} paid={current?.kind === "growth_lab" || (!!current?.plan && current.plan !== "free")} />}
       {tab === "rapor" && current?.kind !== "demo_lab" && b.data_origin !== "simulated" && runList.some((r) => r.status === "done") && <ReportSharePanel brand={b} />}
