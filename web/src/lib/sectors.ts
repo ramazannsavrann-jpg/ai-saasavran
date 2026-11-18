@@ -6,6 +6,7 @@
 
 import type { Intent } from "./data";
 import { isEn } from "./i18n";
+import { QUESTION_POOL } from "./question-pool";
 
 export interface SectorDef {
   label: string;           // veritabanında saklanan değer (eski kayıtlarla uyumlu)
@@ -710,10 +711,25 @@ export function competitorSuggestions(sector: string | null, brandName: string, 
   return def.competitors.filter((c) => !taken.has(norm(c)) && !norm(brandName).includes(norm(c)) && !norm(c).includes(norm(brandName)));
 }
 
-/** Marka sayfasındaki tüm hazır soru fikirleri: sektör + genel + satın alma sonrası (tekrarsız). */
+/** Soru havuzu (19 Kasım): sektör için Google'da sorulan gerçek sorular (scripts/question-pool.ts ile toplanır). */
+export function poolQuestions(sector: string | null | undefined): { text: string; intent: Intent }[] {
+  return (sector ? QUESTION_POOL[sector] ?? [] : []).map((q) => ({ text: q.t, intent: q.i as Intent }));
+}
+
+/** Marka sayfasındaki tüm hazır soru fikirleri: sektör + Google havuzu + genel + satın alma sonrası (tekrarsız). */
 export function allQuestionIdeas(sector: string | null, city: string | null, brand: string): { text: string; intent: Intent }[] {
   const en = sectorIsEn(sector), seen = new Set<string>(), out: { text: string; intent: Intent }[] = [];
-  for (const q of [...questionTemplates(sector, city, brand), ...genericTemplates(brand, en), ...postPurchaseTemplates(brand, en)]) {
+  for (const q of [...questionTemplates(sector, city, brand), ...poolQuestions(sector), ...genericTemplates(brand, en), ...postPurchaseTemplates(brand, en)]) {
+    if (!seen.has(q.text)) { seen.add(q.text); out.push(q); }
+  }
+  return out;
+}
+
+/** Yeni markaya otomatik eklenen ilk sorular (19 Kasım): önce sektör soruları, eksik kalırsa genel sorular; en fazla n. */
+export function starterQuestions(sector: string | null, city: string | null, brand: string, n = 5): { text: string; intent: Intent }[] {
+  const seen = new Set<string>(), out: { text: string; intent: Intent }[] = [];
+  for (const q of [...questionTemplates(sector, city, brand), ...poolQuestions(sector), ...genericTemplates(brand, sectorIsEn(sector))]) {
+    if (out.length >= n) break;
     if (!seen.has(q.text)) { seen.add(q.text); out.push(q); }
   }
   return out;

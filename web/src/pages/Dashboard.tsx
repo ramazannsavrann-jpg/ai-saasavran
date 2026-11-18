@@ -7,7 +7,7 @@ import { PAUSE_TEXT } from "../lib/messages";
 import { downloadCsv } from "../lib/csv";
 import { portfolioRows, type PortfolioStatus } from "../../../engine/src/portfolio.ts";
 import { formatDateTime, lowSample, numLoc, rangeText, series, pct, usd } from "../lib/report";
-import { SECTORS } from "../lib/sectors";
+import { SECTORS, starterQuestions } from "../lib/sectors";
 import { L, isEn } from "../lib/i18n";
 import { MyInvites } from "../components/Team";
 import { Button, DataNotice, Empty, ErrorBox, Field, Loading, Meter, Select, TypeBadge } from "../components/ui";
@@ -281,6 +281,15 @@ export function NewBrand() {
         aliases: String(f.get("aliases") || "").split(",").map((s) => s.trim()).filter(Boolean),
         ...(demo ? { data_origin: "simulated" } : {}),
       });
+      // 19 Kasım: tek soruyla başlayan marka kalmasın; ilk 5 soru otomatik eklenir (kullanıcı silebilir), Google keşfi bir kez sıraya girer.
+      if (!demo) {
+        let limit = 5;
+        try { limit = Math.min(5, (await api.usage(b.workspace_id))?.prompt_limit || 5); } catch { /* varsayılan 5 */ }
+        for (const q of starterQuestions(b.sector, b.city, b.name, limit)) {
+          try { await api.addPrompt({ workspace_id: b.workspace_id, brand_id: b.id, text: q.text, intent: q.intent }); } catch { break; }
+        }
+        if (b.sector) { try { await api.requestDiscovery(b.id); } catch { /* hak yoksa sessiz geç */ } }
+      }
       nav(`/marka/${b.id}?sekme=sorular`);
     } catch (e) { setErr(friendlyError(e)); } finally { setBusy(false); }
   }
