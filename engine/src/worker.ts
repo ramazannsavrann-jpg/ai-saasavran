@@ -4,7 +4,11 @@
 
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { BudgetGuard, ResponseCache } from "./budget.ts";
+import { createHash } from "node:crypto";
 import { analyzeResponse, listRank, type BrandRef } from "./metrics.ts";
+
+/** Ölçüm yöntemi sürümü: güven aralığı, başa baş, marka tespiti ya da arama sayısı değişince artırılır (runs.method_version). */
+export const METHOD_VERSION = "2026-11-18";
 import { runPrompts, type StopReason } from "./pipeline.ts";
 import { buildProviders } from "./providers/registry.ts";
 import { SimulatedProvider } from "./providers/simulated.ts";
@@ -132,7 +136,7 @@ export async function processNextRun(deps: WorkerDeps): Promise<WorkerResult | n
   try {
     const target = must(await db.from("brands").select("id,name,aliases,website,country").eq("id", run.brand_id).single(), "marka") as any;
     const comps = must(await db.from("brands").select("id,name,aliases,website").eq("owner_brand_id", run.brand_id).eq("is_competitor", true), "rakipler") as any[];
-    const prompts = must(await db.from("prompts").select("id,text").eq("brand_id", run.brand_id).eq("active", true).order("created_at"), "sorular") as any[];
+    const prompts = must(await db.from("prompts").select("id,text,intent").eq("brand_id", run.brand_id).eq("active", true).order("created_at"), "sorular") as any[];
     const ws = must(await db.from("workspaces").select("plan,kind").eq("id", run.workspace_id).single(), "workspace") as any;
 
     const brands: BrandRef[] = [target, ...comps].map((b) => ({ id: b.id, name: b.name, aliases: b.aliases ?? [], domain: domainOf(b.website) }));
@@ -145,6 +149,15 @@ export async function processNextRun(deps: WorkerDeps): Promise<WorkerResult | n
       return await finish({ status: "failed", stop: "provider_not_configured", ok: 0, failed: 0 }, undefined,
         run.measurement_type === "live_search" ? "Canlı arama sağlayıcısı etkin değil" : "Gemini anahtarı tanımlı değil");
     }
+
+    // Yöntem kaydı (0051): eğilim yalnız aynı yöntem/sınıflandırıcı/soru seti/motorlarla karşılaştırılsın
+    const promptSetHash = createHash("sha256").update(prompts.map((p: any) => `${p.id}:${p.text}`).sort().join("\n")).digest("hex").slice(0, 16);
+    must(await db.from("runs").update({
+      method_version: METHOD_VERSION,
+      classifier_version: env.LLM_CLASSIFY === "true" ? "rules_v3+llm" : "rules_v3",
+      prompt_set_hash: promptSetHash,
+      engines: providers.map((p) => p.config.provider),
+    }).eq("id", run.id), "yöntem kaydı");
 
     const gate = new DbUsageGate(db, run.id);
     const guard = new BudgetGuard(Number(run.max_cost_usd));
@@ -159,7 +172,10 @@ export async function processNextRun(deps: WorkerDeps): Promise<WorkerResult | n
     for (const provider of providers) {
       const llmClassify = env.LLM_CLASSIFY === "true" && provider.config.billing === "paid" && provider.config.useSearch && !!env.OPENAI_API_KEY;
       const outcome = await runPrompts({
-        workspaceId: run.workspace_id, provider, prompts,
+        workspaceId: run.workspace_id, provider,
+        // Growth Lab'de "bilgi" (informational) soruları ücretli motorlara sorulmaz: %30'unda hiç marka geçmiyor (18 Kasım veri denetimi)
+        prompts: ws.kind === "growth_lab" && provider.config.billing === "paid" && run.measurement_type === "live_search"
+          ? prompts.filter((p: any) => p.intent !== "informational") : prompts,
         repetitions: (provider.config.provider === "claude" || provider.config.provider === "perplexity") && ws.kind !== "growth_lab" ? 1 : repetitions,
         guard, cache,
         gate, env, day, sleep: deps.sleep,
@@ -170,6 +186,7 @@ export async function processNextRun(deps: WorkerDeps): Promise<WorkerResult | n
             answer_text: result.answerText, cited_urls: result.citedUrls, search_queries: result.searchQueries,
             data_origin: result.dataOrigin, measurement_type: run.measurement_type, billing: result.billing,
             input_tokens: result.inputTokens, output_tokens: result.outputTokens, cost_usd: result.costUsd,
+            ...(result.modelSnapshot ? { model_snapshot: result.modelSnapshot } : {}),
           }).select("id").single(), "cevap kaydı") as any;
           const hits = analyzeResponse(result, brands);
           const classifier = new Map<string, string>();

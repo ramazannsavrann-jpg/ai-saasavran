@@ -12,7 +12,7 @@ import {
 import { searchLocation } from "./openai.ts";
 
 /** Bir soruda en fazla bu kadar web araması (maliyet üst sınırı). */
-export const CLAUDE_MAX_SEARCHES = 2;
+export const CLAUDE_MAX_SEARCHES = 1; // 18 Kasım: 2 → 1 (bkz. openai.ts)
 export const ANTHROPIC_VERSION = "2023-06-01";
 export const CLAUDE_SEARCH_TOOL = "web_search_20250305";
 
@@ -65,7 +65,9 @@ export function parseClaudeResponse(json: ClaudeResponse, promptId: string, cfg:
   const outputTokens = u.output_tokens ?? 0;
   const searches = u.server_tool_use?.web_search_requests ?? queries.length;
   const cost = estimateCost({ ...cfg.price, perCall: cfg.price.perCall * searches }, inputTokens, outputTokens);
+  const snap = typeof (json as { model?: unknown }).model === "string" ? (json as { model?: string }).model : undefined;
   return {
+    ...(snap ? { modelSnapshot: snap } : {}),
     promptId, provider: "claude", model: cfg.model,
     method: cfg.useSearch ? "api_with_search" : "api_no_search",
     dataOrigin: "live_api", billing: cfg.billing,

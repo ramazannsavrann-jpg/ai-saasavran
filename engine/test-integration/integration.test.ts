@@ -409,7 +409,10 @@ test("Ücretli canlı ölçüm: müşteri alanında imkânsız, Growth Lab'de ç
   assert.ok(calls.every((c) => c.url === "https://api.openai.com/v1/responses"));
   assert.equal(calls[0].body.model, "gpt-6-luna");
   assert.equal(calls[0].body.tools[0].type, "web_search");
-  assert.equal(calls[0].body.max_tool_calls, 2);
+  assert.equal(calls[0].body.max_tool_calls, 1);
+  // Yöntem kaydı (0051)
+  const meta = ok(await svc.from("runs").select("method_version,classifier_version,prompt_set_hash,engines").eq("id", runId).single()) as any;
+  assert.equal(meta.method_version, "2026-11-18"); assert.ok(meta.prompt_set_hash?.length === 16); assert.deepEqual(meta.engines, ["openai"]);
   const resp = ok(await G.c.from("responses").select("provider,cited_urls,measurement_type,billing").eq("run_id", runId)) as any[];
   assert.ok(resp.length >= 1 && resp.every((x) => x.provider === "openai" && x.billing === "paid" && x.measurement_type === "live_search"));
   assert.equal(resp[0].cited_urls.length, 2);
