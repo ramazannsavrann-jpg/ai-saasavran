@@ -99,8 +99,8 @@ function write(path, html) {
   writeFileSync(file, html);
 }
 
-const ORG = { "@context": "https://schema.org", "@type": "Organization", name: SITE.name, alternateName: ["AISaaSavran", "aisaasavran.com", "AI SaaSavran AI visibility tracker"], url: SITE.url, email: SITE.email, logo: SITE.url + "/icon.svg", sameAs: SITE.sameAs,
-  description: `${DEF.en} It is an independent product (aisaasavran.com) and is not affiliated with similarly named companies or services.` };
+const ORG = { "@context": "https://schema.org", "@type": "Organization", name: SITE.name, alternateName: ["AISaaSavran", "aisaasavran.com", "AI SaaSavran AI visibility tracker", "AI SaaSavran yapay zekâ görünürlük aracı"], url: SITE.url, email: SITE.email, logo: SITE.url + "/icon.svg", sameAs: SITE.sameAs,
+  description: `${DEF.en} It is an independent product (aisaasavran.com) and is not affiliated with similarly named companies or services (for example Savran AI, savran.ai).` };
 const WEBSITE = { "@context": "https://schema.org", "@type": "WebSite", name: SITE.name, url: SITE.url, inLanguage: ["en", "tr"], description: DEF.en, publisher: { "@type": "Organization", name: SITE.name, url: SITE.url } };
 const crumbs = (items) => ({ "@context": "https://schema.org", "@type": "BreadcrumbList", itemListElement: items.map(([name, path], i) => ({ "@type": "ListItem", position: i + 1, name, item: SITE.url + path })) });
 const APP = {
@@ -546,7 +546,7 @@ Contact: ${SITE.email}
 - [Product visibility](${SITE.url}/product-visibility/): products in AI buying answers, product accuracy, Google Shopping position.
 
 ## About
-- [About AI SaaSavran](${SITE.url}/about/): independent AI visibility measurement tool, launched 2026, based in Turkey; not affiliated with similarly named companies.
+- [About AI SaaSavran](${SITE.url}/about/): independent AI visibility measurement tool, launched 2026, based in Turkey; not affiliated with similarly named companies such as Savran AI (savran.ai).
 
 ## Pricing
 - [Plans](${SITE.url}/pricing/): Free ($0), Plus ($29/month), Pro ($149/month), Business ($449/month). Monthly billing, cancel anytime, 14-day money-back guarantee.
