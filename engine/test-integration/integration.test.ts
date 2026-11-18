@@ -539,6 +539,7 @@ test("Google Shopping: ücretli alanda istek → işçi SerpApi'yi arar → sır
   assert.ok((await G.c.rpc("request_shopping_check", { p_product: riv.id })).error);
   ok(await G.c.rpc("request_shopping_check", { p_product: own.id }));
   assert.equal(await processShoppingChecks({ db: svc, env: {} }), "SERPAPI_KEY yok");
+  assert.equal(await processShoppingChecks({ db: svc, env: { SERPAPI_KEY: "k" } }), "paid_api_off");
   const urls: string[] = [];
   const fake = async (u: string) => {
     urls.push(u);
@@ -548,7 +549,7 @@ test("Google Shopping: ücretli alanda istek → işçi SerpApi'yi arar → sır
       { title: "Marka A Rüzgar 2 Koşu Ayakkabısı", source: "Mağaza Y", price: "1.999 TL" },
     ] }), { status: 200 });
   };
-  const out = await processShoppingChecks({ db: svc, env: { SERPAPI_KEY: "k" }, fetchFn: fake as any }) as { productId: string; status: string }[];
+  const out = await processShoppingChecks({ db: svc, env: { SERPAPI_KEY: "k", ALLOW_PAID_API: "true" }, fetchFn: fake as any }) as { productId: string; status: string }[];
   const mine = out.find((o) => o.productId === own.id);
   assert.equal(mine?.status, "found:2", JSON.stringify(out));
   assert.ok(urls.some((u) => u.includes("q=ko%C5%9Fu+ayakkab%C4%B1s%C4%B1") && u.includes("gl=tr")));
@@ -562,13 +563,13 @@ test("Google Shopping: ücretli alanda istek → işçi SerpApi'yi arar → sır
   assert.ok((await G.c.from("shopping_checks").insert({ workspace_id: gws.id, product_id: own.id, query: "x", country: "TR" })).error);
   assert.ok((await G.c.rpc("request_shopping_check", { p_product: own.id })).error);
   urls.length = 0;
-  const again = await processShoppingChecks({ db: svc, env: { SERPAPI_KEY: "k" }, fetchFn: fake as any }) as any[];
+  const again = await processShoppingChecks({ db: svc, env: { SERPAPI_KEY: "k", ALLOW_PAID_API: "true" }, fetchFn: fake as any }) as any[];
   assert.ok(!again.some((o) => o.productId === own.id));
   // kalan hak azsa arama yapılmaz
   const own2 = ok(await G.c.from("products").insert({ workspace_id: gws.id, brand_id: gb.id, name: "Fırtına", facts: "Yürüyüş ayakkabısı" }).select("id").single()) as any;
   const low = async (u: string) => { urls.push(u); return new Response(JSON.stringify({ total_searches_left: 3 }), { status: 200 }); };
   urls.length = 0;
-  const lowOut = await processShoppingChecks({ db: svc, env: { SERPAPI_KEY: "k" }, fetchFn: low as any }) as any[];
+  const lowOut = await processShoppingChecks({ db: svc, env: { SERPAPI_KEY: "k", ALLOW_PAID_API: "true" }, fetchFn: low as any }) as any[];
   assert.equal(lowOut.find((o) => o.productId === own2.id)?.status ?? lowOut[0]?.status, "serpapi_quota_low");
   assert.ok(urls.every((u) => u.includes("account.json")), "arama yapılmamalı");
 });

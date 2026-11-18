@@ -6,6 +6,8 @@
 
 import { ClaudeProvider, CLAUDE_DEFAULT } from "../engine/src/providers/claude.ts";
 
+if (process.env.ALLOW_PAID_API !== "true") { console.log("ATLANDI: ALLOW_PAID_API kapalı; ücretli çağrı yapılmadı."); process.exit(0); }
+
 const key = process.env.ANTHROPIC_API_KEY?.trim();
 if (!key) {
   console.log("ATLANDI: ANTHROPIC_API_KEY tanımlı değil. Gerçek bağlantı test EDİLMEDİ.");

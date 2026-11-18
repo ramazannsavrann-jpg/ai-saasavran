@@ -292,6 +292,7 @@ export async function processShoppingChecks(deps: WorkerDeps, max = 5): Promise<
   const { db, env } = deps;
   const key = env.SERPAPI_KEY;
   if (!key) return "SERPAPI_KEY yok";
+  if (env.ALLOW_PAID_API !== "true") return "paid_api_off";
   const pending = must(await db.rpc("pending_shopping_checks", { p_limit: max }), "pending_shopping_checks") as
     { product_id: string; workspace_id: string; brand_name: string; product_name: string; shopping_query: string | null; country: string; rivals: { id: string; name: string; brand: string | null }[]; requested: boolean }[];
   if (!pending.length) return [];
@@ -526,6 +527,7 @@ export async function processPromptDiscovery(deps: WorkerDeps, max = 3): Promise
   const { db, env } = deps;
   const key = env.SERPAPI_KEY;
   if (!key) return "SERPAPI_KEY yok";
+  if (env.ALLOW_PAID_API !== "true") return "paid_api_off";
   const pending = must(await db.rpc("pending_discovery", { p_limit: max }), "pending_discovery") as { run_id: string; brand_id: string; workspace_id: string; brand_name: string; sector: string; city: string | null; country: string | null; lang: string }[];
   if (!pending.length) return [];
   const reserve = Number(env.DISCOVERY_RESERVE || 50);

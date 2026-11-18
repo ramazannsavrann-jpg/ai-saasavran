@@ -3,6 +3,7 @@
 name: Claude bağlantı testi
 on:
   push:
+    branches: [main]
     paths:
       - scripts/claude-smoke.ts
       - .github/workflows/claude-smoke.yml
@@ -23,5 +24,6 @@ jobs:
           node-version: 22
       - name: Claude'a gerçek istek gönder
         env:
+          ALLOW_PAID_API: ${{ vars.ALLOW_PAID_API || 'true' }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: node scripts/claude-smoke.ts
