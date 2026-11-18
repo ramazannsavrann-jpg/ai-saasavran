@@ -1,0 +1,31 @@
+-- Yabancı anahtar indeksleri (18 Kasım denetimi, Supabase performans uyarısı: 29 FK indekssiz).
+-- RLS politikaları ve rapor sorguları bu sütunlarla süzüyor/birleştiriyor (ör. responses.run_id, mentions.brand_id, runs.brand_id).
+create index if not exists admin_log_workspace_id_idx on admin_log (workspace_id);
+create index if not exists ai_bot_hits_workspace_id_idx on ai_bot_hits (workspace_id);
+create index if not exists ai_visits_workspace_id_idx on ai_visits (workspace_id);
+create index if not exists brand_actions_workspace_id_idx on brand_actions (workspace_id);
+create index if not exists brands_owner_brand_id_idx on brands (owner_brand_id);
+create index if not exists content_briefs_prompt_id_idx on content_briefs (prompt_id);
+create index if not exists content_briefs_workspace_id_idx on content_briefs (workspace_id);
+create index if not exists cost_ledger_run_id_idx on cost_ledger (run_id);
+create index if not exists drop_alerts_brand_id_idx on drop_alerts (brand_id);
+create index if not exists drop_alerts_prev_run_id_idx on drop_alerts (prev_run_id);
+create index if not exists engine_conflicts_prompt_id_idx on engine_conflicts (prompt_id);
+create index if not exists engine_conflicts_workspace_id_idx on engine_conflicts (workspace_id);
+create index if not exists mentions_brand_id_idx on mentions (brand_id);
+create index if not exists mentions_workspace_id_idx on mentions (workspace_id);
+create index if not exists product_checks_workspace_id_idx on product_checks (workspace_id);
+create index if not exists products_workspace_id_idx on products (workspace_id);
+create index if not exists prompt_suggestions_workspace_id_idx on prompt_suggestions (workspace_id);
+create index if not exists prompts_brand_id_idx on prompts (brand_id);
+create index if not exists question_suggestions_brand_id_idx on question_suggestions (brand_id);
+create index if not exists report_shares_workspace_id_idx on report_shares (workspace_id);
+create index if not exists responses_prompt_id_idx on responses (prompt_id);
+create index if not exists responses_run_id_idx on responses (run_id);
+create index if not exists runs_brand_id_idx on runs (brand_id);
+create index if not exists shopping_checks_workspace_id_idx on shopping_checks (workspace_id);
+create index if not exists site_audits_workspace_id_idx on site_audits (workspace_id);
+create index if not exists truth_checks_prompt_id_idx on truth_checks (prompt_id);
+create index if not exists truth_checks_run_id_idx on truth_checks (run_id);
+create index if not exists truth_checks_workspace_id_idx on truth_checks (workspace_id);
+create index if not exists workspaces_plan_idx on workspaces (plan);
