@@ -321,6 +321,20 @@
         "AI Picks: US Edition",
         "AI SaaSavran – English Content"
       ]
+    },
+    "ShlJD4l-WB0": {
+      "lang": "tr",
+      "lists": [
+        "Yapay Zekâ Marka Karşılaştırmaları",
+        "AI SaaSavran – Türkçe İçerikler"
+      ]
+    },
+    "hL_EloPq1Y0": {
+      "lang": "en",
+      "lists": [
+        "AI Picks: US Edition",
+        "AI SaaSavran – English Content"
+      ]
     }
   },
   "delete": [],
@@ -346,7 +360,11 @@
     "Uw56ankOGhQ": "smartwatch-us-en.jpg",
     "kLKaNZCQcI8": "security-camera-us-en.jpg",
     "l4AQgjOEzgw": "smartwatch-us-tr.jpg",
-    "o-D7BHM7iKA": "security-camera-us-tr.jpg"
+    "o-D7BHM7iKA": "security-camera-us-tr.jpg",
+    "Ilxb0FZK1go": "nakliye-tr.jpg",
+    "3SmvBaQspGU": "nakliye-en.jpg",
+    "ShlJD4l-WB0": "kahve-seattle-tr.jpg",
+    "hL_EloPq1Y0": "kahve-seattle-en.jpg"
   },
   "tutorials_private": true
 }
