@@ -1,22 +1,32 @@
 # Paket maliyet hesabı
 
-Bu tablo `npm run pricing` ile fiyat kartlarından üretilir (fiyatlar 2026-11-07'de kontrol edildi; OpenAI değerleri gerçek ölçümden). Her CI çalışmasında yeniden hesaplanır.
+Bu tablo `npm run pricing` ile fiyat kartlarından üretilir (fiyatlar 2026-11-07'de kontrol edildi; OpenAI değerleri gerçek ölçümden). Tablo 18 Kasım 2026 denetiminde `npm run pricing` çıktısıyla yenilendi. Her CI çalışmasında yeniden hesaplanır.
 
 ## Sonuç
 
 | Paket | Fiyat | Çağrı/ay | Tipik: maliyet / brüt marj | Kötü durum: maliyet / brüt marj |
 |---|---|---|---|---|
-| Starter (eski öneri: 50 soru, 3 tekrar) | $29.00 | 1950 | $20.28 / %30 | $35.30 / %-22 |
-| Starter (yeni: 25 soru, 2 tekrar) | $29.00 | 650 | $8.70 / %70 | $14.87 / %49 |
-| Starter önerisi (ChatGPT + Gemini, 20 soru, 2 tekrar) | $29.00 | 347 | $6.53 / %77 | $11.82 / %59 |
-| Starter — sadece Gemini (bugünkü durum) | $29.00 | 217 | $3.30 / %89 | $8.08 / %72 |
-| Pro (eski: 3 marka, 50 soru, 3 tekrar) | $79.00 | 5850 | $58.01 / %27 | $100.59 / %-27 |
-| Pro (yeni: 3 marka, 30 soru, 2 tekrar) | $79.00 | 2340 | $26.75 / %66 | $45.43 / %42 |
-| Agency (yeni: 10 marka, 30 soru, 2 tekrar) | $199.00 | 7800 | $83.68 / %58 | $143.04 / %28 |
+| Starter (eski öneri: 50 soru, 3 tekrar) | $29.00 | 1950 | $20.32 / %30 | $42.69 / %-47 |
+| Starter (yeni: 25 soru, 2 tekrar) | $29.00 | 650 | $9.24 / %68 | $17.86 / %38 |
+| Starter önerisi (ChatGPT + Gemini, 20 soru, 2 tekrar) | $29.00 | 347 | $7.32 / %75 | $12.61 / %57 |
+| Starter — sadece Gemini (bugünkü durum) | $29.00 | 217 | $4.09 / %86 | $8.87 / %69 |
+| Pro (eski: 3 marka, 50 soru, 3 tekrar) | $79.00 | 5850 | $57.06 / %28 | $121.68 / %-54 |
+| Pro (yeni: 3 marka, 30 soru, 2 tekrar) | $79.00 | 2340 | $27.14 / %66 | $54.64 / %31 |
+| Agency (yeni: 10 marka, 30 soru, 2 tekrar) | $199.00 | 7800 | $83.18 / %58 | $171.92 / %14 |
+| Free (15 soru, Gemini aramasız, haftada 1 tekrar) | $0.00 | 65 | $1.87 / — | $4.53 / — |
+| Plus (1 marka, 25 soru, ChatGPT canlı + Gemini) | $20.00 | 433 | $7.77 / %61 | $13.95 / %30 |
+| Pro (5 marka, 30 soru, ChatGPT canlı + Gemini) | $99.00 | 2600 | $36.33 / %63 | $66.63 / %33 |
+| Business (15 marka, 30 soru, ChatGPT canlı + Gemini) | $249.00 | 7800 | $103.09 / %59 | $191.50 / %23 |
+| Plus 29 $ (ChatGPT + Claude + Perplexity + Gemini) | $29.00 | 650 | $10.79 / %63 | $18.89 / %35 |
+| Pro 149 $ (ChatGPT + Claude + Perplexity + Gemini) | $149.00 | 3900 | $54.27 / %64 | $96.11 / %35 |
+| Business 449 $ (ChatGPT + Claude + Perplexity + Gemini) | $449.00 | 11700 | $159.41 / %64 | $282.43 / %37 |
+| Plus + Claude (1 marka, 25 soru) | $20.00 | 542 | $9.84 / %51 | $16.71 / %16 |
+| Pro + Claude (5 marka, 30 soru) | $99.00 | 3250 | $48.71 / %51 | $83.21 / %16 |
+| Business + Claude (15 marka, 30 soru) | $249.00 | 9750 | $140.24 / %44 | $241.23 / %3 |
 
 Çağrı başı API maliyeti:
-- Tipik: gemini $0.0018, openai $0.0191, perplexity $0.0059
-- Kötü durum: gemini $0.0158, openai $0.0255, perplexity $0.0059
+- Tipik: gemini $0.0018, openai $0.0191, claude $0.0191, perplexity $0.0047
+- Kötü durum: gemini $0.0158, openai $0.0255, claude $0.0255, perplexity $0.0160
 
 Ücretsiz Gemini kotasıyla (günde 450 çağrı) izlenebilecek "Starter yeni" marka sayısı: 62
 
@@ -44,7 +54,13 @@ Bu tablo `npm run pricing` ile fiyat kartlarından üretilir (fiyatlar 2026-11-0
 | Altyapı payı | müşteri başına 1,25–2,5 $/ay | Supabase Pro ~25 $ / 10–20 müşteri |
 | Ödeme komisyonu | %4 | varsayım; iyzico/PayTR teklifiyle güncellenecek |
 
-## Güncel karar (7 Kasım 2026): ChatGPT tarzı paketler
+## Güncel fiyatlar (12 Kasım 2026, migration 0019)
+
+**Plus 29 $ · Pro 149 $ · Business 449 $** (aylık). Site ve `engine/src/pricing.ts` bu fiyatları kullanır.
+Limitler ve aylık ücretli harcama tavanları değişmedi (Plus 9 $, Pro 50 $, Business 150 $). Aşağıdaki
+7 Kasım tablosundaki 20 / 99 / 249 $ fiyatları **eskidir**; yalnız geçmiş kayıt olarak duruyor.
+
+## Eski karar (7 Kasım 2026): ChatGPT tarzı paketler
 
 Kurucunun isteğiyle paket yapısı ChatGPT'ye benzetildi: Free / Plus / Pro / Business. Pro için ChatGPT'deki 200 $ yerine
 99 $ seçildi, çünkü rakipler (Otterly, Peec AI) bu bantta. Kaynak: `supabase/migrations/0007_plans_v2.sql`, `engine/src/pricing.ts`.

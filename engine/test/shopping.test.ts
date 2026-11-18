@@ -81,3 +81,11 @@ test("Shopping: SerpApi hataları sınıflanır; sonuç yoksa boş liste", async
   assert.match(url, /engine=google_shopping/);
   assert.match(url, /gl=tr/);
 });
+
+test("Shopping: 'Standard/Standart' ürün adıdır, stand (aksesuar) değildir", () => {
+  const w = { name: "Apple Watch Series 11", brand: "Apple" };
+  assert.equal(titleMatches("Apple Watch Series 11 GPS 42mm Standard Band", w), true);
+  assert.equal(titleMatches("Samsung Galaxy Watch8 Standart Kordon", { name: "Galaxy Watch8", brand: "Samsung" }), true);
+  assert.equal(titleMatches("Apple Watch Series 11 şarj standı", w), false);
+  assert.equal(titleMatches("Apple Watch Series 11 Charging Stand", w), false);
+});

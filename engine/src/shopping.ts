@@ -52,7 +52,7 @@ function tokens(s: string): string[] { return normalize(s).split(" ").filter((t)
  * Marka verildiyse marka adı da başlıkta ya da satıcı adında geçmeli (aynı adlı başka markanın ürünü sayılmasın).
  */
 /** Ürünün kendisi olmayan ilanlar: kitap/kılavuz, kılıf, yastık, kablo, yedek parça, "uyumlu" aksesuar. */
-const NOT_PRODUCT = /\b(user guide|guide|manual|book|kitap|kilavuz\w*|rehber\w*|kilif\w*|case for|cases|protective case|phone case|cover|kapak\w*|pads?|ear ?pads?|yastig\w*|yastik\w*|sunger\w*|kablo\w*|cable|stand\w*|aski\w*|sticker|etiket\w*|compatible|uyumlu|replacement|yedek|aksesuar\w*|accessor\w*|koruyucu|protector|skin)\b/;
+const NOT_PRODUCT = /\b(user guide|guide|manual|book|kitap|kilavuz\w*|rehber\w*|kilif\w*|case for|cases|protective case|phone case|cover|kapak\w*|pads?|ear ?pads?|yastig\w*|yastik\w*|sunger\w*|kablo\w*|cable|stands?|standi|standlar\w*|aski\w*|sticker|etiket\w*|compatible|uyumlu|replacement|yedek|aksesuar\w*|accessor\w*|koruyucu|protector|skin)\b/;
 /** Harf ve rakamı birlikte içeren, en az 5 karakterlik bir model kodu (ör. WH-1000XM6'daki 1000xm6): markası yazmasa da yeterince ayırt edicidir. */
 export function isModelCode(name: string): boolean {
   return normalize(name).split(/[\s.]+/).some((w) => w.length >= 5 && /\d/.test(w) && /[a-z]/.test(w));

@@ -1,12 +1,12 @@
 // Metodoloji, marka görünürlüğü ve ürün görünürlüğü sayfaları (TR + EN).
 // Kaynak: engine/src/metrics.ts (anılma/öneri/sıra/kaynak, Wilson aralığı, MIN_SAMPLE=20), insights.ts (kendi site payı),
 // product.ts (ürün doğruluğu), shopping.ts (Google Shopping), web/site/build.mjs PLAN_ROWS (tekrar sayıları).
-// Kod değişirse bu sayfa da güncellenmeli. Ölçmediğimiz bir motoru (Perplexity, Google AI Overviews) yazmayın.
+// Kod değişirse bu sayfa da güncellenmeli. Ölçmediğimiz bir motoru (Google AI Overviews / AI Mode) yazmayın.
 
 // Her yerde aynı kullanılan tanım cümlesi
 export const DEF = {
-  en: "AI SaaSavran measures how often ChatGPT, Gemini and Claude mention and recommend brands and products, in what position they appear, and which sources they rely on.",
-  tr: "AI SaaSavran, markaların ve ürünlerin ChatGPT, Gemini ve Claude'da ne sıklıkla anıldığını, önerildiğini, kaçıncı sırada çıktığını ve hangi kaynaklara dayandığını ölçer.",
+  en: "AI SaaSavran measures how often ChatGPT, Gemini, Claude and Perplexity mention and recommend brands and products, in what position they appear, and which sources they rely on.",
+  tr: "AI SaaSavran, markaların ve ürünlerin ChatGPT, Gemini, Claude ve Perplexity'de ne sıklıkla anıldığını, önerildiğini, kaçıncı sırada çıktığını ve hangi kaynaklara dayandığını ölçer.",
 };
 
 export const METHOD_PAGES = [
@@ -14,7 +14,7 @@ export const METHOD_PAGES = [
     key: "method", lang: "en", path: "/methodology/", alt: "/tr/metodoloji/",
     title: "Methodology: how AI SaaSavran measures AI visibility",
     short: "Methodology",
-    description: "How AI SaaSavran measures mention, recommendation, position and citation in ChatGPT, Gemini and Claude: questions, repetition, live search, confidence ranges, limits.",
+    description: "How AI SaaSavran measures mention, recommendation, position and citation in ChatGPT, Gemini, Claude and Perplexity: questions, repetition, live search, confidence ranges, limits.",
     body: `
 <p class="lede">${DEF.en} This page explains exactly how: which questions are asked, how often, how each metric is calculated and where the limits are.</p>
 
@@ -63,7 +63,7 @@ export const METHOD_PAGES = [
 <li>Results describe the answers on the measurement date. Engines and the web change constantly.</li>
 <li>Real users may see different answers because of their account history, location or app version.</li>
 <li>Recommendation detection is rule-based plus a small AI step; it is reliable for lists but can misread unusual wording.</li>
-<li>We do not currently measure Perplexity or Google's AI answers in search.</li>
+<li>We do not currently measure Google's AI answers in search (AI Overviews, AI Mode).</li>
 </ul>
 
 <h2>Sample-data policy</h2>
@@ -76,14 +76,14 @@ export const METHOD_PAGES = [
     faq: [
       ["How does AI SaaSavran calculate recommendation rate?", "Recommendation rate is the share of answers that recommend the brand: it appears in a list without negative wording, or next to a recommendation phrase. Ambiguous plain-text mentions are checked by a small AI classifier."],
       ["Does AI SaaSavran use live web search?", "Yes on paid plans: ChatGPT, Claude and Perplexity answer with live web search and their sources are recorded. The free plan uses Gemini without live search, labelled as model knowledge."],
-      ["How many times is each question asked?", "Once a week. On paid plans ChatGPT and Gemini ask each question twice per run and Claude once; on the free plan Gemini asks once."],
+      ["How many times is each question asked?", "Once a week. On paid plans ChatGPT and Gemini ask each question twice per run, Claude and Perplexity once; on the free plan Gemini asks once."],
     ],
   },
   {
     key: "method", lang: "tr", path: "/tr/metodoloji/", alt: "/methodology/",
     title: "Metodoloji: AI SaaSavran yapay zekâ görünürlüğünü nasıl ölçer?",
     short: "Metodoloji",
-    description: "AI SaaSavran ChatGPT, Gemini ve Claude'da anılma, önerilme, sıra ve kaynak gösterilmeyi nasıl ölçer: sorular, tekrar, canlı arama, güven aralığı, sınırlar.",
+    description: "AI SaaSavran ChatGPT, Gemini, Claude ve Perplexity'de anılma, önerilme, sıra ve kaynak gösterilmeyi nasıl ölçer: sorular, tekrar, canlı arama, güven aralığı, sınırlar.",
     body: `
 <p class="lede">${DEF.tr} Bu sayfa bunu tam olarak nasıl yaptığımızı anlatır: hangi sorular soruluyor, ne sıklıkla, her metrik nasıl hesaplanıyor ve sınırlar neler.</p>
 
@@ -132,7 +132,7 @@ export const METHOD_PAGES = [
 <li>Sonuçlar ölçüm tarihindeki cevapları anlatır. Motorlar ve internet sürekli değişir.</li>
 <li>Gerçek kullanıcılar hesap geçmişi, konum veya uygulama sürümü yüzünden farklı cevaplar görebilir.</li>
 <li>Öneri tespiti kural tabanlıdır, belirsiz durumlarda küçük bir yapay zekâ adımı kullanılır; listelerde güvenilirdir ama alışılmadık ifadeleri yanlış okuyabilir.</li>
-<li>Şu an Perplexity'yi ve Google arama sonuçlarındaki yapay zekâ cevaplarını ölçmüyoruz.</li>
+<li>Şu an Google arama sonuçlarındaki yapay zekâ cevaplarını (AI Overviews, AI Mode) ölçmüyoruz.</li>
 </ul>
 
 <h2>Örnek veri politikası</h2>
@@ -145,7 +145,7 @@ export const METHOD_PAGES = [
     faq: [
       ["AI SaaSavran önerilme oranını nasıl hesaplar?", "Önerilme oranı, markayı öneren cevapların oranıdır: marka olumsuz ifade olmadan bir listede veya bir öneri ifadesinin yanında geçer. Belirsiz düz metin anılmaları küçük bir yapay zekâ sınıflandırıcısıyla kontrol edilir."],
       ["AI SaaSavran canlı web araması kullanıyor mu?", "Ücretli paketlerde evet: ChatGPT, Claude ve Perplexity canlı web aramasıyla cevap verir ve kaynakları kaydedilir. Ücretsiz paket Gemini'yi canlı arama olmadan kullanır ve bu model bilgisi olarak etiketlenir."],
-      ["Her soru kaç kez soruluyor?", "Haftada bir ölçüm yapılır. Ücretli paketlerde her ölçümde ChatGPT ve Gemini her soruyu iki kez, Claude bir kez sorar; ücretsiz pakette Gemini bir kez sorar."],
+      ["Her soru kaç kez soruluyor?", "Haftada bir ölçüm yapılır. Ücretli paketlerde her ölçümde ChatGPT ve Gemini her soruyu iki kez, Claude ve Perplexity bir kez sorar; ücretsiz pakette Gemini bir kez sorar."],
     ],
   },
   {
