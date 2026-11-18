@@ -2254,9 +2254,10 @@ function UntrackedNames({ brand, competitors, texts, onChange }: { brand: Brand;
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState<string | null>(null);
   const [err, setErr] = useState<string | null>(null);
+  // Tüm hook'lar erken dönüşten önce (React #310: hook sırası her çizimde aynı olmalı)
+  const [pick, setPick] = useState<string | null>(null);
   const names = untrackedNames(texts, [brand, ...competitors]).filter((n) => !hidden.includes(n.name));
   if (names.length === 0 && !msg && !brand.reanalyze_requested_at) return null;
-  const [pick, setPick] = useState<string | null>(null);
   async function act(name: string, kind: "alias" | "competitor" | "rival_alias", rival?: Brand) {
     setBusy(true); setErr(null); setMsg(null);
     try {
