@@ -12,7 +12,7 @@
     "pricing": "node scripts/pricing-report.ts",
     "smoke:gemini": "node scripts/gemini-smoke.ts",
     "scan:secrets": "node scripts/scan-secrets.mjs",
-    "test:integration": "node --test --test-concurrency=1 \"engine/test-integration/*.test.ts\"",
+    "test:integration": "TZ=UTC node --test --test-concurrency=1 \"engine/test-integration/*.test.ts\"",
     "stack": "node scripts/stack/stack.mjs",
     "worker": "node scripts/worker.ts"
   },

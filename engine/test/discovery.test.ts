@@ -54,10 +54,10 @@ test("İşçi: kota düşükse keşif bekler; yeterliyse 3 arama yapılır, temi
     return { st, db, fetchFn, calls: () => calls };
   };
   const low = mk(52);
-  assert.deepEqual(await processPromptDiscovery({ db: low.db, env: { SERPAPI_KEY: "k" }, fetchFn: low.fetchFn } as never), [{ runId: "R", status: "serpapi_quota_low" }]);
+  assert.deepEqual(await processPromptDiscovery({ db: low.db, env: { SERPAPI_KEY: "k", ALLOW_PAID_API: "true" }, fetchFn: low.fetchFn } as never), [{ runId: "R", status: "serpapi_quota_low" }]);
   assert.equal(low.calls(), 0);
   const ok = mk(200);
-  const out = await processPromptDiscovery({ db: ok.db, env: { SERPAPI_KEY: "k" }, fetchFn: ok.fetchFn } as never) as { found: number }[];
+  const out = await processPromptDiscovery({ db: ok.db, env: { SERPAPI_KEY: "k", ALLOW_PAID_API: "true" }, fetchFn: ok.fetchFn } as never) as { found: number }[];
   assert.equal(ok.calls(), 3);
   assert.equal(out[0].found, 4, "mevcut soru ve tekrarlar atıldı: 3 farklı soru + 1 ilgili arama");
   assert.equal((ok.st.updates[0] as { searches: number }).searches, 3);

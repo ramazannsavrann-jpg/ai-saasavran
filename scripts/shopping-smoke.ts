@@ -2,6 +2,8 @@
 // Kalan arama sorgusu ücretsizdir. Yalnız bu dosya ya da iş akışı değişince (ve elle) çalışır.
 import { parseShopping, shoppingLocale, shoppingSearchesLeft } from "../engine/src/shopping.ts";
 
+if (process.env.ALLOW_PAID_API !== "true") { console.log("ATLANDI: ALLOW_PAID_API kapalı; ücretli çağrı yapılmadı."); process.exit(0); }
+
 const key = process.env.SERPAPI_KEY;
 if (!key) { console.log("ATLANDI: SERPAPI_KEY tanımlı değil."); process.exit(0); }
 const before = await shoppingSearchesLeft(key);

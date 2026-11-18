@@ -5,6 +5,8 @@
 
 import { PerplexityProvider, PERPLEXITY_DEFAULT } from "../engine/src/providers/perplexity.ts";
 
+if (process.env.ALLOW_PAID_API !== "true") { console.log("ATLANDI: ALLOW_PAID_API kapalı; ücretli çağrı yapılmadı."); process.exit(0); }
+
 const key = process.env.PERPLEXITY_API_KEY?.trim();
 if (!key) {
   console.log("ATLANDI: PERPLEXITY_API_KEY tanımlı değil. Gerçek bağlantı test EDİLMEDİ.");

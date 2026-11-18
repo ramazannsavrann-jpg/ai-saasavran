@@ -4,6 +4,7 @@
 name: Perplexity bağlantı testi
 on:
   push:
+    branches: [main]
     paths:
       - scripts/perplexity-smoke.ts
       - .github/workflows/perplexity-smoke.yml
@@ -24,5 +25,6 @@ jobs:
           node-version: 22
       - name: Perplexity'ye gerçek istek gönder
         env:
+          ALLOW_PAID_API: ${{ vars.ALLOW_PAID_API || 'true' }}
           PERPLEXITY_API_KEY: ${{ secrets.PERPLEXITY_API_KEY }}
         run: node scripts/perplexity-smoke.ts

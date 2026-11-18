@@ -56,7 +56,8 @@ jobs:
           GEO_DATA_DIR: geo-data
           GEO_DETAIL_DIR: geo-detail
           GEO_CAP_USD: "0.40"
-          ALLOW_PAID_API: "true"
+          # Ücretli API anahtarı: depo değişkeni ALLOW_PAID_API=false yapılırsa tüm ücretli çağrılar durur (tanımsızsa açık).
+          ALLOW_PAID_API: ${{ vars.ALLOW_PAID_API || 'true' }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
@@ -68,14 +69,7 @@ jobs:
           if git -c user.name="geo-otopilot" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" commit -q -m "GEO veri ${{ steps.m.outputs.date }} (${{ steps.m.outputs.mode }}) [skip ci]"; then
             git push -q origin geo-veri
           fi
-      - name: Ayrıntılar (gerçek rakip adları, tam cevaplar; 30 gün)
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: geo-detay
-          path: geo-detail/
-          retention-days: 30
-          if-no-files-found: ignore
+      # Ayrıntı dosyası (gerçek rakip adları, tam cevaplar) eser olarak YÜKLENMEZ: depo herkese açık (18 Kasım denetimi).
       - name: Rapor (GitHub Issue)
         if: steps.m.outputs.mode == 'full'
         continue-on-error: true
