@@ -42,6 +42,8 @@ Bu dal (`seslendirme`) videoların tek kaynağıdır. Yeni oturumda buradan deva
 - **Google Shopping sırası:** belirli ürün/model içeren her videoda (telefon, kulaklık, TV, prezervatif gibi) Google Shopping sırası mutlaka konur (yukarıdaki "Google Shopping verisi" kuralı). Hizmet videolarında (nakliye gibi) Shopping olmaz; bu açıklamada yazılır, uydurulmaz.
 - **Grafiklerde gerçek adlar (18 Kasım):** markalar/firmalar grafiklerde ve anlatımda gerçek adlarıyla gösterilir, harf (Marka A/B) kullanılmaz. Marka kartı kalır, altında "Alfabetik sırayla".
 - **Gemini sütunu:** canlı arama yapmayan Gemini ayrı sütundur; üstünde Gemini renginde küçük rozet "Hafızadan" / "From memory" (`gemini_label`). Alta küçük not konmaz.
+- **"Motor" denmez (18 Kasım):** ekranda ve anlatımda ChatGPT/Claude/Perplexity/Gemini için "yapay zekâ(lar)" / "AI(s)" denir: "Yapay zekâlar anlaşamıyor" / "The AIs disagree", etiket "Yapay zekâ karşılaştırması" / "AI comparison", "dört yapay zekânın hepsinde" / "all four AIs".
+- **Kapak (18 Kasım):** her yüklemede kapak konur: s1'in son karesi (`frame_p1.png`) JPEG → `videolar` dalında `kapak/<ad>-<dil>.jpg`; video yüklenince `yt/ayar.json` "thumbnails" içine {videoId: dosya} eklenir ve `youtube-ayar` dalına push edilir (iş akışı anında çalışır, kapak yüklenir), ayrıca main'e PR.
 - Yeni sahne/şablon değişikliği yapan oturum kodu **bu dala push eder**; yalnız yerel çalışma klasöründe bırakılmaz (prezervatif videosundaki kaynak ağı ve Shopping sahneleri kaydedilmediği için kayboldu).
 
 ## Ses + müzik karışımı

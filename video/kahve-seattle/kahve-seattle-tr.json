@@ -225,7 +225,7 @@
    ]
   },
   {
-   "title": "Bir motorda var, diğerinde yok",
+   "title": "Bir yapay zekâda var, diğerinde yok",
    "lines": [
     [
      "Milstead: Claude'da 0/16",
@@ -438,8 +438,8 @@
   "tag_brands": "Bahsedilen kafeler",
   "who": "Kim öne çıktı?",
   "who_sub": "ChatGPT + Claude + Perplexity, 48 canlı aramalı cevap",
-  "tag_eng": "Motor karşılaştırması",
-  "eng": "Motorlar anlaşamıyor",
+  "tag_eng": "Yapay zekâ karşılaştırması",
+  "eng": "Yapay zekâlar anlaşamıyor",
   "eng_sub": "Kafenin geçtiği cevap sayısı",
   "eng_note": "Starbucks: canlı aramada 6/48, Gemini'de 10/14.",
   "tag_q": "Soru bazında",
