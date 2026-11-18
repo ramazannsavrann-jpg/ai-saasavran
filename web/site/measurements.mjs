@@ -56,8 +56,8 @@ export function measurementBody(m, esc) {
 <table class="mtable"><thead><tr><th>${tr ? "Marka" : "Brand"}</th><th>${tr ? "Önerildi" : "Recommended"}</th><th>${tr ? "Anıldı" : "Mentioned"}</th><th>${tr ? "İlk sırada" : "First pick"}</th></tr></thead><tbody>${rows}</tbody></table>`;
   }).join("\n");
   const note = tr
-    ? `<p class="small">Sayılar AI SaaSavran'ın kendi laboratuvarındaki (Growth Lab) gerçek ölçümdür; cevaplar resmî API'lerle alındı, tüketici uygulamasındaki cevaplar farklı olabilir. Az cevapla küçük farklar şans olabilir: 10 puandan küçük farkları "başa baş" sayarız. <a href="/tr/metodoloji/">Yöntem</a> · <a href="${mIndex("tr")}">Tüm ölçümler</a></p>`
-    : `<p class="small">These are real measurements from AI SaaSavran's own lab (Growth Lab), collected through the official APIs; answers in the consumer apps can differ. With few answers small gaps can be chance: we call gaps under 10 points a tie. <a href="/methodology/">Method</a> · <a href="${mIndex("en")}">All measurements</a></p>`;
+    ? `<p class="small">Sayılar AI SaaSavran'ın kendi laboratuvarındaki (Growth Lab) gerçek ölçümdür; cevaplar resmî API'lerle alındı, tüketici uygulamasındaki cevaplar farklı olabilir. Az cevapla küçük farklar şans olabilir: 10 puandan küçük farkları "başa baş" sayarız. <a href="/tr/metodoloji/">Yöntem</a> · <a href="${mIndex("tr")}">Tüm ölçümler</a> · <a href="/tr/yapay-zeka-gorunurluk-endeksi/">Sektör endeksi</a></p>`
+    : `<p class="small">These are real measurements from AI SaaSavran's own lab (Growth Lab), collected through the official APIs; answers in the consumer apps can differ. With few answers small gaps can be chance: we call gaps under 10 points a tie. <a href="/methodology/">Method</a> · <a href="${mIndex("en")}">All measurements</a> · <a href="/ai-visibility-index/">Sector index</a></p>`;
   const cta = tr
     ? `<p class="actions"><a class="btn" href="/tr/kontrol/">Kendi markanızı ücretsiz kontrol edin</a></p>`
     : `<p class="actions"><a class="btn" href="/check/">Check your own brand for free</a></p>`;
@@ -71,6 +71,6 @@ export function indexBody(lang, items, esc) {
   const tr = lang === "tr";
   const li = items.map((m) => { const t = totals(m); const a = t.list[0]; return `<li><a href="${mPath(m)}">${esc(m.question)}</a><span class="small"> · ${fmtDate(m.at, tr)} · ${a && a.rec ? `${esc(a.name)} ${a.rec}/${t.n}` : tr ? "önerilen yok" : "none recommended"}</span></li>`; }).join("");
   return `<section class="article"><h1>${tr ? "Yapay zekâ ne öneriyor? Gerçek ölçümler" : "What does AI recommend? Real measurements"}</h1>
-<p class="lead">${tr ? `ChatGPT, Claude, Perplexity ve Gemini'ye sorduğumuz gerçek soruların sonuçları. Her hafta kendiliğinden güncellenir; ${items.length} soru.` : `Results of real questions we asked ChatGPT, Claude, Perplexity and Gemini. Updated automatically every week; ${items.length} questions.`}</p>
+<p class="lead">${tr ? `ChatGPT, Claude, Perplexity ve Gemini'ye sorduğumuz gerçek soruların sonuçları. Her hafta kendiliğinden güncellenir; ${items.length} soru. Sektör sektör özet: <a href="/tr/yapay-zeka-gorunurluk-endeksi/">Yapay Zekâ Görünürlük Endeksi</a>.` : `Results of real questions we asked ChatGPT, Claude, Perplexity and Gemini. Updated automatically every week; ${items.length} questions. Sector summary: <a href="/ai-visibility-index/">AI Visibility Index</a>.`}</p>
 <ul class="mlist">${li}</ul></section>`;
 }

@@ -20,6 +20,9 @@
 > değişirse commit + CI. Kendi ölçümümüz (AI SaaSavran, canlı, tavan 0,60 $) çift ISO haftalarında `scripts/self-measure.ts`.
 > Haftalık içerik: Claude zamanlanmış görevi (çarşamba) ölçümlerden 1 yeni TR+EN yazı yazar ve yayınlar.
 > 18 Kasım kendi ölçümümüz: 7 markasız soru × 3 motor × 2 = 42 cevapta 0 öneri; 0,59 $.
+> Yapay Zekâ Görünürlük Endeksi: `/tr/yapay-zeka-gorunurluk-endeksi/` + `/ai-visibility-index/` + CSV `/ai-visibility-index.csv`
+> (`web/site/visibility-index.mjs`): ölçümlerin sektör özeti (sorular metindeki anahtar kelimeyle sektöre ayrılır; yalnız canlı
+> aramalı cevaplar toplanır, Gemini ayrı satır; CC BY 4.0, Dataset şeması). Aynı veriyle her pazartesi kendiliğinden güncellenir.
 
 > **18 Kasım (4 paket, devam):** gizli bilgi taraması Paddle/Resend/SerpApi/Turnstile/GitHub/OAuth + kişisel e-posta; gece Gemini
 > testi hatayı gizlemez; `runs.prompts_total` işçide gerçek soru sayısı; SEO: `/tr/fiyatlar/`, sayfa bazlı `lastmod`, RSS `<link>`,
