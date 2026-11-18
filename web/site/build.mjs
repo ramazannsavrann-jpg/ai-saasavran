@@ -6,7 +6,7 @@ import { dirname, join } from "node:path";
 import { SITE, GUIDES, HOME_FAQ } from "./content.mjs";
 import { LEGAL } from "./legal.mjs";
 import { demoHtml } from "./demo.mjs";
-import { checkHtml } from "./check.mjs";
+import { checkHtml, CHECK_FAQ_TR, CHECK_FAQ_EN } from "./check.mjs";
 import { GUIDES_EN, HOME_FAQ_EN } from "./content-en.mjs";
 import { POSTS } from "./blog.mjs";
 import { LESSONS, tutorialsHtml, tutorialsPath, tutorialsSchema } from "./tutorials.mjs";
@@ -657,8 +657,8 @@ writeFileSync(join(DIST, `${SITE.indexnow}.txt`), SITE.indexnow);
 
 // 6) Uygulama adresleri → /app/ (Cloudflare Pages yeniden yazma, adres çubuğu değişmez)
 const APP_ROUTES = ["/giris", "/kayit", "/sifre", "/durum", "/durum-ic", "/gizlilik", "/kosullar", "/panel", "/hesap", "/demo-lab", "/yonetim", "/calisma-alani/*", "/marka/*", "/rapor/*", "/davet/*"];
-write("/check/", page({ lang: "en", alt: "/tr/kontrol/", path: "/check/", title: "Free AI visibility check | AI SaaSavran", description: "Check for free whether Gemini mentions your business when customers ask about your category. No signup.", body: checkHtml(true), schema: [APP] }));
-write("/tr/kontrol/", page({ lang: "tr", alt: "/check/", path: "/tr/kontrol/", title: "Ücretsiz yapay zekâ görünürlük kontrolü | AI SaaSavran", description: "İşletmeniz Gemini cevaplarında geçiyor mu? Üye olmadan ücretsiz kontrol edin.", body: checkHtml(false), schema: [APP] }));
+write("/check/", page({ lang: "en", alt: "/tr/kontrol/", path: "/check/", title: "Free AI visibility check | AI SaaSavran", description: "Check for free whether Gemini mentions your business when customers ask about your category. No signup.", body: checkHtml(true), schema: [APP, faqLd(CHECK_FAQ_EN)] }));
+write("/tr/kontrol/", page({ lang: "tr", alt: "/check/", path: "/tr/kontrol/", title: "Ücretsiz yapay zekâ görünürlük kontrolü | AI SaaSavran", description: "İşletmeniz Gemini cevaplarında geçiyor mu? Üye olmadan ücretsiz kontrol edin.", body: checkHtml(false), schema: [APP, faqLd(CHECK_FAQ_TR)] }));
 write("/tr/fiyatlar/", page({ lang: "tr", path: "/tr/fiyatlar/", alt: "/pricing/", title: "Fiyatlar: yapay zekâ görünürlük aracı | AI SaaSavran", description: "AI SaaSavran paketleri: Free, Plus aylık 29 $, Pro aylık 149 $, Business aylık 449 $. Aylık ödeme, istediğiniz zaman iptal, 14 gün para iadesi.", body: `<section class="article"><h1>Fiyatlar</h1><p>Ücretsiz başlayın. Ücretli paketler canlı web aramalı ChatGPT, Claude ve Perplexity ölçümü, daha fazla marka ve soru ekler. Aylık ödeme, istediğiniz zaman iptal, 14 gün para iadesi (<a href="/iade/">iade koşulları</a>).</p></section>${plansHtml(false)}`, schema: [APP] }));
 write("/pricing/", page({ lang: "en", path: "/pricing/", alt: "/tr/fiyatlar/", title: "Pricing: AI visibility tracking tool | AI SaaSavran", description: "AI SaaSavran plans: Free, Plus $29/month, Pro $149/month, Business $449/month.", body: `<section class="article"><h1>Pricing</h1><p>Start free. Paid plans add live-search ChatGPT, Claude and Perplexity, more brands and more questions. Monthly billing, cancel anytime, 14-day money-back guarantee (<a href="/refund/">refund policy</a>).</p></section>${plansHtml(true)}`, schema: [APP] }));
 

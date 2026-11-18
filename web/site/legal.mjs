@@ -36,6 +36,7 @@ export const LEGAL = {
 <li><b>Workspace content:</b> brand and competitor names, websites, sector, city and the questions you write.</li>
 <li><b>Measurement results:</b> answers returned by AI services to your questions, and the rates calculated from them.</li>
 <li><b>Usage records:</b> number of measurements, error logs and cost records (for quotas and security).</li>
+<li><b>Free check (no sign-up):</b> the business name, category and city you enter, the result counts, the visitor's country, a guess of the visitor type from the browser's user agent and a one-way hash of the IP address (to enforce 2 checks a month); the plain IP address is not stored.</li>
 <li><b>Payments:</b> handled by Paddle as merchant of record. We don't see or store your card details.</li></ul>
 <p>We don't use advertising or tracking cookies. Cloudflare Web Analytics counts page views without cookies.</p>
 <h2>Why</h2>
