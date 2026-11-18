@@ -4,11 +4,20 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 
 export interface DigestRow {
   user_id: string; lang: "en" | "tr"; token: string | null; brand_id: string; brand_name: string; workspace_name: string;
+  /** Ölçüm türü ve motor: canlı arama ile model bilgisi asla tek orana karıştırılmaz (0049). Eski satırlarda olmayabilir. */
+  measurement_type?: string | null; provider?: string | null;
   cur_n: number; cur_mention: number; cur_recommend: number; prev_n: number; prev_mention: number; prev_recommend: number;
   top_competitor: string | null; top_competitor_rec: number | null;
 }
 export const SITE = "https://aisaasavran.com";
 const esc = (s: string) => s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]!);
+const ENGINE: Record<string, string> = { openai: "ChatGPT", gemini: "Gemini", claude: "Claude", perplexity: "Perplexity" };
+function sourceLabel(lang: "en" | "tr", r: DigestRow): string {
+  const eng = r.provider ? (ENGINE[r.provider] ?? r.provider) : "";
+  const kind = r.measurement_type === "live_search" ? (lang === "tr" ? "canlı web araması" : "live web search")
+    : r.measurement_type === "model_knowledge" ? (lang === "tr" ? "aramasız, model bilgisi" : "no search, model knowledge") : "";
+  return [eng, kind].filter(Boolean).join(" · ");
+}
 const pct = (k: number, n: number) => (n ? Math.round((100 * k) / n) : 0);
 
 function change(lang: "en" | "tr", cur: number, prev: number | null): string {
@@ -24,27 +33,35 @@ export function buildDigest(rows: DigestRow[], token: string): { subject: string
     ? { subject: "Haftalık yapay zekâ görünürlük özetiniz", hello: "Bu haftaki ölçümlerinizin özeti:", rec: "Önerilme", men: "Anılma", answers: "cevap",
         comp: (n: string, k: number, total: number) => `En çok önerilen rakip: ${n} (${total} cevabın ${k}'inde)`,
         open: "Raporu aç", foot: "Bu e-postayı AI SaaSavran hesabınız olduğu için aldınız.", unsub: "Haftalık özeti kapat",
-        note: "Yapay zekâ cevapları sorudan soruya değişir; oranları raporda güven aralığıyla görürsünüz." }
+        note: "Her motor ve ölçüm türü ayrı gösterilir; canlı arama ile aramasız sonuçlar birleştirilmez. Yapay zekâ cevapları sorudan soruya değişir; oranları raporda güven aralığıyla görürsünüz." }
     : { subject: "Your weekly AI visibility summary", hello: "Here's a summary of this week's measurements:", rec: "Recommended", men: "Mentioned", answers: "answers",
         comp: (n: string, k: number, total: number) => `Most recommended competitor: ${n} (${k} of ${total} answers)`,
         open: "Open report", foot: "You're receiving this because you have an AI SaaSavran account.", unsub: "Turn off the weekly summary",
-        note: "AI answers vary from one request to the next; the report shows rates with confidence ranges." };
+        note: "Each engine and measurement type is shown separately; live-search and no-search results are never combined. AI answers vary from one request to the next; the report shows rates with confidence ranges." };
   const unsubUrl = `${SITE}/api/unsubscribe?t=${encodeURIComponent(token)}`;
-  const blocks = rows.map((r) => {
-    const rec = pct(r.cur_recommend, r.cur_n), men = pct(r.cur_mention, r.cur_n);
-    const prevRec = r.prev_n ? pct(r.prev_recommend, r.prev_n) : null, prevMen = r.prev_n ? pct(r.prev_mention, r.prev_n) : null;
-    const lines = [
-      `${T.rec}: ${rec}%${change(lang, rec, prevRec)}`,
-      `${T.men}: ${men}%${change(lang, men, prevMen)}`,
-      `${r.cur_n} ${T.answers}`,
-      ...(r.top_competitor && (r.top_competitor_rec ?? 0) > 0 ? [T.comp(r.top_competitor, r.top_competitor_rec!, r.cur_n)] : []),
-    ];
-    const url = `${SITE}/marka/${r.brand_id}`;
+  const byBrand = new Map<string, DigestRow[]>();
+  for (const r of rows) byBrand.set(r.brand_id, [...(byBrand.get(r.brand_id) ?? []), r]);
+  const blocks = [...byBrand.values()].map((group) => {
+    const b = group[0];
+    const sections = group.map((r) => {
+      const rec = pct(r.cur_recommend, r.cur_n), men = pct(r.cur_mention, r.cur_n);
+      const prevRec = r.prev_n ? pct(r.prev_recommend, r.prev_n) : null, prevMen = r.prev_n ? pct(r.prev_mention, r.prev_n) : null;
+      return {
+        title: sourceLabel(lang, r),
+        lines: [
+          `${T.rec}: ${rec}%${change(lang, rec, prevRec)}`,
+          `${T.men}: ${men}%${change(lang, men, prevMen)}`,
+          `${r.cur_n} ${T.answers}`,
+          ...(r.top_competitor && (r.top_competitor_rec ?? 0) > 0 ? [T.comp(r.top_competitor, r.top_competitor_rec!, r.cur_n)] : []),
+        ],
+      };
+    });
+    const url = `${SITE}/marka/${b.brand_id}`;
     return {
-      text: `${r.brand_name} (${r.workspace_name})\n${lines.map((l) => `- ${l}`).join("\n")}\n${T.open}: ${url}`,
-      html: `<tr><td style="padding:16px 0;border-top:1px solid #e3e8e6"><p style="margin:0 0 6px;font-size:17px;font-weight:700">${esc(r.brand_name)}</p>`
-        + `<p style="margin:0 0 8px;color:#5b6b66;font-size:13px">${esc(r.workspace_name)}</p>`
-        + lines.map((l) => `<p style="margin:0 0 4px">${esc(l)}</p>`).join("")
+      text: `${b.brand_name} (${b.workspace_name})\n${sections.map((x) => `${x.title ? `${x.title}\n` : ""}${x.lines.map((l) => `- ${l}`).join("\n")}`).join("\n")}\n${T.open}: ${url}`,
+      html: `<tr><td style="padding:16px 0;border-top:1px solid #e3e8e6"><p style="margin:0 0 6px;font-size:17px;font-weight:700">${esc(b.brand_name)}</p>`
+        + `<p style="margin:0 0 8px;color:#5b6b66;font-size:13px">${esc(b.workspace_name)}</p>`
+        + sections.map((x) => (x.title ? `<p style="margin:10px 0 4px;font-weight:600">${esc(x.title)}</p>` : "") + x.lines.map((l) => `<p style="margin:0 0 4px">${esc(l)}</p>`).join("")).join("")
         + `<p style="margin:10px 0 0"><a href="${url}" style="color:#11705e;font-weight:600">${T.open}</a></p></td></tr>`,
     };
   });

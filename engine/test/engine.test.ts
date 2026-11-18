@@ -538,6 +538,14 @@ test("Haftalık özet içeriği: oranlar, geçen haftayla fark, rakip ve aboneli
   assert.match(en.html, /\/api\/unsubscribe\?t=tok-1/);
   const tr = buildDigest([{ ...row, lang: "tr", prev_n: 0 }], "x");
   assert.match(tr.text, /Önerilme: 30%\n/);
+  // Canlı arama ile model bilgisi ve motorlar ayrı bölüm; tek orana karışmaz (0049)
+  const split = buildDigest([
+    { ...row, measurement_type: "live_search", provider: "openai", cur_recommend: 5 },
+    { ...row, measurement_type: "model_knowledge", provider: "gemini", cur_recommend: 1 },
+  ], "t");
+  assert.match(split.text, /ChatGPT · live web search\n- Recommended: 50%/);
+  assert.match(split.text, /Gemini · no search, model knowledge\n- Recommended: 10%/);
+  assert.equal((split.text.match(/Acme <Dental>/g) ?? []).length, 1);
   assert.equal(isDigestTime(new Date("2026-11-09T06:30:00Z")), true);   // Pazartesi 09:30 İstanbul
   assert.equal(isDigestTime(new Date("2026-11-09T05:30:00Z")), false);  // 08:30
   assert.equal(isDigestTime(new Date("2026-11-10T07:00:00Z")), false);  // Salı
