@@ -275,7 +275,8 @@ export function NewBrand() {
       const b = await api.addBrand({
         workspace_id: current!.id, name,
         website: String(f.get("website") || "").trim() || null,
-        sector: String(f.get("sector") || "") || null,
+        // "Diğer" seçip ürününü/hizmetini yazdıysa sektör o metin olur: kategori soruları ve Google keşfi bununla kurulur
+        sector: (/^(Diğer|Other)$/.test(String(f.get("sector") || "")) && String(f.get("product") || "").trim()) ? String(f.get("product")).trim().slice(0, 80) : (String(f.get("sector") || "") || null),
         city: String(f.get("city") || "").trim() || null,
         country: /^[A-Za-z]{2}$/.test(String(f.get("country") || "").trim()) ? String(f.get("country")).trim().toUpperCase() : null,
         aliases: String(f.get("aliases") || "").split(",").map((s) => s.trim()).filter(Boolean),
@@ -303,6 +304,7 @@ export function NewBrand() {
         <option value="" disabled>{L("Seçin", "Choose")}</option>
         {SECTORS.map((s) => <option key={s}>{s}</option>)}
       </Select>
+      <Field label={L("Ne satıyorsunuz ya da hangi hizmeti veriyorsunuz?", "What do you sell or offer?")} name="product" maxLength={80} placeholder={L("Örn. köklendirici gübre", "e.g. organic fertilizer")} hint={L("Sektörünüz listede yoksa \"Diğer\"i seçip buraya yazın; sorular buna göre hazırlanır.", "If your sector isn't listed, choose \"Other\" and type it here; questions are built from it.")} />
       <Field label={L("Şehir veya ilçe", "City or area")} name="city" placeholder={L("Örn. Antalya", "e.g. Austin")} />
       <Field label={L("Ülke kodu (isteğe bağlı)", "Country code (optional)")} name="country" key={geo.country} defaultValue={geo.country} maxLength={2} placeholder={L("TR", "US")} hint={L("İki harf: TR, US, DE, GB… Boşsa Türkiye sayılır.", "Two letters: US, GB, DE, TR… Empty means Turkey.")} />
       {!geo.geminiFree && !demo && <p className="caution">{L("Bulunduğunuz ülkede ücretsiz Gemini ölçümü kapalı (Avrupa Ekonomik Alanı, İsviçre, Birleşik Krallık). Marka ekleyebilir ve sorularınızı hazırlayabilirsiniz; ölçüm için ChatGPT canlı aramalı ücretli paketler kullanılabilir.", "Free Gemini measurement isn't available in your country (EEA, Switzerland, UK). You can add your brand and prepare questions; measurement is available with ChatGPT live search on paid plans.")}</p>}

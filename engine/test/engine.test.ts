@@ -966,3 +966,17 @@ test("Rakibi öne çıkaran nitelikler (0055): yalnız rakip önerilip hedef ön
   assert.deepEqual(rows[0].traits.map((t) => [t.trait, t.count, t.ownCount]), [["affordable", 2, 1], ["popular", 1, 0]]);
   assert.equal(rows[0].traits[0].quote, "Otterly is affordable");
 });
+
+test("Markalı soru (19 Kasım pilot): marka soruda geçiyorsa başlık/liste öneri sayılmaz; dolandırıcılık uyarısı önerildi değildir", () => {
+  const b: BrandRef[] = [{ id: "g", name: "Gemici ziraat", aliases: ["Gemici tarım"], domain: null }];
+  const fraud = "\"Gemici Ziraat\" ifadesi, genellikle sosyal medyada **dolandırıcılık şüphesi taşıyan** bazı ilanları akıllara getirmektedir.\n\n1. **Gemici Ziraat** ile ilgili dikkatli olun.";
+  const r1 = analyzeResponse({ promptId: "p", provider: "gemini", answerText: fraud, citedUrls: [] }, b, { question: "Gemici ziraat güvenilir mi?" })[0];
+  assert.equal(r1.mentioned, true); assert.equal(r1.recommended, false);
+  const describe = "**Gemici Ziraat**, Türkiye'de tarım sektöründe faaliyet gösteren bir şirkettir.\n\n### Ürünleri\n- Gübre\n- Tohum";
+  const r2 = analyzeResponse({ promptId: "p", provider: "gemini", answerText: describe, citedUrls: [] }, b, { question: "Gemici ziraat ne iş yapar?" })[0];
+  assert.equal(r2.mentioned, true); assert.equal(r2.recommended, false);
+  // Markasız soruda listede geçmek yine öneridir
+  const list = "Kumluca'da zirai ürün satan yerler:\n1. **Gemici Ziraat**: geniş ürün yelpazesi\n2. Teknik Tarım";
+  const r3 = analyzeResponse({ promptId: "p", provider: "gemini", answerText: list, citedUrls: [] }, b, { question: "Kumluca'da zirai ürün nereden alınır?" })[0];
+  assert.equal(r3.recommended, true);
+});

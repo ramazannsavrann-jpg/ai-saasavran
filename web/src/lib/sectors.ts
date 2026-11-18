@@ -673,6 +673,27 @@ export function genericTemplates(brand: string, en: boolean): { text: string; in
        Q(`${b} ürünleri nereden alınır?`, "purchase")]);
 }
 
+/** Kategori soruları (19 Kasım pilot): sektör listede yoksa ve kullanıcı ürününü/hizmetini yazdıysa ("köklendirici gübre")
+ *  marka adı geçmeyen sorular kurulur. Markalı sorular ("X güvenilir mi?") aramasız Gemini'de uydurma cevaba en açık soru tipi
+ *  olduğu için otomatik eklenmez, yalnız fikir olarak gösterilir. */
+export function productTemplates(noun: string, city: string | null, en: boolean): { text: string; intent: Intent }[] {
+  const n = noun.trim(), c = city?.trim();
+  if (!n) return [];
+  if (en) return [
+    ...(c ? [Q(`Where can I buy ${n} in ${c}?`, "local"), Q(`Which ${n} sellers in ${c} are the most reliable?`, "local")] : [Q(`Where can I buy ${n}?`, "purchase")]),
+    Q(`What are the best ${n} brands?`, "comparison"), Q(`Which company would you recommend for ${n}?`, "comparison"),
+    Q(`What should I look for when buying ${n}?`, "informational"),
+  ];
+  const lw = n.toLocaleLowerCase("tr-TR");
+  return [
+    ...(c ? [Q(`${locative(c)} ${lw} nereden alınır?`, "local"), Q(`${locative(c)} ${lw} satan güvenilir firmalar hangileri?`, "local")] : [Q(`${n} nereden alınır?`, "purchase")]),
+    Q(`En iyi ${lw} markaları hangileri?`, "comparison"), Q(`${n} için hangi firmayı önerirsin?`, "comparison"),
+    Q(`${n} alırken nelere dikkat edilmeli?`, "informational"),
+  ];
+}
+
+const GENERIC_LABELS = new Set(["Diğer", "Other", "İçerik üreticisi: diğer", "Content creator: other"]);
+
 /** Sektör etiketi İngilizce listedense (ya da hiçbir listede yoksa ve arayüz İngilizceyse) İngilizce sorular. */
 function sectorIsEn(sector: string | null | undefined): boolean {
   if (SECTOR_DEFS_EN.some((s) => s.label === sector)) return true;
@@ -681,10 +702,11 @@ function sectorIsEn(sector: string | null | undefined): boolean {
 }
 
 /** Markaya uygun hazır sorular. Yerel sektörlerde şehir yoksa yerel sorular çıkmaz.
- *  Sektörün hazır sorusu yoksa ("Diğer" ya da serbest yazılmış sektör) ve marka adı verildiyse genel sorularla başlar. */
+ *  Listede olmayan serbest sektör ("köklendirici gübre") marka adı geçmeyen kategori sorularıyla başlar; "Diğer"de hazır soru yoktur. */
 export function questionTemplates(sector: string | null, city: string | null, brand?: string): { text: string; intent: Intent }[] {
   const def = sectorDef(sector);
-  if (!def || def.questions.length === 0) return brand ? genericTemplates(brand, sectorIsEn(sector)) : [];
+  if (!def) return sector && !GENERIC_LABELS.has(sector) ? productTemplates(sector, city, sectorIsEn(sector)) : [];
+  if (def.questions.length === 0) return [];
   const c = city?.trim();
   return def.questions
     .filter((q) => c || !/\{(city|where)\}/.test(q.text))
@@ -725,12 +747,12 @@ export function allQuestionIdeas(sector: string | null, city: string | null, bra
   return out;
 }
 
-/** Yeni markaya otomatik eklenen ilk sorular (19 Kasım): önce sektör soruları, eksik kalırsa genel sorular; en fazla n. */
+/** Yeni markaya otomatik eklenen ilk sorular (19 Kasım): sektör ya da kategori soruları, eksik kalırsa Google havuzu; markalı sorular otomatik eklenmez. En fazla n. */
 export function starterQuestions(sector: string | null, city: string | null, brand: string, n = 5): { text: string; intent: Intent }[] {
   const seen = new Set<string>(), out: { text: string; intent: Intent }[] = [];
   // Otomatik eklemede havuzdan yalnız öneri/karşılaştırma/satın alma soruları ("Döner hangi ülkenin?" gibi bilgi soruları fikir olarak kalır)
   const pool = poolQuestions(sector).filter((q) => q.intent !== "informational");
-  for (const q of [...questionTemplates(sector, city, brand), ...pool, ...genericTemplates(brand, sectorIsEn(sector))]) {
+  for (const q of [...questionTemplates(sector, city, brand), ...pool]) {
     if (out.length >= n) break;
     if (!seen.has(q.text)) { seen.add(q.text); out.push(q); }
   }

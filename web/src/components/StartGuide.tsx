@@ -116,6 +116,7 @@ export function StartGuide({ brand, runs, onRunsChange, goTab }: { brand: Brand;
             ? L("Ölçüm başlatıldı. Genellikle birkaç dakikada biter; bu sayfa kendiliğinden güncellenir.", "Measurement started. It usually finishes in a few minutes; this page updates by itself.")
             : L("Ölçüm sırada. Ölçümler her saat 17 geçe işlenir (Türkiye saatiyle 08:17–23:17); bu sayfa kendiliğinden güncellenir. Sayfayı kapatabilirsiniz, sonuç kaybolmaz.", "Measurement queued. Measurements are processed at 17 past every hour (08:17–23:17 Turkey time); this page updates by itself. You can close the page, nothing is lost.")}</p>
           <p className="muted">{L("Beklerken: rakip ve soru eklemeye devam edebilirsiniz; sonraki ölçümde sayılırlar.", "While you wait: keep adding competitors and questions; they count in the next measurement.")}</p>
+          <div className="guide-actions"><button className="btn btn-primary" onClick={() => goTab("rapor")}>{L("Rapor sekmesine git", "Go to the report tab")}</button></div>
         </>)}
         {row(6, "bilgi", L("Doğru bilgi kartını doldurun", "Fill in your fact card"), <>
           <p>{L("Yapay zekâ markanız hakkında yanlış bilgi veriyor mu? Kuruluş yılı, adres, çalışma saatleri, hizmetler gibi doğru bilgileri yazın; cevaplar bunlarla karşılaştırılır (TruthGuard, ücretli paketlerde).", "Is the AI saying wrong things about your brand? Write the correct facts (founding year, address, hours, services); answers are checked against them (TruthGuard, paid plans).")}</p>
