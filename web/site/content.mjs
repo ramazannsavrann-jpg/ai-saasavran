@@ -5,7 +5,7 @@ export const SITE = {
   name: "AI SaaSavran",
   url: "https://aisaasavran.com",
   email: "info@aisaasavran.com",
-  updated: "2026-11-07",
+  updated: "2026-11-18",
   // IndexNow anahtarı (gizli değildir; Bing/Yandex'e "bu sayfa değişti" bildirmek için sitede herkese açık durur).
   indexnow: "81070e2ac780301303314203d3c9f558",
   // Markanın resmî profilleri (Organization.sameAs) — yapay zekânın markayı tek bir varlık olarak tanıması için.
@@ -73,7 +73,7 @@ export const GUIDES = [
   {
     slug: "geo-nedir",
     title: "GEO (Generative Engine Optimization) nedir? İşletmeler için kısa rehber",
-    short: "GEO nedir",
+    short: "GEO nedir? Üretken motor optimizasyonu",
     description: "GEO, markanızın ChatGPT, Gemini gibi yapay zekâ asistanlarının cevaplarında yer alması için yapılan çalışmadır. SEO'dan farkı, nasıl ölçüldüğü ve ilk adımlar.",
     body: `
 <p class="lede">GEO (Generative Engine Optimization, üretken motor optimizasyonu), markanızın ChatGPT, Gemini, Perplexity gibi yapay zekâ asistanlarının cevaplarında anılması ve önerilmesi için yapılan çalışmalardır. Benzer anlamda AEO (Answer Engine Optimization) terimi de kullanılır.</p>
