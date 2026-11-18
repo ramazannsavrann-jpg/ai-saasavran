@@ -682,6 +682,12 @@ test("Paylaşılan rapor: editör bağlantı üretir; bağlantıyla salt okunur 
   assert.deepEqual(rep.questions.map((q: any) => [q.text, q.recommended]), [["Hangi kafeyi önerirsin?", 1]]);
   assert.deepEqual(rep.sources, [{ domain: "ornek.com", count: 1 }]);
   assert.ok(!JSON.stringify(rep).includes("Paylaşmarka iyi"), "cevap metni raporda olmamalı");
+  // En önemli 3 iş (0054): sahip/editör yazar, paylaşılan rapor gösterir; yabancı yazamaz
+  assert.equal(rep.actions, null);
+  ok(await O.c.from("brands").update({ top_actions: [{ title: "Web sitesi ekleyin", action: "Markaya site adresi girin." }], top_actions_at: "2026-11-18T10:00:00Z" }).eq("id", b.id));
+  await X.c.from("brands").update({ top_actions: [{ title: "Sahte", action: "x" }] }).eq("id", b.id);
+  const rep2 = ok(await svc.rpc("shared_report", { p_token: token })) as any;
+  assert.deepEqual(rep2.actions.items.map((a: any) => a.title), ["Web sitesi ekleyin"]);
   // listede görünür, yabancı görmez; iptal edilince boş
   const list = ok(await O.c.from("report_shares").select("id,token")) as any[];
   assert.equal(list.length, 1);

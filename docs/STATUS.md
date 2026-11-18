@@ -14,6 +14,12 @@
 > kullanır; iki nedensellik cümlesi kanıt dilinde; motor listeleri (Perplexity) ve eski fiyat notları düzeltildi; `test:integration` TZ=UTC.
 > Fiyat kararı: **29 / 149 / 449 $** (sahip, 18 Kasım).
 >
+> **18 Kasım (4 paket, devam):** gizli bilgi taraması Paddle/Resend/SerpApi/Turnstile/GitHub/OAuth + kişisel e-posta; gece Gemini
+> testi hatayı gizlemez; `runs.prompts_total` işçide gerçek soru sayısı; SEO: `/tr/fiyatlar/`, sayfa bazlı `lastmod`, RSS `<link>`,
+> `favicon.ico`, blog görseli 640×360, başlıklar; uygulama parçalı yüklenir (ilk yük 846 → 571 kB); 0053 29 FK indeksi;
+> zaman grafiğinin altında "yöntem/soru seti/motor değişti" notu (0051 alanları); 0054 `brands.top_actions` → paylaşılan raporda
+> "En önemli 3 iş" (sahip/editör rapor ekranını açınca güncellenir).
+
 > **18 Kasım (3. aşama, ürün):** Paddle 0052 `apply_subscription_v2` (yeni abonelik yalnız checkout'u başlatan owner/admin/editor
 > üyeyle bağlanır; aynı aboneliğin eski olayı `stale_event`). Bilgi kartı `FactCardInline` ile rehberde (6. adım) ve TruthGuard'da.
 > Raporda en üstte "Bu hafta yapılacak iş" (Öneriler ile aynı `useRecommendations`). Kaynak panelleri "Kaynaklar", AI ziyaret/bot

@@ -10,6 +10,8 @@ export interface Brand {
   id: string; workspace_id: string; name: string; aliases: string[]; website: string | null;
   sector: string | null; city: string | null; country: string | null; is_competitor: boolean; owner_brand_id: string | null; data_origin: string;
   auto_weekly: boolean; audit_requested_at: string | null; reanalyze_requested_at: string | null;
+  /** Paylaşılan rapor için ilk 3 öneri (0054) */
+  top_actions?: { title: string; action: string }[] | null; top_actions_at?: string | null;
   fact_card?: string | null; fact_card_updated_at?: string | null; track_key?: string;
 }
 export interface Prompt { id: string; brand_id: string; text: string; intent: Intent; segment: string | null; active: boolean; created_at: string }
@@ -20,6 +22,8 @@ export interface Run {
   stop_reason: string | null; error_class: string | null; error: string | null;
   calls_ok: number; calls_failed: number; prompts_total: number; created_at: string; finished_at: string | null;
   trigger: "manual" | "weekly" | "seed";
+  /** Yöntem kaydı (0051); eski ölçümlerde null */
+  method_version?: string | null; prompt_set_hash?: string | null; engines?: string[] | null;
 }
 export interface Usage {
   plan_id: string; plan_name: string; status: "active" | "paused"; paused_reason: string | null;

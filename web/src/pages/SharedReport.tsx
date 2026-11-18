@@ -14,6 +14,8 @@ interface Shared {
   vis: Record<MeasurementType, VisRow[]>;
   questions: { text: string; answers: number; recommended: number; mentioned: number; top_competitor: string | null }[];
   sources: { domain: string; count: number }[];
+  /** Sahibin rapor ekranında hesaplanan ilk 3 öneri (0054) */
+  actions?: { items: { title: string; action: string }[]; at: string | null } | null;
 }
 
 const TYPE_TEXT: Record<string, () => string> = {
@@ -76,6 +78,13 @@ export function SharedReport() {
           <ul className="rows">{data.questions.map((q) => (
             <li key={q.text}><span><strong>{q.text}</strong><span className="q-meta">{isEn() ? `recommended in ${q.recommended} of ${q.answers} answers` : `${q.answers} cevabın ${numLoc(q.recommended)} önerildi`}{q.top_competitor ? L(` · en çok önerilen rakip: ${q.top_competitor}`, ` · top competitor: ${q.top_competitor}`) : ""}</span></span></li>
           ))}</ul>
+        </section>
+      )}
+      {data.actions && data.actions.items.length > 0 && (
+        <section className="panel stack" id="ilk-isler">
+          <h2>{L("En önemli 3 iş", "Top 3 actions")}</h2>
+          <ol className="top-actions">{data.actions.items.slice(0, 3).map((a) => <li key={a.title}><strong>{a.title}</strong><span>{a.action}</span></li>)}</ol>
+          {data.actions.at && <p className="muted small">{L("Öneriler şu tarihteki ölçümlere göre: ", "Based on measurements as of ")}{formatDate(data.actions.at)}</p>}
         </section>
       )}
       {data.sources.length > 0 && (
