@@ -71,6 +71,12 @@ PR açıklamasında bu kontrollerden neyin değiştiğini kısaca yaz.
 - Aynı şirketin markaları (ör. MACFit, MAC/One, Mars Athletic) tek rakip sayılır; bağlantı kaynaktan doğrulanır.
 - Motor adları çevrilmez (Gemini, ChatGPT, Claude, Perplexity). E-posta alıcının dilinde yazılır.
 
+## Görünürlük düzeni (18 Kasım, otomatik)
+- Ölçüm sayfaları `web/site/data/measurements.json`'dan üretilir (`web/site/measurements.mjs`); veri elle düzenlenmez,
+  `visibility.yml` her pazartesi yeniler. Yayın sonunda IndexNow bildirimi (`scripts/indexnow.mjs`).
+- Kendi markamız 2 haftada bir ölçülür (`scripts/self-measure.ts`). Ana sayfadaki "Kendi markamızı ölçtük" kutusu son ölçümle güncel tutulur.
+- Haftalık yazı: yalnız gerçek ölçüm verisiyle; uydurma rakam, uydurma alıntı yok.
+
 ## Video ve sosyal medya
 - Video kurulumu ve şablonlar: `seslendirme` dalında `video/README.md` + `video/sablon/`.
 - Paylaşım kuralları (Instagram 3'lü set: TR Reels → EN Reels → ayrı gönderi; YouTube oynatma listeleri,

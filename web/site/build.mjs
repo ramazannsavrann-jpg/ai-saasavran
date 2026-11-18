@@ -11,6 +11,7 @@ import { GUIDES_EN, HOME_FAQ_EN } from "./content-en.mjs";
 import { POSTS } from "./blog.mjs";
 import { LESSONS, tutorialsHtml, tutorialsPath, tutorialsSchema } from "./tutorials.mjs";
 import { DEF, METHOD_PAGES } from "./method.mjs";
+import { MEASUREMENTS, mPath, mIndex, measurementBody, indexBody, leadSentence } from "./measurements.mjs";
 
 const DIST = "dist";
 if (!existsSync(join(DIST, "index.html"))) throw new Error("Önce vite build çalışmalı");
@@ -73,7 +74,7 @@ ${schema.map(ld).join("\n")}
 <!--email_off-->
 <header class="top">
   <a class="mark" href="${en ? "/" : "/tr/"}" aria-label="AI SaaSavran"><img src="/icon.svg" alt="" width="28" height="28"><span>AI <b>SaaSavran</b></span></a>
-  <nav aria-label="${en ? "Main menu" : "Ana menü"}">${en ? `<a href="/#pricing">Pricing</a><a href="/guides/">Guides</a><a href="/blog/">Blog</a>` : `<a href="/tr/fiyatlar/">Fiyatlar</a><a href="/rehber/">Rehberler</a><a href="/tr/blog/">Blog</a><a href="/durum">Ürün durumu</a>`}<a class="lang" href="${alt ?? (en ? "/tr/" : "/")}" hreflang="${en ? "tr" : "en"}" lang="${en ? "tr" : "en"}">${en ? "Türkçe" : "English"}</a><a class="cta-sm" data-cta href="/giris">${en ? "Sign in" : "Giriş yap"}</a></nav>
+  <nav aria-label="${en ? "Main menu" : "Ana menü"}">${en ? `<a href="/#pricing">Pricing</a><a href="/measurements/">Measurements</a><a href="/guides/">Guides</a><a href="/blog/">Blog</a>` : `<a href="/tr/fiyatlar/">Fiyatlar</a><a href="/tr/olcumler/">Ölçümler</a><a href="/rehber/">Rehberler</a><a href="/tr/blog/">Blog</a><a href="/durum">Ürün durumu</a>`}<a class="lang" href="${alt ?? (en ? "/tr/" : "/")}" hreflang="${en ? "tr" : "en"}" lang="${en ? "tr" : "en"}">${en ? "Türkçe" : "English"}</a><a class="cta-sm" data-cta href="/giris">${en ? "Sign in" : "Giriş yap"}</a></nav>
 </header>
 <main>
 ${body}
@@ -493,10 +494,30 @@ for (const lang of ["en", "tr"]) {
 }
 
 // 5) Tarayıcılar ve yapay zekâ botları için dosyalar
-const urls = ["/", "/about/", ...METHOD_PAGES.filter((m) => m.lang === "en").map((m) => m.path), "/pricing/", "/check/", "/guides/", ...GUIDES_EN.map((g) => `/guides/${g.slug}/`), "/blog/", ...posts.filter((p) => p.lang === "en").map(postPath), "/tutorials/", "/tr/", "/tr/fiyatlar/", "/tr/hakkimizda/", ...METHOD_PAGES.filter((m) => m.lang === "tr").map((m) => m.path), "/tr/kontrol/", "/rehber/", ...GUIDES.map((g) => `/rehber/${g.slug}/`), "/tr/blog/", ...posts.filter((p) => p.lang === "tr").map(postPath), "/tr/egitim/"];
+// ---------- Ölçüm sayfaları (haftalık otomatik; scripts/export-measurements.ts) ----------
+const MITEMS = MEASUREMENTS.items ?? [];
+for (const m of MITEMS) {
+  const tr = m.lang === "tr";
+  const desc = leadSentence(m, (x) => x).slice(0, 160);
+  write(mPath(m), page({ lang: m.lang, path: mPath(m), title: seoTitle(m.question, m.question.slice(0, 50)), description: desc, type: "article",
+    body: measurementBody(m, esc),
+    schema: [ORG, crumbs([[tr ? "Ana sayfa" : "Home", tr ? "/tr/" : "/"], [tr ? "Ölçümler" : "Measurements", mIndex(m.lang)], [m.question.slice(0, 60), mPath(m)]]),
+      { "@context": "https://schema.org", "@type": "Dataset", name: m.question, description: desc, url: SITE.url + mPath(m), inLanguage: m.lang, dateModified: m.at.slice(0, 10),
+        creator: { "@type": "Organization", name: SITE.name, url: SITE.url }, license: "https://creativecommons.org/licenses/by/4.0/",
+        measurementTechnique: "Repeated questions to AI assistants via official APIs; brand mention and recommendation counts", variableMeasured: ["recommended", "mentioned", "first pick"] }] }));
+}
+for (const lang of ["tr", "en"]) {
+  const items = MITEMS.filter((m) => m.lang === lang);
+  if (!items.length) continue;
+  write(mIndex(lang), page({ lang, path: mIndex(lang), title: lang === "tr" ? "Yapay zekâ ne öneriyor? Gerçek ölçümler | AI SaaSavran" : "What does AI recommend? Real measurements | AI SaaSavran",
+    description: lang === "tr" ? "ChatGPT, Claude, Perplexity ve Gemini'nin gerçek sorulara verdiği cevaplarda hangi markaların önerildiği. Haftalık güncellenir." : "Which brands ChatGPT, Claude, Perplexity and Gemini recommend for real questions. Updated weekly.",
+    body: indexBody(lang, items, esc), schema: [ORG] }));
+}
+
+const urls = ["/", "/about/", ...METHOD_PAGES.filter((m) => m.lang === "en").map((m) => m.path), "/pricing/", "/check/", "/guides/", ...GUIDES_EN.map((g) => `/guides/${g.slug}/`), "/blog/", ...posts.filter((p) => p.lang === "en").map(postPath), "/tutorials/", "/tr/", "/tr/fiyatlar/", "/tr/hakkimizda/", ...METHOD_PAGES.filter((m) => m.lang === "tr").map((m) => m.path), "/tr/kontrol/", "/rehber/", ...GUIDES.map((g) => `/rehber/${g.slug}/`), "/tr/blog/", ...posts.filter((p) => p.lang === "tr").map(postPath), "/tr/egitim/", ...(MITEMS.some((m) => m.lang === "en") ? ["/measurements/"] : []), ...(MITEMS.some((m) => m.lang === "tr") ? ["/tr/olcumler/"] : []), ...MITEMS.map(mPath)];
 writeFileSync(join(DIST, "sitemap.xml"), `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${urls.map((u) => `  <url><loc>${SITE.url}${u}</loc><lastmod>${posts.find((p) => postPath(p) === u)?.date ?? SITE.updated}</lastmod></url>`).join("\n")}
+${urls.map((u) => `  <url><loc>${SITE.url}${u}</loc><lastmod>${posts.find((p) => postPath(p) === u)?.date ?? MITEMS.find((m) => mPath(m) === u)?.at.slice(0, 10) ?? (u === "/measurements/" || u === "/tr/olcumler/" ? MEASUREMENTS.updated ?? SITE.updated : SITE.updated)}</lastmod></url>`).join("\n")}
 </urlset>
 `);
 writeFileSync(join(DIST, "robots.txt"), `User-agent: *
@@ -546,6 +567,10 @@ ${GUIDES_EN.map((g) => `- [${g.title}](${SITE.url}/guides/${g.slug}/): ${g.descr
 
 ## Blog (weekly findings from real measurements)
 ${posts.filter((p) => p.lang === "en").map((p) => `- [${p.title}](${SITE.url}${postPath(p)}): ${p.description}`).join("\n")}
+
+## Measurements (real AI answers, updated weekly)
+- [All measurements](${SITE.url}/measurements/) · [Türkçe ölçümler](${SITE.url}/tr/olcumler/): ${MITEMS.length} real questions asked to ChatGPT, Claude, Perplexity and Gemini, with brand recommendation counts.
+${MITEMS.slice(0, 15).map((m) => `- [${m.question}](${SITE.url}${mPath(m)}): ${leadSentence(m, (x) => x)}`).join("\n")}
 
 ## Türkçe
 - [Türkçe ana sayfa](${SITE.url}/tr/)
