@@ -7,6 +7,7 @@ import { questionTemplates } from "../lib/sectors";
 import { friendlyError } from "../lib/supabase";
 import { L, isEn } from "../lib/i18n";
 import { Button } from "./ui";
+import { FactCardInline } from "./FactCardInline";
 
 export const GUIDE_MIN_QUESTIONS = 3;
 const offKey = (id: string) => `aisv-guide-off-${id}`;
@@ -41,6 +42,8 @@ export function StartGuide({ brand, runs, onRunsChange, goTab }: { brand: Brand;
     { key: "rakip", done: rivals.data.length > 0 || skipRival || runs.length > 0 },
     { key: "olcum", done: !!pending || doneRuns > 0 },
     { key: "rapor", done: doneRuns > 0 },
+    // 18 Kasım: TruthGuard'ın tek girdisi bilgi kartı; formun içinde gizli kaldığı için rehbere alındı
+    { key: "bilgi", done: !!brand.fact_card || brand.data_origin === "simulated" },
   ] as const;
   const doneCount = steps.filter((s) => s.done).length;
   const next = steps.find((s) => !s.done)?.key ?? null;
@@ -113,6 +116,10 @@ export function StartGuide({ brand, runs, onRunsChange, goTab }: { brand: Brand;
             ? L("Ölçüm başlatıldı. Genellikle birkaç dakikada biter; bu sayfa kendiliğinden güncellenir.", "Measurement started. It usually finishes in a few minutes; this page updates by itself.")
             : L("Ölçüm sırada. Ölçümler her saat 17 geçe işlenir (Türkiye saatiyle 08:17–23:17); bu sayfa kendiliğinden güncellenir. Sayfayı kapatabilirsiniz, sonuç kaybolmaz.", "Measurement queued. Measurements are processed at 17 past every hour (08:17–23:17 Turkey time); this page updates by itself. You can close the page, nothing is lost.")}</p>
           <p className="muted">{L("Beklerken: rakip ve soru eklemeye devam edebilirsiniz; sonraki ölçümde sayılırlar.", "While you wait: keep adding competitors and questions; they count in the next measurement.")}</p>
+        </>)}
+        {row(6, "bilgi", L("Doğru bilgi kartını doldurun", "Fill in your fact card"), <>
+          <p>{L("Yapay zekâ markanız hakkında yanlış bilgi veriyor mu? Kuruluş yılı, adres, çalışma saatleri, hizmetler gibi doğru bilgileri yazın; cevaplar bunlarla karşılaştırılır (TruthGuard, ücretli paketlerde).", "Is the AI saying wrong things about your brand? Write the correct facts (founding year, address, hours, services); answers are checked against them (TruthGuard, paid plans).")}</p>
+          <FactCardInline brand={brand} />
         </>)}
       </ol>
       {doneCount === steps.length && (
