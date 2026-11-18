@@ -23,14 +23,16 @@ export async function verifyPaddle(header, rawBody, secret, nowSec = Math.floor(
 
 export const PLAN_IDS = ["starter", "pro", "agency"];
 
-/** Abonelik olayından alan, paket ve durum çıkarır. */
-export function subscriptionUpdate(data) {
+/** Abonelik olayından alan, paket, durum, checkout'u başlatan kullanıcı ve olay zamanı çıkarır. */
+export function subscriptionUpdate(data, occurredAt = null) {
   const ws = data?.custom_data?.workspace_id;
   const item = (data?.items ?? []).find((i) => PLAN_IDS.includes(i?.price?.custom_data?.plan) || PLAN_IDS.includes(i?.product?.custom_data?.plan));
   const plan = item?.price?.custom_data?.plan ?? item?.product?.custom_data?.plan;
   return {
     p_workspace: ws ?? null, p_plan: plan ?? null, p_status: data?.status ?? null, p_subscription: data?.id ?? null,
     p_customer: data?.customer_id ?? null, p_period_end: data?.current_billing_period?.ends_at ?? null,
+    p_user: UUID.test(String(data?.custom_data?.user_id ?? "")) ? data.custom_data.user_id : null,
+    p_occurred: occurredAt ?? null,
   };
 }
 
