@@ -941,3 +941,23 @@ test("Marka tespiti (18 Kasım): kısa BÜYÜK harfli ilk kelime, üst şirket t
   assert.equal(ringCap.find((x) => x.brandId === "ring")!.mentioned, true);
   assert.equal(listRank("Options:\n- Durex\n- SKYN Original", brands[1]), 2);
 });
+
+test("Rakibi öne çıkaran nitelikler (0055): yalnız rakip önerilip hedef önerilmediğinde; size yakıştırılma sayısıyla", async () => {
+  const { rivalTraits } = await import("../src/insights.ts");
+  const answers = [{ id: "a1" }, { id: "a2" }, { id: "a3" }];
+  const P = (traits: [string, string][]) => ({ sentiment: "positive", traits: traits.map(([trait, quote]) => ({ trait, quote })) });
+  const mentions = [
+    { response_id: "a1", brand_id: "r1", recommended: true, perception: P([["affordable", "Otterly is affordable"], ["popular", "widely used"]]) },
+    { response_id: "a2", brand_id: "r1", recommended: true, perception: P([["affordable", "cheap plans"]]) },
+    { response_id: "a2", brand_id: "t", recommended: false, perception: P([["innovative", "new tool"]]) },
+    // hedef de önerildiği için sayılmaz
+    { response_id: "a3", brand_id: "r1", recommended: true, perception: P([["premium", "x"]]) },
+    { response_id: "a3", brand_id: "t", recommended: true, perception: P([["affordable", "low price"]]) },
+    { response_id: "a1", brand_id: "r2", recommended: false, perception: P([["fast", "y"]]) },
+  ];
+  const rows = rivalTraits(answers, mentions, "t", ["r1", "r2"]);
+  assert.equal(rows.length, 1);
+  assert.equal(rows[0].rivalId, "r1"); assert.equal(rows[0].answers, 2);
+  assert.deepEqual(rows[0].traits.map((t) => [t.trait, t.count, t.ownCount]), [["affordable", 2, 1], ["popular", 1, 0]]);
+  assert.equal(rows[0].traits[0].quote, "Otterly is affordable");
+});

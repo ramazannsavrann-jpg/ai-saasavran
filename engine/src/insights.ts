@@ -641,6 +641,44 @@ export function perceptionSummary(answers: { id: string; provider?: string }[], 
   return out;
 }
 
+// ---------------- Rakibi öne çıkaran nitelikler ----------------
+export interface RivalTraitRow {
+  rivalId: string;
+  /** Rakibin önerilip sizin önerilmediğiniz, algısı çıkarılmış cevap sayısı */
+  answers: number;
+  /** Bu cevaplarda rakibe yakıştırılan nitelikler; ownCount = aynı niteliğin size kaç cevapta yakıştırıldığı */
+  traits: { trait: string; count: number; quote: string; ownCount: number }[];
+}
+/**
+ * Rakip önerilip siz önerilmediğinizde yapay zekâ rakibe hangi nitelikleri yakıştırdı (birebir alıntıyla) ve aynı nitelik
+ * size kaç cevapta yakıştırıldı. Nitelik listesi kapalıdır (TRAITS); yorum yapılmaz. Ek API çağrısı yok (0055 algı kayıtları).
+ */
+export function rivalTraits(
+  answers: { id: string }[],
+  mentions: { response_id: string; brand_id: string; recommended?: boolean; perception?: unknown }[],
+  targetId: string, rivalIds: string[],
+): RivalTraitRow[] {
+  const ids = new Set(answers.map((a) => a.id));
+  const own = perceptionSummary(answers, mentions, targetId);
+  const ownCount = new Map(own.traits.map((t) => [t.trait, t.count]));
+  const targetRec = new Set(mentions.filter((m) => m.brand_id === targetId && m.recommended).map((m) => m.response_id));
+  return rivalIds.map((rid) => {
+    const tr = new Map<string, { trait: string; count: number; quote: string; ownCount: number }>();
+    let n = 0;
+    for (const m of mentions) {
+      if (m.brand_id !== rid || !m.recommended || !ids.has(m.response_id) || targetRec.has(m.response_id)) continue;
+      const p = m.perception as { sentiment?: string; traits?: { trait?: string; quote?: string }[] } | null | undefined;
+      if (!p || !p.sentiment) continue;
+      n++;
+      for (const t of new Map((p.traits ?? []).filter((x) => x?.trait).map((x) => [x.trait!, x])).values()) {
+        const r = tr.get(t.trait!) ?? { trait: t.trait!, count: 0, quote: t.quote ?? "", ownCount: ownCount.get(t.trait!) ?? 0 };
+        r.count++; tr.set(t.trait!, r);
+      }
+    }
+    return { rivalId: rid, answers: n, traits: [...tr.values()].sort((a, b) => b.count - a.count || a.trait.localeCompare(b.trait)).slice(0, 5) };
+  }).filter((r) => r.traits.length > 0).sort((a, b) => b.answers - a.answers);
+}
+
 // ---------------- Kendi siteniz kaynak gösterildi ama rakip önerildi ----------------
 export interface OwnCitedResult {
   /** Sitenizin kaynak gösterildiği cevap sayısı */

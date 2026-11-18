@@ -429,7 +429,8 @@ export async function reanalyzeRuns(db: SupabaseClient, kind: "growth_lab" = "gr
 export async function backfillPerception(deps: { db: SupabaseClient; env: Record<string, string | undefined>; fetchFn?: FetchLike }, limit = 40): Promise<{ done: number; failed: number; spentUsd: number; skipped?: string }> {
   const { db, env } = deps;
   if (env.LLM_CLASSIFY !== "true" || !env.OPENAI_API_KEY || env.ALLOW_PAID_API !== "true") return { done: 0, failed: 0, spentUsd: 0, skipped: "paid_api_off" };
-  const cap = Number(env.PERCEPTION_BACKFILL_MAX_USD || 0.10);
+  // Tüm zamanlar toplamı; 18 Kasım: rakip algısı eklendi, tavan 0,10 → 0,30 $ (çağrı başına ~0,0001 $)
+  const cap = Number(env.PERCEPTION_BACKFILL_MAX_USD || 0.30);
   let spent = Number(must(await db.rpc("perception_spend"), "algı harcaması") ?? 0);
   if (spent >= cap) return { done: 0, failed: 0, spentUsd: spent, skipped: "cap_reached" };
   const rows = must(await db.rpc("pending_perception", { p_limit: limit }), "bekleyen algı") as { response_id: string; workspace_id: string; run_id: string; brand_id: string; brand_name: string; answer_text: string; names: string[] }[];
