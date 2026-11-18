@@ -7,6 +7,14 @@
 > **Erken erişim.** Ödeme (Paddle) ve haftalık e-posta (Resend) kodu hazır ve testli, ancak gerçek bir ödeme
 > ve gerçek bir gelen kutusu teslimi uçtan uca henüz doğrulanmadı. Hukuki metinleri avukat incelemedi.
 
+> **18 Kasım (iyileştirme paketi):** (1) Site başlık/açıklamalarına Perplexity eklendi (ana sayfa TR başlığı, Hakkımızda,
+> Rehberler, marka/ürün görünürlüğü, araç seçimi ve ajans rehberleri). (2) Shopping: "E-Book Reader / e-kitap okuyucu"
+> ürünün kendisi sayılır (Kindle elenmiyordu). (3) Marka adayı listesine RAM/GB/GPU/16GB/120Hz gibi teknik terimler girmez.
+> (4) TruthGuard: teknik hatayla yapılamayan kontroller "henüz kontrol yok" yerine ayrıca yazılır; iddia bulunmayan
+> cevaplarda 0/0/0 yerine "somut iddia yok" açıklaması. (5) Site kontrolü: marka adı başlıkta yazım farklarıyla da bulunur
+> (KafeMavi ↔ Kafe Mavi, İŞ BANKASI, Enpara.com ↔ Enpara, &amp;). **Karar bekliyor:** Perplexity'de 96 cevabın hepsinde
+> metin içi atıf yok; kaynak olarak aramanın bulduğu 15 site sayılıyor, bu da kaynak paylarında Perplexity'yi şişiriyor.
+
 > **18 Kasım (haftalık denetim):** Google Shopping eşleştirmesi "Standard/Standart" geçen ilanları "stand" (aksesuar)
 > sanıp eliyordu (kayıtlı 381 ilandan 1'i); düzeltildi + test. Metodoloji sayfası (TR+EN) "Perplexity'yi ölçmüyoruz"
 > diyordu, oysa ücretli paketlerde ölçülüyor; tanım cümlesi, SSS tekrar sayısı ve hoş geldin e-postası Perplexity'yi

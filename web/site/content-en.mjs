@@ -191,7 +191,7 @@ export const GUIDES_EN = [
     tr: "yapay-zeka-gorunurluk-araci-secimi",
     title: "How to choose an AI visibility (GEO) tracking tool: 9 questions to ask",
     short: "Choosing an AI visibility tool",
-    description: "What to check before you pick a tool that tracks your brand in ChatGPT, Gemini and Claude: engines, live search, repetition, sources, language and cost.",
+    description: "What to check before you pick a tool that tracks your brand in ChatGPT, Gemini, Claude and Perplexity: engines, live search, repetition, sources, language and cost.",
     body: `
 <p class="lede">Short answer: a good AI visibility tool asks the questions your customers ask, <b>several times</b>, in <b>each AI engine separately</b>, tells you whether the answer came from <b>live web search or the model's memory</b>, and shows <b>which sources</b> the AI relied on. Mention counts alone are not enough. Below are the 9 questions we suggest asking any tool, including ours.</p>
 
@@ -236,7 +236,7 @@ export const GUIDES_EN = [
     tr: "ajanslar-icin-yapay-zeka-gorunurluk-takibi",
     title: "How agencies track client brands in AI assistants",
     short: "AI visibility tracking for agencies",
-    description: "How an agency can track whether client brands are recommended in ChatGPT, Gemini and Claude: a question set per brand, regular runs, reports and team access.",
+    description: "How an agency can track whether client brands are recommended in ChatGPT, Gemini, Claude and Perplexity: a question set per brand, regular runs, reports and team access.",
     body: `
 <p class="lede">Short answer: an agency builds a separate set of customer-style questions for each client brand, has each AI engine answer them <b>on a regular schedule</b> and <b>several times</b>, and reports the result next to the brand's competitors. Doing this by hand stops scaling once you manage a few brands. You need an AI visibility tool that holds many brands in one account, gives team members their own access, and produces a report you can send to the client.</p>
 

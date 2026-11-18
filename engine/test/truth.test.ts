@@ -69,6 +69,9 @@ test("Özet: başarısız kontrol sayılmaz, aynı yanlış iddia bir kez listel
   ]);
   assert.deepEqual([s.checks, s.correct, s.wrong, s.unverifiable], [2, 1, 2, 1]);
   assert.equal(s.wrongClaims.length, 1); assert.equal(s.wrongClaims[0].provider, "claude");
+  assert.equal(s.failed, 1); assert.equal(s.noClaims, 0);
+  const only = truthSummary([c("2026-11-12", "openai", [], true), c("2026-11-13", "claude", [])]);
+  assert.deepEqual([only.checks, only.failed, only.noClaims], [1, 1, 1]);
 });
 
 test("Rehber ve kampanya: bilgi kartıyla çelişen iddia yüksek öncelikli madde ve görev listesi olur", async () => {

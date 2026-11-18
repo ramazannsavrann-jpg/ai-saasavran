@@ -209,7 +209,7 @@ export const GUIDES = [
     slug: "yapay-zeka-gorunurluk-araci-secimi",
     title: "Yapay zekâ görünürlük (GEO) aracı nasıl seçilir? Sorulacak 9 soru",
     short: "GEO aracı nasıl seçilir",
-    description: "Markanızı ChatGPT, Gemini ve Claude'da takip edecek aracı seçmeden önce bakın: motorlar, canlı arama, tekrar, kaynaklar, dil ve maliyet.",
+    description: "Markanızı ChatGPT, Gemini, Claude ve Perplexity'de takip edecek aracı seçmeden önce bakın: motorlar, canlı arama, tekrar, kaynaklar, dil ve maliyet.",
     body: `
 <p class="lede">Kısa cevap: İyi bir yapay zekâ görünürlük aracı, müşterinizin sorduğu soruları <b>birkaç kez</b>, <b>her motorda ayrı ayrı</b> sorar; cevabın <b>canlı web aramasından mı yoksa modelin hafızasından mı</b> geldiğini söyler ve yapay zekânın <b>hangi kaynaklara</b> baktığını gösterir. Sadece "kaç kez anıldı" sayısı yetmez. Aşağıda, bizimki dahil her araca sormanızı önerdiğimiz 9 soru var.</p>
 
@@ -253,7 +253,7 @@ export const GUIDES = [
     slug: "ajanslar-icin-yapay-zeka-gorunurluk-takibi",
     title: "Ajanslar müşteri markalarını yapay zekâda nasıl takip eder?",
     short: "Ajanslar için yapay zekâ takibi",
-    description: "Müşteri markalarının ChatGPT, Gemini ve Claude'da önerilip önerilmediğini ajans olarak takip etmek: marka başına sorular, düzenli ölçüm, rapor, ekip.",
+    description: "Müşteri markalarının ChatGPT, Gemini, Claude ve Perplexity'de önerilip önerilmediğini ajans olarak takip etmek: marka başına sorular, düzenli ölçüm, rapor, ekip.",
     body: `
 <p class="lede">Kısa cevap: Ajans, her müşteri markası için müşterinin ağzından ayrı bir soru seti kurar; bu soruları her yapay zekâ motorunda <b>düzenli aralıklarla</b> ve <b>birkaç kez</b> sordurur; sonucu markanın rakipleriyle yan yana raporlar. Bunu elle yapmak marka sayısı arttıkça sürdürülemez. Çok markayı tek hesapta yöneten, ekip erişimi ve müşteriye gönderilebilir raporu olan bir yapay zekâ görünürlük aracı gerekir.</p>
 

@@ -150,7 +150,7 @@ export const METHOD_PAGES = [
   },
   {
     key: "brand", lang: "en", path: "/brand-visibility/", alt: "/tr/marka-gorunurlugu/",
-    title: "Brand visibility in ChatGPT, Gemini and Claude",
+    title: "Brand visibility in ChatGPT, Gemini, Claude and Perplexity",
     short: "Brand visibility",
     description: "Does the AI name and recommend your brand when customers ask about your category? What AI SaaSavran measures for brand visibility and how to read it.",
     body: `
@@ -169,14 +169,14 @@ export const METHOD_PAGES = [
 <p>Start with recommendation rate per engine, not a total. A low rate with many third-party sources usually means the review and listing sites the AI reads don't cover you well. A brand that is mentioned but not recommended is usually described, not endorsed. Check the confidence range before acting on a change. Definitions and limits are on the <a href="/methodology/">methodology</a> page.</p>
 `,
     faq: [
-      ["What is AI brand visibility?", "How often AI assistants such as ChatGPT, Gemini and Claude name and recommend a brand when customers ask about its category, compared with competitors."],
+      ["What is AI brand visibility?", "How often AI assistants such as ChatGPT, Gemini, Claude and Perplexity name and recommend a brand when customers ask about its category, compared with competitors."],
       ["Is brand visibility the same as product visibility?", "No. Brand visibility is about the brand in category questions; product visibility is about a specific product in buying recommendations and whether the AI's facts about it are correct."],
       ["Why does my brand appear in one engine but not another?", "Engines use different search providers, sources and training data, so results are reported per engine."],
     ],
   },
   {
     key: "brand", lang: "tr", path: "/tr/marka-gorunurlugu/", alt: "/brand-visibility/",
-    title: "ChatGPT, Gemini ve Claude'da marka görünürlüğü",
+    title: "ChatGPT, Gemini, Claude ve Perplexity'de marka görünürlüğü",
     short: "Marka görünürlüğü",
     description: "Müşteriler kategorinizi sorduğunda yapay zekâ markanızı söyleyip öneriyor mu? AI SaaSavran marka görünürlüğünde neyi ölçer, nasıl okunur?",
     body: `
@@ -195,7 +195,7 @@ export const METHOD_PAGES = [
 <p>Toplamdan değil, motor bazında önerilme oranından başlayın. Düşük oran ve çok sayıda üçüncü taraf kaynak genellikle yapay zekânın okuduğu inceleme ve listeleme sitelerinin sizi iyi anlatmadığını gösterir. Anılan ama önerilmeyen bir marka genellikle tavsiye edilmiyor, sadece anlatılıyordur. Bir değişikliğe göre hareket etmeden önce güven aralığına bakın. Tanımlar ve sınırlar <a href="/tr/metodoloji/">metodoloji</a> sayfasında.</p>
 `,
     faq: [
-      ["Yapay zekâda marka görünürlüğü nedir?", "ChatGPT, Gemini ve Claude gibi yapay zekâ asistanlarının, müşteriler kategoriyi sorduğunda bir markayı rakiplerine göre ne sıklıkla andığı ve önerdiği."],
+      ["Yapay zekâda marka görünürlüğü nedir?", "ChatGPT, Gemini, Claude ve Perplexity gibi yapay zekâ asistanlarının, müşteriler kategoriyi sorduğunda bir markayı rakiplerine göre ne sıklıkla andığı ve önerdiği."],
       ["Marka görünürlüğü ile ürün görünürlüğü aynı şey mi?", "Hayır. Marka görünürlüğü kategori sorularında markayla ilgilidir; ürün görünürlüğü belirli bir ürünün satın alma önerilerinde çıkıp çıkmadığı ve yapay zekânın onun hakkındaki bilgilerinin doğru olup olmadığıyla ilgilidir."],
       ["Markam neden bir motorda çıkıp diğerinde çıkmıyor?", "Motorlar farklı arama sağlayıcıları, kaynaklar ve eğitim verileri kullanır; bu yüzden sonuçlar motor bazında raporlanır."],
     ],
@@ -204,7 +204,7 @@ export const METHOD_PAGES = [
     key: "product", lang: "en", path: "/product-visibility/", alt: "/tr/urun-gorunurlugu/",
     title: "Product visibility in AI shopping answers",
     short: "Product visibility",
-    description: "Does a specific product appear when buyers ask ChatGPT, Gemini or Claude what to buy, and are the AI's price and specs right? What AI SaaSavran measures.",
+    description: "Does a specific product appear when buyers ask ChatGPT, Gemini, Claude or Perplexity what to buy, and are the AI's price and specs right? What AI SaaSavran measures.",
     body: `
 <p class="lede">Product visibility answers a different question from brand visibility: <b>when buyers ask an AI assistant what to buy, does your specific product appear, against which competing products, and is what the AI says about it correct?</b></p>
 <h2>Who it is for</h2>
@@ -229,7 +229,7 @@ export const METHOD_PAGES = [
     key: "product", lang: "tr", path: "/tr/urun-gorunurlugu/", alt: "/product-visibility/",
     title: "Yapay zekâ alışveriş cevaplarında ürün görünürlüğü",
     short: "Ürün görünürlüğü",
-    description: "Alıcılar ChatGPT, Gemini veya Claude'a ne alacaklarını sorduğunda ürününüz çıkıyor mu, fiyat ve özellikler doğru mu? AI SaaSavran neyi ölçer?",
+    description: "Alıcılar ChatGPT, Gemini, Claude veya Perplexity'ye ne alacaklarını sorduğunda ürününüz çıkıyor mu, fiyat ve özellikler doğru mu? AI SaaSavran neyi ölçer?",
     body: `
 <p class="lede">Ürün görünürlüğü, marka görünürlüğünden farklı bir soruya cevap verir: <b>alıcılar bir yapay zekâ asistanına ne almaları gerektiğini sorduğunda, sizin ürününüz hangi rakip ürünlere karşı çıkıyor ve yapay zekânın onun hakkında söyledikleri doğru mu?</b></p>
 <h2>Kimler için?</h2>

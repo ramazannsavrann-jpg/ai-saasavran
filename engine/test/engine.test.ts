@@ -492,6 +492,27 @@ test("Takip edilmeyen adlar: TEB, QNB, VakıfBank bulunur; bilinen markalar ve s
   for (const bad of ["Garanti", "Garanti Bonus", "Akbank", "Akbank Axess", "Enpara", "Türkiye", "Kredi", "Ayrıca"]) assert.ok(!names.includes(bad), `${bad} çıkmamalı: ${names.join("|")}`);
 });
 
+test("Site kontrolü: marka adı başlıkta yazım farklarıyla da bulunur", () => {
+  const t = (title: string, names: string[]) => analyzeHtml(`<html><head><title>${title}</title></head></html>`, names).nameInTitle;
+  assert.equal(t("KafeMavi | Kadıköy", ["Kafe Mavi"]), true);
+  assert.equal(t("Mars-Athletic Club", ["Mars Athletic"]), true);
+  assert.equal(t("İŞ BANKASI - Bireysel", ["İş Bankası"]), true);
+  assert.equal(t("Enpara | Bankacılık", ["Enpara.com"]), true);
+  assert.equal(t("Tom &amp; Jerry Kafe", ["Tom & Jerry"]), true);
+  assert.equal(t("Başka Bir Kafe", ["Kafe Mavi"]), false);
+});
+
+test("Takip edilmeyen adlar: RAM, GB, GPU, 16GB, 120Hz gibi teknik terimler marka sayılmaz", async () => {
+  const { untrackedNames } = await import("../src/metrics.ts");
+  const texts = [
+    "1. **Lenovo Legion 5** — 16GB RAM, RTX GPU, 1TB SSD.\n2. **ASUS ROG** 120Hz OLED ekran, 32GB RAM.\nMSI de iyi bir seçenek; GPU ve CPU güçlü.",
+    "Lenovo Legion ve ASUS ROG öne çıkıyor. MSI Katana 16GB RAM ile gelir. OLED ve 5000mAh pil, USB-C şarj.",
+  ];
+  const names = untrackedNames(texts, []).map((x) => x.name);
+  assert.ok(names.includes("MSI") || names.some((n) => n.startsWith("MSI")), names.join("|"));
+  for (const bad of ["RAM", "GPU", "CPU", "SSD", "OLED", "16GB", "16GB RAM", "120Hz", "1TB", "32GB", "USB-C"]) assert.ok(!names.includes(bad), `${bad} çıkmamalı: ${names.join("|")}`);
+});
+
 test("Güncel paketler (Plus/Pro/Business): tipik %55+ kâr; tavan + komisyon fiyatın altında; kötü durum API'si tavana sığar", () => {
   for (const name of ["Plus", "Pro", "Business"]) {
     const plan = PLANS.findLast((p) => p.name.startsWith(name + " ("))!;

@@ -1408,16 +1408,23 @@ function TruthGuardPanel({ brand, paid, mix, stats }: { brand: Brand; paid: bool
       <h2>TruthGuard</h2>
       {!brand.fact_card ? (
         <p>{L("Doğruluk kontrolü için önce markanın doğru bilgi kartını doldurun: sayfanın üstündeki \"Düzenle\" → \"Doğru bilgi kartı\". Kontrol sonraki saatlerde kendiliğinden yapılır.", "To check accuracy, first fill in the brand's fact card: \"Edit\" at the top → \"Fact card\". Checks then run automatically within hours.")}</p>
-      ) : checks.loading ? <Loading /> : s.checks === 0 ? (
+      ) : checks.loading ? <Loading /> : s.checks === 0 && s.failed > 0 ? (
+        <p className="muted">{isEn() ? `${s.failed} check(s) could not be completed because of a technical error. The same question and engine are tried again about a week later; nothing is counted as correct or wrong until then.` : `${s.failed} kontrol teknik bir hata yüzünden yapılamadı. Aynı soru ve motor yaklaşık bir hafta sonra yeniden denenir; o zamana kadar hiçbir iddia doğru ya da yanlış sayılmaz.`}</p>
+      ) : s.checks === 0 ? (
         <p className="muted">{L("Henüz kontrol yok. Markanızın geçtiği yeni cevaplar birkaç saat içinde (soru ve motor başına haftada bir) bilgi kartınızla karşılaştırılır.", "No checks yet. New answers that mention your brand are compared with your fact card within hours (once a week per question and engine).")}</p>
       ) : (
         <>
           <p className="muted">{isEn() ? `Last 30 days: ${s.checks} answers checked against your fact card, ${total} claims about your brand.` : `Son 30 gün: ${s.checks} cevap bilgi kartınızla karşılaştırıldı, markanız hakkında ${total} iddia bulundu.`}</p>
+          {total === 0 ? (
+            <p>{L("Bu cevaplarda markanız hakkında kontrol edilecek somut bir iddia (fiyat, adres, yıl, hizmet gibi) bulunmadı. Bu bir hata değil: yapay zekâ markanızı yalnızca adıyla anmış.", "These answers made no concrete claim about your brand (such as price, address, year or services) to check. This is not an error: the AI only named your brand.")}</p>
+          ) : (
           <dl className="metrics">
             <div><dt>{L("Yanlış", "Wrong")}</dt><dd className={`num ${s.wrong ? "truth-bad" : ""}`}>{s.wrong}</dd></div>
             <div><dt>{L("Doğru", "Correct")}</dt><dd className="num">{s.correct}</dd></div>
             <div><dt>{L("Doğrulanamadı", "Can't verify")}</dt><dd className="num">{s.unverifiable}</dd><dd className="range">{L("kartta yok", "not in your card")}</dd></div>
           </dl>
+          )}
+          {s.failed > 0 && <p className="src-sup muted">{isEn() ? `${s.failed} more check(s) failed with a technical error and are not counted; they are retried about a week later.` : `${s.failed} kontrol daha teknik hata yüzünden yapılamadı ve sayılmadı; yaklaşık bir hafta sonra yeniden denenir.`}</p>}
           {s.wrongClaims.length > 0 && (
             <ul className="src-dom">
               {s.wrongClaims.slice(0, 10).map((w) => (
