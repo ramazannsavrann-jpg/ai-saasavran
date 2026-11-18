@@ -898,4 +898,25 @@ test("Yapay zekâ ↔ Shopping: AI 1 numarası SKYN, Shopping 1. sıra Trojan; s
   assert.deepEqual(r, { aiTop: "SKYN", ownAiRank: 2, shopTop: "Trojan", ownShopPos: 1, differ: true });
   const tie = aiVsShopping([{ ...brands[0], recommended: 37 }, brands[1]], [{ title: "TROJAN MAGNUM XL", position: 1 }]);
   assert.equal(tie.aiTop, null); assert.equal(tie.ownAiRank, 1); assert.equal(tie.shopTop, "Trojan"); assert.equal(tie.differ, false);
+  // 18 Kasım standardı: 48 cevapta 37'ye 35 (8 soru × 3 motor) başa baş → lider ilan edilmez
+  const close = aiVsShopping(brands.map((b) => ({ ...b, answers: 48, clusters: 24 })), [{ title: "Trojan Condoms", position: 1 }]);
+  assert.equal(close.aiTop, null); assert.equal(close.differ, false);
+  // Açık fark (40/48 ↔ 10/48) → lider var
+  const clear = aiVsShopping([{ ...brands[0], recommended: 10, answers: 48, clusters: 24 }, { ...brands[1], recommended: 40, answers: 48, clusters: 24 }], [{ title: "Trojan Condoms", position: 1 }]);
+  assert.equal(clear.aiTop, "SKYN"); assert.equal(clear.differ, true);
+});
+
+test("Soru bazında güven aralığı: tekrarlar bağımsız sayılmaz; başa baş ve küçük örneklem kuralları", async () => {
+  const { wilson, clusteredWilson, effectiveN, isTie, isLowSample } = await import("../src/metrics.ts");
+  // 48 cevap, 24 küme (2 tekrar) → n_eff = 48 / 1,67 ≈ 28,7
+  assert.ok(Math.abs(effectiveN(48, 24) - 48 / 1.67) < 1e-9);
+  const plain = wilson(37, 48), wide = clusteredWilson(37, 48, 24);
+  assert.ok(wide.low < plain.low && wide.high > plain.high, "küme düzeltmesi aralığı genişletmeli");
+  assert.deepEqual(clusteredWilson(37, 48), plain); // küme bilinmiyorsa düz Wilson
+  assert.deepEqual(clusteredWilson(5, 10, 10), wilson(5, 10)); // tekrar yoksa aynı
+  assert.equal(isTie({ k: 37, n: 48 }, { k: 35, n: 48 }), true);
+  assert.equal(isTie({ k: 40, n: 48, clusters: 24 }, { k: 10, n: 48, clusters: 24 }), false);
+  assert.equal(isLowSample(20, 8), true);  // 20 cevap ama 8 soru
+  assert.equal(isLowSample(24, 12), false);
+  assert.equal(isLowSample(19), true);
 });

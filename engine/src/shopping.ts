@@ -4,7 +4,7 @@
 // SerpApi yalnız başarılı aramaları sayar; hesap bilgisi (kalan arama) sorgusu ücretsizdir ve kotadan düşmez.
 
 import type { FetchLike } from "./providers/types.ts";
-import { hasName, normalize } from "./metrics.ts";
+import { hasName, isTie, normalize } from "./metrics.ts";
 
 export interface ShoppingItem {
   position: number;
@@ -167,7 +167,7 @@ export async function shoppingSearchesLeft(apiKey: string, fetchFn?: FetchLike):
 }
 
 // ---------------- Yapay zekâ ↔ Google Shopping karşılaştırması ----------------
-export interface AiShopBrand { name: string; aliases: string[]; recommended: number; isTarget: boolean }
+export interface AiShopBrand { name: string; aliases: string[]; recommended: number; isTarget: boolean; /** Aynı ölçümdeki cevap sayısı ve soru×motor kümesi; verilirse "başa baş" kuralı uygulanır */ answers?: number; clusters?: number }
 export interface AiShopCompare {
   /** Yapay zekânın en çok önerdiği marka (takip edilenler arasında) */
   aiTop: string | null;
@@ -186,7 +186,11 @@ export interface AiShopCompare {
  */
 export function aiVsShopping(brands: AiShopBrand[], items: { title: string; position: number }[]): AiShopCompare {
   const ranked = [...brands].filter((b) => b.recommended > 0).sort((a, b) => b.recommended - a.recommended);
-  const aiTop = ranked[0] && (ranked.length === 1 || ranked[0].recommended > ranked[1].recommended) ? ranked[0].name : null;
+  // Lider ancak ikinciden açıkça öndeyse ilan edilir: fark ≥ 10 puan ve aralıklar çakışmıyor (18 Kasım ölçüm standardı)
+  const lead = (a: AiShopBrand, b: AiShopBrand) => a.answers && b.answers
+    ? !isTie({ k: a.recommended, n: a.answers, clusters: a.clusters }, { k: b.recommended, n: b.answers, clusters: b.clusters }) && a.recommended / a.answers > b.recommended / b.answers
+    : a.recommended > b.recommended;
+  const aiTop = ranked[0] && (ranked.length === 1 || lead(ranked[0], ranked[1])) ? ranked[0].name : null;
   const ownIdx = ranked.findIndex((b) => b.isTarget);
   const ownAiRank = ownIdx < 0 ? null : 1 + ranked.filter((b) => b.recommended > ranked[ownIdx].recommended).length;
   const brandOf = (title: string) => brands.find((b) => [b.name, ...b.aliases].some((n) => normalize(n).length >= 2 && hasName(normalize(title), normalize(n))))?.name ?? null;

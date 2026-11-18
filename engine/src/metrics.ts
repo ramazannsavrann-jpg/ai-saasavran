@@ -180,6 +180,38 @@ export function wilson(successes: number, n: number, z = 1.96): { low: number; h
   return { low: Math.max(0, center - margin), high: Math.min(1, center + margin) };
 }
 
+/**
+ * Aynı sorunun tekrarları bağımsız değildir (Growth Lab, 18 Kasım: 4.736 tekrar çiftinde sonuç yalnız %15 değişti, ICC ≈ 0,67).
+ * Aralık bu yüzden "etkin örneklem" ile hesaplanır: n_eff = n / (1 + (m − 1)·ICC), m = küme (soru × motor) başına cevap.
+ */
+export const REPEAT_ICC = 0.67;
+export function effectiveN(n: number, clusters?: number, icc = REPEAT_ICC): number {
+  if (!clusters || clusters <= 0 || clusters >= n) return n;
+  const m = n / clusters;
+  return n / (1 + (m - 1) * icc);
+}
+/** Soru (küme) bazında düzeltilmiş Wilson aralığı. clusters verilmezse düz Wilson. */
+export function clusteredWilson(k: number, n: number, clusters?: number, icc = REPEAT_ICC): { low: number; high: number } {
+  const ne = effectiveN(n, clusters, icc);
+  return ne >= n ? wilson(k, n) : wilson((k * ne) / n, ne);
+}
+/** Küçük örneklem: 20 cevaptan az ya da (biliniyorsa) 10 farklı sorudan az. */
+export const MIN_PROMPTS = 10;
+export function isLowSample(n: number, prompts?: number): boolean {
+  return n < MIN_SAMPLE || (prompts !== undefined && prompts < MIN_PROMPTS);
+}
+/**
+ * İki oran "başa baş" mı? Fark 10 puandan küçükse ya da aralıklar çakışıyorsa sıra verilmez (18 Kasım ölçüm standardı).
+ */
+export const TIE_POINTS = 0.10;
+export function isTie(a: { k: number; n: number; clusters?: number }, b: { k: number; n: number; clusters?: number }): boolean {
+  if (!a.n || !b.n) return false;
+  const pa = a.k / a.n, pb = b.k / b.n;
+  if (Math.abs(pa - pb) < TIE_POINTS) return true;
+  const ia = clusteredWilson(a.k, a.n, a.clusters), ib = clusteredWilson(b.k, b.n, b.clusters);
+  return ia.low <= ib.high && ib.low <= ia.high;
+}
+
 export interface Rate { value: number; low: number; high: number; n: number }
 
 export interface BrandSummary {

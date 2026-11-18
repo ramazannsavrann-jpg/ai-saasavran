@@ -1,5 +1,5 @@
 // Metodoloji, marka görünürlüğü ve ürün görünürlüğü sayfaları (TR + EN).
-// Kaynak: engine/src/metrics.ts (anılma/öneri/sıra/kaynak, Wilson aralığı, MIN_SAMPLE=20), insights.ts (kendi site payı),
+// Kaynak: engine/src/metrics.ts (anılma/öneri/sıra/kaynak, Wilson aralığı + soru bazlı etkin örneklem, MIN_SAMPLE=20, MIN_PROMPTS=10, başa baş 10 puan), insights.ts (kendi site payı),
 // product.ts (ürün doğruluğu), shopping.ts (Google Shopping), web/site/build.mjs PLAN_ROWS (tekrar sayıları).
 // Kod değişirse bu sayfa da güncellenmeli. Ölçmediğimiz bir motoru (Google AI Overviews / AI Mode) yazmayın.
 
@@ -50,7 +50,8 @@ export const METHOD_PAGES = [
 </tbody></table>
 
 <h2>Confidence ranges and sample size</h2>
-<p>AI assistants can answer the same question differently each time. Every rate comes with a 95% confidence range (Wilson interval), so 3 of 5 shows as roughly 23–88%, not as a precise 60%. When a result rests on fewer than 20 answers, the report marks it as low confidence.</p>
+<p>AI assistants can answer the same question differently each time. Every rate comes with a 95% confidence range (Wilson interval), so 3 of 5 shows as roughly 23–88%, not as a precise 60%. Repeats of the same question tend to give the same answer, so they are not counted as independent: the range is widened according to the number of different questions behind it (in our own data, two repeats of a question agree about 85% of the time). When a result rests on fewer than 20 answers or fewer than 10 different questions, the report marks it as low confidence.</p>
+<p>When two brands are less than 10 points apart, or their ranges overlap, we call it a tie and do not rank one above the other.</p>
 
 <h2>Product-level checks</h2>
 <ul>
@@ -119,7 +120,8 @@ export const METHOD_PAGES = [
 </tbody></table>
 
 <h2>Güven aralığı ve örneklem</h2>
-<p>Yapay zekâ aynı soruya her seferinde farklı cevap verebilir. Her oran %95 güven aralığıyla (Wilson aralığı) gösterilir; yani 5'te 3, kesin bir %60 olarak değil, yaklaşık %23–88 olarak görünür. Bir sonuç 20'den az cevaba dayanıyorsa raporda düşük güven olarak işaretlenir.</p>
+<p>Yapay zekâ aynı soruya her seferinde farklı cevap verebilir. Her oran %95 güven aralığıyla (Wilson aralığı) gösterilir; yani 5'te 3, kesin bir %60 olarak değil, yaklaşık %23–88 olarak görünür. Aynı sorunun tekrarları çoğu zaman aynı cevabı verdiği için bağımsız sayılmaz: aralık, arkasındaki farklı soru sayısına göre genişletilir (kendi verimizde bir sorunun iki tekrarı yaklaşık %85 oranında aynı sonucu veriyor). Bir sonuç 20'den az cevaba ya da 10'dan az farklı soruya dayanıyorsa raporda düşük güven olarak işaretlenir.</p>
+<p>İki marka arasındaki fark 10 puandan azsa ya da aralıkları çakışıyorsa bunu "başa baş" sayarız ve birini diğerinin önüne koymayız.</p>
 
 <h2>Ürün düzeyindeki kontroller</h2>
 <ul>

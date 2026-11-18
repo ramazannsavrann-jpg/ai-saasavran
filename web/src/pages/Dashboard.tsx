@@ -6,7 +6,7 @@ import { friendlyError } from "../lib/supabase";
 import { PAUSE_TEXT } from "../lib/messages";
 import { downloadCsv } from "../lib/csv";
 import { portfolioRows, type PortfolioStatus } from "../../../engine/src/portfolio.ts";
-import { formatDateTime, MIN_SAMPLE, numLoc, rangeText, series, pct, usd } from "../lib/report";
+import { formatDateTime, lowSample, numLoc, rangeText, series, pct, usd } from "../lib/report";
 import { SECTORS } from "../lib/sectors";
 import { L, isEn } from "../lib/i18n";
 import { MyInvites } from "../components/Team";
@@ -180,7 +180,7 @@ function CountryCompare({ name, brands, type, live }: { name: string; brands: Br
                 <Link to={`/marka/${r.brand.id}`} className="src-head"><span><strong>{(r.brand.country || "TR").toUpperCase()}</strong>{r.brand.city ? ` · ${r.brand.city}` : ""}</span><span className="num">{p ? pct(p.recommend.value) : "–"}</span></Link>
                 {p ? <>
                   <div className="bar-track bar-target" aria-hidden="true"><div className="bar-fill" style={{ width: `${(100 * p.recommend.value) / max}%` }} /></div>
-                  <p className="src-sup muted">{isEn() ? `recommended in ${p.recommend.k} of ${p.recommend.n} answers (range ${rangeText(p.recommend)}), ${formatDateTime(p.at)}` : `${p.recommend.n} cevabın ${numLoc(p.recommend.k)} önerildi (aralık ${rangeText(p.recommend)}), ${formatDateTime(p.at)}`}{p.recommend.n < MIN_SAMPLE && L("; örneklem küçük", "; small sample")}</p>
+                  <p className="src-sup muted">{isEn() ? `recommended in ${p.recommend.k} of ${p.recommend.n} answers (range ${rangeText(p.recommend)}), ${formatDateTime(p.at)}` : `${p.recommend.n} cevabın ${numLoc(p.recommend.k)} önerildi (aralık ${rangeText(p.recommend)}), ${formatDateTime(p.at)}`}{lowSample(p.recommend) && L("; örneklem küçük", "; small sample")}</p>
                 </> : <p className="src-sup muted">{L("Bu ülkede henüz bu türde ölçüm yok.", "No measurement of this kind in this country yet.")}</p>}
               </li>
             );
