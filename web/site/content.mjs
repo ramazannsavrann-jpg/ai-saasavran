@@ -2,6 +2,7 @@
 // Kural: Burada yazan her sayı ve iddia gerçek veriye dayanır. Ölçüm sonuçları Growth Lab'in gerçek ölçümleridir (7 Kasım 2026).
 
 import { COMPARE_TR } from "./compare.mjs";
+import { EXTRA_TR, NEW_TR } from "./guides-more.mjs";
 
 export const SITE = {
   name: "AI SaaSavran",
@@ -291,6 +292,10 @@ export const GUIDES = [
     ],
   },
 ];
+
+// Ek bölümler (guides-more.mjs) mevcut rehberlerin sonuna eklenir; yeni rehberler listenin sonuna
+for (const g of GUIDES) { const x = EXTRA_TR[g.slug]; if (x) { g.body += x.body; g.faq = [...g.faq, ...x.faq]; } }
+GUIDES.push(...NEW_TR);
 
 export const HOME_FAQ = [
   ["AI SaaSavran ne işe yarar?", "Markanızın ChatGPT, Gemini, Claude ve Perplexity gibi yapay zekâ asistanlarının cevaplarında ne sıklıkla anıldığını ve önerildiğini ölçer, rakiplerinizle karşılaştırır ve ne yapmanız gerektiğini önerir."],

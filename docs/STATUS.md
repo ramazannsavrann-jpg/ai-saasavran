@@ -26,6 +26,8 @@
 > Karşılaştırma rehberleri geri geldi (sahip kararı, gerçek adlarla): `/rehber/yapay-zeka-gorunurluk-araclari/`, `/rehber/peec-ai-alternatifi/`
 > + EN (`web/site/compare.mjs`; rakip bilgisi yalnız resmî sayfalardan, 18 Kasım; 3 ayda bir kontrol). Kurucu sayfası `/tr/kurucu/`, `/founder/`
 > (Ramazan Savran, Antalya; Person + Organization.founder şeması; sahip onayı).
+> Rehberler: 4 ince rehbere gerçek ölçüm verili bölümler eklendi; yeni TR+EN: markam ChatGPT'de neden çıkmıyor, Perplexity'de görünmek,
+> GEO/AEO sözlüğü, llms.txt nedir (`web/site/guides-more.mjs`). Toplam 13 TR + 13 EN rehber.
 
 > **18 Kasım (4 paket, devam):** gizli bilgi taraması Paddle/Resend/SerpApi/Turnstile/GitHub/OAuth + kişisel e-posta; gece Gemini
 > testi hatayı gizlemez; `runs.prompts_total` işçide gerçek soru sayısı; SEO: `/tr/fiyatlar/`, sayfa bazlı `lastmod`, RSS `<link>`,
