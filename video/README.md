@@ -63,7 +63,7 @@ ffmpeg -i v.mp4 -i voice.wav -i music.wav -filter_complex "[1:a]aresample=44100,
 ## Eğitim videoları kuralı (13 Kasım)
 - **14 Kasım kararı: eğitim videoları YouTube'a GİZLİ (private) yüklenir**, herkese açık yapılmaz (kullanıcı isteği). Veri Shorts herkese açık devam eder.
 - **15 Kasım kararı:** eğitim videolarının TAMAMI bitip YouTube'a yüklenene ve ilgili oynatma listelerine ("AI SaaSavran | Kullanım ve Eğitim Rehberi" / "AI SaaSavran | Tutorials & User Guide" + dil listesi) alınana kadar hepsi GİZLİ kalır; tek tek açılmaz. Hepsi tamamlanınca: videolar herkese açık yapılır, `web/src/lib/tutorial-videos.json` içine kimlikler yazılır ve `"public": true` yapılır → site /tr/egitim/, /tutorials/ ve /kayit (kayıt videosu = Eğitim 2) YouTube'dan gömülü oynatır (video siteye yüklenmez). Her yeni eğitim videosunun kimliği yüklenince bu dosyaya eklenir (public false kalarak).
-- Durum: Eğitim 1 (ücretsiz kontrol) TR pulZMgYWQqI, EN dgGNLhc6A3g yüklendi. Sıradaki: Eğitim 2 kayıt/hesap açma.
+- Durum (18 Kasım): Eğitim 1–8 TR+EN TAMAM, 16 video YouTube'da GİZLİ, listelerde, kapaklı. 6: TR kn7IEveF7dI / EN HgQXnVSZvHY; 7: TR GIdlPj6Q_sw / EN N50X-1JfGJA; 8: TR 2PtipsC0Bm4 / EN tesgSylSO-U. Kimlikler web/src/lib/tutorial-videos.json'da, "public": false. Herkese açma kararı sahibinde.
 - Kendi markamız gösterilmez. Gerçek arayüz + uydurma ÖRNEK veri (Marka A/B…, Ürün 1/2…), ekranda "Örnek veri / Sample data" etiketi. Ekran çekerken API cevapları Playwright ile örnek veriyle değiştirilir; gerçek ölçüm yapılmaz.
 - Anlatımda eskiyecek bilgi yok: fiyat, kota sayısı, tarih, motor sürümü söylenmez; "yapay zekâ" denir. Böylece videolar ileride güncelleme gerektirmez.
 
