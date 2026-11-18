@@ -3,9 +3,9 @@
  "questions": 7,
  "answers": 42,
  "engines": [
+  "ChatGPT",
   "Claude",
-  "Perplexity",
-  "ChatGPT"
+  "Perplexity"
  ],
  "ours": 0,
  "brands": [

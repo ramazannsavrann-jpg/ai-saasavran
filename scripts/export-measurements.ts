@@ -83,7 +83,7 @@ console.log(`Ölçüm sayfaları: ${final.length} soru (${final.filter((m) => m.
       const ours = ms.filter((m) => m.recommended && m.brand_id === SELF_BRAND).length;
       const self = {
         at: String(run.finished_at ?? run.created_at).slice(0, 10), questions: new Set(rs.map((r) => r.prompt_id)).size, answers: rs.length,
-        engines: [...new Set(rs.map((r) => ENG[r.provider] ?? r.provider))], ours,
+        engines: [...new Set(rs.map((r) => ENG[r.provider] ?? r.provider))].sort((a, b) => Object.values(ENG).indexOf(a) - Object.values(ENG).indexOf(b)), ours,
         brands: [...rec.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])).slice(0, 8),
       };
       writeFileSync("web/site/data/self.json", JSON.stringify(self, null, 1) + "\n");
