@@ -29,6 +29,8 @@ export interface Usage {
 export interface VisRow {
   run_id: string; run_at: string; provider: string; model: string; brand_id: string; brand_name: string;
   is_target: boolean; n: number; mentioned: number; recommended: number; cited: number;
+  /** Farklı soru sayısı (0050); eski satırlarda yok */
+  prompts?: number | null;
 }
 export interface PromptResult {
   prompt_id: string; prompt_text: string; intent: Intent; answers: number; target_mentioned: number;

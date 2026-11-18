@@ -5,7 +5,7 @@ import { CompareBars, TrendChart } from "../components/Chart";
 import { Empty, Loading } from "../components/ui";
 import type { MeasurementType, VisRow } from "../lib/data";
 import { L, isEn } from "../lib/i18n";
-import { MIN_SAMPLE, competitorsInRun, formatDate, formatDateTime, numLoc, pct, providerLabel, rangeText, series } from "../lib/report";
+import { lowSample, competitorsInRun, formatDate, formatDateTime, numLoc, pct, providerLabel, rangeText, series } from "../lib/report";
 
 interface Shared {
   brand: { name: string; sector: string | null; city: string | null; country: string };
@@ -62,7 +62,7 @@ export function SharedReport() {
               <div><dt>{L("Anılma", "Mentioned")}</dt><dd className="num">{pct(last.mention.value)}<span className="muted dd-note">{L("aralık", "range")} {rangeText(last.mention)}</span></dd></div>
               <div><dt>{L("Önerilerdeki payı", "Share of recommendations")}</dt><dd className="num">{pct(last.share)}</dd></div>
             </dl>
-            {last.recommend.n < MIN_SAMPLE && <p className="caution">{L("Örneklem küçük; oranlar kesin değildir, aralığa bakın.", "Small sample; rates are not precise, look at the range.")}</p>}
+            {lowSample(last.recommend) && <p className="caution">{L("Örneklem küçük; oranlar kesin değildir, aralığa bakın.", "Small sample; rates are not precise, look at the range.")}</p>}
             {pts.length > 1 && <TrendChart points={pts} type={t} metric="recommend" />}
             <h3>{L("Rakiplerle karşılaştırma (son ölçüm)", "Compared with competitors (latest)")}</h3>
             <CompareBars type={t} rows={comp.map((c) => ({ name: c.name, isTarget: c.isTarget, value: c.recommend.value,

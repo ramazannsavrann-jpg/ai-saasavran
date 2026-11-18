@@ -7,7 +7,7 @@ import { friendlyError, sb } from "../lib/supabase";
 import { L, isEn } from "../lib/i18n";
 import { ERROR_CLASS_TEXT, STOP_TEXT, runStatusText } from "../lib/messages";
 import { actionImpact, compareProducts, engineComparison, engineScoreChanges, perceptionSummary, scoreChange, visibilityScore, type ScoreInput, type ScorePartKey, ownedSourceShare, ownCitedRivals, visibilityForecast, sourcesByEngine, rivalReasons, conditionMap, lossCards, productVisibility, promptKind, shoppingSources, sourceDominance, splitByKind, type EngineCompareRow, type LossCard, type SourceRow } from "../../../engine/src/insights.ts";
-import { competitorsInRun, formatDate, formatDateTime, MIN_SAMPLE, numLoc, pct, providerLabel, rangeText, series, shareSummary, sourceOpportunities, topDomains, usd } from "../lib/report";
+import { competitorsInRun, formatDate, formatDateTime, lowSample, MIN_SAMPLE, numLoc, pct, providerLabel, rangeText, series, shareSummary, sourceOpportunities, topDomains, usd } from "../lib/report";
 import { Button, Confirm, DataNotice, Empty, ErrorBox, Field, Loading, Select, TypeBadge } from "../components/ui";
 import { CompareBars, TrendChart } from "../components/Chart";
 import { StartGuide } from "../components/StartGuide";
@@ -411,8 +411,10 @@ function Products({ brand, paidAllowed, manualShopping }: { brand: Brand; paidAl
     const m = new Map<string, AiShopBrand>();
     for (const r of rows.filter((x) => x.run_id === lastRun)) {
       const b = all.find((x) => x.id === r.brand_id);
-      const cur = m.get(r.brand_id) ?? { name: r.brand_name, aliases: b?.aliases ?? [], recommended: 0, isTarget: r.is_target };
-      cur.recommended += r.recommended; m.set(r.brand_id, cur);
+      const cur = m.get(r.brand_id) ?? { name: r.brand_name, aliases: b?.aliases ?? [], recommended: 0, isTarget: r.is_target, answers: 0, clusters: 0 };
+      cur.recommended += r.recommended; cur.answers = (cur.answers ?? 0) + r.n;
+      cur.clusters = r.prompts != null && cur.clusters !== undefined ? cur.clusters + r.prompts : undefined;
+      m.set(r.brand_id, cur);
     }
     return [...m.values()];
   })();
@@ -828,7 +830,7 @@ function Report({ brand, type, onBrandChange, paid = false }: { brand: Brand; ty
                 ? <div><dt>{L("Sitenizin kaynak gösterilmesi", "Your site cited")}</dt><dd className="num">{pct(last.cite.value)}</dd><dd className="range">{last.cite.k}/{last.cite.n} {L("cevapta", "answers")}</dd></div>
                 : <div><dt>{L("Kaynak gösterilme", "Cited")}</dt><dd className="num na">{L("Ölçülmedi", "Not measured")}</dd><dd className="range">{L("yalnızca canlı aramada vardır", "only with live search")}</dd></div>}
             </dl>
-            {last.recommend.n < MIN_SAMPLE && (
+            {lowSample(last.recommend) && (
               <p className="caution">{isEn() ? `Small sample (${last.recommend.n} answers). Don't read these rates as final; the ranges are wide. Add more questions and measure again.` : `Örneklem küçük (${last.recommend.n} cevap). Oranları kesin sonuç gibi okumayın; aralıklar geniştir. Daha fazla soru ekleyip tekrar ölçün.`}</p>
             )}
             <ShareButton text={() => shareSummary({

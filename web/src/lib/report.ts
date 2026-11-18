@@ -1,10 +1,13 @@
 // Ham sayımlardan rapor metrikleri. Güven aralığı motorla aynı fonksiyondan gelir.
-import { wilson } from "../../../engine/src/metrics.ts";
+import { clusteredWilson, isLowSample } from "../../../engine/src/metrics.ts";
 import { L, isEn } from "./i18n";
 import type { VisRow } from "./data";
 
-export interface Rate { value: number; low: number; high: number; k: number; n: number }
-const rate = (k: number, n: number): Rate => ({ value: n ? k / n : 0, ...wilson(k, n), k, n });
+/** clusters = farklı soru × motor sayısı; aralık tekrarların bağımlılığına göre genişletilir (engine/src/metrics.ts). */
+export interface Rate { value: number; low: number; high: number; k: number; n: number; clusters?: number }
+const rate = (k: number, n: number, clusters?: number): Rate => ({ value: n ? k / n : 0, ...clusteredWilson(k, n, clusters), k, n, clusters });
+/** Küçük örneklem uyarısı: 20 cevaptan ya da 10 farklı sorudan az. */
+export const lowSample = (r: Rate) => isLowSample(r.n, r.clusters);
 
 export interface RunPoint {
   runId: string; at: string; providers: string[];
@@ -23,11 +26,12 @@ export function series(rows: VisRow[]): RunPoint[] {
     const n = target.reduce((a, r) => a + r.n, 0);
     const sum = (f: (r: VisRow) => number) => target.reduce((a, r) => a + f(r), 0);
     const allRecs = rs.reduce((a, r) => a + r.recommended, 0);
+    const cl = target.every((r) => r.prompts != null) ? sum((r) => r.prompts ?? 0) : undefined;
     return {
       runId, at: rs[0].run_at, providers: [...new Set(rs.map((r) => r.provider))],
-      mention: rate(sum((r) => r.mentioned), n),
-      recommend: rate(sum((r) => r.recommended), n),
-      cite: rate(sum((r) => r.cited), n),
+      mention: rate(sum((r) => r.mentioned), n, cl),
+      recommend: rate(sum((r) => r.recommended), n, cl),
+      cite: rate(sum((r) => r.cited), n, cl),
       share: allRecs ? sum((r) => r.recommended) / allRecs : 0,
     };
   }).sort((a, b) => a.at.localeCompare(b.at));
@@ -42,9 +46,10 @@ export function competitorsInRun(rows: VisRow[], runId: string): CompetitorStat[
   return [...byBrand.entries()].map(([brandId, b]) => {
     const n = b.reduce((a, r) => a + r.n, 0);
     const rec = b.reduce((a, r) => a + r.recommended, 0);
+    const cl = b.every((r) => r.prompts != null) ? b.reduce((a, r) => a + (r.prompts ?? 0), 0) : undefined;
     return {
       brandId, name: b[0].brand_name, isTarget: b[0].is_target,
-      recommend: rate(rec, n), mention: rate(b.reduce((a, r) => a + r.mentioned, 0), n),
+      recommend: rate(rec, n, cl), mention: rate(b.reduce((a, r) => a + r.mentioned, 0), n, cl),
       share: allRecs ? rec / allRecs : 0,
     };
   }).sort((a, b) => b.recommend.value - a.recommend.value || (a.isTarget ? -1 : 1));
