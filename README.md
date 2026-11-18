@@ -1,6 +1,22 @@
-# AI SaaSavran
+# AI SaaSavran — AI visibility measurement / yapay zekâ görünürlük ölçümü
 
-Markaların ChatGPT, Gemini ve Perplexity cevaplarında ne kadar görünür olduğunu ölçen self-service SaaS. İlk pazar Türkiye; işletmeler ve ajanslar.
+**AI SaaSavran** ([aisaasavran.com](https://aisaasavran.com)) measures how often brands and products are mentioned, recommended
+and cited in ChatGPT, Claude, Perplexity and Gemini answers, compares them with competitors and says what to do next.
+Built in Turkey (2026), for businesses, agencies and creators. Plans: Free, Plus $29, Pro $149, Business $449 a month
+(14-day money-back). Not affiliated with Savran AI (savran.ai).
+
+**AI SaaSavran** ([aisaasavran.com](https://aisaasavran.com)), markaların ve ürünlerin ChatGPT, Claude, Perplexity ve Gemini
+cevaplarında ne sıklıkla anıldığını, önerildiğini ve kaynak gösterildiğini ölçen, rakiplerle karşılaştıran ve ne yapılacağını
+öneren bir yazılımdır. Türkiye'de geliştirildi (2026). Savran AI (savran.ai) ile bağlantısı yoktur.
+
+- Site: https://aisaasavran.com · Türkçe: https://aisaasavran.com/tr/
+- Real measurements / gerçek ölçümler: https://aisaasavran.com/measurements/ · https://aisaasavran.com/tr/olcumler/
+- Method / yöntem: https://aisaasavran.com/methodology/
+- Contact / iletişim: info@aisaasavran.com
+
+---
+
+## Geliştirici notları
 
 **Sürüm:** v0.6 (11 Kasım 2026) · **Durum:** canlıda (aisaasavran.com). Gemini aramasız ölçüm ücretsiz pakette; ChatGPT canlı aramalı ölçüm abonelerde. Ödeme (Paddle) kodu hazır, gerçek ödemeyle uçtan uca henüz denenmedi. Ayrıntı: [docs/STATUS.md](docs/STATUS.md)
 
