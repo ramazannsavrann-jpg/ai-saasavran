@@ -940,6 +940,11 @@ test("Marka tespiti (18 Kasım): kısa BÜYÜK harfli ilk kelime, üst şirket t
   const ringCap = analyzeResponse({ promptId: "p", provider: "openai", answerText: "- Ring Video Doorbell is popular.", citedUrls: [] }, brands);
   assert.equal(ringCap.find((x) => x.brandId === "ring")!.mentioned, true);
   assert.equal(listRank("Options:\n- Durex\n- SKYN Original", brands[1]), 2);
+  // İki harfli ya da yaygın kısaltma ilk kelime markaya sayılmaz: "AI SaaSavran" her "AI" geçen cevapta anılmış sayılmamalı
+  const ai = analyzeResponse({ promptId: "p", provider: "openai", answerText: "Best AI visibility tools: Peec AI, Otterly.AI. AI search is growing.", citedUrls: [] }, [{ id: "s", name: "AI SaaSavran", aliases: ["SaaSavran"] }, { id: "seo", name: "SEO PowerSuite", aliases: [] }]);
+  assert.equal(ai.find((x) => x.brandId === "s")!.mentioned, false);
+  const seo = analyzeResponse({ promptId: "p", provider: "openai", answerText: "SEO tools matter.", citedUrls: [] }, [{ id: "seo", name: "SEO PowerSuite", aliases: [] }]);
+  assert.equal(seo[0].mentioned, false);
 });
 
 test("Rakibi öne çıkaran nitelikler (0055): yalnız rakip önerilip hedef önerilmediğinde; size yakıştırılma sayısıyla", async () => {

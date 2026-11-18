@@ -92,12 +92,14 @@ const COMMON_FIRST_WORDS = new Set([
   "yeni", "usta", "büyük", "küçük", "merkez", "türk", "türkiye", "ilk", "en", "iyi", "ana", "hızlı", "güzel", "altın", "yıldız",
   "best", "the", "new", "first", "smart", "super", "global", "best", "open", "google",
 ]);
+const COMMON_ACRONYMS = new Set(["SEO", "CRM", "API", "USA", "GPS", "LED", "USB", "SUV", "PDF", "ERP", "SMS", "VPN", "CEO", "B2B", "FAQ", "APP", "WEB", "NEW", "THE", "BIG", "TOP", "PRO"]);
 function firstWordPattern(name: string): RegExp | null {
   const words = name.trim().split(/\s+/);
   if (words.length < 2) return null;
   const w = words[0];
   // Kısa ilk kelime ancak tamamen BÜYÜK harfse ve metinde de büyük harfle geçiyorsa sayılır: "ONE Condoms" ← "ONE UltraFeel" (18 Kasım)
-  const shortCaps = w.length >= 2 && w.length < 4 && /^\p{Lu}+$/u.test(w);
+  // "AI", "SEO", "TV" gibi yaygın kısaltmalar asla tek başına markaya sayılmaz ("AI SaaSavran" her "AI" kelimesinde sayılıyordu, 18 Kasım)
+  const shortCaps = w.length === 3 && /^\p{Lu}+$/u.test(w) && !COMMON_ACRONYMS.has(w);
   if ((w.length < 4 && !shortCaps) || COMMON_FIRST_WORDS.has(w.toLocaleLowerCase("tr-TR"))) return null;
   if (w[0] !== w[0].toLocaleUpperCase("tr-TR")) return null;
   const esc = w.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
