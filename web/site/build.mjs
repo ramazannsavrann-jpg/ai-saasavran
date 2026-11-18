@@ -82,9 +82,9 @@ ${body}
 </main>
 <footer class="foot">
   ${en ? `<p><b>AI SaaSavran</b> measures whether ChatGPT and Gemini recommend your business. Early access.</p>
-  <p><a href="/pricing/">Pricing</a> · <a href="/guides/">Guides</a> · <a href="/blog/">Blog</a> · <a href="/ai-visibility-index/">AI Visibility Index</a> · <a href="/tutorials/">Tutorials</a> · <a href="/about/">About</a> · <a href="/methodology/">Methodology</a> · <a href="/terms/">Terms</a> · <a href="/privacy/">Privacy</a> · <a href="/refund/">Refunds</a> · <a href="/tr/">Türkçe</a></p>
+  <p><a href="/pricing/">Pricing</a> · <a href="/guides/">Guides</a> · <a href="/blog/">Blog</a> · <a href="/ai-visibility-index/">AI Visibility Index</a> · <a href="/tutorials/">Tutorials</a> · <a href="/about/">About</a> · <a href="/founder/">Founder</a> · <a href="/methodology/">Methodology</a> · <a href="/terms/">Terms</a> · <a href="/privacy/">Privacy</a> · <a href="/refund/">Refunds</a> · <a href="/tr/">Türkçe</a></p>
   <p>Contact: <a href="mailto:${SITE.email}">${SITE.email}</a></p>` : `<p><b>AI SaaSavran</b>: markaların yapay zekâ asistanlarındaki görünürlüğünü ölçen araç. Erken erişim.</p>
-  <p><a href="/tr/#fiyatlar">Fiyatlar</a> · <a href="/rehber/">Rehberler</a> · <a href="/tr/blog/">Blog</a> · <a href="/tr/yapay-zeka-gorunurluk-endeksi/">Görünürlük Endeksi</a> · <a href="/tr/egitim/">Eğitim</a> · <a href="/tr/hakkimizda/">Hakkımızda</a> · <a href="/tr/metodoloji/">Metodoloji</a> · <a href="/durum">Ürün durumu</a> · <a href="/kosullar">Kullanım koşulları</a> · <a href="/gizlilik">Gizlilik</a> · <a href="/iade/">İade</a> · <a href="/">English</a></p>
+  <p><a href="/tr/#fiyatlar">Fiyatlar</a> · <a href="/rehber/">Rehberler</a> · <a href="/tr/blog/">Blog</a> · <a href="/tr/yapay-zeka-gorunurluk-endeksi/">Görünürlük Endeksi</a> · <a href="/tr/egitim/">Eğitim</a> · <a href="/tr/hakkimizda/">Hakkımızda</a> · <a href="/tr/kurucu/">Kurucu</a> · <a href="/tr/metodoloji/">Metodoloji</a> · <a href="/durum">Ürün durumu</a> · <a href="/kosullar">Kullanım koşulları</a> · <a href="/gizlilik">Gizlilik</a> · <a href="/iade/">İade</a> · <a href="/">English</a></p>
   <p>İletişim: <a href="mailto:${SITE.email}">${SITE.email}</a></p>`}
 </footer>
 <script src="/site/site.js" defer></script>
@@ -101,7 +101,9 @@ function write(path, html) {
 }
 
 const ORG = { "@context": "https://schema.org", "@type": "Organization", name: SITE.name, alternateName: ["AISaaSavran", "aisaasavran.com", "AI SaaSavran AI visibility tracker", "AI SaaSavran yapay zekâ görünürlük aracı"], url: SITE.url, email: SITE.email, logo: SITE.url + "/icon.svg", sameAs: SITE.sameAs,
-  description: `${DEF.en} It is an independent product (aisaasavran.com) and is not affiliated with similarly named companies or services (for example Savran AI, savran.ai).` };
+  description: `${DEF.en} It is an independent product (aisaasavran.com) and is not affiliated with similarly named companies or services (for example Savran AI, savran.ai).`,
+  founder: { "@type": "Person", "@id": SITE.url + "/founder/#person", name: "Ramazan Savran", url: SITE.url + "/founder/" }, foundingDate: "2026", foundingLocation: { "@type": "Place", name: "Antalya, Turkey" },
+  areaServed: ["TR", "Worldwide"], knowsAbout: ["AI visibility", "Generative engine optimization (GEO)", "Answer engine optimization (AEO)", "ChatGPT", "Claude", "Perplexity", "Gemini"] };
 const WEBSITE = { "@context": "https://schema.org", "@type": "WebSite", name: SITE.name, url: SITE.url, inLanguage: ["en", "tr"], description: DEF.en, publisher: { "@type": "Organization", name: SITE.name, url: SITE.url } };
 const crumbs = (items) => ({ "@context": "https://schema.org", "@type": "BreadcrumbList", itemListElement: items.map(([name, path], i) => ({ "@type": "ListItem", position: i + 1, name, item: SITE.url + path })) });
 const APP = {
@@ -429,7 +431,7 @@ const ABOUT = {
   </ul>
   <h2>Facts</h2>
   <ul>
-    <li>Launched: 2026, early access. Based in Turkey; serves customers in Turkey and worldwide.</li>
+    <li>Launched: 2026, early access. Founded by <a href="/founder/">Ramazan Savran</a> in Antalya, Turkey; serves customers in Turkey and worldwide. The name combines SaaS and the founder's surname, Savran.</li>
     <li>Plans: Free, Plus $29, Pro $149, Business $449 per month (<a href="/pricing/">pricing</a>).</li>
     <li>Not affiliated with other companies or services with a similar name.</li>
     <li>Contact: <a href="mailto:${SITE.email}">${SITE.email}</a> · YouTube: <a href="https://www.youtube.com/@aisaasavran">@aisaasavran</a></li>
@@ -457,7 +459,7 @@ const ABOUT = {
   </ul>
   <h2>Bilgiler</h2>
   <ul>
-    <li>Kuruluş: 2026, erken erişim. Türkiye merkezli; Türkiye'deki ve dünyadaki müşterilere hizmet verir.</li>
+    <li>Kuruluş: 2026, erken erişim. Kurucu: <a href="/tr/kurucu/">Ramazan Savran</a> (Antalya). Türkiye'deki ve dünyadaki müşterilere hizmet verir. Ad, SaaS ile kurucunun soyadı Savran'dan gelir.</li>
     <li>Paketler: Ücretsiz, Plus 29 $, Pro 149 $, Business 449 $ (aylık) (<a href="/tr/#fiyatlar">fiyatlar</a>).</li>
     <li>Benzer adlı başka şirket veya hizmetlerle bağlantısı yoktur.</li>
     <li>İletişim: <a href="mailto:${SITE.email}">${SITE.email}</a> · YouTube: <a href="https://www.youtube.com/@aisaasavran">@aisaasavran</a></li>
@@ -492,6 +494,44 @@ for (const lang of ["en", "tr"]) {
     title: en ? "Tutorials: how to use AI SaaSavran" : "Eğitim: AI SaaSavran nasıl kullanılır?",
     description: en ? "Eight short step-by-step lessons: free check, adding a brand, questions and competitors, first measurement, reading the report, sources, recommendations." : "Sekiz kısa, adım adım ders: ücretsiz kontrol, marka ekleme, soru ve rakipler, ilk ölçüm, raporu okuma, kaynaklar, öneriler.",
     body: tutorialsHtml(lang), schema: [tutorialsSchema(lang, SITE.url), crumbs([["AI SaaSavran", en ? "/" : "/tr/"], [en ? "Tutorials" : "Eğitim", path]])] }));
+}
+
+
+// 4d) Kurucu sayfası (18 Kasım, sahip onayı ve kendi verdiği bilgilerle). Yapay zekânın markayı bir kişiye bağlayıp doğru tanıması için.
+const PERSON = { "@context": "https://schema.org", "@type": "Person", "@id": SITE.url + "/founder/#person", name: "Ramazan Savran", jobTitle: "Founder", url: SITE.url + "/founder/",
+  homeLocation: { "@type": "Place", name: "Antalya, Turkey" }, worksFor: { "@type": "Organization", name: SITE.name, url: SITE.url },
+  knowsAbout: ["AI visibility", "Generative engine optimization", "Banking", "Customer service", "Training"] };
+const FOUNDER = {
+  en: { path: "/founder/", alt: "/tr/kurucu/", title: "Ramazan Savran, founder of AI SaaSavran", description: "Ramazan Savran founded AI SaaSavran in Antalya, Turkey, after eight years in banking. The name AI SaaSavran combines SaaS and his surname, Savran.", body: `
+<section class="article">
+  <p class="eyebrow">Founder</p>
+  <h1>Ramazan Savran</h1>
+  <p class="lede">Ramazan Savran is the founder of <a href="/about/">AI SaaSavran</a>, the tool that measures how often ChatGPT, Claude, Perplexity and Gemini mention and recommend brands and products. He lives in Antalya, Turkey.</p>
+  <h2>Background</h2>
+  <p>Ramazan worked in banking for eight years, in roles that included the bank's call centre and staff training. Before that he worked as an agricultural technician. His interest in artificial intelligence led him to focus on building products that add real value, and in 2026 he started AI SaaSavran.</p>
+  <h2>Why AI SaaSavran</h2>
+  <p>More and more customers ask AI assistants which product, shop or service to choose. Years of answering customers' questions showed him how much the first answer matters. AI SaaSavran lets businesses see whether they are part of that answer, measured with real questions and real answers, never simulated data shown as real.</p>
+  <h2>About the name</h2>
+  <p>AI SaaSavran = SaaS + Savran, the founder's surname. It is not affiliated with Savran AI (savran.ai) or any other similarly named company.</p>
+  <p>Contact: <a href="mailto:${SITE.email}">${SITE.email}</a></p>
+</section>` },
+  tr: { path: "/tr/kurucu/", alt: "/founder/", title: "Ramazan Savran, AI SaaSavran'ın kurucusu", description: "Ramazan Savran, sekiz yıllık bankacılık deneyiminin ardından AI SaaSavran'ı Antalya'da kurdu. AI SaaSavran adı SaaS ile kurucunun soyadı Savran'dan gelir.", body: `
+<section class="article">
+  <p class="eyebrow">Kurucu</p>
+  <h1>Ramazan Savran</h1>
+  <p class="lede">Ramazan Savran, markaların ve ürünlerin ChatGPT, Claude, Perplexity ve Gemini cevaplarında ne sıklıkla anıldığını ve önerildiğini ölçen <a href="/tr/hakkimizda/">AI SaaSavran</a>'ın kurucusudur. Antalya'da yaşıyor.</p>
+  <h2>Geçmişi</h2>
+  <p>Sekiz yıl bankacılık sektöründe çalıştı; bankada çağrı merkezi ve eğitmenlik gibi görevlerde bulundu. Daha önce ziraat teknikeri olarak çalıştı. Yapay zekâya ilgisi onu katma değerli işler üretmeye yöneltti ve 2026'da AI SaaSavran'ı kurdu.</p>
+  <h2>Neden AI SaaSavran?</h2>
+  <p>Müşteriler artık hangi ürünü, mağazayı veya hizmeti seçeceklerini yapay zekâ asistanlarına soruyor. Yıllarca müşteri sorularını cevaplamak, ilk cevabın ne kadar önemli olduğunu gösterdi. AI SaaSavran, işletmelerin o cevapta yer alıp almadığını gerçek sorular ve gerçek cevaplarla gösterir; simülasyon asla gerçek gibi sunulmaz.</p>
+  <h2>Adın hikâyesi</h2>
+  <p>AI SaaSavran = SaaS + Savran (kurucunun soyadı). Savran AI (savran.ai) veya benzer adlı başka bir şirketle bağlantısı yoktur.</p>
+  <p>İletişim: <a href="mailto:${SITE.email}">${SITE.email}</a></p>
+</section>` },
+};
+for (const [lang, f] of Object.entries(FOUNDER)) {
+  const prof = { "@context": "https://schema.org", "@type": "ProfilePage", name: f.title, url: SITE.url + f.path, inLanguage: lang, mainEntity: PERSON };
+  write(f.path, page({ lang, alt: f.alt, path: f.path, title: f.title + " | AI SaaSavran", description: f.description, body: f.body, schema: [prof, ORG], type: "profile" }));
 }
 
 // 5) Tarayıcılar ve yapay zekâ botları için dosyalar
@@ -539,7 +579,7 @@ if (IDX_SECTORS) {
   writeFileSync(join(DIST, idxCsvPath.slice(1)), indexCsv(IDX));
 }
 
-const urls = ["/", "/about/", ...METHOD_PAGES.filter((m) => m.lang === "en").map((m) => m.path), "/pricing/", "/check/", "/guides/", ...GUIDES_EN.map((g) => `/guides/${g.slug}/`), "/blog/", ...posts.filter((p) => p.lang === "en").map(postPath), "/tutorials/", "/tr/", "/tr/fiyatlar/", "/tr/hakkimizda/", ...METHOD_PAGES.filter((m) => m.lang === "tr").map((m) => m.path), "/tr/kontrol/", "/rehber/", ...GUIDES.map((g) => `/rehber/${g.slug}/`), "/tr/blog/", ...posts.filter((p) => p.lang === "tr").map(postPath), "/tr/egitim/", ...(MITEMS.some((m) => m.lang === "en") ? ["/measurements/"] : []), ...(MITEMS.some((m) => m.lang === "tr") ? ["/tr/olcumler/"] : []), ...(IDX_SECTORS ? [idxPath("en"), idxPath("tr")] : []), ...MITEMS.map(mPath)];
+const urls = ["/", "/about/", "/founder/", "/tr/kurucu/", ...METHOD_PAGES.filter((m) => m.lang === "en").map((m) => m.path), "/pricing/", "/check/", "/guides/", ...GUIDES_EN.map((g) => `/guides/${g.slug}/`), "/blog/", ...posts.filter((p) => p.lang === "en").map(postPath), "/tutorials/", "/tr/", "/tr/fiyatlar/", "/tr/hakkimizda/", ...METHOD_PAGES.filter((m) => m.lang === "tr").map((m) => m.path), "/tr/kontrol/", "/rehber/", ...GUIDES.map((g) => `/rehber/${g.slug}/`), "/tr/blog/", ...posts.filter((p) => p.lang === "tr").map(postPath), "/tr/egitim/", ...(MITEMS.some((m) => m.lang === "en") ? ["/measurements/"] : []), ...(MITEMS.some((m) => m.lang === "tr") ? ["/tr/olcumler/"] : []), ...(IDX_SECTORS ? [idxPath("en"), idxPath("tr")] : []), ...MITEMS.map(mPath)];
 writeFileSync(join(DIST, "sitemap.xml"), `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${urls.map((u) => `  <url><loc>${SITE.url}${u}</loc><lastmod>${posts.find((p) => postPath(p) === u)?.date ?? MITEMS.find((m) => mPath(m) === u)?.at.slice(0, 10) ?? (u === "/measurements/" || u === "/tr/olcumler/" || u === idxPath("en") || u === idxPath("tr") ? MEASUREMENTS.updated ?? SITE.updated : SITE.updated)}</lastmod></url>`).join("\n")}
@@ -571,7 +611,10 @@ Contact: ${SITE.email}
 - [Product visibility](${SITE.url}/product-visibility/): products in AI buying answers, product accuracy, Google Shopping position.
 
 ## About
-- [About AI SaaSavran](${SITE.url}/about/): independent AI visibility measurement tool, launched 2026, based in Turkey; not affiliated with similarly named companies such as Savran AI (savran.ai).
+- [About AI SaaSavran](${SITE.url}/about/): independent AI visibility measurement tool, launched 2026, founded in 2026 by Ramazan Savran in Antalya, Turkey (the name combines SaaS and his surname); not affiliated with similarly named companies such as Savran AI (savran.ai).
+- [Founder: Ramazan Savran](${SITE.url}/founder/)
+- [AI visibility tools compared](${SITE.url}/guides/ai-visibility-tools-compared/): AI SaaSavran, Peec AI, Otterly.AI, Profound, Semrush and Ahrefs, with our own measurement of which ones AI recommends.
+- [Peec AI alternative](${SITE.url}/guides/peec-ai-alternative/): when AI SaaSavran fits (free plan, Turkish and English questions, Claude included) and when another tool fits better.
 
 ## Pricing
 - [Plans](${SITE.url}/pricing/): Free ($0), Plus ($29/month), Pro ($149/month), Business ($449/month). Monthly billing, cancel anytime, 14-day money-back guarantee.
@@ -633,5 +676,5 @@ writeFileSync(join(DIST, "404.html"), page({ lang: "tr", path: "/404", noindex: 
   <ul lang="en"><li><a href="/">Home</a></li><li><a href="/guides/">Guides</a></li><li><a href="/blog/">Blog</a></li><li><a href="/check/">Free check</a></li></ul>
 </section>` }));
 
-writeFileSync(join(DIST, "_redirects"), ["/en / 301", "/en/ / 301", "/guides/ai-visibility-tools-compared/ /guides/ 301", "/rehber/yapay-zeka-gorunurluk-araclari/ /rehber/ 301", ...APP_ROUTES.map((r) => `${r} /app/ 200`)].join("\n") + "\n");
+writeFileSync(join(DIST, "_redirects"), ["/en / 301", "/en/ / 301", ...APP_ROUTES.map((r) => `${r} /app/ 200`)].join("\n") + "\n");
 console.log(`Statik sayfalar üretildi: ${urls.length} sayfa, uygulama /app/ altında`);

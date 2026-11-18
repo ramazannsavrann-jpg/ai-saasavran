@@ -1,7 +1,10 @@
 // English public pages (default language of the site). Every number comes from our own measurements (Growth Lab, 7 Nov 2026)
 // or from a cited source. Turkish versions live in content.mjs under /tr/ and /rehber/.
 
+import { COMPARE_EN } from "./compare.mjs";
+
 export const GUIDES_EN = [
+  ...COMPARE_EN,
   {
     slug: "measure-brand-visibility-in-chatgpt",
     tr: "chatgpt-marka-gorunurlugu-olcme",
