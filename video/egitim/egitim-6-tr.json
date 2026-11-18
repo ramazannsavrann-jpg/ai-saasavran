@@ -6,7 +6,7 @@
   "badge": "Eğitim 6",
   "title": "Soru bazında sonuç ve kayıp nedeni",
   "sub": "",
-  "dur": 2.36
+  "dur": 1.98
  },
  "scenes": [
   {
@@ -16,7 +16,7 @@
     "shots/tr/r_rapor_tam.jpg"
    ],
    "top": 28079,
-   "dur": 9.57
+   "dur": 7.85
   },
   {
    "step": "Kayıp nedeni",
@@ -25,7 +25,7 @@
     "shots/tr/r_rapor_tam.jpg"
    ],
    "top": 30124,
-   "dur": 11.54
+   "dur": 9.83
   },
   {
    "step": "Cevap",
@@ -34,7 +34,7 @@
     "shots/tr/r_rapor_cevap_tam.jpg"
    ],
    "top": 28593,
-   "dur": 4.05
+   "dur": 3.52
   },
   {
    "step": "Koşullar",
@@ -43,7 +43,7 @@
     "shots/tr/r_rapor_tam.jpg"
    ],
    "top": 11238,
-   "dur": 9.77
+   "dur": 9.0
   }
  ],
  "end": {
@@ -51,6 +51,6 @@
   "sub": "Sıradaki adım: yapay zekânın baktığı siteler.",
   "next_label": "Sonraki eğitim",
   "next": "Yapay zekânın baktığı kaynaklar",
-  "dur": 6.36
+  "dur": 5.78
  }
 }

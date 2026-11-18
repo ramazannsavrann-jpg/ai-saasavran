@@ -6,7 +6,7 @@
   "badge": "Tutorial 7",
   "title": "The sources AI reads",
   "sub": "",
-  "dur": 4.89
+  "dur": 1.89
  },
  "scenes": [
   {
@@ -16,7 +16,7 @@
     "shots/en/r_rapor_tam.jpg"
    ],
    "top": 14229,
-   "dur": 8.1
+   "dur": 8.11
   },
   {
    "step": "Share",
@@ -25,7 +25,7 @@
     "shots/en/r_rapor_tam.jpg"
    ],
    "top": 15155,
-   "dur": 2.96
+   "dur": 5.19
   },
   {
    "step": "Support",
@@ -34,7 +34,7 @@
     "shots/en/r_rapor_tam.jpg"
    ],
    "top": 24169,
-   "dur": 12.41
+   "dur": 5.89
   },
   {
    "step": "Opportunity",
@@ -43,7 +43,7 @@
     "shots/en/r_rapor_tam.jpg"
    ],
    "top": 27548,
-   "dur": 7.93
+   "dur": 7.01
   }
  ],
  "end": {
@@ -51,6 +51,6 @@
   "sub": "Start with the opportunity sites.",
   "next_label": "Next tutorial",
   "next": "Improvement recommendations",
-  "dur": 6.04
+  "dur": 5.88
  }
 }

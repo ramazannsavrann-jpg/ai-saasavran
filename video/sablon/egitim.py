@@ -69,7 +69,9 @@ def cover_img(c):
     im, d = base()
     y = text_block(d, c["badge"], font("Black", 150), 460, GOLD)
     d.rectangle([80, y + 20, 280, y + 34], fill=ACC)
-    y = text_block(d, c["title"], font("Black", 112), y + 90, INK)
+    sz = 112  # en uzun kelime satıra sığana kadar küçült (ör. "recommendations")
+    while sz > 70 and max(d.textlength(w, font=font("Black", sz)) for w in c["title"].split()) > W - 160: sz -= 4
+    y = text_block(d, c["title"], font("Black", sz), y + 90, INK)
     if c.get("sub"): text_block(d, c["sub"], font("SemiBold", 52), y + 40, ACC)
     return im
 

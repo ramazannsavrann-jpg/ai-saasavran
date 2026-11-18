@@ -6,7 +6,7 @@
   "badge": "Tutorial 6",
   "title": "Results by question, and why you lost",
   "sub": "",
-  "dur": 3.87
+  "dur": 2.55
  },
  "scenes": [
   {
@@ -16,7 +16,7 @@
     "shots/en/r_rapor_tam.jpg"
    ],
    "top": 28595,
-   "dur": 9.07
+   "dur": 7.46
   },
   {
    "step": "Why you lost",
@@ -25,7 +25,7 @@
     "shots/en/r_rapor_tam.jpg"
    ],
    "top": 30827,
-   "dur": 11.36
+   "dur": 9.32
   },
   {
    "step": "Answer",
@@ -34,7 +34,7 @@
     "shots/en/r_rapor_cevap_tam.jpg"
    ],
    "top": 29171,
-   "dur": 3.31
+   "dur": 3.17
   },
   {
    "step": "Conditions",
@@ -43,7 +43,7 @@
     "shots/en/r_rapor_tam.jpg"
    ],
    "top": 11429,
-   "dur": 9.09
+   "dur": 7.52
   }
  ],
  "end": {
@@ -51,6 +51,6 @@
   "sub": "Next: the sites AI reads.",
   "next_label": "Next tutorial",
   "next": "The sources AI reads",
-  "dur": 5.94
+  "dur": 5.56
  }
 }

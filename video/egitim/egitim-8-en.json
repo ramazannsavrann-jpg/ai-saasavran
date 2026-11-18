@@ -6,7 +6,7 @@
   "badge": "Tutorial 8",
   "title": "Improvement recommendations",
   "sub": "",
-  "dur": 2.06
+  "dur": 1.88
  },
  "scenes": [
   {
@@ -16,7 +16,7 @@
     "shots/en/r_oneriler_tam.jpg"
    ],
    "top": 1663,
-   "dur": 6.35
+   "dur": 5.54
   },
   {
    "step": "Evidence",
@@ -25,7 +25,7 @@
     "shots/en/r_oneriler_tam.jpg"
    ],
    "top": 2163,
-   "dur": 4.09
+   "dur": 3.62
   },
   {
    "step": "Campaign",
@@ -34,7 +34,7 @@
     "shots/en/r_oneriler_tam.jpg"
    ],
    "top": 3013,
-   "dur": 4.36
+   "dur": 4.15
   },
   {
    "step": "Tracking",
@@ -43,7 +43,7 @@
     "shots/en/r_oneriler_tam.jpg"
    ],
    "top": 5481,
-   "dur": 6.89
+   "dur": 5.46
   },
   {
    "step": "Website",
@@ -52,7 +52,7 @@
     "shots/en/r_oneriler_tam.jpg"
    ],
    "top": 8058,
-   "dur": 6.85
+   "dur": 5.67
   }
  ],
  "end": {
@@ -60,6 +60,6 @@
   "sub": "See the effect in every measurement.",
   "next_label": "Next tutorial",
   "next": "Brand perception and accuracy",
-  "dur": 6.51
+  "dur": 6.01
  }
 }

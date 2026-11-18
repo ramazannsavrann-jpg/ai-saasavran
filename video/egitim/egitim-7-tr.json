@@ -6,7 +6,7 @@
   "badge": "Eğitim 7",
   "title": "Yapay zekânın baktığı kaynaklar",
   "sub": "",
-  "dur": 4.83
+  "dur": 1.81
  },
  "scenes": [
   {
@@ -16,7 +16,7 @@
     "shots/tr/r_rapor_tam.jpg"
    ],
    "top": 14219,
-   "dur": 11.46
+   "dur": 7.55
   },
   {
    "step": "Pay",
@@ -25,7 +25,7 @@
     "shots/tr/r_rapor_tam.jpg"
    ],
    "top": 15204,
-   "dur": 5.95
+   "dur": 4.99
   },
   {
    "step": "Destek",
@@ -34,7 +34,7 @@
     "shots/tr/r_rapor_tam.jpg"
    ],
    "top": 24417,
-   "dur": 6.04
+   "dur": 5.02
   },
   {
    "step": "Fırsat",
@@ -43,7 +43,7 @@
     "shots/tr/r_rapor_tam.jpg"
    ],
    "top": 27031,
-   "dur": 8.17
+   "dur": 6.89
   }
  ],
  "end": {
@@ -51,6 +51,6 @@
   "sub": "Önce fırsat sitelerinden başlayın.",
   "next_label": "Sonraki eğitim",
   "next": "İyileştirme önerileri",
-  "dur": 5.79
+  "dur": 5.11
  }
 }
