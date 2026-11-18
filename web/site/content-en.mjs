@@ -62,7 +62,7 @@ export const GUIDES_EN = [
     slug: "what-is-geo",
     tr: "geo-nedir",
     title: "What is GEO (Generative Engine Optimization)? A short guide for businesses",
-    short: "What is GEO",
+    short: "What is GEO? Generative Engine Optimization",
     description: "GEO is the work of getting your brand mentioned and recommended in AI assistants' answers. How it differs from SEO, how it's measured, and five first steps.",
     body: `
 <p class="lede">GEO (Generative Engine Optimization) is the work of getting your brand mentioned and recommended in answers from AI assistants such as ChatGPT, Gemini and Perplexity. AEO (Answer Engine Optimization) is used in a similar sense.</p>
