@@ -1,11 +1,18 @@
 # Gerçek durum raporu
 
-**Son güncelleme:** 2026-11-11 · v0.7 (denetim düzeltmeleri, kayıp zekâsı özellikleri, bölge kısıtı)
+**Son güncelleme:** 2026-11-18 · kalite denetimi ilk aşama (bkz. aşağıdaki 18 Kasım notu)
 
 **Canlı adres:** https://aisaasavran.com (Cloudflare Pages + Supabase)
 
 > **Erken erişim.** Ödeme (Paddle) ve haftalık e-posta (Resend) kodu hazır ve testli, ancak gerçek bir ödeme
 > ve gerçek bir gelen kutusu teslimi uçtan uca henüz doğrulanmadı. Hukuki metinleri avukat incelemedi.
+
+> **18 Kasım (kalite denetimi, 1. aşama):** 7 uzmanlı salt okunur denetim yapıldı (rapor: claude.ai Docs, "AI SaaSavran – Kalite
+> Denetimi"). Uygulananlar: Actions günlük/eserlerinde tam cevap ve gizli Growth Lab verisi yok; `ALLOW_PAID_API` depo değişkeninden
+> (`vars.ALLOW_PAID_API`, tanımsızsa açık) ve smoke testleri + SerpApi bunu kontrol ediyor; smoke iş akışları yalnız `main`'de;
+> haftalık e-posta marka × ölçüm türü × motor (0049); panelde gerçek motor adı, canlı ölçüm varsa canlı görünüm, Öneriler seçili türü
+> kullanır; iki nedensellik cümlesi kanıt dilinde; motor listeleri (Perplexity) ve eski fiyat notları düzeltildi; `test:integration` TZ=UTC.
+> Fiyat kararı: **29 / 149 / 449 $** (sahip, 18 Kasım). Sıradaki: ölçüm standardı (soru bazlı aralık, "başa baş"), marka tespiti, maliyet.
 
 > **18 Kasım (Perplexity kaynak, karar A):** Perplexity'de yalnız cevabın gösterdiği siteler (alıntı ya da metindeki
 > bağlantı) kaynak sayılır; aramada bulunup gösterilmeyenler sayılmaz. Geçmiş 96 Growth Lab cevabı 0048 ile düzeltildi
@@ -328,7 +335,7 @@
 - Bölge kısıtı uygulama içinde markanın ülke koduna dayanır; kullanıcı kodu değiştirebilir. Kesin uygulama için sunucu tarafında kullanıcı ülkesi gerekir.
 
 - Ücretsiz (Gemini) ölçümlerde "önerildi" tespiti kural tabanlıdır; listede geçen marka önerilmiş sayılır (olumsuz ifade yoksa). LLM kontrolü yalnız ücretli ölçümlerdedir ve doğruluğu elle etiketlenmiş cevaplarla henüz ölçülmedi.
-- Perplexity, ekip daveti, ürün/SKU ölçümü yok.
+- Ürün SKU/varyant ölçümü yok (Perplexity 0043 ve ekip daveti 0026 ile eklendi).
 - Aşağıdaki tablolar 6 Kasım 2026 tarihlidir; "Henüz yok" bölümündeki ödeme, PDF ve ChatGPT satırları artık geçerli değildir.
 
 ## Çalışan ve test edilen

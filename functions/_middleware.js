@@ -4,6 +4,9 @@ import { detectBot, recordBot, verifyBotIp } from "./api/_bot-lib.js";
 const OWN_TRACK_KEY = "552ec134-8c6a-4ffe-a923-2697cd66bf65";
 
 export async function onRequest(ctx) {
+  // www.aisaasavran.com → aisaasavran.com (kopya sayfa olmasın; 18 Kasım denetimi)
+  const u0 = new URL(ctx.request.url);
+  if (u0.hostname === "www.aisaasavran.com") return Response.redirect(`https://aisaasavran.com${u0.pathname}${u0.search}`, 301);
   const res = await ctx.next();
   try {
     const bot = detectBot(ctx.request.headers.get("user-agent"));

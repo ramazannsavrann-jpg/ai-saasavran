@@ -159,7 +159,7 @@ export const METHOD_PAGES = [
 <p>Local businesses, service companies, online shops, agencies and content creators: anyone whose customers ask questions like "best dentist in Antalya", "which bank for a home loan" or "which online store is reliable".</p>
 <h2>What is measured</h2>
 <ul>
-<li>Mention rate, recommendation rate and position, per engine (ChatGPT, Gemini, Claude).</li>
+<li>Mention rate, recommendation rate and position, per engine (ChatGPT, Gemini, Claude, Perplexity).</li>
 <li>Share of recommendations against the competitors you track, and untracked brands the AI names instead of you.</li>
 <li>Questions where you lose: the competitor named instead, and the reason or source given.</li>
 <li>Sources the AI cited, and the share that is your site, competitors' sites and third-party sites.</li>
@@ -185,7 +185,7 @@ export const METHOD_PAGES = [
 <p>Yerel işletmeler, hizmet şirketleri, online mağazalar, ajanslar ve içerik üreticileri: müşterisi "Antalya'da en iyi diş hekimi", "konut kredisi için hangi banka" veya "hangi alışveriş sitesi güvenilir" gibi sorular soran herkes.</p>
 <h2>Neler ölçülür?</h2>
 <ul>
-<li>Motor bazında (ChatGPT, Gemini, Claude) anılma oranı, önerilme oranı ve sıra.</li>
+<li>Motor bazında (ChatGPT, Gemini, Claude, Perplexity) anılma oranı, önerilme oranı ve sıra.</li>
 <li>Takip ettiğiniz rakiplere karşı öneri payı ve yapay zekânın sizin yerinize andığı, takip edilmeyen markalar.</li>
 <li>Kaybettiğiniz sorular: yerinize anılan rakip ve verilen gerekçe ya da kaynak.</li>
 <li>Yapay zekânın gösterdiği kaynaklar ve bunlar içinde sizin sitenizin, rakip sitelerin ve üçüncü taraf sitelerin payı.</li>

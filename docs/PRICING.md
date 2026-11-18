@@ -78,6 +78,6 @@ Bu yüzden en kötü durumda bile müşteri başına zarar edilmez (birim testi:
 **Ücretsiz paket neden zarar ettirmez:** yalnız Gemini ücretsiz katmanını kullanır (para maliyeti 0). Tek sınır, tüm kullanıcılar
 için ortak günlük Gemini kotası (kendi tavanımız 450/gün). Free kullanıcı başına ~65 cevap/ay → aynı anda ~200 aktif ücretsiz marka.
 Dolarsa ölçüm ertesi güne kalır, para harcanmaz. Ücretli müşteriler gelince Gemini için ayrı ücretli anahtar düşünülmeli
-(ücretsiz katmanda Google içerikleri kullanabilir) ve `app_settings.paid_total_cap_usd` (şu an 3 $ deneme tavanı) yükseltilmeli.
+(ücretsiz katmanda Google içerikleri kullanabilir) ve `app_settings.paid_total_cap_usd` (o tarihte 3 $; 18 Kasım itibarıyla 25 $) yükseltilmeli.
 
-Ücretli paketler ödeme sağlayıcısı (Paddle / Lemon Squeezy) bağlanana kadar satışta değil; sitede bekleme listesi (e-posta) var.
+(Eski not, 7 Kasım: o tarihte ücretli paketler satışta değildi. Bugün Paddle bağlı; güncel fiyat 29 / 149 / 449 $ ve toplam ücretli tavan 25 $.)

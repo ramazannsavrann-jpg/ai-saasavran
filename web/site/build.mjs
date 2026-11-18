@@ -41,7 +41,7 @@ const seoTitle = (title, short, suffix = " | AI SaaSavran") => (title + suffix).
 // Kendi sitemizin yapay zekâdan gelen ziyaretçi sayacı (Growth Lab'deki "AI SaaSavran" markası; çerezsiz, kişisel veri yok)
 const OWN_TRACK_KEY = "552ec134-8c6a-4ffe-a923-2697cd66bf65";
 
-function page({ path, title, description, body, schema = [], type = "website", lang = "en", alt = null, image = null, noindex = false }) {
+function page({ path, title, description, body, schema = [], type = "website", lang = "en", alt = null, image = "/og.png", noindex = false }) {
   const url = SITE.url + path;
   const en = lang === "en";
   const enPath = en ? path : alt, trPath = en ? alt : path;
@@ -68,6 +68,7 @@ ${schema.map(ld).join("\n")}
 <script async src="/t.js" data-site="${OWN_TRACK_KEY}"></script>
 </head>
 <body>
+<!--email_off-->
 <header class="top">
   <a class="mark" href="${en ? "/" : "/tr/"}" aria-label="AI SaaSavran"><img src="/icon.svg" alt="" width="28" height="28"><span>AI <b>SaaSavran</b></span></a>
   <nav aria-label="${en ? "Main menu" : "Ana menü"}">${en ? `<a href="/#pricing">Pricing</a><a href="/guides/">Guides</a><a href="/blog/">Blog</a>` : `<a href="/tr/#fiyatlar">Fiyatlar</a><a href="/rehber/">Rehberler</a><a href="/tr/blog/">Blog</a><a href="/durum">Ürün durumu</a>`}<a class="lang" href="${alt ?? (en ? "/tr/" : "/")}" hreflang="${en ? "tr" : "en"}" lang="${en ? "tr" : "en"}">${en ? "Türkçe" : "English"}</a><a class="cta-sm" data-cta href="/giris">${en ? "Sign in" : "Giriş yap"}</a></nav>
@@ -83,6 +84,7 @@ ${body}
   <p>İletişim: <a href="mailto:${SITE.email}">${SITE.email}</a></p>`}
 </footer>
 <script src="/site/site.js" defer></script>
+<!--/email_off-->
 </body>
 </html>
 `;
@@ -106,7 +108,7 @@ const APP = {
 };
 
 
-// Paketler (migration 0007 ile aynı). Ücretli paketler henüz satışta değil: bekleme listesi e-postayla.
+// Paketler (güncel fiyatlar migration 0019: 29 / 149 / 449 $; satışta, ödeme Paddle ile).
 const PLAN_ROWS = (en) => [
   { name: "Free", price: "$0", per: "", items: en
       ? ["1 brand, 15 questions, 3 competitors", "4 measurements a month (one a week, automatic)", "Gemini, model knowledge (no live search)", "Website check and recommendations"]
