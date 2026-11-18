@@ -899,8 +899,6 @@ function Report({ brand, type, onBrandChange, paid = false, runs = [] }: { brand
           {engList.length > 1 && (
             <EngineComparePanel rows={(vis.data ?? []).filter((r) => r.run_id === last.runId)} answers={answersAll.data ?? []} live={live} />
           )}
-          {live && answersAll.data && answersAll.data.length > 0 && <SourceNetworkPanel answers={answersAll.data} brands={insightBrands} />}
-
           <section className="panel" id="kosul-haritasi">
             <h2>{L("Hangi koşulda görünüyorsunuz", "Where you show up, and where you don't")}</h2>
             <p className="muted">{isEn() ? `Recommendation rate by what the customer is doing, over the last ${recentIds.length} measurement${recentIds.length > 1 ? "s" : ""}. Groups under 20 answers are marked; don't draw conclusions from them.` : `Müşterinin ne yaptığına göre önerilme oranı, son ${recentIds.length} ölçümün toplamı. 20 cevabın altındaki gruplar işaretlidir; onlardan sonuç çıkarmayın.`}</p>
@@ -915,108 +913,118 @@ function Report({ brand, type, onBrandChange, paid = false, runs = [] }: { brand
             )}
           </section>
 
-          {live && (
-            <section className="panel">
-              <h2>{L("Yapay zekânın kaynak gösterdiği siteler", "Sites the AI cited")}</h2>
-              <p className="muted">{L("Bu ölçümdeki cevaplarda yapay zekânın kaynak olarak gösterdiği siteler. Sayı, o siteye verilen bağlantı sayısıdır (cevap sayısı değil). Kaynak listesi motorun okuduğu her siteyi göstermez; burada yer almanın görünürlüğü artıracağı kesin değildir.", "Sites the AI cited as sources in this measurement's answers. The number is links to that site (not answers). The list doesn't show every site the engine read, and being listed here isn't guaranteed to raise your visibility.")}</p>
-              {answers.loading ? <Loading /> : domains.length === 0 ? <p>{L("Bu ölçümde kaynak gösterilmedi.", "No sources were cited in this measurement.")}</p> : (
-                <ol className="domains">
-                  {domains.map((d) => <li key={d.domain}><span>{d.domain}</span><span className="num muted">{d.count} {L("bağlantı", d.count === 1 ? "link" : "links")}</span></li>)}
-                </ol>
-              )}
-            </section>
-          )}
-
-          {live && insightsReady && (() => {
-            const o = ownedSourceShare(answers.data!, insightBrands);
-            const part = (n: number, t: number) => (t ? pct(n / t) : "–");
-            return (
-              <section className="panel" id="kendi-site-payi">
-                <h2>{L("Kendi site payı", "Owned-source share")}</h2>
-                <p className="muted">{L("Yapay zekânın gösterdiği kaynakların ne kadarı sizin siteniz (veya kanalınız), ne kadarı rakiplerin siteleri, ne kadarı üçüncü taraf siteler. Her cevapta her site bir kez sayılır.", "How much of the sources the AI cited are your own site (or channel), competitors' sites, or third-party sites. Each site counts once per answer.")}</p>
-                {o.total === 0 ? <p>{L("Bu ölçümde kaynak gösterilmedi.", "No sources were cited in this measurement.")}</p> : (
-                  <>
-                    <div className="own-bar" role="img" aria-label={L("Kaynak dağılımı", "Source split")}>
-                      <span className="own-own" style={{ flex: o.own }} /><span className="own-comp" style={{ flex: o.competitor }} /><span className="own-third" style={{ flex: o.thirdParty }} />
-                    </div>
-                    <ul className="own-legend">
-                      <li><span className="dot own-own" /> {L("Sizin siteniz", "Your site")}: <strong>{part(o.own, o.total)}</strong> <span className="muted">({o.own})</span></li>
-                      <li><span className="dot own-comp" /> {L("Rakip siteleri", "Competitor sites")}: <strong>{part(o.competitor, o.total)}</strong> <span className="muted">({o.competitor})</span></li>
-                      <li><span className="dot own-third" /> {L("Üçüncü taraf", "Third-party")}: <strong>{part(o.thirdParty, o.total)}</strong> <span className="muted">({o.thirdParty})</span></li>
-                    </ul>
-                    <p className="muted">{isEn() ? `Your site was cited in ${o.answersCitingOwn} of ${o.answersWithSources} answers that cited sources.` : `Kaynak gösteren ${o.answersWithSources} cevabın ${o.answersCitingOwn} tanesinde sitenize yer verildi.`}</p>
-                    {(() => {
-                      const r = ownCitedRivals(answers.data!, ments.data!, insightBrands);
-                      if (!r.citingOwn || !r.rivals.length) return null;
-                      const top = r.rivals[0];
-                      return (
-                        <div className="loss-card" id="kendi-site-rakip">
-                          <p className="loss-title">{L("Siteniz kaynak gösterildi, rakip de önerildi", "Your site was cited, a competitor was recommended too")}</p>
-                          <p>{isEn()
-                            ? `In the ${r.citingOwn} answers that cited your site, you were recommended in ${r.ownRecommended}; ${top.name} was recommended in ${top.count}.${r.rivalOnly ? ` In ${r.rivalOnly} of them only competitors were recommended.` : ""}`
-                            : `Sitenizin kaynak gösterildiği ${r.citingOwn} cevabın ${r.ownRecommended} tanesinde siz, ${top.count} tanesinde ${top.name} önerildi.${r.rivalOnly ? ` Bunların ${r.rivalOnly} tanesinde yalnız rakip önerildi.` : ""}`}</p>
-                          {r.rivals.length > 1 && <p className="src-sup">{L("Bu cevaplarda önerilen diğer rakipler: ", "Other competitors recommended in these answers: ")}{r.rivals.slice(1, 4).map((x) => `${x.name} (${x.count})`).join(", ")}</p>}
-                          <p className="loss-note muted">{L("Kaynak gösterilmesi, yapay zekânın o sayfadaki sonucu benimsediği anlamına gelmez. Sayfanızda rakiplerle karşılaştırma ya da genel rehber içeriği varsa yapay zekâ oradan rakipleri de alabilir.", "Being cited doesn't mean the AI adopted that page's conclusion. If your page compares competitors or is a general guide, the AI may pick competitors from it too.")}</p>
-                        </div>
-                      );
-                    })()}
-                    {o.byEngine.length > 1 && (
-                      <ul className="own-engines">{o.byEngine.map((e) => <li key={e.provider}><strong>{providerLabel(e.provider)}</strong>: {L("siz", "you")} {part(e.own, e.total)} · {L("rakip", "rivals")} {part(e.competitor, e.total)} · {L("üçüncü taraf", "third-party")} {part(e.thirdParty, e.total)}</li>)}</ul>
-                    )}
-                    {!brand.website && <p className="src-sup muted">{L("Markaya web sitesi eklenmemiş: sitenizin payı hesaplanamaz. Marka ayarlarından ekleyin (YouTube kanalı için youtube.com/@kanal).", "No website on this brand: your share can't be computed. Add it in brand settings (for a YouTube channel use youtube.com/@channel).")}</p>}
-                  </>
-                )}
-              </section>
-            );
-          })()}
-          {type !== "simulated" && <AiTrafficPanel brand={brand} paid={paid} vis={vis.data ?? []} />}
-          {type !== "simulated" && <AiBotsPanel brand={brand} paid={paid} />}
           {type !== "simulated" && <TruthGuardPanel brand={brand} paid={paid} mix={live && insightsReady ? sourceMix(answers.data!, ments.data!, insightBrands) : null}
             stats={answers.data ? statSummary(answers.data, [brand.name, ...brand.aliases]) : null} />}
           {live && insightsReady && <PerceptionPanel summary={perceptionSummary(answers.data!, ments.data!, brand.id)} brand={brand.name} />}
-          {!live && type !== "simulated" && (
-            <section className="panel" id="kendi-site-payi">
-              <h2>{L("Kendi site payı", "Owned-source share")}</h2>
-              <p className="muted">{L("Veri yok: kaynaklar yalnız canlı internet aramalı ölçümde oluşur (ChatGPT, Claude ve Perplexity, ücretli paketler).", "No data: sources only exist in live web-search measurements (ChatGPT, Claude and Perplexity, paid plans).")}</p>
-            </section>
-          )}
-
-          {live && (
-            <section className="panel" id="kaynak-egemenligi">
-              <h2>{L("Kaynaklar kimi destekliyor", "Who the sources support")}</h2>
-              {(answers.data ?? []).some((a) => a.provider === "perplexity" && !(a.cited_urls ?? []).length) && (
-                <p className="src-sup muted">{L("Perplexity bu ölçümdeki cevaplarının bazılarında hiçbir site göstermedi; aramada bulduğu ama cevapta göstermediği siteler kaynak sayılmaz.", "In some answers in this measurement Perplexity showed no sites; sites it searched but did not show in the answer are not counted as sources.")}</p>
-              )}
-              <p className="muted">{L("Her kaynak sitenin kaç cevapta kullanıldığı, kime ait olduğu ve o cevaplarda hangi markaların önerildiği. Bir kaynağın geçtiği cevapta bir markanın önerilmesi, kaynağın o markayı önerdiğini kanıtlamaz; birlikte görülme sayısıdır.", "How many answers used each source site, who owns it, and which brands were recommended in those answers. A brand being recommended in an answer that cites a source does not prove the source recommends it; this is a co-occurrence count.")}</p>
-              {ments.loading || comps.loading || answers.loading ? <Loading /> : dominance.length === 0 ? <p>{L("Bu ölçümde kaynak gösterilmedi.", "No sources were cited in this measurement.")}</p> : (
-                <ul className="src-dom">
-                  {dominance.map((d) => (
-                    <li key={d.domain} className={`src-${d.owner}`}>
-                      <p className="src-head"><strong>{d.domain}</strong> <span className="muted num">{isEn() ? `${d.answers} answers` : `${d.answers} cevap`}</span></p>
-                      <p className="src-owner">{d.owner === "target" ? L("Sizin siteniz", "Your site") : d.owner === "competitor" ? L(`Rakibin kendi sitesi: ${d.ownerName}`, `Competitor's own site: ${d.ownerName}`) : L("Üçüncü taraf site", "Third-party site")}</p>
-                      <p className="src-sup muted">{d.supports.length === 0 ? L("Bu cevaplarda takip ettiğiniz hiçbir marka önerilmedi.", "No tracked brand was recommended in these answers.") : <>{L("Bu cevaplarda önerilen: ", "Recommended in these answers: ")}{d.supports.map((x) => `${x.name} (${x.count})`).join(", ")}</>}</p>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </section>
-          )}
 
           {type !== "simulated" && answers.data && comps.data && (
             <UntrackedNames brand={brand} competitors={comps.data} texts={answers.data.map((a) => a.answer_text)}
               onChange={() => { onBrandChange(); comps.reload(); }} />
           )}
 
-          {live && (
-            <section className="panel">
-              <h2>{L("Kaynak fırsatları", "Source opportunities")}</h2>
-              <p className="muted">{L("Rakibiniz önerilip sizin önerilmediğiniz cevaplarda yapay zekânın kaynak gösterdiği siteler; sayı bağlantı sayısıdır. Rakiplerin kendi siteleri ayrıca işaretlendi; diğerleri yer almayı deneyebileceğiniz yerlerdir (içerik, liste, inceleme, basın). Birlikte görülmek neden olduğunu kanıtlamaz.", "Sites the AI cited in answers that recommended a competitor but not you; the number is links. Competitors' own sites are marked; the rest are places you could try to get featured on (content, lists, reviews, press). Appearing together isn't proof of cause.")}</p>
-              {ments.loading || comps.loading ? <Loading /> : opps.length === 0 ? <p>{L("Bu ölçümde böyle bir cevap yok.", "No such answers in this measurement.")}</p> : (
-                <ol className="domains">
-                  {opps.map((d) => <li key={d.domain}><span>{d.domain}{d.own && <span className="muted"> {L("(rakibin kendi sitesi)", "(competitor's own site)")}</span>}</span><span className="num muted">{d.count} {L("bağlantı", d.count === 1 ? "link" : "links")}</span></li>)}
-                </ol>
-              )}
-            </section>
+          <details className="panel-group" id="kaynaklar">
+            <summary><h2>{L("Kaynaklar: yapay zekâ hangi sitelere dayanıyor", "Sources: which sites the AI relies on")}</h2>
+              <span className="muted">{L("Kaynak gösterilen siteler, kendi site payınız, kaynakların kimi desteklediği ve yer alabileceğiniz siteler. Açmak için dokunun.", "Cited sites, your owned-source share, who the sources support and sites you could appear on. Tap to open.")}</span></summary>
+            {live && answersAll.data && answersAll.data.length > 0 && <SourceNetworkPanel answers={answersAll.data} brands={insightBrands} />}
+            {live && (
+              <section className="panel">
+                <h2>{L("Yapay zekânın kaynak gösterdiği siteler", "Sites the AI cited")}</h2>
+                <p className="muted">{L("Bu ölçümdeki cevaplarda yapay zekânın kaynak olarak gösterdiği siteler. Sayı, o siteye verilen bağlantı sayısıdır (cevap sayısı değil). Kaynak listesi motorun okuduğu her siteyi göstermez; burada yer almanın görünürlüğü artıracağı kesin değildir.", "Sites the AI cited as sources in this measurement's answers. The number is links to that site (not answers). The list doesn't show every site the engine read, and being listed here isn't guaranteed to raise your visibility.")}</p>
+                {answers.loading ? <Loading /> : domains.length === 0 ? <p>{L("Bu ölçümde kaynak gösterilmedi.", "No sources were cited in this measurement.")}</p> : (
+                  <ol className="domains">
+                    {domains.map((d) => <li key={d.domain}><span>{d.domain}</span><span className="num muted">{d.count} {L("bağlantı", d.count === 1 ? "link" : "links")}</span></li>)}
+                  </ol>
+                )}
+              </section>
+            )}
+            {live && insightsReady && (() => {
+              const o = ownedSourceShare(answers.data!, insightBrands);
+              const part = (n: number, t: number) => (t ? pct(n / t) : "–");
+              return (
+                <section className="panel" id="kendi-site-payi">
+                  <h2>{L("Kendi site payı", "Owned-source share")}</h2>
+                  <p className="muted">{L("Yapay zekânın gösterdiği kaynakların ne kadarı sizin siteniz (veya kanalınız), ne kadarı rakiplerin siteleri, ne kadarı üçüncü taraf siteler. Her cevapta her site bir kez sayılır.", "How much of the sources the AI cited are your own site (or channel), competitors' sites, or third-party sites. Each site counts once per answer.")}</p>
+                  {o.total === 0 ? <p>{L("Bu ölçümde kaynak gösterilmedi.", "No sources were cited in this measurement.")}</p> : (
+                    <>
+                      <div className="own-bar" role="img" aria-label={L("Kaynak dağılımı", "Source split")}>
+                        <span className="own-own" style={{ flex: o.own }} /><span className="own-comp" style={{ flex: o.competitor }} /><span className="own-third" style={{ flex: o.thirdParty }} />
+                      </div>
+                      <ul className="own-legend">
+                        <li><span className="dot own-own" /> {L("Sizin siteniz", "Your site")}: <strong>{part(o.own, o.total)}</strong> <span className="muted">({o.own})</span></li>
+                        <li><span className="dot own-comp" /> {L("Rakip siteleri", "Competitor sites")}: <strong>{part(o.competitor, o.total)}</strong> <span className="muted">({o.competitor})</span></li>
+                        <li><span className="dot own-third" /> {L("Üçüncü taraf", "Third-party")}: <strong>{part(o.thirdParty, o.total)}</strong> <span className="muted">({o.thirdParty})</span></li>
+                      </ul>
+                      <p className="muted">{isEn() ? `Your site was cited in ${o.answersCitingOwn} of ${o.answersWithSources} answers that cited sources.` : `Kaynak gösteren ${o.answersWithSources} cevabın ${o.answersCitingOwn} tanesinde sitenize yer verildi.`}</p>
+                      {(() => {
+                        const r = ownCitedRivals(answers.data!, ments.data!, insightBrands);
+                        if (!r.citingOwn || !r.rivals.length) return null;
+                        const top = r.rivals[0];
+                        return (
+                          <div className="loss-card" id="kendi-site-rakip">
+                            <p className="loss-title">{L("Siteniz kaynak gösterildi, rakip de önerildi", "Your site was cited, a competitor was recommended too")}</p>
+                            <p>{isEn()
+                              ? `In the ${r.citingOwn} answers that cited your site, you were recommended in ${r.ownRecommended}; ${top.name} was recommended in ${top.count}.${r.rivalOnly ? ` In ${r.rivalOnly} of them only competitors were recommended.` : ""}`
+                              : `Sitenizin kaynak gösterildiği ${r.citingOwn} cevabın ${r.ownRecommended} tanesinde siz, ${top.count} tanesinde ${top.name} önerildi.${r.rivalOnly ? ` Bunların ${r.rivalOnly} tanesinde yalnız rakip önerildi.` : ""}`}</p>
+                            {r.rivals.length > 1 && <p className="src-sup">{L("Bu cevaplarda önerilen diğer rakipler: ", "Other competitors recommended in these answers: ")}{r.rivals.slice(1, 4).map((x) => `${x.name} (${x.count})`).join(", ")}</p>}
+                            <p className="loss-note muted">{L("Kaynak gösterilmesi, yapay zekânın o sayfadaki sonucu benimsediği anlamına gelmez. Sayfanızda rakiplerle karşılaştırma ya da genel rehber içeriği varsa yapay zekâ oradan rakipleri de alabilir.", "Being cited doesn't mean the AI adopted that page's conclusion. If your page compares competitors or is a general guide, the AI may pick competitors from it too.")}</p>
+                          </div>
+                        );
+                      })()}
+                      {o.byEngine.length > 1 && (
+                        <ul className="own-engines">{o.byEngine.map((e) => <li key={e.provider}><strong>{providerLabel(e.provider)}</strong>: {L("siz", "you")} {part(e.own, e.total)} · {L("rakip", "rivals")} {part(e.competitor, e.total)} · {L("üçüncü taraf", "third-party")} {part(e.thirdParty, e.total)}</li>)}</ul>
+                      )}
+                      {!brand.website && <p className="src-sup muted">{L("Markaya web sitesi eklenmemiş: sitenizin payı hesaplanamaz. Marka ayarlarından ekleyin (YouTube kanalı için youtube.com/@kanal).", "No website on this brand: your share can't be computed. Add it in brand settings (for a YouTube channel use youtube.com/@channel).")}</p>}
+                    </>
+                  )}
+                </section>
+              );
+            })()}
+            {!live && type !== "simulated" && (
+              <section className="panel" id="kendi-site-payi">
+                <h2>{L("Kendi site payı", "Owned-source share")}</h2>
+                <p className="muted">{L("Veri yok: kaynaklar yalnız canlı internet aramalı ölçümde oluşur (ChatGPT, Claude ve Perplexity, ücretli paketler).", "No data: sources only exist in live web-search measurements (ChatGPT, Claude and Perplexity, paid plans).")}</p>
+              </section>
+            )}
+            {live && (
+              <section className="panel" id="kaynak-egemenligi">
+                <h2>{L("Kaynaklar kimi destekliyor", "Who the sources support")}</h2>
+                {(answers.data ?? []).some((a) => a.provider === "perplexity" && !(a.cited_urls ?? []).length) && (
+                  <p className="src-sup muted">{L("Perplexity bu ölçümdeki cevaplarının bazılarında hiçbir site göstermedi; aramada bulduğu ama cevapta göstermediği siteler kaynak sayılmaz.", "In some answers in this measurement Perplexity showed no sites; sites it searched but did not show in the answer are not counted as sources.")}</p>
+                )}
+                <p className="muted">{L("Her kaynak sitenin kaç cevapta kullanıldığı, kime ait olduğu ve o cevaplarda hangi markaların önerildiği. Bir kaynağın geçtiği cevapta bir markanın önerilmesi, kaynağın o markayı önerdiğini kanıtlamaz; birlikte görülme sayısıdır.", "How many answers used each source site, who owns it, and which brands were recommended in those answers. A brand being recommended in an answer that cites a source does not prove the source recommends it; this is a co-occurrence count.")}</p>
+                {ments.loading || comps.loading || answers.loading ? <Loading /> : dominance.length === 0 ? <p>{L("Bu ölçümde kaynak gösterilmedi.", "No sources were cited in this measurement.")}</p> : (
+                  <ul className="src-dom">
+                    {dominance.map((d) => (
+                      <li key={d.domain} className={`src-${d.owner}`}>
+                        <p className="src-head"><strong>{d.domain}</strong> <span className="muted num">{isEn() ? `${d.answers} answers` : `${d.answers} cevap`}</span></p>
+                        <p className="src-owner">{d.owner === "target" ? L("Sizin siteniz", "Your site") : d.owner === "competitor" ? L(`Rakibin kendi sitesi: ${d.ownerName}`, `Competitor's own site: ${d.ownerName}`) : L("Üçüncü taraf site", "Third-party site")}</p>
+                        <p className="src-sup muted">{d.supports.length === 0 ? L("Bu cevaplarda takip ettiğiniz hiçbir marka önerilmedi.", "No tracked brand was recommended in these answers.") : <>{L("Bu cevaplarda önerilen: ", "Recommended in these answers: ")}{d.supports.map((x) => `${x.name} (${x.count})`).join(", ")}</>}</p>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </section>
+            )}
+            {live && (
+              <section className="panel">
+                <h2>{L("Kaynak fırsatları", "Source opportunities")}</h2>
+                <p className="muted">{L("Rakibiniz önerilip sizin önerilmediğiniz cevaplarda yapay zekânın kaynak gösterdiği siteler; sayı bağlantı sayısıdır. Rakiplerin kendi siteleri ayrıca işaretlendi; diğerleri yer almayı deneyebileceğiniz yerlerdir (içerik, liste, inceleme, basın). Birlikte görülmek neden olduğunu kanıtlamaz.", "Sites the AI cited in answers that recommended a competitor but not you; the number is links. Competitors' own sites are marked; the rest are places you could try to get featured on (content, lists, reviews, press). Appearing together isn't proof of cause.")}</p>
+                {ments.loading || comps.loading ? <Loading /> : opps.length === 0 ? <p>{L("Bu ölçümde böyle bir cevap yok.", "No such answers in this measurement.")}</p> : (
+                  <ol className="domains">
+                    {opps.map((d) => <li key={d.domain}><span>{d.domain}{d.own && <span className="muted"> {L("(rakibin kendi sitesi)", "(competitor's own site)")}</span>}</span><span className="num muted">{d.count} {L("bağlantı", d.count === 1 ? "link" : "links")}</span></li>)}
+                  </ol>
+                )}
+              </section>
+            )}
+          </details>
+
+          {type !== "simulated" && (
+            <details className="panel-group" id="site-ziyaretleri">
+              <summary><h2>{L("Sitenize gelen yapay zekâ ziyaretleri", "AI visits to your site")}</h2>
+                <span className="muted">{L("Yapay zekâdan gelen ziyaretçiler ve yapay zekâ tarayıcıları. Açmak için dokunun.", "Visitors from AI assistants and AI crawlers. Tap to open.")}</span></summary>
+            <AiTrafficPanel brand={brand} paid={paid} vis={vis.data ?? []} />
+            <AiBotsPanel brand={brand} paid={paid} />
+            </details>
           )}
 
           <section className="panel">
