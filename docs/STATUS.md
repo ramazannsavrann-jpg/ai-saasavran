@@ -12,6 +12,9 @@
 > diyordu, oysa ücretli paketlerde ölçülüyor; tanım cümlesi, SSS tekrar sayısı ve hoş geldin e-postası Perplexity'yi
 > içerecek şekilde düzeltildi. `docs/PRICING.md` tablosu `npm run pricing` çıktısıyla yenilendi, güncel fiyat notu
 > (29/149/449 $) eklendi; Free satırında "%-Infinity" yerine "—". Plus tavanı 9 $ < 4 motorlu tipik maliyet 10,8 $; **karar (sahip, 18 Kasım): tavan şimdilik 9 $ kalıyor** (ay sonuna doğru ölçüm durabilir).
+> Google AI ölçümü ileride (sahip kararı); şimdilik sitede yazılmıyor. Instagram (vidIQ kayıtları, 0 kredi): 17 Kasım'da akıllı saat
+> seti TR Reels → EN Reels arasına prezervatif TR+EN Reels girdi, prezervatif setinin ayrı gönderisi yok (set yarım);
+> 14 Kasım'da 4 Reels aynı dakikada atıldı ve saç ekimi TR/EN Reels 2'şer kez görünüyor (silindi mi bilinmiyor).
 
 > **18 Kasım (TruthGuard dil):** Model "Never translate" kuralına rağmen İngilizce cevaptan Çince/İspanyolca/Almanca
 > iddia yazabiliyordu (Trojan ölçümü). Artık iddianın dili cevaptakinden farklıysa cevaptaki alıntı gösterilir; bilgi
