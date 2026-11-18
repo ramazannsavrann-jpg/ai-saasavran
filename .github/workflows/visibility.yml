@@ -43,10 +43,10 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          if git diff --quiet -- web/site/data/measurements.json; then echo "Ölçüm verisi değişmedi."; exit 0; fi
+          if git diff --quiet -- web/site/data/measurements.json web/site/data/self.json; then echo "Ölçüm verisi değişmedi."; exit 0; fi
           git config user.name "aisaasavran-bot"
           git config user.email "info@aisaasavran.com"
-          git add web/site/data/measurements.json
+          git add web/site/data/measurements.json web/site/data/self.json
           git commit -m "Ölçüm sayfaları: haftalık güncelleme"
           git push
           # GITHUB_TOKEN ile yapılan push başka iş akışını tetiklemez; yayını elle başlat

@@ -6,9 +6,10 @@
 const CHECKED_TR = "18 Kasım 2026";
 const CHECKED_EN = "18 November 2026";
 
-// Kendi ölçümümüz (18 Kasım 2026; scripts/self-measure.ts): 7 markasız soru × ChatGPT, Claude, Perplexity × 2, Türkiye'den canlı arama
-const SELF = { n: 42, list: [["Peec AI", 33], ["Otterly.AI", 32], ["Semrush", 32], ["Profound", 23], ["Ahrefs", 22], ["AI SaaSavran", 0]] };
-const selfRows = SELF.list.map(([n, r]) => `<tr><td>${n}</td><td class="num">${r}/${SELF.n}</td></tr>`).join("");
+import { SELF, selfRows as rows, selfDate } from "./self.mjs";
+const selfDateTr = selfDate(true), selfDateEn = selfDate(false);
+const selfRows = rows();
+const SELFN = SELF.answers;
 
 export const COMPARE_TR = [
   {
@@ -21,9 +22,9 @@ export const COMPARE_TR = [
 <p>Bu sayfayı bir rakip olarak yazıyoruz, bunu baştan söyleyelim. Bu yüzden rakipler hakkında yalnız kendi resmî sayfalarında yazanları aktarıyoruz (kontrol tarihi: ${CHECKED_TR}). Doğrulayamadığımız rakamı yazmıyoruz. Fiyatlar sık değişir; satın almadan önce her aracın kendi sayfasına bakın.</p>
 
 <h2>Yapay zekâ bu araçlardan hangisini öneriyor? (kendi ölçümümüz)</h2>
-<p>${CHECKED_TR} tarihinde bu kategorideki 7 markasız soruyu ("yapay zekâ cevaplarında marka görünürlüğünü ölçen araçlar hangileri?" gibi) ChatGPT, Claude ve Perplexity'ye Türkiye'den canlı web aramasıyla, her birini iki kez sorduk. 42 cevapta araçların önerilme sayıları:</p>
+<p>${selfDateTr} tarihinde bu kategorideki ${SELF.questions} markasız soruyu ("yapay zekâ cevaplarında marka görünürlüğünü ölçen araçlar hangileri?" gibi) ${SELF.engines.join(", ")} motorlarına Türkiye'den canlı web aramasıyla sorduk. ${SELFN} cevapta araçların önerilme sayıları (iki haftada bir kendiliğinden güncellenir):</p>
 <table class="mtable"><thead><tr><th>Araç</th><th>Önerildi</th></tr></thead><tbody>${selfRows}</tbody></table>
-<p>Yeni bir marka olarak biz hiçbir cevapta önerilmedik. Bunu saklamıyoruz, çünkü ölçümün neden önemli olduğunu gösteriyor: yapay zekâ, internette hakkında çok yazılmış markaları öneriyor. Haftalık güncel sayılar: <a href="/tr/yapay-zeka-gorunurluk-endeksi/#tr-ai-visibility">Yapay Zekâ Görünürlük Endeksi</a>.</p>
+<p>${SELF.ours === 0 ? "Yeni bir marka olarak biz hiçbir cevapta önerilmedik." : `Biz ${SELFN} cevabın ${SELF.ours} tanesinde önerildik.`} Bunu saklamıyoruz, çünkü ölçümün neden önemli olduğunu gösteriyor: yapay zekâ, internette hakkında çok yazılmış markaları öneriyor. Haftalık güncel sayılar: <a href="/tr/yapay-zeka-gorunurluk-endeksi/#tr-ai-visibility">Yapay Zekâ Görünürlük Endeksi</a>.</p>
 
 <h2>Araçlar tek tek</h2>
 <h3>AI SaaSavran</h3>
@@ -80,7 +81,7 @@ export const COMPARE_TR = [
 </ul>
 
 <h2>Dürüst bir not</h2>
-<p>AI SaaSavran yeni bir ürün. Kendi kategorimizde ölçüm yaptığımızda (${CHECKED_TR}, 42 canlı aramalı cevap) yapay zekâ Peec AI'yi 33, Otterly.AI'yi 32, Semrush'ı 32, Profound'u 23 cevapta önerdi; bizi hiç önermedi. Bu sayıyı ana sayfamızda da yayımlıyoruz ve her iki haftada bir yeniden ölçüyoruz. Tüm araçların karşılaştırması: <a href="/rehber/yapay-zeka-gorunurluk-araclari/">yapay zekâ görünürlük araçları</a>.</p>
+<p>AI SaaSavran yeni bir ürün. İlk kez kendi kategorimizde ölçüm yaptığımızda (18 Kasım 2026, 42 canlı aramalı cevap) yapay zekâ Peec AI'yi 33, Otterly.AI'yi 32, Semrush'ı 32, Profound'u 23 cevapta önerdi; bizi hiç önermedi. Bu sayıyı ana sayfamızda da yayımlıyoruz ve her iki haftada bir yeniden ölçüyoruz. Tüm araçların karşılaştırması: <a href="/rehber/yapay-zeka-gorunurluk-araclari/">yapay zekâ görünürlük araçları</a>.</p>
 
 <h2>Nasıl denenir?</h2>
 <ol>
@@ -110,9 +111,9 @@ export const COMPARE_EN = [
 <p>We are a competitor in this category, so we say it up front. For other tools we only repeat what their own official pages say (checked ${CHECKED_EN}) and leave out figures we could not verify. Prices change often; check each vendor's page before you buy.</p>
 
 <h2>Which of these tools does AI recommend? (our own measurement)</h2>
-<p>On ${CHECKED_EN} we asked ChatGPT, Claude and Perplexity 7 unbranded questions in this category (such as "which tools measure brand visibility in AI answers?") with live web search from Turkey, each twice. Recommendations in 42 answers:</p>
+<p>On ${selfDateEn} we asked ${SELF.engines.join(", ")} ${SELF.questions} unbranded questions in this category (such as "which tools measure brand visibility in AI answers?") with live web search from Turkey. Recommendations in ${SELFN} answers (updated automatically every two weeks):</p>
 <table class="mtable"><thead><tr><th>Tool</th><th>Recommended</th></tr></thead><tbody>${selfRows}</tbody></table>
-<p>As a new brand, we were recommended in none. We publish that because it shows why measurement matters: AI recommends brands that are widely written about. Weekly numbers: <a href="/ai-visibility-index/#tr-ai-visibility">AI Visibility Index</a>.</p>
+<p>${SELF.ours === 0 ? "As a new brand, we were recommended in none." : `We were recommended in ${SELF.ours} of ${SELFN}.`} We publish that because it shows why measurement matters: AI recommends brands that are widely written about. Weekly numbers: <a href="/ai-visibility-index/#tr-ai-visibility">AI Visibility Index</a>.</p>
 
 <h2>The tools one by one</h2>
 <h3>AI SaaSavran</h3>
@@ -169,7 +170,7 @@ export const COMPARE_EN = [
 </ul>
 
 <h2>An honest note</h2>
-<p>AI SaaSavran is a new product. When we measured our own category (${CHECKED_EN}, 42 live-search answers), AI recommended Peec AI in 33, Otterly.AI and Semrush in 32 each and Profound in 23; it did not recommend us once. We publish this on our home page and re-measure every two weeks. All tools compared: <a href="/guides/ai-visibility-tools-compared/">AI visibility tools compared</a>.</p>
+<p>AI SaaSavran is a new product. When we first measured our own category (18 November 2026, 42 live-search answers), AI recommended Peec AI in 33, Otterly.AI and Semrush in 32 each and Profound in 23; it did not recommend us once. We publish this on our home page and re-measure every two weeks. All tools compared: <a href="/guides/ai-visibility-tools-compared/">AI visibility tools compared</a>.</p>
 
 <h2>How to try it</h2>
 <ol>

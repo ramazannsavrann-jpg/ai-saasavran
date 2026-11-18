@@ -1,0 +1,33 @@
+{
+ "at": "2026-11-18",
+ "questions": 7,
+ "answers": 42,
+ "engines": [
+  "ChatGPT",
+  "Claude",
+  "Perplexity"
+ ],
+ "ours": 0,
+ "brands": [
+  [
+   "Peec AI",
+   33
+  ],
+  [
+   "Otterly.AI",
+   32
+  ],
+  [
+   "Semrush",
+   32
+  ],
+  [
+   "Profound",
+   23
+  ],
+  [
+   "Ahrefs",
+   22
+  ]
+ ]
+}

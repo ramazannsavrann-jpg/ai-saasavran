@@ -28,6 +28,9 @@
 > (Ramazan Savran, Antalya; Person + Organization.founder şeması; sahip onayı).
 > Rehberler: 4 ince rehbere gerçek ölçüm verili bölümler eklendi; yeni TR+EN: markam ChatGPT'de neden çıkmıyor, Perplexity'de görünmek,
 > GEO/AEO sözlüğü, llms.txt nedir (`web/site/guides-more.mjs`). Toplam 13 TR + 13 EN rehber.
+> Ücretsiz kontrol sayfası tam sayfa (sorular, sonuç okuma, sınırlar, SSS şeması); gizlilik politikasına ücretsiz kontrol verisi eklendi.
+> Kendi ölçümümüz otomatik: `export-measurements.ts` son bitmiş canlı ölçümü `web/site/data/self.json`'a yazar; ana sayfa kutusu ve
+> karşılaştırma tablosu buradan (`web/site/self.mjs`). `visibility.yml` bu dosyayı da commit eder.
 
 > **18 Kasım (4 paket, devam):** gizli bilgi taraması Paddle/Resend/SerpApi/Turnstile/GitHub/OAuth + kişisel e-posta; gece Gemini
 > testi hatayı gizlemez; `runs.prompts_total` işçide gerçek soru sayısı; SEO: `/tr/fiyatlar/`, sayfa bazlı `lastmod`, RSS `<link>`,

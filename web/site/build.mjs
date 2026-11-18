@@ -12,6 +12,7 @@ import { POSTS } from "./blog.mjs";
 import { LESSONS, tutorialsHtml, tutorialsPath, tutorialsSchema } from "./tutorials.mjs";
 import { DEF, METHOD_PAGES } from "./method.mjs";
 import { MEASUREMENTS, mPath, mIndex, measurementBody, indexBody, leadSentence } from "./measurements.mjs";
+import { selfBox } from "./self.mjs";
 import { buildIndex, indexReportBody, indexCsv, idxPath, idxCsvPath } from "./visibility-index.mjs";
 
 const DIST = "dist";
@@ -193,12 +194,7 @@ ${demoHtml(false)}
   <p class="small">Motor farkı, kaynak etkisi, TruthGuard ve Google Shopping canlı aramalı ölçümde, ücretli paketlerdedir.</p>
 </section>
 
-<section class="honest">
-  <h2>Kendi markamızı ölçtük: 42 cevabın 0'ı</h2>
-  <p>18 Kasım 2026'da AI SaaSavran'ı kendi ürünümüzle ölçtük: 7 markasız soru, ChatGPT, Claude ve Perplexity'ye Türkiye'den canlı web aramasıyla, her soru 2 kez. Yeni bir marka olarak 42 cevabın hiçbirinde önerilmedik. Rakipler 42 cevabın 22 ile 33'ünde önerildi (Peec AI 33, Otterly.AI 32, Semrush 32, Profound 23, Ahrefs 22). Adımızı doğrudan sorduğumuzda Perplexity sitemizi buldu, Claude yalnız kod deposunu buldu, ChatGPT bizi başka bir markayla karıştırdı. Sonuçları saklamıyoruz, çünkü ürünün ne işe yaradığını en iyi bu gösteriyor: nerede olduğunuzu bilmeden ilerleyemezsiniz.</p>
-  <p class="small">İlk ölçümümüz (11 Kasım, yalnız ChatGPT): 20 cevabın 0'ı.</p>
-  <p><a href="/rehber/chatgpt-marka-gorunurlugu-olcme/">Ölçüm yöntemini ve tüm tabloyu okuyun</a></p>
-</section>
+${selfBox(false)}
 
 <section class="band">
   <h2>Nasıl çalışır?</h2>
@@ -273,12 +269,7 @@ ${demoHtml(true)}
   <p class="small">Engine gaps, source impact, TruthGuard and Google Shopping are part of live-search measurement on paid plans.</p>
 </section>
 
-<section class="honest">
-  <h2>We measured ourselves first: 0 out of 42</h2>
-  <p>On 18 November 2026 we ran AI SaaSavran on our own brand: 7 unbranded questions to ChatGPT, Claude and Perplexity with live web search from Turkey, each asked twice. As a new brand we were recommended in none of 42 answers. Competitors were recommended in 22 to 33 of them (Peec AI 33, Otterly.AI 32, Semrush 32, Profound 23, Ahrefs 22). Asked about us by name, Perplexity found our site, Claude found only our code repository, and ChatGPT confused us with another brand. We publish it because it shows why measurement comes first: you can't improve what you can't see.</p>
-  <p class="small">Our first measurement (11 November, ChatGPT only): 0 out of 20.</p>
-  <p><a href="/guides/measure-brand-visibility-in-chatgpt/">Read the method and full table</a></p>
-</section>
+${selfBox(true)}
 
 <section class="band">
   <h2>Built to be honest about the numbers</h2>

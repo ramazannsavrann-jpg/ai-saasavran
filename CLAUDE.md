@@ -74,7 +74,7 @@ PR açıklamasında bu kontrollerden neyin değiştiğini kısaca yaz.
 ## Görünürlük düzeni (18 Kasım, otomatik)
 - Ölçüm sayfaları `web/site/data/measurements.json`'dan üretilir (`web/site/measurements.mjs`); veri elle düzenlenmez,
   `visibility.yml` her pazartesi yeniler. Yayın sonunda IndexNow bildirimi (`scripts/indexnow.mjs`).
-- Kendi markamız 2 haftada bir ölçülür (`scripts/self-measure.ts`). Ana sayfadaki "Kendi markamızı ölçtük" kutusu son ölçümle güncel tutulur.
+- Kendi markamız 2 haftada bir ölçülür (`scripts/self-measure.ts`). Ana sayfa kutusu ve karşılaştırma tablosu `web/site/data/self.json`'dan kendiliğinden güncellenir (`export-measurements.ts` yazar); elle düzenleme gerekmez.
 - Haftalık yazı: yalnız gerçek ölçüm verisiyle; uydurma rakam, uydurma alıntı yok.
 - Rakip karşılaştırma sayfaları (`web/site/compare.mjs`) gerçek adlarla (18 Kasım kararı); rakip bilgisi yalnız resmî sayfalarından, kötüleme yok, en geç 3 ayda bir fiyat kontrolü. Kurucu: Ramazan Savran (Antalya), `/tr/kurucu/`.
 - Görünürlük Endeksi (`web/site/visibility-index.mjs`) aynı veriden üretilir; yeni sektörde soru eklenince `SECTORS` listesine anahtar kelime ekle (sektörsüz soru endekse girmez).
