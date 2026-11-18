@@ -1,0 +1,8 @@
+US edition. In the city where Starbucks was born, which coffee shop does AI recommend? We asked ChatGPT, Claude, Perplexity and Gemini eight real coffee questions about Seattle.
+These seven names came up.
+Across forty-eight live-search answers, Espresso Vivace came first, mentioned in twenty-seven. Starbucks, only six.
+The engines disagree again. Claude never mentioned Milstead. Anchorhead was in almost every Gemini answer, and never on ChatGPT.
+Change the question, change the winner. The first Starbucks is at Pike Place Market. But asked for coffee near Pike Place, AI never mentioned Starbucks. All six mentions came from the tourist question.
+Gemini, answering from its own knowledge without searching, mentioned Starbucks in ten of fourteen answers.
+Where does AI look? Wikipedia, Yelp and city guides lead the way.
+These are AI answers. What does AI say about your brand? Check it free at... A. I. Saa Savran... dot com.

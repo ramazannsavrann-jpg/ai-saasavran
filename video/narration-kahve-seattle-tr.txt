@@ -1,0 +1,8 @@
+Starbucks'ın doğduğu şehirde yapay zekâ hangi kahveciyi öneriyor? Seattle'da kahve arayan biri gibi ChatGPT, Claude, Perplexity ve Gemini'ye sekiz soru sorduk.
+Bu yedi isim öne çıktı.
+Canlı aramalı kırk sekiz cevapta Espresso Vivace birinci: yirmi yedi cevapta geçti. Starbucks yalnızca altı.
+Motorlar yine anlaşamıyor. Milstead, Claude'da hiç yok. Anchorhead ise kendi bilgisiyle cevap veren Gemini'nin neredeyse her cevabında var, ChatGPT'de hiç yok.
+Soru değişince kazanan değişiyor. İlk Starbucks, Pike Place Market'te. Ama orada kahve sorulunca yapay zekâ Starbucks'ı hiç anmadı. Altı cevabın hepsi turist sorusundan geldi.
+İnternette aramadan cevap veren Gemini ise Starbucks'ı on dört cevabın onunda andı.
+Yapay zekâ nereye bakıyor? Wikipedia, Yelp ve şehir rehberleri öne çıkıyor.
+Bunlar yapay zekânın cevaplarıdır. Yapay zekâ sizin markanız için ne diyor? Ücretsiz ölçün... Ey Ay Saa Savran... nokta com.
