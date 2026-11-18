@@ -15,13 +15,12 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  # ---------------- Gerçek Gemini (bilgi amaçlı; Google'daki geçici sorunlar yayını durdurmaz) ----------------
+  # ---------------- Gerçek Gemini (bilgi amaçlı; ayrı iş akışı olduğu için yayını durdurmaz; hata olursa kırmızı görünür — 18 Kasım) ----------------
   e2e-gemini:
     name: Uçtan uca, gerçek Gemini ile (bilgi amaçlı)
     # Postgres 16 ikilileri (scripts/stack) ubuntu-24.04'te var; ubuntu-latest 26.04'e geçince kayboldu (17 Kasım 2026)
     runs-on: ubuntu-24.04
     timeout-minutes: 20
-    continue-on-error: true
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -48,7 +47,6 @@ jobs:
     name: Gerçek Gemini bağlantı testi (bilgi amaçlı)
     runs-on: ubuntu-latest
     timeout-minutes: 5
-    continue-on-error: true
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
