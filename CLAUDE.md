@@ -76,6 +76,7 @@ PR açıklamasında bu kontrollerden neyin değiştiğini kısaca yaz.
   `visibility.yml` her pazartesi yeniler. Yayın sonunda IndexNow bildirimi (`scripts/indexnow.mjs`).
 - Kendi markamız 2 haftada bir ölçülür (`scripts/self-measure.ts`). Ana sayfadaki "Kendi markamızı ölçtük" kutusu son ölçümle güncel tutulur.
 - Haftalık yazı: yalnız gerçek ölçüm verisiyle; uydurma rakam, uydurma alıntı yok.
+- Rakip karşılaştırma sayfaları (`web/site/compare.mjs`) gerçek adlarla (18 Kasım kararı); rakip bilgisi yalnız resmî sayfalarından, kötüleme yok, en geç 3 ayda bir fiyat kontrolü. Kurucu: Ramazan Savran (Antalya), `/tr/kurucu/`.
 - Görünürlük Endeksi (`web/site/visibility-index.mjs`) aynı veriden üretilir; yeni sektörde soru eklenince `SECTORS` listesine anahtar kelime ekle (sektörsüz soru endekse girmez).
 
 ## Video ve sosyal medya

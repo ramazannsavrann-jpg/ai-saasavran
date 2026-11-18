@@ -23,6 +23,9 @@
 > Yapay Zekâ Görünürlük Endeksi: `/tr/yapay-zeka-gorunurluk-endeksi/` + `/ai-visibility-index/` + CSV `/ai-visibility-index.csv`
 > (`web/site/visibility-index.mjs`): ölçümlerin sektör özeti (sorular metindeki anahtar kelimeyle sektöre ayrılır; yalnız canlı
 > aramalı cevaplar toplanır, Gemini ayrı satır; CC BY 4.0, Dataset şeması). Aynı veriyle her pazartesi kendiliğinden güncellenir.
+> Karşılaştırma rehberleri geri geldi (sahip kararı, gerçek adlarla): `/rehber/yapay-zeka-gorunurluk-araclari/`, `/rehber/peec-ai-alternatifi/`
+> + EN (`web/site/compare.mjs`; rakip bilgisi yalnız resmî sayfalardan, 18 Kasım; 3 ayda bir kontrol). Kurucu sayfası `/tr/kurucu/`, `/founder/`
+> (Ramazan Savran, Antalya; Person + Organization.founder şeması; sahip onayı).
 
 > **18 Kasım (4 paket, devam):** gizli bilgi taraması Paddle/Resend/SerpApi/Turnstile/GitHub/OAuth + kişisel e-posta; gece Gemini
 > testi hatayı gizlemez; `runs.prompts_total` işçide gerçek soru sayısı; SEO: `/tr/fiyatlar/`, sayfa bazlı `lastmod`, RSS `<link>`,

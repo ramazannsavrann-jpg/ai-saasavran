@@ -1,6 +1,8 @@
 // Herkese açık sayfaların içeriği (statik HTML olarak üretilir; JavaScript gerektirmez, arama motorları ve yapay zekâ botları okuyabilir).
 // Kural: Burada yazan her sayı ve iddia gerçek veriye dayanır. Ölçüm sonuçları Growth Lab'in gerçek ölçümleridir (7 Kasım 2026).
 
+import { COMPARE_TR } from "./compare.mjs";
+
 export const SITE = {
   name: "AI SaaSavran",
   url: "https://aisaasavran.com",
@@ -14,6 +16,7 @@ export const SITE = {
 
 // Rehberler: müşterilerin yapay zekâya sorduğu sorulara doğrudan cevap veren sayfalar.
 export const GUIDES = [
+  ...COMPARE_TR,
   {
     slug: "chatgpt-marka-gorunurlugu-olcme",
     title: "ChatGPT'de markanızın görünürlüğünü nasıl ölçersiniz?",
