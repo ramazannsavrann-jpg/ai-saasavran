@@ -204,6 +204,9 @@ jobs:
             echo "Yayın başarısız (deneme $i/5), $((i*30)) sn sonra tekrar"; sleep $((i*30))
           done
           exit 1
+      - name: Arama motorlarına bildir (IndexNow → Bing/ChatGPT arama, Yandex)
+        continue-on-error: true
+        run: sleep 20 && node scripts/indexnow.mjs 7
 
   live-check:
     name: Canlı site kontrolü

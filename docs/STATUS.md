@@ -14,6 +14,13 @@
 > kullanır; iki nedensellik cümlesi kanıt dilinde; motor listeleri (Perplexity) ve eski fiyat notları düzeltildi; `test:integration` TZ=UTC.
 > Fiyat kararı: **29 / 149 / 449 $** (sahip, 18 Kasım).
 >
+> **18 Kasım (görünürlük düzeni, otomatik):** IndexNow (anahtar dosyası `web/public/<anahtar>.txt`, `scripts/indexnow.mjs`;
+> her yayın sonunda son 7 günde değişen sayfalar Bing/Yandex'e). Ölçüm sayfaları `/measurements/`, `/tr/olcumler/` (gerçek marka
+> adları, sahip kararı) — veri `web/site/data/measurements.json`, her pazartesi `visibility.yml` ile Growth Lab'den güncellenir,
+> değişirse commit + CI. Kendi ölçümümüz (AI SaaSavran, canlı, tavan 0,60 $) çift ISO haftalarında `scripts/self-measure.ts`.
+> Haftalık içerik: Claude zamanlanmış görevi (çarşamba) ölçümlerden 1 yeni TR+EN yazı yazar ve yayınlar.
+> 18 Kasım kendi ölçümümüz: 7 markasız soru × 3 motor × 2 = 42 cevapta 0 öneri; 0,59 $.
+
 > **18 Kasım (4 paket, devam):** gizli bilgi taraması Paddle/Resend/SerpApi/Turnstile/GitHub/OAuth + kişisel e-posta; gece Gemini
 > testi hatayı gizlemez; `runs.prompts_total` işçide gerçek soru sayısı; SEO: `/tr/fiyatlar/`, sayfa bazlı `lastmod`, RSS `<link>`,
 > `favicon.ico`, blog görseli 640×360, başlıklar; uygulama parçalı yüklenir (ilk yük 846 → 571 kB); 0053 29 FK indeksi;

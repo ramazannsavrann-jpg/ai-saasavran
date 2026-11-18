@@ -1,0 +1,53 @@
+name: Görünürlük düzeni (haftalık)
+# 18 Kasım: sitenin kendisi yapay zekâda ve aramada görünsün diye kendiliğinden çalışan düzen.
+# 1) Growth Lab ölçümlerinden "Yapay zekâ ne öneriyor?" sayfalarının verisini günceller (web/site/data/measurements.json),
+#    değiştiyse depoya yazar ve yayını (CI) başlatır; yayın sonunda IndexNow ile Bing/Yandex'e bildirilir (ci.yml).
+# 2) Çift haftalarda kendi markamızın (AI SaaSavran, Growth Lab) canlı aramalı ölçümünü sıraya koyar (tavan 0,60 $).
+on:
+  schedule:
+    - cron: "41 4 * * 1"   # her pazartesi 07:41 (Türkiye)
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/visibility.yml
+permissions:
+  contents: write
+  actions: write
+concurrency:
+  group: visibility
+  cancel-in-progress: false
+
+jobs:
+  update:
+    name: Ölçüm sayfaları + kendi ölçümümüz
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm ci
+      - name: Ölçüm sayfalarının verisi
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: node scripts/export-measurements.ts
+      - name: Kendi ölçümümüz (çift haftalarda)
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: node scripts/self-measure.ts
+      - name: Değiştiyse depoya yaz ve yayını başlat
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if git diff --quiet -- web/site/data/measurements.json; then echo "Ölçüm verisi değişmedi."; exit 0; fi
+          git config user.name "aisaasavran-bot"
+          git config user.email "info@aisaasavran.com"
+          git add web/site/data/measurements.json
+          git commit -m "Ölçüm sayfaları: haftalık güncelleme"
+          git push
+          # GITHUB_TOKEN ile yapılan push başka iş akışını tetiklemez; yayını elle başlat
+          gh workflow run ci.yml --ref main
