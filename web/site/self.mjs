@@ -33,16 +33,24 @@ export function selfBox(en) {
   const first = SELF.at === "2026-11-18";
   if (en) return `
 <section class="honest">
+  <div class="honest-copy">
+  <p class="eyebrow">Transparency</p>
   <h2>We measure ourselves too: ${SELF.ours} out of ${SELF.answers}</h2>
   <p>On ${date(SELF.at, false)} we ran AI SaaSavran on our own brand: ${SELF.questions} unbranded questions to ${SELF.engines.join(", ")} with live web search from Turkey. We were recommended in ${SELF.ours} of ${SELF.answers} answers. Competitors were recommended in ${range[0]} to ${range[1]} of them (${list}). We re-measure every two weeks and this box updates itself. We publish it because it shows why measurement comes first: you can't improve what you can't see.</p>
   <p class="small">${first ? "" : "First full measurement (18 November 2026): 0 out of 42. "}Asked about us by name on 18 November, Perplexity found our site, Claude found only our code repository, and ChatGPT confused us with another brand. Our first measurement (11 November, ChatGPT only): 0 out of 20.</p>
   <p><a href="/guides/ai-visibility-tools-compared/">AI visibility tools compared</a> · <a href="/guides/measure-brand-visibility-in-chatgpt/">Measurement method</a></p>
+  </div>
+  <div class="stats"><div class="stat dark"><b>${SELF.ours}<span>/${SELF.answers}</span></b><span>answers recommended AI SaaSavran</span></div><div class="stat"><b>${range[0]}–${range[1]}</b><span>answers recommended each competitor (${top.map((b) => b[0]).join(", ")})</span></div></div>
 </section>`;
   return `
 <section class="honest">
+  <div class="honest-copy">
+  <p class="eyebrow">Şeffaflık</p>
   <h2>Kendi markamızı da ölçüyoruz: ${SELF.answers} cevabın ${trPoss(SELF.ours)}</h2>
   <p>${date(SELF.at, true)} tarihinde AI SaaSavran'ı kendi markamızla ölçtük: ${SELF.questions} markasız soru, ${SELF.engines.join(", ")} motorlarına Türkiye'den canlı web aramasıyla. ${SELF.ours === 0 ? `${SELF.answers} cevabın hiçbirinde önerilmedik.` : `${SELF.answers} cevabın ${SELF.ours} tanesinde önerildik.`} Rakipler ${range[0]} ile ${range[1]} cevapta önerildi (${list}). İki haftada bir yeniden ölçüyoruz ve bu kutu kendiliğinden güncelleniyor. Sonuçları saklamıyoruz, çünkü ürünün ne işe yaradığını en iyi bu gösteriyor: nerede olduğunuzu bilmeden ilerleyemezsiniz.</p>
   <p class="small">${first ? "" : "İlk tam ölçüm (18 Kasım 2026): 42 cevabın 0'ı. "}18 Kasım'da adımızı doğrudan sorduğumuzda Perplexity sitemizi buldu, Claude yalnız kod deposunu buldu, ChatGPT bizi başka bir markayla karıştırdı. İlk ölçümümüz (11 Kasım, yalnız ChatGPT): 20 cevabın 0'ı.</p>
   <p><a href="/rehber/yapay-zeka-gorunurluk-araclari/">Yapay zekâ görünürlük araçları karşılaştırması</a> · <a href="/rehber/chatgpt-marka-gorunurlugu-olcme/">Ölçüm yöntemi</a></p>
+  </div>
+  <div class="stats"><div class="stat dark"><b>${SELF.ours}<span>/${SELF.answers}</span></b><span>cevapta AI SaaSavran önerildi</span></div><div class="stat"><b>${range[0]}–${range[1]}</b><span>cevapta rakipler önerildi (${top.map((b) => b[0]).join(", ")})</span></div></div>
 </section>`;
 }

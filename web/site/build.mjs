@@ -44,7 +44,7 @@ const seoTitle = (title, short, suffix = " | AI SaaSavran") => (title + suffix).
 // Kendi sitemizin yapay zekâdan gelen ziyaretçi sayacı (Growth Lab'deki "AI SaaSavran" markası; çerezsiz, kişisel veri yok)
 const OWN_TRACK_KEY = "552ec134-8c6a-4ffe-a923-2697cd66bf65";
 
-function page({ path, title, description, body, schema = [], type = "website", lang = "en", alt = null, image = "/og.png", noindex = false }) {
+function page({ path, title, description, body, schema = [], type = "website", lang = "en", alt = null, image = "/og.png", noindex = false, home = false }) {
   const url = SITE.url + path;
   const en = lang === "en";
   const enPath = en ? path : alt, trPath = en ? alt : path;
@@ -72,7 +72,7 @@ ${alternates}
 ${schema.map(ld).join("\n")}
 <script async src="/t.js" data-site="${OWN_TRACK_KEY}"></script>
 </head>
-<body>
+<body${home ? ' class="home"' : ""}>
 <!--email_off-->
 <header class="top">
   <a class="mark" href="${en ? "/" : "/tr/"}" aria-label="AI SaaSavran"><img src="/icon.svg" alt="" width="28" height="28"><span>AI <b>SaaSavran</b></span></a>
@@ -135,7 +135,7 @@ const plansHtml = (en) => `
   <h2>${en ? "Pricing" : "Fiyatlar"}</h2>
   <div class="plan-grid">${PLAN_ROWS(en).map((p) => `
     <div class="plan${p.name === "Plus" ? " plan-main" : ""}">
-      <h3>${p.name}</h3>
+      ${p.name === "Plus" ? `<span class="badge">${en ? "Recommended" : "Önerilen"}</span>` : ""}<h3>${p.name}</h3>
       <p class="price"><span>${p.price}</span>${p.per}</p>
       <ul>${p.items.map((i) => `<li>${i}</li>`).join("")}</ul>
       ${p.live
@@ -149,154 +149,137 @@ const plansHtml = (en) => `
 </section>
 `;
 
+
+// Ana sayfa üst bölüm kartı: GERÇEK ölçüm (17 Kasım 2026, ABD, canlı web araması, 8 soru, 48 cevap). Uydurma veri yok.
+const WATCH = [["Apple Watch", 42], ["Garmin", 37], ["Galaxy Watch", 27], ["Pixel Watch", 26], ["Amazfit", 7]];
+const heroCard = (en) => `
+  <figure class="answer-card" aria-label="${en ? "Example of a real measurement" : "Gerçek ölçüm örneği"}">
+    <figcaption class="ac-head"><span>${en ? "Example question · US, live web search" : "Örnek soru · ABD, canlı web araması"}</span><span class="chip">${en ? "17 Nov 2026" : "17 Kas 2026"}</span></figcaption>
+    <p class="q"${en ? "" : ' lang="en"'}>“What is the best smartwatch to buy this Black Friday?”</p>
+    ${en ? "" : `<p class="small tr-note">Türkçesi: “Black Friday'de hangi akıllı saati almalıyım?”</p>`}
+    <p class="ac-label">${en ? "Recommended in how many of 48 answers (8 questions)" : "8 soruda, 48 cevabın kaçında önerildi"}</p>
+    <ul class="ac-bars">${WATCH.map(([n, k], i) => `<li${i === WATCH.length - 1 ? ' class="low"' : ""}><span class="nm">${n}</span><span class="track"><span class="fill" style="width:${Math.round(k / 48 * 100)}%"></span></span><span class="k">${k}</span></li>`).join("")}</ul>
+    <p class="cite">${en ? "Sources" : "Kaynaklar"}: techradar.com · tomsguide.com · wired.com · ChatGPT, Claude ${en ? "and" : "ve"} Perplexity</p>
+  </figure>`;
+const ICONS = {
+  gap: '<path d="M3 12h4l3-8 4 16 3-8h4"/>', why: '<circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/>',
+  src: '<path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/>',
+  truth: '<path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/>',
+  shop: '<path d="M3 4h2l2.5 11h11L21 7H7"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/>',
+  merge: '<circle cx="8" cy="12" r="5"/><circle cx="16" cy="12" r="5"/>',
+};
+const icon = (k) => `<svg class="ic" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[k]}</svg>`;
+const finalCta = (en) => `
+<section class="final">
+  <div><h2>${en ? "What does AI say about your brand?" : "Yapay zekâ markanız hakkında ne diyor?"}</h2>
+  <p>${en ? "See your first result in a few minutes. No signup, no card." : "İlk sonucu birkaç dakikada görün. Üyelik ve kart gerekmez."}</p></div>
+  <a class="btn bright" href="${en ? "/check/" : "/tr/kontrol/"}">${en ? "Run a free check" : "Ücretsiz kontrol et"}</a>
+</section>`;
+
 // 3) Tanıtım sayfası
 const home = `
 <section class="hero">
   <div class="hero-copy">
-    <h1>Müşteriniz yapay zekâya sorduğunda markanız cevapta mı?</h1>
-    <p class="lede">AI SaaSavran, müşterilerinizin ChatGPT, Claude, Perplexity ve Gemini'ye soracağı soruları sorar; markanızın anılıp anılmadığını, önerilip önerilmediğini ve sizin yerinize hangi rakibin önerildiğini ölçer.</p>
-    <p class="actions"><a class="btn" href="/kayit">Ücretsiz başla</a><a class="btn ghost" href="/tr/kontrol/">Üye olmadan dene</a></p>
-    <p class="small">Ücretsiz paket: 1 marka, 15 soru, ayda 4 ölçüm. Kart bilgisi istenmez. <a href="#fiyatlar">Fiyatlar</a></p>
-  </div>
-  <figure class="answer-card" aria-label="Örnek yapay zekâ cevabı">
-    <figcaption><span class="q" lang="en">What is the best smartwatch to buy this Black Friday?</span> <span class="small">(ABD'de İngilizce soruldu: "Black Friday'de hangi akıllı saati almalıyım?")</span></figcaption>
-    <blockquote>
-      <p>1. <mark class="hit">Apple Watch</mark> …</p>
-      <p>2. <mark class="hit">Garmin</mark> …</p>
-      <p>3. <mark class="hit alt">Samsung Galaxy Watch</mark> …</p>
-    </blockquote>
-    <p class="cite">Kaynaklar: techradar.com · tomsguide.com · wired.com</p>
-    <p class="caption">Temsilî gösterim, gerçek ölçümümüze dayanır: ChatGPT, Claude ve Perplexity, ABD'den canlı web aramasıyla, 17 Kasım 2026. Yukarıda tek soru gösteriliyor; sayılar 8 sorunun toplam 48 cevabından. Önerildiği cevap sayısı: Apple Watch 42, Garmin 37, Galaxy Watch 27, Pixel Watch 26, Amazfit 7.</p>
-  </figure>
-</section>
-<section class="demo daily" id="daily" data-lang="tr" hidden aria-labelledby="daily-h"></section>
-${demoHtml(false)}
-
-<section class="band">
-  <h2>Ne ölçüyoruz?</h2>
-  <div class="trio">
-    <div><h3>Anılma</h3><p>Cevapta markanızın adı geçiyor mu? Ürün ve uygulama adlarını da markanıza bağlarız.</p></div>
-    <div><h3>Önerilme</h3><p>Öneri listesinde misiniz? "Önerilmez" gibi olumsuz bağlamları öneri saymayız.</p></div>
-    <div><h3>Rakip ve kaynak</h3><p>Sizin yerinize kim öneriliyor, yapay zekâ hangi sitelere bakıyor?</p></div>
-  </div>
+    <p class="engines">ChatGPT · Claude · Perplexity · Gemini</p>
+    <h1>Müşteriniz yapay zekâya sorduğunda <em>markanız cevapta mı?</em></h1>
+    <p class="lede">Müşterilerinizin soracağı soruları ChatGPT, Claude, Perplexity ve Gemini'ye biz soruyoruz. Markanızın anılıp anılmadığını, önerilip önerilmediğini, yerinize hangi rakibin seçildiğini ve cevabın hangi sitelere dayandığını gösteriyoruz.</p>
+    <p class="actions"><a class="btn bright" href="/tr/kontrol/">Markanı ücretsiz kontrol et</a><a class="btn ghost" data-cta href="/kayit">Hesap aç</a></p>
+    <p class="small">Üye olmadan ayda 2 kontrol · Ücretsiz paket: 1 marka, 15 soru, ayda 4 ölçüm · Kart istenmez · <a href="#fiyatlar">Fiyatlar</a></p>
+  </div>${heroCard(false)}
 </section>
 
-<section class="band">
-  <h2>Raporda neler var?</h2>
-  <div class="trio">
-    <div><h3>Motor farkı</h3><p>Aynı soruda Claude sizi öneriyor, ChatGPT önermiyor mu? Her motor ayrı gösterilir, büyük farklar işaretlenir.</p></div>
-    <div><h3>Neden önerilmediniz?</h3><p>Önerilmediğiniz her soru için kanıt kartı: yerinize kim önerildi, cevap hangi sitelere dayandı.</p></div>
-    <div><h3>Kaynak etkisi</h3><p>Hangi site hangi markanın önerilmesine katkı veriyor? Kendi siteniz kaynak gösterilip yine de rakip önerildiyse ayrıca belirtilir.</p></div>
-    <div><h3>Bilgi doğruluğu (TruthGuard)</h3><p>Yapay zekânın ürünleriniz hakkında söylediklerini sizin girdiğiniz resmî bilgilerle karşılaştırır: doğru, yanlış, doğrulanamadı.</p></div>
-    <div><h3>Yapay zekâ ↔ Google Shopping</h3><p>Yapay zekânın en çok önerdiği marka ile Google Shopping'de 1. sıradaki aynı mı? Ürünleriniz haftada bir aranır.</p></div>
-    <div><h3>Aynı şirket, tek rakip</h3><p>Bir rakibin alt markası ya da sahibi olan şirket cevaplarda ayrı adla geçerse birleştirmeniz önerilir; aynı şirket iki kez sayılmaz.</p></div>
-  </div>
-  <p class="small">Motor farkı, kaynak etkisi, TruthGuard ve Google Shopping canlı aramalı ölçümde, ücretli paketlerdedir.</p>
+<section class="qs" aria-label="Ne ölçüyoruz?">
+  <div><h2>Anıldınız mı?</h2><p>Cevapta markanızın adı geçiyor mu? Ürün ve uygulama adlarını da markanıza bağlarız.</p></div>
+  <div><h2>Önerildiniz mi?</h2><p>Öneri listesinde misiniz? "Önerilmez" gibi olumsuz bağlamları öneri saymayız.</p></div>
+  <div><h2>Yerinize kim?</h2><p>Sizin yerinize hangi rakip önerildi, yapay zekâ kararını hangi sitelere bakarak verdi?</p></div>
 </section>
 
-${selfBox(false)}
-
-<section class="band">
-  <h2>Nasıl çalışır?</h2>
-  <ol class="steps">
-    <li><b>Markanızı ve rakiplerinizi ekleyin.</b> Sektörünüzü seçin; örnek rakipler ve hazır Türkçe sorular gelsin.</li>
-    <li><b>Ölçümü başlatın.</b> Her soru birden fazla kez sorulur; sonuç güven aralığıyla gösterilir.</li>
-    <li><b>Ne yapacağınızı görün.</b> Web siteniz kontrol edilir, eksikler önem sırasına göre listelenir. Haftalık ölçümle değişimi izleyin.</li>
+<section class="howto">
+  <p class="eyebrow">Nasıl çalışır?</p>
+  <h2>Üç adımda nerede durduğunuzu görün</h2>
+  <ol>
+    <li><h3>Markanızı ve rakiplerinizi ekleyin</h3><p>Sektörünüzü seçin; örnek rakipler ve hazır Türkçe sorular gelsin.</p></li>
+    <li><h3>Ölçümü başlatın</h3><p>Her soru birden fazla kez sorulur; sonuç güven aralığıyla gösterilir.</p></li>
+    <li><h3>Ne yapacağınızı görün</h3><p>Web siteniz kontrol edilir, eksikler önem sırasına göre listelenir. Haftalık ölçümle değişimi izleyin.</p></li>
   </ol>
 </section>
 
-<section class="status">
-  <h2>Şu an neler kullanılabilir?</h2>
-  <ul>
-    <li class="ok">Gemini ile ölçüm (internete bakmadan, model bilgisiyle). Raporda açıkça yazar.</li>
-    <li class="ok">Haftalık otomatik ölçüm, web sitesi kontrolü, kural tabanlı öneriler.</li>
-    <li class="ok">ChatGPT, Claude ve Perplexity ile canlı aramalı ölçüm ve kaynak analizi: ücretli paketlerde, motor bazında.</li>
-    <li class="ok">Üye olmadan ücretsiz kontrol (ayda 2 kez).</li>
-    <li class="ok">Önerilmediğiniz sorular için kanıtlar ve "kaynaklar kimi destekliyor" tablosu: canlı aramalı ölçümde.</li>
-    <li class="ok">Ürünler: TruthGuard bilgi doğruluğu kontrolü ve haftalık Google Shopping sırası (ücretli paketlerde).</li>
-    <li class="no">Ayrı PDF dosyası üretilmez; PDF, tarayıcının yazdır penceresiyle alınır.</li>
-  </ul>
-  <p><a href="/durum">Ayrıntılı ürün durumu</a></p>
+<section class="demo daily" id="daily" data-lang="tr" hidden aria-labelledby="daily-h"></section>
+${demoHtml(false)}
+
+<section class="feat">
+  <p class="eyebrow">Rapor</p>
+  <h2>Sadece skor değil, nedeni ve çözümü</h2>
+  <div class="feat-grid">
+    <div>${icon("gap")}<h3>Motor farkı</h3><p>Aynı soruda Claude sizi öneriyor, ChatGPT önermiyor mu? Her motor ayrı gösterilir, büyük farklar işaretlenir.</p></div>
+    <div>${icon("why")}<h3>Neden önerilmediniz?</h3><p>Önerilmediğiniz her soru için kanıt kartı: yerinize kim önerildi, cevap hangi sitelere dayandı.</p></div>
+    <div>${icon("src")}<h3>Kaynak etkisi</h3><p>Hangi site hangi markanın önerilmesine katkı veriyor? Kendi siteniz kaynak gösterilip yine de rakip önerildiyse ayrıca belirtilir.</p></div>
+    <div>${icon("truth")}<h3>Bilgi doğruluğu (TruthGuard)</h3><p>Yapay zekânın ürünleriniz hakkında söylediklerini sizin girdiğiniz resmî bilgilerle karşılaştırır: doğru, yanlış, doğrulanamadı.</p></div>
+    <div>${icon("shop")}<h3>Yapay zekâ ↔ Google Shopping</h3><p>Yapay zekânın en çok önerdiği marka ile Google Shopping'de 1. sıradaki aynı mı? Ürünleriniz haftada bir aranır.</p></div>
+    <div>${icon("merge")}<h3>Aynı şirket, tek rakip</h3><p>Bir rakibin alt markası ya da sahibi olan şirket cevaplarda ayrı adla geçerse birleştirmeniz önerilir; aynı şirket iki kez sayılmaz.</p></div>
+  </div>
+  <p class="small">Motor farkı, kaynak etkisi, TruthGuard ve Google Shopping canlı aramalı ölçümde, ücretli paketlerdedir. Gemini internete bakmadan, model bilgisiyle ölçülür ve raporda açıkça yazar. <a href="/durum">Ayrıntılı ürün durumu</a></p>
 </section>
+
+${selfBox(false)}
 ${plansHtml(false)}
 ${faqHtml(HOME_FAQ)}
+${finalCta(false)}
 `;
-write("/tr/", page({ lang: "tr", alt: "/", path: "/tr/", title: "AI SaaSavran: Markanız ChatGPT, Gemini, Claude ve Perplexity'de mi?", description: DEF.tr, body: home, schema: [ORG, WEBSITE, APP, faqLd(HOME_FAQ)] }));
+write("/tr/", page({ lang: "tr", alt: "/", path: "/tr/", title: "AI SaaSavran: Markanız ChatGPT, Gemini, Claude ve Perplexity'de mi?", description: DEF.tr, body: home, home: true, schema: [ORG, WEBSITE, APP, faqLd(HOME_FAQ)] }));
 
 
 // 3a) English home (default)
 const enHome = `
 <section class="hero">
   <div class="hero-copy">
-    <h1>When customers ask AI for a recommendation, are you in the answer?</h1>
+    <p class="engines">ChatGPT · Claude · Perplexity · Gemini</p>
+    <h1>When customers ask AI for a recommendation, <em>are you in the answer?</em></h1>
     <p class="lede">AI SaaSavran asks ChatGPT, Claude, Perplexity and Gemini the questions your customers ask, then shows whether your business is mentioned, recommended, or passed over for a competitor, and which websites the AI relied on.</p>
-    <p class="actions"><a class="btn" href="/kayit">Start free</a><a class="btn ghost" href="/check/">Try it without signing up</a></p>
-    <p class="small">Free plan: 1 brand, 15 questions, 4 measurements a month. No card. <a href="#pricing">See pricing</a></p>
-  </div>
-  <figure class="answer-card" aria-label="Example AI answer">
-    <figcaption><span class="q">What is the best smartwatch to buy this Black Friday?</span></figcaption>
-    <blockquote>
-      <p>1. <mark class="hit">Apple Watch</mark> …</p>
-      <p>2. <mark class="hit">Garmin</mark> …</p>
-      <p>3. <mark class="hit alt">Samsung Galaxy Watch</mark> …</p>
-    </blockquote>
-    <p class="cite">Sources: techradar.com · tomsguide.com · wired.com</p>
-    <p class="caption">Illustration based on our real measurement: ChatGPT, Claude and Perplexity with live web search from the US, 17 Nov 2026. One question is shown above; the counts come from 48 answers to 8 questions. Recommended in: Apple Watch 42, Garmin 37, Galaxy Watch 27, Pixel Watch 26, Amazfit 7.</p>
-  </figure>
-</section>
-<section class="demo daily" id="daily" data-lang="en" hidden aria-labelledby="daily-h"></section>
-${demoHtml(true)}
-
-<section class="band">
-  <h2>What you see</h2>
-  <div class="trio">
-    <div><h3>Mentioned</h3><p>Is your business named? Product names and alternate spellings are matched to your brand.</p></div>
-    <div><h3>Recommended</h3><p>Are you on the shortlist? "Not recommended" and passing mentions don't count.</p></div>
-    <div><h3>Competitors and sources</h3><p>Who gets recommended instead, and which pages the AI read before answering.</p></div>
-  </div>
+    <p class="actions"><a class="btn bright" href="/check/">Check your brand for free</a><a class="btn ghost" data-cta href="/kayit">Create account</a></p>
+    <p class="small">2 checks a month without signing up · Free plan: 1 brand, 15 questions, 4 measurements a month · No card · <a href="#pricing">See pricing</a></p>
+  </div>${heroCard(true)}
 </section>
 
-<section class="band">
-  <h2>What's in the report</h2>
-  <div class="trio">
-    <div><h3>Engine gaps</h3><p>Does Claude recommend you while ChatGPT doesn't? Every engine is shown separately and large gaps are flagged.</p></div>
-    <div><h3>Why you weren't recommended</h3><p>An evidence card for each question you lost: who was recommended instead and which sites the answer relied on.</p></div>
-    <div><h3>Source impact</h3><p>Which site helps which brand get recommended? If your own site was cited and a competitor was still recommended, we point it out.</p></div>
-    <div><h3>Fact check (TruthGuard)</h3><p>Compares what AI says about your products with the official facts you enter: correct, wrong, or can't be verified.</p></div>
-    <div><h3>AI ↔ Google Shopping</h3><p>Is AI's most recommended brand also #1 on Google Shopping? Your products are searched once a week.</p></div>
-    <div><h3>One company, one competitor</h3><p>When a competitor's sub-brand or parent company shows up under another name, you're prompted to merge them, so one company isn't counted twice.</p></div>
-  </div>
-  <p class="small">Engine gaps, source impact, TruthGuard and Google Shopping are part of live-search measurement on paid plans.</p>
+<section class="qs" aria-label="What you see">
+  <div><h2>Mentioned?</h2><p>Is your business named? Product names and alternate spellings are matched to your brand.</p></div>
+  <div><h2>Recommended?</h2><p>Are you on the shortlist? "Not recommended" and passing mentions don't count.</p></div>
+  <div><h2>Who instead?</h2><p>Who gets recommended instead, and which pages the AI read before answering.</p></div>
 </section>
 
-${selfBox(true)}
-
-<section class="band">
+<section class="howto">
+  <p class="eyebrow">Method</p>
   <h2>Built to be honest about the numbers</h2>
-  <ol class="steps">
-    <li><b>Every question is asked more than once.</b> One answer is luck; rates over many answers are signal.</li>
-    <li><b>Ranges, not false precision.</b> Results come with a confidence range and a warning when the sample is small.</li>
-    <li><b>Live search or not, always labelled.</b> Answers from model knowledge and answers from live web search are never mixed.</li>
+  <ol>
+    <li><h3>Every question is asked more than once</h3><p>One answer is luck; rates over many answers are signal.</p></li>
+    <li><h3>Ranges, not false precision</h3><p>Results come with a confidence range and a warning when the sample is small.</p></li>
+    <li><h3>Live search or not, always labelled</h3><p>Answers from model knowledge and answers from live web search are never mixed.</p></li>
   </ol>
 </section>
 
-<section class="status">
-  <h2>What you can use now</h2>
-  <ul>
-    <li class="ok">Gemini measurement (model knowledge, no live search), clearly labelled.</li>
-    <li class="ok">Weekly automatic measurement, competitor comparison, website check, recommendations.</li>
-    <li class="ok">ChatGPT, Claude and Perplexity live-search measurement and source analysis: on paid plans, reported per engine.</li>
-    <li class="ok">Free check without signing up (2 a month).</li>
-    <li class="ok">App in English and Turkish.</li>
-    <li class="ok">Evidence on questions where a competitor was recommended instead of you, and which brands each source supports: in live-search measurements.</li>
-    <li class="ok">Products: TruthGuard fact check and weekly Google Shopping position (paid plans).</li>
-    <li class="no">No separate PDF file is generated; PDFs are saved from the browser's print dialog.</li>
-  </ul>
+<section class="demo daily" id="daily" data-lang="en" hidden aria-labelledby="daily-h"></section>
+${demoHtml(true)}
+
+<section class="feat">
+  <p class="eyebrow">Report</p>
+  <h2>Not just a score: the reason and the fix</h2>
+  <div class="feat-grid">
+    <div>${icon("gap")}<h3>Engine gaps</h3><p>Does Claude recommend you while ChatGPT doesn't? Every engine is shown separately and large gaps are flagged.</p></div>
+    <div>${icon("why")}<h3>Why you weren't recommended</h3><p>An evidence card for each question you lost: who was recommended instead and which sites the answer relied on.</p></div>
+    <div>${icon("src")}<h3>Source impact</h3><p>Which site helps which brand get recommended? If your own site was cited and a competitor was still recommended, we point it out.</p></div>
+    <div>${icon("truth")}<h3>Fact check (TruthGuard)</h3><p>Compares what AI says about your products with the official facts you enter: correct, wrong, or can't be verified.</p></div>
+    <div>${icon("shop")}<h3>AI ↔ Google Shopping</h3><p>Is AI's most recommended brand also #1 on Google Shopping? Your products are searched once a week.</p></div>
+    <div>${icon("merge")}<h3>One company, one competitor</h3><p>When a competitor's sub-brand or parent company shows up under another name, you're prompted to merge them, so one company isn't counted twice.</p></div>
+  </div>
+  <p class="small">Engine gaps, source impact, TruthGuard and Google Shopping are part of live-search measurement on paid plans. Gemini is measured from model knowledge (no live search) and labelled as such. The app is in English and Turkish.</p>
 </section>
+
+${selfBox(true)}
 ${plansHtml(true)}
 ${faqHtml(HOME_FAQ_EN, true)}
+${finalCta(true)}
 `;
-write("/", page({ lang: "en", alt: "/tr/", path: "/", title: "AI SaaSavran: Does ChatGPT recommend your business?", description: DEF.en, body: enHome, schema: [ORG, WEBSITE, APP, faqLd(HOME_FAQ_EN)] }));
+write("/", page({ lang: "en", alt: "/tr/", path: "/", title: "AI SaaSavran: Does ChatGPT recommend your business?", description: DEF.en, body: enHome, home: true, schema: [ORG, WEBSITE, APP, faqLd(HOME_FAQ_EN)] }));
 
 // 4a) English guides
 const enList = `
