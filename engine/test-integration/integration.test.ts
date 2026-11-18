@@ -659,6 +659,13 @@ test("Bugünün ölçümü: yalnız Growth Lab, markalı soru seçilmez, marka a
   // istemci çağıramaz
   const u = await user("ornek@test.local");
   assert.ok((await u.c.rpc("daily_example", { p_day: "2026-11-12" })).error);
+  // 0056: saatlik dilim, karışık sıra; tüm adaylar dolaşılır, markalı soru yine yok, istemci çağıramaz
+  const slots: any[] = [];
+  for (let i = 0; i < first.candidates; i++) slots.push(ok(await svc.rpc("example_at", { p_slot: 495000 + i })) as any);
+  assert.equal(new Set(slots.map((x) => `${x.question}|${x.provider}|${x.measurement_type}`)).size, first.candidates, "her aday bir kez");
+  assert.ok(slots.some((x) => x.question === "Hangi aracı önerirsin?"));
+  assert.ok(!slots.some((x) => x.question === "Rakipmarka iyi mi?"));
+  assert.ok((await u.c.rpc("example_at", { p_slot: 1 })).error);
 });
 
 test("Paylaşılan rapor: editör bağlantı üretir; bağlantıyla salt okunur rapor; iptal/süre sonrası boş; başkası üretemez", async () => {
