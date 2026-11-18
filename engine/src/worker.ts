@@ -190,7 +190,7 @@ export async function processNextRun(deps: WorkerDeps): Promise<WorkerResult | n
             input_tokens: result.inputTokens, output_tokens: result.outputTokens, cost_usd: result.costUsd,
             ...(result.modelSnapshot ? { model_snapshot: result.modelSnapshot } : {}),
           }).select("id").single(), "cevap kaydı") as any;
-          const hits = analyzeResponse(result, brands);
+          const hits = analyzeResponse(result, brands, { question: (prompts as any[]).find((p) => p.id === result.promptId)?.text });
           const classifier = new Map<string, string>();
           let perception: Perception | null = null;
           const seen = brands.filter((b) => hits.find((h) => h.brandId === b.id)?.mentioned);
@@ -378,8 +378,9 @@ export async function reanalyzeBrand(db: SupabaseClient, brandId: string): Promi
   let n = 0;
   for (const run of runs) {
     const resp = must(await db.from("responses").select("id,prompt_id,provider,answer_text,cited_urls").eq("run_id", run.id), "cevaplar") as any[];
+    const qText = new Map((must(await db.from("prompts").select("id,text").eq("brand_id", brandId), "sorular") as { id: string; text: string }[]).map((p) => [p.id, p.text]));
     for (const r of resp) {
-      const hits = analyzeResponse({ promptId: r.prompt_id, provider: r.provider, answerText: r.answer_text, citedUrls: r.cited_urls ?? [] }, brands);
+      const hits = analyzeResponse({ promptId: r.prompt_id, provider: r.provider, answerText: r.answer_text, citedUrls: r.cited_urls ?? [] }, brands, { question: qText.get(r.prompt_id) });
       // LLM ile sınıflandırılmış "önerildi" kararları korunur (kural tabanlı yeniden hesap onları ezmez)
       const prev = must(await db.from("mentions").select("brand_id,recommended,classifier,perception").eq("response_id", r.id), "önceki anılma") as { brand_id: string; recommended: boolean; classifier: string; perception: unknown }[];
       const perc = new Map(prev.filter((x) => x.perception).map((x) => [x.brand_id, x.perception]));

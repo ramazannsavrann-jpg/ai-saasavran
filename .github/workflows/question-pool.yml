@@ -1,0 +1,43 @@
+# Soru havuzu: sektörler için Google'da sorulan gerçek soruları toplar ve web/src/lib/question-pool.ts dosyasını günceller.
+# Elle (Actions > Çalıştır) ya da soru-havuzu dalına push ile çalışır; SerpApi hakkı rezervin altına inmez (POOL_RESERVE).
+name: Soru havuzu
+on:
+  workflow_dispatch:
+    inputs:
+      max_sectors:
+        description: "En fazla kaç sektör (boş = hepsi)"
+        required: false
+        default: ""
+  push:
+    branches: [soru-otomatik]
+    paths:
+      - scripts/question-pool.ts
+      - .github/workflows/question-pool.yml
+permissions:
+  contents: write
+concurrency:
+  group: question-pool
+  cancel-in-progress: false
+jobs:
+  pool:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Google sorularını topla
+        env:
+          SERPAPI_KEY: ${{ secrets.SERPAPI_KEY }}
+          POOL_RESERVE: ${{ vars.POOL_RESERVE || '150' }}
+          POOL_MAX_SECTORS: ${{ inputs.max_sectors || '200' }}
+        run: node scripts/question-pool.ts
+      - name: Değiştiyse kaydet
+        run: |
+          if git diff --quiet web/src/lib/question-pool.ts; then echo "Değişiklik yok"; exit 0; fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
+          git add web/src/lib/question-pool.ts
+          git commit -m "soru havuzu: Google soruları güncellendi [skip ci]"
+          git push

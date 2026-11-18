@@ -102,14 +102,10 @@ test("Müşteri akışı: kayıt → marka → rakip → soru → ölçüm → r
   await expect(page.getByRole("heading", { name: "Hazır sorular" })).toBeVisible();
   // İlk 5 dakika rehberi: adımlar gerçek veriden ilerler
   const guide = page.getByRole("region", { name: "Başlangıç rehberi" });
-  await expect(guide.getByText("6 adımdan 1 tanesi tamam")).toBeVisible();
-  await expect(guide.getByRole("button", { name: "3 hazır soruyu ekle" })).toBeVisible();
-  await shot(page, "03b-baslangic-rehberi");
-  for (let k = 0; k < 3; k++) {
-    await page.getByRole("button", { name: "Ekle", exact: true }).first().click();
-    await expect(page.getByText(`${k + 1} / 15 aktif`)).toBeVisible();
-  }
+  // 19 Kasım: yeni markaya sektörün ilk 5 sorusu otomatik eklenir
+  await expect(page.getByText("5 / 15 aktif")).toBeVisible();
   await expect(guide.getByText("6 adımdan 2 tanesi tamam")).toBeVisible();
+  await shot(page, "03b-baslangic-rehberi");
   await expect(guide.getByRole("button", { name: "Rakip ekle" })).toBeVisible();
   await shot(page, "04-sorular");
 
@@ -245,9 +241,10 @@ test("Banka sektörü: hazır sorular, örnek rakipler, düzenleme, gerçek sır
   // Şehir olmadan da ulusal sektör soruları çıkar; restoran şablonu çıkmaz
   await expect(page.getByRole("heading", { name: "Hazır sorular" })).toBeVisible();
   await expect(page.getByText("Kredi kartı almak için hangi bankayı önerirsin?")).toBeVisible();
+  await expect(page.getByText("5 / 15 aktif")).toBeVisible();
   for (let k = 0; k < 2; k++) {
     await page.getByRole("button", { name: "Ekle", exact: true }).first().click();
-    await expect(page.getByText(`${k + 1} / 15 aktif`)).toBeVisible();
+    await expect(page.getByText(`${k + 6} / 15 aktif`)).toBeVisible();
   }
 
   // Soru düzenleme

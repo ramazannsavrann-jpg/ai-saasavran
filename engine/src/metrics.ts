@@ -51,6 +51,9 @@ function hostOf(url: string): string | null {
 const NEGATIVE = [
   "onermiyorum", "onermiyoruz", "onermem", "onerilmez", "tavsiye etmem", "tavsiye etmiyorum", "uzak durun", "kacinin", "kapandi", "kapali",
   "sikayet", "memnun degil", "not recommend", "don t recommend", "wouldn t recommend", "avoid", "closed",
+  // 19 Kasım (pilot): güven sorusuna "dolandırıcılık şüphesi" cevabı önerildi sayılıyordu
+  "dolandiricilik", "dolandirici", "supheli", "suphesi", "sahte", "guvenilir degil", "dikkatli olun", "dikkatli olmaniz", "dikkatli olunmasi",
+  "scam", "fraud", "complaints", "be careful", "not trustworthy", "untrustworthy",
 ];
 
 // Türkçe çekim ekleri (normalize edilmiş hâlde): "Garantinin", "Akbanka", "Enparadan", "Migroslar"
@@ -133,7 +136,9 @@ function sentences(line: string): string[] {
   return line.split(/(?<=[!?])\s+|(?<=[a-zçğıöşü)\]*][.])\s+/i).filter(Boolean);
 }
 
-export function analyzeResponse(resp: AIResponse, brands: BrandRef[]): BrandHit[] {
+/** opts.question: soru metni. Marka adı sorunun kendisinde geçiyorsa ("X güvenilir mi?") cevap zaten markayı anlatır;
+ *  bu durumda "önerildi" yalnız açık öneri cümlesiyle sayılır (liste/başlık satırı yetmez). 19 Kasım pilot bulgusu. */
+export function analyzeResponse(resp: AIResponse, brands: BrandRef[], opts: { question?: string | null } = {}): BrandHit[] {
   const lines = resp.answerText.split(/\n+/);
   // İlk kelime iki ayrı markada aynıysa ("Marka A" / "Marka B", "Samsung Galaxy" / "Samsung Pay") tek başına ilk kelime hiçbirine sayılmaz
   const firstOf = (n: string) => n.trim().split(/\s+/)[0].toLocaleLowerCase("tr-TR");
@@ -174,8 +179,9 @@ export function analyzeResponse(resp: AIResponse, brands: BrandRef[]): BrandHit[
 
     let recommended = false;
     let ambiguous = false;
-    if (mentioned && cueSentence) recommended = true;
-    else if (mentioned && !negative && inList) recommended = true;
+    const askedByName = !!opts.question && containsBrand(opts.question);
+    if (mentioned && cueSentence && !(askedByName && negative)) recommended = true;
+    else if (mentioned && !negative && inList && !askedByName) recommended = true;
     else if (mentioned && !negative && !inList) ambiguous = true; // düz metinde geçiyor: öneri mi, bilgi mi?
 
     return { brandId: b.id, mentioned, recommended, ambiguous, cited, rank: null };
