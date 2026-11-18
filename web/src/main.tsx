@@ -11,6 +11,7 @@ import { initSupabase } from "./lib/supabase";
 import { AppProvider, useApp } from "./lib/app";
 import { Shell } from "./components/Shell";
 import { Loading } from "./components/ui";
+import { ErrorBoundary, isChunkError, logClientError, reloadOnce } from "./components/ErrorBoundary";
 import { Forgot, Login, Signup } from "./pages/Auth";
 import { Dashboard, NewBrand, NewWorkspace } from "./pages/Dashboard";
 // Büyük sayfalar ayrı parçada yüklenir: telefonda ilk açılış hızlansın (18 Kasım, ana dosya 838 kB idi)
@@ -51,8 +52,14 @@ function StatusRoute() {
   return session ? <Navigate to="/durum-ic" replace /> : <main className="content"><ProductStatus /></main>;
 }
 
+// Yeni yayından sonra eski parça istenirse (Vite önyükleme hatası) sayfa bir kez yenilenir
+window.addEventListener("vite:preloadError", (e) => { if (reloadOnce()) e.preventDefault(); });
+window.addEventListener("unhandledrejection", (e) => { if (isChunkError(e.reason) && reloadOnce()) return; });
+window.addEventListener("error", (e) => { if (e.error && !isChunkError(e.error)) logClientError(e.error, "window"); });
+
 function App() {
   return (
+    <ErrorBoundary>
     <Suspense fallback={<Loading />}>
     <Routes>
       <Route path="/giris" element={<PublicOnly><Login /></PublicOnly>} />
@@ -76,6 +83,7 @@ function App() {
       <Route path="*" element={<Navigate to="/panel" replace />} />
     </Routes>
     </Suspense>
+    </ErrorBoundary>
   );
 }
 
