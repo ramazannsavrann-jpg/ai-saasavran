@@ -73,7 +73,9 @@ export function parsePerplexityResponse(json: PplxResponse, promptId: string, cf
   const cost = typeof reported === "number" && Number.isFinite(reported) && reported >= 0
     ? reported
     : estimateCost({ ...cfg.price, perCall: cfg.price.perCall * Math.max(1, queries.length) }, inputTokens, outputTokens);
+  const snap = typeof (json as { model?: unknown }).model === "string" ? (json as { model?: string }).model : undefined;
   return {
+    ...(snap ? { modelSnapshot: snap } : {}),
     promptId, provider: "perplexity", model: cfg.model,
     method: "api_with_search", dataOrigin: "live_api", billing: cfg.billing,
     answerText: text, citedUrls: [...new Set(cited)], searchQueries: queries,

@@ -12,7 +12,16 @@
 > (`vars.ALLOW_PAID_API`, tanımsızsa açık) ve smoke testleri + SerpApi bunu kontrol ediyor; smoke iş akışları yalnız `main`'de;
 > haftalık e-posta marka × ölçüm türü × motor (0049); panelde gerçek motor adı, canlı ölçüm varsa canlı görünüm, Öneriler seçili türü
 > kullanır; iki nedensellik cümlesi kanıt dilinde; motor listeleri (Perplexity) ve eski fiyat notları düzeltildi; `test:integration` TZ=UTC.
-> Fiyat kararı: **29 / 149 / 449 $** (sahip, 18 Kasım). Sıradaki: ölçüm standardı (soru bazlı aralık, "başa baş"), marka tespiti, maliyet.
+> Fiyat kararı: **29 / 149 / 449 $** (sahip, 18 Kasım).
+>
+> **18 Kasım (2. aşama, ölçüm güvenilirliği):** aralık soru bazında (etkin örneklem, ICC 0,67; 0050 `brand_visibility.prompts`);
+> fark <10 puan ya da aralık çakışması = "başa baş" (Yapay zekâ ↔ Shopping lideri dahil); küçük örneklem = <20 cevap ya da <10 soru.
+> Marka tespiti: kısa BÜYÜK harfli ilk kelime ("ONE"), `parent:` önekli üst şirket takma adı sayılmaz (Growth Lab SKYN güncellendi),
+> yaygın kelime adlar yalnız büyük harfle; LLM "önerildi" deyince sıra da hesaplanır; sınıflandırıcıya "hepsi benzer = neutral".
+> Yöntem kaydı (0051): `runs.method_version` (2026-11-18), `classifier_version`, `prompt_set_hash`, `engines`; `responses.model_snapshot`.
+> Maliyet: ChatGPT ve Claude canlı aramada en fazla 1 web araması (önce 2); Growth Lab'de "bilgi" soruları ücretli motorlara sorulmaz.
+> Yapılmadı: eğilim grafiğinde "yöntem değişti" işareti, günler arası önbellek (ölçüm bağımsızlığını bozacağı için bilinçli olarak yok),
+> `cost_ledger.tool_calls` ve `runs.prompts_total` sayaç düzeltmesi.
 
 > **18 Kasım (Perplexity kaynak, karar A):** Perplexity'de yalnız cevabın gösterdiği siteler (alıntı ya da metindeki
 > bağlantı) kaynak sayılır; aramada bulunup gösterilmeyenler sayılmaz. Geçmiş 96 Growth Lab cevabı 0048 ile düzeltildi

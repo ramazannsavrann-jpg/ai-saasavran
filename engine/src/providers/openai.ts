@@ -8,7 +8,7 @@ import {
 } from "./types.ts";
 
 /** Bir soruda en fazla bu kadar web araması (maliyet üst sınırı). */
-export const OPENAI_MAX_SEARCHES = 2;
+export const OPENAI_MAX_SEARCHES = 1; // 18 Kasım: 2 → 1 (maliyetin çoğu arama ücreti; 1 aramalı cevap ~%40 ucuz, marka sayısı az değişiyor)
 
 export const OPENAI_DEFAULT: ProviderConfig = {
   provider: "openai",
@@ -50,7 +50,9 @@ export function parseOpenAIResponse(json: OpenAIResponse, promptId: string, cfg:
   const inputTokens = json.usage?.input_tokens ?? 0;
   const outputTokens = json.usage?.output_tokens ?? 0;
   const cost = estimateCost({ ...cfg.price, perCall: cfg.price.perCall * searchCalls.length }, inputTokens, outputTokens);
+  const snap = typeof (json as { model?: unknown }).model === "string" ? (json as { model?: string }).model : undefined;
   return {
+    ...(snap ? { modelSnapshot: snap } : {}),
     promptId, provider: "openai", model: cfg.model,
     method: cfg.useSearch ? "api_with_search" : "api_no_search",
     dataOrigin: "live_api", billing: cfg.billing,

@@ -429,7 +429,7 @@ test("OpenAI en kötü durum maliyeti arama sınırını hesaba katar", () => {
   const worst = OPENAI_DEFAULT.price.perCall * (OPENAI_DEFAULT.worstCaseToolCalls ?? 1)
     + OPENAI_DEFAULT.worstCaseTokens.input / 1e6 * OPENAI_DEFAULT.price.inputPerMTok
     + OPENAI_DEFAULT.worstCaseTokens.output / 1e6 * OPENAI_DEFAULT.price.outputPerMTok;
-  assert.ok(worst > 0.02 && worst < 0.03, String(worst));
+  assert.ok(worst > 0.01 && worst < 0.02, String(worst));
   assert.equal(OPENAI_DEFAULT.model, "gpt-6-luna");
 });
 
@@ -694,7 +694,7 @@ test("Claude: istek biçimi doğru, anahtar hata mesajına sızmaz, kredi bitinc
   assert.equal(h["anthropic-version"], "2023-06-01");
   const body = JSON.parse(seen!.init.body as string);
   assert.equal(body.model, "claude-haiku-5-5");
-  assert.deepEqual(body.tools[0], { type: "web_search_20250305", name: "web_search", max_uses: 2, user_location: { type: "approximate", country: "TR", timezone: "Europe/Istanbul" } });
+  assert.deepEqual(body.tools[0], { type: "web_search_20250305", name: "web_search", max_uses: 1, user_location: { type: "approximate", country: "TR", timezone: "Europe/Istanbul" } });
   assert.equal(r.costUsd, (10 / 1e6) * 0.10 + (5 / 1e6) * 0.50);
 
   const noSearch = new ClaudeProvider("k", { ...CLAUDE_DEFAULT, useSearch: false }, async (_u, init) => {

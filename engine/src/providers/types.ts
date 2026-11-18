@@ -43,6 +43,8 @@ export interface ProviderResult {
   costUsd: number;
   /** Aynı çağrı ücretli katmanda yapılsaydı maliyeti — fiyatlandırma kararı için. */
   paidEquivalentUsd: number;
+  /** API'nin cevapta bildirdiği gerçek model sürümü (istenen takma ad değil); yöntem kaydı için (0051) */
+  modelSnapshot?: string;
 }
 
 export interface Provider {

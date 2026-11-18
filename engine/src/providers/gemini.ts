@@ -74,7 +74,9 @@ export function parseGeminiResponse(json: GeminiResponse, promptId: string, cfg:
     { ...cfg.price, perCall: grounded ? cfg.price.perCall : 0 }, inputTokens, outputTokens,
   );
 
+  const snap = typeof (json as { modelVersion?: unknown }).modelVersion === "string" ? (json as { modelVersion?: string }).modelVersion : undefined;
   return {
+    ...(snap ? { modelSnapshot: snap } : {}),
     promptId,
     provider: "gemini",
     model: cfg.model,
