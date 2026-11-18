@@ -6,7 +6,7 @@ import { api, INTENT_LABEL, type Brand, type BrandAction, type PromptResult, typ
 import { friendlyError, sb } from "../lib/supabase";
 import { L, isEn } from "../lib/i18n";
 import { ERROR_CLASS_TEXT, STOP_TEXT, runStatusText } from "../lib/messages";
-import { actionImpact, compareProducts, engineComparison, engineScoreChanges, perceptionSummary, scoreChange, visibilityScore, type ScoreInput, type ScorePartKey, ownedSourceShare, ownCitedRivals, visibilityForecast, sourcesByEngine, rivalReasons, conditionMap, lossCards, productVisibility, promptKind, shoppingSources, sourceDominance, splitByKind, type EngineCompareRow, type LossCard, type SourceRow } from "../../../engine/src/insights.ts";
+import { actionImpact, compareProducts, engineComparison, engineScoreChanges, perceptionSummary, rivalTraits, scoreChange, visibilityScore, type ScoreInput, type ScorePartKey, ownedSourceShare, ownCitedRivals, visibilityForecast, sourcesByEngine, rivalReasons, conditionMap, lossCards, productVisibility, promptKind, shoppingSources, sourceDominance, splitByKind, type EngineCompareRow, type LossCard, type SourceRow } from "../../../engine/src/insights.ts";
 import { competitorsInRun, formatDate, formatDateTime, lowSample, MIN_SAMPLE, numLoc, pct, providerLabel, rangeText, series, shareSummary, sourceOpportunities, topDomains, usd } from "../lib/report";
 import { Button, Confirm, DataNotice, Empty, ErrorBox, Field, Loading, Select, TypeBadge } from "../components/ui";
 import { CompareBars, TrendChart } from "../components/Chart";
@@ -929,6 +929,8 @@ function Report({ brand, type, onBrandChange, paid = false, runs = [] }: { brand
           {type !== "simulated" && <TruthGuardPanel brand={brand} paid={paid} mix={live && insightsReady ? sourceMix(answers.data!, ments.data!, insightBrands) : null}
             stats={answers.data ? statSummary(answers.data, [brand.name, ...brand.aliases]) : null} />}
           {live && insightsReady && <PerceptionPanel summary={perceptionSummary(answers.data!, ments.data!, brand.id)} brand={brand.name} />}
+          {live && insightsReady && <RivalTraitsPanel rows={rivalTraits(answers.data!, ments.data!, brand.id, insightBrands.filter((b) => !b.isTarget).map((b) => b.id))}
+            names={new Map(insightBrands.map((b) => [b.id, b.name]))} brand={brand.name} />}
 
           {type !== "simulated" && answers.data && comps.data && (
             <UntrackedNames brand={brand} competitors={comps.data} texts={answers.data.map((a) => a.answer_text)}
@@ -1553,6 +1555,32 @@ const TRAIT_LABEL: Record<string, [string, string]> = {
 };
 const NEG_TRAITS = new Set(["expensive", "low_quality", "unreliable", "poor_service", "limited_range", "slow", "outdated"]);
 /** Marka algısı: yapay zekânın markaya yakıştırdığı nitelikler, cevaptan birebir alıntıyla. */
+/** Rakibi öne çıkaran nitelikler (0055): rakip önerilip siz önerilmediğinizde rakibe yakıştırılanlar, size yakıştırılma sayısıyla. */
+function RivalTraitsPanel({ rows, names, brand }: { rows: ReturnType<typeof rivalTraits>; names: Map<string, string>; brand: string }) {
+  if (!rows.length) return null;
+  const tl = (t: string) => (TRAIT_LABEL[t] ? (isEn() ? TRAIT_LABEL[t][1] : TRAIT_LABEL[t][0]) : t);
+  return (
+    <section className="panel" id="rakip-nitelikleri">
+      <h2>{L("Rakibi öne çıkaran nitelikler", "What makes competitors stand out")}</h2>
+      <p className="muted">{isEn() ? `In answers where a competitor was recommended and ${brand} was not, these are the traits the AI gave the competitor, each with an exact quote. "You" shows how many answers gave ${brand} the same trait.` : `Bir rakibin önerilip ${brand} markasının önerilmediği cevaplarda yapay zekânın rakibe yakıştırdığı nitelikler; her biri cevaptan birebir alıntıyla. "Siz" sütunu aynı niteliğin size kaç cevapta yakıştırıldığını gösterir.`}</p>
+      {rows.slice(0, 4).map((r) => (
+        <div key={r.rivalId} className="rival-traits">
+          <p className="src-head"><strong>{names.get(r.rivalId) ?? "?"}</strong> <span className="muted">{isEn() ? `${r.answers} answers` : `${r.answers} cevap`}</span></p>
+          <ul className="src-dom">
+            {r.traits.map((t) => (
+              <li key={t.trait}>
+                <p className="src-head"><span>{tl(t.trait)}</span> <span className="num">{t.count} · {L("siz", "you")} {t.ownCount}</span></p>
+                {t.quote && <p className="src-sup muted">“{t.quote}”</p>}
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+      {rows.reduce((a, r) => a + r.answers, 0) < 10 && <p className="muted">{L("Örneklem küçük; tek bir cevap tabloyu değiştirebilir.", "Small sample; a single answer can change this table.")}</p>}
+    </section>
+  );
+}
+
 function PerceptionPanel({ summary: s, brand }: { summary: ReturnType<typeof perceptionSummary>; brand: string }) {
   const [open, setOpen] = useState<string | null>(null);
   const tl = (t: string) => (TRAIT_LABEL[t] ? (isEn() ? TRAIT_LABEL[t][1] : TRAIT_LABEL[t][0]) : t);
