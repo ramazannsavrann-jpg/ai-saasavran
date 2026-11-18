@@ -5,6 +5,7 @@ Bu dosya her Claude oturumunun başında otomatik okunur. Kısa tut; ayrıntı `
 ## Proje
 aisaasavran.com — markaların ve ürünlerin ChatGPT, Gemini, Claude, Perplexity ve Google AI cevaplarında
 ne kadar görünür olduğunu ölçen self-service SaaS. Önce Türkiye, sonra global. İşletmeler ve ajanslar.
+Google AI (AI Overviews / AI Mode) listede kalır, ileride ölçülecek (18 Kasım kararı); ölçülene kadar sitede "ölçüyoruz" denmez.
 Güncel durum: `docs/STATUS.md` · Mimari: `docs/ARCHITECTURE.md` · Fiyat: `docs/PRICING.md` · Yayın: `docs/DEPLOY.md`
 
 ## Sahibi hakkında
