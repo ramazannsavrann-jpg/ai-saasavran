@@ -105,7 +105,7 @@ export function buildWelcome(lang: "en" | "tr"): { subject: string; html: string
   const tr = lang === "tr";
   const T = tr ? {
     subject: "AI SaaSavran'a hoş geldiniz: ilk adımlar",
-    hello: "Hoş geldiniz! AI SaaSavran, müşterileriniz ChatGPT, Gemini ve Claude'a sorduğunda işletmenizin geçip geçmediğini ve rakiplerinizin yanında nerede durduğunu ölçer.",
+    hello: "Hoş geldiniz! AI SaaSavran, müşterileriniz ChatGPT, Gemini, Claude ve Perplexity'ye sorduğunda işletmenizin geçip geçmediğini ve rakiplerinizin yanında nerede durduğunu ölçer.",
     stepsTitle: "Başlamak için 3 adım",
     steps: [
       "Markanızı ekleyin: sektörünüzü ve şehrinizi seçin.",
@@ -129,7 +129,7 @@ export function buildWelcome(lang: "en" | "tr"): { subject: string; html: string
     foot: "Bu e-postayı AI SaaSavran'a kaydolduğunuz için bir kez aldınız.",
   } : {
     subject: "Welcome to AI SaaSavran: getting started",
-    hello: "Welcome! AI SaaSavran measures whether your business shows up when customers ask ChatGPT, Gemini and Claude, and where you stand next to your competitors.",
+    hello: "Welcome! AI SaaSavran measures whether your business shows up when customers ask ChatGPT, Gemini, Claude and Perplexity, and where you stand next to your competitors.",
     stepsTitle: "3 steps to get started",
     steps: [
       "Add your brand: choose your industry and city.",

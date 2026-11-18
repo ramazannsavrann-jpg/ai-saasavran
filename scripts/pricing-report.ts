@@ -8,14 +8,14 @@ lines.push("|---|---|---|" + SCENARIOS.map(() => "---").join("|") + "|");
 for (const p of PLANS) {
   const cells = SCENARIOS.map((s) => {
     const c = planCost(p, s);
-    return `${usd(c.totalCostUsd)} / %${c.grossMarginPct.toFixed(0)}`;
+    return `${usd(c.totalCostUsd)} / ${Number.isFinite(c.grossMarginPct) ? `%${c.grossMarginPct.toFixed(0)}` : "—"}`;
   });
   lines.push(`| ${p.name} | ${usd(p.priceUsd)} | ${planCost(p, SCENARIOS[0]).engineCallsPerMonth} | ${cells.join(" | ")} |`);
 }
 lines.push("");
 lines.push("Çağrı başı API maliyeti:");
 for (const s of SCENARIOS) {
-  const e = (["gemini", "openai", "perplexity"] as const).map((k) => `${k} ${usd(costPerCall(k, s.calls[k], s), 4)}`);
+  const e = (["gemini", "openai", "claude", "perplexity"] as const).map((k) => `${k} ${usd(costPerCall(k, s.calls[k], s), 4)}`);
   lines.push(`- ${s.name}: ${e.join(", ")}`);
 }
 lines.push("");
