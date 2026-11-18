@@ -12,6 +12,7 @@ import { POSTS } from "./blog.mjs";
 import { LESSONS, tutorialsHtml, tutorialsPath, tutorialsSchema } from "./tutorials.mjs";
 import { DEF, METHOD_PAGES } from "./method.mjs";
 import { MEASUREMENTS, mPath, mIndex, measurementBody, indexBody, leadSentence } from "./measurements.mjs";
+import { buildIndex, indexReportBody, indexCsv, idxPath, idxCsvPath } from "./visibility-index.mjs";
 
 const DIST = "dist";
 if (!existsSync(join(DIST, "index.html"))) throw new Error("Önce vite build çalışmalı");
@@ -81,9 +82,9 @@ ${body}
 </main>
 <footer class="foot">
   ${en ? `<p><b>AI SaaSavran</b> measures whether ChatGPT and Gemini recommend your business. Early access.</p>
-  <p><a href="/pricing/">Pricing</a> · <a href="/guides/">Guides</a> · <a href="/blog/">Blog</a> · <a href="/tutorials/">Tutorials</a> · <a href="/about/">About</a> · <a href="/methodology/">Methodology</a> · <a href="/terms/">Terms</a> · <a href="/privacy/">Privacy</a> · <a href="/refund/">Refunds</a> · <a href="/tr/">Türkçe</a></p>
+  <p><a href="/pricing/">Pricing</a> · <a href="/guides/">Guides</a> · <a href="/blog/">Blog</a> · <a href="/ai-visibility-index/">AI Visibility Index</a> · <a href="/tutorials/">Tutorials</a> · <a href="/about/">About</a> · <a href="/methodology/">Methodology</a> · <a href="/terms/">Terms</a> · <a href="/privacy/">Privacy</a> · <a href="/refund/">Refunds</a> · <a href="/tr/">Türkçe</a></p>
   <p>Contact: <a href="mailto:${SITE.email}">${SITE.email}</a></p>` : `<p><b>AI SaaSavran</b>: markaların yapay zekâ asistanlarındaki görünürlüğünü ölçen araç. Erken erişim.</p>
-  <p><a href="/tr/#fiyatlar">Fiyatlar</a> · <a href="/rehber/">Rehberler</a> · <a href="/tr/blog/">Blog</a> · <a href="/tr/egitim/">Eğitim</a> · <a href="/tr/hakkimizda/">Hakkımızda</a> · <a href="/tr/metodoloji/">Metodoloji</a> · <a href="/durum">Ürün durumu</a> · <a href="/kosullar">Kullanım koşulları</a> · <a href="/gizlilik">Gizlilik</a> · <a href="/iade/">İade</a> · <a href="/">English</a></p>
+  <p><a href="/tr/#fiyatlar">Fiyatlar</a> · <a href="/rehber/">Rehberler</a> · <a href="/tr/blog/">Blog</a> · <a href="/tr/yapay-zeka-gorunurluk-endeksi/">Görünürlük Endeksi</a> · <a href="/tr/egitim/">Eğitim</a> · <a href="/tr/hakkimizda/">Hakkımızda</a> · <a href="/tr/metodoloji/">Metodoloji</a> · <a href="/durum">Ürün durumu</a> · <a href="/kosullar">Kullanım koşulları</a> · <a href="/gizlilik">Gizlilik</a> · <a href="/iade/">İade</a> · <a href="/">English</a></p>
   <p>İletişim: <a href="mailto:${SITE.email}">${SITE.email}</a></p>`}
 </footer>
 <script src="/site/site.js" defer></script>
@@ -513,11 +514,35 @@ for (const lang of ["tr", "en"]) {
     description: lang === "tr" ? "ChatGPT, Claude, Perplexity ve Gemini'nin gerçek sorulara verdiği cevaplarda hangi markaların önerildiği. Haftalık güncellenir." : "Which brands ChatGPT, Claude, Perplexity and Gemini recommend for real questions. Updated weekly.",
     body: indexBody(lang, items, esc), schema: [ORG] }));
 }
+// ---------- Yapay Zekâ Görünürlük Endeksi (ölçümlerin sektör özeti; aynı veriyle haftalık) ----------
+const IDX = buildIndex(MITEMS);
+if (IDX.other.length) console.log(`Endeks: sektörü bulunamayan ${IDX.other.length} soru endekse girmedi: ${IDX.other.join(" | ")}`);
+const IDX_SECTORS = IDX.groups.reduce((a, g) => a + g.sectors.length, 0);
+if (IDX_SECTORS) {
+  for (const lang of ["tr", "en"]) {
+    const tr = lang === "tr";
+    const title = tr ? "Yapay Zekâ Görünürlük Endeksi: sektör sektör | AI SaaSavran" : "AI Visibility Index: which brands AI recommends | AI SaaSavran";
+    const description = tr
+      ? `ChatGPT, Claude ve Perplexity ${IDX_SECTORS} sektörde hangi markaları öneriyor? Gerçek ölçümlerin sektör özeti, haftalık güncellenir.`
+      : `Which brands do ChatGPT, Claude and Perplexity recommend across ${IDX_SECTORS} sectors? A summary of real measurements, updated weekly.`;
+    const updated = MEASUREMENTS.updated ?? SITE.updated;
+    write(idxPath(lang), page({ lang, path: idxPath(lang), alt: idxPath(tr ? "en" : "tr"), title, description,
+      body: indexReportBody(lang, IDX, esc, mPath, updated),
+      schema: [ORG, crumbs([[tr ? "Ana sayfa" : "Home", tr ? "/tr/" : "/"], [tr ? "Görünürlük Endeksi" : "AI Visibility Index", idxPath(lang)]]),
+        { "@context": "https://schema.org", "@type": "Dataset", name: tr ? "AI SaaSavran Yapay Zekâ Görünürlük Endeksi" : "AI SaaSavran AI Visibility Index", description, url: SITE.url + idxPath(lang), inLanguage: lang, dateModified: updated,
+          isAccessibleForFree: true, keywords: ["AI visibility", "GEO", "ChatGPT", "Claude", "Perplexity", "brand recommendations"],
+          creator: { "@type": "Organization", name: SITE.name, url: SITE.url }, license: "https://creativecommons.org/licenses/by/4.0/",
+          distribution: [{ "@type": "DataDownload", encodingFormat: "text/csv", contentUrl: SITE.url + idxCsvPath }],
+          measurementTechnique: "Repeated customer questions to AI assistants with live web search via official APIs; brand recommendation counts grouped by sector",
+          variableMeasured: ["recommended", "mentioned", "answers"] }] }));
+  }
+  writeFileSync(join(DIST, idxCsvPath.slice(1)), indexCsv(IDX));
+}
 
-const urls = ["/", "/about/", ...METHOD_PAGES.filter((m) => m.lang === "en").map((m) => m.path), "/pricing/", "/check/", "/guides/", ...GUIDES_EN.map((g) => `/guides/${g.slug}/`), "/blog/", ...posts.filter((p) => p.lang === "en").map(postPath), "/tutorials/", "/tr/", "/tr/fiyatlar/", "/tr/hakkimizda/", ...METHOD_PAGES.filter((m) => m.lang === "tr").map((m) => m.path), "/tr/kontrol/", "/rehber/", ...GUIDES.map((g) => `/rehber/${g.slug}/`), "/tr/blog/", ...posts.filter((p) => p.lang === "tr").map(postPath), "/tr/egitim/", ...(MITEMS.some((m) => m.lang === "en") ? ["/measurements/"] : []), ...(MITEMS.some((m) => m.lang === "tr") ? ["/tr/olcumler/"] : []), ...MITEMS.map(mPath)];
+const urls = ["/", "/about/", ...METHOD_PAGES.filter((m) => m.lang === "en").map((m) => m.path), "/pricing/", "/check/", "/guides/", ...GUIDES_EN.map((g) => `/guides/${g.slug}/`), "/blog/", ...posts.filter((p) => p.lang === "en").map(postPath), "/tutorials/", "/tr/", "/tr/fiyatlar/", "/tr/hakkimizda/", ...METHOD_PAGES.filter((m) => m.lang === "tr").map((m) => m.path), "/tr/kontrol/", "/rehber/", ...GUIDES.map((g) => `/rehber/${g.slug}/`), "/tr/blog/", ...posts.filter((p) => p.lang === "tr").map(postPath), "/tr/egitim/", ...(MITEMS.some((m) => m.lang === "en") ? ["/measurements/"] : []), ...(MITEMS.some((m) => m.lang === "tr") ? ["/tr/olcumler/"] : []), ...(IDX_SECTORS ? [idxPath("en"), idxPath("tr")] : []), ...MITEMS.map(mPath)];
 writeFileSync(join(DIST, "sitemap.xml"), `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${urls.map((u) => `  <url><loc>${SITE.url}${u}</loc><lastmod>${posts.find((p) => postPath(p) === u)?.date ?? MITEMS.find((m) => mPath(m) === u)?.at.slice(0, 10) ?? (u === "/measurements/" || u === "/tr/olcumler/" ? MEASUREMENTS.updated ?? SITE.updated : SITE.updated)}</lastmod></url>`).join("\n")}
+${urls.map((u) => `  <url><loc>${SITE.url}${u}</loc><lastmod>${posts.find((p) => postPath(p) === u)?.date ?? MITEMS.find((m) => mPath(m) === u)?.at.slice(0, 10) ?? (u === "/measurements/" || u === "/tr/olcumler/" || u === idxPath("en") || u === idxPath("tr") ? MEASUREMENTS.updated ?? SITE.updated : SITE.updated)}</lastmod></url>`).join("\n")}
 </urlset>
 `);
 writeFileSync(join(DIST, "robots.txt"), `User-agent: *
@@ -567,6 +592,9 @@ ${GUIDES_EN.map((g) => `- [${g.title}](${SITE.url}/guides/${g.slug}/): ${g.descr
 
 ## Blog (weekly findings from real measurements)
 ${posts.filter((p) => p.lang === "en").map((p) => `- [${p.title}](${SITE.url}${postPath(p)}): ${p.description}`).join("\n")}
+
+## AI Visibility Index (sector summary, updated weekly)
+- [AI Visibility Index](${SITE.url}${idxPath("en")}) · [Yapay Zekâ Görünürlük Endeksi](${SITE.url}${idxPath("tr")}): which brands ChatGPT, Claude and Perplexity recommend in ${IDX_SECTORS} sectors (Turkish- and English-language questions), from real live-search measurements. Data under CC BY 4.0; CSV: ${SITE.url}${idxCsvPath}
 
 ## Measurements (real AI answers, updated weekly)
 - [All measurements](${SITE.url}/measurements/) · [Türkçe ölçümler](${SITE.url}/tr/olcumler/): ${MITEMS.length} real questions asked to ChatGPT, Claude, Perplexity and Gemini, with brand recommendation counts.
