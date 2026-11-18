@@ -205,7 +205,7 @@ ${demoHtml(false)}
 </section>
 
 <section class="status">
-  <h2>Bugün ne çalışıyor?</h2>
+  <h2>Şu an neler kullanılabilir?</h2>
   <ul>
     <li class="ok">Gemini ile ölçüm (internete bakmadan, model bilgisiyle). Raporda açıkça yazar.</li>
     <li class="ok">Haftalık otomatik ölçüm, web sitesi kontrolü, kural tabanlı öneriler.</li>
@@ -284,7 +284,7 @@ ${demoHtml(true)}
 </section>
 
 <section class="status">
-  <h2>What works today</h2>
+  <h2>What you can use now</h2>
   <ul>
     <li class="ok">Gemini measurement (model knowledge, no live search), clearly labelled.</li>
     <li class="ok">Weekly automatic measurement, competitor comparison, website check, recommendations.</li>

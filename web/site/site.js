@@ -114,32 +114,35 @@
   if (!box || !window.fetch) return;
   var en = box.getAttribute("data-lang") === "en";
   var T = en ? {
-    h: "Today's measurement", sub: "A different real question every day from our own lab. Brand names are hidden; the numbers are as measured.",
-    q: "Question", trNote: " (asked in Turkish)", eng: { openai: "ChatGPT", claude: "Claude", gemini: "Gemini" },
+    h: "From our measurements", sub: "Real questions from our own lab, changing every hour. Brand names are hidden; the numbers are as measured.", next: "Show another measurement",
+    q: "Question", trNote: " (asked in Turkish)", eng: { openai: "ChatGPT", claude: "Claude", gemini: "Gemini", perplexity: "Perplexity" },
     live: "live web search", know: "no web search (model knowledge)", answers: "answers", res: "What we measured",
     rec: function (b, n) { return "recommended in " + b.recommended + " of " + n + (b.first ? ", first pick " + b.first + "×" : ""); },
     brand: "Brand ", src: function (k) { return "The AI read " + k + " different websites."; },
-    note: "Tomorrow there will be another question. In your report every question is asked again each week and shown with confidence ranges.",
+    note: "In your report every question is asked again each week and shown with confidence ranges.",
     c1: "Free check, no signup", c1h: "/check/", c2: "Measure your own brand"
   } : {
-    h: "Bugünün ölçümü", sub: "Her gün kendi laboratuvarımızdan başka bir gerçek soru. Marka adlarını gizledik; sayılar ölçüldüğü gibi.",
-    q: "Soru", trNote: "", eng: { openai: "ChatGPT", claude: "Claude", gemini: "Gemini" },
+    h: "Ölçümlerimizden", sub: "Kendi laboratuvarımızdan gerçek sorular; her saat değişir. Marka adlarını gizledik; sayılar ölçüldüğü gibi.", next: "Başka bir ölçüm göster",
+    q: "Soru", trNote: "", eng: { openai: "ChatGPT", claude: "Claude", gemini: "Gemini", perplexity: "Perplexity" },
     live: "canlı web araması", know: "web araması yok (model bilgisi)", answers: "cevap", res: "Ölçtüğümüz",
     rec: function (b, n) { return n + " cevabın " + b.recommended + " tanesinde önerildi" + (b.first ? ", " + b.first + " kez ilk sırada" : ""); },
     brand: "Marka ", src: function (k) { return "Yapay zekâ " + k + " farklı siteye baktı."; },
-    note: "Yarın başka bir soru olacak. Raporunuzda her soru her hafta yeniden sorulur ve güven aralığıyla gösterilir.",
+    note: "Raporunuzda her soru her hafta yeniden sorulur ve güven aralığıyla gösterilir.",
     c1: "Üye olmadan ücretsiz kontrol", c1h: "/tr/kontrol/", c2: "Kendi markanızı ölçün"
   };
   function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
-  fetch("/api/example").then(function (r) { return r.ok ? r.json() : null; }).then(function (x) {
-    if (!x || !x.brands || x.brands.length < 2) return;
+  // Örnek her saat değişir; "Başka bir ölçüm göster" sıradakine geçer (18 Kasım: hep aynı sorunun görünmesi düzeltildi)
+  var off = 0;
+  function render(x) {
+    if (!x || !x.brands || x.brands.length < 2) return false;
+    while (box.firstChild) box.removeChild(box.firstChild);
     var d = new Date(x.at);
     var date = isNaN(d) ? "" : d.toLocaleDateString(en ? "en-GB" : "tr-TR", { day: "numeric", month: "long", year: "numeric" });
     var h = el("h2", null, T.h); h.id = "daily-h"; box.appendChild(h);
     box.appendChild(el("p", "muted", T.sub));
     var ol = el("ol", "demo-steps");
     var li1 = el("li"); li1.appendChild(el("h3", null, T.q)); li1.appendChild(el("p", "demo-q", x.question));
-    li1.appendChild(el("p", "small", (T.eng[x.provider] || x.provider) + ", " + (x.measurement_type === "live_search" ? T.live : T.know) + " · " + date + " · " + x.answers + " " + T.answers + T.trNote));
+    li1.appendChild(el("p", "small", (T.eng[x.provider] || x.provider) + ", " + (x.measurement_type === "live_search" ? T.live : T.know) + " · " + date + " · " + x.answers + " " + T.answers + (/[çğışöüÇĞİŞÖÜ]/.test(x.question) ? T.trNote : "")));
     ol.appendChild(li1);
     var li2 = el("li"); li2.appendChild(el("h3", null, T.res + " (" + x.answers + " " + T.answers + ")"));
     var ul = el("ul", "demo-bars");
@@ -159,10 +162,17 @@
     var act = el("p", "actions");
     var a1 = el("a", "btn", T.c1); a1.href = T.c1h; act.appendChild(a1);
     var a2 = el("a", "btn ghost", T.c2); a2.href = "/kayit"; act.appendChild(a2);
+    var nb = el("button", "btn ghost", T.next); nb.type = "button"; nb.addEventListener("click", function () { nb.disabled = true; load(off + 1).then(function (ok) { if (ok) off++; else nb.disabled = false; }); }); act.appendChild(nb);
     box.appendChild(act);
     box.hidden = false;
     var stat = box.nextElementSibling;
     if (stat && stat.classList.contains("demo")) stat.hidden = true;
-  }).catch(function () { /* sabit örnek kalır */ });
+    return true;
+  }
+  function load(i) {
+    return fetch("/api/example" + (i ? "?i=" + i : "")).then(function (r) { return r.ok ? r.json() : null; }).then(render).catch(function () { return false; });
+  }
+  load(0);
+
 })();
 
