@@ -870,6 +870,19 @@ function Report({ brand, type, onBrandChange, paid = false, runs = [] }: { brand
             </div>
             {pts.length < 2 && <p className="muted">{L("Eğilim için en az iki ölçüm gerekir. Şimdilik tek ölçüm gösteriliyor.", "A trend needs at least two measurements. Showing one for now.")}</p>}
             <TrendChart points={pts} type={type} metric={metric} />
+            {(() => {
+              // Yöntem, soru seti ya da motorlar değiştiyse noktalar doğrudan karşılaştırılmamalı (18 Kasım ölçüm standardı)
+              const byId = new Map(runs.map((r) => [r.id, r]));
+              const sig = (r?: Run) => r && r.method_version ? `${r.method_version}|${r.prompt_set_hash ?? ""}|${(r.engines ?? []).join(",")}` : null;
+              const changes = pts.slice(1).filter((p, i) => {
+                const a = sig(byId.get(pts[i].runId)), b = sig(byId.get(p.runId));
+                return b !== null && a !== b;
+              });
+              if (!changes.length) return null;
+              return <p className="muted method-change">{L("Yöntem, soru seti ya da motorlar değişti: ", "Method, question set or engines changed: ")}
+                {changes.map((p) => formatDate(p.at)).join(", ")}
+                {L(". Bu tarihten önceki ve sonraki ölçümleri doğrudan karşılaştırmayın.", ". Don't compare measurements before and after this date directly.")}</p>;
+            })()}
             {type !== "simulated" && (() => {
               const f = visibilityForecast(pts.map((p) => ({ at: p.at, k: p.recommend.k, n: p.recommend.n })));
               if (!f) return <p className="muted forecast-note">{L("Tahmin için en az 4 ölçüm ve 14 günlük süre gerekir.", "A forecast needs at least 4 measurements over 14 days.")}</p>;
@@ -1850,6 +1863,12 @@ function useRecommendations(brand: Brand, type: MeasurementType, runs: Run[]) {
     ...(evidence.data ?? {}),
   } satisfies RecInput as RecInput);
   const recs = recInput ? buildRecommendations(recInput).filter((r) => !(sim && r.id === "no_website")) : [];
+  // Paylaşılan rapor "en önemli 3 iş"i buradan alır (0054): yalnız değişince yazılır; izin yoksa (izleyici) sessizce geçilir
+  const top3 = JSON.stringify(recs.slice(0, 3).map((r) => ({ title: r.title, action: r.action })));
+  useEffect(() => {
+    if (loading || sim || !recs.length || top3 === JSON.stringify(brand.top_actions ?? null)) return;
+    api.updateBrand(brand.id, { top_actions: JSON.parse(top3), top_actions_at: new Date().toISOString() }).catch(() => {});
+  }, [loading, sim, top3, brand.id]);
   return { audit, prompts, lastRun, results, prevResults, evidence, loading, recInput, recs };
 }
 
