@@ -13,6 +13,9 @@ DRY = os.environ.get("DRY_RUN") == "1"
 # ONLY: elle başlatmada virgülle video kimlikleri. Verilirse kapak ve video işlemleri yalnız bu videolara yapılır
 # (yayın sonrası hızlı çalışma; kotayı korur). Gece çalışması ve push her zaman tam çalışır (kapak koruması sürer).
 ONLY = {x.strip() for x in os.environ.get("ONLY", "").split(",") if x.strip()}
+# EXPORT=1: hiçbir şey değiştirmeden tüm videoların kimlik/başlık/açıklama/gizlilik bilgisini JSON olarak loga yazar (19 Kasım).
+EXPORT = os.environ.get("EXPORT") == "1"
+DRY = DRY or EXPORT  # dışa aktarmada hiçbir şey değiştirilmez
 CFG = json.load(open(os.path.join(os.path.dirname(__file__), "ayar.json"), encoding="utf-8"))
 quota = 0
 tut_status = []  # (video, son gizlilik durumu, başlık): rapor sonunda özetlenir
@@ -176,6 +179,15 @@ def main():
         vids = [v for v in vids if v in ONLY]
         print("Yalnız şu videolar:", ", ".join(sorted(ONLY)))
     print(f"{len(vids)} video, {len(pls)} liste:", sorted(pls))
+    if EXPORT:
+        out = []
+        for k in range(0, len(vids), 50):
+            r = call("GET", "videos", {"part": "snippet,status", "id": ",".join(vids[k:k + 50])}) or {}
+            out += [{"id": v["id"], "title": v["snippet"]["title"], "privacy": v["status"]["privacyStatus"],
+                     "published": v["snippet"]["publishedAt"], "description": v["snippet"].get("description", "")} for v in r.get("items", [])]
+        print("EXPORT-BASLA"); print(json.dumps(out, ensure_ascii=False)); print("EXPORT-BITTI")
+        print(f"Kota (tahmini): {quota}")
+        return
     rep = []
     for k in range(0, len(vids), 50):
         r = call("GET", "videos", {"part": "snippet,status,paidProductPlacementDetails", "id": ",".join(vids[k:k + 50])}) or {}
@@ -202,13 +214,14 @@ def main():
                     line += " · →gizli✓"
             if is_tut:
                 line += " · listeler: " + ", ".join(n for n, pid in pls.items() if vid in members.get(pid, set()))
-            # 1) dil (snippet)
-            if sn.get("defaultLanguage") != lang or sn.get("defaultAudioLanguage") != lang:
-                body = {"id": vid, "snippet": {"title": sn["title"], "description": sn.get("description", ""),
+            # 1) dil + açıklama (snippet). ayar.json "descriptions": {video: metin} varsa açıklama ona çevrilir (19 Kasım: anahtar kelimeli açıklamalar)
+            new_desc = CFG.get("descriptions", {}).get(vid, sn.get("description", ""))
+            if sn.get("defaultLanguage") != lang or sn.get("defaultAudioLanguage") != lang or new_desc != sn.get("description", ""):
+                body = {"id": vid, "snippet": {"title": sn["title"], "description": new_desc,
                         "tags": sn.get("tags", []), "categoryId": sn["categoryId"],
                         "defaultLanguage": lang, "defaultAudioLanguage": lang}}
                 if not DRY and call("PUT", "videos", {"part": "snippet"}, body, cost=50) is not None:
-                    line += " · dil✓"
+                    line += " · dil✓" + (" · açıklama✓" if new_desc != sn.get("description", "") else "")
             # 2) yapay içerik + ücretli tanıtım yok (status)
             # YouTube bu alanı okumada geri döndürmüyor: sadece son 3 günde yüklenenlere (ve force listesine) uygula
             fresh = datetime.fromisoformat(sn["publishedAt"].replace("Z", "+00:00")) > datetime.now(timezone.utc) - timedelta(days=3)
