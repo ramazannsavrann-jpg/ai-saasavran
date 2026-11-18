@@ -1,7 +1,9 @@
+import { Suspense } from "react";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useApp } from "../lib/app";
 import { sb } from "../lib/supabase";
 import { t, L, getLang, switchLang } from "../lib/i18n";
+import { Loading } from "./ui";
 
 export function Shell() {
   const { workspaces, current, select, isAdmin } = useApp();
@@ -41,7 +43,7 @@ export function Shell() {
         </nav>
       </header>
       {inDemo && <div className="demo-ribbon" role="note">{L("Demo Lab: buradaki her şey simülasyondur, gerçek müşteri verisi değildir.", "Demo Lab: everything here is simulated, not real customer data.")}</div>}
-      <main className="content"><Outlet /></main>
+      <main className="content"><Suspense fallback={<Loading />}><Outlet /></Suspense></main>
       <nav className="bottomnav" aria-label={L("Alt menü", "Bottom menu")}>
         <NavLink to="/panel"><Icon d="M4 11l8-7 8 7v9h-5v-6H9v6H4z" />{t("nav.dashboard")}</NavLink>
         <NavLink to="/durum-ic"><Icon d="M12 3a9 9 0 100 18 9 9 0 000-18zm0 4v6m0 3v1" />{L("Durum", "Status")}</NavLink>

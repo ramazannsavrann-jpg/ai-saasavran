@@ -1,4 +1,4 @@
-import { StrictMode } from "react";
+import { StrictMode, Suspense, lazy } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import "@fontsource/instrument-sans/400.css";
@@ -13,10 +13,16 @@ import { Shell } from "./components/Shell";
 import { Loading } from "./components/ui";
 import { Forgot, Login, Signup } from "./pages/Auth";
 import { Dashboard, NewBrand, NewWorkspace } from "./pages/Dashboard";
-import { BrandPage } from "./pages/Brand";
-import { AcceptInvite, Account, AdminCustomers, DemoLab, ProductStatus } from "./pages/Misc";
-import { SharedReport } from "./pages/SharedReport";
-import { Privacy, Terms } from "./pages/Legal";
+// Büyük sayfalar ayrı parçada yüklenir: telefonda ilk açılış hızlansın (18 Kasım, ana dosya 838 kB idi)
+const BrandPage = lazy(() => import("./pages/Brand").then((m) => ({ default: m.BrandPage })));
+const SharedReport = lazy(() => import("./pages/SharedReport").then((m) => ({ default: m.SharedReport })));
+const AcceptInvite = lazy(() => import("./pages/Misc").then((m) => ({ default: m.AcceptInvite })));
+const Account = lazy(() => import("./pages/Misc").then((m) => ({ default: m.Account })));
+const AdminCustomers = lazy(() => import("./pages/Misc").then((m) => ({ default: m.AdminCustomers })));
+const DemoLab = lazy(() => import("./pages/Misc").then((m) => ({ default: m.DemoLab })));
+const ProductStatus = lazy(() => import("./pages/Misc").then((m) => ({ default: m.ProductStatus })));
+const Privacy = lazy(() => import("./pages/Legal").then((m) => ({ default: m.Privacy })));
+const Terms = lazy(() => import("./pages/Legal").then((m) => ({ default: m.Terms })));
 import { L } from "./lib/i18n";
 
 function Private({ children }: { children: React.ReactNode }) {
@@ -47,6 +53,7 @@ function StatusRoute() {
 
 function App() {
   return (
+    <Suspense fallback={<Loading />}>
     <Routes>
       <Route path="/giris" element={<PublicOnly><Login /></PublicOnly>} />
       <Route path="/kayit" element={<PublicOnly><Signup /></PublicOnly>} />
@@ -68,6 +75,7 @@ function App() {
       </Route>
       <Route path="*" element={<Navigate to="/panel" replace />} />
     </Routes>
+    </Suspense>
   );
 }
 
