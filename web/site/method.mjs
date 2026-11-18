@@ -44,7 +44,7 @@ export const METHOD_PAGES = [
 <tr><td>Mention rate</td><td>Share of answers in which the brand's name appears at least once. Whole-word matching only: Turkish suffixes ("Garanti'nin") and the brand's domain count; the start of another word ("Ada" in "Adalet") does not.</td></tr>
 <tr><td>Recommendation rate</td><td>Share of answers that recommend the brand. Counted when the brand appears in a list (numbered, bulleted or heading) without negative wording, or in the same sentence as a recommendation phrase. Plain-text mentions that could be either are sent to a small AI classifier.</td></tr>
 <tr><td>Position</td><td>In answers that recommend the brand, its place in the answer's list, counting untracked brands too. Reports show the best position per question.</td></tr>
-<tr><td>Citation rate</td><td>Share of answers whose source list includes the brand's own domain. Only meaningful with live web search.</td></tr>
+<tr><td>Citation rate</td><td>Share of answers whose source list includes the brand's own domain. Only meaningful with live web search. A source is a site the answer itself shows (citation or link); sites the engine searched but did not show are not counted. Perplexity answers usually show none, so they rarely add sources.</td></tr>
 <tr><td>Share of recommendations</td><td>The brand's recommendations divided by all recommendations of the tracked brands (you plus competitors).</td></tr>
 <tr><td>Owned-source share</td><td>Of all sources cited, the share that is your site, competitors' sites and third-party sites.</td></tr>
 </tbody></table>
@@ -113,7 +113,7 @@ export const METHOD_PAGES = [
 <tr><td>Anılma oranı</td><td>Markanın adının en az bir kez geçtiği cevapların oranı. Yalnız tam kelime eşleşmesi sayılır: Türkçe ekli hâli ("Garanti'nin") ve markanın alan adı sayılır; başka bir kelimenin başı ("Adalet" içindeki "Ada") sayılmaz.</td></tr>
 <tr><td>Önerilme oranı</td><td>Markayı öneren cevapların oranı. Marka olumsuz bir ifade olmadan bir listede (numaralı, madde işaretli veya başlık) geçiyorsa ya da bir öneri ifadesiyle aynı cümlede geçiyorsa sayılır. Öneri mi bilgi mi olduğu belirsiz düz metin anılmaları küçük bir yapay zekâ sınıflandırıcısına gider.</td></tr>
 <tr><td>Sıra</td><td>Markayı öneren cevaplarda, cevaptaki listede kaçıncı madde olduğu; takip edilmeyen markalar da sayılır. Raporda soru başına en iyi sıra gösterilir.</td></tr>
-<tr><td>Kaynak gösterilme oranı</td><td>Kaynak listesinde markanın kendi alan adının bulunduğu cevapların oranı. Yalnız canlı web aramasında anlamlıdır.</td></tr>
+<tr><td>Kaynak gösterilme oranı</td><td>Kaynak listesinde markanın kendi alan adının bulunduğu cevapların oranı. Yalnız canlı web aramasında anlamlıdır. Kaynak, cevabın kendisinin gösterdiği sitedir (alıntı ya da bağlantı); motorun aramada bulup cevapta göstermediği siteler sayılmaz. Perplexity cevapları çoğu zaman site göstermez, bu yüzden kaynak sayımına nadiren girer.</td></tr>
 <tr><td>Öneri payı</td><td>Markanın önerilerinin, takip edilen tüm markaların (siz + rakipler) önerilerine oranı.</td></tr>
 <tr><td>Kendi site payı</td><td>Kaynak gösterilen tüm siteler içinde sizin sitenizin, rakip sitelerin ve üçüncü taraf sitelerin payı.</td></tr>
 </tbody></table>

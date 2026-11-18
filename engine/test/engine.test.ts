@@ -156,10 +156,13 @@ test("Perplexity: Agent API cevabı çözülür; maliyet cevaptan, kaynak alınt
   assert.deepEqual(r.searchQueries, ["en iyi ön muhasebe programı"]);
   assert.equal(r.costUsd, 0.0031);
   assert.equal(r.method, "api_with_search");
-  // alıntı yoksa aramanın bulduğu siteler kaynak sayılır; maliyet alanı yoksa fiyat kartından tahmin edilir
+  // alıntı yoksa aramanın bulduğu siteler kaynak SAYILMAZ (cevapta gösterilmedi); maliyet alanı yoksa fiyat kartından tahmin edilir
   const noCite = { ...PPLX_SAMPLE, output: [PPLX_SAMPLE.output[0], { type: "message", content: [{ type: "output_text", text: "Cevap." }] }], usage: { input_tokens: 1_000_000, output_tokens: 0 } };
   const r2 = parsePerplexityResponse(noCite, "p2", PERPLEXITY_DEFAULT);
-  assert.deepEqual(r2.citedUrls, ["https://bulunan.example/a", "https://bulunan.example/b"]);
+  assert.deepEqual(r2.citedUrls, []);
+  // alıntı yok ama cevap bağlantı veriyorsa o bağlantılar kaynaktır
+  const linked = { ...noCite, output: [PPLX_SAMPLE.output[0], { type: "message", content: [{ type: "output_text", text: "Bakın: [Site](https://gercek.example/x). Ayrıca https://iki.example/y." }] }] };
+  assert.deepEqual(parsePerplexityResponse(linked, "p3", PERPLEXITY_DEFAULT).citedUrls, ["https://gercek.example/x", "https://iki.example/y"]);
   assert.ok(Math.abs(r2.costUsd - (1 + 0.0025)) < 1e-9);
 });
 
