@@ -554,3 +554,12 @@ pre.code { white-space: pre-wrap; word-break: break-all; padding: 8px 10px; back
 .weekly-todo h2 { margin: 2px 0 6px; font-size: 1.15rem; }
 .eyebrow { margin: 0; font-size: .8rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--primary); }
 .fact-inline { display: grid; gap: 10px; }
+/* Rapor: ikincil bölümler katlanır grup (18 Kasım sadeleştirme) */
+.panel-group { border: 1px solid var(--line, #dfe6e3); border-radius: var(--radius, 14px); padding: 0; }
+.panel-group > summary { cursor: pointer; padding: 14px 16px; list-style: none; display: grid; gap: 4px; }
+.panel-group > summary::-webkit-details-marker { display: none; }
+.panel-group > summary h2 { margin: 0; font-size: 1.05rem; }
+.panel-group > summary h2::after { content: " ▾"; color: var(--primary); }
+.panel-group[open] > summary h2::after { content: " ▴"; }
+.panel-group[open] { padding-bottom: 8px; }
+.panel-group > .panel, .panel-group > section { margin: 0 10px 10px; }

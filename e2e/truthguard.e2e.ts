@@ -101,10 +101,14 @@ test("TruthGuard: ücretli pakette bilgi kartı, yanlış iddialar, kaynak türl
   await page.locator("#marka-algisi").getByRole("button", { name: "Alıntıyı göster" }).first().click();
   await page.locator("#marka-algisi").screenshot({ path: `${SHOTS}/31-marka-algisi.png` });
   await page.locator("#gorunurluk-skoru").screenshot({ path: `${SHOTS}/32-gorunurluk-skoru.png` });
+  // 18 Kasım: kaynak bölümleri ve site ziyaretleri katlanır grupta; kapalı başlar
+  await expect(page.locator("#kaynaklar")).not.toHaveAttribute("open", "");
+  await page.locator("#kaynaklar > summary").click();
   const net = page.locator("#kaynak-agi");
   await expect(net).toContainText("eksisozluk.com");
   await expect(net.locator("svg line")).not.toHaveCount(0);
   await net.screenshot({ path: `${SHOTS}/38-kaynak-agi.png` });
+  await page.locator("#site-ziyaretleri > summary").click();
   const tr = page.locator("#ai-ziyaretci");
   await expect(tr).toContainText("Gelinen sayfalar");
   await expect(tr).toContainText("/menu");
