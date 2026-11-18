@@ -112,6 +112,10 @@ Derslerde marka gerçek adıyla anılabilir; tam sıralama tablolarında harf ku
 - Süre ≤ 58 sn (tek Instagram hikâyesine sığsın). TR seslendirme atempo 1.24, EN 1.2. "Ey Ay Saa, Savran".
 - Tempo: veri Shorts günde 1, fazlası ileri tarihe (günde 1–2). Saatler TR 19:00, EN 23:00 (TSİ). Kullanıcı "hemen yayınla" derse hemen.
 - Her yüklemede: yapay zekâ ile değiştirilmiş içerik işareti, ücretli tanıtım kapalı, video dili (TR/EN), doğru oynatma listesi.
+### Ölçüm hemen başlar (18 Kasım, kullanıcı kuralı)
+- Video için ölçüm istenince saatlik işçi beklenmez: ölçüm kuyruğa eklenir eklenmez işçi elle başlatılır: `gh api -X POST repos/ramazannsavrann-jpg/ai-saasavran/actions/workflows/worker.yml/dispatches -f ref=main` (tek motor gerekirse `-f "inputs[live_engines]=claude"`). Canlı arama ~8 dk, Gemini (aramasız) ~7 dk daha; beklerken kullanıcıya kısa durum verilir.
+- Örnek kurulum (Growth Lab 3): ana marka `<Konu> Study (video)` country=US + 8 soru (marka adı geçmez) + iki run (live_search tavan 1 $, model_knowledge tavan 0,1 $). Adlar cevap metninden sayılır.
+
 ### Hızlı yayın akışı (18 Kasım, kullanıcı isteği: yayın sonrası bekleme olmasın)
 1. Video `videolar` dalına (commit'e sabit raw link) → `vidiq_video_upload` → `vidiq_social_post_draft_create` (YouTube, public, başlık/açıklama/etiketler) → kullanıcı onayı → `vidiq_social_post_publish`. Ücretli tanıtım bu yolla kapalı yüklenir.
 2. Yayın biter bitmez: `gh api -X POST repos/ramazannsavrann-jpg/ai-saasavran/actions/workflows/youtube-ayar.yml/dispatches -f ref=main` → dil, "yapay içerik" işareti ve dil listesi başlık kuralıyla 1–2 dk içinde uygulanır (ayar.json'da kayıt beklemeden). Kullanıcıya bu bitince haber verilir.
