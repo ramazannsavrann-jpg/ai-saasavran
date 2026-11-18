@@ -3,7 +3,7 @@
 import { useEffect, useState, type ReactNode } from "react";
 import { api, CHANGED, type Brand, type Run } from "../lib/data";
 import { useLoad } from "../lib/app";
-import { questionTemplates } from "../lib/sectors";
+import { offeringTemplates, questionTemplates } from "../lib/sectors";
 import { friendlyError } from "../lib/supabase";
 import { L, isEn } from "../lib/i18n";
 import { Button } from "./ui";
@@ -50,7 +50,7 @@ export function StartGuide({ brand, runs, onRunsChange, goTab }: { brand: Brand;
   const close = () => { try { localStorage.setItem(offKey(brand.id), "1"); } catch { /* yok say */ } setOff(true); };
 
   const existing = new Set(prompts.data.map((p) => p.text));
-  const ideas = questionTemplates(brand.sector, brand.city, brand.name).filter((q) => !existing.has(q.text));
+  const ideas = [...offeringTemplates(brand.offering, brand.city, brand.sector), ...questionTemplates(brand.sector, brand.city, brand.name)].filter((q) => !existing.has(q.text));
   const need = Math.max(GUIDE_MIN_QUESTIONS - active, 0);
   async function addReady() {
     setBusy("q"); setErr(null);

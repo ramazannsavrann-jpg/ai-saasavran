@@ -643,7 +643,9 @@ export const SECTOR_DEFS_EN: SectorDef[] = [
 ];
 
 /** Seçim listesi arayüz diline göre; kayıtlı eski değerler iki listede de aranır. */
-export const SECTORS = (isEn() ? SECTOR_DEFS_EN : SECTOR_DEFS).map((s) => s.label);
+/** Seçim listesi alfabetik (19 Kasım); "Diğer" türü genel seçenekler en sonda. */
+export const SECTORS = (isEn() ? SECTOR_DEFS_EN : SECTOR_DEFS).map((s) => s.label)
+  .sort((a, b) => Number(/diğer$|^diğer|other$|^other/i.test(a)) - Number(/diğer$|^diğer|other$|^other/i.test(b)) || a.localeCompare(b, isEn() ? "en" : "tr"));
 
 export function sectorDef(label: string | null | undefined): SectorDef | undefined {
   return SECTOR_DEFS.find((s) => s.label === label) ?? SECTOR_DEFS_EN.find((s) => s.label === label);
@@ -739,22 +741,31 @@ export function poolQuestions(sector: string | null | undefined): { text: string
 }
 
 /** Marka sayfasındaki tüm hazır soru fikirleri: sektör + Google havuzu + genel + satın alma sonrası (tekrarsız). */
-export function allQuestionIdeas(sector: string | null, city: string | null, brand: string): { text: string; intent: Intent }[] {
+export function allQuestionIdeas(sector: string | null, city: string | null, brand: string, offering?: string | null): { text: string; intent: Intent }[] {
   const en = sectorIsEn(sector), seen = new Set<string>(), out: { text: string; intent: Intent }[] = [];
-  for (const q of [...questionTemplates(sector, city, brand), ...poolQuestions(sector), ...genericTemplates(brand, en), ...postPurchaseTemplates(brand, en)]) {
+  for (const q of [...offeringTemplates(offering, city, sector), ...questionTemplates(sector, city, brand), ...poolQuestions(sector), ...genericTemplates(brand, en), ...postPurchaseTemplates(brand, en)]) {
     if (!seen.has(q.text)) { seen.add(q.text); out.push(q); }
   }
   return out;
 }
 
 /** Yeni markaya otomatik eklenen ilk sorular (19 Kasım): sektör ya da kategori soruları, eksik kalırsa Google havuzu; markalı sorular otomatik eklenmez. En fazla n. */
-export function starterQuestions(sector: string | null, city: string | null, brand: string, n = 5): { text: string; intent: Intent }[] {
+export function starterQuestions(sector: string | null, city: string | null, brand: string, n = 5, offering?: string | null): { text: string; intent: Intent }[] {
   const seen = new Set<string>(), out: { text: string; intent: Intent }[] = [];
   // Otomatik eklemede havuzdan yalnız öneri/karşılaştırma/satın alma soruları ("Döner hangi ülkenin?" gibi bilgi soruları fikir olarak kalır)
   const pool = poolQuestions(sector).filter((q) => q.intent !== "informational");
-  for (const q of [...questionTemplates(sector, city, brand), ...pool]) {
+  for (const q of [...offeringTemplates(offering, city, sector), ...questionTemplates(sector, city, brand), ...pool]) {
     if (out.length >= n) break;
     if (!seen.has(q.text)) { seen.add(q.text); out.push(q); }
   }
   return out;
+}
+
+/** "gübre, zirai ilaç, tohum" → her ürün için 2 kategori sorusu (en fazla 3 ürün); tek ürün yazıldıysa 5 soru. */
+export function offeringTemplates(offering: string | null | undefined, city: string | null, sector: string | null): { text: string; intent: Intent }[] {
+  const items = (offering ?? "").split(/[,;\n]|\s+ve\s+|\s+and\s+/i).map((x) => x.trim()).filter((x) => x.length >= 2).slice(0, 3);
+  if (!items.length) return [];
+  const en = sectorIsEn(sector);
+  if (items.length === 1) return productTemplates(items[0], city, en);
+  return items.flatMap((it) => productTemplates(it, city, en).slice(0, 2));
 }

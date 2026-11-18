@@ -13,6 +13,8 @@ export interface Brand {
   /** Paylaşılan rapor için ilk 3 öneri (0054) */
   top_actions?: { title: string; action: string }[] | null; top_actions_at?: string | null;
   fact_card?: string | null; fact_card_updated_at?: string | null; track_key?: string;
+  /** Ne satıyor / hangi hizmeti veriyor (0059) */
+  offering?: string | null;
 }
 export interface Prompt { id: string; brand_id: string; text: string; intent: Intent; segment: string | null; active: boolean; created_at: string }
 export type Intent = "informational" | "comparison" | "purchase" | "local" | "post_purchase";
