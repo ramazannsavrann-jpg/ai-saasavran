@@ -1,14 +1,16 @@
-# GEO Otopilot raporu — 2026-11-17
+# GEO Otopilot raporu — 2026-11-18
 
 Mod: **ücretsiz kontrol** · Harcanan: **0 $** (tavan 0.4 $)
 
 ## Otomatik yapılanlar
 - IndexNow (Bing + Yandex): 35 sayfa bildirildi — kabul edildi
-- 35 sayfa kontrol edildi, 0 sayfada sorun var
+- 35 sayfa kontrol edildi, 3 sayfada sorun var
 - Site denetimi: 13/13 kontrol geçti
 
 ## Claude'un sitede yapacakları (sonraki zamanlanmış görev, PR olarak)
-- Sorun yok
+- Sayfa /: açıklama uzun (175)
+- Sayfa /methodology/: açıklama uzun (178)
+- Sayfa /tr/: açıklama uzun (180)
 
 ## Senin yapacakların (akşam, toplu)
 - Bu sefer yok

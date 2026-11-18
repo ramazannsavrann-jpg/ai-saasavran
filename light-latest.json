@@ -1,10 +1,10 @@
 {
-  "date": "2026-11-17",
+  "date": "2026-11-18",
   "mode": "light",
   "costUsd": 0,
   "capUsd": 0.4,
   "pages": 35,
-  "pagesWithIssues": 0,
+  "pagesWithIssues": 3,
   "auditPassed": 13,
   "auditTotal": 13,
   "indexnow": {
@@ -16,9 +16,32 @@
   "engineStatus": {},
   "competitorCount": 0,
   "topSources": [],
-  "forClaude": [],
+  "forClaude": [
+    "Sayfa /: açıklama uzun (175)",
+    "Sayfa /methodology/: açıklama uzun (178)",
+    "Sayfa /tr/: açıklama uzun (180)"
+  ],
   "forUser": [],
-  "pageIssues": [],
+  "pageIssues": [
+    {
+      "url": "https://aisaasavran.com/",
+      "issues": [
+        "açıklama uzun (175)"
+      ]
+    },
+    {
+      "url": "https://aisaasavran.com/methodology/",
+      "issues": [
+        "açıklama uzun (178)"
+      ]
+    },
+    {
+      "url": "https://aisaasavran.com/tr/",
+      "issues": [
+        "açıklama uzun (180)"
+      ]
+    }
+  ],
   "answers": [],
   "questions": [
     {
