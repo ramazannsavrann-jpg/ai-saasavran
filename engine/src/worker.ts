@@ -4,7 +4,7 @@
 
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { BudgetGuard, ResponseCache } from "./budget.ts";
-import { analyzeResponse, type BrandRef } from "./metrics.ts";
+import { analyzeResponse, listRank, type BrandRef } from "./metrics.ts";
 import { runPrompts, type StopReason } from "./pipeline.ts";
 import { buildProviders } from "./providers/registry.ts";
 import { SimulatedProvider } from "./providers/simulated.ts";
@@ -187,7 +187,7 @@ export async function processNextRun(deps: WorkerDeps): Promise<WorkerResult | n
                 const label = c.labels[b.name]; const h = hits.find((x) => x.brandId === b.id)!;
                 if (!label) continue;
                 h.recommended = label === "recommended";
-                if (!h.recommended) h.rank = null;
+                h.rank = h.recommended ? (h.rank ?? listRank(result.answerText, b)) : null;
                 classifier.set(b.id, `llm:${c.model}`);
               }
             } catch { /* kural sonucu geçerli kalır */ }
