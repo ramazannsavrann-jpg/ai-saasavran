@@ -7,6 +7,15 @@
 > **Erken erişim.** Ödeme (Paddle) ve haftalık e-posta (Resend) kodu hazır ve testli, ancak gerçek bir ödeme
 > ve gerçek bir gelen kutusu teslimi uçtan uca henüz doğrulanmadı. Hukuki metinleri avukat incelemedi.
 
+> **19 Kasım (sektörler ve sorular):** Türkçe sektör listesi 31'den 56'ya, İngilizce 27'den 39'a çıktı (tarım/gübre, tohum/fide,
+> hayvancılık/yem, üretim/sanayi B2B, makine, inşaat, enerji, gıda toptan, kimya, ambalaj, diş kliniği, kuaför, spor salonu, avukat,
+> mali müşavir, veteriner, düğün, ajans, matbaa, kuyumcu, nakliyat, temizlik, mimarlık, optik, oto servis; EN: agriculture, manufacturing,
+> moving, solar vb.). Sektörü "Diğer" ya da listede olmayan markalar artık genel sorularla başlar (`genericTemplates`: güvenilir mi,
+> yorumlar, ne iş yapar, alternatifler, nereden alınır); diğer sektörlerde bu sorular ek fikir olarak görünür (`allQuestionIdeas`).
+> Google soru keşfi: keşif başına 5 aramaya kadar (önce markanın kendi soruları tohum olur; "Diğer"de sektör tohumu yok), 40 öneriye kadar;
+> ücretli paketlerde 30 günde 4 keşif (önce 2), ücretsiz pakette 1 keşif (migration 0058). Sebep: ilk gerçek dış üye (gübre üreticisi)
+> sektör bulamayıp "Diğer" ile tek soruyla başladı.
+
 > **18 Kasım (kalite denetimi, 1. aşama):** 7 uzmanlı salt okunur denetim yapıldı (rapor: claude.ai Docs, "AI SaaSavran – Kalite
 > Denetimi"). Uygulananlar: Actions günlük/eserlerinde tam cevap ve gizli Growth Lab verisi yok; `ALLOW_PAID_API` depo değişkeninden
 > (`vars.ALLOW_PAID_API`, tanımsızsa açık) ve smoke testleri + SerpApi bunu kontrol ediyor; smoke iş akışları yalnız `main`'de;

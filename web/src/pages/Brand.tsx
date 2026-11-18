@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState, type FormEvent } from "react";
-import { SECTORS, competitorSuggestions, postPurchaseTemplates, questionTemplates, sectorDef } from "../lib/sectors";
+import { SECTORS, allQuestionIdeas, competitorSuggestions, sectorDef } from "../lib/sectors";
 import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useApp, useLoad } from "../lib/app";
 import { api, INTENT_LABEL, type Brand, type BrandAction, type PromptResult, type Intent, type MeasurementType, type Prompt, type Run, type Product, type ShoppingCheck, type VisRow } from "../lib/data";
@@ -1142,12 +1142,13 @@ function VisVsTraffic({ vis, rows, today }: { vis: VisRow[]; rows: Parameters<ty
   );
 }
 
-/** Gerçek soru keşfi: Google'da insanların sorduğu sorular (SerpApi). Ücretli paketlerde; marka başına 30 günde 2 keşif. */
+/** Gerçek soru keşfi: Google'da insanların sorduğu sorular (SerpApi). Ücretli paketlerde marka başına 30 günde 4 keşif; ücretsiz pakette 1 keşif (19 Kasım). */
 function GoogleQuestions({ brand, existing, canAdd, onAdd, busy }: { brand: Brand; existing: Set<string>; canAdd: boolean; onAdd: (t: string, i: Intent) => Promise<void>; busy: boolean }) {
   const { current } = useApp();
   const paid = current?.kind === "growth_lab" || (!!current?.plan && current.plan !== "free");
-  const sugg = useLoad(() => (paid ? api.promptSuggestions(brand.id) : Promise.resolve([])), [brand.id, paid]);
-  const runs = useLoad(() => (paid ? api.discoveryRuns(brand.id) : Promise.resolve([])), [brand.id, paid]);
+  const sugg = useLoad(() => api.promptSuggestions(brand.id), [brand.id]);
+  const runs = useLoad(() => api.discoveryRuns(brand.id), [brand.id]);
+  const freeUsed = !paid && (runs.data ?? []).some((r) => !r.error);
   const [err, setErr] = useState<string | null>(null);
   const [msg, setMsg] = useState<string | null>(null);
   const pending = (runs.data ?? []).some((r) => !r.done_at);
@@ -1162,12 +1163,11 @@ function GoogleQuestions({ brand, existing, canAdd, onAdd, busy }: { brand: Bran
     <section className="panel no-print" id="gercek-sorular">
       <h2>{L("Gerçek sorular (Google)", "Real questions (Google)")}</h2>
       <p className="muted">{L("İnsanların Google'da sektörünüzle ilgili sorduğu sorular (\"Diğer kişiler şunları da sordu\" ve ilgili aramalar). Yapay zekâya sorulan soruların sayısını hiçbir şirket yayımlamıyor; bu, gerçek talebe en yakın veri.", "Questions people ask Google about your sector (\"People also ask\" and related searches). No company publishes how often things are asked to AI assistants; this is the closest real demand data.")}</p>
-      {!paid ? (
-        <p className="muted">{L("Ücretli paketlerde.", "On paid plans.")} <Link to="/hesap#paket">{L("Paketler", "Plans")}</Link></p>
-      ) : (
+      {!paid && <p className="muted">{freeUsed ? L("Ücretsiz pakette 1 keşif yapılabilir; daha fazlası ücretli paketlerde.", "The free plan includes 1 discovery; more on paid plans.") : L("Ücretsiz pakette 1 keşif hakkınız var.", "The free plan includes 1 discovery.")} <Link to="/hesap#paket">{L("Paketler", "Plans")}</Link></p>}
+      {(
         <>
           {!brand.sector && <p className="caution">{L("Keşif için önce markanın sektörünü yazın (Düzenle).", "Set the brand's sector first (Edit).")}</p>}
-          <Button variant="quiet" className="btn-small" disabled={pending || !brand.sector} onClick={discover}>{pending ? L("Keşif sırada…", "Discovery queued…") : L("Soruları keşfet", "Discover questions")}</Button>
+          <Button variant="quiet" className="btn-small" disabled={pending || !brand.sector || freeUsed} onClick={discover}>{pending ? L("Keşif sırada…", "Discovery queued…") : L("Soruları keşfet", "Discover questions")}</Button>
           {last && <p className="src-sup muted">{isEn() ? `Last discovery: ${formatDate(last.done_at!)} · ${last.found ?? 0} questions${last.error ? " · " + last.error : ""}` : `Son keşif: ${formatDate(last.done_at!)} · ${last.found ?? 0} soru${last.error ? " · " + last.error : ""}`}</p>}
           {msg && <p className="success-box">{msg}</p>}
           <ErrorBox message={err} />
@@ -1184,7 +1184,7 @@ function GoogleQuestions({ brand, existing, canAdd, onAdd, busy }: { brand: Bran
               ))}
             </ul>
           )}
-          {list.length > 0 && <p className="src-sup muted">{L("İlgili aramalar soru biçiminde değildir; eklerken düzenleyebilirsiniz. Marka başına 30 günde 2 keşif yapılabilir.", "Related searches aren't phrased as questions; you can edit them after adding. Up to 2 discoveries per brand every 30 days.")}</p>}
+          {list.length > 0 && <p className="src-sup muted">{L("İlgili aramalar soru biçiminde değildir; eklerken düzenleyebilirsiniz. Ücretli paketlerde marka başına 30 günde 4 keşif yapılabilir.", "Related searches aren't phrased as questions; you can edit them after adding. Paid plans: up to 4 discoveries per brand every 30 days.")}</p>}
         </>
       )}
     </section>
@@ -2105,7 +2105,7 @@ function Questions({ brand }: { brand: Brand }) {
   const active = list.filter((p) => p.active).length;
   const limit = usage.data?.prompt_limit ?? 0;
   const existing = new Set(list.map((p) => p.text));
-  const ideas = [...questionTemplates(brand.sector, brand.city), ...postPurchaseTemplates(brand.name, isEn())].filter((s) => !existing.has(s.text));
+  const ideas = allQuestionIdeas(brand.sector, brand.city, brand.name).filter((s) => !existing.has(s.text));
   const def = sectorDef(brand.sector);
   const needsCity = def?.local && !brand.city;
 

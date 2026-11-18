@@ -541,7 +541,7 @@ export async function processEngineConflicts(deps: { db: SupabaseClient; env: Re
 
 /**
  * Gerçek soru keşfi: istenen markalar için Google'daki "Diğer kişiler şunları da sordu" ve ilgili aramaları toplar (keşif başına
- * en fazla 3 SerpApi araması). SerpApi'de kalan hak DISCOVERY_RESERVE'in (varsayılan 50) altındaysa Shopping'e bırakır ve bekler.
+ * en fazla 5 SerpApi araması: markanın kendi soruları + sektör/şehir). SerpApi'de kalan hak DISCOVERY_RESERVE'in (varsayılan 50) altındaysa Shopping'e bırakır ve bekler.
  */
 export async function processPromptDiscovery(deps: WorkerDeps, max = 3): Promise<{ runId: string; status: string; found?: number }[] | string> {
   const { db, env } = deps;
@@ -554,7 +554,10 @@ export async function processPromptDiscovery(deps: WorkerDeps, max = 3): Promise
   let left = await shoppingSearchesLeft(key, deps.fetchFn);
   const out: { runId: string; status: string; found?: number }[] = [];
   for (const p of pending) {
-    const seeds = discoverySeeds({ sector: p.sector, city: p.city, lang: p.lang });
+    const existing = (must(await db.from("prompts").select("text").eq("brand_id", p.brand_id), "sorular") as { text: string }[]).map((x) => x.text);
+    const bn = p.brand_name.toLocaleLowerCase("tr-TR");
+    const own = existing.filter((t) => !t.toLocaleLowerCase("tr-TR").includes(bn));
+    const seeds = discoverySeeds({ sector: p.sector, city: p.city, lang: p.lang, questions: own });
     if (left !== null && left - seeds.length < reserve) { out.push({ runId: p.run_id, status: "serpapi_quota_low" }); break; }
     const found: FoundQuestion[] = [];
     let searches = 0, error: string | null = null;
@@ -563,7 +566,6 @@ export async function processPromptDiscovery(deps: WorkerDeps, max = 3): Promise
       catch (e) { error = (e as Error).message.slice(0, 200); break; }
     }
     if (left !== null) left -= searches;
-    const existing = (must(await db.from("prompts").select("text").eq("brand_id", p.brand_id), "sorular") as { text: string }[]).map((x) => x.text);
     const clean = cleanQuestions(found, existing);
     if (clean.length) {
       must(await db.from("prompt_suggestions").upsert(clean.map((q) => ({ workspace_id: p.workspace_id, brand_id: p.brand_id, text: q.text, source: q.source, seed: q.seed })), { onConflict: "brand_id,text", ignoreDuplicates: true }), "öneri kaydı");
