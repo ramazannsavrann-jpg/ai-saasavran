@@ -96,10 +96,35 @@ function firstWordPattern(name: string): RegExp | null {
   const words = name.trim().split(/\s+/);
   if (words.length < 2) return null;
   const w = words[0];
-  if (w.length < 4 || COMMON_FIRST_WORDS.has(w.toLocaleLowerCase("tr-TR"))) return null;
+  // Kısa ilk kelime ancak tamamen BÜYÜK harfse ve metinde de büyük harfle geçiyorsa sayılır: "ONE Condoms" ← "ONE UltraFeel" (18 Kasım)
+  const shortCaps = w.length >= 2 && w.length < 4 && /^\p{Lu}+$/u.test(w);
+  if ((w.length < 4 && !shortCaps) || COMMON_FIRST_WORDS.has(w.toLocaleLowerCase("tr-TR"))) return null;
   if (w[0] !== w[0].toLocaleUpperCase("tr-TR")) return null;
   const esc = w.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
   return new RegExp(`(^|[^\\p{L}\\p{N}])${esc}(?=$|[^\\p{L}\\p{N}]|'|’)`, "u");
+}
+
+/**
+ * "parent:LifeStyles" / "üst:LifeStyles" biçimindeki takma ad üst şirket adıdır: rakip birleştirmede kullanılır ama
+ * anılma/önerilme sayımına girmez (üst şirket adı alt markayı şişirmesin; 18 Kasım denetimi).
+ */
+export const isParentAlias = (a: string) => /^(parent|üst|ust):/i.test(a.trim());
+export const countableAliases = (aliases: string[]) => aliases.filter((a) => !isParentAlias(a));
+
+/**
+ * Yaygın kelime olan tek kelimelik marka adları ("Ring", "Visible", "Target", "One") yalnız büyük harfle başlıyorsa sayılır:
+ * "ring light" ya da "visible results" markaya sayılmaz.
+ */
+const COMMON_WORD_NAMES = new Set([
+  "ring", "visible", "target", "one", "nest", "echo", "edge", "dove", "tide", "gap", "shell", "orange", "mint", "glow", "bloom",
+  "pure", "honest", "fit", "life", "go", "open", "smart", "simple", "chime", "current", "notion", "slack", "square", "stripe",
+]);
+function commonWordCaps(name: string): RegExp | null {
+  const w = name.trim();
+  if (w.includes(" ") || !COMMON_WORD_NAMES.has(w.toLocaleLowerCase("tr-TR"))) return null;
+  const esc = w.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const cap = esc[0].toLocaleUpperCase("tr-TR") + esc.slice(1);
+  return new RegExp(`(^|[^\\p{L}\\p{N}])(${cap}|${esc.toLocaleUpperCase("tr-TR")})(?=$|[^\\p{L}\\p{N}]|'|’)`, "u");
 }
 
 function sentences(line: string): string[] {
@@ -120,12 +145,13 @@ export function analyzeResponse(resp: AIResponse, brands: BrandRef[]): BrandHit[
   const otherOwns = (word: string, id: string) => [...(singleOwner.get(word) ?? [])].some((x) => x !== id);
 
   const hits = brands.map((b): BrandHit => {
-    const needles = [b.name, ...b.aliases].map(normalize).filter((n) => n.length >= 2);
+    const caps = commonWordCaps(b.name);
+    const needles = [...(caps ? [] : [b.name]), ...countableAliases(b.aliases)].map(normalize).filter((n) => n.length >= 2);
     const fw = firstOf(b.name);
     const first = b.exactOnly || (firstCount.get(fw) ?? 0) > 1 || otherOwns(fw, b.id) ? null : firstWordPattern(b.name);
     const containsBrand = (text: string) => {
       const t = normalize(text);
-      return needles.some((n) => hasName(t, n)) || (!!first && first.test(text));
+      return needles.some((n) => hasName(t, n)) || (!!first && first.test(text)) || (!!caps && caps.test(text));
     };
 
     const mentionLines = lines.filter(containsBrand);
@@ -161,13 +187,28 @@ export function analyzeResponse(resp: AIResponse, brands: BrandRef[]): BrandHit[
   const items = numbered.length > 0 ? numbered : bullets.length > 0 ? bullets : headings;
   for (const h of hits) {
     if (!h.recommended) continue;
-    const b = brands.find((x) => x.id === h.brandId)!;
-    const n = [b.name, ...b.aliases].map(normalize).filter((x) => x.length >= 2);
-    const fw = firstWordPattern(b.name);
-    const i = items.findIndex((line) => n.some((x) => hasName(normalize(line), x)) || (!!fw && fw.test(line)));
-    h.rank = i >= 0 ? i + 1 : null;
+    h.rank = rankInItems(items, brands.find((x) => x.id === h.brandId)!);
   }
   return hits;
+}
+
+function listItems(answerText: string): string[] {
+  const lines = answerText.split(/\n+/);
+  const numbered = lines.filter((l) => /^\s{0,1}(#{2,4}\s+)?(\*\*)?\d+[.)]\s+/.test(l));
+  const bullets = lines.filter((l) => /^\s{0,1}[-*•]\s+/.test(l));
+  const headings = lines.filter((l) => /^\s{0,1}(\*\*|#{2,4}\s)/.test(l));
+  return numbered.length > 0 ? numbered : bullets.length > 0 ? bullets : headings;
+}
+function rankInItems(items: string[], b: BrandRef): number | null {
+  const caps = commonWordCaps(b.name);
+  const n = [...(caps ? [] : [b.name]), ...countableAliases(b.aliases)].map(normalize).filter((x) => x.length >= 2);
+  const fw = firstWordPattern(b.name);
+  const i = items.findIndex((line) => n.some((x) => hasName(normalize(line), x)) || (!!fw && fw.test(line)) || (!!caps && caps.test(line)));
+  return i >= 0 ? i + 1 : null;
+}
+/** Cevaptaki liste sırası: LLM bir markayı sonradan "önerildi" yaptığında sırası da hesaplansın (18 Kasım denetimi). */
+export function listRank(answerText: string, brand: BrandRef): number | null {
+  return rankInItems(listItems(answerText), brand);
 }
 
 // Wilson güven aralığı — tek cevaba bakıp kesin sonuç çıkarmamak için

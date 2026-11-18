@@ -920,3 +920,24 @@ test("Soru bazında güven aralığı: tekrarlar bağımsız sayılmaz; başa ba
   assert.equal(isLowSample(24, 12), false);
   assert.equal(isLowSample(19), true);
 });
+
+test("Marka tespiti (18 Kasım): kısa BÜYÜK harfli ilk kelime, üst şirket takma adı, yaygın kelime adlar", async () => {
+  const { analyzeResponse, listRank } = await import("../src/metrics.ts");
+  const brands = [
+    { id: "one", name: "ONE Condoms", aliases: [] },
+    { id: "skyn", name: "SKYN", aliases: ["parent:LifeStyles"] },
+    { id: "ring", name: "Ring", aliases: [] },
+  ];
+  const a = "Top picks:\n1. Trojan Magnum\n2. ONE Vanish Hyperthin\n3. SKYN Elite\n\nUse a ring light for photos.";
+  const h = analyzeResponse({ promptId: "p", provider: "openai", answerText: a, citedUrls: [] }, brands);
+  assert.equal(h.find((x) => x.brandId === "one")!.mentioned, true);
+  assert.equal(h.find((x) => x.brandId === "one")!.rank, 2);
+  assert.equal(h.find((x) => x.brandId === "ring")!.mentioned, false, "küçük harfli 'ring light' Ring markası değil");
+  const only = analyzeResponse({ promptId: "p", provider: "openai", answerText: "LifeStyles makes many condoms.", citedUrls: [] }, brands);
+  assert.equal(only.find((x) => x.brandId === "skyn")!.mentioned, false, "üst şirket adı alt markaya sayılmaz");
+  const lower = analyzeResponse({ promptId: "p", provider: "openai", answerText: "Pick one that fits you.", citedUrls: [] }, brands);
+  assert.equal(lower.find((x) => x.brandId === "one")!.mentioned, false);
+  const ringCap = analyzeResponse({ promptId: "p", provider: "openai", answerText: "- Ring Video Doorbell is popular.", citedUrls: [] }, brands);
+  assert.equal(ringCap.find((x) => x.brandId === "ring")!.mentioned, true);
+  assert.equal(listRank("Options:\n- Durex\n- SKYN Original", brands[1]), 2);
+});
