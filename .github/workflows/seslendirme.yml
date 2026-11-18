@@ -24,7 +24,8 @@ jobs:
           for f in $files; do
             name=$(basename "$f" .txt | sed 's/narration-//'); lang="${name##*-}"
             trvoice=$(cat "video/ses-$name.txt" 2>/dev/null || cat video/ses-tr.txt 2>/dev/null || echo Charon)
-            if [ "$lang" = "tr" ] || [ "$lang" = "en" ]; then
+            # video/motor-<ad>.txt "openai" ise Gemini atlanır (19 Kasım: EN site adı için)
+            if [ "$(cat video/motor-$name.txt 2>/dev/null)" != "openai" ] && { [ "$lang" = "tr" ] || [ "$lang" = "en" ]; }; then
               ok=0
               if [ "$lang" = "en" ]; then pre="Read this like a natural, warm, energetic YouTube host, in clear American English: "; else pre="Doğal, samimi ve enerjik bir Türk YouTube sunucusu gibi, akıcı İstanbul Türkçesiyle oku: "; fi
               for m in gemini-2.5-flash-preview-tts gemini-3.1-flash-tts-preview gemini-3.8-flash-tts; do
@@ -40,6 +41,7 @@ jobs:
               echo "Gemini olmadı, OpenAI'ye düşülüyor"
             fi
             if [ "$lang" = "en" ]; then ins="Speak English. Energetic, upbeat, friendly YouTube Shorts host; brisk but clear."; else ins="Türkçe konuş. Enerjik, samimi bir YouTube Shorts sunucusu gibi; doğal Türkçe vurgu."; fi
+            [ -f "video/talimat-$name.txt" ] && ins="$ins $(cat video/talimat-$name.txt)"
             jq -n --rawfile t "$f" --arg ins "$ins" '{model:"gpt-4o-mini-tts", voice:"ash", input:$t, response_format:"mp3", instructions:$ins}' > req.json
             curl -sS --fail-with-body https://api.openai.com/v1/audio/speech -H "Authorization: Bearer $OPENAI_API_KEY" -H "Content-Type: application/json" -d @req.json -o "out/ses-$name.mp3"
             ls -l "out/ses-$name.mp3"
