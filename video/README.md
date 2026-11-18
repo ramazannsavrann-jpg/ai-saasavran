@@ -123,6 +123,12 @@ Derslerde marka gerçek adıyla anılabilir; tam sıralama tablolarında harf ku
 2. Yayın biter bitmez: `gh api -X POST repos/ramazannsavrann-jpg/ai-saasavran/actions/workflows/youtube-ayar.yml/dispatches -f ref=main -f "inputs[only]=<id1>,<id2>"` (`only` = yalnız yeni videolar; kota korunur. Gece çalışması tam kalır, kapak/gizli koruması sürer. `youtube-ayar` dalına push TAM çalışma başlatır, kotayı yer — kullanma) → dil, "yapay içerik" işareti ve dil listesi başlık kuralıyla 1–2 dk içinde uygulanır (ayar.json'da kayıt beklemeden). Kullanıcıya bu bitince haber verilir.
 3. Konu listesi (ör. "AI Picks: US Edition") için `yt/ayar.json` kaydı ayrı PR ile eklenir; kullanıcı bunu beklemez, testler geçince birleştirilir ve gece çalışmasında da uygulanır.
 
+### Seste site adı kontrolü (19 Kasım, kullanıcı: "böyle hatalar asla olmasın") — ZORUNLU
+- Seattle kahve videosunda TTS site adını "AI sizin markanız nokta com" (TR) ve "AI Savram" (EN) diye okudu, yayına çıktı, silindi.
+- Seslendirme iş akışı her sesi yazıya döker (`video/kontrol-ses/ad_kontrol.py`, faster-whisper small); site adı yanlışsa iş KIRMIZI olur, `ses-out/<ad>-kontrol.txt` "HATA" yazar. HATA'lı sesle video yapılmaz.
+- Bitmiş videoyu da yayından önce kontrol et: mp4'leri bir klasöre koy, `python3 video/kontrol-ses/ad_kontrol.py <klasör>` → hepsi TAMAM olmadan YouTube/Instagram'a yükleme yok.
+- Anlatımda site adı her zaman TEK BAŞINA ayrı cümle: TR "Site adresimiz: Ey Ay Saa, Savran, nokta com." EN "Our website is: A. I. Saa, Savran, dot com." Önüne "sizin markanız" gibi cümle bitiştirme.
+
 ### Instagram (@aisaasavran)
 - Sadece marka/ürün/YouTuber/sektör ölçüm içerikleri; eğitim videoları Instagram'a gitmez.
 - Açıklama ve etiketler hem TR hem EN; ölçüm açıklamasına bağımsızlık satırı.
