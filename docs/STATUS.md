@@ -11,7 +11,7 @@
 > sanıp eliyordu (kayıtlı 381 ilandan 1'i); düzeltildi + test. Metodoloji sayfası (TR+EN) "Perplexity'yi ölçmüyoruz"
 > diyordu, oysa ücretli paketlerde ölçülüyor; tanım cümlesi, SSS tekrar sayısı ve hoş geldin e-postası Perplexity'yi
 > içerecek şekilde düzeltildi. `docs/PRICING.md` tablosu `npm run pricing` çıktısıyla yenilendi, güncel fiyat notu
-> (29/149/449 $) eklendi; Free satırında "%-Infinity" yerine "—". Karar bekleyen: Plus tavanı 9 $ < 4 motorlu tipik maliyet 10,8 $.
+> (29/149/449 $) eklendi; Free satırında "%-Infinity" yerine "—". Plus tavanı 9 $ < 4 motorlu tipik maliyet 10,8 $; **karar (sahip, 18 Kasım): tavan şimdilik 9 $ kalıyor** (ay sonuna doğru ölçüm durabilir).
 
 > **18 Kasım (TruthGuard dil):** Model "Never translate" kuralına rağmen İngilizce cevaptan Çince/İspanyolca/Almanca
 > iddia yazabiliyordu (Trojan ölçümü). Artık iddianın dili cevaptakinden farklıysa cevaptaki alıntı gösterilir; bilgi
