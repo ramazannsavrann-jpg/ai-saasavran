@@ -8,9 +8,9 @@
   "auditPassed": 13,
   "auditTotal": 13,
   "indexnow": {
-    "sent": 36,
-    "status": 200,
-    "note": "kabul edildi"
+    "sent": 0,
+    "status": 0,
+    "note": "değişen sayfa yok"
   },
   "engines": {},
   "engineStatus": {},
