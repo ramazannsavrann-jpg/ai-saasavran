@@ -4,7 +4,7 @@ Mod: **ücretsiz kontrol** · Harcanan: **0 $** (tavan 0.4 $)
 
 ## Otomatik yapılanlar
 - IndexNow (Bing + Yandex): 0 sayfa bildirildi — değişen sayfa yok
-- 248 sayfa kontrol edildi, 152 sayfada sorun var
+- 248 sayfa kontrol edildi, 151 sayfada sorun var
 - Site denetimi: 13/13 kontrol geçti
 
 ## Claude'un sitede yapacakları (sonraki zamanlanmış görev, PR olarak)
@@ -13,7 +13,6 @@ Mod: **ücretsiz kontrol** · Harcanan: **0 $** (tavan 0.4 $)
 - Sayfa /tr/kurucu/: az metin (~189 kelime)
 - Sayfa /methodology/: açıklama uzun (178)
 - Sayfa /tr/: açıklama uzun (180)
-- Sayfa /tr/olcumler/yapay-zeka-arama-sonuclarinda-rakipleri-geride-birakmak-icin-hangi-yaz/: HTTP 0, başlık yok, açıklama (meta description) kısa/yok, h1 yok, yapılandırılmış veri (JSON-LD) yok, canonical yok, az metin (~0 kelime)
 - Sayfa /tr/olcumler/turkiyede-yapay-zeka-gorunurlugu-analizi-yapan-bir-hizmet-onerir-misin/: az metin (~212 kelime)
 - Sayfa /measurements/what-are-the-best-home-security-camera-deals-for-black-friday-2026/: az metin (~215 kelime)
 - Sayfa /measurements/which-home-security-camera-is-best-for-renters/: az metin (~237 kelime)
