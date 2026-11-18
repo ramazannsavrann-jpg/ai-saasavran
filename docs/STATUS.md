@@ -14,6 +14,13 @@
 > kullanır; iki nedensellik cümlesi kanıt dilinde; motor listeleri (Perplexity) ve eski fiyat notları düzeltildi; `test:integration` TZ=UTC.
 > Fiyat kararı: **29 / 149 / 449 $** (sahip, 18 Kasım).
 >
+> **18 Kasım (3. aşama, ürün):** Paddle 0052 `apply_subscription_v2` (yeni abonelik yalnız checkout'u başlatan owner/admin/editor
+> üyeyle bağlanır; aynı aboneliğin eski olayı `stale_event`). Bilgi kartı `FactCardInline` ile rehberde (6. adım) ve TruthGuard'da.
+> Raporda en üstte "Bu hafta yapılacak iş" (Öneriler ile aynı `useRecommendations`). Kaynak panelleri "Kaynaklar", AI ziyaret/bot
+> panelleri "Sitenize gelen yapay zekâ ziyaretleri" katlanır grubunda. Müşteriye iç maliyet gösterilmez.
+> Yapılmadı: rakip nitelik tablosu (rakip algısı işçide saklanmıyor; LLM maliyeti var), paylaşılan rapora "en önemli 3 iş"
+> (girişsiz rapor RPC'sine öneri verisi gerekir), "doğrulanmış bot" etiketinin eklenti bildirimlerinde ayrılması, Turnstile anahtarları.
+
 > **18 Kasım (2. aşama, ölçüm güvenilirliği):** aralık soru bazında (etkin örneklem, ICC 0,67; 0050 `brand_visibility.prompts`);
 > fark <10 puan ya da aralık çakışması = "başa baş" (Yapay zekâ ↔ Shopping lideri dahil); küçük örneklem = <20 cevap ya da <10 soru.
 > Marka tespiti: kısa BÜYÜK harfli ilk kelime ("ONE"), `parent:` önekli üst şirket takma adı sayılmaz (Growth Lab SKYN güncellendi),
