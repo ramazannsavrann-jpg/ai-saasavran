@@ -22,6 +22,9 @@ test("Paddle abonelik olayı: alan, paket, durum ve dönem sonu çıkarılır", 
     current_billing_period: { ends_at: "2026-12-07T00:00:00Z" },
     items: [{ price: { id: "pri_1", custom_data: { plan: "pro" } } }],
   });
-  assert.deepEqual(u, { p_workspace: "6f1c2d3e-4a5b-4c6d-8e9f-0a1b2c3d4e5f", p_plan: "pro", p_status: "active", p_subscription: "sub_1", p_customer: "ctm_1", p_period_end: "2026-12-07T00:00:00Z" });
+  assert.deepEqual(u, { p_workspace: "6f1c2d3e-4a5b-4c6d-8e9f-0a1b2c3d4e5f", p_plan: "pro", p_status: "active", p_subscription: "sub_1", p_customer: "ctm_1", p_period_end: "2026-12-07T00:00:00Z", p_user: null, p_occurred: null });
+  const v = subscriptionUpdate({ id: "sub_3", status: "active", custom_data: { workspace_id: "6f1c2d3e-4a5b-4c6d-8e9f-0a1b2c3d4e5f", user_id: "11111111-2222-4333-8444-555555555555" }, items: [] }, "2026-11-18T09:00:00Z");
+  assert.equal(v.p_user, "11111111-2222-4333-8444-555555555555"); assert.equal(v.p_occurred, "2026-11-18T09:00:00Z");
+  assert.equal(subscriptionUpdate({ id: "sub_4", custom_data: { user_id: "x' or 1=1" } }).p_user, null);
   assert.equal(subscriptionUpdate({ id: "sub_2", status: "active", items: [] }).p_plan, null);
 });

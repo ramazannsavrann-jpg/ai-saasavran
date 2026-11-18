@@ -47,7 +47,7 @@ export function BillingPanel() {
     try {
       await openCheckout(plan, current.id, session?.user.email, (name) => {
         if (name === "checkout.completed") setNotice(L("Ödemeniz alındı. Paketiniz birkaç saniye içinde güncellenir.", "Payment received. Your plan updates within a few seconds."));
-      });
+      }, session?.user.id);
     } catch { setErr(L("Ödeme penceresi açılamadı. Sayfayı yenileyip tekrar deneyin.", "Couldn't open the checkout. Refresh the page and try again.")); }
     setBusy(null);
   }

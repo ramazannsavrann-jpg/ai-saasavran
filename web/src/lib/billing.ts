@@ -34,12 +34,13 @@ function loadPaddle(onEvent: (name: string) => void): Promise<any> {
   return loading;
 }
 
-export async function openCheckout(plan: PaidPlan, workspaceId: string, email: string | undefined, onEvent: (name: string) => void) {
+export async function openCheckout(plan: PaidPlan, workspaceId: string, email: string | undefined, onEvent: (name: string) => void, userId?: string) {
   const P = await loadPaddle(onEvent);
   P.Checkout.open({
     items: [{ priceId: cfg().prices[plan], quantity: 1 }],
     customer: email ? { email } : undefined,
-    customData: { workspace_id: workspaceId },
+    // user_id: sunucu, aboneliği yalnız bu kullanıcı alanın sahibi/editörüyse bağlar (0052)
+    customData: { workspace_id: workspaceId, ...(userId ? { user_id: userId } : {}) },
     settings: { displayMode: "overlay", theme: "light", locale: isEn() ? "en" : "tr", successUrl: `${location.origin}/hesap?paid=1` },
   });
 }

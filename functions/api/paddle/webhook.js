@@ -8,12 +8,12 @@ export async function onRequestPost({ request, env }) {
   try { evt = JSON.parse(raw); } catch { return json({ error: "bad_json" }, 400); }
   if (!String(evt.event_type ?? "").startsWith("subscription.")) return json({ ok: true, ignored: evt.event_type ?? null });
 
-  const u = subscriptionUpdate(evt.data);
+  const u = subscriptionUpdate(evt.data, evt.occurred_at ?? null);
   if (!u.p_workspace || !UUID.test(u.p_workspace) || !u.p_plan || !u.p_status || !u.p_subscription) {
     console.log("paddle: eksik abonelik bilgisi", evt.event_type, evt.data?.id ?? null);
     return json({ ok: true, ignored: "missing_fields" }); // 200: Paddle tekrar denemesin
   }
-  const r = await fetch(`${env.SUPABASE_URL}/rest/v1/rpc/apply_subscription`, {
+  const r = await fetch(`${env.SUPABASE_URL}/rest/v1/rpc/apply_subscription_v2`, {
     method: "POST",
     headers: { apikey: env.SUPABASE_SERVICE_ROLE_KEY, Authorization: `Bearer ${env.SUPABASE_SERVICE_ROLE_KEY}`, "content-type": "application/json" },
     body: JSON.stringify(u),

@@ -894,3 +894,20 @@ test("Telafi: geçici hatayla sonuçsuz kalan müşteri ölçümü yeniden sıra
   await scheduleRecovery(svc);
   assert.equal(retries(third), 0, "3 denemeden sonra durur");
 });
+
+test("Paddle v2 (0052): yeni abonelik yalnız alan üyesine bağlanır; eski olay yok sayılır", async () => {
+  const owner = await user("paddle-owner@test.local");
+  const outsider = await user("paddle-outsider@test.local");
+  const ws = ok(await svc.from("workspaces").insert({ name: "Paddle Test", kind: "business", plan: "free" }).select("id").single()) as any;
+  ok(await svc.from("workspace_members").insert({ workspace_id: ws.id, user_id: owner.id, role: "owner" }));
+  const base = { p_workspace: ws.id, p_plan: "starter", p_status: "active", p_customer: "ctm_x", p_period_end: null };
+  assert.equal(ok(await svc.rpc("apply_subscription_v2", { ...base, p_subscription: "sub_bad", p_user: outsider.id, p_occurred: "2026-11-18T10:00:00Z" })), "not_member");
+  assert.equal(ok(await svc.rpc("apply_subscription_v2", { ...base, p_subscription: "sub_bad", p_user: null, p_occurred: null })), "not_member");
+  assert.equal(stack.sql(`select plan from workspaces where id='${ws.id}'`), "free");
+  assert.equal(ok(await svc.rpc("apply_subscription_v2", { ...base, p_subscription: "sub_ok", p_user: owner.id, p_occurred: "2026-11-18T10:00:00Z" })), "ok");
+  assert.equal(stack.sql(`select plan from workspaces where id='${ws.id}'`), "starter");
+  // Aynı abonelik: iptal olayı kullanıcı kimliği olmadan da geçer; daha eski "active" olayı iptali geri açamaz
+  assert.equal(ok(await svc.rpc("apply_subscription_v2", { ...base, p_subscription: "sub_ok", p_status: "canceled", p_user: null, p_occurred: "2026-11-18T12:00:00Z" })), "ok");
+  assert.equal(ok(await svc.rpc("apply_subscription_v2", { ...base, p_subscription: "sub_ok", p_user: null, p_occurred: "2026-11-18T11:00:00Z" })), "stale_event");
+  assert.equal(stack.sql(`select plan from workspaces where id='${ws.id}'`), "free");
+});
