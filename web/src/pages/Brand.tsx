@@ -11,6 +11,7 @@ import { competitorsInRun, formatDate, formatDateTime, lowSample, MIN_SAMPLE, nu
 import { Button, Confirm, DataNotice, Empty, ErrorBox, Field, Loading, Select, TypeBadge } from "../components/ui";
 import { CompareBars, TrendChart } from "../components/Chart";
 import { StartGuide } from "../components/StartGuide";
+import { FactCardInline } from "../components/FactCardInline";
 import { downloadCsv, fileSlug } from "../lib/csv";
 import { buildRecommendations, type RecInput } from "../../../engine/src/recommendations.ts";
 import { relatedBrand, untrackedNames } from "../../../engine/src/metrics.ts";
@@ -84,7 +85,7 @@ export function BrandPage() {
           <button aria-pressed={type === "live_search"} onClick={() => setView("canli")}>{L("Canlı arama", "Live search")}</button>
         </div>
       )}
-      {tab === "rapor" && <Report key={runList.filter((r) => r.status === "done").length} brand={b} type={type} onBrandChange={brand.reload} paid={current?.kind === "growth_lab" || (!!current?.plan && current.plan !== "free")} />}
+      {tab === "rapor" && <Report key={runList.filter((r) => r.status === "done").length} brand={b} type={type} runs={runList} onBrandChange={brand.reload} paid={current?.kind === "growth_lab" || (!!current?.plan && current.plan !== "free")} />}
       {tab === "rapor" && current?.kind !== "demo_lab" && b.data_origin !== "simulated" && runList.some((r) => r.status === "done") && <ReportSharePanel brand={b} />}
       {tab === "rapor" && current && (current.kind === "business" || current.kind === "agency") && b.data_origin !== "simulated" && <ReportBrandingPanel workspaceId={current.id} agency={current.plan === "agency"} />}
       {tab === "oneriler" && <Advice brand={b} type={type} runs={runs.data ?? []} onBrandChange={brand.reload} />}
@@ -497,7 +498,7 @@ function Products({ brand, paidAllowed, manualShopping }: { brand: Brand; paidAl
                     </div>
                   )}
                   <span className="row-actions">
-                    {paidAllowed && <button className="link-btn" disabled={pending || busy === p.id} onClick={() => check(p.id)}>{pending ? L("Kontrol sırada", "Check queued") : L("Doğruluğu kontrol et (yaklaşık 0,02 $)", "Check accuracy (about $0.02)")}</button>}
+                    {paidAllowed && <button className="link-btn" disabled={pending || busy === p.id} onClick={() => check(p.id)}>{pending ? L("Kontrol sırada", "Check queued") : L("Doğruluğu kontrol et", "Check accuracy")}</button>}
                     <button className="link-btn" onClick={async () => { try { await api.deleteProduct(p.id); products.reload(); } catch (x) { setErr(friendlyError(x)); } }}>{L("Sil", "Delete")}</button>
                   </span>
                 </li>
@@ -737,7 +738,23 @@ const LIVE_ENGINES = ["openai", "claude", "perplexity"];
 /** Sekmelerde kısa ad (şirket adı olmadan): dar ekranda satır kırılmasın. */
 const shortEngine = (p: string) => (p === "openai" ? "ChatGPT" : p === "claude" ? "Claude" : p === "perplexity" ? "Perplexity" : p === "gemini" ? "Gemini" : p);
 
-function Report({ brand, type, onBrandChange, paid = false }: { brand: Brand; type: MeasurementType; onBrandChange: () => void; paid?: boolean }) {
+/** Raporun en üstünde tek iş: rehberin ilk maddesi (Öneriler sekmesiyle aynı hesap). 18 Kasım: "ne yapmalıyım?" cevabı rapordan görünsün. */
+function WeeklyTodo({ brand, type, runs }: { brand: Brand; type: MeasurementType; runs: Run[] }) {
+  const { loading, recs } = useRecommendations(brand, type, runs);
+  if (loading || !recs.length) return null;
+  const r = recs[0];
+  return (
+    <section className="panel weekly-todo" aria-label={L("Bu hafta yapılacak iş", "This week's task")}>
+      <p className="eyebrow">{L("Bu hafta yapılacak iş", "This week's task")}</p>
+      <h2>{r.title}</h2>
+      <p>{r.action}</p>
+      {r.check && <p className="muted">{L("Sonraki ölçümde bakın: ", "Check in the next measurement: ")}{r.check}</p>}
+      <p><Link to="?sekme=oneriler">{isEn() ? `See all ${recs.length} recommendations` : `Tüm önerileri gör (${recs.length})`}</Link></p>
+    </section>
+  );
+}
+
+function Report({ brand, type, onBrandChange, paid = false, runs = [] }: { brand: Brand; type: MeasurementType; onBrandChange: () => void; paid?: boolean; runs?: Run[] }) {
   const vis = useLoad(() => api.visibility(brand.id, type), [brand.id, type]);
   const [metric, setMetric] = useState<"recommend" | "mention">("recommend");
   // Canlı aramada birden çok motor olabilir (ChatGPT, Claude): oranlar motor bazında ayrı gösterilir, karıştırılmaz
@@ -791,6 +808,7 @@ function Report({ brand, type, onBrandChange, paid = false }: { brand: Brand; ty
   return (
     <div className="stack">
       <DataNotice type={type} engines={live && last ? last.providers.map(shortEngine) : undefined} />
+      {last && runs.length > 0 && <WeeklyTodo brand={brand} type={type} runs={runs} />}
       {!last ? (
         <Empty title={L("Henüz tamamlanmış ölçüm yok", "No completed measurements yet")}>
           {isEn()
@@ -1413,8 +1431,9 @@ function TruthGuardPanel({ brand, paid, mix, stats }: { brand: Brand; paid: bool
     <section className="panel" id="truthguard">
       <h2>TruthGuard</h2>
       {!brand.fact_card ? (
-        <p>{L("Doğruluk kontrolü için önce markanın doğru bilgi kartını doldurun: sayfanın üstündeki \"Düzenle\" → \"Doğru bilgi kartı\". Kontrol sonraki saatlerde kendiliğinden yapılır.", "To check accuracy, first fill in the brand's fact card: \"Edit\" at the top → \"Fact card\". Checks then run automatically within hours.")}</p>
-      ) : checks.loading ? <Loading /> : s.checks === 0 && s.failed > 0 ? (
+        <><FactCardInline brand={brand} /><p className="muted">{L("Kartı sonra sayfanın üstündeki \"Düzenle\" ile değiştirebilirsiniz.", "You can change it later with \"Edit\" at the top of the page.")}</p></>
+      ) : null}
+      {!brand.fact_card ? null : checks.loading ? <Loading /> : s.checks === 0 && s.failed > 0 ? (
         <p className="muted">{isEn() ? `${s.failed} check(s) could not be completed because of a technical error. The same question and engine are tried again about a week later; nothing is counted as correct or wrong until then.` : `${s.failed} kontrol teknik bir hata yüzünden yapılamadı. Aynı soru ve motor yaklaşık bir hafta sonra yeniden denenir; o zamana kadar hiçbir iddia doğru ya da yanlış sayılmaz.`}</p>
       ) : s.checks === 0 ? (
         <p className="muted">{L("Henüz kontrol yok. Markanızın geçtiği yeni cevaplar birkaç saat içinde (soru ve motor başına haftada bir) bilgi kartınızla karşılaştırılır.", "No checks yet. New answers that mention your brand are compared with your fact card within hours (once a week per question and engine).")}</p>
@@ -1771,7 +1790,8 @@ function ActionsPanel({ brand }: { brand: Brand }) {
 
 const SEV_LABEL = { high: L("Önemli", "Important"), medium: L("Orta", "Medium"), low: L("Düşük", "Low"), info: L("Bilgi", "Info") } as const;
 
-function Advice({ brand, type, runs, onBrandChange }: { brand: Brand; type: MeasurementType; runs: Run[]; onBrandChange: () => void }) {
+/** İyileştirme rehberi girdisi ve önerileri: Öneriler sekmesi ve rapordaki "Bu hafta yapılacak iş" kartı aynı hesabı kullanır. */
+function useRecommendations(brand: Brand, type: MeasurementType, runs: Run[]) {
   const audit = useLoad(() => api.latestAudit(brand.id), [brand.id, brand.audit_requested_at]);
   const prompts = useLoad(() => api.prompts(brand.id), [brand.id]);
   const lastRun = runs.find((r) => r.status === "done" && r.measurement_type === type);
@@ -1808,18 +1828,9 @@ function Advice({ brand, type, runs, onBrandChange }: { brand: Brand; type: Meas
     const wrongBrandClaims = truthSummary(tc).wrongClaims.slice(0, 5).map((w) => ({ claim: w.claim, fact: w.fact }));
     return { engineGap, opportunitySites, wrongClaims, shoppingBehind, ownShare, wrongBrandClaims };
   }, [brand.id, type, lastRun?.id]);
-  const [busy, setBusy] = useState(false);
-  const [err, setErr] = useState<string | null>(null);
-  const [msg, setMsg] = useState<string | null>(null);
-  const [rev, setRev] = useState(0);
-  const [campMsg, setCampMsg] = useState<string | null>(null);
-  const [campErr, setCampErr] = useState<string | null>(null);
-  const camps = useLoad(() => api.actions(brand.id), [brand.id, rev]);
+  const loading = audit.loading || prompts.loading || results.loading || prevResults.loading || evidence.loading;
   const sim = brand.data_origin === "simulated";
-  const pendingAudit = brand.audit_requested_at && (!audit.data || audit.data.created_at < brand.audit_requested_at);
-
-  if (audit.loading || prompts.loading || results.loading || prevResults.loading || evidence.loading) return <Loading />;
-  const recInput = {
+  const recInput = loading ? null : ({
     brandName: brand.name, website: brand.website, city: brand.city, sector: brand.sector, aliases: brand.aliases,
     activePrompts: (prompts.data ?? []).filter((p) => p.active).length,
     completedRuns: runs.filter((r) => r.status === "done").length,
@@ -1829,8 +1840,24 @@ function Advice({ brand, type, runs, onBrandChange }: { brand: Brand; type: Meas
     lang: (isEn() ? "en" : "tr") as "en" | "tr",
     previousPrompts: prevResults.data ?? [],
     ...(evidence.data ?? {}),
-  } satisfies RecInput as RecInput;
-  const recs = buildRecommendations(recInput).filter((r) => !(sim && r.id === "no_website"));
+  } satisfies RecInput as RecInput);
+  const recs = recInput ? buildRecommendations(recInput).filter((r) => !(sim && r.id === "no_website")) : [];
+  return { audit, prompts, lastRun, results, prevResults, evidence, loading, recInput, recs };
+}
+
+function Advice({ brand, type, runs, onBrandChange }: { brand: Brand; type: MeasurementType; runs: Run[]; onBrandChange: () => void }) {
+  const { audit, results, loading, recInput, recs } = useRecommendations(brand, type, runs);
+  const sim = brand.data_origin === "simulated";
+  const [busy, setBusy] = useState(false);
+  const [err, setErr] = useState<string | null>(null);
+  const [msg, setMsg] = useState<string | null>(null);
+  const [rev, setRev] = useState(0);
+  const [campMsg, setCampMsg] = useState<string | null>(null);
+  const [campErr, setCampErr] = useState<string | null>(null);
+  const camps = useLoad(() => api.actions(brand.id), [brand.id, rev]);
+  const pendingAudit = brand.audit_requested_at && (!audit.data || audit.data.created_at < brand.audit_requested_at);
+
+  if (loading || !recInput) return <Loading />;
   const activeRecs = new Set((camps.data ?? []).filter((a) => a.rec_id && a.tasks && taskProgress(a.tasks).done < a.tasks.length).map((a) => a.rec_id!));
   async function startCampaign(r: (typeof recs)[number], tasks: string[]) {
     setCampErr(null); setCampMsg(null);
