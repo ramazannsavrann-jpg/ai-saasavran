@@ -36,6 +36,14 @@ Bu dal (`seslendirme`) videoların tek kaynağıdır. Yeni oturumda buradan deva
 - Global video İngilizce, Türkiye videosu Türkçe; YouTube başlık/açıklama/etiketler iki dilli. Başlık ≤ 100 karakter.
 - Kulaklık videosu formatı esas: marka oranı, motor karşılaştırması, soru bazında kayıp, rakip ürün, ürün doğruluğu, Google Shopping sırası, kaynaklar.
 
+
+## KAYNAK AĞI + GOOGLE SHOPPING (18 Kasım, kullanıcı kararı — tüm veri videoları için kalıcı)
+- **Kaynak ağı sahnesi** (`"net"`, kodu `sablon/kaynak_agi.py`, `make.py` içinde kayıtlı): solda yapay zekânın kaynak gösterdiği siteler, sağda markalar/firmalar; çizgi kalınlığı = o siteyi kaynak gösterip o markayı anan cevap sayısı. Veri: canlı arama cevaplarının `cited_urls` alan adları × cevap metninde marka geçişi. Ayar: `CFG["net"] = {"left": [[site, cevap]], "right": [ad], "links": [[sol_i, sag_i, cevap]]}`, metin `tag_net`, `net`, `net_sub`, `net_note`. Veri videolarında kaynaklar sahnesi olarak bu kullanılır (`order` içinde `"net"`). Örnek: `video/nakliye/nakliye-tr.json`.
+- **Google Shopping sırası:** belirli ürün/model içeren her videoda (telefon, kulaklık, TV, prezervatif gibi) Google Shopping sırası mutlaka konur (yukarıdaki "Google Shopping verisi" kuralı). Hizmet videolarında (nakliye gibi) Shopping olmaz; bu açıklamada yazılır, uydurulmaz.
+- **Grafiklerde gerçek adlar (18 Kasım):** markalar/firmalar grafiklerde ve anlatımda gerçek adlarıyla gösterilir, harf (Marka A/B) kullanılmaz. Marka kartı kalır, altında "Alfabetik sırayla".
+- **Gemini sütunu:** canlı arama yapmayan Gemini ayrı sütundur; üstünde Gemini renginde küçük rozet "Hafızadan" / "From memory" (`gemini_label`). Alta küçük not konmaz.
+- Yeni sahne/şablon değişikliği yapan oturum kodu **bu dala push eder**; yalnız yerel çalışma klasöründe bırakılmaz (prezervatif videosundaki kaynak ağı ve Shopping sahneleri kaydedilmediği için kayboldu).
+
 ## Ses + müzik karışımı
 ```
 ffmpeg -i v.mp4 -i voice.wav -i music.wav -filter_complex "[1:a]aresample=44100,volume=1.6,apad=whole_dur=$D,asplit=2[vo][sc];[2:a]volume=0.35,atrim=0:$D,afade=t=out:st=$(($D-1.5)):d=1.5[mu];[mu][sc]sidechaincompress=threshold=0.03:ratio=8:attack=20:release=300[duck];[duck][vo]amix=inputs=2:duration=first:normalize=0,alimiter=limit=0.95[a]" -map 0:v -map "[a]" -c:v copy -c:a aac -b:a 160k out.mp4

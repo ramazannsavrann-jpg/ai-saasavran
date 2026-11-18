@@ -120,7 +120,9 @@ def s3(t, dur):
     for (lab, sub), x, c in zip(CFG["engines"], xs, cols):
         rtext(d, x, y - 80, lab, font("Bold", 26 if four else 36), c); rtext(d, x, y - 36, sub, font("Medium", 26 if four else 28), MUTED)
         if lab == "Gemini" and CFG.get("gemini_label"):
-            rtext(d, x, y - 122, CFG["gemini_label"], font("SemiBold", 26), c)
+            fl = font("Bold", 24); gl = CFG["gemini_label"]; pw = d.textlength(gl, font=fl) + 28
+            d.rounded_rectangle([x - pw, y - 132, x, y - 96], radius=18, fill=mix(c, 0.22), outline=c, width=2)
+            d.text((x - pw + 14, y - 127), gl, font=fl, fill=c)
     y += 20; step = rows_step(y, len(CFG["eng_rows"]), 125, YB - 120)
     for i, row in enumerate(CFG["eng_rows"]):
         al = ease((t - 0.5 - i * 0.3) / 0.5); hl = row[0] in CFG["eng_hl"]
@@ -259,7 +261,16 @@ def guvenli_alan_kontrol(im, ad):
     if hata: print(f"GÜVENLİ ALAN HATASI: {ad} -> {hata[0]} (kapalı bölgede içerik var)")
     return not hata
 
-FN = {"s1": s1, "s2": s2, "s3": s3, "s4": s4, "s5": s5, "s6": s6, "s7": s7, "s8": s8, "subs": s_subs, "boxes": s_boxes, "names": s_names}
+_HERE = os.path.dirname(os.path.abspath(__file__))
+def s_net(t, dur):
+    """Kaynak ağı sahnesi: kodu sablon/kaynak_agi.py içinde."""
+    import importlib.util
+    p = os.path.join(_HERE, "kaynak_agi.py")
+    if not os.path.exists(p): p = os.path.join(_HERE, "..", "sablon", "kaynak_agi.py")
+    sp = importlib.util.spec_from_file_location("kaynak_agi", p); mod = importlib.util.module_from_spec(sp); sp.loader.exec_module(mod)
+    return mod.scene(sys.modules[__name__], t, dur)
+
+FN = {"s1": s1, "s2": s2, "s3": s3, "s4": s4, "s5": s5, "s6": s6, "s7": s7, "s8": s8, "subs": s_subs, "boxes": s_boxes, "names": s_names, "net": s_net}
 ORDER = CFG.get("order", ["s1", "s2", "s3", "s4", "s5", "s6", "s7", "s8"])
 # Marka kartı her zaman kancadan (ilk sahne) hemen sonra gelir. order'da "names" yoksa eklenir.
 # Süresi: order'da yazılıysa sureler2'nin verdiği pN; değilse dur["names"] (yoksa 2.5 sn) — anlatımda kart için bir cümle olmalı.

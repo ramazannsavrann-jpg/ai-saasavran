@@ -256,7 +256,16 @@ def guvenli_alan_kontrol(im, ad):
     if hata: print(f"GÜVENLİ ALAN HATASI: {ad} -> {hata[0]} (kapalı bölgede içerik var)")
     return not hata
 
-FN = {"s1": s1, "s2": s2, "s3": s3, "s4": s4, "s5": s5, "s6": s6, "s7": s7, "s8": s8, "subs": s_subs, "boxes": s_boxes, "names": s_names}
+_HERE = os.path.dirname(os.path.abspath(__file__))
+def s_net(t, dur):
+    """Kaynak ağı sahnesi: kodu sablon/kaynak_agi.py içinde."""
+    import importlib.util
+    p = os.path.join(_HERE, "kaynak_agi.py")
+    if not os.path.exists(p): p = os.path.join(_HERE, "..", "sablon", "kaynak_agi.py")
+    sp = importlib.util.spec_from_file_location("kaynak_agi", p); mod = importlib.util.module_from_spec(sp); sp.loader.exec_module(mod)
+    return mod.scene(sys.modules[__name__], t, dur)
+
+FN = {"s1": s1, "s2": s2, "s3": s3, "s4": s4, "s5": s5, "s6": s6, "s7": s7, "s8": s8, "subs": s_subs, "boxes": s_boxes, "names": s_names, "net": s_net}
 ORDER = CFG.get("order", ["s1", "s2", "s3", "s4", "s5", "s6", "s7", "s8"])
 # Marka kartı her zaman kancadan (ilk sahne) hemen sonra gelir. order'da "names" yoksa eklenir.
 # Süresi: order'da yazılıysa sureler2'nin verdiği pN; değilse dur["names"] (yoksa 2.5 sn) — anlatımda kart için bir cümle olmalı.

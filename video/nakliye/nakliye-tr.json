@@ -8,7 +8,7 @@
   "s3",
   "s4",
   "boxes",
-  "s7",
+  "net",
   "s8"
  ],
  "n": 16,
@@ -23,34 +23,34 @@
   "Roadway Moving",
   "Solidarity Movers"
  ],
- "footer": "ChatGPT, Claude, Perplexity canlı arama (ABD) · Gemini canlı arama yok · 18 Kas 2026",
+ "footer": "ChatGPT, Claude, Perplexity: canlı web araması (ABD) · Gemini: model bilgisi · 18 Kas 2026",
  "brands": [
   [
-   "Firma D",
+   "Roadway",
    19
   ],
   [
-   "Firma A",
+   "JP Urban",
    10
   ],
   [
-   "Firma F",
+   "Piece of Cake",
    10
   ],
   [
-   "Firma C",
+   "Intense",
    8
   ],
   [
-   "Firma E",
+   "Solidarity",
    7
   ],
   [
-   "Firma B",
+   "FlatRate",
    6
   ],
   [
-   "Firma G",
+   "Dumbo",
    6
   ]
  ],
@@ -72,52 +72,52 @@
    "/12"
   ]
  ],
- "gemini_label": "canlı arama yok",
+ "gemini_label": "Hafızadan",
  "eng_rows": [
   [
-   "Firma D",
+   "Roadway",
    6,
    9,
    4,
    0
   ],
   [
-   "Firma A",
+   "JP Urban",
    3,
    7,
    0,
    12
   ],
   [
-   "Firma F",
+   "Piece of Cake",
    2,
    6,
    2,
    12
   ],
   [
-   "Firma C",
+   "Intense",
    1,
    5,
    2,
    0
   ],
   [
-   "Firma E",
+   "Solidarity",
    2,
    3,
    2,
    0
   ],
   [
-   "Firma B",
+   "FlatRate",
    1,
    3,
    2,
    6
   ],
   [
-   "Firma G",
+   "Dumbo",
    3,
    2,
    1,
@@ -125,25 +125,25 @@
   ]
  ],
  "eng_hl": [
-  "Firma D",
-  "Firma A"
+  "Roadway",
+  "JP Urban"
  ],
  "questions": [
   [
    "Manhattan'da en güvenilir?",
    [
     [
-     "Firma D",
+     "Roadway",
      "6/6",
      false
     ],
     [
-     "Firma A",
+     "JP Urban",
      "2/6",
      false
     ],
     [
-     "Firma B",
+     "FlatRate",
      "0/6",
      true
     ]
@@ -153,12 +153,12 @@
    "Bu hafta son dakika taşınma?",
    [
     [
-     "Firma G",
+     "Dumbo",
      "4/6",
      false
     ],
     [
-     "Firma D",
+     "Roadway",
      "0/6",
      true
     ]
@@ -168,17 +168,17 @@
    "Tutulmaya değer küçük firmalar?",
    [
     [
-     "Firma E",
+     "Solidarity",
      "4/6",
      false
     ],
     [
-     "Firma A",
+     "JP Urban",
      "3/6",
      false
     ],
     [
-     "Firma B",
+     "FlatRate",
      "0/6",
      true
     ]
@@ -188,17 +188,17 @@
    "Başka eyalete taşınma?",
    [
     [
-     "Firma B",
+     "FlatRate",
      "1/6",
      false
     ],
     [
-     "Firma D",
+     "Roadway",
      "0/6",
      true
     ],
     [
-     "Firma A",
+     "JP Urban",
      "0/6",
      true
     ]
@@ -210,11 +210,11 @@
    "title": "Canlı aramada 1. olan",
    "lines": [
     [
-     "Firma D: 19/48 canlı arama",
+     "Roadway: 19/48 canlı arama",
      "good"
     ],
     [
-     "Firma D: Gemini'de 0/12",
+     "Roadway: Gemini'de 0/12",
      "bad"
     ]
    ]
@@ -223,20 +223,20 @@
    "title": "Gemini'nin favorisi",
    "lines": [
     [
-     "Firma A: Gemini'de 12/12",
+     "JP Urban: Gemini'de 12/12",
      "good"
     ],
     [
-     "Firma A: Perplexity'de 0/16",
+     "JP Urban: Perplexity'de 0/16",
      "bad"
     ]
    ]
   },
   {
-   "title": "Dört motorun hepsinde geçen",
+   "title": "Dört motorun hepsinde: 7 firmadan yalnız 3'ü",
    "lines": [
     [
-     "Firma B, F, G · 7 firmadan yalnız 3'ü",
+     "FlatRate · Piece of Cake · Dumbo",
      "gold"
     ]
    ]
@@ -265,14 +265,14 @@
   ]
  ],
  "dur": {
-  "p1": 7.88,
-  "p2": 1.43,
-  "p3": 4.47,
-  "p4": 8.51,
-  "p5": 7.78,
-  "p6": 3.46,
-  "p7": 5.1,
-  "p8": 8.77
+  "p1": 8.27,
+  "p2": 1.53,
+  "p3": 4.74,
+  "p4": 10.2,
+  "p5": 7.45,
+  "p6": 3.81,
+  "p7": 4.89,
+  "p8": 9.11
  },
  "t": {
   "hook": "Yapay zekâ hangi nakliye firmasını öneriyor?",
@@ -286,7 +286,7 @@
   "tag_eng": "Motor karşılaştırması",
   "eng": "Motorlar anlaşamıyor",
   "eng_sub": "Firmanın geçtiği cevap sayısı",
-  "eng_note": "Gemini canlı arama yapmıyor: Firma D'yi hiç anmadı.",
+  "eng_note": "Kendi bilgisiyle cevap veren Gemini, Roadway'i hiç anmadı.",
   "tag_q": "Soru bazında",
   "byq": "Soru değişince kazanan değişiyor",
   "byq_sub": "Soru başına 6 cevap (canlı arama)",
@@ -299,7 +299,205 @@
   "cta": "Yapay zekâ markanız için ne diyor?",
   "cta2": "ChatGPT, Gemini, Claude ve Perplexity'de her hafta takip edin.",
   "free": "Ücretsiz kontrol, kayıt gerekmez",
-  "disc": "18 Kasım 2026 yapay zekâ cevapları (ABD). 60 cevap; Gemini'nin 4 cevabı alınamadı. Küçük örneklem, tüm pazarı temsil etmez. Harfler rastgele atandı. Marka adları sahiplerine aittir."
+  "disc": "18 Kasım 2026 yapay zekâ cevapları (ABD). 60 cevap; Gemini'nin 4 cevabı alınamadı. Küçük örneklem, tüm pazarı temsil etmez. Marka adları sahiplerine aittir.",
+  "names_sub": "Alfabetik sırayla",
+  "tag_net": "Kaynak ağı",
+  "net": "Yapay zekâ nereye bakıyor?",
+  "net_sub": "Çizgi kalınlığı = siteyi kaynak gösterip firmayı anan cevap sayısı",
+  "net_note": "movebuddha.com'u kaynak gösteren 11 cevabın 10'unda Roadway var."
  },
- "_map": "A=JP Urban Moving, B=FlatRate Moving, C=Intense Movers, D=Roadway Moving, E=Solidarity Movers, F=Piece of Cake Moving, G=Dumbo Moving (yayına girmez)"
+ "net": {
+  "left": [
+   [
+    "movebuddha.com",
+    11
+   ],
+   [
+    "movd.nyc",
+    8
+   ],
+   [
+    "yelp.com",
+    7
+   ],
+   [
+    "extraspace.com",
+    6
+   ],
+   [
+    "freightwaves.com",
+    6
+   ],
+   [
+    "dot.ny.gov",
+    5
+   ]
+  ],
+  "right": [
+   "Roadway",
+   "JP Urban",
+   "Piece of Cake",
+   "Intense",
+   "Solidarity",
+   "FlatRate",
+   "Dumbo"
+  ],
+  "links": [
+   [
+    0,
+    0,
+    10
+   ],
+   [
+    0,
+    1,
+    7
+   ],
+   [
+    0,
+    2,
+    1
+   ],
+   [
+    0,
+    6,
+    1
+   ],
+   [
+    0,
+    3,
+    3
+   ],
+   [
+    0,
+    4,
+    4
+   ],
+   [
+    1,
+    0,
+    3
+   ],
+   [
+    1,
+    1,
+    3
+   ],
+   [
+    1,
+    2,
+    3
+   ],
+   [
+    1,
+    5,
+    1
+   ],
+   [
+    1,
+    3,
+    3
+   ],
+   [
+    1,
+    4,
+    1
+   ],
+   [
+    2,
+    0,
+    5
+   ],
+   [
+    2,
+    1,
+    5
+   ],
+   [
+    2,
+    2,
+    2
+   ],
+   [
+    2,
+    3,
+    4
+   ],
+   [
+    2,
+    4,
+    3
+   ],
+   [
+    3,
+    0,
+    6
+   ],
+   [
+    3,
+    1,
+    6
+   ],
+   [
+    3,
+    2,
+    3
+   ],
+   [
+    3,
+    3,
+    4
+   ],
+   [
+    3,
+    4,
+    3
+   ],
+   [
+    4,
+    0,
+    6
+   ],
+   [
+    4,
+    1,
+    4
+   ],
+   [
+    4,
+    2,
+    3
+   ],
+   [
+    4,
+    5,
+    2
+   ],
+   [
+    4,
+    3,
+    4
+   ],
+   [
+    4,
+    4,
+    1
+   ],
+   [
+    5,
+    0,
+    2
+   ],
+   [
+    5,
+    2,
+    1
+   ],
+   [
+    5,
+    4,
+    1
+   ]
+  ]
+ }
 }
