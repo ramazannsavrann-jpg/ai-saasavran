@@ -190,8 +190,9 @@ ${demoHtml(false)}
 </section>
 
 <section class="honest">
-  <h2>Kendi markamızı ölçtük: 20 cevabın 0'ı</h2>
-  <p>AI SaaSavran'ı kendi ürünümüzle, ChatGPT'nin canlı web aramasıyla ölçtük. Yeni bir marka olarak hiçbir cevapta önerilmedik; rakiplerimiz 20 cevabın 5 ila 8'inde önerildi. Sonuçları saklamıyoruz, çünkü ürünün ne işe yaradığını en iyi bu gösteriyor: nerede olduğunuzu bilmeden ilerleyemezsiniz.</p>
+  <h2>Kendi markamızı ölçtük: 42 cevabın 0'ı</h2>
+  <p>18 Kasım 2026'da AI SaaSavran'ı kendi ürünümüzle ölçtük: 7 markasız soru, ChatGPT, Claude ve Perplexity'ye Türkiye'den canlı web aramasıyla, her soru 2 kez. Yeni bir marka olarak 42 cevabın hiçbirinde önerilmedik. Rakipler 42 cevabın 22 ile 33'ünde önerildi (Peec AI 33, Otterly.AI 32, Semrush 32, Profound 23, Ahrefs 22). Adımızı doğrudan sorduğumuzda Perplexity sitemizi buldu, Claude yalnız kod deposunu buldu, ChatGPT bizi başka bir markayla karıştırdı. Sonuçları saklamıyoruz, çünkü ürünün ne işe yaradığını en iyi bu gösteriyor: nerede olduğunuzu bilmeden ilerleyemezsiniz.</p>
+  <p class="small">İlk ölçümümüz (11 Kasım, yalnız ChatGPT): 20 cevabın 0'ı.</p>
   <p><a href="/rehber/chatgpt-marka-gorunurlugu-olcme/">Ölçüm yöntemini ve tüm tabloyu okuyun</a></p>
 </section>
 
@@ -269,8 +270,9 @@ ${demoHtml(true)}
 </section>
 
 <section class="honest">
-  <h2>We measured ourselves first: 0 out of 20</h2>
-  <p>We ran AI SaaSavran on our own brand with ChatGPT's live web search. As a new brand we were recommended in none of 20 answers; established competitors appeared in 5 to 8. We publish it because it shows why measurement comes first: you can't improve what you can't see.</p>
+  <h2>We measured ourselves first: 0 out of 42</h2>
+  <p>On 18 November 2026 we ran AI SaaSavran on our own brand: 7 unbranded questions to ChatGPT, Claude and Perplexity with live web search from Turkey, each asked twice. As a new brand we were recommended in none of 42 answers. Competitors were recommended in 22 to 33 of them (Peec AI 33, Otterly.AI 32, Semrush 32, Profound 23, Ahrefs 22). Asked about us by name, Perplexity found our site, Claude found only our code repository, and ChatGPT confused us with another brand. We publish it because it shows why measurement comes first: you can't improve what you can't see.</p>
+  <p class="small">Our first measurement (11 November, ChatGPT only): 0 out of 20.</p>
   <p><a href="/guides/measure-brand-visibility-in-chatgpt/">Read the method and full table</a></p>
 </section>
 
