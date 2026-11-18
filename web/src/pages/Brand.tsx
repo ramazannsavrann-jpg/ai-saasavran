@@ -963,6 +963,9 @@ function Report({ brand, type, onBrandChange, paid = false }: { brand: Brand; ty
           {live && (
             <section className="panel" id="kaynak-egemenligi">
               <h2>{L("Kaynaklar kimi destekliyor", "Who the sources support")}</h2>
+              {(answers.data ?? []).some((a) => a.provider === "perplexity" && !(a.cited_urls ?? []).length) && (
+                <p className="src-sup muted">{L("Perplexity bu ölçümdeki cevaplarının bazılarında hiçbir site göstermedi; aramada bulduğu ama cevapta göstermediği siteler kaynak sayılmaz.", "In some answers in this measurement Perplexity showed no sites; sites it searched but did not show in the answer are not counted as sources.")}</p>
+              )}
               <p className="muted">{L("Her kaynak sitenin kaç cevapta kullanıldığı, kime ait olduğu ve o cevaplarda hangi markaların önerildiği. Bir kaynağın geçtiği cevapta bir markanın önerilmesi, kaynağın o markayı önerdiğini kanıtlamaz; birlikte görülme sayısıdır.", "How many answers used each source site, who owns it, and which brands were recommended in those answers. A brand being recommended in an answer that cites a source does not prove the source recommends it; this is a co-occurrence count.")}</p>
               {ments.loading || comps.loading || answers.loading ? <Loading /> : dominance.length === 0 ? <p>{L("Bu ölçümde kaynak gösterilmedi.", "No sources were cited in this measurement.")}</p> : (
                 <ul className="src-dom">

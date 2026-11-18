@@ -57,8 +57,12 @@ export function parsePerplexityResponse(json: PplxResponse, promptId: string, cf
   const parts = items.filter((i) => i.type === "message").flatMap((i) => i.content ?? []).filter((c) => c.type === "output_text");
   const text = parts.map((p) => p.text ?? "").join("").trim();
   if (!text) throw new ProviderError("Perplexity boş cevap döndü", { kind: "transient" });
-  // Kaynak: cevabın metin içi alıntıları; hiç yoksa aramanın bulduğu siteler
-  const cited = parts.flatMap((p) => p.annotations ?? []).filter((a) => a.type === "url_citation" && a.url).map((a) => a.url!);
+  // Kaynak: yalnız cevabın gerçekten gösterdiği siteler (metin içi alıntı, yoksa cevaptaki bağlantılar).
+  // Aramanın bulduğu ama cevapta gösterilmeyen siteler kaynak SAYILMAZ (18 Kasım kararı: diğer motorlarla aynı ölçüt;
+  // eskiden her cevaba 15 arama sonucu ekleniyor, kaynak paylarında Perplexity'yi şişiriyordu).
+  const annotated = parts.flatMap((p) => p.annotations ?? []).filter((a) => a.type === "url_citation" && a.url).map((a) => a.url!);
+  const inText = [...text.matchAll(/https?:\/\/[^\s)\]>"'<]+/g)].map((m) => m[0].replace(/[.,;:!?]+$/, ""));
+  const cited = annotated.length ? annotated : inText;
   const searchItems = items.filter((i) => i.type === "search_results");
   const found = searchItems.flatMap((i) => i.results ?? []).map((r) => r.url).filter((u): u is string => !!u);
   const queries = searchItems.flatMap((i) => i.queries ?? []).filter(Boolean);
@@ -72,7 +76,7 @@ export function parsePerplexityResponse(json: PplxResponse, promptId: string, cf
   return {
     promptId, provider: "perplexity", model: cfg.model,
     method: "api_with_search", dataOrigin: "live_api", billing: cfg.billing,
-    answerText: text, citedUrls: [...new Set(cited.length ? cited : found)], searchQueries: queries,
+    answerText: text, citedUrls: [...new Set(cited)], searchQueries: queries,
     inputTokens, outputTokens, costUsd: cost, paidEquivalentUsd: cost,
   };
 }
