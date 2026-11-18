@@ -50,7 +50,7 @@ export function StartGuide({ brand, runs, onRunsChange, goTab }: { brand: Brand;
   const close = () => { try { localStorage.setItem(offKey(brand.id), "1"); } catch { /* yok say */ } setOff(true); };
 
   const existing = new Set(prompts.data.map((p) => p.text));
-  const ideas = questionTemplates(brand.sector, brand.city).filter((q) => !existing.has(q.text));
+  const ideas = questionTemplates(brand.sector, brand.city, brand.name).filter((q) => !existing.has(q.text));
   const need = Math.max(GUIDE_MIN_QUESTIONS - active, 0);
   async function addReady() {
     setBusy("q"); setErr(null);

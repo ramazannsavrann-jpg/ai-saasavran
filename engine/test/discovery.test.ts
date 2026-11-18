@@ -7,6 +7,15 @@ test("Tohumlar: Türkçe/İngilizce, şehirli/şehirsiz, en fazla 3", () => {
   assert.deepEqual(discoverySeeds({ sector: "running shoes", lang: "en" }), ["best running shoes", "running shoes recommendations", "how to choose running shoes"]);
 });
 
+test("Tohumlar (19 Kasım): kendi soruları önce, Diğer'de sektör tohumu yok, bölünmüş sektör, en fazla 5", () => {
+  assert.deepEqual(discoverySeeds({ sector: "Diğer", city: "Antalya", lang: "tr", questions: ["Köklendirici gübre nereden alırım"] }), ["Köklendirici gübre nereden alırım"]);
+  assert.deepEqual(discoverySeeds({ sector: "Diğer", lang: "tr" }), []);
+  const s = discoverySeeds({ sector: "Tarım / gübre / zirai ürünler", city: "Antalya", lang: "tr", questions: ["Köklendirici gübre nereden alırım", "Yaprak gübresi hangisi iyi"] });
+  assert.equal(s.length, 5);
+  assert.deepEqual(s.slice(0, 3), ["Köklendirici gübre nereden alırım", "Yaprak gübresi hangisi iyi", "en iyi tarım"]);
+  assert.deepEqual(discoverySeeds({ sector: "Moving company", city: "New York", lang: "en" }), ["best Moving company", "Moving company in New York", "how to choose Moving company"]);
+});
+
 test("Ayrıştırma ve temizleme: önce gerçek sorular, tekrar ve mevcut sorular atılır", () => {
   const j = { related_questions: [{ question: "Antalya'da en iyi diş kliniği hangisi?" }, { question: "İmplant fiyatları ne kadar?" }],
     related_searches: [{ query: "antalya diş kliniği yorumlar" }, { query: "implant" }, { query: "İmplant fiyatları ne kadar" }] };

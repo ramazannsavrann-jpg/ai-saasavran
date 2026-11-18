@@ -4,12 +4,23 @@ import type { FetchLike } from "./providers/types.ts";
 
 export interface FoundQuestion { text: string; source: "paa" | "related"; seed: string }
 
-/** Sektör ve şehirden en fazla 3 arama tohumu. */
-export function discoverySeeds(o: { sector: string; city?: string | null; lang: string }): string[] {
-  const s = o.sector.trim().replace(/\s+/g, " ").slice(0, 80), c = (o.city ?? "").trim().slice(0, 40);
+const GENERIC_SECTOR = /^(diğer|other|i̇çerik üreticisi: diğer|içerik üreticisi: diğer|content creator: other)$/i;
+
+/** Arama tohumları (en fazla 5): önce markanın kendi (marka adı geçmeyen) soruları, sonra sektör ve şehir.
+ *  "Diğer" gibi genel sektörlerde sektör tohumu kurulmaz; sektör etiketi "Tarım / gübre / zirai ürünler" ise ilk iki parça ayrı tohum olur. */
+export function discoverySeeds(o: { sector: string; city?: string | null; lang: string; questions?: string[] }): string[] {
+  const c = (o.city ?? "").trim().slice(0, 40);
   const en = o.lang === "en";
-  const seeds = en ? [`best ${s}`, c ? `${s} in ${c}` : `${s} recommendations`, `how to choose ${s}`] : [`en iyi ${s}`, c ? `${c} ${s}` : `${s} önerisi`, `${s} nasıl seçilir`];
-  return [...new Set(seeds)];
+  const raw = o.sector.trim().replace(/\s+/g, " ").slice(0, 80);
+  const parts = GENERIC_SECTOR.test(raw) ? [] : raw.replace(/\([^)]*\)/g, "").split("/").map((x) => x.trim()).filter((x) => x.length >= 2);
+  const own = (o.questions ?? []).map((q) => q.trim().replace(/\s+/g, " ").slice(0, 100)).filter((q) => q.length >= 8).slice(0, 2);
+  const seeds: string[] = [...own];
+  if (parts.length) {
+    const s = parts.length > 1 ? parts[0].toLocaleLowerCase(en ? "en-US" : "tr-TR") : raw;
+    seeds.push(...(en ? [`best ${s}`, c ? `${s} in ${c}` : `${s} recommendations`, `how to choose ${s}`] : [`en iyi ${s}`, c ? `${c} ${s}` : `${s} önerisi`, `${s} nasıl seçilir`]));
+    if (parts.length > 1) seeds.push(en ? `best ${parts[1]}` : `en iyi ${parts[1]}`);
+  }
+  return [...new Set(seeds)].slice(0, 5);
 }
 
 export function parseDiscovery(json: unknown, seed: string): FoundQuestion[] {
@@ -22,7 +33,7 @@ export function parseDiscovery(json: unknown, seed: string): FoundQuestion[] {
 
 const norm = (s: string) => s.toLocaleLowerCase("tr-TR").replace(/[?!.,;:'"’]+/g, "").replace(/\s+/g, " ").trim();
 /** Temizler: çok kısa/uzun olanları, mevcut sorularla ve kendi içinde tekrar edenleri atar; ilgili aramaları soru biçimine sokmaz (olduğu gibi). */
-export function cleanQuestions(found: FoundQuestion[], existing: string[], max = 30): FoundQuestion[] {
+export function cleanQuestions(found: FoundQuestion[], existing: string[], max = 40): FoundQuestion[] {
   const seen = new Set(existing.map(norm));
   const out: FoundQuestion[] = [];
   for (const f of found) {
