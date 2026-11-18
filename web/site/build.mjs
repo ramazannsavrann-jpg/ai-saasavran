@@ -64,6 +64,7 @@ ${alternates}
 <meta property="og:url" content="${url}">${image ? `\n<meta property="og:image" content="${SITE.url}${image}">\n<meta name="twitter:card" content="summary_large_image">` : ""}
 <meta property="og:locale" content="${en ? "en_US" : "tr_TR"}">
 <meta name="theme-color" content="#0F6E5C">
+<meta name="color-scheme" content="light dark">
 <link rel="icon" href="/icon.svg" type="image/svg+xml">
 <link rel="icon" href="/favicon.ico" sizes="32x32">
 <link rel="alternate" type="application/rss+xml" title="AI SaaSavran Blog${en ? "" : " (Türkçe)"}" href="${SITE.url}${en ? "/blog/" : "/tr/blog/"}rss.xml">

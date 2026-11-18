@@ -177,15 +177,18 @@ tr.us td { background: var(--tint); font-weight: 600; }
 .home main > section h2 { font-size: clamp(1.7rem, 3.4vw, 2.5rem); margin-top: 0; }
 
 /* Koyu üst bant: başlık + hero tam genişlik */
-.home .top, .home .hero { background: var(--hero); color: var(--hero-ink); box-shadow: 0 0 0 100vmax var(--hero); clip-path: inset(0 -100vmax); }
-.home .top { max-width: 1200px; padding: 16px 24px; }
+body.home { overflow-x: clip; }
+/* Tam genişlik bant: gerçek arka plan (gölge hilesi yok; tarayıcı karanlık modu kenarları farklı boyamasın) */
+.home .top { background: var(--hero); color: var(--hero-ink); max-width: none; padding: 16px max(20px, calc(50vw - 576px)); }
+.home .hero { background: var(--hero); color: var(--hero-ink); margin-inline: calc(50% - 50vw); padding-inline: calc(50vw - 50%); }
 .home .mark, .home .top nav a { color: var(--hero-ink); }
 .home .mark b { color: var(--bright); }
 .home .top nav a.lang { color: var(--hero-muted); }
 .home .cta-sm { border-color: #3D6A5F; color: var(--hero-ink) !important; }
-.home main { max-width: 1200px; padding: 0 24px 56px; }
-.home .hero { gap: 48px; padding: 40px 0 72px; }
-@media (min-width: 880px) { .home .hero { grid-template-columns: 1.05fr .95fr; padding: 72px 0 96px; } }
+.home main { max-width: 1200px; padding: 0 20px 56px; }
+@media (min-width: 640px) { .home main { padding-inline: 24px; } }
+.home .hero { gap: 48px; padding-block: 40px 72px; }
+@media (min-width: 880px) { .home .hero { grid-template-columns: 1.05fr .95fr; padding-block: 72px 96px; } }
 .home .hero h1 { font-size: clamp(2.3rem, 5vw, 3.9rem); font-weight: 700; line-height: 1.04; letter-spacing: -0.02em; }
 .home .hero h1 em { font-style: normal; color: var(--bright); }
 .home .hero .lede { color: var(--hero-muted); font-size: 1.15rem; }
@@ -228,7 +231,7 @@ tr.us td { background: var(--tint); font-weight: 600; }
 .howto p { margin: 0; color: var(--muted); }
 
 /* Örnek ölçüm: açık yeşil tam genişlik bant */
-.home .demo:not(.daily) { background: var(--tint); box-shadow: 0 0 0 100vmax var(--tint); clip-path: inset(0 -100vmax); padding: 64px 0; margin-top: 48px; }
+.home .demo:not(.daily) { background: var(--tint); margin: 48px calc(50% - 50vw) 0; padding: 64px calc(50vw - 50%); }
 .home .demo-steps > li { border: 0; border-radius: 18px; }
 @media (min-width: 1040px) { .home .demo:not(.daily) .demo-steps { grid-template-columns: 1fr 1fr 1fr; } .home .demo:not(.daily) .demo-steps > li:first-child { grid-column: 1 / -1; } }
 .home .demo:not(.daily) .demo-steps > li:last-child { background: var(--hero); color: var(--hero-ink); }
