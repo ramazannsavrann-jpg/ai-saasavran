@@ -89,3 +89,11 @@ test("Shopping: 'Standard/Standart' ürün adıdır, stand (aksesuar) değildir"
   assert.equal(titleMatches("Apple Watch Series 11 şarj standı", w), false);
   assert.equal(titleMatches("Apple Watch Series 11 Charging Stand", w), false);
 });
+
+test("Shopping: 'e-book / e-kitap okuyucu' ürünün kendisidir; kılavuz kitabı değildir", () => {
+  const k = { name: "Kindle Paperwhite", brand: "Amazon" };
+  assert.equal(titleMatches("Amazon Kindle Paperwhite 16GB E-Book Reader", k), true);
+  assert.equal(titleMatches("Amazon Kindle Paperwhite e-kitap okuyucu", k), true);
+  assert.equal(titleMatches("Amazon Kindle Paperwhite user guide book", k), false);
+  assert.equal(titleMatches("Amazon Kindle Paperwhite kitap kılıfı", k), false);
+});

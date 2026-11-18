@@ -227,7 +227,13 @@ const GENERIC_CAPS = new Set([
   "temmuz", "ağustos", "eylül", "ekim", "kasım", "aralık", "pazartesi", "salı", "çarşamba", "perşembe", "cuma", "cumartesi", "pazar",
   "the", "this", "if", "for", "and", "or", "but", "best", "top", "note", "pros", "cons", "summary", "yes", "no", "chatgpt", "openai",
   "google", "gemini", "ai", "seo", "kobi", "tl", "usd", "ios", "android", "app", "store", "play",
+  // Teknik özellik kısaltmaları marka değildir (17 Kasım incelemesi: RAM/GB/GPU aday listesine giriyordu)
+  "ram", "rom", "gb", "tb", "mb", "gpu", "cpu", "npu", "ssd", "hdd", "nvme", "usb", "usb-c", "oled", "amoled", "lcd", "led", "hdr",
+  "nfc", "gps", "lte", "5g", "4g", "4k", "8k", "hd", "fhd", "qhd", "uhd", "mah", "hz", "wifi", "wi-fi", "bluetooth", "ip67", "ip68",
+  "anc", "esim", "faq", "pdf", "api", "vs", "pc", "tv", "diy",
 ]);
+/** "16GB", "5000mAh", "120Hz", "50MP" gibi birimli sayılar */
+const SPEC_RE = /^\d+([.,]\d+)?\s?(gb|tb|mb|mah|hz|mp|w|mm|cm|inç|inch|k|g|nm)$/iu;
 const NAME_RE = /(?:\p{Lu}[\p{L}\p{N}&.+-]*)(?:\s+(?:\p{Lu}[\p{L}\p{N}&.+-]*))*/gu;
 
 /**
@@ -246,7 +252,7 @@ export function untrackedNames(texts: string[], brands: { name: string; aliases:
         for (const m of sentence.matchAll(NAME_RE)) {
           let name = m[0].replace(/['’].*$/u, "").replace(/[.\-+&]+$/u, "").trim();
           // Baştaki/sondaki genel kelimeleri ayıkla ("En iyi Enpara" → "Enpara", "Akbank Mobil" → "Akbank")
-          const words = name.split(/\s+/).filter((w) => !GENERIC_CAPS.has(w.toLocaleLowerCase("tr-TR")));
+          const words = name.split(/\s+/).filter((w) => !GENERIC_CAPS.has(w.toLocaleLowerCase("tr-TR")) && !SPEC_RE.test(w));
           // "TEB Bonus", "VakıfBank Worldcard": kısaltma ya da birleşik yazılmış ilk kelime markanın kendisidir
           if (words.length > 1 && (/^[\p{Lu}\p{N}]{2,6}$/u.test(words[0]) || /\p{Ll}\p{Lu}/u.test(words[0]))) words.splice(1);
           name = words.join(" ");

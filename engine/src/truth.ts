@@ -159,15 +159,20 @@ export function sourceMix(answers: { id: string; cited_urls: string[] | null }[]
 
 export interface TruthSummary {
   checks: number; correct: number; wrong: number; unverifiable: number;
+  /** Teknik hatayla sonuçsuz kalan kontrol sayısı (aynı soru + motor için ~1 hafta sonra yeniden denenir). */
+  failed: number;
+  /** Başarılı olup markayla ilgili hiç somut iddia bulunmayan cevap sayısı. */
+  noClaims: number;
   wrongClaims: (TruthClaim & { provider: string; at: string })[];
 }
 /** Kontrol kayıtlarını özetler: aynı yanlış iddia (normalize) bir kez listelenir, en yenisi tutulur. */
 export function truthSummary(checks: { provider: string; created_at: string; failed: boolean; claims: TruthClaim[] }[]): TruthSummary {
-  const out: TruthSummary = { checks: 0, correct: 0, wrong: 0, unverifiable: 0, wrongClaims: [] };
+  const out: TruthSummary = { checks: 0, correct: 0, wrong: 0, unverifiable: 0, failed: 0, noClaims: 0, wrongClaims: [] };
   const seen = new Set<string>();
   for (const c of [...checks].sort((a, b) => b.created_at.localeCompare(a.created_at))) {
-    if (c.failed) continue;
+    if (c.failed) { out.failed++; continue; }
     out.checks++;
+    if (!c.claims.length) out.noClaims++;
     for (const x of c.claims) {
       out[x.status]++;
       if (x.status !== "wrong") continue;

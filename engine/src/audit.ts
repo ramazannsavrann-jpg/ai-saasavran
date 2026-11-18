@@ -2,6 +2,7 @@
 // Yalnızca herkese açık sayfaları okur (ana sayfa, robots.txt, sitemap.xml, llms.txt). Giriş yapmaz, form doldurmaz.
 
 import type { FetchLike } from "./providers/types.ts";
+import { normalize } from "./metrics.ts";
 
 export type Severity = "high" | "medium" | "low" | "info";
 export interface AuditCheck { id: string; ok: boolean; severity: Severity; title: string; detail: string; title_en?: string; detail_en?: string }
@@ -86,7 +87,16 @@ export function analyzeHtml(html: string, brandNames: string[]) {
     } catch { types.add("__invalid__"); }
   }
   const lower = (s: string) => s.toLocaleLowerCase("tr-TR");
-  const nameInTitle = brandNames.some((n) => n && lower(title).includes(lower(n)));
+  // Yazım farkları da eşleşir: "KafeMavi" ↔ "Kafe Mavi", "Mars-Athletic", "İŞ BANKASI", "Enpara.com" ↔ "Enpara", "&amp;".
+  const decode = (t: string) => t.replace(/&amp;/g, "&").replace(/&#0?39;|&apos;|&rsquo;/g, "'").replace(/&quot;/g, '"').replace(/&nbsp;/g, " ");
+  const squash = (t: string) => normalize(decode(t)).replace(/[\s.]/g, "");
+  const st = squash(title);
+  const nameInTitle = brandNames.some((n) => {
+    if (!n?.trim()) return false;
+    if (lower(decode(title)).includes(lower(n))) return true;
+    const k = squash(n.replace(/\.(com|net|org|co|io|app|com\.tr|tr)$/i, ""));
+    return k.length >= 3 && st.includes(k);
+  });
   const textLen = html.replace(/<script[\s\S]*?<\/script>/gi, "").replace(/<style[\s\S]*?<\/style>/gi, "").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim().length;
   return { title, metaDesc, viewport, lang, h1, types, nameInTitle, textLen };
 }

@@ -216,7 +216,7 @@ ${demoHtml(false)}
 ${plansHtml(false)}
 ${faqHtml(HOME_FAQ)}
 `;
-write("/tr/", page({ lang: "tr", alt: "/", path: "/tr/", title: "AI SaaSavran: Markanız ChatGPT, Gemini ve Claude'da mı?", description: DEF.tr, body: home, schema: [ORG, WEBSITE, APP, faqLd(HOME_FAQ)] }));
+write("/tr/", page({ lang: "tr", alt: "/", path: "/tr/", title: "AI SaaSavran: Markanız ChatGPT, Gemini, Claude ve Perplexity'de mi?", description: DEF.tr, body: home, schema: [ORG, WEBSITE, APP, faqLd(HOME_FAQ)] }));
 
 
 // 3a) English home (default)
@@ -331,7 +331,7 @@ const list = `
   <p>Müşteriler artık hangi ürünü, mağazayı veya hizmeti seçeceklerini ChatGPT, Gemini ya da Claude'a soruyor. Yapay zekâ genellikle birkaç marka sayıyor; geri kalanlar görünmez kalıyor. Bu rehberler bu görünürlüğün doğru nasıl ölçüleceğini (tekrarlanan sorular, her motor ayrı, canlı web araması ve model bilgisi ayrımı), yapay zekânın neden sizin yerinize rakibinizi önerdiğini ve neleri değiştirebileceğinizi anlatıyor: yapay zekânın okuduğu kaynaklar, müşterinizin sorduğu sorular ve kendi sitenizin ne yaptığınızı ne kadar açık anlattığı. Küçük işletmeler, ajanslar, ürün markaları ve içerik üreticileri için yazıldı. İçlerindeki her sayı gerçek bir ölçümden geliyor; örneklem küçükse bunu söylüyoruz.</p>
   <ul class="guide-list">${GUIDES.map((g) => `<li><a href="/rehber/${g.slug}/"><b>${esc(g.title)}</b><span>${esc(g.description)}</span></a></li>`).join("")}</ul>
 </section>`;
-write("/rehber/", page({ lang: "tr", alt: "/guides/", path: "/rehber/", title: "Rehberler: Yapay zekâ görünürlüğü | AI SaaSavran", description: "ChatGPT, Gemini ve Claude'da markanızın görünürlüğünü ölçmek ve artırmak için Türkçe rehberler.", body: list, schema: [ORG] }));
+write("/rehber/", page({ lang: "tr", alt: "/guides/", path: "/rehber/", title: "Rehberler: Yapay zekâ görünürlüğü | AI SaaSavran", description: "ChatGPT, Gemini, Claude ve Perplexity'de markanızın görünürlüğünü ölçmek ve artırmak için Türkçe rehberler.", body: list, schema: [ORG] }));
 
 for (const g of GUIDES) {
   const path = `/rehber/${g.slug}/`;
@@ -383,7 +383,7 @@ for (const lang of ["en", "tr"]) {
   ${p.video ? `<p class="video-link"><a href="https://www.youtube.com/shorts/${p.video.id}" rel="noopener"><img src="${p.cover}" alt="${esc(p.video.title)}" width="360" height="640" loading="lazy"><span>▶ ${esc(p.video.title)}</span></a></p>` : ""}
   <p class="note"><b>${en ? "Note:" : "Not:"}</b> ${en ? `These are the AI's answers on ${fmtDate(p.date, true)}. Small sample; not representative of the whole market. Letters were assigned at random. Brands measured (alphabetical): ${esc(p.names)}. Brand names belong to their owners.` : `Bunlar yapay zekânın ${fmtDate(p.date, false)} tarihli cevaplarıdır. Küçük örneklem, tüm pazarı temsil etmez. Harfler rastgele atanmıştır. Ölçülen markalar (alfabetik): ${esc(p.names)}. Marka adları sahiplerine aittir.`}</p>
   ${faqHtml(p.faq ?? [], en)}
-  <aside class="next"><p><b>${en ? "What does AI say about your brand?" : "Yapay zekâ sizin markanız için ne diyor?"}</b> ${en ? "Measure it across ChatGPT, Gemini and Claude." : "ChatGPT, Gemini ve Claude'da ölçün."}</p><a class="btn" href="${en ? "/check/" : "/tr/kontrol/"}">${en ? "Free check" : "Ücretsiz kontrol"}</a></aside>
+  <aside class="next"><p><b>${en ? "What does AI say about your brand?" : "Yapay zekâ sizin markanız için ne diyor?"}</b> ${en ? "Measure it across ChatGPT, Gemini, Claude and Perplexity." : "ChatGPT, Gemini, Claude ve Perplexity'de ölçün."}</p><a class="btn" href="${en ? "/check/" : "/tr/kontrol/"}">${en ? "Free check" : "Ücretsiz kontrol"}</a></aside>
   ${others ? `<nav class="related" aria-label="${en ? "More posts" : "Diğer yazılar"}"><h2>${en ? "More posts" : "Diğer yazılar"}</h2><ul>${others}</ul></nav>` : ""}
 </article>`;
     const posting = { "@context": "https://schema.org", "@type": "BlogPosting", headline: p.title, description: p.description, inLanguage: lang, datePublished: p.date, dateModified: p.date, image: SITE.url + p.cover, author: { "@type": "Organization", name: SITE.name, url: SITE.url }, publisher: { "@type": "Organization", name: SITE.name, logo: { "@type": "ImageObject", url: SITE.url + "/icon.svg" } }, mainEntityOfPage: SITE.url + path };
@@ -399,7 +399,7 @@ ${mine.map((p) => `<item><title>${rssEsc(p.title)}</title><link>${SITE.url}${pos
 
 // 4c) Hakkımızda: yapay zekânın markayı tek ve doğru bir tanımla tanıması için
 const ABOUT = {
-  en: { path: "/about/", alt: "/tr/hakkimizda/", title: "About AI SaaSavran | AI visibility measurement", description: "AI SaaSavran measures how often ChatGPT, Gemini and Claude mention and recommend a brand or product, and which sources they rely on.", body: `
+  en: { path: "/about/", alt: "/tr/hakkimizda/", title: "About AI SaaSavran | AI visibility measurement", description: "AI SaaSavran measures how often ChatGPT, Gemini, Claude and Perplexity mention and recommend a brand or product, and which sources they rely on.", body: `
 <section class="article">
   <h1>About AI SaaSavran</h1>
   <p class="lede"><b>${DEF.en}</b> It is an independent web application at aisaasavran.com. How we measure: <a href="/methodology/">methodology</a>.</p>
@@ -427,7 +427,7 @@ const ABOUT = {
     <li>Contact: <a href="mailto:${SITE.email}">${SITE.email}</a> · YouTube: <a href="https://www.youtube.com/@aisaasavran">@aisaasavran</a></li>
   </ul>
 </section>` },
-  tr: { path: "/tr/hakkimizda/", alt: "/about/", title: "AI SaaSavran hakkında | Yapay zekâ görünürlük ölçümü", description: "AI SaaSavran, ChatGPT, Gemini ve Claude'un bir markayı veya ürünü ne sıklıkla andığını ve önerdiğini, hangi kaynaklara baktığını ölçer.", body: `
+  tr: { path: "/tr/hakkimizda/", alt: "/about/", title: "AI SaaSavran hakkında | Yapay zekâ görünürlük ölçümü", description: "AI SaaSavran, ChatGPT, Gemini, Claude ve Perplexity'nin bir markayı veya ürünü ne sıklıkla andığını ve önerdiğini, hangi kaynaklara baktığını ölçer.", body: `
 <section class="article">
   <h1>AI SaaSavran hakkında</h1>
   <p class="lede"><b>${DEF.tr}</b> aisaasavran.com adresinde çalışan bağımsız bir web uygulamasıdır. Nasıl ölçtüğümüz: <a href="/tr/metodoloji/">metodoloji</a>.</p>
