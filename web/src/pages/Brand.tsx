@@ -939,7 +939,11 @@ function Report({ brand, type, onBrandChange, paid = false, runs = [] }: { brand
             names={new Map(insightBrands.map((b) => [b.id, b.name]))} brand={brand.name} />}
 
           {type !== "simulated" && answers.data && comps.data && (
-            <UntrackedNames brand={brand} competitors={comps.data} texts={answers.data.map((a) => a.answer_text)}
+            <UntrackedNames brand={brand} competitors={comps.data}
+              // 19 Kasım pilot: marka adını içeren sorulara ("X ne iş yapar?") gelen cevaplar markayı anlatır; içindeki kalın konu başlıkları
+              // (NPK, Azot, TikTok...) firma adı sanılıyordu. Yalnız markasız soruların cevaplarından ad çıkarılır.
+              texts={answers.data.filter((a) => { const q = (prompts.data ?? []).find((p) => p.prompt_id === a.prompt_id)?.prompt_text?.toLocaleLowerCase("tr-TR") ?? "";
+                return ![brand.name, ...brand.aliases].some((n) => n.trim().length >= 2 && q.includes(n.trim().toLocaleLowerCase("tr-TR"))); }).map((a) => a.answer_text)}
               onChange={() => { onBrandChange(); comps.reload(); }} />
           )}
 

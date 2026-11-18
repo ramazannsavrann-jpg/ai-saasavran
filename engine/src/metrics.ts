@@ -312,6 +312,9 @@ const GENERIC_CAPS = new Set([
   "ram", "rom", "gb", "tb", "mb", "gpu", "cpu", "npu", "ssd", "hdd", "nvme", "usb", "usb-c", "oled", "amoled", "lcd", "led", "hdr",
   "nfc", "gps", "lte", "5g", "4g", "4k", "8k", "hd", "fhd", "qhd", "uhd", "mah", "hz", "wifi", "wi-fi", "bluetooth", "ip67", "ip68",
   "anc", "esim", "faq", "pdf", "api", "vs", "pc", "tv", "diy",
+  // Sosyal medya ve genel siteler firma/rakip değildir (19 Kasım pilot)
+  "instagram", "tiktok", "facebook", "youtube", "twitter", "linkedin", "whatsapp", "telegram", "pinterest", "wikipedia", "vikipedi", "ekşi", "sözlük",
+  "nelerdir", "nedir", "neler", "hangileri", "ürün", "ürünler", "ürünleri", "grupları", "hizmetler", "hizmetleri", "ar-ge",
 ]);
 /** "16GB", "5000mAh", "120Hz", "50MP" gibi birimli sayılar */
 const SPEC_RE = /^\d+([.,]\d+)?\s?(gb|tb|mb|mah|hz|mp|w|mm|cm|inç|inch|k|g|nm)$/iu;
