@@ -11,6 +11,10 @@ on:
         description: "1 = sadece rapor"
         required: false
         default: "0"
+      only:
+        description: "Yalnız bu videolar (virgülle kimlik). Boş = hepsi"
+        required: false
+        default: ""
 concurrency: youtube-ayar
 jobs:
   ayar:
@@ -24,4 +28,5 @@ jobs:
           YT_CLIENT_SECRET: ${{ secrets.YT_CLIENT_SECRET }}
           YT_REFRESH_TOKEN: ${{ secrets.YT_REFRESH_TOKEN }}
           DRY_RUN: ${{ inputs.dry_run }}
+          ONLY: ${{ inputs.only }}
         run: python3 yt/yt_ayar.py

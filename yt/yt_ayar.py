@@ -10,6 +10,9 @@ from datetime import datetime, timedelta, timezone
 
 API = "https://www.googleapis.com/youtube/v3"
 DRY = os.environ.get("DRY_RUN") == "1"
+# ONLY: elle başlatmada virgülle video kimlikleri. Verilirse kapak ve video işlemleri yalnız bu videolara yapılır
+# (yayın sonrası hızlı çalışma; kotayı korur). Gece çalışması ve push her zaman tam çalışır (kapak koruması sürer).
+ONLY = {x.strip() for x in os.environ.get("ONLY", "").split(",") if x.strip()}
 CFG = json.load(open(os.path.join(os.path.dirname(__file__), "ayar.json"), encoding="utf-8"))
 quota = 0
 tut_status = []  # (video, son gizlilik durumu, başlık): rapor sonunda özetlenir
@@ -123,6 +126,8 @@ def set_thumbnails():
     global quota
     base = "https://raw.githubusercontent.com/ramazannsavrann-jpg/ai-saasavran/videolar/kapak/"
     for vid, name in (CFG.get("thumbnails") or {}).items():
+        if ONLY and vid not in ONLY:
+            continue
         if quota > 9000:
             print("! kota sınırı, kapaklar yarına"); return
         print("· kapak:", vid, name)
@@ -167,6 +172,9 @@ def main():
         if not DRY:
             call("DELETE", "videos", {"id": vid}, cost=50)
     vids = [i["contentDetails"]["videoId"] for i in paged("playlistItems", {"part": "contentDetails", "playlistId": uploads})]
+    if ONLY:
+        vids = [v for v in vids if v in ONLY]
+        print("Yalnız şu videolar:", ", ".join(sorted(ONLY)))
     print(f"{len(vids)} video, {len(pls)} liste:", sorted(pls))
     rep = []
     for k in range(0, len(vids), 50):
