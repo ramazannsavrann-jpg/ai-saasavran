@@ -2,6 +2,7 @@
 // or from a cited source. Turkish versions live in content.mjs under /tr/ and /rehber/.
 
 import { COMPARE_EN } from "./compare.mjs";
+import { EXTRA_EN, NEW_EN } from "./guides-more.mjs";
 
 export const GUIDES_EN = [
   ...COMPARE_EN,
@@ -274,6 +275,9 @@ export const GUIDES_EN = [
     ],
   },
 ];
+
+for (const g of GUIDES_EN) { const x = EXTRA_EN[g.slug]; if (x) { g.body += x.body; g.faq = [...g.faq, ...x.faq]; } }
+GUIDES_EN.push(...NEW_EN);
 
 export const HOME_FAQ_EN = [
   ["Is AI SaaSavran the same as Savran AI?", "No. AI SaaSavran (aisaasavran.com) is software that measures how visible brands are in ChatGPT, Gemini, Claude and Perplexity answers. Savran AI (savran.ai) is a separate company and product; there is no connection between us. Our name is written AI SaaSavran (SaaS + Savran)."],
