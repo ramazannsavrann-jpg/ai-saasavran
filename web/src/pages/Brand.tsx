@@ -546,6 +546,7 @@ function BrandEditForm({ brand, onDone }: { brand: Brand; onDone: (changed: bool
         name, aliases: splitAliases(f.get("aliases")),
         website: String(f.get("website") || "").trim() || null,
         sector: String(f.get("sector") || "") || null,
+        offering: String(f.get("offering") || "").trim().slice(0, 120) || null,
         city: String(f.get("city") || "").trim() || null,
         country: /^[A-Za-z]{2}$/.test(String(f.get("country") || "").trim()) ? String(f.get("country")).trim().toUpperCase() : null,
         ...(brand.data_origin !== "simulated" ? { auto_weekly: f.get("auto_weekly") === "on" } : {}),
@@ -565,6 +566,7 @@ function BrandEditForm({ brand, onDone }: { brand: Brand; onDone: (changed: bool
         {SECTORS.map((x) => <option key={x}>{x}</option>)}
         {brand.sector && !SECTORS.includes(brand.sector) && <option>{brand.sector}</option>}
       </Select>
+      <Field label={L("Ne satıyorsunuz ya da hangi hizmeti veriyorsunuz?", "What do you sell or offer?")} name="offering" defaultValue={brand.offering ?? ""} maxLength={120} placeholder={L("Örn. gübre, zirai ilaç, tohum", "e.g. fertilizer, seeds")} />
       <Field label={L("Şehir veya ilçe", "City or area")} name="city" defaultValue={brand.city ?? ""} />
       <Field label={L("Ülke kodu (canlı arama konumu)", "Country code (live-search location)")} name="country" defaultValue={brand.country ?? ""} maxLength={2} placeholder="TR"
         hint={L("İki harf: TR, US, DE, GB… Boş bırakılırsa Türkiye. ChatGPT web aramasını bu ülkeden yapılmış gibi çalıştırır.", "Two letters: US, GB, DE, TR… Empty means Turkey. ChatGPT runs its web search as if from this country.")} />
@@ -2115,7 +2117,7 @@ function Questions({ brand }: { brand: Brand }) {
   const active = list.filter((p) => p.active).length;
   const limit = usage.data?.prompt_limit ?? 0;
   const existing = new Set(list.map((p) => p.text));
-  const ideas = allQuestionIdeas(brand.sector, brand.city, brand.name).filter((s) => !existing.has(s.text));
+  const ideas = allQuestionIdeas(brand.sector, brand.city, brand.name, brand.offering).filter((s) => !existing.has(s.text));
   const def = sectorDef(brand.sector);
   const needsCity = def?.local && !brand.city;
 

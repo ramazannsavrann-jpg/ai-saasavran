@@ -275,8 +275,9 @@ export function NewBrand() {
       const b = await api.addBrand({
         workspace_id: current!.id, name,
         website: String(f.get("website") || "").trim() || null,
-        // "Diğer" seçip ürününü/hizmetini yazdıysa sektör o metin olur: kategori soruları ve Google keşfi bununla kurulur
-        sector: (/^(Diğer|Other)$/.test(String(f.get("sector") || "")) && String(f.get("product") || "").trim()) ? String(f.get("product")).trim().slice(0, 80) : (String(f.get("sector") || "") || null),
+        sector: String(f.get("sector") || "") || null,
+        // Ne sattığı (sektörden bağımsız): kategori soruları bununla kurulur
+        offering: String(f.get("product") || "").trim().slice(0, 120) || null,
         city: String(f.get("city") || "").trim() || null,
         country: /^[A-Za-z]{2}$/.test(String(f.get("country") || "").trim()) ? String(f.get("country")).trim().toUpperCase() : null,
         aliases: String(f.get("aliases") || "").split(",").map((s) => s.trim()).filter(Boolean),
@@ -286,7 +287,7 @@ export function NewBrand() {
       if (!demo) {
         let limit = 5;
         try { limit = Math.min(5, (await api.usage(b.workspace_id))?.prompt_limit || 5); } catch { /* varsayılan 5 */ }
-        for (const q of starterQuestions(b.sector, b.city, b.name, limit)) {
+        for (const q of starterQuestions(b.sector, b.city, b.name, limit, b.offering)) {
           try { await api.addPrompt({ workspace_id: b.workspace_id, brand_id: b.id, text: q.text, intent: q.intent }); } catch { break; }
         }
         if (b.sector) { try { await api.requestDiscovery(b.id); } catch { /* hak yoksa sessiz geç */ } }
@@ -304,7 +305,7 @@ export function NewBrand() {
         <option value="" disabled>{L("Seçin", "Choose")}</option>
         {SECTORS.map((s) => <option key={s}>{s}</option>)}
       </Select>
-      <Field label={L("Ne satıyorsunuz ya da hangi hizmeti veriyorsunuz?", "What do you sell or offer?")} name="product" maxLength={80} placeholder={L("Örn. köklendirici gübre", "e.g. organic fertilizer")} hint={L("Listede uygun seçenek yoksa \"Diğer\"i seçip buraya yazın; sorular buna göre hazırlanır.", "If nothing in the list fits, choose \"Other\" and type it here; questions are built from it.")} />
+      <Field label={L("Ne satıyorsunuz ya da hangi hizmeti veriyorsunuz?", "What do you sell or offer?")} name="product" maxLength={80} placeholder={L("Örn. gübre, zirai ilaç, tohum", "e.g. fertilizer, seeds, garden tools")} hint={L("Virgülle birkaç tane yazabilirsiniz. Yapay zekâya bu ürünlerle ilgili sorular sorarız.", "You can list a few, separated by commas. We ask the AI questions about these.")} />
       <Field label={L("Şehir veya ilçe", "City or area")} name="city" placeholder={L("Örn. Antalya", "e.g. Austin")} />
       <Field label={L("Ülke kodu (isteğe bağlı)", "Country code (optional)")} name="country" key={geo.country} defaultValue={geo.country} maxLength={2} placeholder={L("TR", "US")} hint={L("İki harf: TR, US, DE, GB… Boşsa Türkiye sayılır.", "Two letters: US, GB, DE, TR… Empty means Turkey.")} />
       {!geo.geminiFree && !demo && <p className="caution">{L("Bulunduğunuz ülkede ücretsiz Gemini ölçümü kapalı (Avrupa Ekonomik Alanı, İsviçre, Birleşik Krallık). Marka ekleyebilir ve sorularınızı hazırlayabilirsiniz; ölçüm için ChatGPT canlı aramalı ücretli paketler kullanılabilir.", "Free Gemini measurement isn't available in your country (EEA, Switzerland, UK). You can add your brand and prepare questions; measurement is available with ChatGPT live search on paid plans.")}</p>}
