@@ -14,6 +14,15 @@ const patterns = [
   ["Supabase gizli anahtarı", /sb_secret_[A-Za-z0-9_\-]{20,}/],
   ["Postgres bağlantı adresi (şifreli)", /postgres(ql)?:\/\/[^:\s]+:[^@\s]{8,}@[a-z0-9.-]*supabase/],
   ["Cloudflare API anahtarı", /CLOUDFLARE_API_TOKEN\s*=\s*[A-Za-z0-9_\-]{30,}/],
+  // 18 Kasım denetimi: kullanılan diğer servisler + kişisel e-posta
+  ["Paddle API anahtarı", /pdl_(live|sdbx)_apikey_[A-Za-z0-9_]{20,}/],
+  ["Paddle webhook gizli anahtarı", /pdl_ntfset_[A-Za-z0-9_]{20,}/],
+  ["Resend anahtarı", /\bre_[A-Za-z0-9]{8,}_[A-Za-z0-9]{16,}/],
+  ["SerpApi anahtarı", /SERPAPI_KEY\s*[=:]\s*["']?[a-f0-9]{64}/],
+  ["Turnstile gizli anahtarı", /TURNSTILE_SECRET\w*\s*[=:]\s*["']?0x4[A-Za-z0-9_\-]{20,}/],
+  ["GitHub anahtarı", /\b(gh[pousr]_[A-Za-z0-9]{36,}|github_pat_[A-Za-z0-9_]{40,})/],
+  ["YouTube/Google OAuth yenileme anahtarı", /\b1\/\/0[A-Za-z0-9_\-]{40,}/],
+  ["Kişisel e-posta adresi", /[A-Za-z0-9._%+-]+@(gmail|hotmail|outlook|yahoo|icloud|yandex)\.(com|com\.tr)\b/],
 ];
 let found = 0;
 for (const f of files) {

@@ -159,7 +159,7 @@ const home = `
       <p>3. <mark class="hit alt">Samsung Galaxy Watch</mark> …</p>
     </blockquote>
     <p class="cite">Kaynaklar: techradar.com · tomsguide.com · wired.com</p>
-    <p class="caption">Temsilî gösterim, gerçek ölçümümüze dayanır: ChatGPT, Claude ve Perplexity, ABD'den canlı web aramasıyla, 17 Kasım 2026, 48 cevap. Önerildiği cevap sayısı: Apple Watch 42, Garmin 37, Galaxy Watch 27, Pixel Watch 26, Amazfit 7.</p>
+    <p class="caption">Temsilî gösterim, gerçek ölçümümüze dayanır: ChatGPT, Claude ve Perplexity, ABD'den canlı web aramasıyla, 17 Kasım 2026. Yukarıda tek soru gösteriliyor; sayılar 8 sorunun toplam 48 cevabından. Önerildiği cevap sayısı: Apple Watch 42, Garmin 37, Galaxy Watch 27, Pixel Watch 26, Amazfit 7.</p>
   </figure>
 </section>
 <section class="demo daily" id="daily" data-lang="tr" hidden aria-labelledby="daily-h"></section>
@@ -238,7 +238,7 @@ const enHome = `
       <p>3. <mark class="hit alt">Samsung Galaxy Watch</mark> …</p>
     </blockquote>
     <p class="cite">Sources: techradar.com · tomsguide.com · wired.com</p>
-    <p class="caption">Illustration based on our real measurement: ChatGPT, Claude and Perplexity with live web search from the US, 17 Nov 2026, 48 answers. Recommended in: Apple Watch 42, Garmin 37, Galaxy Watch 27, Pixel Watch 26, Amazfit 7.</p>
+    <p class="caption">Illustration based on our real measurement: ChatGPT, Claude and Perplexity with live web search from the US, 17 Nov 2026. One question is shown above; the counts come from 48 answers to 8 questions. Recommended in: Apple Watch 42, Garmin 37, Galaxy Watch 27, Pixel Watch 26, Amazfit 7.</p>
   </figure>
 </section>
 <section class="demo daily" id="daily" data-lang="en" hidden aria-labelledby="daily-h"></section>

@@ -157,6 +157,8 @@ export async function processNextRun(deps: WorkerDeps): Promise<WorkerResult | n
       classifier_version: env.LLM_CLASSIFY === "true" ? "rules_v3+llm" : "rules_v3",
       prompt_set_hash: promptSetHash,
       engines: providers.map((p) => p.config.provider),
+      // prompts_total istek anındaki soru sayısıydı; sorular sonradan değişince yanlış kalıyordu (18 Kasım veri denetimi)
+      prompts_total: prompts.length,
     }).eq("id", run.id), "yöntem kaydı");
 
     const gate = new DbUsageGate(db, run.id);
