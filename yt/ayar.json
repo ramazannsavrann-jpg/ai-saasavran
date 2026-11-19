@@ -367,5 +367,6 @@
     "hL_EloPq1Y0": "kahve-seattle-en.jpg"
   },
   "tutorials_private": false,
-  "tutorials_public": true
+  "tutorials_public": true,
+  "tutorials_privacy": "unlisted"
 }
