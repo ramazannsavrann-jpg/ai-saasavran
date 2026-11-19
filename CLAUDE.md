@@ -80,6 +80,14 @@ PR açıklamasında bu kontrollerden neyin değiştiğini kısaca yaz.
 - Görünürlük Endeksi (`web/site/visibility-index.mjs`) aynı veriden üretilir; yeni sektörde soru eklenince `SECTORS` listesine anahtar kelime ekle (sektörsüz soru endekse girmez).
 
 ## Video ve sosyal medya
+- **KANAL KURALI (20 Kasım, her oturum/hesap/sohbet için zorunlu; eski "iki dilli YouTube" kurallarının yerine geçer):**
+  İngilizce video/Shorts YALNIZ **AI SaaSavran EN** kanalına (@AISaaSavranEN, `UCJ3mA2nPzsinfO9MgccFtdA`);
+  Türkçe video/Shorts YALNIZ **AI SaaSavran** kanalına (@AISaaSavran, `UCHL4sdkEenxkpuP4_Hq1RZw`) yüklenir.
+  Başlık, açıklama, etiket ve hashtag her kanalda yalnız o kanalın dilinde (iki dilli metin yok); oynatma
+  listeleri de kendi kanalında ve kendi dilinde. EN kanalında Türkiye/Türkçe adlı liste açılmaz.
+  Eğitim (Eğitim/Tutorial) videoları EN kanalına yüklenmez; TR kanalında liste dışı kalır, yalnız siteden izlenir.
+  Her yüklemede: çocuklara yönelik değil, ücretli tanıtım yok, yapay içerik işareti, video dili, kurala uygun kapak.
+  vidIQ yalnız TR kanalına bağlı (ikinci kanal ücretli): EN yüklemeleri YouTube Studio'dan yapılır.
 - Video kurulumu ve şablonlar: `seslendirme` dalında `video/README.md` + `video/sablon/`.
 - Paylaşım kuralları (Instagram 3'lü set: TR Reels → EN Reels → ayrı gönderi; YouTube oynatma listeleri,
   açıklama metinleri): aynı dosyada "PAYLAŞIM KURALLARI" bölümü. Yeni video işinden önce oku.
