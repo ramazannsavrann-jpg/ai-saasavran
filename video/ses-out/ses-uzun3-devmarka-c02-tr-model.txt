@@ -1,1 +1,1 @@
-gemini-3.1-flash-tts-preview Charon
+gemini-2.5-flash-preview-tts Charon
