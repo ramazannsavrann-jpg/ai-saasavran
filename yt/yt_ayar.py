@@ -217,14 +217,16 @@ def main():
                 if call("PUT", "videos", {"part": "status"}, {"id": vid, "status": s0}, cost=50) is not None:
                     priv = "private"
                     line += " · →gizli✓"
-            # 0b) seri tamamlanınca eğitim videoları herkese açılır (kullanıcı kararı, 19 Kasım): tutorials_public
-            if is_tut and not keep_private and CFG.get("tutorials_public") and priv != "public" and not DRY:
-                s0 = {"privacyStatus": "public", "selfDeclaredMadeForKids": st.get("selfDeclaredMadeForKids", False),
+            # 0b) eğitim videoları liste dışı (kullanıcı kararı, 19 Kasım akşam): sitede oynar, kanal akışında/aramada görünmez.
+            # tutorials_privacy: "unlisted" (varsayılan) ya da "public"
+            tut_target = CFG.get("tutorials_privacy", "unlisted")
+            if is_tut and not keep_private and CFG.get("tutorials_public") and priv != tut_target and not DRY:
+                s0 = {"privacyStatus": tut_target, "selfDeclaredMadeForKids": st.get("selfDeclaredMadeForKids", False),
                       "embeddable": True, "license": st.get("license", "youtube"),
                       "publicStatsViewable": st.get("publicStatsViewable", True), "containsSyntheticMedia": True}
                 if call("PUT", "videos", {"part": "status"}, {"id": vid, "status": s0}, cost=50) is not None:
-                    priv = "public"
-                    line += " · →herkese açık✓"
+                    priv = tut_target
+                    line += f" · →{tut_target}✓"
             # 0b) "hemen yayınla" (19 Kasım): PUBLISH_NOW içindeki videolar zamanlanmış yayını beklemeden herkese açılır.
             now_pub = vid in PUBLISH_NOW and not keep_private
             if now_pub and (priv != "public" or st.get("publishAt")) and not DRY:
@@ -293,8 +295,9 @@ def print_tutorials():
     if not tut_status:
         return
     if CFG.get("tutorials_public"):
-        not_pub = [t for t in tut_status if t[1] != "public"]
-        print(f"EĞİTİM VİDEOLARI: {len(tut_status)} video, herkese açık olmayan {len(not_pub)}")
+        tgt = CFG.get("tutorials_privacy", "unlisted")
+        not_pub = [t for t in tut_status if t[1] != tgt]
+        print(f"EĞİTİM VİDEOLARI: {len(tut_status)} video, {tgt} olmayan {len(not_pub)}")
         for vid, priv, title in not_pub:
             print(f"  ! açık değil: {vid} {priv} {title}")
         return
