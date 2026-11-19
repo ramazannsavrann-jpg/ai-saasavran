@@ -9,7 +9,9 @@ import { spawnSync } from "node:child_process";
 const URL_ = process.env.SUPABASE_DB_URL;
 if (!URL_) { console.log("ATLANDI: SUPABASE_DB_URL yok"); process.exit(0); }
 // RLS kurallarının her rolde çağırdığı yardımcılar: yalnız çağıranın kendisi hakkında evet/hayır döner
-const ANON_OK = new Set(["is_member", "is_platform_admin"]);
+// mobile_*: sahibinin telefon uygulaması (19 Kasım). Hepsi SECURITY DEFINER ve gizli anahtar ister; anahtar yanlışsa "Yetki yok" hatası verir.
+const ANON_OK = new Set(["is_member", "is_platform_admin",
+  "mobile_dashboard", "mobile_app_latest", "mobile_app_apk", "mobile_app_publish", "mobile_app_publish_src"]);
 
 function q(sql) {
   const r = spawnSync("psql", [URL_, "-X", "-At", "-v", "ON_ERROR_STOP=1", "-c", sql], { encoding: "utf8" });
