@@ -1,0 +1,450 @@
+{
+ "out": "tr",
+ "lang": "tr",
+ "order": [
+  "s1",
+  "names",
+  "s2",
+  "s3",
+  "s4",
+  "shop",
+  "net",
+  "s8"
+ ],
+ "n": 16,
+ "n2": 48,
+ "names": "Akıllı yüzükler: Amazfit, Circular, Evie Ring, Oura, RingConn, Samsung Galaxy Ring, Ultrahuman",
+ "names_list": [
+  "Amazfit",
+  "Circular",
+  "Evie Ring",
+  "Oura",
+  "RingConn",
+  "Samsung Galaxy Ring",
+  "Ultrahuman"
+ ],
+ "footer": "ChatGPT, Claude, Perplexity: canlı web araması (Türkiye) · Gemini: model bilgisi · 19 Kas 2026",
+ "brands": [
+  [
+   "Oura",
+   36
+  ],
+  [
+   "Galaxy Ring",
+   36
+  ],
+  [
+   "RingConn",
+   23
+  ],
+  [
+   "Ultrahuman",
+   21
+  ],
+  [
+   "Amazfit",
+   9
+  ],
+  [
+   "Circular",
+   0
+  ],
+  [
+   "Evie Ring",
+   0
+  ]
+ ],
+ "engines": [
+  [
+   "ChatGPT",
+   "/16"
+  ],
+  [
+   "Claude",
+   "/16"
+  ],
+  [
+   "Perplexity",
+   "/16"
+  ],
+  [
+   "Gemini",
+   "/6"
+  ]
+ ],
+ "gemini_label": "Hafızadan",
+ "eng_rows": [
+  [
+   "Oura",
+   10,
+   16,
+   10,
+   6
+  ],
+  [
+   "Galaxy Ring",
+   11,
+   13,
+   12,
+   4
+  ],
+  [
+   "RingConn",
+   8,
+   10,
+   5,
+   2
+  ],
+  [
+   "Ultrahuman",
+   3,
+   12,
+   6,
+   6
+  ],
+  [
+   "Amazfit",
+   0,
+   9,
+   0,
+   5
+  ],
+  [
+   "Circular",
+   0,
+   0,
+   0,
+   0
+  ]
+ ],
+ "eng_hl": [
+  "Amazfit"
+ ],
+ "questions": [
+  [
+   "Kasım indirimlerinde en iyisi?",
+   [
+    [
+     "Oura",
+     "6/6",
+     false
+    ],
+    [
+     "Galaxy Ring",
+     "6/6",
+     false
+    ],
+    [
+     "Amazfit",
+     "0/6",
+     true
+    ]
+   ]
+  ],
+  [
+   "Pil ömrü en uzun?",
+   [
+    [
+     "Ultrahuman",
+     "5/6",
+     false
+    ],
+    [
+     "RingConn",
+     "4/6",
+     false
+    ],
+    [
+     "Galaxy Ring",
+     "1/6",
+     true
+    ]
+   ]
+  ],
+  [
+   "Aylık abonelik ücreti yok?",
+   [
+    [
+     "RingConn",
+     "6/6",
+     false
+    ],
+    [
+     "Galaxy Ring",
+     "5/6",
+     false
+    ],
+    [
+     "Oura",
+     "2/6",
+     true
+    ]
+   ]
+  ],
+  [
+   "Bütçe dostu?",
+   [
+    [
+     "RingConn",
+     "3/6",
+     false
+    ],
+    [
+     "Oura",
+     "2/6",
+     false
+    ],
+    [
+     "Ultrahuman",
+     "0/6",
+     true
+    ]
+   ]
+  ]
+ ],
+ "shop": {
+  "rows": [
+   [
+    "NexuRing",
+    "—",
+    "#2",
+    true
+   ],
+   [
+    "Galaxy Ring",
+    "#2",
+    "#1",
+    false
+   ],
+   [
+    "Oura",
+    "#1",
+    "#4",
+    false
+   ],
+   [
+    "RingConn",
+    "#3",
+    "#19",
+    false
+   ],
+   [
+    "Ultrahuman",
+    "#4",
+    "—",
+    false
+   ],
+   [
+    "Amazfit",
+    "#5",
+    "—",
+    false
+   ]
+  ]
+ },
+ "net": {
+  "left": [
+   [
+    "techradar.com",
+    9
+   ],
+   [
+    "akakce.com",
+    7
+   ],
+   [
+    "ultrahuman.com",
+    4
+   ],
+   [
+    "wareable.com",
+    3
+   ],
+   [
+    "tomsguide.com",
+    3
+   ],
+   [
+    "trustedreviews.com",
+    3
+   ]
+  ],
+  "right": [
+   "Oura",
+   "Galaxy Ring",
+   "RingConn",
+   "Ultrahuman",
+   "Amazfit"
+  ],
+  "links": [
+   [
+    0,
+    4,
+    3
+   ],
+   [
+    0,
+    0,
+    9
+   ],
+   [
+    0,
+    2,
+    5
+   ],
+   [
+    0,
+    1,
+    8
+   ],
+   [
+    0,
+    3,
+    3
+   ],
+   [
+    1,
+    0,
+    5
+   ],
+   [
+    1,
+    2,
+    3
+   ],
+   [
+    1,
+    1,
+    5
+   ],
+   [
+    1,
+    3,
+    2
+   ],
+   [
+    2,
+    4,
+    1
+   ],
+   [
+    2,
+    0,
+    2
+   ],
+   [
+    2,
+    2,
+    4
+   ],
+   [
+    2,
+    1,
+    1
+   ],
+   [
+    2,
+    3,
+    4
+   ],
+   [
+    3,
+    0,
+    3
+   ],
+   [
+    3,
+    2,
+    3
+   ],
+   [
+    3,
+    1,
+    3
+   ],
+   [
+    4,
+    4,
+    2
+   ],
+   [
+    4,
+    0,
+    3
+   ],
+   [
+    4,
+    2,
+    1
+   ],
+   [
+    4,
+    1,
+    3
+   ],
+   [
+    4,
+    3,
+    2
+   ],
+   [
+    5,
+    4,
+    2
+   ],
+   [
+    5,
+    0,
+    3
+   ],
+   [
+    5,
+    2,
+    1
+   ],
+   [
+    5,
+    1,
+    3
+   ],
+   [
+    5,
+    3,
+    3
+   ]
+  ]
+ },
+ "sources": [],
+ "t": {
+  "hook": "Kasım indirimlerinde yapay zekâ hangi akıllı yüzüğü öneriyor?",
+  "badge": "Aynı mı söylüyorlar?",
+  "hook2": "Türkiye · 7 marka · 8 alıcı sorusu",
+  "note": "Bunlar yapay zekânın cevaplarıdır.",
+  "names_title": "Takip ettiğimiz akıllı yüzükler",
+  "names_sub": "Alfabetik sırayla",
+  "tag_brands": "Öneriler",
+  "who": "Kim önerildi?",
+  "who_sub": "ChatGPT + Claude + Perplexity, 48 canlı aramalı cevap",
+  "tag_eng": "Yapay zekâ karşılaştırması",
+  "eng": "Yapay zekâlar anlaşamıyor",
+  "eng_sub": "Markayı öneren cevap sayısı",
+  "eng_note": "Amazfit: Claude'da 9, ChatGPT ve Perplexity'de 0.",
+  "tag_q": "Soru bazında",
+  "byq": "Soru değişince kazanan değişiyor",
+  "byq_sub": "Soru başına 6 canlı aramalı cevap",
+  "tag_shop": "Google Shopping (Türkiye)",
+  "shop": "Yapay zekâ ile Google Shopping",
+  "shop_sub": "Arama: \"akıllı yüzük\" · her markanın ilk ürünü",
+  "shop_col_ai": "YZ sırası",
+  "shop_col_shop": "Shopping",
+  "shop_note": "Shopping'de 2. sıradaki NexuRing'i hiçbir yapay zekâ anmadı. — = ilk 20'de yok.",
+  "tag_net": "Kaynak ağı",
+  "net": "Yapay zekâ nereye bakıyor?",
+  "net_sub": "Çizgi kalınlığı = siteyi kaynak gösterip markayı anan cevap sayısı",
+  "net_note": "Türkçe sorularda bile en çok TechRadar (9), sonra Akakçe (7).",
+  "cta": "Yapay zekâ markanız için ne diyor?",
+  "cta2": "ChatGPT, Gemini, Claude ve Perplexity'de her hafta takip edin.",
+  "free": "Ücretsiz kontrol, kayıt gerekmez",
+  "disc": "19 Kasım 2026 yapay zekâ cevapları (Türkiye). 54 cevap; Gemini'nin 10 cevabı alınamadı. Küçük örneklem, tüm pazarı temsil etmez. Tavsiye değildir. Marka adları sahiplerine aittir."
+ }
+}

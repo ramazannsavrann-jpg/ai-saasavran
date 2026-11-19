@@ -69,7 +69,7 @@
   ],
   [
    "Gemini",
-   "/16"
+   "/11"
   ]
  ],
  "gemini_label": "From memory",
@@ -79,42 +79,42 @@
    10,
    14,
    11,
-   0
+   2
   ],
   [
    "Oura",
    10,
    12,
    10,
-   0
+   8
   ],
   [
    "Galaxy Ring",
    9,
    12,
    8,
-   0
+   5
   ],
   [
    "Ultrahuman",
    5,
    11,
    3,
-   0
+   6
   ],
   [
    "Amazfit",
    0,
    11,
    3,
-   0
+   7
   ],
   [
    "Circular",
    0,
    0,
    0,
-   0
+   3
   ]
  ],
  "eng_hl": [
@@ -453,7 +453,7 @@
   "shop_sub": "Search: \"smart ring\" · first listing of each brand",
   "shop_col_ai": "AI rank",
   "shop_col_shop": "Shopping",
-  "shop_note": "Shopping's #1 brand, Halo Ring, was never mentioned by the AIs. — = not in the top 20.",
+  "shop_note": "Shopping's #1 brand, Halo Ring, was never mentioned by any AI. — = not in the top 20.",
   "tag_net": "AI source network",
   "net": "Which sites shape the answers?",
   "net_sub": "Line width = answers citing the site that mentioned the brand",
@@ -461,6 +461,16 @@
   "cta": "What does AI say about your brand?",
   "cta2": "Track it weekly across ChatGPT, Gemini, Claude and Perplexity.",
   "free": "Free check, no signup",
-  "disc": "AI answers from 19 Nov 2026 (US). Small sample, not representative of the whole market. Not an endorsement; prices and deals change. Brand names belong to their owners."
+  "disc": "AI answers from 19 Nov 2026 (US). 59 answers; 5 Gemini answers failed. Small sample, not representative of the whole market. Not an endorsement. Brand names belong to their owners."
+ },
+ "dur": {
+  "p1": 8.17,
+  "p2": 2.02,
+  "p3": 6.48,
+  "p4": 4.85,
+  "p5": 5.96,
+  "p6": 6.62,
+  "p7": 4.73,
+  "p8": 9.22
  }
 }
