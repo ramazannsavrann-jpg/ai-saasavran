@@ -1,0 +1,466 @@
+{
+ "out": "en",
+ "lang": "en",
+ "order": [
+  "s1",
+  "names",
+  "s2",
+  "s3",
+  "s4",
+  "shop",
+  "net",
+  "s8"
+ ],
+ "n": 16,
+ "n2": 48,
+ "names": "Smart rings: Amazfit, Circular, Evie Ring, Oura, RingConn, Samsung Galaxy Ring, Ultrahuman",
+ "names_list": [
+  "Amazfit",
+  "Circular",
+  "Evie Ring",
+  "Oura",
+  "RingConn",
+  "Samsung Galaxy Ring",
+  "Ultrahuman"
+ ],
+ "footer": "ChatGPT, Claude, Perplexity: live web search (US) · Gemini: model knowledge · 19 Nov 2026",
+ "brands": [
+  [
+   "RingConn",
+   35
+  ],
+  [
+   "Oura",
+   32
+  ],
+  [
+   "Galaxy Ring",
+   29
+  ],
+  [
+   "Ultrahuman",
+   19
+  ],
+  [
+   "Amazfit",
+   14
+  ],
+  [
+   "Circular",
+   0
+  ],
+  [
+   "Evie Ring",
+   0
+  ]
+ ],
+ "engines": [
+  [
+   "ChatGPT",
+   "/16"
+  ],
+  [
+   "Claude",
+   "/16"
+  ],
+  [
+   "Perplexity",
+   "/16"
+  ],
+  [
+   "Gemini",
+   "/16"
+  ]
+ ],
+ "gemini_label": "From memory",
+ "eng_rows": [
+  [
+   "RingConn",
+   10,
+   14,
+   11,
+   0
+  ],
+  [
+   "Oura",
+   10,
+   12,
+   10,
+   0
+  ],
+  [
+   "Galaxy Ring",
+   9,
+   12,
+   8,
+   0
+  ],
+  [
+   "Ultrahuman",
+   5,
+   11,
+   3,
+   0
+  ],
+  [
+   "Amazfit",
+   0,
+   11,
+   3,
+   0
+  ],
+  [
+   "Circular",
+   0,
+   0,
+   0,
+   0
+  ]
+ ],
+ "eng_hl": [
+  "Amazfit"
+ ],
+ "questions": [
+  [
+   "Best Black Friday deals?",
+   [
+    [
+     "Oura",
+     "6/6",
+     false
+    ],
+    [
+     "Ultrahuman",
+     "3/6",
+     false
+    ],
+    [
+     "RingConn",
+     "1/6",
+     true
+    ]
+   ]
+  ],
+  [
+   "Longest battery life?",
+   [
+    [
+     "Ultrahuman",
+     "6/6",
+     false
+    ],
+    [
+     "RingConn",
+     "5/6",
+     false
+    ],
+    [
+     "Oura",
+     "0/6",
+     true
+    ]
+   ]
+  ],
+  [
+   "Works without a subscription?",
+   [
+    [
+     "Galaxy Ring",
+     "6/6",
+     false
+    ],
+    [
+     "RingConn",
+     "6/6",
+     false
+    ],
+    [
+     "Oura",
+     "0/6",
+     true
+    ]
+   ]
+  ],
+  [
+   "Best affordable smart ring?",
+   [
+    [
+     "RingConn",
+     "6/6",
+     false
+    ],
+    [
+     "Amazfit",
+     "3/6",
+     false
+    ],
+    [
+     "Oura",
+     "2/6",
+     true
+    ]
+   ]
+  ]
+ ],
+ "shop": {
+  "rows": [
+   [
+    "Halo Ring",
+    "—",
+    "#1",
+    true
+   ],
+   [
+    "RingConn",
+    "#1",
+    "#3",
+    false
+   ],
+   [
+    "Oura",
+    "#2",
+    "#2",
+    false
+   ],
+   [
+    "Galaxy Ring",
+    "#3",
+    "—",
+    false
+   ],
+   [
+    "Ultrahuman",
+    "#4",
+    "#8",
+    false
+   ],
+   [
+    "Amazfit",
+    "#5",
+    "—",
+    false
+   ]
+  ]
+ },
+ "net": {
+  "left": [
+   [
+    "tomsguide.com",
+    10
+   ],
+   [
+    "wired.com",
+    7
+   ],
+   [
+    "techradar.com",
+    7
+   ],
+   [
+    "wareable.com",
+    6
+   ],
+   [
+    "ringconn.com",
+    4
+   ],
+   [
+    "ultrahuman.com",
+    4
+   ]
+  ],
+  "right": [
+   "RingConn",
+   "Oura",
+   "Galaxy Ring",
+   "Ultrahuman",
+   "Amazfit",
+   "Circular"
+  ],
+  "links": [
+   [
+    0,
+    2,
+    10
+   ],
+   [
+    0,
+    1,
+    10
+   ],
+   [
+    0,
+    0,
+    9
+   ],
+   [
+    0,
+    3,
+    9
+   ],
+   [
+    0,
+    4,
+    7
+   ],
+   [
+    0,
+    5,
+    2
+   ],
+   [
+    1,
+    0,
+    6
+   ],
+   [
+    1,
+    1,
+    5
+   ],
+   [
+    1,
+    2,
+    4
+   ],
+   [
+    2,
+    1,
+    7
+   ],
+   [
+    2,
+    0,
+    7
+   ],
+   [
+    2,
+    2,
+    6
+   ],
+   [
+    2,
+    4,
+    3
+   ],
+   [
+    2,
+    3,
+    2
+   ],
+   [
+    2,
+    5,
+    1
+   ],
+   [
+    3,
+    0,
+    6
+   ],
+   [
+    3,
+    1,
+    5
+   ],
+   [
+    3,
+    4,
+    4
+   ],
+   [
+    3,
+    2,
+    4
+   ],
+   [
+    3,
+    3,
+    4
+   ],
+   [
+    3,
+    5,
+    1
+   ],
+   [
+    4,
+    0,
+    4
+   ],
+   [
+    4,
+    1,
+    3
+   ],
+   [
+    4,
+    2,
+    2
+   ],
+   [
+    4,
+    3,
+    2
+   ],
+   [
+    4,
+    4,
+    1
+   ],
+   [
+    5,
+    3,
+    4
+   ],
+   [
+    5,
+    0,
+    4
+   ],
+   [
+    5,
+    2,
+    1
+   ],
+   [
+    5,
+    1,
+    1
+   ]
+  ]
+ },
+ "sources": [],
+ "t": {
+  "hook": "Which smart ring does AI recommend for Black Friday?",
+  "badge": "Do they agree?",
+  "hook2": "US edition · 7 brands · 8 buyer questions",
+  "note": "These are the AI's answers.",
+  "names_title": "Smart rings we tracked",
+  "names_sub": "In alphabetical order",
+  "tag_brands": "Recommendations",
+  "who": "Who got recommended?",
+  "who_sub": "ChatGPT + Claude + Perplexity, 48 live-search answers",
+  "tag_eng": "AI comparison",
+  "eng": "The AIs disagree",
+  "eng_sub": "Answers recommending each brand",
+  "eng_note": "Amazfit: 11 from Claude, zero from ChatGPT.",
+  "tag_q": "By question",
+  "byq": "New question, new winner",
+  "byq_sub": "6 live-search answers per question",
+  "tag_shop": "Google Shopping (US)",
+  "shop": "AI's picks vs Google Shopping",
+  "shop_sub": "Search: \"smart ring\" · first listing of each brand",
+  "shop_col_ai": "AI rank",
+  "shop_col_shop": "Shopping",
+  "shop_note": "Shopping's #1 brand, Halo Ring, was never mentioned by the AIs. — = not in the top 20.",
+  "tag_net": "AI source network",
+  "net": "Which sites shape the answers?",
+  "net_sub": "Line width = answers citing the site that mentioned the brand",
+  "net_note": "Tom's Guide: cited in 10 answers, more than any brand's own site.",
+  "cta": "What does AI say about your brand?",
+  "cta2": "Track it weekly across ChatGPT, Gemini, Claude and Perplexity.",
+  "free": "Free check, no signup",
+  "disc": "AI answers from 19 Nov 2026 (US). Small sample, not representative of the whole market. Not an endorsement; prices and deals change. Brand names belong to their owners."
+ }
+}
