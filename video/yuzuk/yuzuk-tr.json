@@ -446,5 +446,15 @@
   "cta2": "ChatGPT, Gemini, Claude ve Perplexity'de her hafta takip edin.",
   "free": "Ücretsiz kontrol, kayıt gerekmez",
   "disc": "19 Kasım 2026 yapay zekâ cevapları (Türkiye). 54 cevap; Gemini'nin 10 cevabı alınamadı. Küçük örneklem, tüm pazarı temsil etmez. Tavsiye değildir. Marka adları sahiplerine aittir."
+ },
+ "dur": {
+  "p1": 7.0,
+  "p2": 1.49,
+  "p3": 5.83,
+  "p4": 5.86,
+  "p5": 5.04,
+  "p6": 4.97,
+  "p7": 5.5,
+  "p8": 9.33
  }
 }
