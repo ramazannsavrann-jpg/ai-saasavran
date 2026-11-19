@@ -144,3 +144,11 @@ Derslerde marka gerçek adıyla anılabilir; tam sıralama tablolarında harf ku
 ## YouTube API otomasyonu (14 Kasım)
 Dil (TR/EN), "yapay içerik" işareti ve oynatma listeleri artık otomatik: `yt/yt_ayar.py` + `yt/ayar.json` + `.github/workflows/youtube-ayar.yml` (PR #70; birleşince main'de her gece 00:30 TR çalışır). Anahtarlar Secrets'ta: YT_CLIENT_ID, YT_CLIENT_SECRET, YT_REFRESH_TOKEN (Google projesi "My First Project", OAuth client "youtube-playground").
 Yeni video yükleyince ID'sini `yt/ayar.json`'a {lang, lists} ile ekle ve push et (anında çalışır). Eklenmeyenler başlık kuralıyla işlenir. Kota 10.000/gün; güncelleme başına 50.
+
+
+## UZUN VİDEO (16:9) — 19 Kasım
+- Şablon: `video/uzun/uzun.py` (1920x1080). Ayar: `video/uzun/<konu>-<dil>.json` → `scenes` listesi; her sahnede `type` (title, stats, bars, table, net, boxes, cta), ekran metinleri ve `say` (o bölümün anlatımı).
+- Akış: `python3 uzun.py ayar.json frames` (önizleme) → `narr` (narration-<ad>-cNN-<dil>.txt yazar; push = TTS) → ses-out'ta hepsi TAMAM olunca `render --force` → `<ad>-<dil>.mp4` (bölüm süresi = o bölümün sesi; müzik sidechain).
+- Marka adı anlatımda "AI SaaSavran" yazılır (Gemini TTS doğru okuyor); "Ey Ay Saa Savran" yazımı kontrolde "Sağ Savran" diye duyulup HATA veriyor. Kapanış: TR "Site adresimiz: Ey Ay, Saas Savran, nokta com." EN "Our website is: A. I. SaaS Savran, dot com." (HATA olursa ikinci kez tekrar eklenir).
+- Kapak: `/tmp/thumb.py` benzeri sade 1280x720 (başlık + sarı bulgu rozeti). Açıklamada bölüm zaman damgaları (a01..aNN süreleri toplanarak).
+- Yayında (19 Kasım): Uzun 2 "Yapay zekâ hangi sitelere bakıyor?" TR/EN (`uzun/kaynak-*.json`, videolar dalı `uzun/kaynaklar-tr.mp4`, `uzun/sources-en.mp4`). Sıradaki: 3) Dev markalar neden görünmüyor 4) Soruyu değiştir, kazanan değişsin 5) Yapay zekâ vs Google Shopping.
