@@ -1,0 +1,2 @@
+TAMAM
+seste duyulan: Yapay zekalarda birbirinden farklı davranıyor.  Cloud cevap başına ortalama 4,6 kaynak gösterdi.  ChatGPT ise yalnızca 2.  Cloud daha çok siteye bakıyor ve genelde daha uzun listeler yapıyor.  ChatGPT daha az kaynağa dayanıyor ve daha seçici davranıyor.  Bu yüzden aynı soruya 2 yapay zeka çoğu zaman farklı markalar öneriyor.  Bir markanın ChatGPT'de görünüp Cloud'la görünmemesi ya da tam tersi  büyük ölçüde bu farktan kaynaklanıyor.
