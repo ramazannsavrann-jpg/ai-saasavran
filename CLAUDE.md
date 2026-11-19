@@ -80,6 +80,7 @@ PR açıklamasında bu kontrollerden neyin değiştiğini kısaca yaz.
 - Görünürlük Endeksi (`web/site/visibility-index.mjs`) aynı veriden üretilir; yeni sektörde soru eklenince `SECTORS` listesine anahtar kelime ekle (sektörsüz soru endekse girmez).
 
 ## Video ve sosyal medya
+- **KESİN KURAL (19 Kasım):** Seslendirmede site adresi/adı hiç söylenmez ("Site adresimiz…", "Ey Ay Saa Savran nokta com", "aisaasavran.com" yok). Ekranda yazıyor. Kapanış "Ücretsiz kontrol edin." / "Check it free." ile biter.
 - Video kurulumu ve şablonlar: `seslendirme` dalında `video/README.md` + `video/sablon/`.
 - Paylaşım kuralları (Instagram 3'lü set: TR Reels → EN Reels → ayrı gönderi; YouTube oynatma listeleri,
   açıklama metinleri): aynı dosyada "PAYLAŞIM KURALLARI" bölümü. Yeni video işinden önce oku.
