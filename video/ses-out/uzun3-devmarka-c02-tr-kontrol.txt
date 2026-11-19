@@ -1,0 +1,2 @@
+HATA: site adı seste doğru okunmadı, bu sesle video YAYINLANMAZ
+seste duyulan: Yöntem şöyle, AI sağ savuran ile kahve makinesi, parfüm, televizyon, robot süpürge, oyun laptopu, telefon, spor ayakkabı  ve özel hastane gibi kategorilerde sekizer gerçek alıcı sorusu sorduk.  Sorularda hiçbir marka adı yok, chat gpt ve cloud internette canlı arama yaparak cevap verdi.  Gemina'ya ise aynı soruları arama olmadan sorduk.  Yani o yalnızca hafızasındaki bilgiyle cevap verdi.  Sonra her markanın kaç cevapta önerildiğini her yapay zeka için ayrı ayrı saydık.
