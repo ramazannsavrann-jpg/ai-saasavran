@@ -169,3 +169,5 @@ Yayından önce, rakam kontrolüne ek olarak:
 - Düzeltme: talimat metne eklenmez; tek model sabit (`gemini-2.5-flash-preview-tts`, istenirse `video/tts-model-<ad>.txt`); 429'da aynı modelle beklenip yeniden denenir, başka modele/OpenAI'ye düşülmez.
 - `ad_kontrol.py` artık üç şeye bakar: site adı, talimat sızıntısı (read this / YouTube host / sunucu / … kelimeleri), seste metinde olmayan fazla konuşma (kelime sayısı %25+ fazla). Herhangi biri HATA ise video yayınlanmaz.
 - Yayından önce her bölümün `seste duyulan` dökümü baştan sona okunur.
+
+- **Site adı videoda yalnız BİR kez söylenir (19 Kasım, kullanıcı kuralı).** Kontrolden geçmezse cümleyi ikinci kez ekleyerek çözülmez; o bölüm yeniden seslendirilir.
