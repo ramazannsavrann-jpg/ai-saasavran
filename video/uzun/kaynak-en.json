@@ -1,0 +1,712 @@
+{
+ "name": "uzun2-kaynak",
+ "lang": "en",
+ "voice": "Charon",
+ "atempo": 1.08,
+ "footer": "These are AI answers · 12–19 Nov 2026 · ChatGPT, Claude, Perplexity with live web search · Small samples · Independent measurement",
+ "scenes": [
+  {
+   "type": "stats",
+   "tag": "AI measurement",
+   "title": "Which websites does AI rely on?",
+   "sub": "Who does it listen to before recommending a product?",
+   "items": [
+    [
+     "1,371",
+     "live-search answers"
+    ],
+    [
+     "3,769",
+     "source links"
+    ],
+    [
+     "35",
+     "measurement areas"
+    ],
+    [
+     "2",
+     "markets: US + Turkey",
+     "gold"
+    ]
+   ],
+   "say": "When you ask an AI which smartwatch, which TV or which coffee shop to choose, where does the answer actually come from? We measured it. We analyzed one thousand three hundred seventy-one answers from ChatGPT, Claude and Perplexity, all using live web search. Those answers contain more than three thousand seven hundred source links. In this video, we look at which websites AI relies on the most, why brands' own websites barely show up, and what that means for your brand."
+  },
+  {
+   "type": "boxes",
+   "tag": "Method",
+   "title": "How we measured it",
+   "ncol": 2,
+   "boxes": [
+    {
+     "t": "8 real buyer questions",
+     "d": "Per category; no brand names in the questions."
+    },
+    {
+     "t": "US and Turkey",
+     "d": "English questions asked from the US, Turkish questions from Turkey.",
+     "c": "gold"
+    },
+    {
+     "t": "Every link recorded",
+     "d": "Each source the AI showed in its answer was saved.",
+     "c": "blue"
+    },
+    {
+     "t": "Counted per site",
+     "d": "How many different answers cited each website.",
+     "c": "pink"
+    }
+   ],
+   "say": "First, the method. With AI SaaSavran, we wrote eight real buyer questions for each category. No brand names appear in the questions, just like a regular shopper would ask. English questions were asked from the US, and Turkish questions from Turkey. Whenever the AI looked at a website to answer, we recorded that link. Then we counted how many different answers cited each site. The categories are broad: phones, TVs, robot vacuums, coffee machines, smart rings, hospitals, hair transplant clinics, and even coffee shops in Seattle and moving companies in New York."
+  },
+  {
+   "type": "bars",
+   "tag": "Finding 1",
+   "title": "The most-cited websites",
+   "sub": "Number of answers citing the site (all categories)",
+   "rows": [
+    [
+     "tomsguide.com",
+     140
+    ],
+    [
+     "techradar.com",
+     97
+    ],
+    [
+     "rtings.com",
+     64
+    ],
+    [
+     "forbes.com",
+     38
+    ],
+    [
+     "akakce.com",
+     36
+    ],
+    [
+     "wired.com",
+     25
+    ],
+    [
+     "consumerreports.org",
+     23
+    ],
+    [
+     "en.wikipedia.org",
+     23
+    ]
+   ],
+   "note": "Not a single brand website in the top eight: all review, testing and comparison sites.",
+   "say": "The first finding is very clear. The most-cited website is Tom's Guide, in one hundred forty answers. TechRadar is second, with ninety-seven. Third is RTINGS, which tests products in its own lab. Then come Forbes, the Turkish price comparison site Akakçe, Wired and Consumer Reports. Look closely at this list: there is not a single brand website in the top eight. They are all review, testing and comparison sites. So when AI recommends a product, it usually trusts what these sites say, not what the brand says about itself."
+  },
+  {
+   "type": "stats",
+   "tag": "Finding 2",
+   "title": "How visible is the brand's own website?",
+   "sub": "Share of sources whose domain contains the brand name",
+   "items": [
+    [
+     "6%",
+     "consumer products and services",
+     "red"
+    ],
+    [
+     "26%",
+     "software tools",
+     "acc"
+    ],
+    [
+     "46",
+     "answers citing Semrush's own site",
+     "gold"
+    ]
+   ],
+   "note": "Consumer products: only 6 of every 100 sources are the brand's own site.",
+   "say": "What about brands' own websites? For consumer products, only six of every one hundred sources were sites with the brand's name in the domain. Phones, TVs, coffee, smart rings: it's the same story. Whatever a brand writes on its own website, AI mostly reads what others write. Software tools are different. There, the share rises to about one in four. Semrush's own website alone was cited in forty-six answers. That's because software companies publish detailed guides that answer the exact questions customers ask. Most consumer brands don't."
+  },
+  {
+   "type": "table",
+   "tag": "Finding 3",
+   "title": "Every category has its own referee",
+   "cols": [
+    "Category",
+    "Most-cited source",
+    "Answers"
+   ],
+   "widths": [
+    620,
+    780,
+    340
+   ],
+   "rows": [
+    [
+     "TVs (global)",
+     "rtings.com",
+     "21 / 29"
+    ],
+    [
+     "Sneakers (global)",
+     "runrepeat.com",
+     "12 / 33"
+    ],
+    [
+     "Gaming laptops (global)",
+     "tomshardware.com",
+     "11 / 27"
+    ],
+    [
+     "Seattle coffee shops",
+     "wikipedia · yelp",
+     "8 · 6 / 48"
+    ],
+    [
+     "NYC movers",
+     "movebuddha.com",
+     "11 / 48"
+    ],
+    [
+     "Condoms (US)",
+     "cdc.gov · walmart.com",
+     "12 · 12 / 48"
+    ],
+    [
+     "Hair transplant (Turkey)",
+     "medikalakademi.com.tr",
+     "12 / 32"
+    ]
+   ],
+   "say": "Finding three: every category has its own referee. When we asked about TVs, RTINGS was the source in twenty-one of twenty-nine answers. For sneakers it was RunRepeat, and for gaming laptops, Tom's Hardware. Local businesses bring in completely different sites: for Seattle coffee shops, Wikipedia and Yelp, and for New York movers, MoveBuddha. For health questions in the US, official sources like the CDC were cited. So there is no single magic website. Which site matters depends entirely on your category. The first job for any brand is to find its category's referee."
+  },
+  {
+   "type": "bars",
+   "tag": "Finding 4",
+   "title": "Even in Turkish, foreign sites lead",
+   "sub": "Answers citing the site, questions asked in Turkish",
+   "rows": [
+    [
+     "techradar.com",
+     48
+    ],
+    [
+     "akakce.com",
+     39,
+     "gold"
+    ],
+    [
+     "tomsguide.com",
+     38
+    ],
+    [
+     "rtings.com",
+     24
+    ],
+    [
+     "donanimhaber.com",
+     20,
+     "gold"
+    ]
+   ],
+   "note": "Only 13% of sources in Turkish answers were .tr websites.",
+   "say": "Here's a surprising result from Turkey. Even when we asked in Turkish, the most-cited site was the English-language TechRadar. Tom's Guide and RTINGS were also in the top five. Only thirteen percent of the sources in Turkish answers were dot t r websites. The local sites that stood out were the price comparison site Akakçe and the tech site DonanımHaber. The lesson: how you are covered on major English review sites shapes AI answers even in other languages."
+  },
+  {
+   "type": "bars",
+   "tag": "Finding 5",
+   "title": "AIs don't read the same number of sources",
+   "sub": "Average sources per answer",
+   "dec": 1,
+   "rows": [
+    [
+     "Claude",
+     4.6,
+     "acc",
+     "4.6"
+    ],
+    [
+     "ChatGPT",
+     2.0,
+     "gold",
+     "2.0"
+    ]
+   ],
+   "max": 5,
+   "note": "Claude reads more sites and builds longer lists; ChatGPT is more selective.",
+   "say": "The AIs also behave differently. Claude cited four point six sources per answer on average. ChatGPT cited only two. Claude looks at more sites and usually builds longer lists. ChatGPT relies on fewer sources and is more selective. That's why two AIs often recommend different brands for the same question. When a brand shows up on ChatGPT but not on Claude, or the other way around, this difference is a big part of the reason."
+  },
+  {
+   "type": "net",
+   "tag": "Example: smart rings (US)",
+   "title": "Source network: site → brand",
+   "sub": "Line width = answers citing the site that mentioned the brand",
+   "left": [
+    [
+     "tomsguide.com",
+     10
+    ],
+    [
+     "wired.com",
+     7
+    ],
+    [
+     "techradar.com",
+     7
+    ],
+    [
+     "wareable.com",
+     6
+    ],
+    [
+     "ringconn.com",
+     4
+    ],
+    [
+     "ultrahuman.com",
+     4
+    ]
+   ],
+   "right": [
+    "RingConn",
+    "Oura",
+    "Galaxy Ring",
+    "Ultrahuman",
+    "Amazfit",
+    "Circular"
+   ],
+   "links": [
+    [
+     0,
+     2,
+     10
+    ],
+    [
+     0,
+     1,
+     10
+    ],
+    [
+     0,
+     0,
+     9
+    ],
+    [
+     0,
+     3,
+     9
+    ],
+    [
+     0,
+     4,
+     7
+    ],
+    [
+     0,
+     5,
+     2
+    ],
+    [
+     1,
+     0,
+     6
+    ],
+    [
+     1,
+     1,
+     5
+    ],
+    [
+     1,
+     2,
+     4
+    ],
+    [
+     2,
+     1,
+     7
+    ],
+    [
+     2,
+     0,
+     7
+    ],
+    [
+     2,
+     2,
+     6
+    ],
+    [
+     2,
+     4,
+     3
+    ],
+    [
+     2,
+     3,
+     2
+    ],
+    [
+     2,
+     5,
+     1
+    ],
+    [
+     3,
+     0,
+     6
+    ],
+    [
+     3,
+     1,
+     5
+    ],
+    [
+     3,
+     4,
+     4
+    ],
+    [
+     3,
+     2,
+     4
+    ],
+    [
+     3,
+     3,
+     4
+    ],
+    [
+     3,
+     5,
+     1
+    ],
+    [
+     4,
+     0,
+     4
+    ],
+    [
+     4,
+     1,
+     3
+    ],
+    [
+     4,
+     2,
+     2
+    ],
+    [
+     4,
+     3,
+     2
+    ],
+    [
+     4,
+     4,
+     1
+    ],
+    [
+     5,
+     3,
+     4
+    ],
+    [
+     5,
+     0,
+     4
+    ],
+    [
+     5,
+     2,
+     1
+    ],
+    [
+     5,
+     1,
+     1
+    ]
+   ],
+   "note": "All 10 answers citing Tom's Guide mentioned Oura and Galaxy Ring.",
+   "say": "Let's see this in an example: smart rings in the US. On the left are the sites AI cited. On the right, the brands mentioned in the answers. The thicker the line, the more answers cited that site and mentioned that brand. Tom's Guide was cited in ten answers, and every one of them mentioned Oura and Galaxy Ring. Only two brand websites made the list: RingConn and Ultrahuman. And here's the interesting part: Oura was among the most recommended brands even though its own website was barely cited, because it is so strong on review sites."
+  },
+  {
+   "type": "net",
+   "tag": "Example: Seattle coffee shops",
+   "title": "Local businesses, different sources",
+   "sub": "Line width = answers citing the site that mentioned the cafe",
+   "left": [
+    [
+     "en.wikipedia.org",
+     8
+    ],
+    [
+     "yelp.com",
+     6
+    ],
+    [
+     "theinfatuation.com",
+     6
+    ],
+    [
+     "visitseattle.org",
+     6
+    ],
+    [
+     "talkofthehouse.com",
+     4
+    ],
+    [
+     "remembrew.com",
+     3
+    ]
+   ],
+   "right": [
+    "Espresso Vivace",
+    "Victrola",
+    "Storyville",
+    "Milstead",
+    "Monorail",
+    "Anchorhead",
+    "Starbucks"
+   ],
+   "links": [
+    [
+     0,
+     0,
+     4
+    ],
+    [
+     0,
+     1,
+     5
+    ],
+    [
+     0,
+     4,
+     3
+    ],
+    [
+     0,
+     5,
+     3
+    ],
+    [
+     0,
+     2,
+     5
+    ],
+    [
+     0,
+     6,
+     1
+    ],
+    [
+     1,
+     0,
+     4
+    ],
+    [
+     1,
+     1,
+     5
+    ],
+    [
+     1,
+     4,
+     4
+    ],
+    [
+     1,
+     5,
+     4
+    ],
+    [
+     1,
+     2,
+     6
+    ],
+    [
+     2,
+     0,
+     4
+    ],
+    [
+     2,
+     1,
+     2
+    ],
+    [
+     2,
+     3,
+     3
+    ],
+    [
+     2,
+     4,
+     1
+    ],
+    [
+     3,
+     0,
+     4
+    ],
+    [
+     3,
+     1,
+     3
+    ],
+    [
+     3,
+     3,
+     4
+    ],
+    [
+     3,
+     4,
+     3
+    ],
+    [
+     3,
+     2,
+     1
+    ],
+    [
+     3,
+     6,
+     2
+    ],
+    [
+     4,
+     0,
+     4
+    ],
+    [
+     4,
+     1,
+     2
+    ],
+    [
+     4,
+     4,
+     2
+    ],
+    [
+     4,
+     5,
+     2
+    ],
+    [
+     4,
+     2,
+     2
+    ],
+    [
+     5,
+     0,
+     3
+    ],
+    [
+     5,
+     3,
+     3
+    ]
+   ],
+   "note": "All 6 answers citing Yelp mentioned Storyville. Starbucks: only 6 of 48.",
+   "say": "For local businesses, the picture changes completely. When we asked about coffee shops in Seattle, AI looked at Wikipedia, Yelp and city guides. Every one of the six answers that cited Yelp mentioned a cafe called Storyville. Starbucks, born in Seattle, showed up in only six of forty-eight answers. So for a local business, how you appear on Yelp, Google reviews and city guides directly decides whether AI recommends you. Even the world's best-known coffee brand fell behind in its own hometown."
+  },
+  {
+   "type": "stats",
+   "tag": "Finding 6",
+   "title": "The AI that doesn't search the web",
+   "sub": "We asked Gemini the same questions without live search",
+   "items": [
+    [
+     "35/48",
+     "RingConn: live search",
+     "acc"
+    ],
+    [
+     "2/11",
+     "RingConn: Gemini, from memory",
+     "red"
+    ],
+    [
+     "10/14",
+     "Starbucks: Gemini, from memory",
+     "gold"
+    ]
+   ],
+   "note": "AI answering from memory learns about new brands late and favors well-known ones.",
+   "say": "Then there's the AI that doesn't search the web. We asked Gemini the same questions without live search, so it answered from memory only. The result is striking. In smart rings, RingConn was recommended in thirty-five of forty-eight live-search answers. Gemini recommended it in just two of eleven. In Seattle it was the reverse: Starbucks, which fell behind with live search, was mentioned by Gemini in ten of fourteen answers. AI that answers from memory learns about new, fast-growing brands late, and it favors big, well-known names. Content published today only reaches these models with their next training."
+  },
+  {
+   "type": "boxes",
+   "tag": "What to do",
+   "title": "Three steps for your brand",
+   "ncol": 3,
+   "boxes": [
+    {
+     "t": "1. Find the referee",
+     "d": "List the 5 sites AI cites most in your category."
+    },
+    {
+     "t": "2. Be there",
+     "d": "Make sure tests and comparisons on those sites have your correct facts.",
+     "c": "gold"
+    },
+    {
+     "t": "3. Open your own site",
+     "d": "Answer customers' real questions clearly on your website.",
+     "c": "blue"
+    }
+   ],
+   "say": "So what should a brand do? We suggest three steps. First, find your category's referee: list the five sites AI cites most. Second, be present on those sites: make sure their tests and comparisons include your product with correct information. Third, open up your own website to AI: answer the questions customers actually ask, like battery life, whether there's a subscription fee, or warranty terms, clearly and plainly on your site. That's exactly what software companies do."
+  },
+  {
+   "type": "boxes",
+   "tag": "AI SaaSavran",
+   "title": "How to measure this for your brand",
+   "ncol": 2,
+   "boxes": [
+    {
+     "t": "Source Impact",
+     "d": "Which sites are cited in answers that recommend you."
+    },
+    {
+     "t": "Competitor Source Dominance",
+     "d": "Which sites push your competitors forward.",
+     "c": "gold"
+    },
+    {
+     "t": "Loss Reason Card",
+     "d": "Who was recommended instead of you, and based on what.",
+     "c": "red"
+    },
+    {
+     "t": "AI comparison",
+     "d": "Your visibility on ChatGPT, Claude, Perplexity and Gemini, separately.",
+     "c": "blue"
+    },
+    {
+     "t": "Action Tracking",
+     "d": "Do your changes show up in the next measurements?",
+     "c": "pink"
+    },
+    {
+     "t": "Google Shopping rank",
+     "d": "AI's recommendation next to your shopping search position.",
+     "c": "acc"
+    }
+   ],
+   "say": "You can run every analysis in this video for your own brand with AI SaaSavran. Source Impact shows which sites are cited in the answers that recommend you. Competitor Source Dominance shows which sites push your competitors forward. The Loss Reason Card explains, for each question where you weren't recommended, who was recommended instead and based on what. AI comparison shows your visibility on ChatGPT, Claude, Perplexity and Gemini separately. And Action Tracking checks whether your changes show up in the next measurements."
+  },
+  {
+   "type": "cta",
+   "tag": "Free check",
+   "title": "Which sites does AI rely on in your category?",
+   "free": "Free check, no signup",
+   "disc": "These are AI answers. Measurements from 12–19 Nov 2026; small samples, not representative of the whole market. Brand-site share: domains containing the brand name. Independent measurement; we have no sponsorship or partnership with any brand shown. Brand names belong to their owners.",
+   "say": "One last reminder: these are AI answers. The measurements use small samples and don't represent the whole market. This is an independent measurement; we have no sponsorship or partnership with any brand shown. Which websites does AI rely on in your category, and does it recommend your brand? Check it free. Our website is: A. I. SaaS Savran, dot com."
+  }
+ ]
+}
