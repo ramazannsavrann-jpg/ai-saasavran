@@ -161,13 +161,13 @@ Sebep: 19 Kasım'da yalnız vidIQ paylaşım listesine bakılıp Seattle seti "e
 ### PAYLAŞIM KAYDI (her paylaşımdan sonra güncellenir; en yeni üstte)
 | Konu | YouTube TR | YouTube EN | Instagram seti | Not |
 |---|---|---|---|---|
-| Akıllı yüzük | oKNVNscsGi8 | Zz8biHgxQzc | 19 Kas: taslaklar hazır, onay bekliyor | karusel `videolar` dalı `instagram/ig-yuzuk-1..5.jpg` |
+| Akıllı yüzük | oKNVNscsGi8 | Zz8biHgxQzc | TAMAM 19 Kas 22:15–22:20 (TR Df7zyEwiicv, EN Df7z-0xkZqd, karusel Df70MDyiX2n) | karusel `videolar` dalı `instagram/ig-yuzuk-1..5.jpg` |
 | Uzun 2: Kaynaklar | gjH-oaMvKuI | IZ7fzbcTzrE | gönderilmez (uzun video) | |
 | Seattle kahve | 85rcRRxKwkw | Zk1eQF5wk4o | TAMAM (TR Reels, EN Reels, karusel) | Reels vidIQ dışından paylaşıldı |
-| NYC nakliye | Ilxb0FZK1go | 3SmvBaQspGU | yok | |
+| NYC nakliye | Ilxb0FZK1go | 3SmvBaQspGU | yok (vidIQ listesinde yok; profilde doğrulanmadı) | |
 | Prezervatif (ABD) | LePjz0EEfgM | tFF4JG7ncN0 | paylaşılmaz (kullanıcı kararı) | |
 | Akıllı saat (ABD) | l4AQgjOEzgw | Uw56ankOGhQ | TAMAM | |
-| Güvenlik kamerası (ABD) | o-D7BHM7iKA | kLKaNZCQcI8 | yok | |
+| Güvenlik kamerası (ABD) | o-D7BHM7iKA | kLKaNZCQcI8 | yok (vidIQ listesinde yok; profilde doğrulanmadı) | |
 | Saç ekimi / özel hastane | – | – | TAMAM (14 Kas) | |
 
 ## YouTube API otomasyonu (14 Kasım)
