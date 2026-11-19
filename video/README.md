@@ -39,7 +39,7 @@ Bu dal (`seslendirme`) videoların tek kaynağıdır. Yeni oturumda buradan deva
 - Sonuçlarda markalar **harfli**: Marka A/B/C…, ürünler Model 1/2…. Harfler rastgele atanır (alfabetik değil).
 - Ölçülen markaların gerçek adları **kancadan sonraki marka kartında** alfabetik yazılır; hangi harfin hangi marka olduğu verilmez.
 - Her videoda: "Bunlar yapay zekânın cevaplarıdır" (kullanıcı: "bizim görüşümüz değildir" denmesin), tarih, örneklem, "tüm pazarı temsil etmez".
-- Global video İngilizce, Türkiye videosu Türkçe; YouTube başlık/açıklama/etiketler iki dilli. Başlık ≤ 100 karakter.
+- Global video İngilizce, Türkiye videosu Türkçe; YouTube başlık/açıklama/etiketler YALNIZ kanalın dilinde (bkz. KANAL KURALI). Başlık ≤ 100 karakter.
 - Kulaklık videosu formatı esas: marka oranı, motor karşılaştırması, soru bazında kayıp, rakip ürün, ürün doğruluğu, Google Shopping sırası, kaynaklar.
 
 
@@ -57,8 +57,17 @@ Bu dal (`seslendirme`) videoların tek kaynağıdır. Yeni oturumda buradan deva
 ffmpeg -i v.mp4 -i voice.wav -i music.wav -filter_complex "[1:a]aresample=44100,volume=1.6,apad=whole_dur=$D,asplit=2[vo][sc];[2:a]volume=0.35,atrim=0:$D,afade=t=out:st=$(($D-1.5)):d=1.5[mu];[mu][sc]sidechaincompress=threshold=0.03:ratio=8:attack=20:release=300[duck];[duck][vo]amix=inputs=2:duration=first:normalize=0,alimiter=limit=0.95[a]" -map 0:v -map "[a]" -c:v copy -c:a aac -b:a 160k out.mp4
 ```
 
+## KANAL KURALI (20 Kasım) — HER SOHBET/OTURUM/HESAP İÇİN ZORUNLU; aşağıdaki "iki dilli" ve "@aisaasavran" ifadelerinin yerine geçer
+- İngilizce video/Shorts YALNIZ **AI SaaSavran EN** kanalına: @AISaaSavranEN, `UCJ3mA2nPzsinfO9MgccFtdA`.
+- Türkçe video/Shorts YALNIZ **AI SaaSavran** kanalına: @AISaaSavran, `UCHL4sdkEenxkpuP4_Hq1RZw`.
+- Başlık, açıklama, etiket, hashtag her kanalda yalnız o kanalın dilinde (iki dilli metin YOK). Oynatma listeleri kendi kanalında, kendi dilinde; EN kanalında Türkiye/Türkçe adlı liste açılmaz.
+- Eğitim videoları EN kanalına yüklenmez; TR kanalında liste dışı (yalnız siteden izlenir).
+- EN kanalı vidIQ'ya bağlı değil (ikinci kanal ücretli): EN yüklemeleri YouTube Studio'dan (tarayıcı) yapılır. vidIQ'daki `UCHL4sdkEenxkpuP4_Hq1RZw` yalnız Türkçe içerik içindir.
+- Her yüklemede: çocuklara yönelik değil, ücretli tanıtım yok, yapay içerik işareti, video dili, `kapak/<ad>-<dil>.jpg` kapağı.
+- EN kanalı listeleri: "Black Friday AI Picks", "AI Picks: US Edition", "Which brand does AI recommend? All tests".
+
 ## Yükleme
-- Dosya `videolar` dalına konur, raw.githubusercontent.com linki `vidiq_video_upload`'a verilir; YouTube kanalı @aisaasavran (UCHL4sdkEenxkpuP4_Hq1RZw).
+- Dosya `videolar` dalına konur, raw.githubusercontent.com linki `vidiq_video_upload`'a verilir; YouTube kanalı: Türkçe → @aisaasavran (UCHL4sdkEenxkpuP4_Hq1RZw); İngilizce → @AISaaSavranEN (UCJ3mA2nPzsinfO9MgccFtdA, Studio'dan).
 
 ## İngilizce strateji: ABD odaklı (15 Kasım, kullanıcı kararı)
 - İngilizce içerik tutana kadar ABD hedefli: ABD markaları/ürünleri, ABD'den ölçüm (marka country=US → canlı arama konumu ABD; worker SEARCH_COUNTRY'yi marka ülkesinden alır). Başlık/etiket ABD aramalarına göre ("US edition", yerel marka adları).
@@ -113,7 +122,7 @@ Derslerde marka gerçek adıyla anılabilir; tam sıralama tablolarında harf ku
 ## PAYLAŞIM KURALLARI (YouTube + Instagram) — 14 Kasım, HANGİ SOHBETTEN OLURSA OLSUN GEÇERLİ
 ### YouTube (@aisaasavran)
 - Veri/ölçüm Shorts: herkese açık. Eğitim videoları: GİZLİ (private).
-- Başlık, açıklama, etiketler hem TR hem EN; başlık ≤ 100 karakter. Kapak: sorunun kendisi + motorların aynı şeyi söylemeyebileceği.
+- Başlık, açıklama, etiketler yalnız kanalın dilinde (KANAL KURALI); başlık ≤ 100 karakter. Kapak: sorunun kendisi + motorların aynı şeyi söylemeyebileceği.
 - Grafiklerde markalar harfli (Marka/Hastane/Klinik A, B…; harfler rastgele). Gerçek adlar kancadan sonraki marka kartında alfabetik, hangi harf olduğu söylenmez. Adlar etiketlerde ve açıklamada hashtag olarak.
 - Notlar: "Bunlar yapay zekânın cevaplarıdır" ("bizim görüşümüz değildir" DENMEZ). Sağlıkta ek olarak "tıbbi tavsiye değildir".
 - Her ölçüm videosu açıklamasına: "Bu video bağımsız bir ölçümdür. Hiçbir markayla reklam veya iş birliğimiz yoktur." / "Independent measurement. We have no sponsorship or partnership with any brand shown."
