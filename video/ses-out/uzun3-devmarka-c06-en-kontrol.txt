@@ -1,0 +1,2 @@
+TAMAM
+seste duyulan: Pattern 3. One AI recommends you, another never does.  Claude recommended Xiaomi phones in 13 of 24 answers.  Chat GPT in none of 32.  For MSI gaming laptops, Claude 8, Chat GPT zero.  In Turkey, Claude recommended Live Hospital seven times.  Chat GPT never did.  In our measurements, Chat GPT cited fewer sources per answer.  We can't prove that's the cause, but a likely explanation  is that a brand that misses its shortlist disappears on that AI.  That's why measuring your brand on only one AI can be misleading.
