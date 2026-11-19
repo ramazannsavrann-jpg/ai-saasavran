@@ -55,7 +55,7 @@
      "c": "pink"
     }
    ],
-   "say": "Yöntem şöyle. AI SaaSavran ile kahve makinesi, parfüm, televizyon, robot süpürge, oyun laptopu, telefon, spor ayakkabı ve özel hastane gibi kategorilerde sekizer gerçek alıcı sorusu sorduk. Sorularda hiçbir marka adı yok. ChatGPT ve Claude internette canlı arama yaparak cevap verdi. Gemini'ye ise aynı soruları arama olmadan sorduk; yani o, yalnızca hafızasındaki bilgiyle cevap verdi. Sonra her markanın kaç cevapta önerildiğini, her yapay zekâ için ayrı ayrı saydık."
+   "say": "Yöntem şöyle. Kahve makinesi, parfüm, televizyon, robot süpürge, oyun laptopu, telefon, spor ayakkabı ve özel hastane gibi kategorilerde sekizer gerçek alıcı sorusu sorduk. Sorularda hiçbir marka adı yok. ChatGPT ve Claude internette canlı arama yaparak cevap verdi. Gemini'ye ise aynı soruları arama olmadan sorduk; yani o, yalnızca hafızasındaki bilgiyle cevap verdi. Sonra her markanın kaç cevapta önerildiğini, her yapay zekâ için ayrı ayrı saydık."
   },
   {
    "type": "table",
@@ -397,7 +397,7 @@
      "c": "acc"
     }
    ],
-   "say": "Bu videodaki analizlerin hepsini AI SaaSavran ile kendi markanız için yapabilirsiniz. Kayıp Nedeni Kartı, önerilmediğiniz her soruda yerinize kimin, neye dayanarak önerildiğini gösteriyor. Koşullu Görünürlük Haritası, fiyat, kalite ya da kullanım amacı gibi soru türlerinde güçlü ve zayıf olduğunuz yerleri çıkarıyor. Yapay zekâ karşılaştırması, ChatGPT, Claude, Perplexity ve Gemini'yi ayrı ayrı gösteriyor. Ürün bilgi doğruluğu, yapay zekânın ürününüz hakkında doğru konuşup konuşmadığını kontrol ediyor. Aksiyon Takibi ise yaptığınız değişikliklerin sonuç verip vermediğini izliyor."
+   "say": "Bu videodaki analizlerin hepsini kendi markanız için sitemizde yapabilirsiniz. Kayıp Nedeni Kartı, önerilmediğiniz her soruda yerinize kimin, neye dayanarak önerildiğini gösteriyor. Koşullu Görünürlük Haritası, fiyat, kalite ya da kullanım amacı gibi soru türlerinde güçlü ve zayıf olduğunuz yerleri çıkarıyor. Yapay zekâ karşılaştırması, ChatGPT, Claude, Perplexity ve Gemini'yi ayrı ayrı gösteriyor. Ürün bilgi doğruluğu, yapay zekânın ürününüz hakkında doğru konuşup konuşmadığını kontrol ediyor. Aksiyon Takibi ise yaptığınız değişikliklerin sonuç verip vermediğini izliyor."
   },
   {
    "type": "cta",

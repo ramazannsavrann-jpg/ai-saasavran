@@ -55,7 +55,7 @@
      "c": "pink"
     }
    ],
-   "say": "Here's the method. With AI SaaSavran, we asked eight real buyer questions in categories like coffee machines, fragrance, TVs, robot vacuums, gaming laptops, phones, sneakers and private hospitals. No brand names appear in the questions. ChatGPT and Claude answered with live web search. We asked Gemini the same questions without search, so it answered from memory only. Then we counted how many answers recommended each brand, separately for each AI."
+   "say": "Here's the method. We asked eight real buyer questions in categories like coffee machines, fragrance, TVs, robot vacuums, gaming laptops, phones, sneakers and private hospitals. No brand names appear in the questions. ChatGPT and Claude answered with live web search. We asked Gemini the same questions without search, so it answered from memory only. Then we counted how many answers recommended each brand, separately for each AI."
   },
   {
    "type": "table",
@@ -397,7 +397,7 @@
      "c": "acc"
     }
    ],
-   "say": "You can run every analysis in this video for your own brand with AI SaaSavran. The Loss Reason Card shows, for each question where you weren't recommended, who was recommended instead and based on what. The Conditional Visibility Map shows your strong and weak spots by question type, like price, quality or use case. AI comparison shows ChatGPT, Claude, Perplexity and Gemini separately. Product accuracy checks whether AI gets the facts about your product right. And Action Tracking shows whether your changes are working."
+   "say": "You can run every analysis in this video for your own brand on our website. The Loss Reason Card shows, for each question where you weren't recommended, who was recommended instead and based on what. The Conditional Visibility Map shows your strong and weak spots by question type, like price, quality or use case. AI comparison shows ChatGPT, Claude, Perplexity and Gemini separately. Product accuracy checks whether AI gets the facts about your product right. And Action Tracking shows whether your changes are working."
   },
   {
    "type": "cta",
