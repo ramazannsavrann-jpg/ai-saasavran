@@ -15,6 +15,10 @@ on:
         description: "Yalnız bu videolar (virgülle kimlik). Boş = hepsi"
         required: false
         default: ""
+      publish_now:
+        description: "Hemen herkese açılacak videolar (virgülle kimlik)"
+        required: false
+        default: ""
       export:
         description: "1 = hiçbir şey değiştirme, video bilgilerini loga yaz"
         required: false
@@ -34,4 +38,5 @@ jobs:
           DRY_RUN: ${{ inputs.dry_run }}
           ONLY: ${{ inputs.only }}
           EXPORT: ${{ inputs.export }}
+          PUBLISH_NOW: ${{ inputs.publish_now }}
         run: python3 yt/yt_ayar.py

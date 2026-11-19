@@ -13,6 +13,8 @@ DRY = os.environ.get("DRY_RUN") == "1"
 # ONLY: elle başlatmada virgülle video kimlikleri. Verilirse kapak ve video işlemleri yalnız bu videolara yapılır
 # (yayın sonrası hızlı çalışma; kotayı korur). Gece çalışması ve push her zaman tam çalışır (kapak koruması sürer).
 ONLY = {x.strip() for x in os.environ.get("ONLY", "").split(",") if x.strip()}
+# PUBLISH_NOW: elle başlatmada virgülle video kimlikleri; zamanlanmış yayını beklemeden herkese açılır (eğitim videoları hariç)
+PUBLISH_NOW = {x.strip() for x in os.environ.get("PUBLISH_NOW", "").split(",") if x.strip()}
 # EXPORT=1: hiçbir şey değiştirmeden tüm videoların kimlik/başlık/açıklama/gizlilik bilgisini JSON olarak loga yazar (19 Kasım).
 EXPORT = os.environ.get("EXPORT") == "1"
 DRY = DRY or EXPORT  # dışa aktarmada hiçbir şey değiştirilmez
@@ -223,6 +225,15 @@ def main():
                 if call("PUT", "videos", {"part": "status"}, {"id": vid, "status": s0}, cost=50) is not None:
                     priv = "public"
                     line += " · →herkese açık✓"
+            # 0b) "hemen yayınla" (19 Kasım): PUBLISH_NOW içindeki videolar zamanlanmış yayını beklemeden herkese açılır.
+            now_pub = vid in PUBLISH_NOW and not keep_private
+            if now_pub and (priv != "public" or st.get("publishAt")) and not DRY:
+                s1 = {"privacyStatus": "public", "selfDeclaredMadeForKids": st.get("selfDeclaredMadeForKids", False),
+                      "embeddable": st.get("embeddable", True), "license": st.get("license", "youtube"),
+                      "publicStatsViewable": st.get("publicStatsViewable", True), "containsSyntheticMedia": True}
+                if call("PUT", "videos", {"part": "status"}, {"id": vid, "status": s1}, cost=50) is not None:
+                    priv = "public"; st = dict(st, publishAt=None, containsSyntheticMedia=True)
+                    line += " · →herkese açık✓"
             if is_tut:
                 line += " · listeler: " + ", ".join(n for n, pid in pls.items() if vid in members.get(pid, set()))
             # 1) dil + açıklama (snippet). ayar.json "descriptions": {video: metin} varsa açıklama ona çevrilir (19 Kasım: anahtar kelimeli açıklamalar)
@@ -245,8 +256,13 @@ def main():
                     s["publishAt"] = st["publishAt"]
                 if not DRY and call("PUT", "videos", {"part": "status"}, {"id": vid, "status": s}, cost=50) is not None:
                     line += " · yapay✓"
+            # 2b) marka iş birliği / ücretli tanıtım YOK açıkça işaretlenir (19 Kasım, kullanıcı isteği): yeni yüklenenlere
             if (v.get("paidProductPlacementDetails") or {}).get("hasPaidProductPlacement"):
                 line += " · DİKKAT ücretli tanıtım işaretli"
+            elif (fresh or vid in CFG.get("force", [])) and not DRY:
+                if call("PUT", "videos", {"part": "paidProductPlacementDetails"},
+                        {"id": vid, "paidProductPlacementDetails": {"hasPaidProductPlacement": False}}, cost=50) is not None:
+                    line += " · işbirliği yok✓"
             # 3) oynatma listeleri
             for name in rule["lists"]:
                 pid = pls.get(norm(name))
