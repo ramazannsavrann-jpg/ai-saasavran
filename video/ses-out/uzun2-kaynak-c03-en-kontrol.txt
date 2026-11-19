@@ -1,0 +1,2 @@
+TAMAM
+seste duyulan: The first finding is very clear. The most cited website is Tom's Guide, in 140 answers.  Tech Radar is second, with 97. Third is Readings, which tests products in its own lab.  Then come Forbes, the Turkish Price Comparison Site, Akıcı, Wired, and Consumer Reports.  Look closely at this list. There is not a single brand website in the top eight.  They are all review, testing, and comparison sites.  So when AI recommends a product, it usually trusts what these sites say,  not what the brand says about itself.
