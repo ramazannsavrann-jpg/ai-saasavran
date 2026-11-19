@@ -185,7 +185,10 @@ def main():
             r = call("GET", "videos", {"part": "snippet,status", "id": ",".join(vids[k:k + 50])}) or {}
             out += [{"id": v["id"], "title": v["snippet"]["title"], "privacy": v["status"]["privacyStatus"],
                      "published": v["snippet"]["publishedAt"], "description": v["snippet"].get("description", "")} for v in r.get("items", [])]
-        print("EXPORT-BASLA"); print(json.dumps(out, ensure_ascii=False)); print("EXPORT-BITTI")
+        print("EXPORT-BASLA")
+        for o in out:
+            print("EXP " + json.dumps(o, ensure_ascii=False))  # video başına bir satır: tek uzun satır GitHub günlüğünde kesiliyor
+        print("EXPORT-BITTI")
         print(f"Kota (tahmini): {quota}")
         return
     rep = []
