@@ -162,3 +162,10 @@ Yayından önce, rakam kontrolüne ek olarak:
 4. **Yaklaşık ölçüler belirtilir.** Sezgisel sınıflama (ör. "alan adında marka adı geçen site = marka sitesi") "yaklaşık" diye anılır, yöntem açıklamaya yazılır.
 5. **"Hiç anmadı" iddiası** cevap metinlerinde arama ile doğrulanır (kısa adlar başka kelimenin içinde geçebilir: "evie" ⊂ "review").
 6. Ölçülen her rakam veritabanından yeniden sorgulanır; ekrandaki sayı ile anlatımdaki sayı aynı olmalı.
+
+
+## SESLENDİRME TALİMAT SIZINTISI (19 Kasım, yayına çıkan hata)
+- Gemini TTS'e metnin başına "Read this like a … YouTube host" / "Türk YouTube sunucusu gibi oku" talimatı ekleniyordu; gemini-3.8 bunu sesli okudu (Uzun 2 EN yayına çıktı, kullanıcı sildi). Bölümler farklı modellerle üretildiği için ses tonu da bölüm bölüm değişti.
+- Düzeltme: talimat metne eklenmez; tek model sabit (`gemini-2.5-flash-preview-tts`, istenirse `video/tts-model-<ad>.txt`); 429'da aynı modelle beklenip yeniden denenir, başka modele/OpenAI'ye düşülmez.
+- `ad_kontrol.py` artık üç şeye bakar: site adı, talimat sızıntısı (read this / YouTube host / sunucu / … kelimeleri), seste metinde olmayan fazla konuşma (kelime sayısı %25+ fazla). Herhangi biri HATA ise video yayınlanmaz.
+- Yayından önce her bölümün `seste duyulan` dökümü baştan sona okunur.

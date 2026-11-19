@@ -7,6 +7,7 @@ from faster_whisper import WhisperModel
 
 OUT = sys.argv[1]
 ADI = re.compile(r"a[iı]sa+s*sav")  # "aisaasavran", "aisassavron" geçer; "aisavarin", "aisizinmarkaniz" geçmez
+TALIMAT = re.compile(r"read this|youtube (host|post)|american english|sunucu|s[ıi]n[ıi]c[ıi]s[ıi]|istanbul türkçe|türkçesiyle oku|enerjik bir|energetic", re.I)
 model = WhisperModel("small", device="cpu", compute_type="int8")
 hata = 0
 for f in sorted(glob.glob(f"{OUT}/ses-*.pcm") + glob.glob(f"{OUT}/ses-*.mp3") + glob.glob(f"{OUT}/*.mp4")):
@@ -22,8 +23,13 @@ for f in sorted(glob.glob(f"{OUT}/ses-*.pcm") + glob.glob(f"{OUT}/ses-*.mp3") + 
     yazi = " ".join(s.text for s in model.transcribe(a, language=lang)[0]).strip()
     duz = re.sub(r"[^a-zçğıöşü]", "", yazi.lower())
     gerek = bool(re.search(r"savran", metin, re.I))
-    ok = (not gerek) or bool(ADI.search(duz))
-    sonuc = "TAMAM" if ok else "HATA: site adı seste doğru okunmadı, bu sesle video YAYINLANMAZ"
+    ok_ad = (not gerek) or bool(ADI.search(duz))
+    # 19 Kasım: TTS talimatı sesli okudu ("Read this like a ... YouTube host", "Türk YouTube sunucusu gibi oku") -> yakala
+    sizinti = TALIMAT.search(yazi) and not TALIMAT.search(metin)
+    # Seste metinde olmayan uzun bir ek varsa (kelime sayısı %25'ten fazla) yakala (yalnız bölüm sesleri; bitmiş videoda metin yok)
+    fazla = os.path.exists(np_) and len(yazi.split()) > 1.25 * len(metin.split()) + 4
+    ok = ok_ad and not sizinti and not fazla
+    sonuc = "TAMAM" if ok else "HATA: " + "; ".join(x for x, b in (("site adı seste doğru okunmadı", not ok_ad), ("seslendirme talimatı sesli okunmuş", sizinti), ("seste metinde olmayan fazla konuşma var", fazla)) if b) + ", bu sesle video YAYINLANMAZ"
     open(f"{OUT}/{name}-kontrol.txt", "w", encoding="utf-8").write(f"{sonuc}\nseste duyulan: {yazi}\n")
     print(f"{name}: {sonuc}\n  {yazi[-160:]}")
     hata += 0 if ok else 1

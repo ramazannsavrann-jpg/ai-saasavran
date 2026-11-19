@@ -27,18 +27,19 @@ jobs:
             # video/motor-<ad>.txt "openai" ise Gemini atlanır (19 Kasım: EN site adı için)
             if [ "$(cat video/motor-$name.txt 2>/dev/null)" != "openai" ] && { [ "$lang" = "tr" ] || [ "$lang" = "en" ]; }; then
               ok=0
-              if [ "$lang" = "en" ]; then pre="Read this like a natural, warm, energetic YouTube host, in clear American English: "; else pre="Doğal, samimi ve enerjik bir Türk YouTube sunucusu gibi, akıcı İstanbul Türkçesiyle oku: "; fi
-              for m in gemini-2.5-flash-preview-tts gemini-3.1-flash-tts-preview gemini-3.8-flash-tts; do
-                jq -n --rawfile t "$f" --arg v "$trvoice" --arg pre "$pre" '{contents:[{parts:[{text:($pre + $t)}]}],generationConfig:{responseModalities:["AUDIO"],speechConfig:{voiceConfig:{prebuiltVoiceConfig:{voiceName:$v}}}}}' > req.json
+              # 19 Kasım düzeltmesi: metnin başına talimat EKLENMEZ (gemini-3.8 talimatı sesli okudu, yayına çıktı).
+              # Tek model sabit (bölümler arası ses farkı olmasın); 429'da aynı modelle bekleyip yeniden denenir.
+              m=$(cat "video/tts-model-$name.txt" 2>/dev/null || echo gemini-2.5-flash-preview-tts)
+              for try in 1 2 3 4 5 6; do
+                jq -n --rawfile t "$f" --arg v "$trvoice" '{contents:[{parts:[{text:$t}]}],generationConfig:{responseModalities:["AUDIO"],speechConfig:{voiceConfig:{prebuiltVoiceConfig:{voiceName:$v}}}}}' > req.json
                 code=$(curl -sS -o resp.json -w "%{http_code}" "https://generativelanguage.googleapis.com/v1beta/models/$m:generateContent" -H "x-goog-api-key: $GEMINI_API_KEY" -H "Content-Type: application/json" -d @req.json)
-                echo "$lang $trvoice $m HTTP $code"; sleep 2
+                echo "$lang $trvoice $m HTTP $code (deneme $try)"
                 if [ "$code" = "200" ]; then jq -r '.candidates[0].content.parts[0].inlineData.data' resp.json | base64 -d > out/ses-$name.pcm; echo "$m $trvoice" > out/ses-$name-model.txt; ok=1; break; fi
-                head -c 300 resp.json; echo
+                head -c 300 resp.json; echo; sleep 30
               done
               [ "$ok" = 1 ] && continue
-              # Eğitim videoları (e*) sabit Gemini sesiyle yapılır; ses değişmesin diye OpenAI'ye düşülmez.
-              case "$name" in e[0-9]*) echo "Gemini olmadı ($name), atlandı"; continue;; esac
-              echo "Gemini olmadı, OpenAI'ye düşülüyor"
+              # Ses değişmesin diye Gemini olmazsa OpenAI'ye düşülmez (yalnız motor-<ad>.txt "openai" ise OpenAI kullanılır).
+              echo "Gemini olmadı ($name), atlandı: yeniden çalıştır"; continue
             fi
             if [ "$lang" = "en" ]; then ins="Speak English. Energetic, upbeat, friendly YouTube Shorts host; brisk but clear."; else ins="Türkçe konuş. Enerjik, samimi bir YouTube Shorts sunucusu gibi; doğal Türkçe vurgu."; fi
             [ -f "video/talimat-$name.txt" ] && ins="$ins $(cat video/talimat-$name.txt)"
