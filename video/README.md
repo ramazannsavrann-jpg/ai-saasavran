@@ -154,7 +154,7 @@ Sebep: 19 Kasım'da yalnız vidIQ paylaşım listesine bakılıp Seattle seti "e
 2. Aşağıdaki **PAYLAŞIM KAYDI**'na bak: konu zaten paylaşılmış mı?
 3. Gerçek profile/kanala bak, yalnız paylaşım listesine değil: Instagram için profil ızgarası (`vidiq_ig_profile_reels` ya da kullanıcının ekran görüntüsü), YouTube için kanal yükleme listesi. vidIQ `social_post_list` yalnız vidIQ'dan yapılanları gösterir.
 4. Kullanıcıya "eksik / yok / paylaşılmamış" demeden önce en az İKİ kaynakla doğrula. Doğrulayamadıysan "doğrulayamadım" de.
-5. Video kuralları: süre ≤ 58 sn, `ad_kontrol.py` TAMAM, site adı tek kez, mantık kontrolü.
+5. Video kuralları: süre ≤ 58 sn, `ad_kontrol.py` TAMAM, mantık kontrolü. Site adı seslendirmede HİÇ söylenmez (19 Kasım kuralı; ekranda yazar).
 6. Taslağı kullanıcıya göster, onaydan sonra yayınla; set sırasını (TR → EN → gönderi) bozma.
 7. Yayından sonra PAYLAŞIM KAYDI'na satır ekle ve bu dala push et.
 
