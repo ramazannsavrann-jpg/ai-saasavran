@@ -352,6 +352,20 @@
         "Yapay Zekâ Ürün Karşılaştırmaları",
         "AI SaaSavran – Türkçe İçerikler"
       ]
+    },
+    "gjH-oaMvKuI": {
+      "lang": "tr",
+      "lists": [
+        "Yapay Zekâ Araştırmaları",
+        "AI SaaSavran – Türkçe İçerikler"
+      ]
+    },
+    "IZ7fzbcTzrE": {
+      "lang": "en",
+      "lists": [
+        "AI Research Deep Dives",
+        "AI SaaSavran – English Content"
+      ]
     }
   },
   "delete": [],
@@ -383,7 +397,9 @@
     "85rcRRxKwkw": "kahve-seattle-tr.jpg",
     "Zk1eQF5wk4o": "kahve-seattle-en.jpg",
     "Zz8biHgxQzc": "yuzuk-en.jpg",
-    "oKNVNscsGi8": "yuzuk-tr.jpg"
+    "oKNVNscsGi8": "yuzuk-tr.jpg",
+    "gjH-oaMvKuI": "uzun2-tr.jpg",
+    "IZ7fzbcTzrE": "uzun2-en.jpg"
   },
   "tutorials_private": false,
   "descriptions": {
