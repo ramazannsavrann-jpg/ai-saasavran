@@ -215,6 +215,14 @@ def main():
                 if call("PUT", "videos", {"part": "status"}, {"id": vid, "status": s0}, cost=50) is not None:
                     priv = "private"
                     line += " · →gizli✓"
+            # 0b) seri tamamlanınca eğitim videoları herkese açılır (kullanıcı kararı, 19 Kasım): tutorials_public
+            if is_tut and not keep_private and CFG.get("tutorials_public") and priv != "public" and not DRY:
+                s0 = {"privacyStatus": "public", "selfDeclaredMadeForKids": st.get("selfDeclaredMadeForKids", False),
+                      "embeddable": True, "license": st.get("license", "youtube"),
+                      "publicStatsViewable": st.get("publicStatsViewable", True), "containsSyntheticMedia": True}
+                if call("PUT", "videos", {"part": "status"}, {"id": vid, "status": s0}, cost=50) is not None:
+                    priv = "public"
+                    line += " · →herkese açık✓"
             if is_tut:
                 line += " · listeler: " + ", ".join(n for n, pid in pls.items() if vid in members.get(pid, set()))
             # 1) dil + açıklama (snippet). ayar.json "descriptions": {video: metin} varsa açıklama ona çevrilir (19 Kasım: anahtar kelimeli açıklamalar)
@@ -267,6 +275,12 @@ def main():
 def print_tutorials():
     """Eğitim videolarının özeti: gizli olmayan varsa açıkça yazılır."""
     if not tut_status:
+        return
+    if CFG.get("tutorials_public"):
+        not_pub = [t for t in tut_status if t[1] != "public"]
+        print(f"EĞİTİM VİDEOLARI: {len(tut_status)} video, herkese açık olmayan {len(not_pub)}")
+        for vid, priv, title in not_pub:
+            print(f"  ! açık değil: {vid} {priv} {title}")
         return
     open_ = [t for t in tut_status if t[1] != "private"]
     print(f"EĞİTİM VİDEOLARI: {len(tut_status)} video, gizli olmayan {len(open_)}")
