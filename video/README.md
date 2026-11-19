@@ -146,6 +146,29 @@ Derslerde marka gerçek adıyla anılabilir; tam sıralama tablolarında harf ku
 - Açıklama ve etiketler hem TR hem EN; ölçüm açıklamasına bağımsızlık satırı.
 - IZGARA: her satır = 2 video + 1 ayrı gönderi. Hep 3'lü set: önce TR Reels, sonra EN Reels, sonra ayrı gönderi (görsel/karusel, blog gibi). Teker teker, bir önceki yayına girdikten sonra. Toplu/aynı anda paylaşım YOK, set yarım bırakılmaz.
 - Üstte 3 sabitlenmiş gönderi ayrı satırdır, sayılmaz.
+- Prezervatif konusu Instagram'da paylaşılmaz (19 Kasım, kullanıcı kararı).
+
+### PAYLAŞMADAN ÖNCE KONTROL LİSTESİ (19 Kasım, kullanıcı kuralı — ZORUNLU, her sohbet)
+Sebep: 19 Kasım'da yalnız vidIQ paylaşım listesine bakılıp Seattle seti "eksik" sanıldı; Reels'ler vidIQ dışından paylaşılmıştı. Aynı anda birden çok sohbet paylaşım yapıyor.
+1. Bu bölümü (PAYLAŞIM KURALLARI) baştan sona oku.
+2. Aşağıdaki **PAYLAŞIM KAYDI**'na bak: konu zaten paylaşılmış mı?
+3. Gerçek profile/kanala bak, yalnız paylaşım listesine değil: Instagram için profil ızgarası (`vidiq_ig_profile_reels` ya da kullanıcının ekran görüntüsü), YouTube için kanal yükleme listesi. vidIQ `social_post_list` yalnız vidIQ'dan yapılanları gösterir.
+4. Kullanıcıya "eksik / yok / paylaşılmamış" demeden önce en az İKİ kaynakla doğrula. Doğrulayamadıysan "doğrulayamadım" de.
+5. Video kuralları: süre ≤ 58 sn, `ad_kontrol.py` TAMAM, site adı tek kez, mantık kontrolü.
+6. Taslağı kullanıcıya göster, onaydan sonra yayınla; set sırasını (TR → EN → gönderi) bozma.
+7. Yayından sonra PAYLAŞIM KAYDI'na satır ekle ve bu dala push et.
+
+### PAYLAŞIM KAYDI (her paylaşımdan sonra güncellenir; en yeni üstte)
+| Konu | YouTube TR | YouTube EN | Instagram seti | Not |
+|---|---|---|---|---|
+| Akıllı yüzük | oKNVNscsGi8 | Zz8biHgxQzc | 19 Kas: taslaklar hazır, onay bekliyor | karusel `videolar` dalı `instagram/ig-yuzuk-1..5.jpg` |
+| Uzun 2: Kaynaklar | gjH-oaMvKuI | IZ7fzbcTzrE | gönderilmez (uzun video) | |
+| Seattle kahve | 85rcRRxKwkw | Zk1eQF5wk4o | TAMAM (TR Reels, EN Reels, karusel) | Reels vidIQ dışından paylaşıldı |
+| NYC nakliye | Ilxb0FZK1go | 3SmvBaQspGU | yok | |
+| Prezervatif (ABD) | LePjz0EEfgM | tFF4JG7ncN0 | paylaşılmaz (kullanıcı kararı) | |
+| Akıllı saat (ABD) | l4AQgjOEzgw | Uw56ankOGhQ | TAMAM | |
+| Güvenlik kamerası (ABD) | o-D7BHM7iKA | kLKaNZCQcI8 | yok | |
+| Saç ekimi / özel hastane | – | – | TAMAM (14 Kas) | |
 
 ## YouTube API otomasyonu (14 Kasım)
 Dil (TR/EN), "yapay içerik" işareti ve oynatma listeleri artık otomatik: `yt/yt_ayar.py` + `yt/ayar.json` + `.github/workflows/youtube-ayar.yml` (PR #70; birleşince main'de her gece 00:30 TR çalışır). Anahtarlar Secrets'ta: YT_CLIENT_ID, YT_CLIENT_SECRET, YT_REFRESH_TOKEN (Google projesi "My First Project", OAuth client "youtube-playground").
