@@ -152,3 +152,13 @@ Yeni video yükleyince ID'sini `yt/ayar.json`'a {lang, lists} ile ekle ve push e
 - Marka adı anlatımda "AI SaaSavran" yazılır (Gemini TTS doğru okuyor); "Ey Ay Saa Savran" yazımı kontrolde "Sağ Savran" diye duyulup HATA veriyor. Kapanış: TR "Site adresimiz: Ey Ay, Saas Savran, nokta com." EN "Our website is: A. I. SaaS Savran, dot com." (HATA olursa ikinci kez tekrar eklenir).
 - Kapak: `video/uzun/kapak.py "başlık" "rozet" "alt satır" çıktı.jpg` ile sade 1280x720 (başlık + sarı bulgu rozeti). Açıklamada bölüm zaman damgaları (a01..aNN süreleri toplanarak).
 - Yayında (19 Kasım): Uzun 2 "Yapay zekâ hangi sitelere bakıyor?" TR/EN (`uzun/kaynak-*.json`, videolar dalı `uzun/kaynaklar-tr.mp4`, `uzun/sources-en.mp4`). Sıradaki: 3) Dev markalar neden görünmüyor 4) Soruyu değiştir, kazanan değişsin 5) Yapay zekâ vs Google Shopping.
+
+
+## MANTIK KONTROLÜ (19 Kasım, kullanıcı kuralı — tüm veri videoları, kısa ve uzun)
+Yayından önce, rakam kontrolüne ek olarak:
+1. **Gözlem ≠ neden.** Veri yalnız farkı gösterir. Neden–sonuç cümleleri "olası neden", "yorumumuz", "bununla açıklanabilir" diye kurulur; "bu yüzden", "bundan kaynaklanıyor" denmez.
+2. **Küçük örneklem söylenir.** 16'dan az cevaplı oranlar (özellikle Gemini) ekranda ya da anlatımda "küçük örneklem" notuyla verilir; tek başına büyük sonuç çıkarılmaz.
+3. **Paydalar tutarlı.** Bir tabloda farklı yapay zekâ setleri (ör. + Perplexity) karışıyorsa dipnotta yazılır. Eksik cevaplar paydaya katılmaz, açıklamada "X cevap alınamadı" yazılır.
+4. **Yaklaşık ölçüler belirtilir.** Sezgisel sınıflama (ör. "alan adında marka adı geçen site = marka sitesi") "yaklaşık" diye anılır, yöntem açıklamaya yazılır.
+5. **"Hiç anmadı" iddiası** cevap metinlerinde arama ile doğrulanır (kısa adlar başka kelimenin içinde geçebilir: "evie" ⊂ "review").
+6. Ölçülen her rakam veritabanından yeniden sorgulanır; ekrandaki sayı ile anlatımdaki sayı aynı olmalı.
