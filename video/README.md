@@ -129,6 +129,12 @@ Derslerde marka gerçek adıyla anılabilir; tam sıralama tablolarında harf ku
 - Bitmiş videoyu da yayından önce kontrol et: mp4'leri bir klasöre koy, `python3 video/kontrol-ses/ad_kontrol.py <klasör>` → hepsi TAMAM olmadan YouTube/Instagram'a yükleme yok.
 - Anlatımda site adı her zaman TEK BAŞINA ayrı cümle: TR "Site adresimiz: Ey Ay Saa, Savran, nokta com." EN "Our website is: A. I. Saa, Savran, dot com." Önüne "sizin markanız" gibi cümle bitiştirme.
 
+### YouTube açıklama ve işaretler (19 Kasım, kullanıcı kuralı)
+- Açıklamanın ilk satırı arama ifadeleri (anahtar kelimeli; ör. "Best smart ring for Black Friday according to AI: … Oura vs RingConn …"). Açıklamalar `yt/ayar.json` "descriptions" içine yazılır, otomasyon uygular.
+- **İngilizce videoların açıklamasında Türkçe satır yok** (bağımsızlık notu da yalnız İngilizce). Türkçe videolar Türkçe (+ kısa EN özet olabilir).
+- Marka iş birliği / ücretli tanıtım YOK açıkça işaretlenir: `yt_ayar.py` yeni yüklenen videolarda `hasPaidProductPlacement=false` yazar.
+- Hemen yayın: `youtube-ayar.yml` girdisi `publish_now=<id>` zamanlanmış videoyu hemen herkese açar.
+
 ### Instagram (@aisaasavran)
 - Sadece marka/ürün/YouTuber/sektör ölçüm içerikleri; eğitim videoları Instagram'a gitmez.
 - Açıklama ve etiketler hem TR hem EN; ölçüm açıklamasına bağımsızlık satırı.
