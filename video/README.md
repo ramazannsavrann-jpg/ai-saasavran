@@ -1,5 +1,11 @@
 # AI SaaSavran video düzeni (kalıcı)
 
+## ANLATIMDA SİTE ADRESİ YOK (19 Kasım, kullanıcı kuralı — KESİN, tüm videolar)
+- Seslendirmede site adresi/adı **hiç söylenmez**: "Site adresimiz…", "Ey Ay Saa Savran nokta com", "A. I. SaaS Savran dot com", "aisaasavran.com" gibi hiçbir cümle yok. Ekranda yazıyor, izleyen görüyor.
+- Kapanış anlatımı "Ücretsiz kontrol edin." / "Check it free." ile biter.
+- Eski kurallardaki "site adı ayrı cümle / okunuş" maddeleri geçersizdir.
+
+
 Bu dal (`seslendirme`) videoların tek kaynağıdır. Yeni oturumda buradan devam edilir; sesler ve şablonlar her seferinde baştan aranmaz.
 
 ## Ses
@@ -127,7 +133,7 @@ Derslerde marka gerçek adıyla anılabilir; tam sıralama tablolarında harf ku
 - Seattle kahve videosunda TTS site adını "AI sizin markanız nokta com" (TR) ve "AI Savram" (EN) diye okudu, yayına çıktı, silindi.
 - Seslendirme iş akışı her sesi yazıya döker (`video/kontrol-ses/ad_kontrol.py`, faster-whisper small); site adı yanlışsa iş KIRMIZI olur, `ses-out/<ad>-kontrol.txt` "HATA" yazar. HATA'lı sesle video yapılmaz.
 - Bitmiş videoyu da yayından önce kontrol et: mp4'leri bir klasöre koy, `python3 video/kontrol-ses/ad_kontrol.py <klasör>` → hepsi TAMAM olmadan YouTube/Instagram'a yükleme yok.
-- Anlatımda site adı her zaman TEK BAŞINA ayrı cümle: TR "Site adresimiz: Ey Ay Saa, Savran, nokta com." EN "Our website is: A. I. Saa, Savran, dot com." Önüne "sizin markanız" gibi cümle bitiştirme.
+- (GEÇERSİZ, 19 Kasım: anlatımda site adresi hiç söylenmez) Eski kural: site adı ayrı cümle: TR "Site adresimiz: Ey Ay Saa, Savran, nokta com." EN "Our website is: A. I. Saa, Savran, dot com." Önüne "sizin markanız" gibi cümle bitiştirme.
 
 ### YouTube açıklama ve işaretler (19 Kasım, kullanıcı kuralı)
 - Açıklamanın ilk satırı arama ifadeleri (anahtar kelimeli; ör. "Best smart ring for Black Friday according to AI: … Oura vs RingConn …"). Açıklamalar `yt/ayar.json` "descriptions" içine yazılır, otomasyon uygular.
@@ -170,4 +176,4 @@ Yayından önce, rakam kontrolüne ek olarak:
 - `ad_kontrol.py` artık üç şeye bakar: site adı, talimat sızıntısı (read this / YouTube host / sunucu / … kelimeleri), seste metinde olmayan fazla konuşma (kelime sayısı %25+ fazla). Herhangi biri HATA ise video yayınlanmaz.
 - Yayından önce her bölümün `seste duyulan` dökümü baştan sona okunur.
 
-- **Site adı videoda yalnız BİR kez söylenir (19 Kasım, kullanıcı kuralı).** Kontrolden geçmezse cümleyi ikinci kez ekleyerek çözülmez; o bölüm yeniden seslendirilir.
+- (GEÇERSİZ) Site adı anlatımda hiç söylenmez; bkz. en üstteki kural.
