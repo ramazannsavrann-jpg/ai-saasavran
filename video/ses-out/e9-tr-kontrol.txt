@@ -1,0 +1,2 @@
+TAMAM
+seste duyulan: Ürünler. Ürünler sekmesinde, ürününüzün adını, fiyatını ve doğru bilgilerini girin.  Doğruluk kontrolü, ürünü çet GPT'ye sorar ve cevaptaki iddiaları sizin bilgilerinizle karşılaştırır, yanlış olanı açıkça gösterir.  Rakip ürüneklerseniz, yapay zeka cevaplarında hangi ürünün daha çok geçtiğini ve önerildiğini görürsünüz.  Google Shopping bölümü, ürününüzün aramadaki sırasını, fiyatını ve rakip ürünleri gösterir.  Ücretli paketlerde, bu arama haftada bir kendiliğinden yapılır.  Sonraki videoda, raporu paylaşmayı ve haftalık otomatik ölçümü anlatıyoruz.
