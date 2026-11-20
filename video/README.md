@@ -179,6 +179,7 @@ Sebep: 19 Kasım'da yalnız vidIQ paylaşım listesine bakılıp Seattle seti "e
 ### PAYLAŞIM KAYDI (her paylaşımdan sonra güncellenir; en yeni üstte)
 | Konu | YouTube TR | YouTube EN | Instagram seti | Not |
 |---|---|---|---|---|
+| AI gözlük (ABD verisi) | (TR: 21 Kas planlanacak, onay bekliyor) | Rtafh3WSaLY (EN kanalı, Studio+Chrome, 21 Kas 03:00 TSİ planlı; kapak s1 karesi elle yüklendi — YouTube otomatik olarak orta sahneyi seçmişti) | – | Yüz serumu TR hazır, yayın onayı bekliyor |
 | Eğitim 9 Ürünler + Eğitim 10 Paylaşım/haftalık ölçüm (20 Kas) | TR kanalı, liste dışı: 9 TR beRz2exSg90, 9 EN jzWe2ZejO_w, 10 TR Y9LNvWFlF6E, 10 EN NgsNPe2PpOA | EN kanalına konmaz (eğitim) | gönderilmez (eğitim) | Studio'dan yüklendi; İngilizce eğitimler TR kanalında liste dışı (20 Kas istisnası) |
 | TEMİZLİK 20 Kas: EN kanalına taşınan 18 İngilizce Shorts + 1 uzun video (V76gSO6nEME) TR kanalından kalıcı silindi | – | EN kanalında: 18 Shorts + 1 uzun video | – | Bu tablodaki YouTube EN sütunundaki eski kimlikler (ör. Zk1eQF5wk4o, Zz8biHgxQzc, 3SmvBaQspGU, Uw56ankOGhQ, kLKaNZCQcI8) artık TR kanalında YOK; karşılıkları EN kanalında |
 | Uzun 3 v2: Dev markalar | n1mIYpg8Xlw (20 Kas 21:00 planlı) | qde8_Cj8i0o (EN kanalı, 20 Kas 15:40 TSİ herkese açık; Chrome+Studio ile, 720p) | gönderilmez (uzun video) | |
