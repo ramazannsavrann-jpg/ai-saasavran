@@ -490,7 +490,7 @@ function Products({ brand, paidAllowed, manualShopping }: { brand: Brand; paidAl
                     <div className="loss-card">
                       <p className="loss-title">{formatDateTime(last.created_at)}: {last.recognized === false ? L("ChatGPT farklı bir ürünü anlatmış olabilir.", "ChatGPT may have described a different product.")
                         : last.judge === null ? L("Cevap alındı ama karşılaştırma yapılamadı.", "Got the answer, but the comparison couldn't run.")
-                        : wrong > 0 ? (isEn() ? `${wrong} claim${wrong > 1 ? "s" : ""} contradict your facts.` : `${wrong} iddia sizin bilgilerinizle çelişiyor.`)
+                        : wrong > 0 ? (isEn() ? `${wrong} ${wrong > 1 ? "claims contradict" : "claim contradicts"} your facts.` : `${wrong} iddia sizin bilgilerinizle çelişiyor.`)
                         : L("Bilgilerinizle çelişen iddia bulunmadı.", "No claims contradict your facts.")}</p>
                       {claims.length > 0 && <ul>{claims.map((c, i) => <li key={i}><strong>{STATUS[c.status]}:</strong> {c.claim}{c.fact && <span className="muted"> ({L("sizin bilginiz", "your fact")}: {c.fact})</span>}</li>)}</ul>}
                       <button className="link-btn" aria-expanded={open === p.id} onClick={() => setOpen(open === p.id ? null : p.id)}>{open === p.id ? L("Cevabı gizle", "Hide answer") : L("Cevabı göster", "Show answer")}</button>

@@ -1,5 +1,5 @@
 {
-  "_not": "Eğitim videolarının YouTube kimlikleri (ders numarası → tr/en). /tr/egitim/, /tutorials/ ve /kayit sayfaları buradan okur. 19 Kasım: seri tamamlandı (8 eğitim TR+EN), videolar YouTube'da liste dışı (unlisted; sitede oynar), 'public': true; sitede oynatıcılar görünür. Yeni eğitim eklenirse önce YouTube'da liste dışı ya da herkese açık olduğundan emin ol (gizli video sitede oynamaz).",
+  "_not": "Eğitim videolarının YouTube kimlikleri (ders numarası → tr/en). /tr/egitim/, /tutorials/ ve /kayit sayfaları buradan okur. 20 Kasım: seri tamamlandı (10 eğitim TR+EN), videolar YouTube'da liste dışı (unlisted; sitede oynar), 'public': true; sitede oynatıcılar görünür. Yeni eğitim eklenirse önce YouTube'da liste dışı ya da herkese açık olduğundan emin ol (gizli video sitede oynamaz).",
   "public": true,
   "1": {
     "tr": "pulZMgYWQqI",
@@ -32,5 +32,13 @@
   "8": {
     "tr": "2PtipsC0Bm4",
     "en": "tesgSylSO-U"
+  },
+  "9": {
+    "tr": "beRz2exSg90",
+    "en": "jzWe2ZejO_w"
+  },
+  "10": {
+    "tr": "Y9LNvWFlF6E",
+    "en": "NgsNPe2PpOA"
   }
 }

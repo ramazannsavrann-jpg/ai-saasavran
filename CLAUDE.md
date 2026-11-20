@@ -96,6 +96,7 @@ PR açıklamasında bu kontrollerden neyin değiştiğini kısaca yaz.
   Başlık, açıklama, etiket ve hashtag her kanalda yalnız o kanalın dilinde (iki dilli metin yok); oynatma
   listeleri de kendi kanalında ve kendi dilinde. EN kanalında Türkiye/Türkçe adlı liste açılmaz.
   Eğitim (Eğitim/Tutorial) videoları EN kanalına yüklenmez; TR kanalında liste dışı kalır, yalnız siteden izlenir.
+  İstisna (20 Kasım, sahibinin kararı): İngilizce eğitim videoları da TR kanalında liste dışı durur (sitedeki /tutorials/ oynatıcıları için); seri 10 ders.
   Her yüklemede: çocuklara yönelik değil, ücretli tanıtım yok, yapay içerik işareti, video dili, kurala uygun kapak.
   vidIQ yalnız TR kanalına bağlı (ikinci kanal ücretli): EN yüklemeleri YouTube Studio'dan yapılır.
 - **Açıklama yapısı (20 Kasım, yeni videolar):** her YouTube açıklaması kanalın dilinde şu sırayla yazılır: 1–2 cümlelik
