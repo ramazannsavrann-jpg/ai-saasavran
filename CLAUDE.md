@@ -54,6 +54,16 @@ npm run pricing         # paket maliyet tablosu
 - Veritabanı değişikliklerini sahibine yaptırma; migration veya araçla kendin uygula.
 - Önemli değişiklikte `docs/STATUS.md`'yi güncelle.
 
+## İki Claude hesabı çalışma kuralı (20 Kasım)
+Aynı işi iki hesap yapar; biri limite takılınca diğeri kaldığı yerden devam eder. Çıktı tek kalem görünmeli.
+- Her hesap işe başlamadan bu dosyayı ve `video/README.md`'yi okur. Kural değişirse önce bu dosya güncellenir.
+- İş kaydı: `docs/KAYIT.md`. İşe başlamadan tek satır yazılır: `kod | hesap | durum | tarih` (ör. `EN-S-001 | hesap-A | devam | 2026-11-20`). Satır yoksa iş alınmamıştır; aynı kod iki hesapta aynı anda açık olmaz.
+- Limit dolan hesap satırı "devam" durumunda bırakır; diğer hesap aynı kodu o satırdan alır, durumunu günceller.
+- Şablon ve ayar dosyaları (`video/sablon/`, ses ayarı, `make.py`, müzik) tek sürümdür. Değişiklik PR ile yapılır; diğer hesap yalnız okur.
+- Yayın tek sırayla yapılır. Instagram 3'lü set sırası (TR Reels → EN Reels → ayrı gönderi) korunur. Yüklemeyi kaydı yazan hesap yapar.
+- "Bitti" denmesi için dosya teslim edilmiş ve `docs/KAYIT.md`'de işlenmiş olmalı. Yarım iş bitmiş sayılmaz.
+- Yayın, ücretli API ve veritabanı veya ayar değişiklikleri sahibin onayıyla yapılır.
+
 ## Her özellik / karar / düzeltmeden sonra kontrol listesi (sorulmasa da yapılır)
 Bir özellik eklenince, değişince, kaldırılınca ya da yeni bir karar alınınca PR'dan önce:
 1. Site metinleri: `web/site/content.mjs` (TR) ve `content-en.mjs` (EN) birlikte güncel mi?
