@@ -106,4 +106,4 @@ Ayrıntı `docs/STATUS.md` v1.33 "Sıradaki düzeltmeler" satırında. Özet:
 marka adayı filtresi (RAM/GB/GPU) · site kontrolü (başlıkta marka varyasyonu, ülke/dil seçici sayfası,
 "bu sayfada bulunamadı") · TruthGuard durumları (başarısız / kontrol edilmedi / bulgu yok) · sayım tutarlılığı ·
 skor yöntem sürümü ve aralık metni · Perplexity kaynak sayımı · soru kaynağı etiketi (DB değişikliği) ·
-paylaşılan rapor testi · `docs/PRICING.md` güncel fiyatlar ($29 / $149 / $449).
+paylaşılan rapor testi · `docs/PRICING.md` güncel fiyatlar ($60 / $300 / $876).

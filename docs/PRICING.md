@@ -56,7 +56,7 @@ Bu tablo `npm run pricing` ile fiyat kartlarından üretilir (fiyatlar 2026-11-0
 
 ## Güncel fiyatlar (12 Kasım 2026, migration 0019)
 
-**Plus 29 $ · Pro 149 $ · Business 449 $** (aylık). Site ve `engine/src/pricing.ts` bu fiyatları kullanır.
+**Plus 60 $ · Pro 300 $ · Business 876 $** (aylık; 21 Kasım 2026, maliyet×5, Paddle komisyonu dahil). Site ve `engine/src/pricing.ts` bu fiyatları kullanır.
 Limitler ve aylık ücretli harcama tavanları değişmedi (Plus 9 $, Pro 50 $, Business 150 $). Aşağıdaki
 7 Kasım tablosundaki 20 / 99 / 249 $ fiyatları **eskidir**; yalnız geçmiş kayıt olarak duruyor.
 
