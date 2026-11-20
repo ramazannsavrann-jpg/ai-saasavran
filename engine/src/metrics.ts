@@ -48,13 +48,28 @@ function hostOf(url: string): string | null {
 }
 
 // Olumsuz bağlam: "X'ten uzak durun", "X önermiyorum", "X kapandı"
+// 20 Kasım denetimi: "kapali", "sikayet", "avoid", "closed", "complaints" tek başına olumsuz değil ("kapalı havuz", "şikayet oranı düşük",
+// "avoids hidden fees", "few complaints"); bu yüzden kalıp olarak aranır. Olumsuzluk yalnız markanın geçtiği CÜMLE PARÇASINDA geçerlidir.
 const NEGATIVE = [
-  "onermiyorum", "onermiyoruz", "onermem", "onerilmez", "tavsiye etmem", "tavsiye etmiyorum", "uzak durun", "kacinin", "kapandi", "kapali",
-  "sikayet", "memnun degil", "not recommend", "don t recommend", "wouldn t recommend", "avoid", "closed",
+  "onermiyorum", "onermiyoruz", "onermem", "onerilmez", "tavsiye etmem", "tavsiye etmiyorum", "uzak durun", "kacinin", "kapandi",
+  "kalici olarak kapali", "cok sikayet", "sikayetler var", "sikayet ediliyor", "sikayetleri var",
+  "memnun degil", "not recommend", "don t recommend", "wouldn t recommend", "avoid it", "avoid this", "permanently closed", "has closed", "closed down",
+  "many complaints", "lots of complaints", "frequent complaints",
   // 19 Kasım (pilot): güven sorusuna "dolandırıcılık şüphesi" cevabı önerildi sayılıyordu
   "dolandiricilik", "dolandirici", "supheli", "suphesi", "sahte", "guvenilir degil", "dikkatli olun", "dikkatli olmaniz", "dikkatli olunmasi",
-  "scam", "fraud", "complaints", "be careful", "not trustworthy", "untrustworthy",
+  "scam", "fraud", "be careful", "not trustworthy", "untrustworthy",
 ];
+// Tek kelime olarak (sonrasında ek olmadan) geçerse olumsuz: "avoid" evet, "avoids/avoiding" hayır
+const NEGATIVE_WORDS = /(^| )(avoid|kacinilmali|kacinilacaklar)( |$)/;
+const isNegative = (normalizedClause: string) => NEGATIVE.some((w) => normalizedClause.includes(w)) || NEGATIVE_WORDS.test(normalizedClause);
+// Olumsuz bölüm başlığı: altındaki liste maddeleri öneri sayılmaz ("Kaçınmanız gerekenler:", "Brands to avoid")
+const NEGATIVE_HEADING = /(kacin|uzak dur|onermedig|tavsiye etmedig|dikkat edilmesi gereken|avoid|not recommend|steer clear|stay away)/;
+// "X yerine Y" / "instead of X" / "rather than X": X önerilmiyor
+const insteadOf = (normalizedSentence: string, needle: string) =>
+  normalizedSentence.includes(`${needle} yerine`) || normalizedSentence.includes(`instead of ${needle}`) || normalizedSentence.includes(`rather than ${needle}`);
+// Cümleyi parçalara böl: noktalı virgül, tire, "ama/fakat/ancak/but/however/while"
+// (ham metinde bölünür; normalize noktalama işaretlerini sildiği için önce bölünür, sonra her parça normalize edilir)
+const clauses = (rawLine: string) => rawLine.split(/[;,]|\s[-—–]\s|\s(?:ama|fakat|ancak|lakin|but|however|while|whereas)\s/i);
 
 // Türkçe çekim ekleri (normalize edilmiş hâlde): "Garantinin", "Akbanka", "Enparadan", "Migroslar"
 const TR_SUFFIX = /^(?:y?[iu]|[nsy]?[iu]n|y?[ae]|[dt][ae]n?|l[ae]r(?:[iu]n?)?|l[iu]|s[iu]|y?l[ae]|ki|c[ae])$/;
@@ -123,13 +138,17 @@ export const countableAliases = (aliases: string[]) => aliases.filter((a) => !is
 const COMMON_WORD_NAMES = new Set([
   "ring", "visible", "target", "one", "nest", "echo", "edge", "dove", "tide", "gap", "shell", "orange", "mint", "glow", "bloom",
   "pure", "honest", "fit", "life", "go", "open", "smart", "simple", "chime", "current", "notion", "slack", "square", "stripe",
+  // Türkçe gündelik kelime olan marka adları/takma adları (20 Kasım): "2 yıl garantili" Garanti BBVA değildir
+  "garanti", "getir", "sahibinden", "tamam", "evim", "ikinci", "dost",
 ]);
 function commonWordCaps(name: string): RegExp | null {
   const w = name.trim();
   if (w.includes(" ") || !COMMON_WORD_NAMES.has(w.toLocaleLowerCase("tr-TR"))) return null;
   const esc = w.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
   const cap = esc[0].toLocaleUpperCase("tr-TR") + esc.slice(1);
-  return new RegExp(`(^|[^\\p{L}\\p{N}])(${cap}|${esc.toLocaleUpperCase("tr-TR")})(?=$|[^\\p{L}\\p{N}]|'|’)`, "u");
+  // Türkçe çekim ekleri kabul ("Garantinin", "Garantiye"), "-li/-lı" (garantili = garanti içeren) ve "-siz" hariç
+  const suffix = "(?:y?[ıiuü]|[nsy]?[ıiuü]n|y?[ae]|[dt][ae]n?|l[ae]r\\p{L}*|s[ıiuü]|ki|c[ae])";
+  return new RegExp(`(^|[^\\p{L}\\p{N}])(${cap}|${esc.toLocaleUpperCase("tr-TR")})(?=$|[^\\p{L}\\p{N}]|'|’|${suffix}(?:$|[^\\p{L}\\p{N}]))`, "u");
 }
 
 function sentences(line: string): string[] {
@@ -153,21 +172,34 @@ export function analyzeResponse(resp: AIResponse, brands: BrandRef[], opts: { qu
 
   const hits = brands.map((b): BrandHit => {
     const caps = commonWordCaps(b.name);
-    const needles = [...(caps ? [] : [b.name]), ...countableAliases(b.aliases)].map(normalize).filter((n) => n.length >= 2);
+    const aliasCaps = countableAliases(b.aliases).map(commonWordCaps).filter((x): x is RegExp => !!x);
+    const needles = [...(caps ? [] : [b.name]), ...countableAliases(b.aliases).filter((a) => !commonWordCaps(a))].map(normalize).filter((n) => n.length >= 2);
     const fw = firstOf(b.name);
     const first = b.exactOnly || (firstCount.get(fw) ?? 0) > 1 || otherOwns(fw, b.id) ? null : firstWordPattern(b.name);
     const containsBrand = (text: string) => {
       const t = normalize(text);
-      return needles.some((n) => hasName(t, n)) || (!!first && first.test(text)) || (!!caps && caps.test(text));
+      return needles.some((n) => hasName(t, n)) || (!!first && first.test(text)) || (!!caps && caps.test(text)) || aliasCaps.some((r) => r.test(text));
     };
+    // Markanın geçtiği cümle parçası olumsuz mu? (aynı satırdaki başka markanın olumsuzluğu bulaşmaz)
+    const clauseNegative = (line: string) => clauses(line).some((c) => containsBrand(c) && isNegative(normalize(c))) ||
+      [b.name, ...countableAliases(b.aliases)].map(normalize).some((n) => n.length >= 2 && insteadOf(normalize(line), n));
 
-    const mentionLines = lines.filter(containsBrand);
+    const mentionIdx = lines.map((l, i) => (containsBrand(l) ? i : -1)).filter((i) => i >= 0);
+    const mentionLines = mentionIdx.map((i) => lines[i]);
     const mentioned = mentionLines.length > 0;
-    const negative = mentionLines.some((l) => NEGATIVE.some((w) => normalize(l).includes(w)));
+    // Liste maddesi olumsuz bir başlığın altındaysa ("Kaçınmanız gerekenler:") o madde olumsuz sayılır
+    const underNegativeHeading = (i: number) => {
+      for (let j = i - 1; j >= 0; j--) {
+        if (LIST_LINE.test(lines[j]) && !/^\s*(#{2,4}\s|\*\*[^*]+\*\*:?\s*$)/.test(lines[j])) continue; // önceki madde: yukarı devam
+        return NEGATIVE_HEADING.test(normalize(lines[j]));
+      }
+      return false;
+    };
+    const negative = mentionIdx.some((i) => clauseNegative(lines[i]) || (LIST_LINE.test(lines[i]) && underNegativeHeading(i)));
     const inList = mentionLines.some((l) => LIST_LINE.test(l));
     const cueSentence = mentionLines.some((l) => sentences(l).some((sn) => {
       const n = normalize(sn);
-      return containsBrand(sn) && RECOMMEND_CUES.some((c) => n.includes(c)) && !NEGATIVE.some((w) => n.includes(w));
+      return containsBrand(sn) && RECOMMEND_CUES.some((c) => n.includes(c)) && !clauseNegative(sn);
     }));
 
     const cited =
@@ -189,10 +221,7 @@ export function analyzeResponse(resp: AIResponse, brands: BrandRef[], opts: { qu
 
   // Sıralama: cevaptaki GERÇEK liste sırası (izlenmeyen markalar da sayılır).
   // Numaralı liste varsa o esas alınır; yoksa girintisiz madde işaretleri. Alt maddeler (özellik açıklamaları) sayılmaz.
-  const numbered = lines.filter((l) => /^\s{0,1}(#{2,4}\s+)?(\*\*)?\d+[.)]\s+/.test(l));
-  const bullets = lines.filter((l) => /^\s{0,1}[-*•]\s+/.test(l));
-  const headings = lines.filter((l) => /^\s{0,1}(\*\*|#{2,4}\s)/.test(l));
-  const items = numbered.length > 0 ? numbered : bullets.length > 0 ? bullets : headings;
+  const items = listItems(resp.answerText);
   for (const h of hits) {
     if (!h.recommended) continue;
     h.rank = rankInItems(items, brands.find((x) => x.id === h.brandId)!);
@@ -200,19 +229,27 @@ export function analyzeResponse(resp: AIResponse, brands: BrandRef[], opts: { qu
   return hits;
 }
 
-function listItems(answerText: string): string[] {
+const NUMBERED = /^\s{0,1}(#{2,4}\s+)?(\*\*)?(\d+)[.)]\s+/;
+/** Liste maddeleri; her öğe [satır, liste içi sıra]. Numaralı liste "1." ile yeniden başlarsa yeni liste sayılır
+ *  (20 Kasım: "Premium" listesinin 1 numarası, önceki listenin uzunluğu kadar geriye düşmesin). */
+function listItems(answerText: string): Array<[string, number]> {
   const lines = answerText.split(/\n+/);
-  const numbered = lines.filter((l) => /^\s{0,1}(#{2,4}\s+)?(\*\*)?\d+[.)]\s+/.test(l));
+  const numbered = lines.filter((l) => NUMBERED.test(l));
+  if (numbered.length > 0) {
+    let pos = 0;
+    return numbered.map((l) => { const n = Number(l.match(NUMBERED)![3]); pos = n === 1 ? 1 : pos + 1; return [l, pos] as [string, number]; });
+  }
   const bullets = lines.filter((l) => /^\s{0,1}[-*•]\s+/.test(l));
   const headings = lines.filter((l) => /^\s{0,1}(\*\*|#{2,4}\s)/.test(l));
-  return numbered.length > 0 ? numbered : bullets.length > 0 ? bullets : headings;
+  return (bullets.length > 0 ? bullets : headings).map((l, i) => [l, i + 1] as [string, number]);
 }
-function rankInItems(items: string[], b: BrandRef): number | null {
+function rankInItems(items: Array<[string, number]>, b: BrandRef): number | null {
   const caps = commonWordCaps(b.name);
-  const n = [...(caps ? [] : [b.name]), ...countableAliases(b.aliases)].map(normalize).filter((x) => x.length >= 2);
+  const aliasCaps = countableAliases(b.aliases).map(commonWordCaps).filter((x): x is RegExp => !!x);
+  const n = [...(caps ? [] : [b.name]), ...countableAliases(b.aliases).filter((a) => !commonWordCaps(a))].map(normalize).filter((x) => x.length >= 2);
   const fw = firstWordPattern(b.name);
-  const i = items.findIndex((line) => n.some((x) => hasName(normalize(line), x)) || (!!fw && fw.test(line)) || (!!caps && caps.test(line)));
-  return i >= 0 ? i + 1 : null;
+  const i = items.findIndex(([line]) => n.some((x) => hasName(normalize(line), x)) || (!!fw && fw.test(line)) || (!!caps && caps.test(line)) || aliasCaps.some((r) => r.test(line)));
+  return i >= 0 ? items[i][1] : null;
 }
 /** Cevaptaki liste sırası: LLM bir markayı sonradan "önerildi" yaptığında sırası da hesaplansın (18 Kasım denetimi). */
 export function listRank(answerText: string, brand: BrandRef): number | null {
