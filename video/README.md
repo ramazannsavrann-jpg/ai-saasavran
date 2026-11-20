@@ -75,6 +75,7 @@ ffmpeg -i v.mp4 -i voice.wav -i music.wav -filter_complex "[1:a]aresample=44100,
 - EN kanalı listeleri: "Black Friday AI Picks", "AI Picks: US Edition", "Which brand does AI recommend? All tests".
 
 ## Yükleme
+- EN kanalına yükleme (20 Kasım): sahibinin bilgisayarındaki Chrome (Claude in Chrome) ile YouTube Studio'dan Claude yapar. Tarayıcı dosya yükleme sınırı 3,8 MB: video 720p'ye sıkıştırılır (`ffmpeg -vf scale=1280:720 -preset slower -crf 35 -tune stillimage -r 24 -c:a aac -b:a 48k -ac 1`), kapak `kapak/<ad>-en.jpg`. Ayarlar: çocuklara özel değil, ücretli tanıtım yok, yapay içerik Evet, dil + başlık/açıklama dili İngilizce (ABD), liste, etiketler.
 - Dosya `videolar` dalına konur, raw.githubusercontent.com linki `vidiq_video_upload`'a verilir; YouTube kanalı: Türkçe → @aisaasavran (UCHL4sdkEenxkpuP4_Hq1RZw); İngilizce → @AISaaSavranEN (UCJ3mA2nPzsinfO9MgccFtdA, Studio'dan).
 
 ## İngilizce strateji: ABD odaklı (15 Kasım, kullanıcı kararı)
@@ -180,7 +181,7 @@ Sebep: 19 Kasım'da yalnız vidIQ paylaşım listesine bakılıp Seattle seti "e
 |---|---|---|---|---|
 | Eğitim 9 Ürünler + Eğitim 10 Paylaşım/haftalık ölçüm (20 Kas) | TR kanalı, liste dışı: 9 TR beRz2exSg90, 9 EN jzWe2ZejO_w, 10 TR Y9LNvWFlF6E, 10 EN NgsNPe2PpOA | EN kanalına konmaz (eğitim) | gönderilmez (eğitim) | Studio'dan yüklendi; İngilizce eğitimler TR kanalında liste dışı (20 Kas istisnası) |
 | TEMİZLİK 20 Kas: EN kanalına taşınan 18 İngilizce Shorts + 1 uzun video (V76gSO6nEME) TR kanalından kalıcı silindi | – | EN kanalında: 18 Shorts + 1 uzun video | – | Bu tablodaki YouTube EN sütunundaki eski kimlikler (ör. Zk1eQF5wk4o, Zz8biHgxQzc, 3SmvBaQspGU, Uw56ankOGhQ, kLKaNZCQcI8) artık TR kanalında YOK; karşılıkları EN kanalında |
-| Uzun 3 v2: Dev markalar | n1mIYpg8Xlw (20 Kas 21:00 planlı) | Studio'dan yüklenecek | gönderilmez (uzun video) | |
+| Uzun 3 v2: Dev markalar | n1mIYpg8Xlw (20 Kas 21:00 planlı) | qde8_Cj8i0o (EN kanalı, 20 Kas 15:40 TSİ herkese açık; Chrome+Studio ile, 720p) | gönderilmez (uzun video) | |
 | Akıllı yüzük | oKNVNscsGi8 | Zz8biHgxQzc | TAMAM 19 Kas 22:15–22:20 (TR Df7zyEwiicv, EN Df7z-0xkZqd, karusel Df70MDyiX2n) | karusel `videolar` dalı `instagram/ig-yuzuk-1..5.jpg` |
 | Uzun 2: Kaynaklar | gjH-oaMvKuI | IZ7fzbcTzrE | gönderilmez (uzun video) | |
 | Seattle kahve | 85rcRRxKwkw | Zk1eQF5wk4o | TAMAM (TR Reels, EN Reels, karusel) | Reels vidIQ dışından paylaşıldı |
