@@ -282,6 +282,8 @@ export const GUIDES = [
 <h2>7. Yapılan işi ölçümle bağlayın</h2>
 <p>Bir içerik yayınladığınızda veya bir dizine kaydolduğunuzda tarihini not edin. Sonraki ölçümlerde değişim görünürse müşteriye "şu işten sonra önerilme oranı değişti" diyebilirsiniz. Değişim yoksa bunu da dürüstçe söyleyin; yapay zekâ cevaplarındaki değişim haftalar sürebilir.</p>
 
+<h2>8. Yeni müşteri kazanmak için ölçümü kullanın</h2>
+<p>Bir sunumdan önce müşteri adayını aynı şekilde ölçün: adayı markalarınızdan biri olarak ekleyin, müşterilerinin soracağı beş altı soru yazın, bir ölçüm yapın ve salt okunur rapor bağlantısını paylaşın. Somut bir bulgu ("rakibiniz 12 cevabın 9'unda önerildi, siz hiçbirinde; kaynak şu üç siteydi") genel bir GEO sunumundan daha güçlü bir başlangıçtır. Business paketinde paylaşılan raporda ajansınızın adı ve logosu görünür. Müşteriyi kazanamazsanız markayı silip yerini boşaltın.</p>
 <h2>AI SaaSavran ajanslar için ne sunar?</h2>
 <p>AI SaaSavran'da çalışma alanını "Ajans" olarak açıp müşteri markalarını ayrı ayrı ekleyebilirsiniz. Pro paket 5 marka ve 3 kişilik ekip, Business paket 15 marka ve 15 kişilik ekip içerir. Her marka için soru seti, rakipler, haftalık otomatik ölçüm, anlamlı düşüşte e-posta uyarısı, motor bazında rapor, kaynak siteler, PDF, CSV (Excel) dışa aktarma ve paylaşılabilir rapor bağlantısı vardır. Business pakette rapor bağlantısı ve PDF kendi adınız, logonuz ve renginizle çıkar. Pro ve Business paketlerde sonuçlar API ve MCP ile kendi panellerinize de aktarılabilir. Ücretsiz paketle bir markayı deneyerek başlayabilirsiniz.</p>
 `,

@@ -88,6 +88,10 @@ PR açıklamasında bu kontrollerden neyin değiştiğini kısaca yaz.
   Eğitim (Eğitim/Tutorial) videoları EN kanalına yüklenmez; TR kanalında liste dışı kalır, yalnız siteden izlenir.
   Her yüklemede: çocuklara yönelik değil, ücretli tanıtım yok, yapay içerik işareti, video dili, kurala uygun kapak.
   vidIQ yalnız TR kanalına bağlı (ikinci kanal ücretli): EN yüklemeleri YouTube Studio'dan yapılır.
+- **Açıklama yapısı (20 Kasım, yeni videolar):** her YouTube açıklaması kanalın dilinde şu sırayla yazılır: 1–2 cümlelik
+  doğrudan cevap (videonun ana bulgusu, gerçek sayıyla) → "Öne çıkanlar" (3–5 madde) → "Bu video hangi sorulara cevap veriyor"
+  (2–4 soru + tek cümlelik cevap) → "Bölümler" (zaman damgalı, uzun videolarda) → bağımsızlık satırı ve ölçüm tarihi.
+  Yapay zekâ bu yapıyı kolay alıntılıyor (rakip kanallarda da böyle). Uydurma sayı yok; sayılar ölçüm verisinden.
 - Video kurulumu ve şablonlar: `seslendirme` dalında `video/README.md` + `video/sablon/`.
 - Paylaşım kuralları (Instagram 3'lü set: TR Reels → EN Reels → ayrı gönderi; YouTube oynatma listeleri,
   açıklama metinleri): aynı dosyada "PAYLAŞIM KURALLARI" bölümü. Yeni video işinden önce oku.

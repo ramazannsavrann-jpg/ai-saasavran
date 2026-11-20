@@ -6,7 +6,7 @@ import { api, INTENT_LABEL, type Brand, type BrandAction, type PromptResult, typ
 import { friendlyError, sb } from "../lib/supabase";
 import { L, isEn } from "../lib/i18n";
 import { ERROR_CLASS_TEXT, STOP_TEXT, runStatusText } from "../lib/messages";
-import { actionImpact, compareProducts, engineComparison, engineScoreChanges, perceptionSummary, rivalTraits, scoreChange, visibilityScore, type ScoreInput, type ScorePartKey, ownedSourceShare, ownCitedRivals, visibilityForecast, sourcesByEngine, rivalReasons, conditionMap, lossCards, productVisibility, promptKind, shoppingSources, sourceDominance, splitByKind, winRates, fanoutQueries, type EngineCompareRow, type LossCard, type SourceRow } from "../../../engine/src/insights.ts";
+import { actionImpact, compareProducts, engineComparison, engineScoreChanges, perceptionSummary, rivalTraits, scoreChange, visibilityScore, type ScoreInput, type ScorePartKey, ownedSourceShare, ownCitedRivals, visibilityForecast, sourcesByEngine, rivalReasons, conditionMap, lossCards, productVisibility, promptKind, shoppingSources, sourceDominance, splitByKind, winRates, fanoutQueries, weeklyTodo, type EngineCompareRow, type LossCard, type SourceRow } from "../../../engine/src/insights.ts";
 import { competitorsInRun, formatDate, formatDateTime, lowSample, MIN_SAMPLE, numLoc, pct, providerLabel, rangeText, series, shareSummary, sourceOpportunities, topDomains, usd } from "../lib/report";
 import { Button, Confirm, DataNotice, Empty, ErrorBox, Field, Loading, Select, TypeBadge } from "../components/ui";
 import { CompareBars, TrendChart } from "../components/Chart";
@@ -304,7 +304,7 @@ function ProductVisibilityView({ vis, loading, hasRuns }: { vis: ReturnType<type
       <p className="src-sup"><strong>{L("Görünürlük (son ölçüm)", "Visibility (latest measurement)")}</strong></p>
       {vis.engines.map((e) => (
         <p key={e.provider} className="src-sup"><span className="muted">{providerLabel(e.provider)}: </span>
-          {isEn() ? `mentioned in ${e.mentioned} of ${e.answers} answers, recommended in ${e.recommended} (${pct(e.answers ? e.recommended / e.answers : 0)}, range ${pct(e.low)}–${pct(e.high)})` : `${e.answers} cevabın ${e.mentioned} tanesinde geçti, ${e.recommended} tanesinde önerildi (${pct(e.answers ? e.recommended / e.answers : 0)}, aralık ${pct(e.low)}–${pct(e.high)})`}{e.answers < MIN_SAMPLE && L("; örneklem küçük", "; small sample")}.
+          {isEn() ? `mentioned in ${e.mentioned} of ${e.answers} answers, recommended in ${e.recommended} (${pct(e.answers ? e.recommended / e.answers : 0)}, range ${pct(e.low)}–${pct(e.high)})` : `${e.answers} cevabın ${e.mentioned} tanesinde geçti, ${e.recommended} tanesinde önerildi (${pct(e.answers ? e.recommended / e.answers : 0)}, aralık ${pct(e.low)}–${pct(e.high)})`}{e.recommended > 0 && (isEn() ? `; #1 in ${e.wins}` : `; ${e.wins} tanesinde 1 numara`)}{e.answers < MIN_SAMPLE && L("; örneklem küçük", "; small sample")}.
         </p>
       ))}
       {total === 0 && <p className="src-sup muted">{L("Ürün adı hiçbir cevapta geçmedi. Sorularınız marka düzeyindeyse bu beklenir: Sorular sekmesinden bu ürünün kategorisine dair markasız sorular ekleyin (örn. \"1.000 dolar altı en iyi yol bisikleti hangisi?\").", "The product name did not appear in any answer. That is expected if your questions are brand-level: add unbranded questions about this product's category in the Questions tab (e.g. \"What is the best road bike under $1,000?\").")}</p>}
@@ -868,6 +868,31 @@ function Report({ brand, type, onBrandChange, paid = false, runs = [] }: { brand
             })} />
           </section>
 
+          {type !== "simulated" && prompts.data && (() => {
+            const todo = weeklyTodo({
+              lang: isEn() ? "en" : "tr",
+              prompts: prompts.data,
+              opportunities: opps,
+              fanout: live && answers.data ? fanoutQueries(answers.data, 5).rows : [],
+              engines: (rows ?? []).filter((r) => r.run_id === last.runId && r.is_target && r.n > 0).map((r) => ({ provider: r.provider, rate: r.recommended / r.n, n: r.n })),
+            });
+            if (!todo.length) return null;
+            return (
+              <section className="panel" id="bu-hafta">
+                <h2>{L("Bu hafta yapılacaklar", "This week's to-do")}</h2>
+                <p className="muted">{L("Son ölçümünüzden çıkan en önemli işler, etkisi büyük olan önce. Her madde ölçümdeki gerçek veriye dayanır.", "The most important jobs from your latest measurement, biggest impact first. Each item comes from the measured data.")}</p>
+                <ol className="src-dom">
+                  {todo.map((t) => (
+                    <li key={t.kind + t.title}>
+                      <p className="src-head"><strong>{t.title}</strong></p>
+                      <p className="muted">{t.detail} <a href={`#${t.anchor}`}>{L("Ayrıntı", "Details")}</a></p>
+                    </li>
+                  ))}
+                </ol>
+              </section>
+            );
+          })()}
+
           <section className="panel">
             <div className="panel-head">
               <h2>{L("Zaman içinde", "Over time")}</h2>
@@ -1056,7 +1081,7 @@ function Report({ brand, type, onBrandChange, paid = false, runs = [] }: { brand
             </details>
           )}
 
-          <section className="panel">
+          <section className="panel" id="soru-sonuclari">
             <h2>{L("Soru bazında sonuç", "Results by question")}</h2>
             {!prompts.loading && (() => {
               const split = splitByKind(prompts.data ?? [], { name: brand.name, aliases: brand.aliases ?? [] });
