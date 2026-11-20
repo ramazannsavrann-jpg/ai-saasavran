@@ -1,0 +1,837 @@
+{
+"u_urunler": [
+[
+"BUTTON",
+"EN",
+0
+],
+[
+"H1",
+"Marka A",
+342
+],
+[
+"BUTTON",
+"Düzenle",
+508
+],
+[
+"BUTTON",
+"Ölçüm başlat (aramasız, ücretsiz)",
+658
+],
+[
+"BUTTON",
+"Canlı aramalı ölçüm (ücretli)",
+818
+],
+[
+"P",
+"Haftalık otomatik ölçüm açık, sıradaki: 20 Kasım Cuma.",
+1185
+],
+[
+"BUTTON",
+"Rapor",
+1290
+],
+[
+"BUTTON",
+"Öneriler",
+1290
+],
+[
+"BUTTON",
+"Rakipler",
+1290
+],
+[
+"BUTTON",
+"Sorular",
+1290
+],
+[
+"BUTTON",
+"Ürünler",
+1290
+],
+[
+"BUTTON",
+"Ölçümler",
+1290
+],
+[
+"H2",
+"Ürün görünürlüğü ve doğruluğu (deneme)",
+1522
+],
+[
+"P",
+"Marka A Beyazlatma Seti\n1.450 TL",
+2211
+],
+[
+"P",
+"Yapay zekâ ↔ Google Shopping",
+3334
+],
+[
+"BUTTON",
+"değiştir",
+4726
+],
+[
+"P",
+"Marka A Beyazlatma Seti\n0/18",
+5356
+],
+[
+"P",
+"Marka B Beyazlatma Kiti\n0/18",
+5567
+],
+[
+"P",
+"Marka A Beyazlatma Seti\n0/18",
+5776
+],
+[
+"P",
+"Marka B Beyazlatma Kiti\n0/18",
+5987
+],
+[
+"P",
+"Marka A Beyazlatma Seti\n0/18",
+6196
+],
+[
+"P",
+"Marka B Beyazlatma Kiti\n2/18",
+6407
+],
+[
+"P",
+"Marka B Beyazlatma Kiti sizin yerinize önerildiğinde cevapla",
+6784
+],
+[
+"BUTTON",
+"sil",
+7718
+],
+[
+"BUTTON",
+"+ Rakip ürün ekle",
+7846
+],
+[
+"P",
+"10 Kas 12:00: 1 iddia sizin bilgilerinizle çelişiyor.",
+9362
+],
+[
+"BUTTON",
+"Cevabı göster",
+10041
+],
+[
+"BUTTON",
+"Doğruluğu kontrol et",
+10202
+],
+[
+"BUTTON",
+"Sil",
+10202
+],
+[
+"H2",
+"Ürün ekleyin",
+10462
+],
+[
+"SPAN",
+"Ürün adı",
+10543
+],
+[
+"SPAN",
+"Fiyat (isteğe bağlı)",
+10802
+],
+[
+"SPAN",
+"Doğru bilgiler",
+11061
+],
+[
+"BUTTON",
+"Ürünü ekle",
+11703
+]
+],
+"u_cevap": [
+[
+"BUTTON",
+"EN",
+8928
+],
+[
+"H1",
+"Marka A",
+342
+],
+[
+"BUTTON",
+"Düzenle",
+508
+],
+[
+"BUTTON",
+"Ölçüm başlat (aramasız, ücretsiz)",
+658
+],
+[
+"BUTTON",
+"Canlı aramalı ölçüm (ücretli)",
+818
+],
+[
+"P",
+"Haftalık otomatik ölçüm açık, sıradaki: 20 Kasım Cuma.",
+1185
+],
+[
+"BUTTON",
+"Rapor",
+1290
+],
+[
+"BUTTON",
+"Öneriler",
+1290
+],
+[
+"BUTTON",
+"Rakipler",
+1290
+],
+[
+"BUTTON",
+"Sorular",
+1290
+],
+[
+"BUTTON",
+"Ürünler",
+1290
+],
+[
+"BUTTON",
+"Ölçümler",
+1290
+],
+[
+"H2",
+"Ürün görünürlüğü ve doğruluğu (deneme)",
+1522
+],
+[
+"P",
+"Marka A Beyazlatma Seti\n1.450 TL",
+2211
+],
+[
+"P",
+"Yapay zekâ ↔ Google Shopping",
+3334
+],
+[
+"BUTTON",
+"değiştir",
+4726
+],
+[
+"P",
+"Marka A Beyazlatma Seti\n0/18",
+5356
+],
+[
+"P",
+"Marka B Beyazlatma Kiti\n0/18",
+5567
+],
+[
+"P",
+"Marka A Beyazlatma Seti\n0/18",
+5776
+],
+[
+"P",
+"Marka B Beyazlatma Kiti\n0/18",
+5987
+],
+[
+"P",
+"Marka A Beyazlatma Seti\n0/18",
+6196
+],
+[
+"P",
+"Marka B Beyazlatma Kiti\n2/18",
+6407
+],
+[
+"P",
+"Marka B Beyazlatma Kiti sizin yerinize önerildiğinde cevapla",
+6784
+],
+[
+"BUTTON",
+"sil",
+7718
+],
+[
+"BUTTON",
+"+ Rakip ürün ekle",
+7846
+],
+[
+"P",
+"10 Kas 12:00: 1 iddia sizin bilgilerinizle çelişiyor.",
+9362
+],
+[
+"BUTTON",
+"Cevabı gizle",
+10041
+],
+[
+"BUTTON",
+"Doğruluğu kontrol et",
+10874
+],
+[
+"BUTTON",
+"Sil",
+10874
+],
+[
+"H2",
+"Ürün ekleyin",
+11135
+],
+[
+"SPAN",
+"Ürün adı",
+11215
+],
+[
+"SPAN",
+"Fiyat (isteğe bağlı)",
+11475
+],
+[
+"SPAN",
+"Doğru bilgiler",
+11734
+],
+[
+"BUTTON",
+"Ürünü ekle",
+12375
+]
+],
+"p_rapor": [
+[
+"BUTTON",
+"EN",
+0
+],
+[
+"H1",
+"Marka A",
+342
+],
+[
+"BUTTON",
+"Düzenle",
+508
+],
+[
+"BUTTON",
+"Ölçüm başlat (aramasız, ücretsiz)",
+658
+],
+[
+"BUTTON",
+"Canlı aramalı ölçüm (ücretli)",
+818
+],
+[
+"P",
+"Haftalık otomatik ölçüm açık, sıradaki: 20 Kasım Cuma.",
+1185
+],
+[
+"BUTTON",
+"Rapor",
+1290
+],
+[
+"BUTTON",
+"Öneriler",
+1290
+],
+[
+"BUTTON",
+"Rakipler",
+1290
+],
+[
+"BUTTON",
+"Sorular",
+1290
+],
+[
+"BUTTON",
+"Ürünler",
+1290
+],
+[
+"BUTTON",
+"Ölçümler",
+1290
+],
+[
+"BUTTON",
+"Aramasız (Gemini)",
+1473
+],
+[
+"BUTTON",
+"Canlı arama",
+1473
+],
+[
+"H2",
+"Yapay zekâ ürününüz hakkında 1 yanlış bilgi veriyor",
+2296
+],
+[
+"BUTTON",
+"Tümü",
+3084
+],
+[
+"BUTTON",
+"ChatGPT",
+3084
+],
+[
+"BUTTON",
+"Claude",
+3084
+],
+[
+"H2",
+"AI Görünürlük Skoru · Tümü",
+3590
+],
+[
+"BUTTON",
+"Skor nasıl hesaplandı?",
+4013
+],
+[
+"BUTTON",
+"Özeti paylaş (WhatsApp, e-posta)",
+5397
+],
+[
+"BUTTON",
+"PDF olarak indir",
+5535
+],
+[
+"H2",
+"Zaman içinde",
+5824
+],
+[
+"BUTTON",
+"Önerilme",
+5798
+],
+[
+"BUTTON",
+"Anılma",
+5798
+],
+[
+"H2",
+"Rakiplerle karşılaştırma",
+7218
+],
+[
+"H2",
+"Motor karşılaştırması",
+8448
+],
+[
+"H3",
+"Öneri payı (sektördeki takip edilen markalar arasında)",
+9409
+],
+[
+"P",
+"ChatGPT (OpenAI)",
+9735
+],
+[
+"P",
+"Claude (Anthropic)",
+10169
+],
+[
+"H3",
+"Motorların baktığı siteler",
+10559
+],
+[
+"P",
+"Claude (Anthropic) 18 cevap",
+10893
+],
+[
+"P",
+"ChatGPT (OpenAI) 18 cevap",
+11412
+],
+[
+"H2",
+"Hangi koşulda görünüyorsunuz",
+12035
+],
+[
+"P",
+"Satın almaya hazırlanıyor\n%77",
+12391
+],
+[
+"P",
+"Yerel işletme arıyor\n%46",
+12663
+],
+[
+"P",
+"Bilgi arıyor\n%21",
+12936
+],
+[
+"P",
+"Karşılaştırıyor\n%17",
+13209
+],
+[
+"H3",
+"Etiketlere göre",
+13412
+],
+[
+"P",
+"estetik\n%79",
+13472
+],
+[
+"P",
+"implant\n%75",
+13745
+],
+[
+"P",
+"uygun fiyat\n%17",
+14017
+],
+[
+"H2",
+"TruthGuard",
+14370
+],
+[
+"H3",
+"Kaynaksız sayılar ve eski bilgi",
+14726
+],
+[
+"H3",
+"Kaynakların türü",
+14992
+],
+[
+"H2",
+"Marka algısı",
+15865
+],
+[
+"P",
+"modern ekipman\n%78",
+16765
+],
+[
+"BUTTON",
+"Alıntıyı göster",
+16968
+],
+[
+"P",
+"olumlu yorumlar\n%78",
+17148
+],
+[
+"BUTTON",
+"Alıntıyı göster",
+17352
+],
+[
+"P",
+"implant deneyimi\n%43",
+17532
+],
+[
+"BUTTON",
+"Alıntıyı göster",
+17735
+],
+[
+"H2",
+"Cevaplarda geçen diğer adlar",
+17996
+],
+[
+"BUTTON",
+"Beyazlatma Kiti 6",
+18557
+],
+[
+"H2",
+"Kaynaklar: yapay zekâ hangi sitelere dayanıyor",
+18818
+],
+[
+"H2",
+"Sitenize gelen yapay zekâ ziyaretleri",
+19269
+],
+[
+"H2",
+"Soru bazında sonuç",
+19610
+],
+[
+"BUTTON",
+"Cevabı göster",
+20003
+],
+[
+"BUTTON",
+"Cevabı göster",
+20537
+],
+[
+"BUTTON",
+"Cevabı göster",
+21071
+],
+[
+"BUTTON",
+"Cevabı göster",
+21605
+],
+[
+"BUTTON",
+"Cevabı göster",
+22139
+],
+[
+"BUTTON",
+"Cevabı göster",
+22673
+],
+[
+"H2",
+"Raporu paylaş",
+22973
+],
+[
+"SPAN",
+"Geçerlilik",
+23510
+],
+[
+"BUTTON",
+"Bağlantı oluştur",
+23758
+],
+[
+"BUTTON",
+"Paylaş",
+23927
+],
+[
+"BUTTON",
+"İptal et",
+23927
+],
+[
+"BUTTON",
+"Ölçümleri CSV indir (Excel)",
+24118
+],
+[
+"H2",
+"Rapor markalama (ajans)",
+24628
+]
+],
+"p_paylasilan": [
+[
+"BUTTON",
+"PDF olarak kaydet",
+78
+],
+[
+"H1",
+"Marka A",
+199
+],
+[
+"H2",
+"Canlı web aramalı (müşterinin gördüğüne en yakın)",
+478
+],
+[
+"H3",
+"Rakiplerle karşılaştırma (son ölçüm)",
+1907
+],
+[
+"H2",
+"Web araması olmadan (yapay zekânın bildiği)",
+2935
+],
+[
+"H3",
+"Rakiplerle karşılaştırma (son ölçüm)",
+4516
+],
+[
+"H2",
+"Sorulan sorular (son ölçüm)",
+5543
+],
+[
+"H2",
+"Yapay zekânın baktığı siteler (son ölçüm)",
+7531
+]
+],
+"p_hesap": [
+[
+"BUTTON",
+"EN",
+0
+],
+[
+"H1",
+"Hesap",
+247
+],
+[
+"H2",
+"Paket ve ödeme",
+510
+],
+[
+"H2",
+"Ekip",
+922
+],
+[
+"H3",
+"Davet et",
+1299
+],
+[
+"SPAN",
+"E-posta adresi",
+1402
+],
+[
+"SPAN",
+"Rol",
+1662
+],
+[
+"BUTTON",
+"Davet oluştur",
+2377
+],
+[
+"H2",
+"API ve MCP (yapay zekâ ajanları)",
+2660
+],
+[
+"SPAN",
+"Anahtar adı",
+3197
+],
+[
+"BUTTON",
+"Anahtar oluştur",
+3445
+],
+[
+"H2",
+"E-posta",
+3841
+],
+[
+"H2",
+"Şifre değiştir",
+4468
+],
+[
+"SPAN",
+"Yeni şifre",
+4549
+],
+[
+"BUTTON",
+"Şifreyi güncelle",
+4883
+],
+[
+"H2",
+"Dil",
+5166
+],
+[
+"BUTTON",
+"EN",
+5255
+],
+[
+"H2",
+"Verileriniz",
+5465
+],
+[
+"BUTTON",
+"Çıkış yap",
+5917
+]
+]
+}

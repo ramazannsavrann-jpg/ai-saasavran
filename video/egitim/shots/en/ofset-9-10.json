@@ -1,0 +1,832 @@
+{
+"u_urunler": [
+[
+"BUTTON",
+"TR",
+0
+],
+[
+"H1",
+"Brand A",
+342
+],
+[
+"BUTTON",
+"Edit",
+508
+],
+[
+"BUTTON",
+"Start measurement (no search, free)",
+658
+],
+[
+"BUTTON",
+"Live-search measurement (paid)",
+818
+],
+[
+"P",
+"Weekly automatic measurement on, next: Friday, November 20.",
+1185
+],
+[
+"BUTTON",
+"Report",
+1350
+],
+[
+"BUTTON",
+"Recommendations",
+1350
+],
+[
+"BUTTON",
+"Competitors",
+1350
+],
+[
+"BUTTON",
+"Questions",
+1350
+],
+[
+"BUTTON",
+"Products",
+1350
+],
+[
+"BUTTON",
+"Runs",
+1350
+],
+[
+"H2",
+"Product visibility and accuracy (pilot)",
+1583
+],
+[
+"P",
+"Brand A Whitening Kit\n£89",
+2213
+],
+[
+"P",
+"AI ↔ Google Shopping",
+3274
+],
+[
+"BUTTON",
+"change",
+4725
+],
+[
+"P",
+"Brand A Whitening Kit\n0/18",
+5354
+],
+[
+"P",
+"Brand B Whitening Kit\n0/18",
+5565
+],
+[
+"P",
+"Brand A Whitening Kit\n0/18",
+5774
+],
+[
+"P",
+"Brand B Whitening Kit\n0/18",
+5985
+],
+[
+"P",
+"Brand A Whitening Kit\n0/18",
+6194
+],
+[
+"P",
+"Brand B Whitening Kit\n0/18",
+6405
+],
+[
+"BUTTON",
+"remove",
+6929
+],
+[
+"BUTTON",
+"+ Add competitor product",
+7056
+],
+[
+"P",
+"Nov 10, 12:00 PM: 1 claim contradicts your facts.",
+8635
+],
+[
+"BUTTON",
+"Show answer",
+9313
+],
+[
+"BUTTON",
+"Check accuracy",
+9474
+],
+[
+"BUTTON",
+"Delete",
+9474
+],
+[
+"H2",
+"Add a product",
+9734
+],
+[
+"SPAN",
+"Product name",
+9815
+],
+[
+"SPAN",
+"Price (optional)",
+10074
+],
+[
+"SPAN",
+"Correct facts",
+10333
+],
+[
+"BUTTON",
+"Add product",
+10975
+]
+],
+"u_cevap": [
+[
+"BUTTON",
+"TR",
+8199
+],
+[
+"H1",
+"Brand A",
+342
+],
+[
+"BUTTON",
+"Edit",
+508
+],
+[
+"BUTTON",
+"Start measurement (no search, free)",
+658
+],
+[
+"BUTTON",
+"Live-search measurement (paid)",
+818
+],
+[
+"P",
+"Weekly automatic measurement on, next: Friday, November 20.",
+1185
+],
+[
+"BUTTON",
+"Report",
+1350
+],
+[
+"BUTTON",
+"Recommendations",
+1350
+],
+[
+"BUTTON",
+"Competitors",
+1350
+],
+[
+"BUTTON",
+"Questions",
+1350
+],
+[
+"BUTTON",
+"Products",
+1350
+],
+[
+"BUTTON",
+"Runs",
+1350
+],
+[
+"H2",
+"Product visibility and accuracy (pilot)",
+1583
+],
+[
+"P",
+"Brand A Whitening Kit\n£89",
+2213
+],
+[
+"P",
+"AI ↔ Google Shopping",
+3274
+],
+[
+"BUTTON",
+"change",
+4725
+],
+[
+"P",
+"Brand A Whitening Kit\n0/18",
+5354
+],
+[
+"P",
+"Brand B Whitening Kit\n0/18",
+5565
+],
+[
+"P",
+"Brand A Whitening Kit\n0/18",
+5774
+],
+[
+"P",
+"Brand B Whitening Kit\n0/18",
+5985
+],
+[
+"P",
+"Brand A Whitening Kit\n0/18",
+6194
+],
+[
+"P",
+"Brand B Whitening Kit\n0/18",
+6405
+],
+[
+"BUTTON",
+"remove",
+6929
+],
+[
+"BUTTON",
+"+ Add competitor product",
+7056
+],
+[
+"P",
+"Nov 10, 12:00 PM: 1 claim contradicts your facts.",
+8635
+],
+[
+"BUTTON",
+"Hide answer",
+9313
+],
+[
+"BUTTON",
+"Check accuracy",
+10147
+],
+[
+"BUTTON",
+"Delete",
+10147
+],
+[
+"H2",
+"Add a product",
+10407
+],
+[
+"SPAN",
+"Product name",
+10488
+],
+[
+"SPAN",
+"Price (optional)",
+10747
+],
+[
+"SPAN",
+"Correct facts",
+11006
+],
+[
+"BUTTON",
+"Add product",
+11648
+]
+],
+"p_rapor": [
+[
+"BUTTON",
+"TR",
+0
+],
+[
+"H1",
+"Brand A",
+342
+],
+[
+"BUTTON",
+"Edit",
+508
+],
+[
+"BUTTON",
+"Start measurement (no search, free)",
+658
+],
+[
+"BUTTON",
+"Live-search measurement (paid)",
+818
+],
+[
+"P",
+"Weekly automatic measurement on, next: Friday, November 20.",
+1185
+],
+[
+"BUTTON",
+"Report",
+1350
+],
+[
+"BUTTON",
+"Recommendations",
+1350
+],
+[
+"BUTTON",
+"Competitors",
+1350
+],
+[
+"BUTTON",
+"Questions",
+1350
+],
+[
+"BUTTON",
+"Products",
+1350
+],
+[
+"BUTTON",
+"Runs",
+1350
+],
+[
+"BUTTON",
+"No search (Gemini)",
+1533
+],
+[
+"BUTTON",
+"Live search",
+1533
+],
+[
+"H2",
+"AI states 1 wrong product fact",
+2356
+],
+[
+"BUTTON",
+"All",
+3017
+],
+[
+"BUTTON",
+"ChatGPT",
+3017
+],
+[
+"BUTTON",
+"Claude",
+3017
+],
+[
+"H2",
+"AI Visibility Score · All",
+3523
+],
+[
+"BUTTON",
+"How is the score calculated?",
+3946
+],
+[
+"BUTTON",
+"Share summary",
+5331
+],
+[
+"BUTTON",
+"Download PDF",
+5331
+],
+[
+"H2",
+"Over time",
+5620
+],
+[
+"BUTTON",
+"Recommended",
+5594
+],
+[
+"BUTTON",
+"Mentioned",
+5594
+],
+[
+"H2",
+"Competitor comparison",
+7072
+],
+[
+"H2",
+"Engine comparison",
+8577
+],
+[
+"H3",
+"Share of recommendations (among tracked brands)",
+9607
+],
+[
+"P",
+"ChatGPT (OpenAI)",
+9932
+],
+[
+"P",
+"Claude (Anthropic)",
+10366
+],
+[
+"H3",
+"Sites each engine read",
+10756
+],
+[
+"P",
+"Claude (Anthropic) 18 answers",
+11022
+],
+[
+"P",
+"ChatGPT (OpenAI) 18 answers",
+11540
+],
+[
+"H2",
+"Where you show up, and where you don't",
+12164
+],
+[
+"P",
+"Ready to buy\n%77",
+12647
+],
+[
+"P",
+"Looking for a local business\n%46",
+12920
+],
+[
+"P",
+"Researching\n%21",
+13192
+],
+[
+"P",
+"Comparing options\n%17",
+13465
+],
+[
+"H3",
+"By tag",
+13669
+],
+[
+"P",
+"cosmetic\n%79",
+13728
+],
+[
+"P",
+"implants\n%75",
+14001
+],
+[
+"P",
+"budget\n%17",
+14274
+],
+[
+"H2",
+"TruthGuard",
+14627
+],
+[
+"H3",
+"Unsourced numbers and outdated info",
+14982
+],
+[
+"H3",
+"Source types",
+15307
+],
+[
+"H2",
+"Brand perception",
+16181
+],
+[
+"P",
+"modern equipment\n%78",
+17081
+],
+[
+"BUTTON",
+"Show quote",
+17284
+],
+[
+"P",
+"positive reviews\n%78",
+17464
+],
+[
+"BUTTON",
+"Show quote",
+17668
+],
+[
+"P",
+"implant experience\n%43",
+17848
+],
+[
+"BUTTON",
+"Show quote",
+18051
+],
+[
+"H2",
+"Other names in the answers",
+18311
+],
+[
+"BUTTON",
+"London 33",
+18942
+],
+[
+"BUTTON",
+"Whitening Kit 6",
+18942
+],
+[
+"H2",
+"Sources: which sites the AI relies on",
+19202
+],
+[
+"H2",
+"AI visits to your site",
+19600
+],
+[
+"H2",
+"Results by question",
+19941
+],
+[
+"BUTTON",
+"Show answer",
+20396
+],
+[
+"BUTTON",
+"Show answer",
+20992
+],
+[
+"BUTTON",
+"Show answer",
+21588
+],
+[
+"BUTTON",
+"Show answer",
+22184
+],
+[
+"BUTTON",
+"Show answer",
+22780
+],
+[
+"BUTTON",
+"Show answer",
+23375
+],
+[
+"H2",
+"Share the report",
+23675
+],
+[
+"SPAN",
+"Valid for",
+24212
+],
+[
+"BUTTON",
+"Create link",
+24460
+],
+[
+"BUTTON",
+"Share",
+24629
+],
+[
+"BUTTON",
+"Revoke",
+24629
+],
+[
+"BUTTON",
+"Download measurements as CSV (Excel)",
+24820
+],
+[
+"H2",
+"Report branding (agency)",
+25330
+]
+],
+"p_paylasilan": [
+[
+"BUTTON",
+"Save as PDF",
+78
+],
+[
+"H1",
+"Brand A",
+199
+],
+[
+"H2",
+"With live web search (closest to what customers see)",
+478
+],
+[
+"H3",
+"Compared with competitors (latest)",
+1965
+],
+[
+"H2",
+"Without web search (what the AI knows)",
+2993
+],
+[
+"H3",
+"Compared with competitors (latest)",
+4633
+],
+[
+"H2",
+"Questions asked (latest)",
+5660
+],
+[
+"H2",
+"Websites the AI read (latest)",
+7648
+]
+],
+"p_hesap": [
+[
+"BUTTON",
+"TR",
+0
+],
+[
+"H1",
+"Account",
+247
+],
+[
+"H2",
+"Plan and billing",
+510
+],
+[
+"H2",
+"Team",
+922
+],
+[
+"H3",
+"Invite",
+1299
+],
+[
+"SPAN",
+"Email address",
+1402
+],
+[
+"SPAN",
+"Role",
+1662
+],
+[
+"BUTTON",
+"Create invitation",
+2377
+],
+[
+"H2",
+"API and MCP (AI agents)",
+2660
+],
+[
+"SPAN",
+"Key name",
+3128
+],
+[
+"BUTTON",
+"Create key",
+3376
+],
+[
+"H2",
+"Email",
+3772
+],
+[
+"H2",
+"Change password",
+4527
+],
+[
+"SPAN",
+"New password",
+4608
+],
+[
+"BUTTON",
+"Update password",
+4942
+],
+[
+"H2",
+"Language",
+5225
+],
+[
+"BUTTON",
+"TR",
+5314
+],
+[
+"H2",
+"Your data",
+5524
+],
+[
+"BUTTON",
+"Sign out",
+5976
+]
+]
+}
