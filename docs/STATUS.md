@@ -33,7 +33,7 @@
 > (`vars.ALLOW_PAID_API`, tanımsızsa açık) ve smoke testleri + SerpApi bunu kontrol ediyor; smoke iş akışları yalnız `main`'de;
 > haftalık e-posta marka × ölçüm türü × motor (0049); panelde gerçek motor adı, canlı ölçüm varsa canlı görünüm, Öneriler seçili türü
 > kullanır; iki nedensellik cümlesi kanıt dilinde; motor listeleri (Perplexity) ve eski fiyat notları düzeltildi; `test:integration` TZ=UTC.
-> Fiyat kararı: **29 / 149 / 449 $** (sahip, 18 Kasım).
+> Fiyat kararı: **60 / 300 / 876 $** (sahip, 21 Kasım; maliyet×5, Paddle komisyonu dahil; migration 0060). Önceki 29 / 149 / 449 $ (18 Kasım) yerine geçti.
 >
 > **18 Kasım (görünürlük düzeni, otomatik):** IndexNow (anahtar dosyası `web/public/<anahtar>.txt`, `scripts/indexnow.mjs`;
 > her yayın sonunda son 7 günde değişen sayfalar Bing/Yandex'e). Ölçüm sayfaları `/measurements/`, `/tr/olcumler/` (gerçek marka
@@ -401,6 +401,7 @@
 ## v1.3 (12 Kasım 2026)
 
 - **Fiyatlar (0019):** Plus 29 $, Pro 149 $, Business 449 $ (tipik maliyetin yaklaşık 3 katı). Limitler ve tavanlar aynı. Paddle'da yeni fiyatlar yayın sırasında otomatik oluşur; site ödeme düğmeleri kurulumun ürettiği güncel kataloğu kullanır.
+- **Fiyatlar (0060, 21 Kasım):** Plus 60 $, Pro 300 $, Business 876 $ (maliyet×5, Paddle %5 + 0,50 $ dahil). Paddle yeni fiyat kimlikleri `paddle-setup.mjs` ile yayın sırasında oluşur. Site metinleri, SSS, JSON-LD ve karşılaştırma sayfaları aynı rakamlara çekildi; Otterly.AI'nin kendi $29 fiyatı değişmedi.
 - **AI alışveriş:** ürün için "nereden satın alınır" (cevaplarda kaynak gösterilen satış siteleri ve kendi sitenin payı) ve site denetiminde ürün yapılandırılmış verisi (Product + Offer) kontrolü. ChatGPT uygulamasındaki ürün karuseli ölçülmüyor.
 
 ## Bilinen açık konular
