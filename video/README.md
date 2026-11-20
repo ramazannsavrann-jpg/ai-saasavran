@@ -171,7 +171,7 @@ Sebep: 19 Kasım'da yalnız vidIQ paylaşım listesine bakılıp Seattle seti "e
 | Konu | YouTube TR | YouTube EN | Instagram seti | Not |
 |---|---|---|---|---|
 | Eğitim 9 Ürünler + Eğitim 10 Paylaşım/haftalık ölçüm (20 Kas) | TR kanalı, liste dışı: 9 TR beRz2exSg90, 9 EN jzWe2ZejO_w, 10 TR Y9LNvWFlF6E, 10 EN NgsNPe2PpOA | EN kanalına konmaz (eğitim) | gönderilmez (eğitim) | Studio'dan yüklendi; İngilizce eğitimler TR kanalında liste dışı (20 Kas istisnası) |
-| TEMİZLİK 20 Kas: EN kanalına taşınan 18 İngilizce Shorts + 1 uzun video (V76gSO6nEME) TR kanalından kalıcı silindi | – | EN kanalında: 18 Shorts + 1 uzun video | – | Bu tablodaki eski EN kimlikleri (Zk1eQF5wk4o, Zz8biHgxQzc, 3SmvBaQspGU, tFF4JG7ncN0 hariç, Uw56ankOGhQ, kLKaNZCQcI8 …) artık TR kanalında YOK; EN karşılıkları EN kanalında |
+| TEMİZLİK 20 Kas: EN kanalına taşınan 18 İngilizce Shorts + 1 uzun video (V76gSO6nEME) TR kanalından kalıcı silindi | – | EN kanalında: 18 Shorts + 1 uzun video | – | Bu tablodaki YouTube EN sütunundaki eski kimlikler (ör. Zk1eQF5wk4o, Zz8biHgxQzc, 3SmvBaQspGU, Uw56ankOGhQ, kLKaNZCQcI8) artık TR kanalında YOK; karşılıkları EN kanalında |
 | Uzun 3 v2: Dev markalar | n1mIYpg8Xlw (20 Kas 21:00 planlı) | Studio'dan yüklenecek | gönderilmez (uzun video) | |
 | Akıllı yüzük | oKNVNscsGi8 | Zz8biHgxQzc | TAMAM 19 Kas 22:15–22:20 (TR Df7zyEwiicv, EN Df7z-0xkZqd, karusel Df70MDyiX2n) | karusel `videolar` dalı `instagram/ig-yuzuk-1..5.jpg` |
 | Uzun 2: Kaynaklar | gjH-oaMvKuI | IZ7fzbcTzrE | gönderilmez (uzun video) | |
