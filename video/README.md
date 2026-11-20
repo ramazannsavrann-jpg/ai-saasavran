@@ -170,6 +170,7 @@ Sebep: 19 Kasım'da yalnız vidIQ paylaşım listesine bakılıp Seattle seti "e
 ### PAYLAŞIM KAYDI (her paylaşımdan sonra güncellenir; en yeni üstte)
 | Konu | YouTube TR | YouTube EN | Instagram seti | Not |
 |---|---|---|---|---|
+| Uzun 3 v2: Dev markalar | n1mIYpg8Xlw (20 Kas 21:00 planlı) | Studio'dan yüklenecek | gönderilmez (uzun video) | |
 | Akıllı yüzük | oKNVNscsGi8 | Zz8biHgxQzc | TAMAM 19 Kas 22:15–22:20 (TR Df7zyEwiicv, EN Df7z-0xkZqd, karusel Df70MDyiX2n) | karusel `videolar` dalı `instagram/ig-yuzuk-1..5.jpg` |
 | Uzun 2: Kaynaklar | gjH-oaMvKuI | IZ7fzbcTzrE | gönderilmez (uzun video) | |
 | Seattle kahve | 85rcRRxKwkw | Zk1eQF5wk4o | TAMAM (TR Reels, EN Reels, karusel) | Reels vidIQ dışından paylaşıldı |
@@ -189,6 +190,13 @@ Yeni video yükleyince ID'sini `yt/ayar.json`'a {lang, lists} ile ekle ve push e
 - Akış: `python3 uzun.py ayar.json frames` (önizleme) → `narr` (narration-<ad>-cNN-<dil>.txt yazar; push = TTS) → ses-out'ta hepsi TAMAM olunca `render --force` → `<ad>-<dil>.mp4` (bölüm süresi = o bölümün sesi; müzik sidechain).
 - Marka adı anlatımda "AI SaaSavran" yazılır (Gemini TTS doğru okuyor); "Ey Ay Saa Savran" yazımı kontrolde "Sağ Savran" diye duyulup HATA veriyor. Kapanış: TR "Site adresimiz: Ey Ay, Saas Savran, nokta com." EN "Our website is: A. I. SaaS Savran, dot com." (HATA olursa ikinci kez tekrar eklenir).
 - Kapak: `video/uzun/kapak.py "başlık" "rozet" "alt satır" çıktı.jpg` ile sade 1280x720 (başlık + sarı bulgu rozeti). Açıklamada bölüm zaman damgaları (a01..aNN süreleri toplanarak).
+- **Uzun 3 (v2), 20 Kasım — "Dev markalar neden görünmüyor?"** (`uzun/devmarka3b-*.json`, ad `uzun3b-devmarka`, haftalık görev). İlk Uzun 3 (19 Kasım render, `uzun/dev-markalar-tr.mp4`) hiç yüklenmemişti; kapanışta site adı vardı, özellik bölümü yoktu → yeniden yapıldı, 10 bölüm, ~4:54.
+  - TR: `n1mIYpg8Xlw` (vidIQ, gizli, 20 Kasım 21:00 TSİ = 18:00Z planlı), video `videolar` dalı `uzun/dev-markalar-v2-tr.mp4`, kapak `kapak/uzun3b-tr.jpg`.
+  - EN: `uzun/big-brands-v2-en.mp4` + `kapak/uzun3b-en.jpg` HAZIR; EN kanalı vidIQ'ya bağlı olmadığı için (KANAL KURALI) sahibi YouTube Studio'dan yükleyecek (plan: 20 Kasım 21:00Z). Kimlik gelince `yt/ayar.json`'a eklenecek.
+  - **Özellik bölümü: Kayıp Nedeni Kartı** (`engine/src/insights.ts` lossCards + `Brand.tsx` LossCardView). Gerçek örnek: Growth Lab 1, Nike TR ölçümü, soru "En kaliteli ve uzun ömürlü spor ayakkabı markası hangisi?", 4 canlı cevap (ChatGPT 2, Claude 2, 14 Kasım): hedef 0/4, yerine Asics/Hoka/New Balance 3/4 (videoda Marka A/C/F, hedef Marka X), hedef sitesi hiç kaynak değil, runrepeat.com 4/4. Yeni sahne türü `loss` (`uzun.py`).
+  - Kullanılan veri: Nespresso/Tom Ford/Armani/iRobot/Philips (global, canlı vs Gemini), Roborock–Philips, Lenovo–Dell, De'Longhi–Siemens (uzman marka), Xiaomi/MSI/Liv Hospital (ChatGPT vs Claude), Philips/Arzum/Fakir, Samsung/Vestel (Türkiye yerli). KULLANILMADI (sonraki bölümlere): soru bazında düşüş (Oura pil/abonelik, Starbucks Pike Place) → Uzun 4; Türkiye vs dünya karşılaştırması → Uzun 5.
+  - Özellik rotasyonu kaydı: Uzun 2 = (özellik bölümü yoktu; kaynak analizi anlatıldı) · Uzun 3 = Kayıp Nedeni Kartı. Sonraki bölüm bunu KULLANMAZ (öneri: Uzun 4 = Koşullu Görünürlük Haritası / soru türü, Uzun 5 = ülke-dil karşılaştırması).
+  - `ad_kontrol.py` güncellendi: bitmiş videoda site adı beklenmez (19 Kasım kuralı), bozuk okunmuş ad yine HATA. Gemini TTS ücretsiz günlük kotası ~12–15 istek; 20 bölüm iki güne/kota sıfırlanmasına (08:00Z) bölünmeli. Müzik `music_vol` 0.22.
 - Yayında (19 Kasım): Uzun 2 "Yapay zekâ hangi sitelere bakıyor?" TR/EN (`uzun/kaynak-*.json`, videolar dalı `uzun/kaynaklar-tr.mp4`, `uzun/sources-en.mp4`). Sıradaki: 3) Dev markalar neden görünmüyor 4) Soruyu değiştir, kazanan değişsin 5) Yapay zekâ vs Google Shopping.
 
 
