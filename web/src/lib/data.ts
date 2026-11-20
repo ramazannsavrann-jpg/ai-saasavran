@@ -152,13 +152,13 @@ export const api = {
   async setPromptActive(id: string, active: boolean) { must(await sb().from("prompts").update({ active }).eq("id", id)); changed(); },
   async updatePrompt(id: string, patch: { text?: string; intent?: Intent; segment?: string | null }) { must(await sb().from("prompts").update(patch).eq("id", id)); },
   /** Bir ölçümdeki ham yapay zekâ cevapları (soru başına). */
-  async answers(runId: string): Promise<{ id: string; prompt_id: string; repetition: number; answer_text: string; model: string; provider: string; cited_urls: string[] }[]> {
-    return must(await sb().from("responses").select("id,prompt_id,repetition,answer_text,model,provider,cited_urls").eq("run_id", runId).order("repetition"));
+  async answers(runId: string): Promise<{ id: string; prompt_id: string; repetition: number; answer_text: string; model: string; provider: string; cited_urls: string[]; search_queries: string[] | null }[]> {
+    return must(await sb().from("responses").select("id,prompt_id,repetition,answer_text,model,provider,cited_urls,search_queries").eq("run_id", runId).order("repetition"));
   },
   /** Bir ölçümdeki cevap başına marka sonuçları (kaynak fırsatları için). */
-  async mentionsFor(responseIds: string[]): Promise<{ response_id: string; brand_id: string; recommended: boolean; mentioned: boolean; perception?: unknown }[]> {
+  async mentionsFor(responseIds: string[]): Promise<{ response_id: string; brand_id: string; recommended: boolean; mentioned: boolean; rank: number | null; perception?: unknown }[]> {
     if (!responseIds.length) return [];
-    return must(await sb().from("mentions").select("response_id,brand_id,recommended,mentioned,perception").in("response_id", responseIds));
+    return must(await sb().from("mentions").select("response_id,brand_id,recommended,mentioned,rank,perception").in("response_id", responseIds));
   },
   async deletePrompt(id: string) { must(await sb().from("prompts").delete().eq("id", id)); changed(); },
   async runs(brandId: string): Promise<Run[]> {

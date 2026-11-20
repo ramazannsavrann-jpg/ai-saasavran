@@ -38,12 +38,14 @@ export const METHOD_PAGES = [
 
 <h2>Live web search vs. model knowledge</h2>
 <p>An answer with live web search reflects pages on the web today and comes with the sources used. An answer from model knowledge reflects the model's training data and has no sources. Both are useful, but they answer different questions, so every result is labelled with its type and they are never mixed in one number.</p>
+<p>For live-search answers we also record the search phrases the AI used before answering. The pages that rank for those phrases are the ones the AI reads.</p>
 
 <h2>Metric definitions</h2>
 <table><thead><tr><th>Metric</th><th>Definition</th></tr></thead><tbody>
 <tr><td>Mention rate</td><td>Share of answers in which the brand's name appears at least once. Whole-word matching only: Turkish suffixes ("Garanti'nin") and the brand's domain count; the start of another word ("Ada" in "Adalet") does not.</td></tr>
 <tr><td>Recommendation rate</td><td>Share of answers that recommend the brand. Counted when the brand appears in a list (numbered, bulleted or heading) without negative wording, or in the same sentence as a recommendation phrase. Plain-text mentions that could be either are sent to a small AI classifier.</td></tr>
 <tr><td>Position</td><td>In answers that recommend the brand, its place in the answer's list, counting untracked brands too. Reports show the best position per question.</td></tr>
+<tr><td>Win rate</td><td>Share of answers in which the brand is recommended in first place. Most people look at the first suggestion, so it is reported separately from recommendation rate.</td></tr>
 <tr><td>Citation rate</td><td>Share of answers whose source list includes the brand's own domain. Only meaningful with live web search. A source is a site the answer itself shows (citation or link); sites the engine searched but did not show are not counted. Perplexity answers usually show none, so they rarely add sources.</td></tr>
 <tr><td>Share of recommendations</td><td>The brand's recommendations divided by all recommendations of the tracked brands (you plus competitors).</td></tr>
 <tr><td>Owned-source share</td><td>Of all sources cited, the share that is your site, competitors' sites and third-party sites.</td></tr>
@@ -108,12 +110,14 @@ export const METHOD_PAGES = [
 
 <h2>Canlı web araması ve model bilgisi</h2>
 <p>Canlı web aramalı cevap bugünkü internet sayfalarını yansıtır ve kullanılan kaynaklarla gelir. Model bilgisine dayalı cevap modelin eğitim verisini yansıtır ve kaynak içermez. İkisi de faydalıdır ama farklı sorulara cevap verir; bu yüzden her sonuç türüyle etiketlenir ve ikisi asla tek bir sayıda karıştırılmaz.</p>
+<p>Canlı aramalı cevaplarda yapay zekânın cevap vermeden önce internette kullandığı arama ifadelerini de kaydederiz. Bu ifadelerde çıkan sayfalar yapay zekânın okuduğu sayfalardır.</p>
 
 <h2>Metrik tanımları</h2>
 <table><thead><tr><th>Metrik</th><th>Tanım</th></tr></thead><tbody>
 <tr><td>Anılma oranı</td><td>Markanın adının en az bir kez geçtiği cevapların oranı. Yalnız tam kelime eşleşmesi sayılır: Türkçe ekli hâli ("Garanti'nin") ve markanın alan adı sayılır; başka bir kelimenin başı ("Adalet" içindeki "Ada") sayılmaz.</td></tr>
 <tr><td>Önerilme oranı</td><td>Markayı öneren cevapların oranı. Marka olumsuz bir ifade olmadan bir listede (numaralı, madde işaretli veya başlık) geçiyorsa ya da bir öneri ifadesiyle aynı cümlede geçiyorsa sayılır. Öneri mi bilgi mi olduğu belirsiz düz metin anılmaları küçük bir yapay zekâ sınıflandırıcısına gider.</td></tr>
 <tr><td>Sıra</td><td>Markayı öneren cevaplarda, cevaptaki listede kaçıncı madde olduğu; takip edilmeyen markalar da sayılır. Raporda soru başına en iyi sıra gösterilir.</td></tr>
+<tr><td>Kazanma oranı</td><td>Markanın ilk sırada önerildiği cevapların oranı. Çoğu kişi ilk öneriye baktığı için önerilme oranından ayrı raporlanır.</td></tr>
 <tr><td>Kaynak gösterilme oranı</td><td>Kaynak listesinde markanın kendi alan adının bulunduğu cevapların oranı. Yalnız canlı web aramasında anlamlıdır. Kaynak, cevabın kendisinin gösterdiği sitedir (alıntı ya da bağlantı); motorun aramada bulup cevapta göstermediği siteler sayılmaz. Perplexity cevapları çoğu zaman site göstermez, bu yüzden kaynak sayımına nadiren girer.</td></tr>
 <tr><td>Öneri payı</td><td>Markanın önerilerinin, takip edilen tüm markaların (siz + rakipler) önerilerine oranı.</td></tr>
 <tr><td>Kendi site payı</td><td>Kaynak gösterilen tüm siteler içinde sizin sitenizin, rakip sitelerin ve üçüncü taraf sitelerin payı.</td></tr>

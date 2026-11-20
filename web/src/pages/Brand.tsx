@@ -6,7 +6,7 @@ import { api, INTENT_LABEL, type Brand, type BrandAction, type PromptResult, typ
 import { friendlyError, sb } from "../lib/supabase";
 import { L, isEn } from "../lib/i18n";
 import { ERROR_CLASS_TEXT, STOP_TEXT, runStatusText } from "../lib/messages";
-import { actionImpact, compareProducts, engineComparison, engineScoreChanges, perceptionSummary, rivalTraits, scoreChange, visibilityScore, type ScoreInput, type ScorePartKey, ownedSourceShare, ownCitedRivals, visibilityForecast, sourcesByEngine, rivalReasons, conditionMap, lossCards, productVisibility, promptKind, shoppingSources, sourceDominance, splitByKind, type EngineCompareRow, type LossCard, type SourceRow } from "../../../engine/src/insights.ts";
+import { actionImpact, compareProducts, engineComparison, engineScoreChanges, perceptionSummary, rivalTraits, scoreChange, visibilityScore, type ScoreInput, type ScorePartKey, ownedSourceShare, ownCitedRivals, visibilityForecast, sourcesByEngine, rivalReasons, conditionMap, lossCards, productVisibility, promptKind, shoppingSources, sourceDominance, splitByKind, winRates, fanoutQueries, type EngineCompareRow, type LossCard, type SourceRow } from "../../../engine/src/insights.ts";
 import { competitorsInRun, formatDate, formatDateTime, lowSample, MIN_SAMPLE, numLoc, pct, providerLabel, rangeText, series, shareSummary, sourceOpportunities, topDomains, usd } from "../lib/report";
 import { Button, Confirm, DataNotice, Empty, ErrorBox, Field, Loading, Select, TypeBadge } from "../components/ui";
 import { CompareBars, TrendChart } from "../components/Chart";
@@ -920,6 +920,8 @@ function Report({ brand, type, onBrandChange, paid = false, runs = [] }: { brand
           {engList.length > 1 && (
             <EngineComparePanel rows={(vis.data ?? []).filter((r) => r.run_id === last.runId)} answers={answersAll.data ?? []} live={live} />
           )}
+          {live && insightsReady && <WinRatePanel answers={answers.data!} mentions={ments.data!} brands={insightBrands} perEngine={!eng} />}
+          {live && answers.data && answers.data.length > 0 && <FanoutPanel answers={answers.data} />}
           <section className="panel" id="kosul-haritasi">
             <h2>{L("Hangi koşulda görünüyorsunuz", "Where you show up, and where you don't")}</h2>
             <p className="muted">{isEn() ? `Recommendation rate by what the customer is doing, over the last ${recentIds.length} measurement${recentIds.length > 1 ? "s" : ""}. Groups under 20 answers are marked; don't draw conclusions from them.` : `Müşterinin ne yaptığına göre önerilme oranı, son ${recentIds.length} ölçümün toplamı. 20 cevabın altındaki gruplar işaretlidir; onlardan sonuç çıkarmayın.`}</p>
@@ -2348,5 +2350,52 @@ function ShareButton({ text }: { text: () => string }) {
       <Button variant="quiet" className="btn-small" onClick={() => window.print()}>{L("PDF olarak indir", "Download PDF")}</Button>
       {done && <span className="muted" role="status">{done}</span>}
     </div>
+  );
+}
+
+// Kazanma oranı: markanın cevapta 1 numara önerildiği cevapların oranı (mentions.rank = 1 ve önerildi)
+function WinRatePanel({ answers, mentions, brands, perEngine }: { answers: { id: string; provider: string }[]; mentions: { response_id: string; brand_id: string; recommended: boolean; rank?: number | null }[]; brands: { id: string; name: string; isTarget: boolean }[]; perEngine: boolean }) {
+  const w = winRates(answers, mentions, brands);
+  if (!w.brands.length || !w.brands[0].n) return null;
+  const top = w.brands.filter((b) => b.wins > 0 || b.isTarget).slice(0, 6);
+  const n = w.brands[0].n;
+  return (
+    <section className="panel" id="kazanma-orani">
+      <h2>{L("Kazanma oranı: kaç cevapta 1 numara?", "Win rate: how often are you #1?")}</h2>
+      <p className="muted">{L("Yapay zekânın listesinde ilk sırada önerilen marka kazanır. Müşterilerin çoğu ilk öneriye bakar; bu yüzden önerilme oranından ayrı izlenir.", "The brand recommended first in the AI's list wins. Most customers look at the first suggestion, so this is tracked separately from recommendation rate.")}</p>
+      <ul className="src-dom">
+        {top.map((b) => (
+          <li key={b.brandId}>
+            <p className="src-head"><strong>{b.name}{b.isTarget ? L(" (siz)", " (you)") : ""}</strong> <span className="num">{pct(b.rate)}</span></p>
+            <p className="muted">{isEn() ? `#1 in ${b.wins} of ${b.n} answers · range ${pct(b.low)}–${pct(b.high)}` : `${b.wins}/${b.n} cevapta 1 numara · aralık ${pct(b.low)}–${pct(b.high)}`}</p>
+          </li>
+        ))}
+      </ul>
+      {perEngine && w.targetByEngine.length > 1 && (
+        <p className="muted">{L("Sizin motor bazında kazanma oranınız: ", "Your win rate by engine: ")}{w.targetByEngine.map((e) => `${shortEngine(e.provider)} ${e.wins}/${e.n}`).join(" · ")}</p>
+      )}
+      {n < 20 && <p className="caution">{L("20 cevabın altında: sonuç kesin değil, eğilim olarak okuyun.", "Under 20 answers: not conclusive, read it as a trend.")}</p>}
+    </section>
+  );
+}
+
+// Yapay zekânın cevap verirken internette yaptığı aramalar (responses.search_queries); ek API çağrısı yok
+function FanoutPanel({ answers }: { answers: { provider: string; search_queries?: string[] | null }[] }) {
+  const f = fanoutQueries(answers, 15);
+  if (!f.rows.length) return null;
+  return (
+    <section className="panel" id="yapay-zeka-aramalari">
+      <h2>{L("Yapay zekânın yaptığı aramalar", "What the AI searched for")}</h2>
+      <p className="muted">{isEn() ? `Before answering, the AI searched the web with these phrases (${f.searched} of ${f.answers} answers used a search). Pages that rank for these searches are the ones the AI reads, so they are your content and outreach targets.` : `Yapay zekâ cevap vermeden önce internette bu ifadelerle arama yaptı (${f.searched}/${f.answers} cevapta arama yapıldı). Bu aramalarda çıkan sayfalar yapay zekânın okuduğu sayfalardır; içerik ve iletişim hedefleriniz bunlardır.`}</p>
+      <ol className="src-dom">
+        {f.rows.map((r) => (
+          <li key={r.query}>
+            <p className="src-head"><strong>{r.query}</strong> <span className="num">{r.count}</span></p>
+            <p className="muted">{r.engines.map(shortEngine).join(", ")}</p>
+          </li>
+        ))}
+      </ol>
+      {f.byEngine.length > 1 && <p className="muted">{L("Arama yapılan cevap oranı: ", "Share of answers that searched: ")}{f.byEngine.map((e) => `${shortEngine(e.provider)} ${e.searched}/${e.answers}`).join(" · ")}</p>}
+    </section>
   );
 }
