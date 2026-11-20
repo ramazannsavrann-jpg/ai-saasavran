@@ -8,3 +8,4 @@ Kodlar: `EN-S-001` (İngilizce Short), `EN-U-001` (İngilizce uzun), `TR-S-001` 
 
 | kod | hesap | durum | tarih |
 | --- | --- | --- | --- |
+| TASIMA-001 (telefon EN → EN kanalı; mağaza/kulaklık/tanıtım TR tek dil) | hesap-B (bu oturum) | devam | 2026-11-20 |
