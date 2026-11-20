@@ -228,3 +228,11 @@ Yayından önce, rakam kontrolüne ek olarak:
 - Yayından önce her bölümün `seste duyulan` dökümü baştan sona okunur.
 
 - (GEÇERSİZ) Site adı anlatımda hiç söylenmez; bkz. en üstteki kural.
+
+## Shorts 20–21 Kasım (uzun videolardan + Dyson ölçümü) — yayında
+- Şablon: `video/uzun/shortlar/kisa.py` + `*.json`. Rakamlar DB'den yeniden doğrulandı. Ses dökümü baştan sona okunur; sahne başları duraklama listesiyle kontrol edilir (gerekirse `starts`).
+- TR (@aisaasavran): Dyson mı Shark mı 7XHLLC06glA · Türkçe sordum jmTA4jmeebM · Yerli marka KxyvTAH0fFE (vidIQ) · Philips robot süpürge 5Q7IXb-87cU (Chrome+Studio; vidIQ taslağı 4258aa45 YAYINLANMAZ, kopya olur).
+- EN (@AISaaSavranEN, Chrome+Studio): Dyson vs Shark fnSArtFRENQ · Philips robot vacuums lHRr61V4ruI.
+- Dyson ölçümü: Growth Lab 3, marka `Hair Styler Study (video)` (811abfff), ABD, 8 soru, 20 Kasım, 0,52 $. "İlk önerilen" = cevapta tüm markalar arasında ilk geçen (örneklerle doğrulandı). Canlı: Shark 32/48, Dyson 9; 200 $ sorusu hariç 26/42; Gemini hafızadan Dyson 13/16.
+- vidIQ ücretsiz planda günde 3 YouTube yüklemesi; fazlası Chrome+Studio ile (sohbet otomatik onay modunda olmalı, dosya ≤3,8 MB).
+- OpenAI TR sesinde "örneklem küçüktür" dökümde bozuk duyuldu (kütüktür/tüçüktür): sonraki anlatımlarda "örneklem sınırlıdır" yaz.
