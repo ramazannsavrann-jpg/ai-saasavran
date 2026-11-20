@@ -1,0 +1,159 @@
+{
+ "name": "short-dyson-tr",
+ "voice_pcm": "/home/claude/ai-saasavran/video/ses-out/ses-short-dyson-tr.mp3",
+ "atempo": 1.2,
+ "engines": [
+  "ChatGPT",
+  "Claude",
+  "Perplexity",
+  "Gemini"
+ ],
+ "sentences": 13,
+ "names_list": [
+  "BaBylissPRO",
+  "Dyson",
+  "ghd",
+  "Revlon",
+  "Shark"
+ ],
+ "footer": "ChatGPT, Claude, Perplexity: canlı arama · Gemini: hafızadan · ABD, İngilizce sorular · 20 Kasım 2026",
+ "t": {
+  "hook": "Black Friday öncesi yapay zekâ Dyson'ı mı öneriyor?",
+  "badge": "İlk sırada Shark: 32/48",
+  "hook2": "Saç şekillendirici · ABD'den 8 alıcı sorusu",
+  "note": "ChatGPT, Claude, Perplexity (canlı arama) · Gemini (hafızadan) · 20 Kasım 2026",
+  "names_title": "Bu markalara baktık",
+  "cta": "Markanız yapay zekâda ilk sırada mı?",
+  "cta2": "Ölçüm: ABD, 20 Kasım 2026",
+  "free": "Ücretsiz kontrol edin",
+  "disc": "Bunlar yapay zekânın cevaplarıdır · Küçük örneklem, tüm pazarı temsil etmez · Bağımsız ölçüm, hiçbir markayla iş birliğimiz yoktur"
+ },
+ "scenes": [
+  {
+   "type": "hook",
+   "from": 0
+  },
+  {
+   "type": "names",
+   "from": 1
+  },
+  {
+   "type": "bars",
+   "from": 3,
+   "tag": "Canlı arama",
+   "title": "İlk önerilen marka",
+   "sub": "ChatGPT, Claude, Perplexity · 48 cevap",
+   "max": 48,
+   "rows": [
+    [
+     "Shark",
+     32,
+     "acc",
+     "32/48"
+    ],
+    [
+     "Dyson",
+     9,
+     "gold",
+     "9/48"
+    ],
+    [
+     "Revlon",
+     3,
+     "muted",
+     "3/48"
+    ],
+    [
+     "ghd",
+     2,
+     "muted",
+     "2/48"
+    ],
+    [
+     "BaBylissPRO",
+     2,
+     "muted",
+     "2/48"
+    ]
+   ],
+   "note": "'200 $ altı' sorusu hariç: Shark 26/42, Dyson 9/42",
+   "note_col": "muted"
+  },
+  {
+   "type": "bars",
+   "from": 5,
+   "tag": "Yapay zekâya göre",
+   "title": "Shark'ı ilk sıraya koyan cevaplar",
+   "sub": "Her yapay zekâ 16 cevap",
+   "max": 16,
+   "rows": [
+    [
+     "Perplexity",
+     13,
+     "acc",
+     "13/16"
+    ],
+    [
+     "ChatGPT",
+     12,
+     "acc",
+     "12/16"
+    ],
+    [
+     "Claude",
+     7,
+     "acc",
+     "7/16"
+    ]
+   ],
+   "note": "Claude'da fark az: Shark 7, Dyson 5",
+   "note_col": "gold"
+  },
+  {
+   "type": "bars",
+   "from": 7,
+   "tag": "Hafızadan",
+   "title": "Gemini: internete bakmadan",
+   "sub": "İlk önerilen marka · 16 cevap",
+   "max": 16,
+   "rows": [
+    [
+     "Dyson",
+     13,
+     "gold",
+     "13/16"
+    ],
+    [
+     "Shark",
+     3,
+     "acc",
+     "3/16"
+    ]
+   ],
+   "note": "Tablo tersine döndü",
+   "note_col": "gold"
+  },
+  {
+   "type": "text",
+   "from": 9,
+   "tag": "Olası neden",
+   "lead": "Yorumumuz:",
+   "main": "güncel inceleme siteleri ve indirimler Shark'ı öne çıkarıyor olabilir.",
+   "tip": "Gözlem bu; kesin neden değil.",
+   "small": "Bunlar yapay zekânın cevaplarıdır. Küçük örneklem, tüm pazarı temsil etmez."
+  },
+  {
+   "type": "cta",
+   "from": 11
+  }
+ ],
+ "starts": [
+  0.0,
+  5.1,
+  15.55,
+  23.85,
+  33.9,
+  42.55,
+  51.4
+ ]
+}
