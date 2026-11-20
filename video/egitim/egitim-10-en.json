@@ -1,0 +1,65 @@
+{
+ "out": "e10en",
+ "series": "How to use · Tutorial 10",
+ "sample": "Sample data",
+ "cover": {
+  "badge": "Tutorial 10",
+  "title": "Sharing and automatic runs",
+  "sub": "",
+  "dur": 2.39
+ },
+ "scenes": [
+  {
+   "step": "Share",
+   "cap": "A report link that expires",
+   "imgs": [
+    "shots/en/p_rapor_tam.jpg"
+   ],
+   "top": 23469,
+   "dur": 4.71
+  },
+  {
+   "step": "Link",
+   "cap": "No sign-in, save as PDF",
+   "imgs": [
+    "shots/en/p_paylasilan_tam.jpg"
+   ],
+   "top": 0,
+   "dur": 4.41
+  },
+  {
+   "step": "CSV",
+   "cap": "Measurements in Excel",
+   "imgs": [
+    "shots/en/p_rapor_tam.jpg"
+   ],
+   "top": 24120,
+   "dur": 3.35
+  },
+  {
+   "step": "Weekly",
+   "cap": "Measured every week on its own",
+   "imgs": [
+    "shots/en/p_rapor_tam.jpg"
+   ],
+   "top": 500,
+   "dur": 7.08
+  },
+  {
+   "step": "Email",
+   "cap": "Weekly summary and alerts",
+   "imgs": [
+    "shots/en/p_hesap_tam.jpg"
+   ],
+   "top": 3652,
+   "dur": 4.3
+  }
+ ],
+ "end": {
+  "title": "Tracked every week",
+  "sub": "Your place in AI, effortlessly.",
+  "next_label": "All tutorials",
+  "next": "aisaasavran.com",
+  "dur": 6.18
+ }
+}

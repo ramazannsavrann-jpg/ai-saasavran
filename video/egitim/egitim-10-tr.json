@@ -1,0 +1,65 @@
+{
+ "out": "e10tr",
+ "series": "Nasıl kullanılır · Eğitim 10",
+ "sample": "Örnek veri",
+ "cover": {
+  "badge": "Eğitim 10",
+  "title": "Paylaşım ve otomatik ölçüm",
+  "sub": "",
+  "dur": 2.47
+ },
+ "scenes": [
+  {
+   "step": "Paylaş",
+   "cap": "Süreli rapor bağlantısı",
+   "imgs": [
+    "shots/tr/p_rapor_tam.jpg"
+   ],
+   "top": 22767,
+   "dur": 4.15
+  },
+  {
+   "step": "Bağlantı",
+   "cap": "Giriş gerekmez, PDF kaydedin",
+   "imgs": [
+    "shots/tr/p_paylasilan_tam.jpg"
+   ],
+   "top": 0,
+   "dur": 4.18
+  },
+  {
+   "step": "CSV",
+   "cap": "Ölçümler Excel'de",
+   "imgs": [
+    "shots/tr/p_rapor_tam.jpg"
+   ],
+   "top": 23418,
+   "dur": 3.56
+  },
+  {
+   "step": "Haftalık",
+   "cap": "Her hafta kendiliğinden ölçülür",
+   "imgs": [
+    "shots/tr/p_rapor_tam.jpg"
+   ],
+   "top": 500,
+   "dur": 6.83
+  },
+  {
+   "step": "E-posta",
+   "cap": "Haftalık özet ve uyarılar",
+   "imgs": [
+    "shots/tr/p_hesap_tam.jpg"
+   ],
+   "top": 3721,
+   "dur": 4.42
+  }
+ ],
+ "end": {
+  "title": "Her hafta takipte",
+  "sub": "Yapay zekâdaki yeriniz, zahmetsizce.",
+  "next_label": "Tüm eğitimler",
+  "next": "aisaasavran.com",
+  "dur": 6.72
+ }
+}

@@ -1,0 +1,65 @@
+{
+ "out": "e9en",
+ "series": "How to use · Tutorial 9",
+ "sample": "Sample data",
+ "cover": {
+  "badge": "Tutorial 9",
+  "title": "Products",
+  "sub": "",
+  "dur": 0.74
+ },
+ "scenes": [
+  {
+   "step": "Product",
+   "cap": "Name, price and correct facts",
+   "imgs": [
+    "shots/en/u_urunler_tam.jpg"
+   ],
+   "top": 9674,
+   "dur": 3.89
+  },
+  {
+   "step": "Accuracy",
+   "cap": "Wrong claims are flagged",
+   "imgs": [
+    "shots/en/u_urunler_tam.jpg"
+   ],
+   "top": 8555,
+   "dur": 6.53
+  },
+  {
+   "step": "Competitor",
+   "cap": "Which product gets recommended more?",
+   "imgs": [
+    "shots/en/u_urunler_tam.jpg"
+   ],
+   "top": 5154,
+   "dur": 4.65
+  },
+  {
+   "step": "Google Shopping",
+   "cap": "Position, price, competitors",
+   "imgs": [
+    "shots/en/u_urunler_tam.jpg"
+   ],
+   "top": 3214,
+   "dur": 4.75
+  },
+  {
+   "step": "Weekly",
+   "cap": "Automatic on paid plans",
+   "imgs": [
+    "shots/en/u_urunler_tam.jpg"
+   ],
+   "top": 2153,
+   "dur": 2.93
+  }
+ ],
+ "end": {
+  "title": "Track your product",
+  "sub": "Right facts, right recommendations.",
+  "next_label": "Next tutorial",
+  "next": "Share the report, weekly runs",
+  "dur": 6.35
+ }
+}
