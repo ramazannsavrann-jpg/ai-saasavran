@@ -1,0 +1,337 @@
+{
+ "name": "uzun3b-devmarka",
+ "lang": "en",
+ "voice": "Charon",
+ "atempo": 1.03,
+ "footer": "These are the AI's answers · Nov 12–19, 2026 · Live search: ChatGPT and Claude · Gemini from memory · Small samples",
+ "scenes": [
+  {
+   "type": "stats",
+   "tag": "AI research",
+   "title": "Why are big brands invisible to AI?",
+   "sub": "Household names keep disappearing from AI answers",
+   "items": [
+    [
+     "0/16",
+     "Nespresso: ChatGPT coffee machine picks (global)",
+     "red"
+    ],
+    [
+     "0/32",
+     "Armani: live-search perfume answers (global)",
+     "red"
+    ],
+    [
+     "0/24",
+     "Philips: robot vacuum picks (global)",
+     "red"
+    ]
+   ],
+   "say": "Nespresso, Armani, Philips. Everyone knows these brands. But when you ask AI for a coffee machine, a perfume or a robot vacuum, do they get recommended? We measured it. ChatGPT recommended Nespresso in zero of sixteen coffee machine answers. Armani was recommended in none of thirty-two live-search perfume answers. Philips scored zero out of twenty-four on robot vacuums. In this video we look at four patterns in the data, the possible reasons, and how to see this for your own brand."
+  },
+  {
+   "type": "boxes",
+   "tag": "Method",
+   "title": "How we measured",
+   "ncol": 2,
+   "boxes": [
+    {
+     "t": "Real buyer questions",
+     "d": "8 questions per category; no brand names in the questions."
+    },
+    {
+     "t": "Live search + memory",
+     "d": "ChatGPT and Claude searched the web; Gemini answered from memory.",
+     "c": "gold"
+    },
+    {
+     "t": "Turkey and global",
+     "d": "The same categories, asked separately in Turkish and English.",
+     "c": "blue"
+    },
+    {
+     "t": "Recommendation count",
+     "d": "How many answers recommended each brand, counted per AI.",
+     "c": "pink"
+    }
+   ],
+   "say": "Here's the method. In categories like coffee machines, perfume, TVs, robot vacuums, gaming laptops and phones, we asked eight real buyer questions each, with no brand names. ChatGPT and Claude answered with live web search; Gemini answered without search, from memory. We now measure Perplexity too, but it wasn't part of these category runs. Then we counted how many answers recommended each brand, separately for each AI."
+  },
+  {
+   "type": "table",
+   "tag": "Table",
+   "title": "Well known, rarely recommended",
+   "cols": [
+    "Brand · category",
+    "Live search",
+    "Gemini (memory)"
+   ],
+   "widths": [
+    800,
+    470,
+    470
+   ],
+   "rows": [
+    [
+     "Nespresso · coffee machine (global)",
+     "3 / 31",
+     "13 / 16"
+    ],
+    [
+     "Tom Ford · perfume (global)",
+     "3 / 32",
+     "10 / 16"
+    ],
+    [
+     "Armani · perfume (global)",
+     "0 / 32",
+     "3 / 16"
+    ],
+    [
+     "iRobot · robot vacuum (global)",
+     "2 / 24",
+     "6 / 16"
+    ],
+    [
+     "Adidas · sneakers (Turkey)",
+     "9 / 32",
+     "15 / 16"
+    ],
+    [
+     "Philips · TV (global)",
+     "0 / 29",
+     "1 / 16"
+    ]
+   ],
+   "note": "Live search: ChatGPT + Claude. Gemini sample is small (16 answers).",
+   "say": "First, the table. Nespresso was recommended in only three of thirty-one live-search answers, while Gemini, answering from memory, recommended it in thirteen of sixteen. Tom Ford is similar: three with live search, ten on Gemini. In Turkey, Adidas got nine of thirty-two live-search answers, and fifteen of sixteen on Gemini. Armani in perfume and Philips in TVs were never recommended with live search. The Gemini sample is small, so read these gaps as a signal, not a rule."
+  },
+  {
+   "type": "bars",
+   "tag": "Pattern 1",
+   "title": "Fame lives in memory, not in current reviews",
+   "sub": "Answers recommending Nespresso (coffee machine, global)",
+   "rows": [
+    [
+     "Gemini (memory)",
+     13,
+     "pink",
+     "13/16"
+    ],
+    [
+     "Claude (live)",
+     3,
+     "acc",
+     "3/15"
+    ],
+    [
+     "ChatGPT (live)",
+     0,
+     "gold",
+     "0/16"
+    ]
+   ],
+   "max": 16,
+   "note": "Our reading: memory may reflect past fame, live search reflects today's review sites.",
+   "say": "Pattern one: an AI answering from memory and an AI searching live don't recommend the same brands. Gemini recommended Nespresso in thirteen of sixteen answers; Claude in three of fifteen; ChatGPT never. Our reading: memory may recall brands people have talked about for years, while live search reads what today's review sites say. So past fame doesn't automatically turn into recommendations from a live-search AI."
+  },
+  {
+   "type": "bars",
+   "tag": "Pattern 2",
+   "title": "The category specialist wins",
+   "sub": "Live-search recommendations (ChatGPT + Claude, global)",
+   "rows": [
+    [
+     "Roborock · robot vacuum",
+     22,
+     "acc",
+     "22/24"
+    ],
+    [
+     "Philips · robot vacuum",
+     0,
+     "red",
+     "0/24"
+    ],
+    [
+     "Lenovo · gaming laptop",
+     19,
+     "acc",
+     "19/27"
+    ],
+    [
+     "Dell · gaming laptop",
+     3,
+     "red",
+     "3/27"
+    ],
+    [
+     "De'Longhi · coffee machine",
+     19,
+     "acc",
+     "19/31"
+    ],
+    [
+     "Siemens · coffee machine",
+     0,
+     "red",
+     "0/31"
+    ]
+   ],
+   "max": 31,
+   "note": "Observation: for \"best X\" questions, brands known as specialists were picked.",
+   "say": "Pattern two: brands that make everything are absent in some categories. For robot vacuums, Roborock was recommended in twenty-two of twenty-four answers; Philips in none. For coffee machines, De'Longhi nineteen, Siemens zero. For gaming laptops, Lenovo nineteen, Dell three. The data shows that for questions like best robot vacuum, brands known as specialists get picked. A possible reason is that review sites put those brands first too."
+  },
+  {
+   "type": "bars",
+   "tag": "Pattern 3",
+   "title": "One AI recommends it, another never does",
+   "sub": "Same questions, live-search recommendations",
+   "rows": [
+    [
+     "Xiaomi phone · Claude",
+     13,
+     "acc",
+     "13/24"
+    ],
+    [
+     "Xiaomi phone · ChatGPT",
+     0,
+     "gold",
+     "0/32"
+    ],
+    [
+     "MSI laptop · Claude",
+     8,
+     "acc",
+     "8/11"
+    ],
+    [
+     "MSI laptop · ChatGPT",
+     0,
+     "gold",
+     "0/16"
+    ],
+    [
+     "Liv Hospital · Claude",
+     7,
+     "acc",
+     "7/16"
+    ],
+    [
+     "Liv Hospital · ChatGPT",
+     0,
+     "gold",
+     "0/16"
+    ]
+   ],
+   "max": 16,
+   "note": "Small samples. Possible explanation: ChatGPT gave shorter lists.",
+   "say": "Pattern three: one AI recommends a brand, another never does. On US phone questions, Claude recommended Xiaomi in thirteen of twenty-four answers; ChatGPT in none of thirty-two. For MSI gaming laptops, Claude eight, ChatGPT zero. In Turkey, Claude recommended Liv Hospital seven times, ChatGPT never. The samples are small, but they show why measuring your brand on a single AI can mislead."
+  },
+  {
+   "type": "bars",
+   "tag": "Pattern 4",
+   "title": "Local brands are weak even at home",
+   "sub": "Turkish questions, live search from Turkey · recommendations",
+   "rows": [
+    [
+     "Philips · coffee machine",
+     23,
+     "acc",
+     "23/29"
+    ],
+    [
+     "Arzum · coffee machine",
+     5,
+     "gold",
+     "5/29"
+    ],
+    [
+     "Fakir · coffee machine",
+     0,
+     "red",
+     "0/29"
+    ],
+    [
+     "Samsung · TV",
+     17,
+     "acc",
+     "17/27"
+    ],
+    [
+     "Vestel · TV",
+     1,
+     "red",
+     "1/27"
+    ]
+   ],
+   "max": 29,
+   "note": "Our reading: being on the review sites AI reads may matter.",
+   "say": "Pattern four is about local brands. On coffee machine questions asked in Turkish, from Turkey, Philips was recommended in twenty-three of twenty-nine answers; the Turkish brand Arzum five, Fakir zero. For TVs, Samsung seventeen, and the Turkish brand Vestel just once. A possible reason: a local brand that isn't on the review sites AI reads can be left out even in its home market."
+  },
+  {
+   "type": "loss",
+   "tag": "Feature: Loss Reason Card",
+   "title": "What happened where you weren't recommended?",
+   "card_title": "Not recommended here: the evidence",
+   "q": "\"Which is the highest-quality, longest-lasting sneaker brand?\" · Turkey (asked in Turkish)",
+   "lines": [
+    [
+     "Recommended instead: Brand A (3/4), Brand C (3/4), Brand F (3/4).",
+     "gold"
+    ],
+    [
+     "Brand X did not appear in any answer to this question.",
+     "red"
+    ],
+    [
+     "Your site was not cited in any answer to this question.",
+     "red"
+    ],
+    [
+     "Third-party sources used: runrepeat.com, ciceksepeti.com, dalkilicspor.com, letsrun.com, onedio.com. Check whether you are featured on them.",
+     "blue"
+    ]
+   ],
+   "note": "Based on 4 answers (ChatGPT 2, Claude 2; live search, Nov 14, 2026). This is evidence, not a proven cause. Real measurement; brands shown as letters.",
+   "say": "So how do you see this for your own brand? This chapter's feature: the Loss Reason Card. For every question where your brand was never recommended but at least one competitor was, AI SaaSavran builds this card. A real example: a major sneaker brand in Turkey; let's call it Brand X. Asked which sneaker brand is the highest quality and longest lasting, Brand X didn't appear once in four live-search answers from ChatGPT and Claude. First, the card shows who was recommended instead: three competitors, each in three of four answers. Then the evidence: the brand's own site was never cited; the answers relied on third-party sites, and the review site RunRepeat was a source in all four. The card doesn't claim a proven cause; it shows the evidence, and tells you where to start. It works on live-search measurements from ChatGPT, Claude and Perplexity, and Gemini is measured from memory alongside."
+  },
+  {
+   "type": "boxes",
+   "tag": "What to do",
+   "title": "Big brand or not: four steps",
+   "ncol": 2,
+   "boxes": [
+    {
+     "t": "1. Measure question by question",
+     "d": "Not general awareness: whether you're recommended for each question customers ask."
+    },
+    {
+     "t": "2. Measure each AI separately",
+     "d": "You can be zero on ChatGPT and strong on Claude.",
+     "c": "gold"
+    },
+    {
+     "t": "3. Check the evidence where you lose",
+     "d": "Who was recommended instead, based on which sources?",
+     "c": "red"
+    },
+    {
+     "t": "4. Be on current sources",
+     "d": "Be on your category's review sites with accurate, current information.",
+     "c": "blue"
+    }
+   ],
+   "say": "What should you do? Four steps. One: look at question-by-question results, not general awareness. Two: measure each AI separately; you can be zero on one and strong on another. Three: check the evidence where you lose; who was recommended instead, and based on which sources? Four: be on your category's current review sites with accurate information. Competitor comparison, product accuracy checks and improvement tracking help with these steps too."
+  },
+  {
+   "type": "cta",
+   "tag": "Free check",
+   "title": "Does AI recommend your brand, or someone else instead?",
+   "free": "ChatGPT · Gemini · Claude · Perplexity · Free check",
+   "disc": "These are the AI's answers. Measured Nov 12–19, 2026; small samples, not representative of the whole market. Independent measurement; we have no sponsorship or partnership with any brand shown. Brand names belong to their owners.",
+   "say": "A reminder: these are the AI's answers. The samples are small and don't represent the whole market. This is an independent measurement; we have no sponsorship or partnership with any brand shown. Do ChatGPT, Gemini, Claude and Perplexity recommend your brand? Check it free."
+  }
+ ]
+}

@@ -1,0 +1,337 @@
+{
+ "name": "uzun3b-devmarka",
+ "lang": "tr",
+ "voice": "Charon",
+ "atempo": 1.06,
+ "footer": "Bunlar yapay zekânın cevaplarıdır · 12–19 Kasım 2026 · Canlı arama: ChatGPT ve Claude · Gemini hafızadan · Küçük örneklemler",
+ "scenes": [
+  {
+   "type": "stats",
+   "tag": "Yapay zekâ araştırması",
+   "title": "Dev markalar neden görünmüyor?",
+   "sub": "Herkesin bildiği markalar, yapay zekâ cevaplarında kayboluyor",
+   "items": [
+    [
+     "0/16",
+     "Nespresso: ChatGPT'de kahve makinesi önerisi (global)",
+     "red"
+    ],
+    [
+     "0/32",
+     "Armani: canlı aramalı parfüm cevapları (global)",
+     "red"
+    ],
+    [
+     "0/24",
+     "Philips: robot süpürge önerisi (global)",
+     "red"
+    ]
+   ],
+   "say": "Nespresso, Armani, Philips. Herkesin tanıdığı markalar. Peki yapay zekâya kahve makinesi, parfüm ya da robot süpürge sorduğunuzda bu markalar öneriliyor mu? Ölçtük. ChatGPT, kahve makinesi sorularında Nespresso'yu on altı cevabın hiçbirinde önermedi. Armani, canlı aramalı otuz iki parfüm cevabının hiçbirinde önerilmedi. Philips, robot süpürge sorulduğunda yirmi dört cevapta sıfır. Bu videoda verinin gösterdiği dört örüntüye, olası nedenlere ve bunu kendi markanız için nasıl görebileceğinize bakıyoruz."
+  },
+  {
+   "type": "boxes",
+   "tag": "Yöntem",
+   "title": "Nasıl ölçtük?",
+   "ncol": 2,
+   "boxes": [
+    {
+     "t": "Gerçek alıcı soruları",
+     "d": "Her kategoride 8 soru; sorularda marka adı yok."
+    },
+    {
+     "t": "Canlı arama + hafıza",
+     "d": "ChatGPT ve Claude internete bakarak, Gemini hafızasından cevap verdi.",
+     "c": "gold"
+    },
+    {
+     "t": "Türkiye ve global",
+     "d": "Aynı kategoriler Türkçe ve İngilizce ayrı soruldu.",
+     "c": "blue"
+    },
+    {
+     "t": "Öneri sayımı",
+     "d": "Bir marka kaç cevapta önerildi; her yapay zekâ ayrı sayıldı.",
+     "c": "pink"
+    }
+   ],
+   "say": "Yöntem şöyle. Kahve makinesi, parfüm, televizyon, robot süpürge, oyun laptopu ve telefon gibi kategorilerde sekizer gerçek alıcı sorusu sorduk; sorularda marka adı yok. ChatGPT ve Claude canlı internet aramasıyla, Gemini ise arama olmadan, hafızasıyla cevap verdi. Perplexity'yi de artık ölçüyoruz ama bu kategorilerin ölçümünde yoktu. Sonra her markanın kaç cevapta önerildiğini, her yapay zekâ için ayrı saydık."
+  },
+  {
+   "type": "table",
+   "tag": "Tablo",
+   "title": "Tanınan ama az önerilen markalar",
+   "cols": [
+    "Marka · kategori",
+    "Canlı arama",
+    "Gemini (hafıza)"
+   ],
+   "widths": [
+    800,
+    470,
+    470
+   ],
+   "rows": [
+    [
+     "Nespresso · kahve makinesi (global)",
+     "3 / 31",
+     "13 / 16"
+    ],
+    [
+     "Tom Ford · parfüm (global)",
+     "3 / 32",
+     "10 / 16"
+    ],
+    [
+     "Armani · parfüm (global)",
+     "0 / 32",
+     "3 / 16"
+    ],
+    [
+     "iRobot · robot süpürge (global)",
+     "2 / 24",
+     "6 / 16"
+    ],
+    [
+     "Adidas · spor ayakkabı (Türkiye)",
+     "9 / 32",
+     "15 / 16"
+    ],
+    [
+     "Philips · televizyon (global)",
+     "0 / 29",
+     "1 / 16"
+    ]
+   ],
+   "note": "Canlı arama: ChatGPT + Claude. Gemini örneklemi küçük (16 cevap).",
+   "say": "Önce tablo. Nespresso, canlı aramalı otuz bir cevabın yalnızca üçünde önerildi; hafızadan cevap veren Gemini ise on altı cevabın on üçünde önerdi. Tom Ford'da da benzer: canlı aramada üç, Gemini'de on. Türkiye'de Adidas, canlı aramada otuz iki cevabın dokuzunda, Gemini'de on altı cevabın on beşinde önerildi. Armani parfümde ve Philips televizyonda canlı aramada hiç önerilmedi. Gemini tarafında örneklem küçük; bu farkları kesin bir kural değil, dikkat çeken bir işaret olarak okuyun."
+  },
+  {
+   "type": "bars",
+   "tag": "Örüntü 1",
+   "title": "Ün hafızada, güncel incelemelerde değil",
+   "sub": "Nespresso'yu öneren cevap sayısı (kahve makinesi, global)",
+   "rows": [
+    [
+     "Gemini (hafıza)",
+     13,
+     "pink",
+     "13/16"
+    ],
+    [
+     "Claude (canlı)",
+     3,
+     "acc",
+     "3/15"
+    ],
+    [
+     "ChatGPT (canlı)",
+     0,
+     "gold",
+     "0/16"
+    ]
+   ],
+   "max": 16,
+   "note": "Yorumumuz: hafıza geçmişteki ünü, canlı arama bugünkü inceleme sitelerini yansıtıyor olabilir.",
+   "say": "Birinci örüntü: hafızadan cevap veren yapay zekâ ile canlı arama yapan yapay zekâ aynı markaları önermiyor. Nespresso'yu Gemini on altı cevabın on üçünde önerdi; Claude on beş cevabın üçünde, ChatGPT hiç. Yorumumuz şu: hafıza, yıllardır konuşulan markaları hatırlıyor olabilir; canlı arama ise bugünkü inceleme sitelerinde ne yazdığını okuyor. Yani geçmişteki ün, canlı aramalı yapay zekâda kendiliğinden öneriye dönüşmüyor."
+  },
+  {
+   "type": "bars",
+   "tag": "Örüntü 2",
+   "title": "Kategorinin uzmanı öne çıkıyor",
+   "sub": "Canlı aramada öneri sayısı (ChatGPT + Claude, global)",
+   "rows": [
+    [
+     "Roborock · robot süpürge",
+     22,
+     "acc",
+     "22/24"
+    ],
+    [
+     "Philips · robot süpürge",
+     0,
+     "red",
+     "0/24"
+    ],
+    [
+     "Lenovo · oyun laptopu",
+     19,
+     "acc",
+     "19/27"
+    ],
+    [
+     "Dell · oyun laptopu",
+     3,
+     "red",
+     "3/27"
+    ],
+    [
+     "De'Longhi · kahve makinesi",
+     19,
+     "acc",
+     "19/31"
+    ],
+    [
+     "Siemens · kahve makinesi",
+     0,
+     "red",
+     "0/31"
+    ]
+   ],
+   "max": 31,
+   "note": "Gözlem: \"en iyi X\" sorusunda o işin uzmanı olarak bilinen markalar seçildi.",
+   "say": "İkinci örüntü: her şeyi üreten büyük markalar bazı kategorilerde hiç önerilmiyor. Robot süpürgede Roborock yirmi dört cevabın yirmi ikisinde önerildi, Philips hiç. Kahve makinesinde De'Longhi on dokuz, Siemens sıfır. Oyun laptopunda Lenovo on dokuz, Dell üç. Veri, en iyi robot süpürge gibi sorularda o işin uzmanı olarak bilinen markaların seçildiğini gösteriyor. Olası neden, inceleme sitelerinin de bu markaları öne çıkarması."
+  },
+  {
+   "type": "bars",
+   "tag": "Örüntü 3",
+   "title": "Bir yapay zekâ önerir, diğeri hiç önermez",
+   "sub": "Aynı sorular, canlı aramalı öneri sayısı",
+   "rows": [
+    [
+     "Xiaomi telefon · Claude",
+     13,
+     "acc",
+     "13/24"
+    ],
+    [
+     "Xiaomi telefon · ChatGPT",
+     0,
+     "gold",
+     "0/32"
+    ],
+    [
+     "MSI laptop · Claude",
+     8,
+     "acc",
+     "8/11"
+    ],
+    [
+     "MSI laptop · ChatGPT",
+     0,
+     "gold",
+     "0/16"
+    ],
+    [
+     "Liv Hospital · Claude",
+     7,
+     "acc",
+     "7/16"
+    ],
+    [
+     "Liv Hospital · ChatGPT",
+     0,
+     "gold",
+     "0/16"
+    ]
+   ],
+   "max": 16,
+   "note": "Küçük örneklem. Olası açıklama: ChatGPT daha kısa liste yaptı.",
+   "say": "Üçüncü örüntü: bir yapay zekâ önerir, diğeri hiç önermez. Amerika'daki telefon sorularında Xiaomi'yi Claude yirmi dört cevabın on üçünde önerdi; ChatGPT otuz iki cevabın hiçbirinde. MSI oyun laptopunda Claude sekiz, ChatGPT sıfır. Türkiye'de Liv Hospital'ı Claude yedi kez önerdi, ChatGPT hiç. Örneklemler küçük; ama markanızı tek bir yapay zekâda ölçmenin yanıltıcı olabileceğini gösteriyor."
+  },
+  {
+   "type": "bars",
+   "tag": "Örüntü 4",
+   "title": "Yerli markalar kendi ülkesinde bile zayıf",
+   "sub": "Türkçe sorular, Türkiye'den canlı arama · öneri sayısı",
+   "rows": [
+    [
+     "Philips · kahve makinesi",
+     23,
+     "acc",
+     "23/29"
+    ],
+    [
+     "Arzum · kahve makinesi",
+     5,
+     "gold",
+     "5/29"
+    ],
+    [
+     "Fakir · kahve makinesi",
+     0,
+     "red",
+     "0/29"
+    ],
+    [
+     "Samsung · televizyon",
+     17,
+     "acc",
+     "17/27"
+    ],
+    [
+     "Vestel · televizyon",
+     1,
+     "red",
+     "1/27"
+    ]
+   ],
+   "max": 29,
+   "note": "Yorumumuz: yapay zekânın okuduğu inceleme sitelerinde yer almak önemli olabilir.",
+   "say": "Dördüncü örüntü Türkiye'yi doğrudan ilgilendiriyor. Türkçe sorduğumuz kahve makinesi sorularında Philips yirmi dokuz cevabın yirmi üçünde önerildi; Arzum beş, Fakir sıfır. Televizyonda Samsung on yedi, Vestel yalnızca bir kez. Olası neden: yapay zekânın baktığı inceleme sitelerinde yer almayan yerli marka, kendi pazarında bile önerilerin dışında kalabiliyor."
+  },
+  {
+   "type": "loss",
+   "tag": "Özellik: Kayıp Nedeni Kartı",
+   "title": "Önerilmediğiniz soruda ne oldu?",
+   "card_title": "Önerilmediğiniz soru: kanıtlar",
+   "q": "\"En kaliteli ve uzun ömürlü spor ayakkabı markası hangisi?\" · Türkiye",
+   "lines": [
+    [
+     "Sizin yerinize önerilen: Marka A (4 cevabın 3'ünde), Marka C (4 cevabın 3'ünde), Marka F (4 cevabın 3'ünde).",
+     "gold"
+    ],
+    [
+     "Marka X bu sorunun hiçbir cevabında geçmedi.",
+     "red"
+    ],
+    [
+     "Sizin siteniz bu sorunun hiçbir cevabında kaynak gösterilmedi.",
+     "red"
+    ],
+    [
+     "Kullanılan üçüncü taraf kaynaklar: runrepeat.com, ciceksepeti.com, dalkilicspor.com, letsrun.com, onedio.com. Bu sitelerde yer alıp almadığınızı kontrol edin.",
+     "blue"
+    ]
+   ],
+   "note": "4 cevaba dayanır (ChatGPT 2, Claude 2; canlı arama, 14 Kasım 2026). Bunlar kanıttır, kesin neden değildir. Gerçek ölçüm; markalar harfle gösterildi.",
+   "say": "Peki bunu kendi markanız için nasıl görürsünüz? Bu bölümün özelliği: Kayıp Nedeni Kartı. AI SaaSavran, markanızın hiç önerilmediği ama en az bir rakibin önerildiği her soru için bu kartı çıkarıyor. Gerçek bir örnek: Türkiye'de dev bir spor ayakkabı markası, ona Marka X diyelim. En kaliteli ve uzun ömürlü spor ayakkabı markası hangisi sorusuna ChatGPT ve Claude'un canlı aramalı dört cevabında Marka X bir kez bile geçmedi. Kart önce yerine kimin önerildiğini gösteriyor: üç rakip marka, her biri dört cevabın üçünde. Sonra kanıtlar: markanın kendi sitesi hiçbir cevapta kaynak gösterilmedi; cevaplar üçüncü taraf sitelere dayandı. RunRepeat adlı inceleme sitesi dört cevabın dördünde de kaynaktı. Kart kesin neden iddia etmez, kanıtı gösterir; ama nereden başlayacağınızı söyler. Kart, ChatGPT, Claude ve Perplexity'nin canlı aramalı ölçümlerinde çalışıyor; Gemini ise ayrıca hafızadan ölçülüyor."
+  },
+  {
+   "type": "boxes",
+   "tag": "Ne yapmalı?",
+   "title": "Dev marka ya da değil: dört adım",
+   "ncol": 2,
+   "boxes": [
+    {
+     "t": "1. Soru soru ölçün",
+     "d": "Genel bilinirlik değil; müşterinin sorduğu her soruda önerilip önerilmediğiniz."
+    },
+    {
+     "t": "2. Her yapay zekâyı ayrı ölçün",
+     "d": "ChatGPT'de sıfır, Claude'da güçlü olabilirsiniz.",
+     "c": "gold"
+    },
+    {
+     "t": "3. Kaybettiğiniz sorunun kanıtına bakın",
+     "d": "Yerinize kim, hangi kaynaklara dayanarak önerildi?",
+     "c": "red"
+    },
+    {
+     "t": "4. Güncel kaynaklarda yer alın",
+     "d": "Kategorinizin inceleme sitelerinde doğru ve güncel bilgiyle bulunun.",
+     "c": "blue"
+    }
+   ],
+   "say": "Ne yapmalı? Dört adım. Bir: genel bilinirliğe değil, soru soru ölçüme bakın. İki: her yapay zekâyı ayrı ölçün; birinde sıfır, diğerinde güçlü olabilirsiniz. Üç: kaybettiğiniz sorunun kanıtına bakın; yerinize kim, hangi kaynaklara dayanarak önerildi? Dört: kategorinizin güncel inceleme sitelerinde doğru bilgiyle yer alın. Rakip karşılaştırması, ürün bilgi doğruluğu ve iyileştirme takibi de bu adımlarda yardımcı oluyor."
+  },
+  {
+   "type": "cta",
+   "tag": "Ücretsiz kontrol",
+   "title": "Yapay zekâ markanızı öneriyor mu, yoksa yerinize başkasını mı?",
+   "free": "ChatGPT · Gemini · Claude · Perplexity · Ücretsiz kontrol",
+   "disc": "Bunlar yapay zekânın cevaplarıdır. 12–19 Kasım 2026 ölçümleri; küçük örneklemler, tüm pazarı temsil etmez. Bu video bağımsız bir ölçümdür; hiçbir markayla reklam veya iş birliğimiz yoktur. Marka adları sahiplerine aittir.",
+   "say": "Hatırlatalım: bunlar yapay zekânın cevaplarıdır. Ölçümler küçük örneklemlerle yapıldı, tüm pazarı temsil etmez. Bu video bağımsız bir ölçümdür; hiçbir markayla reklam veya iş birliğimiz yoktur. ChatGPT, Gemini, Claude ve Perplexity markanızı öneriyor mu? Ücretsiz kontrol edin."
+  }
+ ]
+}

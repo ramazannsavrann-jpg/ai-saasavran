@@ -137,7 +137,19 @@ def s_cta(sc, t):
     s2 = sc.get("free", ""); f2 = font("SemiBold", 40); d.text(((W - d.textlength(s2, font=f2)) / 2, y + 180), s2, font=f2, fill=mix(ACC, a))
     if sc.get("disc"): text(d, sc["disc"], font("Medium", 26), X0, H - 170, mix(MUTED, ease((t - 1.0) / 0.5)), XR - X0)
     return im
-FN = {"title": s_title, "stats": s_stats, "bars": s_bars, "table": s_table, "net": s_net, "boxes": s_boxes, "cta": s_cta}
+def s_loss(sc, t):
+    """Kayıp Nedeni Kartı (uygulamadaki LossCardView düzeni): soru, hedef sonucu, kanıt satırları, alt not."""
+    im, d, y = base(sc, t); x1 = XR; a0 = ease((t - 0.3) / 0.5)
+    d.rounded_rectangle([X0, y, x1, H - 110], radius=24, fill=mix(CARD, a0)); d.rectangle([X0, y, X0 + 10, H - 110], fill=mix(RED, a0))
+    yy = y + 26; d.text((X0 + 40, yy), sc["card_title"], font=font("Bold", 38), fill=mix(RED, a0)); yy += 56
+    d.text((X0 + 40, yy), sc["q"], font=fit(d, sc["q"], "SemiBold", 34, x1 - X0 - 80), fill=mix(INK, a0)); yy += 58
+    for i, ln in enumerate(sc["lines"]):
+        a = ease((t - 0.9 - i * 0.5) / 0.5); c = col(ln[1]) if len(ln) > 1 else INK
+        d.ellipse([X0 + 44, yy + 14, X0 + 58, yy + 28], fill=mix(c, a))
+        yy = text(d, ln[0], font("Medium", 31), X0 + 76, yy, mix(INK, a), x1 - X0 - 120, 1.25) + 12
+    if sc.get("note"): text(d, sc["note"], font("Medium", 26), X0 + 40, H - 170, mix(MUTED, ease((t - 2.6) / 0.5)), x1 - X0 - 80)
+    return im
+FN = {"title": s_title, "stats": s_stats, "bars": s_bars, "table": s_table, "net": s_net, "boxes": s_boxes, "cta": s_cta, "loss": s_loss}
 
 def audio(i):
     for ext in ("pcm", "mp3"):
