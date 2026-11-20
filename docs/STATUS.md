@@ -121,6 +121,12 @@
 > **17 Kasım:** Strateji notlarının kodla eşleştirmesi, iş bölümü (marka/ürün ↔ kamu) ve iki oturumun çakışmama
 > kuralları: [`docs/OZELLIK-HARITASI.md`](OZELLIK-HARITASI.md). Yeni özellik önermeden önce okuyun.
 
+
+## 20 Kasım — ölçüm mantığı denetimi
+- Öneri algılama (engine/src/metrics.ts): olumsuzluk yalnız markanın geçtiği cümle parçasında sayılır; "kapalı havuz", "şikayet oranı düşük", "avoids hidden fees" artık olumsuz değil; "kaçınmanız gerekenler" başlığı altındaki maddeler ve "X yerine Y"deki X önerilmiş sayılmaz; ayrı numaralı listelerde sıra kendi listesinde; gündelik kelime olan marka adları ("garanti", "getir") yalnız büyük harfle ve -li eki olmadan sayılır. Test: engine/test/detection-audit.test.ts.
+- Öneri ilerleme metni (recommendations.ts): kazanılan ve kaybedilen sorular ayrı yazılır, net değişim doğru.
+- Soru havuzu (web/src/lib/sectors.ts `classifyPoolQuestion`): meslek/iş kurma/tanım soruları çıkarıldı (376 → 351); "en iyi … nedir?" soruları karşılaştırma sayılır, otomatik başlangıç sorularına girebilir. Test: engine/test/question-pool.test.ts.
+
 ## Ana sayfa yeni tasarım (18 Kasım 2026)
 - `/` ve `/tr/`: koyu üst bant, gerçek akıllı saat ölçümünün çubuk grafiği (17 Kasım, 48 cevap), 3 soru kartı, "Nasıl çalışır" adımları, rapor özellikleri simgeli kartlar, şeffaflık kutusu sayı kutularıyla, Plus'ta "Önerilen" etiketi, sonda çağrı bandı.
 - Ana butonlar artık üye olmadan kontrol sayfasına gider (`/tr/kontrol/`, `/check/`); ikinci buton hesap açma.

@@ -234,16 +234,22 @@ export function buildRecommendations(i: RecInput): Recommendation[] {
   for (const r of recs) {
     if (r.id === "absent_prompts") {
       r.check = en ? "Next measurement: are you mentioned in these questions?" : "Sonraki ölçüm: bu sorularda anılıyor musunuz?";
-      const before = absent.filter((p) => prev.has(p.prompt_text));
+      // 20 Kasım denetimi: "o zaman da yoktunuz" yalnız önceki ölçümde de anılmayan sorular; kazanılan ve kaybedilen ayrı ayrı yazılır
+      const stillAbsent = absent.filter((p) => { const b = prev.get(p.prompt_text); return b && b.target_mentioned === 0; }).length;
       const wasAbsent = [...prev.values()].filter((p) => p.target_mentioned === 0);
       if (prev.size > 0) {
         const fixed = wasAbsent.filter((p) => measured.some((m) => m.prompt_text === p.prompt_text && m.target_mentioned > 0)).length;
         const newly = absent.filter((p) => { const b = prev.get(p.prompt_text); return b && b.target_mentioned > 0; }).length;
+        const both = fixed > 0 && newly > 0
+          ? (en ? ` (gained ${fixed}, lost ${newly})` : ` (${fixed} soru kazanıldı, ${newly} soru kaybedildi)`)
+          : "";
         r.progress = fixed > newly
-          ? { status: "improved", text: en ? `Since the previous measurement you now appear in ${fixed} more question${fixed > 1 ? "s" : ""}.` : `Önceki ölçüme göre ${fixed} soruda artık anılıyorsunuz.` }
+          ? { status: "improved", text: en ? `Since the previous measurement you appear in ${fixed - newly} more question${fixed - newly > 1 ? "s" : ""}${both}.` : `Önceki ölçüme göre ${fixed - newly} soruda daha anılıyorsunuz${both}.` }
           : newly > fixed
-            ? { status: "worse", text: en ? `You dropped out of ${newly} question${newly > 1 ? "s" : ""} since the previous measurement.` : `Önceki ölçüme göre ${newly} soruda artık anılmıyorsunuz.` }
-            : { status: "same", text: en ? `Same as the previous measurement (${before.length} of these were missing then too).` : `Önceki ölçümle aynı (bunların ${before.length} tanesinde o zaman da yoktunuz).` };
+            ? { status: "worse", text: en ? `You dropped out of ${newly - fixed} more question${newly - fixed > 1 ? "s" : ""} than you gained since the previous measurement${both}.` : `Önceki ölçüme göre ${newly - fixed} soruda daha az anılıyorsunuz${both}.` }
+            : { status: "same", text: fixed > 0
+              ? (en ? `Net unchanged since the previous measurement${both}.` : `Önceki ölçüme göre net değişim yok${both}.`)
+              : (en ? `Same as the previous measurement (${stillAbsent} of these were missing then too).` : `Önceki ölçümle aynı (bunların ${stillAbsent} tanesinde o zaman da yoktunuz).`) };
       }
     } else if (r.id === "mentioned_not_recommended") {
       r.check = en ? "Next measurement: are you on the recommended list in these questions?" : "Sonraki ölçüm: bu sorularda öneri listesine giriyor musunuz?";
