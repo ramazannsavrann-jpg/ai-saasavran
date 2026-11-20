@@ -6,6 +6,13 @@
 - Eski kurallardaki "site adı ayrı cümle / okunuş" maddeleri geçersizdir.
 
 
+## FİRMA ADLARI + SİTE ADI EKRANDA (20 Kasım, kullanıcı kararı — ÖNCELİKLİ; aşağıdaki harf etiketi kuralları bunun yerine geçer)
+- Ölçülen gerçek firma adları (markalar, klinikler, hastaneler) grafiklerde, marka kartında ve açıklamada gerçek adlarıyla görünür. Marka A/B/C harf etiketi yalnız örnek (demo) veride kullanılır.
+- Ürünler (Model 1/2 gibi) bu kararın kapsamında değildir; ayrı karar verilene kadar mevcut düzen sürer.
+- Site adı (aisaasavran.com) Shorts/Reels sonunda ekranda kalır, seslendirmede hiç okunmaz (yukarıdaki 19 Kasım kuralı aynen geçerli).
+- Kapsam: 20 Kasım'dan sonra üretilen videolar. Yayınlanmış videolar değiştirilmez.
+
+
 Bu dal (`seslendirme`) videoların tek kaynağıdır. Yeni oturumda buradan devam edilir; sesler ve şablonlar her seferinde baştan aranmaz.
 
 ## Ses
@@ -27,7 +34,7 @@ Bu dal (`seslendirme`) videoların tek kaynağıdır. Yeni oturumda buradan deva
 
 ## MARKA KARTI + GÜVENLİ ALAN (15 Kasım, kullanıcı kararı — tüm Shorts/Reels için kalıcı)
 - **Sahne sırası:** 1) kanca (soru + motorlar + rozet) → 2) **marka kartı** → 3) sonuç sahneleri → kapanış.
-- **Marka kartı:** ölçülen gerçek adlar ekranın ortasında büyük etiketler halinde (alfabetik), altında "Sonuçlarda harflerle gösterilir / Shown as letters in the results" ve yöntem/tarih notu (`footer`). `make.py` bu sahneyi (`names`) kancadan sonra kendisi ekler; `order` içine "names" yazılırsa oradaki yeri kullanılır. Anlatımda kart için kısa bir cümle olur ("Bu markaları sorduk." / "We asked about these brands.").
+- **Marka kartı:** ölçülen gerçek adlar ekranın ortasında büyük etiketler halinde (alfabetik), altında "Sonuçlarda gerçek adlarla gösterilir / Shown with real names in the results" ve yöntem/tarih notu (`footer`). `make.py` bu sahneyi (`names`) kancadan sonra kendisi ekler; `order` içine "names" yazılırsa oradaki yeri kullanılır. Anlatımda kart için kısa bir cümle olur ("Bu markaları sorduk." / "We asked about these brands.").
 - **Güvenli alan:** Shorts/Reels arayüzü (başlık, kanal adı, beğen/yorum düğmeleri, "Videonuzu paylaşın") ekranın bazı yerlerini kapatır. Bu alanlara **hiçbir yazı, grafik, rakam** konmaz — hiçbir sahnede:
   - üst 160 px,
   - y > 1400 (alt kısım),
@@ -36,8 +43,8 @@ Bu dal (`seslendirme`) videoların tek kaynağıdır. Yeni oturumda buradan deva
 - **Otomatik kontrol:** `make.py <ayar> frames` ve render, her sahnenin son karesini kontrol eder; kapalı bölgede içerik varsa "GÜVENLİ ALAN HATASI" verip durur. Uzun yazılar sığana kadar otomatik küçülür. Yeni sahne eklerken de bu sabitler kullanılır.
 
 ## İçerik kuralları
-- Sonuçlarda markalar **harfli**: Marka A/B/C…, ürünler Model 1/2…. Harfler rastgele atanır (alfabetik değil).
-- Ölçülen markaların gerçek adları **kancadan sonraki marka kartında** alfabetik yazılır; hangi harfin hangi marka olduğu verilmez.
+- (20 Kasım) Sonuçlarda markalar ve firmalar gerçek adlarıyla yazılır; Marka A/B/C harf etiketi gerçek videolarda kullanılmaz. Ürünler (Model 1/2) bu kararın dışında, mevcut düzen sürer.
+- Ölçülen markaların gerçek adları **kancadan sonraki marka kartında** alfabetik yazılır ve grafiklerde de aynı adlarla görünür.
 - Her videoda: "Bunlar yapay zekânın cevaplarıdır" (kullanıcı: "bizim görüşümüz değildir" denmesin), tarih, örneklem, "tüm pazarı temsil etmez".
 - Global video İngilizce, Türkiye videosu Türkçe; YouTube başlık/açıklama/etiketler YALNIZ kanalın dilinde (bkz. KANAL KURALI). Başlık ≤ 100 karakter.
 - Kulaklık videosu formatı esas: marka oranı, motor karşılaştırması, soru bazında kayıp, rakip ürün, ürün doğruluğu, Google Shopping sırası, kaynaklar.
@@ -94,7 +101,7 @@ ffmpeg -i v.mp4 -i voice.wav -i music.wav -filter_complex "[1:a]aresample=44100,
 
 ## Kasım Fırsatları / Black Friday AI Picks serisi (14 Kasım)
 - TR adı "Kasım Fırsatları" (TR içerikte Black Friday denmez), EN adı "Black Friday AI Picks". Sıra: robot süpürge (yayında), kahve makinesi, spor ayakkabı, parfüm, gaming laptop, televizyon.
-- Her kategori: TR (sahip marka country=TR) + global (US) ayrı ölçüm; 8 soru, marka adı geçmez; ChatGPT+Claude canlı arama, Gemini aramasız. Sıralamada harfler rastgele, gerçek isimler altta alfabetik. Fiyat/indirim sadece güncel kaynakla doğrulanırsa.
+- Her kategori: TR (sahip marka country=TR) + global (US) ayrı ölçüm; 8 soru, marka adı geçmez; ChatGPT+Claude canlı arama, Gemini aramasız. Sıralamada gerçek firma adları kullanılır (20 Kasım). Fiyat/indirim sadece güncel kaynakla doğrulanırsa.
 - Robot süpürge ayarları: `video/kasim/robot-tr.json`, `robot-en.json`; metin `narration-robot-*.txt`. Sahne kesimleri silencedetect ile gerçek duraklardan.
 - Durum (14 Kasım): robot süpürge TR+EN (14 Kasım 18:00), kahve makinesi TR+EN (15 Kasım 18:00), spor ayakkabı yalnız TR (16 Kasım 19:00) yayın planında. OpenAI bakiyesi bitti → global spor ayakkabı ölçümünde ChatGPT eksik (run 1e75387f: Claude 16, ChatGPT 1). Kullanıcı kararı: seri bakiye gelene kadar DURDU. Devamında: US ayakkabı için yalnız ChatGPT'yi yeniden ölç, sonra parfüm, gaming laptop, TV.
 - Yeni yayın saatleri: TR 19:00 (16:00Z), EN 23:00 (20:00Z). Kapak: s1 karesi JPEG → vidiq_upload_image → taslakta thumbnailImageId (doğrulama bitene kadar YouTube reddeder, video yine yüklenir).
@@ -115,7 +122,7 @@ YouTube "ücretli tanıtım" kutusu kapalı kalır. Daha önce yüklenen videola
 Yatay 16:9, 6–8 dk, TR + EN ayrı. Veri tek videoda harcanmaz; her video bir soruya odaklanır:
 1. Motor farkları (robot süpürge, kahve, parfüm)  2. Yapay zekâ hangi sitelere bakıyor (kaynaklar)
 3. Dev markalar neden görünmüyor  4. Soruyu değiştir, kazanan değişsin (niyet)  5. Türkiye vs dünya
-Derslerde marka gerçek adıyla anılabilir; tam sıralama tablolarında harf kuralı sürer. Haftada 1 uzun video.
+Derslerde marka gerçek adıyla anılabilir; tam sıralama tablolarında da gerçek firma adları kullanılır (20 Kasım). Haftada 1 uzun video.
 - Durum güncellemesi (14 Kasım akşam): Kasım Fırsatları / Black Friday AI Picks 6 kategori TR+EN TAMAM ve planlandı: 14 robot süpürge, 15 kahve (18:00), 16 spor ayakkabı, 17 parfüm, 18 gaming laptop, 19 TV (TR 19:00, EN 23:00). Parfüm/laptop/TV ölçümleri Growth Lab 2 (fd1b32d1) içinde. Ayarlar video/kasim/*.json.
 
 
@@ -123,7 +130,7 @@ Derslerde marka gerçek adıyla anılabilir; tam sıralama tablolarında harf ku
 ### YouTube (@aisaasavran)
 - Veri/ölçüm Shorts: herkese açık. Eğitim videoları: GİZLİ (private).
 - Başlık, açıklama, etiketler yalnız kanalın dilinde (KANAL KURALI); başlık ≤ 100 karakter. Kapak: sorunun kendisi + motorların aynı şeyi söylemeyebileceği.
-- Grafiklerde markalar harfli (Marka/Hastane/Klinik A, B…; harfler rastgele). Gerçek adlar kancadan sonraki marka kartında alfabetik, hangi harf olduğu söylenmez. Adlar etiketlerde ve açıklamada hashtag olarak.
+- Grafiklerde markalar gerçek adlarıyla gösterilir (20 Kasım; harf etiketi yok). Gerçek adlar kancadan sonraki marka kartında alfabetik de yazılır. Adlar etiketlerde ve açıklamada hashtag olarak.
 - Notlar: "Bunlar yapay zekânın cevaplarıdır" ("bizim görüşümüz değildir" DENMEZ). Sağlıkta ek olarak "tıbbi tavsiye değildir".
 - Her ölçüm videosu açıklamasına: "Bu video bağımsız bir ölçümdür. Hiçbir markayla reklam veya iş birliğimiz yoktur." / "Independent measurement. We have no sponsorship or partnership with any brand shown."
 - Süre ≤ 58 sn (tek Instagram hikâyesine sığsın). TR seslendirme atempo 1.24, EN 1.2. "Ey Ay Saa, Savran".

@@ -238,7 +238,7 @@ def s_names(t, dur):
             x += tw + gap
         y += h + gap
     a2 = ease((t - 0.8) / 0.4)
-    sub = T.get("names_sub") or ("Sonuçlarda harflerle gösterilir" if LANG == "tr" else "Shown as letters in the results")
+    sub = T.get("names_sub") or ("Sonuçlarda gerçek adlarla gösterilir" if LANG == "tr" else "Shown with real names in the results")
     fs = font("SemiBold", 36); d.text(((W - d.textlength(sub, font=fs)) / 2, y + 30), sub, font=fs, fill=mix(MUTED, a2))
     ff = font("Medium", 28); yy = y + 100
     for ln in wrap(d, CFG.get("footer", ""), ff, XR - 80):
