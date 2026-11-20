@@ -3,8 +3,8 @@
 Mod: **ücretsiz kontrol** · Harcanan: **0 $** (tavan 0.4 $)
 
 ## Otomatik yapılanlar
-- IndexNow (Bing + Yandex): 0 sayfa bildirildi — değişen sayfa yok
-- 248 sayfa kontrol edildi, 151 sayfada sorun var
+- IndexNow (Bing + Yandex): 4 sayfa bildirildi — kabul edildi
+- 248 sayfa kontrol edildi, 152 sayfada sorun var
 - Site denetimi: 13/13 kontrol geçti
 
 ## Claude'un sitede yapacakları (sonraki zamanlanmış görev, PR olarak)
@@ -12,6 +12,7 @@ Mod: **ücretsiz kontrol** · Harcanan: **0 $** (tavan 0.4 $)
 - Sayfa /founder/: az metin (~224 kelime)
 - Sayfa /tr/kurucu/: az metin (~189 kelime)
 - Sayfa /methodology/: açıklama uzun (178)
+- Sayfa /tutorials/: açıklama uzun (186)
 - Sayfa /tr/: açıklama uzun (180)
 - Sayfa /tr/olcumler/turkiyede-yapay-zeka-gorunurlugu-analizi-yapan-bir-hizmet-onerir-misin/: az metin (~212 kelime)
 - Sayfa /measurements/what-are-the-best-home-security-camera-deals-for-black-friday-2026/: az metin (~215 kelime)

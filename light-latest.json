@@ -4,13 +4,13 @@
   "costUsd": 0,
   "capUsd": 0.4,
   "pages": 248,
-  "pagesWithIssues": 151,
+  "pagesWithIssues": 152,
   "auditPassed": 13,
   "auditTotal": 13,
   "indexnow": {
-    "sent": 0,
-    "status": 0,
-    "note": "değişen sayfa yok"
+    "sent": 4,
+    "status": 200,
+    "note": "kabul edildi"
   },
   "engines": {},
   "engineStatus": {},
@@ -21,6 +21,7 @@
     "Sayfa /founder/: az metin (~224 kelime)",
     "Sayfa /tr/kurucu/: az metin (~189 kelime)",
     "Sayfa /methodology/: açıklama uzun (178)",
+    "Sayfa /tutorials/: açıklama uzun (186)",
     "Sayfa /tr/: açıklama uzun (180)",
     "Sayfa /tr/olcumler/turkiyede-yapay-zeka-gorunurlugu-analizi-yapan-bir-hizmet-onerir-misin/: az metin (~212 kelime)",
     "Sayfa /measurements/what-are-the-best-home-security-camera-deals-for-black-friday-2026/: az metin (~215 kelime)",
@@ -193,6 +194,12 @@
       "url": "https://aisaasavran.com/methodology/",
       "issues": [
         "açıklama uzun (178)"
+      ]
+    },
+    {
+      "url": "https://aisaasavran.com/tutorials/",
+      "issues": [
+        "açıklama uzun (186)"
       ]
     },
     {
