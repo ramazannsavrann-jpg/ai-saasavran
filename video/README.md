@@ -188,7 +188,7 @@ Yeni video yükleyince ID'sini `yt/ayar.json`'a {lang, lists} ile ekle ve push e
 ## UZUN VİDEO (16:9) — 19 Kasım
 - Şablon: `video/uzun/uzun.py` (1920x1080). Ayar: `video/uzun/<konu>-<dil>.json` → `scenes` listesi; her sahnede `type` (title, stats, bars, table, net, boxes, cta), ekran metinleri ve `say` (o bölümün anlatımı).
 - Akış: `python3 uzun.py ayar.json frames` (önizleme) → `narr` (narration-<ad>-cNN-<dil>.txt yazar; push = TTS) → ses-out'ta hepsi TAMAM olunca `render --force` → `<ad>-<dil>.mp4` (bölüm süresi = o bölümün sesi; müzik sidechain).
-- Marka adı anlatımda "AI SaaSavran" yazılır (Gemini TTS doğru okuyor); "Ey Ay Saa Savran" yazımı kontrolde "Sağ Savran" diye duyulup HATA veriyor. Kapanış: TR "Site adresimiz: Ey Ay, Saas Savran, nokta com." EN "Our website is: A. I. SaaS Savran, dot com." (HATA olursa ikinci kez tekrar eklenir).
+- (GEÇERSİZ, 19 Kasım akşamı) Anlatımda site adı/adresi HİÇ söylenmez; kapanış "Ücretsiz kontrol edin." / "Check it free." ile biter (en üstteki kural).
 - Kapak: `video/uzun/kapak.py "başlık" "rozet" "alt satır" çıktı.jpg` ile sade 1280x720 (başlık + sarı bulgu rozeti). Açıklamada bölüm zaman damgaları (a01..aNN süreleri toplanarak).
 - **Uzun 3 (v2), 20 Kasım — "Dev markalar neden görünmüyor?"** (`uzun/devmarka3b-*.json`, ad `uzun3b-devmarka`, haftalık görev). İlk Uzun 3 (19 Kasım render, `uzun/dev-markalar-tr.mp4`) hiç yüklenmemişti; kapanışta site adı vardı, özellik bölümü yoktu → yeniden yapıldı, 10 bölüm, ~4:54.
   - TR: `n1mIYpg8Xlw` (vidIQ, gizli, 20 Kasım 21:00 TSİ = 18:00Z planlı), video `videolar` dalı `uzun/dev-markalar-v2-tr.mp4`, kapak `kapak/uzun3b-tr.jpg`.
