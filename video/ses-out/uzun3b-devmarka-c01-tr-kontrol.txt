@@ -1,0 +1,2 @@
+TAMAM
+seste duyulan: Nespresso, Armani, Philips. Herkesin tanıdığı markalar.  Peki yapay zekaya kahve makinesi, parfüm ya da robot süpürge sorduğunuzda bu markalar öneriliyor mu?  Ölçtük.  Chat GPT, kahve makinesi sorularında Nespresso'yu 16 cevabın hiçbirinde önermedi.  Armani, canlı aramalı 32 parfüm cevabının hiçbirinde önerilmedi.  Philips, robot süpürge sorulduğunda 24 cevapta 0.  Bu videoda verinin gösterdiği dört örüntüye, olası nedenlere ve bunu kendi markanız için nasıl görebileceğinize bakıyoruz.

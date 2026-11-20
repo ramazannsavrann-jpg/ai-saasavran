@@ -1,0 +1,2 @@
+TAMAM
+seste duyulan: Pattern 1, an AI answering from memory and an AI searching live, don't recommend the same brands.  Gemini recommended Nespresso in 13 of 16 answers.  Claude in 3 of 15, chat GPT, never.  Our reading, memory may recall brands people have talked about for years, while LiveSearch reads what today's review sites say.  So past fame doesn't automatically turn into recommendations from a LiveSearch AI.

@@ -1,0 +1,2 @@
+TAMAM
+seste duyulan: Yöntem şöyle. Kahve makinesi, parfüm, televizyon, robot süpürge, oyun leptapı ve telefon gibi kategorilerde 8er gerçek alıcı sorusu sorduk. Sorularda marka adı yok.  Chat GPT ve Cloud canlı internet aramasıyla, Cemina ise arama olmadan, hafızasıyla cevap verdi.  Perklexity'de artık ölçüyoruz ama bu kategorilerin ölçümünde yoktu.  Sonra her markanın kaç cevapta önerildiğini, her yapay zeka için ayrı saydık.

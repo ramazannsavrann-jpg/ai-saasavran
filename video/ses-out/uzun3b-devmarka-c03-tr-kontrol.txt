@@ -1,0 +1,2 @@
+TAMAM
+seste duyulan: Önce tablo.  Nespresso, canlı aramalı 31 cevabın yalnızca 3'ünde önerildi.  Hafızadan cevap veren gemini ise 16 cevabın 13'ünde önerdi.  Tomford'ta da benzer, canlı aramada 3, gemini de 10.  Türkiye'de Adidas, canlı aramada 32 cevabın 9'unda, gemini de 16 cevabın 15'inde önerildi.  Armani Parfümde ve Philips Televizyonda canlı aramada hiç önerilmedi.  Gemini tarafında örneklem küçük. Bu farkları kesin bir kural değil, dikkat çeken bir işaret olarak okuyun.

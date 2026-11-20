@@ -1,0 +1,2 @@
+TAMAM
+seste duyulan: Here's the method. In categories like Coffee Machines, Perfume, TVs, Robot Vacuums, Gaming  Laptops and Phones, we asked 8 real buyer questions each, with no brand names. ChatGPT and Claude  answered with live web search. Gemini answered without search, from memory. We now measure  perplexity too, but it wasn't part of these category runs. Then we counted how many  answers recommended each brand, separately for each AI.

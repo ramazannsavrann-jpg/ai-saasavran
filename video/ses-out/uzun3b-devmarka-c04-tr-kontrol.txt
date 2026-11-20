@@ -1,0 +1,2 @@
+TAMAM
+seste duyulan: Birinci örüntü, hafızadan cevap veren yapay zeka ile canlı arama yapan yapay zeka aynı markaları önermiyor.  Nespresso'yu Gemini 16 cevabın 13'ünde önerdi.  Cloud 15 cevabın 3'ünde.  ChatGPT hiç.  Yorumumuz şu, hafıza yıllardır konuşulan markaları hatırlıyor olabilir.  Canlı arama ise bugünkü inceleme sitelerinde ne yazdığını okuyor.  Yani geçmişteki ün, canlı aramalı yapay zekada kendiliğinden öneriye dönüşmüyor.

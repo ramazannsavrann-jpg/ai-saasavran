@@ -1,0 +1,2 @@
+TAMAM
+seste duyulan: Nespresso, Armani, Philips. Everyone knows these brands, but when you ask AI for a coffee machine,  a perfume, or a robot vacuum, do they get recommended? We measured it.  ChatGPT recommended Nespresso in 0 of 16 coffee machine answers. Armani was recommended in  none of 32 live search perfume answers. Philips scored 0 out of 24 on robot vacuums.  In this video, we look at four patterns in the data, the possible reasons,  and how to see this for your own brand.
