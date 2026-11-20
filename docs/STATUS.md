@@ -491,7 +491,7 @@
 ## v1.33 (14 Kasım 2026): bot koruması ve eğitim sayfası
 
 - **Ücretsiz kontrolde bot koruması (Cloudflare Turnstile):** `TURNSTILE_SITE_KEY` ve `TURNSTILE_SECRET` GitHub Secret'ları tanımlıysa form doğrulama kutusu gösterir ve sunucu doğrulamayan isteği 403 ile reddeder. **Anahtarlar henüz tanımlı değil; koruma kapalı, form eskisi gibi çalışıyor.**
-- **Eğitim sayfası:** `/tutorials/` ve `/tr/egitim/`: 8 dersin yazılı adımları. YouTube kimliği `web/site/tutorials.mjs` içinde ders başına girilir; kimlik yoksa bağlantı uydurulmaz, yalnız kanal bağlantısı görünür. **19 Kasım:** 8 eğitimin TR+EN videoları (16) YouTube'da liste dışı (sitede oynar; kanal akışında ve aramada görünmez, 19 Kasım akşam kararı); kimlikler `web/src/lib/tutorial-videos.json`'da (`public: true`), eğitim sayfasında ve kayıt sayfasında (Eğitim 2) oynatıcılar görünür.
+- **Eğitim sayfası:** `/tutorials/` ve `/tr/egitim/`: 10 dersin yazılı adımları. YouTube kimliği `web/site/tutorials.mjs` içinde ders başına girilir; kimlik yoksa bağlantı uydurulmaz, yalnız kanal bağlantısı görünür. **19 Kasım:** 10 eğitimin TR+EN videoları (20; Eğitim 9 Ürünler, 10 Paylaşım ve haftalık ölçüm 20 Kasım'da eklendi) YouTube'da liste dışı (sitede oynar; kanal akışında ve aramada görünmez, 19 Kasım akşam kararı); kimlikler `web/src/lib/tutorial-videos.json`'da (`public: true`), eğitim sayfasında ve kayıt sayfasında (Eğitim 2) oynatıcılar görünür.
 
 ## v1.34 (14 Kasım 2026): üst menü taşması düzeltildi
 

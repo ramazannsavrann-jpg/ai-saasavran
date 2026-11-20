@@ -467,7 +467,7 @@ for (const lang of ["en", "tr"]) {
   const en = lang === "en"; const path = tutorialsPath(lang);
   write(path, page({ lang, alt: tutorialsPath(en ? "tr" : "en"), path,
     title: en ? "Tutorials: how to use AI SaaSavran" : "Eğitim: AI SaaSavran nasıl kullanılır?",
-    description: en ? "Eight short step-by-step lessons: free check, adding a brand, questions and competitors, first measurement, reading the report, sources, recommendations." : "Sekiz kısa, adım adım ders: ücretsiz kontrol, marka ekleme, soru ve rakipler, ilk ölçüm, raporu okuma, kaynaklar, öneriler.",
+    description: en ? "Ten short step-by-step lessons: free check, adding a brand, questions and competitors, first measurement, reading the report, sources, recommendations, products, sharing and weekly runs." : "On kısa, adım adım ders: ücretsiz kontrol, marka ekleme, soru ve rakipler, ilk ölçüm, raporu okuma, kaynaklar, öneriler, ürünler, paylaşım ve haftalık ölçüm.",
     body: tutorialsHtml(lang), schema: [tutorialsSchema(lang, SITE.url), crumbs([["AI SaaSavran", en ? "/" : "/tr/"], [en ? "Tutorials" : "Eğitim", path]])] }));
 }
 
