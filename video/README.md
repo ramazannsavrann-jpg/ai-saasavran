@@ -1,7 +1,7 @@
 # AI SaaSavran video düzeni (kalıcı)
 
 ## YAYIN SAATİ: PRIME'DAN 1 SAAT ÖNCE (21 Kasım, kullanıcı kuralı — KALICI, tüm videolar)
-- Her video, hedef ülkenin prime saatinden 1 saat önce yayınlanır. TR Shorts 18:00, TR uzun 20:00 (TSİ). ABD (EN) 18:00 ET = 00:00Z (kışın TSİ 02:00 değil 03:00'dan 1 saat önce: 02:00 TSİ; yaz saatinde 01:00 TSİ).
+- Her video, hedef ülkenin prime saatinden 1 saat önce yayınlanır. TR: Shorts 18:00, uzun 20:00 (TSİ). ABD (EN): prime 19:00 ET → yayın 18:00 ET = 23:00Z = 02:00 TSİ (kış saati); ABD yaz saatinde 22:00Z = 01:00 TSİ.
 - Aynı kanala aynı saate iki video konmaz; ikinci video ertesi güne veya uzun video saatine kayar.
 - Toplu yükleme yapılmaz (EN kanalı 20 Kasım'da 18 Short'u bir günde aldı, izlenme 0–2). Kanal başına günde en fazla 1 veri Short'u.
 - Kapak: her yüklemede s1 karesi JPEG ayrıca yüklenir ve Studio listesinde kontrol edilir (21 Kasım: YouTube EN gözlükte otomatik orta sahneyi seçmişti).
