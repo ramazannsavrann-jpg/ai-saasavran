@@ -8,7 +8,8 @@
 
 ## FİRMA ADLARI + SİTE ADI EKRANDA (20 Kasım, kullanıcı kararı — ÖNCELİKLİ; aşağıdaki harf etiketi kuralları bunun yerine geçer)
 - Ölçülen gerçek firma adları (markalar, klinikler, hastaneler) grafiklerde, marka kartında ve açıklamada gerçek adlarıyla görünür. Marka A/B/C harf etiketi yalnız örnek (demo) veride kullanılır.
-- Ürünler (Model 1/2 gibi) bu kararın kapsamında değildir; ayrı karar verilene kadar mevcut düzen sürer.
+- Ürün adları da gerçek adlarla yazılır (Model 1/2 gibi etiketler artık kullanılmaz).
+- Genel ilke (20 Kasım): ölçülen marka, firma, klinik, hastane ve ürünler gerçek adlarıyla gösterilir. Harf/numara etiketi yalnız örnek (demo) veride kalır.
 - Site adı (aisaasavran.com) Shorts/Reels sonunda ekranda kalır, seslendirmede hiç okunmaz (yukarıdaki 19 Kasım kuralı aynen geçerli).
 - Kapsam: 20 Kasım'dan sonra üretilen videolar. Yayınlanmış videolar değiştirilmez.
 
@@ -43,7 +44,7 @@ Bu dal (`seslendirme`) videoların tek kaynağıdır. Yeni oturumda buradan deva
 - **Otomatik kontrol:** `make.py <ayar> frames` ve render, her sahnenin son karesini kontrol eder; kapalı bölgede içerik varsa "GÜVENLİ ALAN HATASI" verip durur. Uzun yazılar sığana kadar otomatik küçülür. Yeni sahne eklerken de bu sabitler kullanılır.
 
 ## İçerik kuralları
-- (20 Kasım) Sonuçlarda markalar ve firmalar gerçek adlarıyla yazılır; Marka A/B/C harf etiketi gerçek videolarda kullanılmaz. Ürünler (Model 1/2) bu kararın dışında, mevcut düzen sürer.
+- (20 Kasım) Sonuçlarda markalar ve firmalar gerçek adlarıyla yazılır; Marka A/B/C harf etiketi gerçek videolarda kullanılmaz. Ürün adları da gerçek adlarla yazılır.
 - Ölçülen markaların gerçek adları **kancadan sonraki marka kartında** alfabetik yazılır ve grafiklerde de aynı adlarla görünür.
 - Her videoda: "Bunlar yapay zekânın cevaplarıdır" (kullanıcı: "bizim görüşümüz değildir" denmesin), tarih, örneklem, "tüm pazarı temsil etmez".
 - Global video İngilizce, Türkiye videosu Türkçe; YouTube başlık/açıklama/etiketler YALNIZ kanalın dilinde (bkz. KANAL KURALI). Başlık ≤ 100 karakter.
