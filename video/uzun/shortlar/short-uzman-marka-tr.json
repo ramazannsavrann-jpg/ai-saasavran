@@ -1,0 +1,119 @@
+{
+ "name": "short-uzman-marka-tr",
+ "voice_pcm": "/home/claude/ai-saasavran/video/ses-out/ses-short-uzman-marka-tr.pcm",
+ "atempo": 1.12,
+ "engines": [
+  "ChatGPT",
+  "Claude"
+ ],
+ "sentences": 12,
+ "names_list": [
+  "De'Longhi",
+  "Dell",
+  "Lenovo",
+  "Philips",
+  "Roborock",
+  "Siemens"
+ ],
+ "footer": "ChatGPT ve Claude · canlı arama · ABD'den İngilizce sorular · 14 Kasım 2026",
+ "t": {
+  "hook": "Yapay zekâ robot süpürgede Philips'i hiç anmadı",
+  "badge": "Philips: 0 / 24",
+  "hook2": "Kategorinin uzmanı mı, dev marka mı?",
+  "note": "ChatGPT ve Claude · canlı arama · ABD, İngilizce sorular · 14 Kasım 2026",
+  "names_title": "Bu markalara baktık",
+  "cta": "Markanız kendi kategorisinde öneriliyor mu?",
+  "cta2": "Tam analiz kanalda: Dev Markalar Neden Görünmüyor?",
+  "free": "Ücretsiz kontrol edin",
+  "disc": "Bunlar yapay zekânın cevaplarıdır · Küçük örneklem, tüm pazarı temsil etmez · Bağımsız ölçüm, hiçbir markayla iş birliğimiz yoktur"
+ },
+ "scenes": [
+  {
+   "type": "hook",
+   "from": 0
+  },
+  {
+   "type": "names",
+   "from": 2
+  },
+  {
+   "type": "bars",
+   "from": 4,
+   "tag": "Robot süpürge",
+   "title": "Robot süpürge önerileri",
+   "sub": "Öneren cevap sayısı · 24 cevap",
+   "max": 24,
+   "rows": [
+    [
+     "Roborock",
+     22,
+     "acc",
+     "22/24"
+    ],
+    [
+     "Philips",
+     0,
+     "red",
+     "0/24"
+    ]
+   ]
+  },
+  {
+   "type": "bars",
+   "from": 5,
+   "tag": "Kahve makinesi",
+   "title": "Kahve makinesi önerileri",
+   "sub": "Öneren cevap sayısı · 31 cevap",
+   "max": 31,
+   "rows": [
+    [
+     "De'Longhi",
+     20,
+     "acc",
+     "20/31"
+    ],
+    [
+     "Siemens",
+     0,
+     "red",
+     "0/31"
+    ]
+   ]
+  },
+  {
+   "type": "bars",
+   "from": 6,
+   "tag": "Oyun laptopu",
+   "title": "Oyun laptopu önerileri",
+   "sub": "Öneren cevap sayısı · 27 cevap",
+   "max": 27,
+   "rows": [
+    [
+     "Lenovo",
+     19,
+     "acc",
+     "19/27"
+    ],
+    [
+     "Dell",
+     3,
+     "red",
+     "3/27"
+    ]
+   ]
+  },
+  {
+   "type": "text",
+   "from": 7,
+   "tag": "Ne gösteriyor?",
+   "lead": "Veri:",
+   "main": "o işin uzmanı olarak bilinen markalar öne çıkıyor.",
+   "tip": "Olası neden: inceleme siteleri de bu markaları öne çıkarıyor olabilir.",
+   "small": "Bunlar yapay zekânın cevaplarıdır. Küçük örneklem, tüm pazarı temsil etmez."
+  },
+  {
+   "type": "cta",
+   "from": 10
+  }
+ ]
+}

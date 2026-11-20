@@ -1,0 +1,135 @@
+{
+ "name": "short-turkce-sordum-tr",
+ "voice_pcm": "/home/claude/ai-saasavran/video/ses-out/ses-short-turkce-sordum-tr.pcm",
+ "atempo": 1.12,
+ "engines": [
+  "ChatGPT",
+  "Claude"
+ ],
+ "sentences": 9,
+ "t": {
+  "hook": "Türkçe sordum, cevap yabancı siteden geldi",
+  "badge": "Sadece %10'u .tr",
+  "hook2": "Telefon, televizyon, laptop, kahve makinesi… Türkiye'den, Türkçe sorduk.",
+  "note": "ChatGPT ve Claude · canlı arama · 246 cevap · 12–19 Kasım 2026",
+  "cta": "Sizin kategorinizde hangi siteler?",
+  "cta2": "Tam analiz kanalda: Yapay Zekâ Hangi Sitelere Bakıyor?",
+  "free": "Ücretsiz kontrol edin",
+  "disc": "Bunlar yapay zekânın cevaplarıdır · Küçük örneklem, tüm pazarı temsil etmez · Bağımsız ölçüm, hiçbir markayla iş birliğimiz yoktur"
+ },
+ "scenes": [
+  {
+   "type": "hook",
+   "from": 0
+  },
+  {
+   "type": "bars",
+   "from": 2,
+   "tag": "Türkçe sorular",
+   "title": "En çok kaynak gösterilen siteler",
+   "sub": "Elektronik ve ev aletleri · kaynak gösterildiği cevap (246 cevaptan)",
+   "max": 44,
+   "rows": [
+    [
+     "techradar.com",
+     44,
+     "acc",
+     "44"
+    ],
+    [
+     "akakce.com",
+     36,
+     "gold",
+     "36"
+    ],
+    [
+     "tomsguide.com",
+     35,
+     "acc",
+     "35"
+    ],
+    [
+     "rtings.com",
+     20,
+     "acc",
+     "20"
+    ],
+    [
+     "donanimhaber.com",
+     19,
+     "gold",
+     "19"
+    ]
+   ],
+   "note": "İlk 5'in 3'ü İngilizce site"
+  },
+  {
+   "type": "stat",
+   "from": 4,
+   "tag": "Kaynak uzantısı",
+   "value": 10,
+   "fmt": "%{}",
+   "title": "Kaynak bağlantılarının yalnızca bu kadarı .tr uzantılı",
+   "sub": "724 bağlantı. Akakçe gibi bazı Türk siteleri .com uzantılı; bu sayıya dahil değil."
+  },
+  {
+   "type": "bars",
+   "from": 5,
+   "static": true,
+   "tag": "Türk siteleri",
+   "title": "Öne çıkan Türk siteleri",
+   "sub": "Elektronik ve ev aletleri · kaynak gösterildiği cevap (246 cevaptan)",
+   "max": 44,
+   "rows": [
+    [
+     "techradar.com",
+     44,
+     "acc",
+     "44",
+     true
+    ],
+    [
+     "akakce.com",
+     36,
+     "gold",
+     "36"
+    ],
+    [
+     "tomsguide.com",
+     35,
+     "acc",
+     "35",
+     true
+    ],
+    [
+     "rtings.com",
+     20,
+     "acc",
+     "20",
+     true
+    ],
+    [
+     "donanimhaber.com",
+     19,
+     "gold",
+     "19"
+    ]
+   ],
+   "note": "Sarı: Türk siteleri",
+   "note_col": "gold"
+  },
+  {
+   "type": "text",
+   "from": 6,
+   "tag": "Ne anlama geliyor?",
+   "lead": "Türkçe cevaplarda bile",
+   "main": "yabancı inceleme siteleri belirleyici olabiliyor.",
+   "tip": "Önce kendi kategorinizin kaynak sitelerini bulun.",
+   "small": "Bunlar yapay zekânın cevaplarıdır. Küçük örneklem."
+  },
+  {
+   "type": "cta",
+   "from": 7
+  }
+ ]
+}

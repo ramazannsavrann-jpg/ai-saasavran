@@ -1,0 +1,102 @@
+{
+ "name": "short-yerli-marka-tr",
+ "voice_pcm": "/home/claude/ai-saasavran/video/ses-out/ses-short-yerli-marka-tr.pcm",
+ "atempo": 1.12,
+ "engines": [
+  "ChatGPT",
+  "Claude"
+ ],
+ "sentences": 11,
+ "names_list": [
+  "Arzum",
+  "Fakir",
+  "Philips",
+  "Samsung",
+  "Vestel"
+ ],
+ "footer": "ChatGPT ve Claude · canlı arama · Türkiye'den Türkçe sorular · 14 Kasım 2026",
+ "t": {
+  "hook": "Yerli markayı yapay zekâ önermiyor mu?",
+  "badge": "Fakir: 0 / 29",
+  "hook2": "Kahve makinesi ve televizyon soruları, Türkçe sorduk.",
+  "note": "ChatGPT ve Claude · canlı arama · Türkiye · 14 Kasım 2026",
+  "names_title": "Bu markalara baktık",
+  "cta": "Markanız önerilenler arasında mı?",
+  "cta2": "Tam analiz kanalda: Dev Markalar Neden Görünmüyor?",
+  "free": "Ücretsiz kontrol edin",
+  "disc": "Bunlar yapay zekânın cevaplarıdır · Küçük örneklem, tüm pazarı temsil etmez · Bağımsız ölçüm, hiçbir markayla iş birliğimiz yoktur"
+ },
+ "scenes": [
+  {
+   "type": "hook",
+   "from": 0
+  },
+  {
+   "type": "names",
+   "from": 2
+  },
+  {
+   "type": "bars",
+   "from": 4,
+   "tag": "Kahve makinesi",
+   "title": "Kahve makinesi önerileri",
+   "sub": "Öneren cevap sayısı · 29 cevap",
+   "max": 29,
+   "rows": [
+    [
+     "Philips",
+     23,
+     "acc",
+     "23/29"
+    ],
+    [
+     "Arzum",
+     5,
+     "gold",
+     "5/29"
+    ],
+    [
+     "Fakir",
+     0,
+     "red",
+     "0/29"
+    ]
+   ]
+  },
+  {
+   "type": "bars",
+   "from": 6,
+   "tag": "Televizyon",
+   "title": "Televizyon önerileri",
+   "sub": "Öneren cevap sayısı · 27 cevap",
+   "max": 27,
+   "rows": [
+    [
+     "Samsung",
+     17,
+     "acc",
+     "17/27"
+    ],
+    [
+     "Vestel",
+     1,
+     "red",
+     "1/27"
+    ]
+   ]
+  },
+  {
+   "type": "text",
+   "from": 7,
+   "tag": "Olası neden",
+   "lead": "Yorumumuz:",
+   "main": "yapay zekânın baktığı inceleme sitelerinde yerli markalar daha az yer alıyor olabilir.",
+   "tip": "Gözlem bu; kesin neden değil.",
+   "small": "Bunlar yapay zekânın cevaplarıdır. Küçük örneklem, tüm pazarı temsil etmez."
+  },
+  {
+   "type": "cta",
+   "from": 9
+  }
+ ]
+}
