@@ -23,10 +23,10 @@
   "hook2": "Category specialist or giant brand?",
   "note": "ChatGPT and Claude · live web search · US · Nov 14, 2026",
   "names_title": "Brands we checked",
-  "cta": "Is your brand recommended in its own category?",
-  "cta2": "Full analysis on the channel: Why Don't Big Brands Show Up?",
+  "cta": "Is your brand recommended?",
+  "cta2": "Full video on the channel: Why are big brands invisible to AI?",
   "free": "Check yours for free",
-  "disc": "These are AI answers · Small sample, not representative of the whole market · Independent measurement, no sponsorship or partnership with any brand shown"
+  "disc": "These are AI answers · Small sample · Independent measurement, no sponsorship"
  },
  "scenes": [
   {
@@ -116,5 +116,14 @@
    "type": "cta",
    "from": 13
   }
+ ],
+ "starts": [
+  0.0,
+  7.7,
+  14.1,
+  20.05,
+  24.8,
+  30.1,
+  41.15
  ]
 }

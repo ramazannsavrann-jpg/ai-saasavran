@@ -82,7 +82,8 @@ def voice():
 if __name__ == "__main__":
     w, vdur, bounds, sil = voice()
     if len(bounds) != C["sentences"]: sys.exit(f"Cümle sınırı bulunamadı: {len(bounds)} / {C['sentences']}")
-    starts = [bounds[s["from"]] for s in C["scenes"]]; end = vdur + 1.6
+    if any(b2 <= b1 for b1, b2 in zip(bounds, bounds[1:])) and not C.get("starts"): sys.exit(f"Cümle başları sırasız: {bounds} → ayara 'starts' yaz")
+    starts = C.get("starts") or [bounds[s["from"]] for s in C["scenes"]]; end = vdur + 1.6
     SC = [(f"p{i+1}", FN[s["type"]](s), round((starts[i + 1] if i + 1 < len(starts) else end) - starts[i], 2)) for i, s in enumerate(C["scenes"])]
     print("ses", round(vdur, 1), "sn · cümle başları", bounds); print("sahneler", [(n, d) for n, _, d in SC], "toplam", round(sum(d for *_, d in SC), 1))
     os.chdir(OUT); ok = True
