@@ -1,0 +1,494 @@
+{
+ "out": "tr",
+ "lang": "tr",
+ "order": [
+  "s1",
+  "names",
+  "s2",
+  "s3",
+  "s4",
+  "shop",
+  "net",
+  "s8"
+ ],
+ "n": 16,
+ "n2": 48,
+ "names": "Akıllı gözlük: Amazon Echo Frames, Bose Frames, Even Realities, Meta, RayNeo, Rokid, Solos, Viture, Xreal",
+ "names_list": [
+  "Amazon Echo Frames",
+  "Bose Frames",
+  "Even Realities",
+  "Meta",
+  "RayNeo",
+  "Rokid",
+  "Solos",
+  "Viture",
+  "Xreal"
+ ],
+ "footer": "ChatGPT, Claude, Perplexity: canlı web araması (ABD) · Gemini: model bilgisi · 20 Kas 2026",
+ "brands": [
+  [
+   "Meta",
+   47
+  ],
+  [
+   "Xreal",
+   19
+  ],
+  [
+   "Viture",
+   16
+  ],
+  [
+   "Even Realities",
+   12
+  ],
+  [
+   "RayNeo",
+   12
+  ],
+  [
+   "Rokid",
+   12
+  ],
+  [
+   "Solos",
+   9
+  ],
+  [
+   "Echo Frames",
+   2
+  ],
+  [
+   "Bose Frames",
+   0
+  ]
+ ],
+ "engines": [
+  [
+   "ChatGPT",
+   "/16"
+  ],
+  [
+   "Claude",
+   "/16"
+  ],
+  [
+   "Perplexity",
+   "/16"
+  ],
+  [
+   "Gemini",
+   "/16"
+  ]
+ ],
+ "gemini_label": "Hafızadan",
+ "eng_rows": [
+  [
+   "Meta",
+   16,
+   16,
+   15,
+   16
+  ],
+  [
+   "Xreal",
+   8,
+   3,
+   8,
+   11
+  ],
+  [
+   "Viture",
+   3,
+   8,
+   5,
+   5
+  ],
+  [
+   "Echo Frames",
+   0,
+   2,
+   0,
+   12
+  ],
+  [
+   "Bose Frames",
+   0,
+   0,
+   0,
+   8
+  ]
+ ],
+ "eng_hl": [
+  "Bose Frames"
+ ],
+ "questions": [
+  [
+   "Video kaydı için en iyisi?",
+   [
+    [
+     "Meta",
+     "6/6",
+     false
+    ],
+    [
+     "Rokid",
+     "4/6",
+     false
+    ],
+    [
+     "Xreal",
+     "0/6",
+     true
+    ]
+   ]
+  ],
+  [
+   "300 doların altında?",
+   [
+    [
+     "Meta",
+     "6/6",
+     false
+    ],
+    [
+     "Viture",
+     "4/6",
+     false
+    ],
+    [
+     "Oakley Meta",
+     "0/6",
+     true
+    ]
+   ]
+  ],
+  [
+   "Teknoloji meraklısına hediye?",
+   [
+    [
+     "Meta",
+     "6/6",
+     false
+    ],
+    [
+     "Xreal",
+     "6/6",
+     false
+    ],
+    [
+     "Even Realities",
+     "1/6",
+     true
+    ]
+   ]
+  ],
+  [
+   "Numaralı camla her gün?",
+   [
+    [
+     "Meta",
+     "6/6",
+     false
+    ],
+    [
+     "Even Realities",
+     "4/6",
+     false
+    ],
+    [
+     "Xreal",
+     "0/6",
+     true
+    ]
+   ]
+  ]
+ ],
+ "shop": {
+  "rows": [
+   [
+    "HTC Vive Eagle",
+    "—",
+    "#7",
+    true
+   ],
+   [
+    "Meta (Ray-Ban)",
+    "#1",
+    "#2",
+    false
+   ],
+   [
+    "Solos",
+    "#7",
+    "#6",
+    false
+   ],
+   [
+    "Even Realities",
+    "#4",
+    "#9",
+    false
+   ],
+   [
+    "Xreal",
+    "#2",
+    "#11",
+    false
+   ],
+   [
+    "Viture",
+    "#3",
+    "—",
+    false
+   ]
+  ]
+ },
+ "net": {
+  "left": [
+   [
+    "meta.com",
+    15
+   ],
+   [
+    "tomsguide.com",
+    7
+   ],
+   [
+    "vr.org",
+    6
+   ],
+   [
+    "memeburn.com",
+    5
+   ],
+   [
+    "the-gadgeteer.com",
+    5
+   ],
+   [
+    "dymesty.com",
+    5
+   ]
+  ],
+  "right": [
+   "Meta",
+   "Xreal",
+   "Viture",
+   "Even Realities",
+   "RayNeo",
+   "Rokid"
+  ],
+  "links": [
+   [
+    0,
+    0,
+    15
+   ],
+   [
+    0,
+    1,
+    7
+   ],
+   [
+    0,
+    2,
+    3
+   ],
+   [
+    0,
+    3,
+    4
+   ],
+   [
+    0,
+    4,
+    1
+   ],
+   [
+    0,
+    5,
+    2
+   ],
+   [
+    1,
+    0,
+    7
+   ],
+   [
+    1,
+    1,
+    5
+   ],
+   [
+    1,
+    2,
+    3
+   ],
+   [
+    1,
+    3,
+    1
+   ],
+   [
+    1,
+    4,
+    2
+   ],
+   [
+    1,
+    5,
+    2
+   ],
+   [
+    2,
+    0,
+    6
+   ],
+   [
+    2,
+    1,
+    2
+   ],
+   [
+    2,
+    2,
+    5
+   ],
+   [
+    2,
+    3,
+    2
+   ],
+   [
+    2,
+    4,
+    4
+   ],
+   [
+    2,
+    5,
+    3
+   ],
+   [
+    3,
+    0,
+    5
+   ],
+   [
+    3,
+    1,
+    2
+   ],
+   [
+    3,
+    2,
+    3
+   ],
+   [
+    3,
+    3,
+    4
+   ],
+   [
+    3,
+    4,
+    3
+   ],
+   [
+    3,
+    5,
+    1
+   ],
+   [
+    4,
+    0,
+    5
+   ],
+   [
+    4,
+    1,
+    3
+   ],
+   [
+    4,
+    2,
+    3
+   ],
+   [
+    4,
+    3,
+    3
+   ],
+   [
+    4,
+    4,
+    4
+   ],
+   [
+    5,
+    0,
+    5
+   ],
+   [
+    5,
+    3,
+    1
+   ],
+   [
+    5,
+    4,
+    1
+   ],
+   [
+    5,
+    5,
+    4
+   ]
+  ]
+ },
+ "sources": [],
+ "t": {
+  "hook": "Kasım indirimlerinde yapay zekâ hangi akıllı gözlüğü öneriyor?",
+  "badge": "Aynı mı söylüyorlar?",
+  "hook2": "ABD verisi · 9 marka · 8 alıcı sorusu",
+  "note": "Bunlar yapay zekânın cevaplarıdır.",
+  "names_title": "Cevaplarda en çok geçen markalar",
+  "names_sub": "Alfabetik sırayla",
+  "tag_brands": "Anılan markalar",
+  "who": "Kimin adı geçti?",
+  "who_sub": "ChatGPT + Claude + Perplexity, 48 canlı aramalı cevap (ABD)",
+  "tag_eng": "Yapay zekâ karşılaştırması",
+  "eng": "Yapay zekâlar anlaşamıyor",
+  "eng_sub": "Markanın adının geçtiği cevap sayısı",
+  "eng_note": "Bose Frames: Gemini 8, canlı arama 0. Bose kendi sitesinde artık satmıyor.",
+  "tag_q": "Soru bazında",
+  "byq": "Soru değişince kazanan değişiyor",
+  "byq_sub": "Soru başına 6 canlı aramalı cevap",
+  "tag_shop": "Google Shopping (ABD)",
+  "shop": "Yapay zekâ ile Google Shopping",
+  "shop_sub": "Arama: \"smart glasses\" · her markanın ilk ürünü",
+  "shop_col_ai": "YZ sırası",
+  "shop_col_shop": "Shopping",
+  "shop_note": "1. sıra eBay'de 35 $'lık markasız gözlük; ilk 20'nin 6'sı TikTok Shop ilanı. — = YZ'de anılmadı / ilk 20'de yok. Eşitlikte sıra aynı.",
+  "tag_net": "Kaynak ağı",
+  "net": "Yapay zekâ nereye bakıyor?",
+  "net_sub": "Çizgi kalınlığı = siteyi kaynak gösterip markayı anan cevap sayısı",
+  "net_note": "En çok kaynak: Meta'nın kendi sitesi meta.com, 15 cevap.",
+  "cta": "Yapay zekâ markanız için ne diyor?",
+  "cta2": "ChatGPT, Gemini, Claude ve Perplexity'de her hafta takip edin.",
+  "free": "Ücretsiz kontrol, kayıt gerekmez",
+  "disc": "20 Kasım 2026 yapay zekâ cevapları (ABD, İngilizce sorular). 64 cevap, hepsi alındı. Sayılar markanın adının geçtiği cevap sayısıdır. Meta = Ray-Ban Meta, Oakley Meta ve Meta Ray-Ban Display toplamı. Küçük örneklem, tüm pazarı temsil etmez. Tavsiye değildir. Marka adları sahiplerine aittir."
+ },
+ "dur": {
+  "p1": 6.0,
+  "p2": 6.0,
+  "p3": 6.0,
+  "p4": 6.0,
+  "p5": 6.0,
+  "p6": 6.0,
+  "p7": 6.0,
+  "p8": 6.0
+ }
+}

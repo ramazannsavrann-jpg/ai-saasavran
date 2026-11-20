@@ -2,7 +2,7 @@ Efsane Cuma'da yapay zekâ hangi yüz serumunu öneriyor? ChatGPT, Claude, Perpl
 Bu yedi markayı karşılaştırdık.
 Kırk sekiz canlı aramalı cevabın on altısında The Ordinary'nin adı geçti. On yedi cevapta ise hiç marka yoktu.
 Yapay zekâlar anlaşamıyor. Hafızadan cevap veren Gemini, yerli The Purest Solutions'ı on altı cevabın on birinde andı. Canlı arama yapan üç yapay zekâda bu sayı kırk sekizde sekiz.
-Soru değişince kazanan değişiyor. Leke sorusunda altı cevabın hiçbiri marka vermedi. Beş yüz lira altı sorulunca ise The Purest Solutions altı cevabın beşinde çıktı.
+Soru değişince kazanan değişiyor. Leke sorusunda altı cevabın hiçbiri marka vermedi; hepsi azelaik asit ve güneş kremi önerdi. Beş yüz lira altı sorulunca ise The Purest Solutions altı cevabın beşinde çıktı.
 Google Shopping'de yerli Cosmed üçüncü sırada, ama canlı arama yapan yapay zekâlar onu hiç anmadı. CeraVe ve La Roche-Posay ise ilk yirmide yok.
 Peki yapay zekâ nereye bakıyor? Türkçe sorularda en çok, Amerikan Dermatoloji Akademisi'nin sitesini kaynak gösterdi.
 Bunlar yapay zekânın cevaplarıdır. Yapay zekâ markanız için ne diyor? Ücretsiz kontrol edin.
