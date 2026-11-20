@@ -1,0 +1,30 @@
+Why are big brands invisible to AI? Why do ChatGPT, Gemini, Claude and Perplexity skip household-name brands when they recommend a product?
+A real measurement for AI visibility, GEO (generative engine optimization) and AI SEO.
+
+We asked real buyer questions, with no brand names, in categories like coffee machines, perfume, TVs, robot vacuums, gaming laptops, phones and sneakers (Nov 12–19, 2026, Turkey and global). ChatGPT and Claude answered with live web search; Gemini answered from memory. AI SaaSavran now measures Perplexity too; it was not part of these category runs.
+
+Chapters
+00:00 Why are big brands invisible to AI?
+00:30 How we measured
+00:59 Well known, rarely recommended
+01:30 Pattern 1: Fame lives in memory, not in current reviews
+01:57 Pattern 2: The category specialist wins
+02:25 Pattern 3: One AI recommends it, another never does
+02:52 Pattern 4: Local brands are weak even at home
+03:17 Feature: Loss Reason Card
+04:10 What to do: four steps
+04:36 Free check
+
+Highlights
+• ChatGPT recommended Nespresso in 0 of 16 coffee machine answers; Gemini, answering from memory, recommended it in 13 of 16 (small sample).
+• Armani was recommended in 0 of 32 live-search perfume answers; Philips in 0 of 24 robot vacuum answers.
+• Roborock was recommended in 22 of 24 robot vacuum answers; De'Longhi in 19 of 31 coffee machine answers.
+• On Turkish coffee machine questions, Philips was recommended in 23 of 29 answers and Arzum in 5; Fakir in none. In TVs, Vestel in just 1 of 27.
+• Loss Reason Card example: on a sneaker question in Turkey, a major brand appeared in none of 4 live-search answers; its own site was never cited, and one review site was a source in all 4 (brands shown as letters).
+
+These are the AI's answers. Small samples, not representative of the whole market. Statements about causes are our reading; the data only shows the difference. Brand names belong to their owners.
+Independent measurement. We have no sponsorship or partnership with any brand shown.
+
+Does AI recommend your brand? Check it free: https://aisaasavran.com
+
+#AI #ChatGPT #Gemini #Claude #Perplexity #GEO #AISaaSavran #Adidas #Armani #Arzum #DeLonghi #Dell #Fakir #iRobot #Lenovo #LivHospital #MSI #Nespresso #Philips #Roborock #Samsung #Siemens #TomFord #Vestel #Xiaomi
