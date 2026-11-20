@@ -742,6 +742,8 @@ test("Ürün görünürlüğü: ürün adı mevcut cevaplarda aranır, motor baz
   assert.deepEqual([oa.answers, oa.mentioned, oa.recommended], [3, 2, 1], "markasız ad da eşleşir; olumsuz anılma öneri sayılmaz");
   const cl = v.engines.find((e) => e.provider === "claude")!;
   assert.deepEqual([cl.answers, cl.mentioned, cl.recommended], [1, 1, 1]);
+  assert.equal(oa.wins, 1, "a1'de 1. sırada önerildi: kazanma");
+  assert.equal(cl.wins, 1, "a4'te listenin ilk maddesi: kazanma");
   assert.deepEqual(v.promptsMentioned.sort(), ["p1", "p2"]);
   assert.equal(v.losses.length, 0, "ürün her iki soruda da en az bir kez önerildiyse kayıp kartı çıkmaz");
   const v2 = productVisibility(answers.slice(1, 3), { id: "pr", name: "Bianchi Oltre XR4" }, { name: "Bianchi", website: "bianchi.com" }, [{ id: "c", name: "Rakip Bisiklet", website: "rakip.com" }]);

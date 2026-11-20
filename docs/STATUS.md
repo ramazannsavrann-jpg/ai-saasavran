@@ -7,6 +7,12 @@
 > **Erken erişim.** Ödeme (Paddle) ve haftalık e-posta (Resend) kodu hazır ve testli, ancak gerçek bir ödeme
 > ve gerçek bir gelen kutusu teslimi uçtan uca henüz doğrulanmadı. Hukuki metinleri avukat incelemedi.
 
+> **20 Kasım (görünürlük iş paketi):** Marka raporunun üstüne **Bu hafta yapılacaklar** (`weeklyTodo`, insights.ts) eklendi:
+> kaybedilen soru, bizi anmayan kaynak (Kaynak fırsatları), yapay zekânın aradığı ifade, anılıp önerilmeyen soru ve motor farkından
+> en fazla 5 iş; yapay zekâ çağrısı yok. Ürün görünürlüğüne **kazanma** sayısı (1. sırada önerildiği cevap) eklendi. Ajans rehberine
+> (TR+EN) "ölçümle müşteri kazanma" bölümü. Rakip YouTube taraması: `scripts/rakip-youtube.py` → `rakip-veri` dalı (her salı).
+> CLAUDE.md'ye YouTube açıklama yapısı kuralı.
+
 > **20 Kasım (rakip videolarından iki özellik):** Marka sayfasına, canlı aramalı ölçümlerde iki yeni panel eklendi; ikisi de ek API
 > çağrısı yapmaz. **Kazanma oranı** (`winRates`, insights.ts): markanın 1. sırada önerildiği cevap oranı (mentions.rank = 1 ve önerildi),
 > Wilson aralığı ve motor kırılımıyla; 20 cevabın altında uyarı. **Yapay zekânın yaptığı aramalar** (`fanoutQueries`): responses.search_queries

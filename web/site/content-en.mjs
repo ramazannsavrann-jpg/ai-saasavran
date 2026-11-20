@@ -265,6 +265,8 @@ export const GUIDES_EN = [
 <h2>7. Tie the work to the measurements</h2>
 <p>When you publish content or list the brand in a directory, note the date. If later measurements move, you can tell the client what changed after which action. If nothing moves, say so honestly; changes in AI answers can take weeks.</p>
 
+<h2>8. Use a measurement to win a new client</h2>
+<p>Before a pitch, measure the prospect the same way: add the prospect as one of your brands, write five or six questions its customers would ask, run a measurement and share the read-only report link. A concrete finding ("your competitor was recommended in 9 of 12 answers, you in none, and these three sites were the sources") is a stronger opening than a general GEO presentation. On the Business plan the shared report shows your agency's name and logo. If you don't win the client, remove the brand to free the slot.</p>
 <h2>What AI SaaSavran offers agencies</h2>
 <p>In AI SaaSavran you can open your workspace as an "Agency" and add client brands one by one. The Pro plan covers 5 brands and a team of 3; the Business plan covers 15 brands and a team of 15. Each brand gets its own questions, competitors, weekly automatic measurement, an email alert on a significant drop, per-engine reports, cited sources, PDF and CSV (Excel) export and a shareable report link. On Business, the report link and PDF carry your own agency name, logo and colour. On Pro and Business, results can also flow into your own dashboards through the API and MCP. You can start by trying one brand on the free plan.</p>
 `,
