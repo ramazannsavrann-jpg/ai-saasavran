@@ -1,0 +1,2 @@
+TAMAM
+seste duyulan: Pattern 3. One AI recommends a brand, another never does.  On US phone questions, Claude recommended Xiaomi in 13 of 24 answers,  ChatGPT in none of 32.  For MSI gaming laptops, Claude 8, ChatGPT 0.  In Turkey, Claude recommended Live Hospital 7 times, ChatGPT never.  The samples are small, but they show why measuring your brand on a single AI can mislead.
