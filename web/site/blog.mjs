@@ -67,7 +67,7 @@ export const POSTS = [
     short: "Which phone does AI recommend?",
     description: "We asked ChatGPT, Claude and Gemini the questions a phone buyer asks. The engines disagree, and one review site appears in 13 of 32 answers.",
     cover: "/blog/telefon-en.jpg",
-    video: { id: "xNPcVCHRXiA", title: "Which phone does AI recommend? (49 s)" },
+    video: { id: "BivrCJ0BBik", title: "Which phone does AI recommend? (49 s)" },
     names: "Apple, Google, OnePlus, Samsung, Xiaomi",
     body: `
 <p class="lede">More and more buyers ask ChatGPT before they buy a phone. We asked ChatGPT, Claude and Gemini 8 real buyer questions in English and counted how often 5 major phone brands were recommended. Short answer: <b>two brands were recommended in 25–26 of 32 answers, while one was recommended in only 8.</b></p>
