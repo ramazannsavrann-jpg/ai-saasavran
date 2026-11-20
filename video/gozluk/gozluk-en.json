@@ -1,0 +1,494 @@
+{
+ "out": "en",
+ "lang": "en",
+ "order": [
+  "s1",
+  "names",
+  "s2",
+  "s3",
+  "s4",
+  "shop",
+  "net",
+  "s8"
+ ],
+ "n": 16,
+ "n2": 48,
+ "names": "AI glasses: Amazon Echo Frames, Bose Frames, Even Realities, Meta, RayNeo, Rokid, Solos, Viture, Xreal",
+ "names_list": [
+  "Amazon Echo Frames",
+  "Bose Frames",
+  "Even Realities",
+  "Meta",
+  "RayNeo",
+  "Rokid",
+  "Solos",
+  "Viture",
+  "Xreal"
+ ],
+ "footer": "ChatGPT, Claude, Perplexity: live web search (US) · Gemini: model knowledge · Nov 20, 2026",
+ "brands": [
+  [
+   "Meta",
+   47
+  ],
+  [
+   "Xreal",
+   19
+  ],
+  [
+   "Viture",
+   16
+  ],
+  [
+   "Even Realities",
+   12
+  ],
+  [
+   "RayNeo",
+   12
+  ],
+  [
+   "Rokid",
+   12
+  ],
+  [
+   "Solos",
+   9
+  ],
+  [
+   "Echo Frames",
+   2
+  ],
+  [
+   "Bose Frames",
+   0
+  ]
+ ],
+ "engines": [
+  [
+   "ChatGPT",
+   "/16"
+  ],
+  [
+   "Claude",
+   "/16"
+  ],
+  [
+   "Perplexity",
+   "/16"
+  ],
+  [
+   "Gemini",
+   "/16"
+  ]
+ ],
+ "gemini_label": "From memory",
+ "eng_rows": [
+  [
+   "Meta",
+   16,
+   16,
+   15,
+   16
+  ],
+  [
+   "Xreal",
+   8,
+   3,
+   8,
+   11
+  ],
+  [
+   "Viture",
+   3,
+   8,
+   5,
+   5
+  ],
+  [
+   "Echo Frames",
+   0,
+   2,
+   0,
+   12
+  ],
+  [
+   "Bose Frames",
+   0,
+   0,
+   0,
+   8
+  ]
+ ],
+ "eng_hl": [
+  "Bose Frames"
+ ],
+ "questions": [
+  [
+   "Best for recording video?",
+   [
+    [
+     "Meta",
+     "6/6",
+     false
+    ],
+    [
+     "Rokid",
+     "4/6",
+     false
+    ],
+    [
+     "Xreal",
+     "0/6",
+     true
+    ]
+   ]
+  ],
+  [
+   "Best under $300?",
+   [
+    [
+     "Meta",
+     "6/6",
+     false
+    ],
+    [
+     "Viture",
+     "4/6",
+     false
+    ],
+    [
+     "Oakley Meta",
+     "0/6",
+     true
+    ]
+   ]
+  ],
+  [
+   "Gift for a tech lover?",
+   [
+    [
+     "Meta",
+     "6/6",
+     false
+    ],
+    [
+     "Xreal",
+     "6/6",
+     false
+    ],
+    [
+     "Even Realities",
+     "1/6",
+     true
+    ]
+   ]
+  ],
+  [
+   "Prescription, everyday wear?",
+   [
+    [
+     "Meta",
+     "6/6",
+     false
+    ],
+    [
+     "Even Realities",
+     "4/6",
+     false
+    ],
+    [
+     "Xreal",
+     "0/6",
+     true
+    ]
+   ]
+  ]
+ ],
+ "shop": {
+  "rows": [
+   [
+    "HTC Vive Eagle",
+    "—",
+    "#7",
+    true
+   ],
+   [
+    "Meta (Ray-Ban)",
+    "#1",
+    "#2",
+    false
+   ],
+   [
+    "Solos",
+    "#7",
+    "#6",
+    false
+   ],
+   [
+    "Even Realities",
+    "#4",
+    "#9",
+    false
+   ],
+   [
+    "Xreal",
+    "#2",
+    "#11",
+    false
+   ],
+   [
+    "Viture",
+    "#3",
+    "—",
+    false
+   ]
+  ]
+ },
+ "net": {
+  "left": [
+   [
+    "meta.com",
+    15
+   ],
+   [
+    "tomsguide.com",
+    7
+   ],
+   [
+    "vr.org",
+    6
+   ],
+   [
+    "memeburn.com",
+    5
+   ],
+   [
+    "the-gadgeteer.com",
+    5
+   ],
+   [
+    "dymesty.com",
+    5
+   ]
+  ],
+  "right": [
+   "Meta",
+   "Xreal",
+   "Viture",
+   "Even Realities",
+   "RayNeo",
+   "Rokid"
+  ],
+  "links": [
+   [
+    0,
+    0,
+    15
+   ],
+   [
+    0,
+    1,
+    7
+   ],
+   [
+    0,
+    2,
+    3
+   ],
+   [
+    0,
+    3,
+    4
+   ],
+   [
+    0,
+    4,
+    1
+   ],
+   [
+    0,
+    5,
+    2
+   ],
+   [
+    1,
+    0,
+    7
+   ],
+   [
+    1,
+    1,
+    5
+   ],
+   [
+    1,
+    2,
+    3
+   ],
+   [
+    1,
+    3,
+    1
+   ],
+   [
+    1,
+    4,
+    2
+   ],
+   [
+    1,
+    5,
+    2
+   ],
+   [
+    2,
+    0,
+    6
+   ],
+   [
+    2,
+    1,
+    2
+   ],
+   [
+    2,
+    2,
+    5
+   ],
+   [
+    2,
+    3,
+    2
+   ],
+   [
+    2,
+    4,
+    4
+   ],
+   [
+    2,
+    5,
+    3
+   ],
+   [
+    3,
+    0,
+    5
+   ],
+   [
+    3,
+    1,
+    2
+   ],
+   [
+    3,
+    2,
+    3
+   ],
+   [
+    3,
+    3,
+    4
+   ],
+   [
+    3,
+    4,
+    3
+   ],
+   [
+    3,
+    5,
+    1
+   ],
+   [
+    4,
+    0,
+    5
+   ],
+   [
+    4,
+    1,
+    3
+   ],
+   [
+    4,
+    2,
+    3
+   ],
+   [
+    4,
+    3,
+    3
+   ],
+   [
+    4,
+    4,
+    4
+   ],
+   [
+    5,
+    0,
+    5
+   ],
+   [
+    5,
+    3,
+    1
+   ],
+   [
+    5,
+    4,
+    1
+   ],
+   [
+    5,
+    5,
+    4
+   ]
+  ]
+ },
+ "sources": [],
+ "t": {
+  "hook": "Which AI glasses does AI recommend for Black Friday?",
+  "badge": "Do they agree?",
+  "hook2": "US edition · 9 brands · 8 buyer questions",
+  "note": "These are the AI's answers.",
+  "names_title": "Brands that came up most",
+  "names_sub": "In alphabetical order",
+  "tag_brands": "Mentions",
+  "who": "Who got named?",
+  "who_sub": "ChatGPT + Claude + Perplexity, 48 live-search answers",
+  "tag_eng": "AI comparison",
+  "eng": "The AIs disagree",
+  "eng_sub": "Answers naming each brand",
+  "eng_note": "Bose Frames: Gemini 8, live search 0. No longer sold on Bose's site.",
+  "tag_q": "By question",
+  "byq": "New question, new winner",
+  "byq_sub": "6 live-search answers per question",
+  "tag_shop": "Google Shopping (US)",
+  "shop": "AI's picks vs Google Shopping",
+  "shop_sub": "Search: \"smart glasses\" · first listing of each brand",
+  "shop_col_ai": "AI rank",
+  "shop_col_shop": "Shopping",
+  "shop_note": "#1 is a $35 unbranded pair on eBay; 6 of the top 20 are TikTok Shop listings. — = not named by AI / not in top 20. Ties share a rank.",
+  "tag_net": "AI source network",
+  "net": "Which sites shape the answers?",
+  "net_sub": "Line width = answers citing the site that mentioned the brand",
+  "net_note": "Most cited: Meta's own site, meta.com, in 15 answers.",
+  "cta": "What does AI say about your brand?",
+  "cta2": "Track it weekly across ChatGPT, Gemini, Claude and Perplexity.",
+  "free": "Free check, no signup",
+  "disc": "AI answers from Nov 20, 2026 (US). 64 answers, none failed. Counts = answers naming the brand. Meta = Ray-Ban Meta, Oakley Meta and Meta Ray-Ban Display combined. Small sample, not representative of the whole market. Not an endorsement. Brand names belong to their owners."
+ },
+ "dur": {
+  "p1": 6.0,
+  "p2": 6.0,
+  "p3": 6.0,
+  "p4": 6.0,
+  "p5": 6.0,
+  "p6": 6.0,
+  "p7": 6.0,
+  "p8": 6.0
+ }
+}
