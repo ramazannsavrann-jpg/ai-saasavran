@@ -28,7 +28,7 @@ export const COMPARE_TR = [
 
 <h2>Araçlar tek tek</h2>
 <h3>AI SaaSavran</h3>
-<p>Türkiye merkezli, 2026'da erken erişimle açıldı. Ücretsiz paket: 1 marka, 15 soru, ayda 4 ölçüm; Gemini ile, canlı web araması olmadan (model bilgisi) ve bu raporda açıkça yazar. Plus (29 $/ay): 25 soru, 5 rakip, ChatGPT, Claude ve Perplexity canlı web aramasıyla + Gemini, haftalık otomatik ölçüm, yapay zekânın baktığı kaynak siteler, ürünlerde doğruluk kontrolü ve Google Shopping sırası. Pro 149 $ (5 marka, API ve MCP), Business 449 $ (15 marka, ajanslar için). Sorular Türkçe veya İngilizce, Türkiye'den veya başka ülkeden sorulabilir. Sınırlar: Ölçüm haftalıktır, günlük değil. Google AI Overviews, AI Mode ve Microsoft Copilot henüz ölçülmüyor.</p>
+<p>Türkiye merkezli, 2026'da erken erişimle açıldı. Ücretsiz paket: 1 marka, 15 soru, ayda 4 ölçüm; Gemini ile, canlı web araması olmadan (model bilgisi) ve bu raporda açıkça yazar. Plus (60 $/ay): 25 soru, 5 rakip, ChatGPT, Claude ve Perplexity canlı web aramasıyla + Gemini, haftalık otomatik ölçüm, yapay zekânın baktığı kaynak siteler, ürünlerde doğruluk kontrolü ve Google Shopping sırası. Pro 300 $ (5 marka, API ve MCP), Business 876 $ (15 marka, ajanslar için). Sorular Türkçe veya İngilizce, Türkiye'den veya başka ülkeden sorulabilir. Sınırlar: Ölçüm haftalıktır, günlük değil. Google AI Overviews, AI Mode ve Microsoft Copilot henüz ölçülmüyor.</p>
 <h3>Peec AI</h3>
 <p>Berlin merkezli. Marka paketlerinde seçilen yapay zekâ modellerinde günlük takip yapar; ek modeller ek ücretlidir. Ajans paketleri resmî sayfada aylık 245 $'dan başlıyor ve ChatGPT, Perplexity, Google AI Overviews, AI Mode, Gemini gibi modelleri kapsıyor; en büyük ajans paketine Claude gibi API modelleri ekleniyor. Marka paketi fiyatları: peec.ai/pricing. Birçok ülke ve dilde takip isteyen ekipler ve ajanslar için güçlü bir seçenek.</p>
 <h3>Otterly.AI</h3>
@@ -60,15 +60,15 @@ export const COMPARE_TR = [
     slug: "peec-ai-alternatifi",
     title: "Peec AI, Otterly.AI ve Profound'a Türkçe alternatif: AI SaaSavran",
     short: "Peec AI alternatifi",
-    description: "Türkiye pazarı için Peec AI, Otterly.AI ve Profound alternatifi: Türkçe sorular, Türkiye'den canlı arama, ücretsiz paket ve 29 $'dan başlayan fiyat.",
+    description: "Türkiye pazarı için Peec AI, Otterly.AI ve Profound alternatifi: Türkçe sorular, Türkiye'den canlı arama, ücretsiz paket ve 60 $'dan başlayan fiyat.",
     body: `
-<p class="lede">Kısa cevap: Markanızın ChatGPT, Claude, Perplexity ve Gemini'deki görünürlüğünü <b>Türkçe sorularla</b> ve <b>Türkiye'den canlı web aramasıyla</b> ölçmek istiyorsanız AI SaaSavran, Peec AI, Otterly.AI ve Profound'a bir alternatiftir. Ücretsiz paketle başlanır; canlı aramalı ChatGPT, Claude ve Perplexity ölçümü aylık 29 $'dan başlar. Arayüz, raporlar, e-postalar ve soru şablonları Türkçedir.</p>
+<p class="lede">Kısa cevap: Markanızın ChatGPT, Claude, Perplexity ve Gemini'deki görünürlüğünü <b>Türkçe sorularla</b> ve <b>Türkiye'den canlı web aramasıyla</b> ölçmek istiyorsanız AI SaaSavran, Peec AI, Otterly.AI ve Profound'a bir alternatiftir. Ücretsiz paketle başlanır; canlı aramalı ChatGPT, Claude ve Perplexity ölçümü aylık 60 $'dan başlar. Arayüz, raporlar, e-postalar ve soru şablonları Türkçedir.</p>
 
 <h2>Ne zaman AI SaaSavran mantıklı?</h2>
 <ul>
 <li><b>Müşterileriniz Türkiye'de ve Türkçe soruyorsa.</b> Yapay zekâ cevabı sorunun diline ve sorulduğu ülkeye göre değişir. Türkçe sorular ve Türkiye konumu ayarlanır.</li>
 <li><b>Claude da önemliyse.</b> Ücretli paketlerde ChatGPT, Claude ve Perplexity canlı web aramasıyla ölçülür ve her motor ayrı raporlanır.</li>
-<li><b>Bütçeniz küçükse.</b> Ücretsiz paket (1 marka, 15 soru, ayda 4 ölçüm) ve Plus 29 $/ay. Ajanslar için Business 449 $/ay ile 15 marka.</li>
+<li><b>Bütçeniz küçükse.</b> Ücretsiz paket (1 marka, 15 soru, ayda 4 ölçüm) ve Plus 60 $/ay. Ajanslar için Business 876 $/ay ile 15 marka.</li>
 <li><b>Ürün satıyorsanız.</b> Yapay zekânın ürününüz hakkında söylediği fiyat ve özellikler resmî bilgilerle karşılaştırılır; haftalık Google Shopping sırası gösterilir.</li>
 <li><b>"Neden rakip?" sorusuna kanıt istiyorsanız.</b> Kaybettiğiniz sorular, yerinize önerilen rakip ve yapay zekânın baktığı kaynak siteler raporda yer alır.</li>
 </ul>
@@ -92,7 +92,7 @@ export const COMPARE_TR = [
 </ol>
 `,
     faq: [
-      ["Peec AI'nin Türkçe alternatifi var mı?", "Evet. AI SaaSavran Türkçe arayüz ve raporlarla, Türkçe soruları Türkiye'den canlı web aramasıyla ChatGPT, Claude ve Perplexity'de ölçer; ücretsiz paketle başlanır, ücretli paketler aylık 29 $'dan başlar."],
+      ["Peec AI'nin Türkçe alternatifi var mı?", "Evet. AI SaaSavran Türkçe arayüz ve raporlarla, Türkçe soruları Türkiye'den canlı web aramasıyla ChatGPT, Claude ve Perplexity'de ölçer; ücretsiz paketle başlanır, ücretli paketler aylık 60 $'dan başlar."],
       ["AI SaaSavran ile Peec AI arasındaki fark nedir?", "AI SaaSavran Türkiye merkezlidir, Türkçe sorulara ve Türkiye'den canlı aramaya odaklanır, ücretsiz paketi vardır ve haftalık ölçer. Peec AI Berlin merkezlidir, günlük takip yapar ve çok ülkeli takipte güçlüdür."],
       ["Otterly.AI yerine ne kullanılabilir?", "Türkçe sorular, Claude ölçümü ve ürün bilgisi doğruluğu kontrolü önemliyse AI SaaSavran. Google AI Overviews ve Copilot takibi önemliyse Otterly.AI daha uygundur."],
     ],
@@ -117,7 +117,7 @@ export const COMPARE_EN = [
 
 <h2>The tools one by one</h2>
 <h3>AI SaaSavran</h3>
-<p>Based in Turkey, launched in 2026 (early access). Free plan: 1 brand, 15 questions, 4 measurements a month, using Gemini without live web search (model knowledge), clearly labelled. Plus ($29/month): 25 questions, 5 competitors, ChatGPT, Claude and Perplexity with live web search plus Gemini, weekly automatic measurement, cited sources, product accuracy checks and Google Shopping position. Pro $149 (5 brands, API and MCP), Business $449 (15 brands, for agencies). Questions in Turkish or English, asked from Turkey or another country. Limits: measurement is weekly, not daily; Google AI Overviews, AI Mode and Microsoft Copilot are not measured yet.</p>
+<p>Based in Turkey, launched in 2026 (early access). Free plan: 1 brand, 15 questions, 4 measurements a month, using Gemini without live web search (model knowledge), clearly labelled. Plus ($60/month): 25 questions, 5 competitors, ChatGPT, Claude and Perplexity with live web search plus Gemini, weekly automatic measurement, cited sources, product accuracy checks and Google Shopping position. Pro $300 (5 brands, API and MCP), Business $876 (15 brands, for agencies). Questions in Turkish or English, asked from Turkey or another country. Limits: measurement is weekly, not daily; Google AI Overviews, AI Mode and Microsoft Copilot are not measured yet.</p>
 <h3>Peec AI</h3>
 <p>Based in Berlin. Brand plans track selected AI models daily, with extra models for an extra fee. Agency plans start at $245 a month on the official page and cover models such as ChatGPT, Perplexity, Google AI Overviews, AI Mode and Gemini; the largest agency plan adds API models such as Claude. Brand plan prices: peec.ai/pricing. A strong choice for teams and agencies tracking many countries and languages.</p>
 <h3>Otterly.AI</h3>
@@ -149,15 +149,15 @@ export const COMPARE_EN = [
     tr: "peec-ai-alternatifi",
     title: "A Peec AI, Otterly.AI and Profound alternative for Turkish and English questions: AI SaaSavran",
     short: "Peec AI alternative",
-    description: "An alternative to Peec AI, Otterly.AI and Profound: a free plan, live-search ChatGPT, Claude and Perplexity from $29 a month, and questions in Turkish or English.",
+    description: "An alternative to Peec AI, Otterly.AI and Profound: a free plan, live-search ChatGPT, Claude and Perplexity from $60 a month, and questions in Turkish or English.",
     body: `
-<p class="lede">Short answer: if you want to measure your brand in ChatGPT, Claude, Perplexity and Gemini on a small budget, or need questions asked <b>in Turkish from Turkey</b>, AI SaaSavran is an alternative to Peec AI, Otterly.AI and Profound. You can start on a free plan; live-search ChatGPT, Claude and Perplexity start at $29 a month.</p>
+<p class="lede">Short answer: if you want to measure your brand in ChatGPT, Claude, Perplexity and Gemini on a small budget, or need questions asked <b>in Turkish from Turkey</b>, AI SaaSavran is an alternative to Peec AI, Otterly.AI and Profound. You can start on a free plan; live-search ChatGPT, Claude and Perplexity start at $60 a month.</p>
 
 <h2>When AI SaaSavran makes sense</h2>
 <ul>
 <li><b>Your customers are in Turkey, or you sell into Turkey.</b> AI answers change with the language and country of the question. Turkish questions and a Turkish search location are built in, alongside English and other countries.</li>
 <li><b>Claude matters to you.</b> Paid plans measure ChatGPT, Claude and Perplexity with live web search and report each engine separately.</li>
-<li><b>Small budget.</b> Free plan (1 brand, 15 questions, 4 measurements a month) and Plus at $29 a month. Agencies: Business at $449 a month for 15 brands.</li>
+<li><b>Small budget.</b> Free plan (1 brand, 15 questions, 4 measurements a month) and Plus at $60 a month. Agencies: Business at $876 a month for 15 brands.</li>
 <li><b>You sell products.</b> What the AI says about your product's price and specifications is checked against official data, with weekly Google Shopping position.</li>
 <li><b>You need evidence for "why the competitor?".</b> Reports show the questions you lose, the competitor named instead and the sources the AI relied on.</li>
 </ul>
@@ -181,7 +181,7 @@ export const COMPARE_EN = [
 </ol>
 `,
     faq: [
-      ["What is a cheaper alternative to Peec AI?", "AI SaaSavran has a free plan, and its paid plans with live-search ChatGPT, Claude and Perplexity start at $29 a month. Otterly.AI's Lite plan is also $29 a month and covers Google AI Overviews, ChatGPT, Perplexity and Copilot."],
+      ["What is a cheaper alternative to Peec AI?", "AI SaaSavran has a free plan, and its paid plans with live-search ChatGPT, Claude and Perplexity start at $60 a month. Otterly.AI's Lite plan is also $29 a month and covers Google AI Overviews, ChatGPT, Perplexity and Copilot."],
       ["How is AI SaaSavran different from Peec AI?", "AI SaaSavran is based in Turkey, supports Turkish and English questions asked from Turkey or other countries, has a free plan and measures weekly. Peec AI is based in Berlin, tracks daily and is strong at multi-country tracking."],
       ["Does AI SaaSavran track Claude?", "Yes. Paid plans measure Claude with live web search, alongside ChatGPT and Perplexity, and report each engine separately."],
     ],
