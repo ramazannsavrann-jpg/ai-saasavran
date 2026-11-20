@@ -1,5 +1,12 @@
 # AI SaaSavran video düzeni (kalıcı)
 
+## YAYIN SAATİ: PRIME'DAN 1 SAAT ÖNCE (21 Kasım, kullanıcı kuralı — KALICI, tüm videolar)
+- Her video, hedef ülkenin prime saatinden 1 saat önce yayınlanır. TR Shorts 18:00, TR uzun 20:00 (TSİ). ABD (EN) 18:00 ET = 00:00Z (kışın TSİ 02:00 değil 03:00'dan 1 saat önce: 02:00 TSİ; yaz saatinde 01:00 TSİ).
+- Aynı kanala aynı saate iki video konmaz; ikinci video ertesi güne veya uzun video saatine kayar.
+- Toplu yükleme yapılmaz (EN kanalı 20 Kasım'da 18 Short'u bir günde aldı, izlenme 0–2). Kanal başına günde en fazla 1 veri Short'u.
+- Kapak: her yüklemede s1 karesi JPEG ayrıca yüklenir ve Studio listesinde kontrol edilir (21 Kasım: YouTube EN gözlükte otomatik orta sahneyi seçmişti).
+- vidIQ ücretsiz planı günde 3 YouTube yüklemesi; dolarsa Studio + Chrome ile yüklenir.
+
 ## ANLATIMDA SİTE ADRESİ YOK (19 Kasım, kullanıcı kuralı — KESİN, tüm videolar)
 - Seslendirmede site adresi/adı **hiç söylenmez**: "Site adresimiz…", "Ey Ay Saa Savran nokta com", "A. I. SaaS Savran dot com", "aisaasavran.com" gibi hiçbir cümle yok. Ekranda yazıyor, izleyen görüyor.
 - Kapanış anlatımı "Ücretsiz kontrol edin." / "Check it free." ile biter.
@@ -179,6 +186,7 @@ Sebep: 19 Kasım'da yalnız vidIQ paylaşım listesine bakılıp Seattle seti "e
 ### PAYLAŞIM KAYDI (her paylaşımdan sonra güncellenir; en yeni üstte)
 | Konu | YouTube TR | YouTube EN | Instagram seti | Not |
 |---|---|---|---|---|
+| Yüz serumu (TR) + AI gözlük TR (ABD verisi) | serum P9-ViSfAbvQ (21 Kas 18:00), gözlük jCnP-_8Uqqw (21 Kas 20:00); Studio+Chrome, kapaklar s1 | (gözlük EN üst satırda) | – | vidIQ günlük 3 yükleme dolmuştu; vidIQ'da yayınlanmamış 2 taslak kaldı (ba98d54a…, 84a53939…) — YAYINLAMA, mükerrer olur |
 | AI gözlük (ABD verisi) | (TR: 21 Kas planlanacak, onay bekliyor) | Rtafh3WSaLY (EN kanalı, Studio+Chrome, 21 Kas 03:00 TSİ planlı; kapak s1 karesi elle yüklendi — YouTube otomatik olarak orta sahneyi seçmişti) | – | Yüz serumu TR hazır, yayın onayı bekliyor |
 | Eğitim 9 Ürünler + Eğitim 10 Paylaşım/haftalık ölçüm (20 Kas) | TR kanalı, liste dışı: 9 TR beRz2exSg90, 9 EN jzWe2ZejO_w, 10 TR Y9LNvWFlF6E, 10 EN NgsNPe2PpOA | EN kanalına konmaz (eğitim) | gönderilmez (eğitim) | Studio'dan yüklendi; İngilizce eğitimler TR kanalında liste dışı (20 Kas istisnası) |
 | TEMİZLİK 20 Kas: EN kanalına taşınan 18 İngilizce Shorts + 1 uzun video (V76gSO6nEME) TR kanalından kalıcı silindi | – | EN kanalında: 18 Shorts + 1 uzun video | – | Bu tablodaki YouTube EN sütunundaki eski kimlikler (ör. Zk1eQF5wk4o, Zz8biHgxQzc, 3SmvBaQspGU, Uw56ankOGhQ, kLKaNZCQcI8) artık TR kanalında YOK; karşılıkları EN kanalında |
