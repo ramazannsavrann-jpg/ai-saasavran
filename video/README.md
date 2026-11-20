@@ -88,7 +88,7 @@ ffmpeg -i v.mp4 -i voice.wav -i music.wav -filter_complex "[1:a]aresample=44100,
 ## Eğitim videoları kuralı (13 Kasım)
 - **14 Kasım kararı: eğitim videoları YouTube'a GİZLİ (private) yüklenir**, herkese açık yapılmaz (kullanıcı isteği). Veri Shorts herkese açık devam eder.
 - **15 Kasım kararı:** eğitim videolarının TAMAMI bitip YouTube'a yüklenene ve ilgili oynatma listelerine ("AI SaaSavran | Kullanım ve Eğitim Rehberi" / "AI SaaSavran | Tutorials & User Guide" + dil listesi) alınana kadar hepsi GİZLİ kalır; tek tek açılmaz. Hepsi tamamlanınca: videolar herkese açık yapılır, `web/src/lib/tutorial-videos.json` içine kimlikler yazılır ve `"public": true` yapılır → site /tr/egitim/, /tutorials/ ve /kayit (kayıt videosu = Eğitim 2) YouTube'dan gömülü oynatır (video siteye yüklenmez). Her yeni eğitim videosunun kimliği yüklenince bu dosyaya eklenir (public false kalarak).
-- Durum (18 Kasım): Eğitim 1–8 TR+EN TAMAM, 16 video YouTube'da GİZLİ, listelerde, kapaklı. 6: TR kn7IEveF7dI / EN HgQXnVSZvHY; 7: TR GIdlPj6Q_sw / EN N50X-1JfGJA; 8: TR 2PtipsC0Bm4 / EN tesgSylSO-U. Kimlikler web/src/lib/tutorial-videos.json'da, "public": false. Herkese açma kararı sahibinde.
+- Durum (20 Kasım): Eğitim 1–10 TR+EN TAMAM (9: beRz2exSg90/jzWe2ZejO_w, 10: Y9LNvWFlF6E/NgsNPe2PpOA), hepsi LİSTE DIŞI. Önceki durum (18 Kasım): Eğitim 1–8 TR+EN TAMAM, 16 video YouTube'da GİZLİ, listelerde, kapaklı. 6: TR kn7IEveF7dI / EN HgQXnVSZvHY; 7: TR GIdlPj6Q_sw / EN N50X-1JfGJA; 8: TR 2PtipsC0Bm4 / EN tesgSylSO-U. Kimlikler web/src/lib/tutorial-videos.json'da, "public": false. Herkese açma kararı sahibinde.
 - Kendi markamız gösterilmez. Gerçek arayüz + uydurma ÖRNEK veri (Marka A/B…, Ürün 1/2…), ekranda "Örnek veri / Sample data" etiketi. Ekran çekerken API cevapları Playwright ile örnek veriyle değiştirilir; gerçek ölçüm yapılmaz.
 - Anlatımda eskiyecek bilgi yok: fiyat, kota sayısı, tarih, motor sürümü söylenmez; "yapay zekâ" denir. Böylece videolar ileride güncelleme gerektirmez.
 
@@ -170,6 +170,8 @@ Sebep: 19 Kasım'da yalnız vidIQ paylaşım listesine bakılıp Seattle seti "e
 ### PAYLAŞIM KAYDI (her paylaşımdan sonra güncellenir; en yeni üstte)
 | Konu | YouTube TR | YouTube EN | Instagram seti | Not |
 |---|---|---|---|---|
+| Eğitim 9 Ürünler + Eğitim 10 Paylaşım/haftalık ölçüm (20 Kas) | TR kanalı, liste dışı: 9 TR beRz2exSg90, 9 EN jzWe2ZejO_w, 10 TR Y9LNvWFlF6E, 10 EN NgsNPe2PpOA | EN kanalına konmaz (eğitim) | gönderilmez (eğitim) | Studio'dan yüklendi; İngilizce eğitimler TR kanalında liste dışı (20 Kas istisnası) |
+| TEMİZLİK 20 Kas: EN kanalına taşınan 18 İngilizce Shorts + 1 uzun video (V76gSO6nEME) TR kanalından kalıcı silindi | – | EN kanalında: 18 Shorts + 1 uzun video | – | Bu tablodaki eski EN kimlikleri (Zk1eQF5wk4o, Zz8biHgxQzc, 3SmvBaQspGU, tFF4JG7ncN0 hariç, Uw56ankOGhQ, kLKaNZCQcI8 …) artık TR kanalında YOK; EN karşılıkları EN kanalında |
 | Uzun 3 v2: Dev markalar | n1mIYpg8Xlw (20 Kas 21:00 planlı) | Studio'dan yüklenecek | gönderilmez (uzun video) | |
 | Akıllı yüzük | oKNVNscsGi8 | Zz8biHgxQzc | TAMAM 19 Kas 22:15–22:20 (TR Df7zyEwiicv, EN Df7z-0xkZqd, karusel Df70MDyiX2n) | karusel `videolar` dalı `instagram/ig-yuzuk-1..5.jpg` |
 | Uzun 2: Kaynaklar | gjH-oaMvKuI | IZ7fzbcTzrE | gönderilmez (uzun video) | |
