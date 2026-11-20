@@ -1,7 +1,7 @@
 {
  "name": "short-yerli-marka-tr",
- "voice_pcm": "/home/claude/ai-saasavran/video/ses-out/ses-short-yerli-marka-tr.pcm",
- "atempo": 1.12,
+ "voice_pcm": "/home/claude/ai-saasavran/video/ses-out/ses-short-yerli-marka-tr.mp3",
+ "atempo": 1.2,
  "engines": [
   "ChatGPT",
   "Claude"

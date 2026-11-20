@@ -1,0 +1,120 @@
+{
+ "name": "short-uzman-marka-en",
+ "lang": "en",
+ "voice_pcm": "/home/claude/ai-saasavran/video/ses-out/ses-short-uzman-marka-en.mp3",
+ "atempo": 1.2,
+ "engines": [
+  "ChatGPT",
+  "Claude"
+ ],
+ "sentences": 15,
+ "names_list": [
+  "De'Longhi",
+  "Dell",
+  "Lenovo",
+  "Philips",
+  "Roborock",
+  "Siemens"
+ ],
+ "footer": "ChatGPT and Claude · live web search · US, English questions · Nov 14, 2026",
+ "t": {
+  "hook": "AI never mentioned Philips for robot vacuums",
+  "badge": "Philips: 0 / 24",
+  "hook2": "Category specialist or giant brand?",
+  "note": "ChatGPT and Claude · live web search · US · Nov 14, 2026",
+  "names_title": "Brands we checked",
+  "cta": "Is your brand recommended in its own category?",
+  "cta2": "Full analysis on the channel: Why Don't Big Brands Show Up?",
+  "free": "Check yours for free",
+  "disc": "These are AI answers · Small sample, not representative of the whole market · Independent measurement, no sponsorship or partnership with any brand shown"
+ },
+ "scenes": [
+  {
+   "type": "hook",
+   "from": 0
+  },
+  {
+   "type": "names",
+   "from": 2
+  },
+  {
+   "type": "bars",
+   "from": 4,
+   "tag": "Robot vacuums",
+   "title": "Robot vacuum picks",
+   "sub": "Answers recommending the brand · 24 answers",
+   "max": 24,
+   "rows": [
+    [
+     "Roborock",
+     22,
+     "acc",
+     "22/24"
+    ],
+    [
+     "Philips",
+     0,
+     "red",
+     "0/24"
+    ]
+   ]
+  },
+  {
+   "type": "bars",
+   "from": 6,
+   "tag": "Coffee machines",
+   "title": "Coffee machine picks",
+   "sub": "Answers recommending the brand · 31 answers",
+   "max": 31,
+   "rows": [
+    [
+     "De'Longhi",
+     20,
+     "acc",
+     "20/31"
+    ],
+    [
+     "Siemens",
+     0,
+     "red",
+     "0/31"
+    ]
+   ]
+  },
+  {
+   "type": "bars",
+   "from": 8,
+   "tag": "Gaming laptops",
+   "title": "Gaming laptop picks",
+   "sub": "Answers recommending the brand · 27 answers",
+   "max": 27,
+   "rows": [
+    [
+     "Lenovo",
+     19,
+     "acc",
+     "19/27"
+    ],
+    [
+     "Dell",
+     3,
+     "red",
+     "3/27"
+    ]
+   ]
+  },
+  {
+   "type": "text",
+   "from": 10,
+   "tag": "What it shows",
+   "lead": "The data:",
+   "main": "brands known as specialists in their category come out ahead.",
+   "tip": "Possible reason: review sites may highlight these brands too.",
+   "small": "These are AI answers. Small sample, not representative of the whole market."
+  },
+  {
+   "type": "cta",
+   "from": 13
+  }
+ ]
+}
