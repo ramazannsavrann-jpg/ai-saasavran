@@ -9,7 +9,7 @@ CFGP = os.path.abspath(sys.argv[1]); MODE = sys.argv[2] if len(sys.argv) > 2 els
 C = json.load(open(CFGP))
 OUT = os.path.join(os.path.dirname(CFGP), "out-" + C["name"])
 tmp = {"out": OUT, "t": C["t"], "engines": [[e] for e in C["engines"]], "names_list": C.get("names_list", []),
-       "names": "x:" + ",".join(C.get("names_list", [])), "footer": C.get("footer", ""), "lang": "tr", "order": ["s1"], "dur": {"p1": 1}}
+       "names": "x:" + ",".join(C.get("names_list", [])), "footer": C.get("footer", ""), "lang": C.get("lang", "tr"), "order": ["s1"], "dur": {"p1": 1}}
 os.makedirs(OUT, exist_ok=True); json.dump(tmp, open(os.path.join(OUT, "_make.json"), "w"), ensure_ascii=False)
 sys.argv = ["make.py", os.path.join(OUT, "_make.json")]; sys.path.insert(0, SABLON)
 import make as M
@@ -60,12 +60,13 @@ FN = {"hook": lambda s: M.s1, "names": lambda s: M.s_names, "cta": lambda s: M.s
 
 def voice():
     w = os.path.join(OUT, "voice.wav")
-    subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "s16le", "-ar", "24000", "-ac", "1", "-i", C["voice_pcm"], "-af", f"atempo={C['atempo']}", w], check=True)
+    src = C["voice_pcm"]; inp = ["-i", src] if src.endswith(".mp3") else ["-f", "s16le", "-ar", "24000", "-ac", "1", "-i", src]
+    subprocess.run(["ffmpeg", "-v", "error", "-y", *inp, "-af", f"atempo={C['atempo']}", w], check=True)
     dur = float(subprocess.check_output(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", w]))
     log = subprocess.run(["ffmpeg", "-i", w, "-af", "silencedetect=n=-32dB:d=0.12", "-f", "null", "-"], capture_output=True, text=True).stderr
     sil = [(float(a), float(b)) for a, b in re.findall(r"silence_start: ([\d.]+).*?\n.*?silence_end: ([\d.]+)", log)]
     sil = [(a, b) for a, b in sil if a < dur - 0.3]
-    txt = open(C["voice_pcm"].replace("ses-out/ses-", "narration-").replace(".pcm", ".txt")).read().strip()
+    txt = open(re.sub(r"\.(pcm|mp3)$", ".txt", C["voice_pcm"].replace("ses-out/ses-", "narration-"))).read().strip()
     sents = [x for x in re.split(r"(?<=[.?!])\s+", txt) if x]
     if len(sents) != C["sentences"]: sys.exit(f"Cümle sayısı {len(sents)} != {C['sentences']}")
     speech0 = sil[0][1] if sil and sil[0][0] < 0.6 else 0.0
