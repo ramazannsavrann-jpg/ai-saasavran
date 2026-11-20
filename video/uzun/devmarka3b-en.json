@@ -3,6 +3,7 @@
  "lang": "en",
  "voice": "Charon",
  "atempo": 1.03,
+ "music_vol": 0.22,
  "footer": "These are the AI's answers · Nov 12–19, 2026 · Live search: ChatGPT and Claude · Gemini from memory · Small samples",
  "scenes": [
   {

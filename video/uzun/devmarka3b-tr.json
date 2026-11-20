@@ -3,6 +3,7 @@
  "lang": "tr",
  "voice": "Charon",
  "atempo": 1.06,
+ "music_vol": 0.22,
  "footer": "Bunlar yapay zekânın cevaplarıdır · 12–19 Kasım 2026 · Canlı arama: ChatGPT ve Claude · Gemini hafızadan · Küçük örneklemler",
  "scenes": [
   {

@@ -190,6 +190,6 @@ if __name__ == "__main__":
     if not os.path.exists(music): subprocess.run(["python3", os.path.join(VIDEO, "sablon", "music.py")], cwd=HERE, check=True)
     D = total
     subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", os.path.join(OUT, "voice_video.mp4"), "-stream_loop", "-1", "-i", music, "-filter_complex",
-                    f"[0:a]asplit=2[vo][sc];[1:a]volume=0.18,atrim=0:{D},afade=t=out:st={D - 2}:d=2[mu];[mu][sc]sidechaincompress=threshold=0.03:ratio=8:attack=20:release=300[duck];[duck][vo]amix=inputs=2:duration=first:normalize=0,alimiter=limit=0.95[a]",
+                    f"[0:a]asplit=2[vo][sc];[1:a]volume={CFG.get("music_vol", 0.18)},atrim=0:{D},afade=t=out:st={D - 2}:d=2[mu];[mu][sc]sidechaincompress=threshold=0.03:ratio=8:attack=20:release=300[duck];[duck][vo]amix=inputs=2:duration=first:normalize=0,alimiter=limit=0.95[a]",
                     "-map", "0:v", "-map", "[a]", "-c:v", "copy", "-c:a", "aac", "-b:a", "160k", "-movflags", "+faststart", final], check=True)
     print(f"{final}: {D/60:.1f} dk")
