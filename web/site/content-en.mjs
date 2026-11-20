@@ -130,7 +130,7 @@ export const GUIDES_EN = [
 `,
     faq: [
       ["Does AI visibility matter for a small business?", "Yes. Assistants usually suggest only a few businesses per question; not being on the list means never being seen by that customer."],
-      ["Can I pay to appear in AI recommendations?", "No. Recommendations in AI answers are not ads; they come from web information and model knowledge. Accurate, consistent information matters most."],
+      ["Can I pay to appear in AI recommendations?", "Not in the answer itself. ChatGPT now sells ads in some countries, but OpenAI says ads appear below the answer, separate and clearly labeled, and do not influence the brands ChatGPT recommends. Recommendations in the answer come from web information and model knowledge, so accurate, consistent information matters most. AI SaaSavran measures the organic recommendations in the answer, not ads."],
     ],
   },
   {

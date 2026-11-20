@@ -140,7 +140,7 @@ export const GUIDES = [
 `,
     faq: [
       ["Küçük bir işletme için yapay zekâ görünürlüğü önemli mi?", "Evet. Yapay zekâ asistanları çoğu soruda yalnızca birkaç işletme önerir; listede olmamak, o müşteriyi hiç görmemek demektir."],
-      ["Reklam vererek yapay zekâda çıkabilir miyim?", "Yapay zekâ cevaplarındaki öneriler ücretli değildir; internetteki bilgilere ve modelin bildiklerine dayanır. Bu yüzden doğru ve tutarlı bilgi en önemli etkendir."],
+      ["Reklam vererek yapay zekâda çıkabilir miyim?", "Cevabın kendisinde, hayır. ChatGPT reklam satışını Türkiye dahil birçok ülkeye genişletiyor; ancak OpenAI'ye göre reklamlar cevabın altında, ayrı ve \"reklam\" etiketiyle gösterilir ve ChatGPT'nin önerdiği markaları etkilemez. Cevaptaki öneriler internetteki bilgilere ve modelin bildiklerine dayanır, bu yüzden doğru ve tutarlı bilgi en önemli etkendir. AI SaaSavran reklamları değil, cevaptaki ücretsiz (organik) önerileri ölçer."],
     ],
   },
   {

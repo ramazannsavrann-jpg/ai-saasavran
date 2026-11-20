@@ -1,5 +1,6 @@
 // Rakip karşılaştırma rehberleri (18 Kasım, sahip kararı: gerçek adlarla).
 // Kurallar: rakip bilgisi yalnız kendi resmî sayfalarından (18 Kasım 2026'da kontrol edildi) veya kamuya açık şirket bilgisinden;
+// AthenaHQ bilgileri athenahq.ai/plans sayfasından 21 Kasım 2026'da kontrol edildi; Bloomreach satın alması (16 Kasım 2026) CMSWire haberinden.
 // doğrulanamayan fiyat yazılmaz, "resmî sayfada" denir. Kötüleme yok. Kendi ölçümümüz (42 cevapta 0) dürüstçe yazılır.
 // Fiyatlar sık değişir: bu dosyayı en geç 3 ayda bir kontrol et (sonraki kontrol: Şubat 2027).
 
@@ -35,6 +36,8 @@ export const COMPARE_TR = [
 <p>Avusturya merkezli, 2024'te kuruldu. Resmî fiyat sayfasında en küçük paket Lite: aylık 29 $, 15 soru; Google AI Overviews, ChatGPT, Perplexity ve Microsoft Copilot dahil. Gemini ve Google AI Mode ek ücretle ekleniyor. Standard 189 $ (100 soru), Premium 489 $ (400 soru). Ücretsiz deneme var. Düşük bütçeyle Google AI Overviews ve Copilot takibi isteyenler için uygun.</p>
 <h3>Profound</h3>
 <p>New York merkezli, kurumsal odaklı. Resmî sayfaya göre 7 günlük ücretsiz deneme (ChatGPT, Gemini, Google AI Overviews; 50 soru) ve teklifle fiyatlanan kurumsal paket (10'a kadar motor) var; self-servis Starter ve Growth paketleri Eylül 2026'dan beri yeni aboneliğe kapalı. İçerik üreten yapay zekâ ajanları da sunuyor. Büyük bütçeli kurumsal ekipler için.</p>
+<h3>AthenaHQ</h3>
+<p>Y Combinator destekli; Bloomreach 16 Kasım 2026'da satın aldığını duyurdu. Resmî sayfaya göre ücretsiz Essential paketi (300 kredi, 5 motor) ve aylık 295 $'lık Starter paketi var (3.600 kredi, 1 kredi = 1 yapay zekâ cevabı, Claude dahil 11 model). İçerik iyileştirme ajanı sunuyor. Ayrıntı: <a href="/rehber/athenahq-alternatifi/">AthenaHQ alternatifi</a>.</p>
 <h3>Semrush AI Visibility Toolkit</h3>
 <p>Semrush'ın yapay zekâ görünürlük modülü. Semrush yardım sayfasına göre aylık 99 $, alan adı başına; 25 takip sorusu, ChatGPT ve Google AI gibi motorlar; ücretsiz deneme yok. Zaten Semrush ile SEO yapan ekipler için doğal bir ek.</p>
 <h3>Ahrefs Brand Radar</h3>
@@ -97,6 +100,64 @@ export const COMPARE_TR = [
       ["Otterly.AI yerine ne kullanılabilir?", "Türkçe sorular, Claude ölçümü ve ürün bilgisi doğruluğu kontrolü önemliyse AI SaaSavran. Google AI Overviews ve Copilot takibi önemliyse Otterly.AI daha uygundur."],
     ],
   },
+  {
+    slug: "athenahq-alternatifi",
+    title: "AthenaHQ alternatifi: Türkçe sorular ve küçük bütçe için AI SaaSavran",
+    short: "AthenaHQ alternatifi",
+    description: "AthenaHQ ile AI SaaSavran karşılaştırması: motorlar, fiyat, ücretsiz paket, Türkçe sorular ve kime hangisinin uygun olduğu. Rakip bilgisi yalnız resmî sayfadan.",
+    body: `
+<p class="lede">Kısa cevap: <b>AthenaHQ</b>, çok sayıda yapay zekâ motorunu (11 model) takip eden ve içerik iyileştirme ajanları sunan bir yapay zekâ görünürlük (AEO/GEO) platformudur; ücretli paketi resmî sayfasında aylık 295 $'dan başlar. Markanızı <b>Türkçe sorularla</b>, <b>Türkiye'den canlı web aramasıyla</b> ve daha küçük bir bütçeyle ölçmek istiyorsanız <b>AI SaaSavran</b> bir alternatiftir: ücretsiz paketle başlanır, canlı aramalı ChatGPT, Claude ve Perplexity ölçümü aylık 60 $'dır.</p>
+<p>Bu sayfayı bir rakip olarak yazıyoruz. AthenaHQ hakkında yalnız kendi resmî fiyat sayfasında yazanları ve kamuya açık şirket haberlerini aktarıyoruz (kontrol tarihi: 21 Kasım 2026). Fiyatlar değişebilir; satın almadan önce athenahq.ai/plans sayfasına bakın.</p>
+
+<h2>AthenaHQ hakkında bilinenler</h2>
+<ul>
+<li><b>Sahiplik:</b> Bloomreach, 16 Kasım 2026'da AthenaHQ'yu satın aldığını duyurdu. AthenaHQ, Bloomreach'in Loomi yapay zekâ ürünüyle birleştirilecek.</li>
+<li><b>Ücretsiz paket (Essential):</b> 300 kredi; ChatGPT, Perplexity, Google AI Overviews, Gemini ve Copilot.</li>
+<li><b>Starter:</b> aylık 295 $, ayda 3.600 kredi. Resmî sayfaya göre 1 kredi = 1 yapay zekâ cevabı. Claude, Google AI Mode, Grok, DeepSeek, Meta AI ve Mistral dahil 11 model. API ve ek kredi ayrıca ücretli.</li>
+<li><b>Ülke ve dil:</b> Starter paketinde tek ülke ve tek dil; çok ülke ve çok dil kurumsal (Enterprise) pakette, fiyat teklifle.</li>
+<li><b>Ek özellikler:</b> içerik iyileştirme ajanı, sayfa içi ve dışı öneriler; kurumsal pakette kaynak gösterilme tahmini (Athena Citation Engine) ve SSO.</li>
+</ul>
+
+<h2>Yan yana</h2>
+<table class="mtable"><thead><tr><th></th><th>AI SaaSavran</th><th>AthenaHQ</th></tr></thead><tbody>
+<tr><td>Ücretsiz paket</td><td>1 marka, 15 soru, ayda 4 ölçüm (Gemini, canlı aramasız)</td><td>300 kredi, 5 motor</td></tr>
+<tr><td>İlk ücretli paket</td><td>Plus, 60 $/ay</td><td>Starter, 295 $/ay</td></tr>
+<tr><td>Motorlar (ücretli)</td><td>ChatGPT, Claude, Perplexity (canlı arama) + Gemini</td><td>11 model (Google AI Overviews, AI Mode, Copilot dahil)</td></tr>
+<tr><td>Ölçüm sıklığı</td><td>Haftalık</td><td>Resmî sayfada yazmıyor</td></tr>
+<tr><td>Türkçe arayüz ve rapor</td><td>Var</td><td>Resmî sayfada yazmıyor</td></tr>
+<tr><td>Ajans paketi</td><td>Business 876 $/ay, 15 marka</td><td>Enterprise, teklifle</td></tr>
+</tbody></table>
+
+<h2>Ne zaman AI SaaSavran mantıklı?</h2>
+<ul>
+<li><b>Müşterileriniz Türkiye'de ve Türkçe soruyorsa.</b> Sorular Türkçe ve Türkiye konumundan sorulur; arayüz, rapor ve e-postalar Türkçedir.</li>
+<li><b>Bütçeniz küçükse.</b> Ücretsiz başlanır; canlı aramalı ChatGPT, Claude ve Perplexity 60 $/ay.</li>
+<li><b>Ürün satıyorsanız.</b> Yapay zekânın ürününüz hakkında söylediği fiyat ve özellikler resmî bilgilerle karşılaştırılır.</li>
+<li><b>"Neden rakip?" sorusuna kanıt istiyorsanız.</b> Kaybettiğiniz sorular, yerinize önerilen rakip ve yapay zekânın baktığı kaynak siteler raporda yer alır.</li>
+</ul>
+
+<h2>Ne zaman AthenaHQ daha uygun?</h2>
+<ul>
+<li><b>Çok sayıda motor</b> şart ise: Google AI Overviews, AI Mode, Copilot, Grok gibi motorları biz henüz ölçmüyoruz.</li>
+<li><b>Ölçümün yanında içerik ajanı</b> istiyorsanız: AthenaHQ içerik iyileştirme ajanı sunuyor.</li>
+<li><b>Zaten Bloomreach kullanıyorsanız:</b> satın almadan sonra iki ürünün birlikte çalışması bekleniyor.</li>
+</ul>
+
+<h2>Nasıl denenir?</h2>
+<ol>
+<li><a href="/tr/kontrol/">Ücretsiz kontrol</a> ile üye olmadan işletmenizin Gemini'de geçip geçmediğine bakın.</li>
+<li>Ücretsiz hesap açın, markanızı ve 3 rakibinizi ekleyin; sektörünüze hazır Türkçe soru şablonlarından seçin.</li>
+<li>Canlı aramalı ChatGPT, Claude ve Perplexity için Plus pakete geçin. 14 gün içinde iptal ederseniz ücret iade edilir.</li>
+</ol>
+<p>Diğer araçlarla karşılaştırma: <a href="/rehber/yapay-zeka-gorunurluk-araclari/">yapay zekâ görünürlük araçları</a>.</p>
+`,
+    faq: [
+      ["AthenaHQ'nun Türkçe alternatifi var mı?", "Evet. AI SaaSavran Türkçe arayüz ve raporlarla, Türkçe soruları Türkiye'den canlı web aramasıyla ChatGPT, Claude ve Perplexity'de ölçer. Ücretsiz paketle başlanır, ücretli paket aylık 60 $'dır."],
+      ["AthenaHQ ne kadar?", "Resmî fiyat sayfasına göre (21 Kasım 2026) ücretsiz Essential paketi var; Starter aylık 295 $ ve ayda 3.600 kredi içerir (1 kredi = 1 yapay zekâ cevabı). Kurumsal paket teklifle fiyatlanır."],
+      ["AthenaHQ'yu kim satın aldı?", "Bloomreach, 16 Kasım 2026'da AthenaHQ'yu satın aldığını duyurdu."],
+      ["AI SaaSavran ile AthenaHQ arasındaki fark nedir?", "AI SaaSavran Türkiye merkezlidir, Türkçe sorulara ve küçük bütçeye odaklanır ve haftalık ölçer. AthenaHQ daha çok motoru (11 model) takip eder ve içerik ajanları sunar; ücretli paketi 295 $'dan başlar."],
+    ],
+  },
 ];
 
 export const COMPARE_EN = [
@@ -124,6 +185,8 @@ export const COMPARE_EN = [
 <p>Based in Austria, founded in 2024. Its official pricing page lists Lite at $29 a month with 15 prompts, covering Google AI Overviews, ChatGPT, Perplexity and Microsoft Copilot; Gemini and Google AI Mode are paid add-ons. Standard is $189 (100 prompts) and Premium $489 (400 prompts). Free trial available. A good fit for low-budget tracking of Google AI Overviews and Copilot.</p>
 <h3>Profound</h3>
 <p>Based in New York, enterprise-focused. Its official page lists a 7-day free trial (ChatGPT, Gemini, Google AI Overviews; 50 prompts) and a custom-priced Enterprise plan (up to 10 engines); the self-serve Starter and Growth plans closed to new subscriptions in September 2026. It also offers AI agents for content work. Built for well-funded enterprise teams.</p>
+<h3>AthenaHQ</h3>
+<p>Y Combinator-backed; Bloomreach announced on 16 November 2026 that it acquired AthenaHQ. Per its official page: a free Essential plan (300 credits, 5 engines) and a $295-a-month Starter plan (3,600 credits, 1 credit = 1 AI response, 11 models including Claude). It offers a content optimization agent. More: <a href="/guides/athenahq-alternative/">AthenaHQ alternative</a>.</p>
 <h3>Semrush AI Visibility Toolkit</h3>
 <p>Semrush's AI visibility module. Per Semrush's help page: $99 a month per domain, 25 tracked prompts, engines such as ChatGPT and Google AI, no free trial. A natural add-on for teams already doing SEO in Semrush.</p>
 <h3>Ahrefs Brand Radar</h3>
@@ -181,9 +244,67 @@ export const COMPARE_EN = [
 </ol>
 `,
     faq: [
-      ["What is a cheaper alternative to Peec AI?", "AI SaaSavran has a free plan, and its paid plans with live-search ChatGPT, Claude and Perplexity start at $60 a month. Otterly.AI's Lite plan is also $29 a month and covers Google AI Overviews, ChatGPT, Perplexity and Copilot."],
+      ["What is a cheaper alternative to Peec AI?", "AI SaaSavran has a free plan, and its paid plans with live-search ChatGPT, Claude and Perplexity start at $60 a month. Otterly.AI's Lite plan is $29 a month and covers Google AI Overviews, ChatGPT, Perplexity and Copilot."],
       ["How is AI SaaSavran different from Peec AI?", "AI SaaSavran is based in Turkey, supports Turkish and English questions asked from Turkey or other countries, has a free plan and measures weekly. Peec AI is based in Berlin, tracks daily and is strong at multi-country tracking."],
       ["Does AI SaaSavran track Claude?", "Yes. Paid plans measure Claude with live web search, alongside ChatGPT and Perplexity, and report each engine separately."],
+    ],
+  },
+  {
+    slug: "athenahq-alternative",
+    tr: "athenahq-alternatifi",
+    title: "An AthenaHQ alternative for small budgets and Turkish or English questions: AI SaaSavran",
+    short: "AthenaHQ alternative",
+    description: "AthenaHQ vs AI SaaSavran: engines, price, free plan, Turkish and English questions, and who each fits. Competitor facts from AthenaHQ's official pages only.",
+    body: `
+<p class="lede">Short answer: <b>AthenaHQ</b> is an AI visibility (AEO/GEO) platform that tracks many AI engines (11 models) and offers content optimization agents; its paid plan starts at $295 a month on its official pricing page. If you want to measure your brand on a smaller budget, or need questions asked <b>in Turkish from Turkey</b>, <b>AI SaaSavran</b> is an alternative: start on a free plan, and live-search ChatGPT, Claude and Perplexity cost $60 a month.</p>
+<p>We are a competitor, so we only repeat what AthenaHQ's own pricing page and public company news say (checked 21 November 2026). Prices change; check athenahq.ai/plans before buying.</p>
+
+<h2>What is known about AthenaHQ</h2>
+<ul>
+<li><b>Ownership:</b> Bloomreach announced on 16 November 2026 that it acquired AthenaHQ, to pair it with its Loomi AI product.</li>
+<li><b>Free plan (Essential):</b> 300 credits; ChatGPT, Perplexity, Google AI Overviews, Gemini and Copilot.</li>
+<li><b>Starter:</b> $295 a month, 3,600 credits a month. Per the official page, 1 credit = 1 AI response. 11 models including Claude, Google AI Mode, Grok, DeepSeek, Meta AI and Mistral. API access and extra credits cost extra.</li>
+<li><b>Countries and languages:</b> Starter covers a single country and language; multiple regions and languages are on the custom-priced Enterprise plan.</li>
+<li><b>Other features:</b> a content optimization agent and on-page and off-page actions; Enterprise adds citation forecasting (Athena Citation Engine) and SSO.</li>
+</ul>
+
+<h2>Side by side</h2>
+<table class="mtable"><thead><tr><th></th><th>AI SaaSavran</th><th>AthenaHQ</th></tr></thead><tbody>
+<tr><td>Free plan</td><td>1 brand, 15 questions, 4 measurements a month (Gemini, no live search)</td><td>300 credits, 5 engines</td></tr>
+<tr><td>First paid plan</td><td>Plus, $60/month</td><td>Starter, $295/month</td></tr>
+<tr><td>Engines (paid)</td><td>ChatGPT, Claude, Perplexity (live search) + Gemini</td><td>11 models (incl. Google AI Overviews, AI Mode, Copilot)</td></tr>
+<tr><td>Measurement frequency</td><td>Weekly</td><td>Not stated on the official page</td></tr>
+<tr><td>Agency plan</td><td>Business $876/month, 15 brands</td><td>Enterprise, custom</td></tr>
+</tbody></table>
+
+<h2>When AI SaaSavran makes sense</h2>
+<ul>
+<li><b>Small budget.</b> Start free; live-search ChatGPT, Claude and Perplexity at $60 a month.</li>
+<li><b>Customers ask in Turkish, or in a specific country.</b> Questions can be asked in Turkish or English from Turkey or another country.</li>
+<li><b>You sell products.</b> What the AI says about your product's price and specifications is checked against official data.</li>
+<li><b>You need evidence for "why the competitor?".</b> Reports show the questions you lose, the competitor named instead and the sources the AI relied on.</li>
+</ul>
+
+<h2>When AthenaHQ fits better</h2>
+<ul>
+<li><b>Many engines:</b> we don't measure Google AI Overviews, AI Mode, Copilot or Grok yet.</li>
+<li><b>A content agent alongside tracking:</b> AthenaHQ offers a content optimization agent.</li>
+<li><b>You already use Bloomreach:</b> the two products are expected to work together after the acquisition.</li>
+</ul>
+
+<h2>How to try it</h2>
+<ol>
+<li>Run the <a href="/check/">free check</a> without signing up to see whether Gemini mentions your business.</li>
+<li>Create a free account, add your brand and 3 competitors, and pick ready-made questions for your sector.</li>
+<li>Upgrade to Plus for live-search ChatGPT, Claude and Perplexity. Cancel within 14 days for a refund.</li>
+</ol>
+<p>All tools compared: <a href="/guides/ai-visibility-tools-compared/">AI visibility tools compared</a>.</p>
+`,
+    faq: [
+      ["What is a cheaper alternative to AthenaHQ?", "AI SaaSavran has a free plan, and its paid plan with live-search ChatGPT, Claude and Perplexity is $60 a month. AthenaHQ's Starter plan is $295 a month on its official pricing page."],
+      ["How much does AthenaHQ cost?", "Per its official pricing page (21 November 2026): a free Essential plan; Starter at $295 a month with 3,600 credits (1 credit = 1 AI response); Enterprise is custom-priced."],
+      ["Who acquired AthenaHQ?", "Bloomreach announced on 16 November 2026 that it acquired AthenaHQ."],
+      ["How is AI SaaSavran different from AthenaHQ?", "AI SaaSavran focuses on small budgets and on questions in Turkish or English from your customers' country, and measures weekly. AthenaHQ tracks more engines (11 models) and offers content agents; its paid plan starts at $295 a month."],
     ],
   },
 ];

@@ -1,11 +1,16 @@
 # Gerçek durum raporu
 
-**Son güncelleme:** 2026-11-20 · kalite denetimi ilk aşama (bkz. aşağıdaki 18 Kasım notu)
+**Son güncelleme:** 2026-11-21 · AthenaHQ karşılaştırma sayfası, reklam SSS'si
 
 **Canlı adres:** https://aisaasavran.com (Cloudflare Pages + Supabase)
 
 > **Erken erişim.** Ödeme (Paddle) ve haftalık e-posta (Resend) kodu hazır ve testli, ancak gerçek bir ödeme
 > ve gerçek bir gelen kutusu teslimi uçtan uca henüz doğrulanmadı. Hukuki metinleri avukat incelemedi.
+
+> **21 Kasım (piyasa raporundan iki iş):** Yeni rehber **AthenaHQ alternatifi** (`/rehber/athenahq-alternatifi/`, EN `/guides/athenahq-alternative/`,
+> compare.mjs): yalnız athenahq.ai/plans (21 Kasım) ve Bloomreach satın alma haberi (16 Kasım 2026); araçlar listesine AthenaHQ bölümü, llms.txt'ye bağlantı.
+> SSS "Reklam vererek yapay zekâda çıkabilir miyim?" (TR+EN) güncellendi: ChatGPT reklam satışı Türkiye dahil genişliyor (Aleph, 19 Kasım);
+> OpenAI'ye göre reklamlar ayrı ve etiketli, cevabı etkilemez; AI SaaSavran organik öneriyi ölçer. EN Peec SSS'sinde eski "also $29" düzeltildi.
 
 > **20 Kasım (görünürlük iş paketi):** Marka raporunun üstüne **Bu hafta yapılacaklar** (`weeklyTodo`, insights.ts) eklendi:
 > kaybedilen soru, bizi anmayan kaynak (Kaynak fırsatları), yapay zekânın aradığı ifade, anılıp önerilmeyen soru ve motor farkından

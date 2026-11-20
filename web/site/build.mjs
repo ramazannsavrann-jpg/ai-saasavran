@@ -588,8 +588,9 @@ Contact: ${SITE.email}
 ## About
 - [About AI SaaSavran](${SITE.url}/about/): independent AI visibility measurement tool, launched 2026, founded in 2026 by Ramazan Savran in Antalya, Turkey (the name combines SaaS and his surname); not affiliated with similarly named companies such as Savran AI (savran.ai).
 - [Founder: Ramazan Savran](${SITE.url}/founder/)
-- [AI visibility tools compared](${SITE.url}/guides/ai-visibility-tools-compared/): AI SaaSavran, Peec AI, Otterly.AI, Profound, Semrush and Ahrefs, with our own measurement of which ones AI recommends.
+- [AI visibility tools compared](${SITE.url}/guides/ai-visibility-tools-compared/): AI SaaSavran, Peec AI, Otterly.AI, Profound, AthenaHQ, Semrush and Ahrefs, with our own measurement of which ones AI recommends.
 - [Peec AI alternative](${SITE.url}/guides/peec-ai-alternative/): when AI SaaSavran fits (free plan, Turkish and English questions, Claude included) and when another tool fits better.
+- [AthenaHQ alternative](${SITE.url}/guides/athenahq-alternative/): AthenaHQ vs AI SaaSavran on engines, price and free plan, from AthenaHQ's official pricing page.
 
 ## Pricing
 - [Plans](${SITE.url}/pricing/): Free ($0), Plus ($60/month), Pro ($300/month), Business ($876/month). Monthly billing, cancel anytime, 14-day money-back guarantee.
