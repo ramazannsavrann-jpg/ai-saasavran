@@ -716,3 +716,70 @@ export function ownCitedRivals(answers: InsightAnswer[], mentions: InsightMentio
     .sort((x, y) => y.count - x.count || x.name.localeCompare(y.name));
   return out;
 }
+
+// ---------------- Kazanma oranı (1 numara önerilme) ----------------
+// Bir cevapta markanın 1. sırada ÖNERİLMESİ "kazanma" sayılır. Oran = kazanılan cevap / tüm cevaplar.
+// Ek API çağrısı yok: mentions.rank ve recommended alanlarından hesaplanır.
+export interface WinRow { brandId: string; name: string; isTarget: boolean; wins: number; n: number; rate: number; low: number; high: number }
+export function winRates(
+  answers: { id: string; provider: string }[],
+  mentions: { response_id: string; brand_id: string; recommended: boolean; rank?: number | null }[],
+  brands: { id: string; name: string; isTarget: boolean }[],
+): { brands: WinRow[]; targetByEngine: { provider: string; wins: number; n: number; rate: number }[] } {
+  const ids = new Set(answers.map((a) => a.id));
+  const won = new Map<string, Set<string>>(); // brand -> kazandığı cevaplar
+  for (const m of mentions) {
+    if (!ids.has(m.response_id) || !m.recommended || m.rank !== 1) continue;
+    if (!won.has(m.brand_id)) won.set(m.brand_id, new Set());
+    won.get(m.brand_id)!.add(m.response_id);
+  }
+  const n = ids.size;
+  const rows = brands.map((b) => {
+    const wins = won.get(b.id)?.size ?? 0;
+    const w = wilson(wins, n);
+    return { brandId: b.id, name: b.name, isTarget: b.isTarget, wins, n, rate: n ? wins / n : 0, low: w.low, high: w.high };
+  }).sort((a, b) => b.wins - a.wins || Number(b.isTarget) - Number(a.isTarget));
+  const target = brands.find((b) => b.isTarget);
+  const byEng = new Map<string, { wins: number; n: number }>();
+  for (const a of answers) {
+    const e = byEng.get(a.provider) ?? { wins: 0, n: 0 };
+    e.n++;
+    if (target && won.get(target.id)?.has(a.id)) e.wins++;
+    byEng.set(a.provider, e);
+  }
+  const targetByEngine = [...byEng.entries()].map(([provider, e]) => ({ provider, ...e, rate: e.n ? e.wins / e.n : 0 }));
+  return { brands: rows, targetByEngine };
+}
+
+// ---------------- Yapay zekânın yaptığı aramalar (query fan-out) ----------------
+// Canlı aramalı motorların cevap verirken internette aradığı ifadeler (responses.search_queries).
+// Aynı ifade küçük/büyük harf ve boşluk farkıyla tekrar sayılmaz. searchedShare: arama yapılan cevap oranı.
+export interface FanoutRow { query: string; count: number; engines: string[] }
+export function fanoutQueries(
+  answers: { provider: string; search_queries?: string[] | null }[],
+  limit = 15,
+): { rows: FanoutRow[]; answers: number; searched: number; byEngine: { provider: string; answers: number; searched: number }[] } {
+  const map = new Map<string, { query: string; count: number; engines: Set<string> }>();
+  const eng = new Map<string, { answers: number; searched: number }>();
+  let searched = 0;
+  for (const a of answers) {
+    const qs = (a.search_queries ?? []).map((q) => q.trim()).filter((q) => q.length >= 2);
+    const e = eng.get(a.provider) ?? { answers: 0, searched: 0 };
+    e.answers++;
+    if (qs.length) { e.searched++; searched++; }
+    eng.set(a.provider, e);
+    const seen = new Set<string>();
+    for (const q of qs) {
+      const key = q.toLocaleLowerCase("tr-TR").replace(/\s+/g, " ");
+      if (seen.has(key)) continue; // aynı cevapta tekrar eden ifade bir kez sayılır
+      seen.add(key);
+      const row = map.get(key) ?? { query: q.replace(/\s+/g, " "), count: 0, engines: new Set<string>() };
+      row.count++;
+      row.engines.add(a.provider);
+      map.set(key, row);
+    }
+  }
+  const rows = [...map.values()].sort((a, b) => b.count - a.count || a.query.localeCompare(b.query))
+    .slice(0, limit).map((r) => ({ query: r.query, count: r.count, engines: [...r.engines].sort() }));
+  return { rows, answers: answers.length, searched, byEngine: [...eng.entries()].map(([provider, e]) => ({ provider, ...e })) };
+}

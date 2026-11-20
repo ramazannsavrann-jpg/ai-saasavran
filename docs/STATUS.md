@@ -1,11 +1,17 @@
 # Gerçek durum raporu
 
-**Son güncelleme:** 2026-11-18 · kalite denetimi ilk aşama (bkz. aşağıdaki 18 Kasım notu)
+**Son güncelleme:** 2026-11-20 · kalite denetimi ilk aşama (bkz. aşağıdaki 18 Kasım notu)
 
 **Canlı adres:** https://aisaasavran.com (Cloudflare Pages + Supabase)
 
 > **Erken erişim.** Ödeme (Paddle) ve haftalık e-posta (Resend) kodu hazır ve testli, ancak gerçek bir ödeme
 > ve gerçek bir gelen kutusu teslimi uçtan uca henüz doğrulanmadı. Hukuki metinleri avukat incelemedi.
+
+> **20 Kasım (rakip videolarından iki özellik):** Marka sayfasına, canlı aramalı ölçümlerde iki yeni panel eklendi; ikisi de ek API
+> çağrısı yapmaz. **Kazanma oranı** (`winRates`, insights.ts): markanın 1. sırada önerildiği cevap oranı (mentions.rank = 1 ve önerildi),
+> Wilson aralığı ve motor kırılımıyla; 20 cevabın altında uyarı. **Yapay zekânın yaptığı aramalar** (`fanoutQueries`): responses.search_queries
+> alanındaki arama ifadeleri, tekrarsız sayımla ve motorlarla; arama yapılan cevap oranı. Metodoloji sayfasına "Kazanma oranı" ve arama
+> ifadeleri notu eklendi. Testler: engine/test/win-fanout.test.ts.
 
 > **19 Kasım (sektörler ve sorular):** Türkçe sektör listesi 31'den 56'ya, İngilizce 27'den 39'a çıktı (tarım/gübre, tohum/fide,
 > hayvancılık/yem, üretim/sanayi B2B, makine, inşaat, enerji, gıda toptan, kimya, ambalaj, diş kliniği, kuaför, spor salonu, avukat,
