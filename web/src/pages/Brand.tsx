@@ -2207,16 +2207,16 @@ function Questions({ brand }: { brand: Brand }) {
 
       {active < limit ? (
         <form className="panel stack" onSubmit={submit} noValidate>
-          <h2>Kendi sorunuzu ekleyin</h2>
+          <h2>{L("Kendi sorunuzu ekleyin", "Add your own question")}</h2>
           <Field label={L("Soru", "Question")} name="text" maxLength={300} placeholder={L("Örn. Antalya'da en iyi döner nerede yenir?", "e.g. Where's the best pizza in Austin?")} />
           <Select label={L("Müşteri ne yapıyor?", "What is the customer doing?")} name="intent" defaultValue="local">
             {(Object.keys(INTENT_LABEL) as Intent[]).map((k) => <option key={k} value={k}>{INTENT_LABEL[k]}</option>)}
           </Select>
           <Field label={L("Etiket (isteğe bağlı)", "Tag (optional)")} name="segment" maxLength={40}  placeholder={L("Örn. ucuz, premium, Almanya", "e.g. budget, premium, Germany")} hint={L("Aynı etiketi taşıyanlar raporda birlikte gösterilir: hangi koşulda görünüp hangisinde kaybolduğunuzu görürsünüz.", "Items sharing a tag are grouped in the report, so you can see where you show up and where you don't.")} />
           <ErrorBox message={err} />
-          <Button type="submit" busy={busy}>Soruyu ekle</Button>
+          <Button type="submit" busy={busy}>{L("Soruyu ekle", "Add question")}</Button>
         </form>
-      ) : <><ErrorBox message={err} /><p className="muted">Paketinizin aktif soru sınırına ulaştınız.</p></>}
+      ) : <><ErrorBox message={err} /><p className="muted">{L("Paketinizin aktif soru sınırına ulaştınız.", "You've reached the active question limit for your plan.")}</p></>}
     </div>
   );
 }

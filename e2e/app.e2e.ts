@@ -346,7 +346,7 @@ test("İngilizce arayüz: tarayıcı dili İngilizceyse giriş ve gizlilik İngi
   await expect(page.getByRole("heading", { name: "Privacy policy", level: 1 })).toBeVisible();
   await expect(page.getByText("Google may use this content to improve its products")).toBeVisible();
   await page.goto("/giris");
-  await page.getByRole("button", { name: "Türkçeye geç" }).click();
+  await page.getByRole("button", { name: "Switch to Turkish" }).click();
   await expect(page.getByRole("button", { name: "Giriş yap", exact: true })).toBeVisible();
   await ctx.close();
 });
