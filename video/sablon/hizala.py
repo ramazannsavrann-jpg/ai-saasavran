@@ -14,10 +14,11 @@ segs, _ = WhisperModel("small", device="cpu", compute_type="int8").transcribe(np
 W = [(w.start, norm(w.word)) for s in segs for w in s.words if norm(w.word)]
 starts, pos = [], 0
 for g in G[1:]:
-    an = [norm(x) for x in sents[g[0]].split()[:2] if norm(x)]
-    for i in range(pos, len(W) - len(an) + 1):
-        if all(W[i + k][1][:5] == an[k][:5] for k in range(len(an))): starts.append(max(W[i][0] - 0.15, 0.3)); pos = i + 1; break
-    else: sys.exit(f"HİZALAMA: '{' '.join(an)}' seste bulunamadı; süreler sureler2'den kalır")
+    tam = [norm(x) for x in sents[g[0]].split()[:2] if norm(x)]
+    for an in (tam, tam[:1]):   # sayılar sese rakamla yazılabilir (beş -> 5): 2 kelime olmazsa ilk kelime
+        hit = next((i for i in range(pos, len(W) - len(an) + 1) if all(W[i + k][1][:5] == an[k][:5] for k in range(len(an)))), None)
+        if hit is not None: starts.append(max(W[hit][0] - 0.15, 0.3)); pos = hit + 1; break
+    else: sys.exit(f"HİZALAMA: '{' '.join(tam)}' seste bulunamadı; süreler sureler2'den kalır")
 keys = list(cfg["dur"].keys()); tot = sum(cfg["dur"].values()); b = [0.0] + starts
 yeni = [round(float(b[i + 1] - b[i]), 2) for i in range(len(b) - 1)] + [round(float(tot - b[-1]), 2)]
 if min(yeni) < 1.0: sys.exit(f"HİZALAMA şüpheli {yeni}; süreler sureler2'den kalır")
