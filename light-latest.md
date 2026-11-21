@@ -1,9 +1,9 @@
-# GEO Otopilot raporu — 2026-11-20
+# GEO Otopilot raporu — 2026-11-21
 
 Mod: **ücretsiz kontrol** · Harcanan: **0 $** (tavan 0.4 $)
 
 ## Otomatik yapılanlar
-- IndexNow (Bing + Yandex): 30 sayfa bildirildi — kabul edildi
+- IndexNow (Bing + Yandex): 0 sayfa bildirildi — değişen sayfa yok
 - 250 sayfa kontrol edildi, 152 sayfada sorun var
 - Site denetimi: 13/13 kontrol geçti
 

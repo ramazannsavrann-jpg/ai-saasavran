@@ -1,5 +1,5 @@
 {
-  "date": "2026-11-20",
+  "date": "2026-11-21",
   "mode": "light",
   "costUsd": 0,
   "capUsd": 0.4,
@@ -8,9 +8,9 @@
   "auditPassed": 13,
   "auditTotal": 13,
   "indexnow": {
-    "sent": 30,
-    "status": 200,
-    "note": "kabul edildi"
+    "sent": 0,
+    "status": 0,
+    "note": "değişen sayfa yok"
   },
   "engines": {},
   "engineStatus": {},
