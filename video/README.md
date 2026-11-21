@@ -12,6 +12,7 @@
 - Aynı kanala aynı saate iki video konmaz; ikinci video ertesi güne veya uzun video saatine kayar.
 - Toplu yükleme yapılmaz (EN kanalı 20 Kasım'da 18 Short'u bir günde aldı, izlenme 0–2). Kanal başına günde en fazla 1 veri Short'u.
 - Kapak: her yüklemede s1 karesi JPEG ayrıca yüklenir ve Studio listesinde kontrol edilir (21 Kasım: YouTube EN gözlükte otomatik orta sahneyi seçmişti).
+- (21 Kasım) API ile kapak 'yüklendi' dese bile Shorts'ta Studio'da otomatik kare kalabildi (EN GTA). Her yüklemeden sonra Studio'da kapak gözle kontrol edilir, gerekirse Studio'dan yüklenir. YouTube API günlük kotası iki kanal için ortak; günde ~2 yükleme sonrası doluyor (11:00 TSİ sıfırlanır).
 - vidIQ ücretsiz planı günde 3 YouTube yüklemesi; dolarsa Studio + Chrome ile yüklenir.
 
 ## ANLATIMDA SİTE ADRESİ YOK (19 Kasım, kullanıcı kuralı — KESİN, tüm videolar)
