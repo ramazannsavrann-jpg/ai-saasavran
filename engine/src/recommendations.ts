@@ -149,10 +149,10 @@ export function buildRecommendations(i: RecInput): Recommendation[] {
     add(en
       ? { id: "model_knowledge_note", priority: "düşük", title: "Changes can take time to show",
         why: "These measurements were made without live web search; model knowledge only updates with new training.",
-        action: "Improvements to your site show up first in assistants that search the web. No-search measurement reflects the model's training data; when or whether a change shows up there isn't known in advance." }
+        action: "No-search measurement reflects the model's training data. Whether and when changes to your site show up in it can't be predicted; a live-search measurement reads current web results." }
       : { id: "model_knowledge_note", priority: "düşük", title: "Değişikliklerin etkisi zaman alabilir",
         why: "Bu ölçümler canlı web araması olmadan yapıldı; modelin bilgisi ancak yeni eğitimlerle güncellenir.",
-        action: "Sitenizde yaptığınız iyileştirmeler önce canlı arama yapan asistanlarda etkisini gösterir. Aramasız ölçüm modelin eğitim verisini yansıtır; değişikliğin orada ne zaman ya da yansıyıp yansımayacağı önceden bilinemez." });
+        action: "Aramasız ölçüm modelin eğitim verisini yansıtır. Sitenizdeki değişikliklerin bu ölçümde ne zaman görüneceği önceden bilinemez; canlı aramalı ölçüm ise güncel web sonuçlarını kullanır." });
   }
 
   // --- Kanıta dayalı ek maddeler (iyileştirme rehberi)
@@ -259,4 +259,12 @@ export function buildRecommendations(i: RecInput): Recommendation[] {
   }
 
   return recs.sort((a, b) => ORDER[a.priority] - ORDER[b.priority]);
+}
+
+/**
+ * İlerleme kontrolü için önceki ölçüm: yalnız aynı ölçüm türündeki tamamlanmış ölçümler arasından, mevcut (en son) ölçümden sonraki.
+ * Runs en yeniden en eskiye sıralı beklenir. Tür karıştırılırsa (ör. canlı arama ile aramasız) veya aynı ölçüm kendisiyle kıyaslanırsa ilerleme yanlış çıkar.
+ */
+export function previousSameTypeRun<T extends { status: string; measurement_type: string }>(runs: T[], type: string): T | undefined {
+  return runs.filter((r) => r.status === "done" && r.measurement_type === type)[1];
 }

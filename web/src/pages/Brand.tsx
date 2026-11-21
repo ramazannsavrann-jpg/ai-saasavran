@@ -13,7 +13,7 @@ import { CompareBars, TrendChart } from "../components/Chart";
 import { StartGuide } from "../components/StartGuide";
 import { FactCardInline } from "../components/FactCardInline";
 import { downloadCsv, fileSlug } from "../lib/csv";
-import { buildRecommendations, type RecInput } from "../../../engine/src/recommendations.ts";
+import { buildRecommendations, previousSameTypeRun, type RecInput } from "../../../engine/src/recommendations.ts";
 import { relatedBrand, untrackedNames } from "../../../engine/src/metrics.ts";
 import { aiVsShopping, type AiShopBrand } from "../../../engine/src/shopping.ts";
 import { campaignFor, taskProgress } from "../../../engine/src/campaign.ts";
@@ -1885,7 +1885,7 @@ function useRecommendations(brand: Brand, type: MeasurementType, runs: Run[]) {
   const lastRun = runs.find((r) => r.status === "done" && r.measurement_type === type);
   const results = useLoad(() => (lastRun ? api.promptResults(lastRun.id) : Promise.resolve([])), [lastRun?.id]);
   // İyileştirme rehberi için kanıtlar (ek API çağrısı yok): önceki ölçüm, motor farkı, kaynak fırsatları, ürün doğruluğu, Shopping
-  const prevRun = runs.filter((r) => r.status === "done")[1];
+  const prevRun = previousSameTypeRun(runs, type);
   const prevResults = useLoad(() => (prevRun ? api.promptResults(prevRun.id) : Promise.resolve([])), [prevRun?.id]);
   const evidence = useLoad(async () => {
     if (!lastRun || brand.data_origin === "simulated") return null;
