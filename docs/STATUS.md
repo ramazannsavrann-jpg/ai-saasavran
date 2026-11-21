@@ -8,6 +8,8 @@
 >
 > **21 Kasım (öneri raporu denetimi):** İlerleme kontrolü önceki ölçümü ölçüm türüne bakmadan seçiyordu; son ölçüm canlı aramalıysa kendisiyle ya da aramasız ölçümle kıyaslanabiliyordu. `previousSameTypeRun` ile yalnız aynı türden önceki ölçüm kullanılır (`engine/test/previous-run.test.ts`). Aramasız ölçüm notundaki "iyileştirmeler önce web aramalı asistanlarda görünür" iddiası kanıtlanmadığı için kaldırıldı.
 >
+> **21 Kasım (marka eşleştirme):** Çok kelimeli marka adının ilk kelimesi artık tek başına marka sayılmıyor ("Seattle", "Garanti" gibi). Yalnız tam ad ve tanımlı takma adlar sayılır (Peec yöntemi). Yeni ölçümlerde geçerli; eski kayıtlar yeniden hesaplanmadı. Sonuç: "(video)" gibi ek taşıyan adlar cevapta geçmez; bu markalara sade takma ad (ör. "Seattle Coffee Study") tanımlanmalı. Test: `engine/test/brand-matching.test.ts`, eski üç test yeni kurala göre güncellendi.
+>
 > **Erken erişim.** Ödeme (Paddle) ve haftalık e-posta (Resend) kodu hazır ve testli, ancak gerçek bir ödeme
 > ve gerçek bir gelen kutusu teslimi uçtan uca henüz doğrulanmadı. Hukuki metinleri avukat incelemedi.
 
