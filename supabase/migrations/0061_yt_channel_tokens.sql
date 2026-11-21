@@ -5,4 +5,8 @@ create table if not exists public.yt_channel_tokens (
   updated_at timestamptz not null default now()
 );
 alter table public.yt_channel_tokens enable row level security;
-revoke all on public.yt_channel_tokens from anon, authenticated;
+do $$ begin
+  if exists (select 1 from pg_roles where rolname = 'anon') then
+    revoke all on public.yt_channel_tokens from anon, authenticated;
+  end if;
+end $$;
