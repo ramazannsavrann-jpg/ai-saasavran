@@ -467,7 +467,7 @@ for (const lang of ["en", "tr"]) {
   const en = lang === "en"; const path = tutorialsPath(lang);
   write(path, page({ lang, alt: tutorialsPath(en ? "tr" : "en"), path,
     title: en ? "Tutorials: how to use AI SaaSavran" : "Eğitim: AI SaaSavran nasıl kullanılır?",
-    description: en ? "Ten short step-by-step lessons: free check, adding a brand, questions and competitors, first measurement, reading the report, sources, recommendations, products, sharing and weekly runs." : "On kısa, adım adım ders: ücretsiz kontrol, marka ekleme, soru ve rakipler, ilk ölçüm, raporu okuma, kaynaklar, öneriler, ürünler, paylaşım ve haftalık ölçüm.",
+    description: en ? "Ten short step-by-step lessons: free check, brand setup, questions and competitors, first measurement, report, sources, recommendations, products, sharing." : "On kısa, adım adım ders: ücretsiz kontrol, marka ekleme, soru ve rakipler, ilk ölçüm, raporu okuma, kaynaklar, öneriler, ürünler, paylaşım ve haftalık ölçüm.",
     body: tutorialsHtml(lang), schema: [tutorialsSchema(lang, SITE.url), crumbs([["AI SaaSavran", en ? "/" : "/tr/"], [en ? "Tutorials" : "Eğitim", path]])] }));
 }
 
@@ -486,6 +486,8 @@ const FOUNDER = {
   <p>Ramazan worked in banking for eight years, in roles that included the bank's call centre and staff training. Before that he worked as an agricultural technician. His interest in artificial intelligence led him to focus on building products that add real value, and in 2026 he started AI SaaSavran.</p>
   <h2>Why AI SaaSavran</h2>
   <p>More and more customers ask AI assistants which product, shop or service to choose. Years of answering customers' questions showed him how much the first answer matters. AI SaaSavran lets businesses see whether they are part of that answer, measured with real questions and real answers, never simulated data shown as real.</p>
+  <h2>What he publishes</h2>
+  <p>Besides the product, Ramazan publishes AI SaaSavran's own measurements openly: weekly <a href="/measurements/">real measurements</a> of which brands AI assistants recommend, the <a href="/ai-visibility-index/">AI Visibility Index</a> summarised by sector, and a written <a href="/methodology/">methodology</a> that explains every metric. AI SaaSavran also measures its own brand every two weeks and shows the result on the home page, including when it is not mentioned yet. Simulated results appear only in the Demo Lab, labelled as simulation.</p>
   <h2>About the name</h2>
   <p>AI SaaSavran = SaaS + Savran, the founder's surname. It is not affiliated with Savran AI (savran.ai) or any other similarly named company.</p>
   <p>Contact: <a href="mailto:${SITE.email}">${SITE.email}</a></p>
@@ -499,6 +501,8 @@ const FOUNDER = {
   <p>Sekiz yıl bankacılık sektöründe çalıştı; bankada çağrı merkezi ve eğitmenlik gibi görevlerde bulundu. Daha önce ziraat teknikeri olarak çalıştı. Yapay zekâya ilgisi onu katma değerli işler üretmeye yöneltti ve 2026'da AI SaaSavran'ı kurdu.</p>
   <h2>Neden AI SaaSavran?</h2>
   <p>Müşteriler artık hangi ürünü, mağazayı veya hizmeti seçeceklerini yapay zekâ asistanlarına soruyor. Yıllarca müşteri sorularını cevaplamak, ilk cevabın ne kadar önemli olduğunu gösterdi. AI SaaSavran, işletmelerin o cevapta yer alıp almadığını gerçek sorular ve gerçek cevaplarla gösterir; simülasyon asla gerçek gibi sunulmaz.</p>
+  <h2>Neler yayımlıyor?</h2>
+  <p>Ürünün yanında AI SaaSavran'ın kendi ölçümlerini de açıkça yayımlıyor: yapay zekâ asistanlarının hangi markaları önerdiğini gösteren haftalık <a href="/tr/olcumler/">gerçek ölçümler</a>, sektör sektör özet veren <a href="/tr/yapay-zeka-gorunurluk-endeksi/">Yapay Zekâ Görünürlük Endeksi</a> ve her metriği açıklayan <a href="/tr/metodoloji/">metodoloji</a> sayfası. AI SaaSavran kendi markasını da iki haftada bir ölçer ve sonucu, henüz anılmadığı dönemler dahil, ana sayfada gösterir. Simüle sonuçlar yalnız Demo Lab'de, "simülasyon" etiketiyle yer alır.</p>
   <h2>Adın hikâyesi</h2>
   <p>AI SaaSavran = SaaS + Savran (kurucunun soyadı). Savran AI (savran.ai) veya benzer adlı başka bir şirketle bağlantısı yoktur.</p>
   <p>İletişim: <a href="mailto:${SITE.email}">${SITE.email}</a></p>

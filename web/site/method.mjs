@@ -5,8 +5,8 @@
 
 // Her yerde aynı kullanılan tanım cümlesi
 export const DEF = {
-  en: "AI SaaSavran measures how often ChatGPT, Gemini, Claude and Perplexity mention and recommend brands and products, in what position they appear, and which sources they rely on.",
-  tr: "AI SaaSavran, markaların ve ürünlerin ChatGPT, Gemini, Claude ve Perplexity'de ne sıklıkla anıldığını, önerildiğini, kaçıncı sırada çıktığını ve hangi kaynaklara dayandığını ölçer.",
+  en: "AI SaaSavran measures how often ChatGPT, Gemini, Claude and Perplexity mention and recommend brands and products, their position, and which sources they rely on.",
+  tr: "AI SaaSavran, markaların ve ürünlerin ChatGPT, Gemini, Claude ve Perplexity'de ne sıklıkla anılıp önerildiğini, kaçıncı sırada çıktığını ve kaynaklarını ölçer.",
 };
 
 export const METHOD_PAGES = [
@@ -14,7 +14,7 @@ export const METHOD_PAGES = [
     key: "method", lang: "en", path: "/methodology/", alt: "/tr/metodoloji/",
     title: "Methodology: how AI SaaSavran measures AI visibility",
     short: "Methodology",
-    description: "How AI SaaSavran measures mention, recommendation, position and citation in ChatGPT, Gemini, Claude and Perplexity: questions, repetition, live search, confidence ranges, limits.",
+    description: "How AI SaaSavran measures mention, recommendation, position and citation in ChatGPT, Gemini, Claude and Perplexity: questions, repetition, live search, limits.",
     body: `
 <p class="lede">${DEF.en} This page explains exactly how: which questions are asked, how often, how each metric is calculated and where the limits are.</p>
 

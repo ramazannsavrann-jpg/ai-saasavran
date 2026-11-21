@@ -53,7 +53,7 @@
 > + EN (`web/site/compare.mjs`; rakip bilgisi yalnız resmî sayfalardan, 18 Kasım; 3 ayda bir kontrol). Kurucu sayfası `/tr/kurucu/`, `/founder/`
 > (Ramazan Savran, Antalya; Person + Organization.founder şeması; sahip onayı).
 > Rehberler: 4 ince rehbere gerçek ölçüm verili bölümler eklendi; yeni TR+EN: markam ChatGPT'de neden çıkmıyor, Perplexity'de görünmek,
-> GEO/AEO sözlüğü, llms.txt nedir (`web/site/guides-more.mjs`). Toplam 13 TR + 13 EN rehber.
+> GEO/AEO sözlüğü, llms.txt nedir (`web/site/guides-more.mjs`). Toplam 14 TR + 14 EN rehber (21 Kasım).
 > Ücretsiz kontrol sayfası tam sayfa (sorular, sonuç okuma, sınırlar, SSS şeması); gizlilik politikasına ücretsiz kontrol verisi eklendi.
 > Kendi ölçümümüz otomatik: `export-measurements.ts` son bitmiş canlı ölçümü `web/site/data/self.json`'a yazar; ana sayfa kutusu ve
 > karşılaştırma tablosu buradan (`web/site/self.mjs`). `visibility.yml` bu dosyayı da commit eder.
@@ -126,6 +126,11 @@
 > **17 Kasım:** Strateji notlarının kodla eşleştirmesi, iş bölümü (marka/ürün ↔ kamu) ve iki oturumun çakışmama
 > kuralları: [`docs/OZELLIK-HARITASI.md`](OZELLIK-HARITASI.md). Yeni özellik önermeden önce okuyun.
 
+
+## 21 Kasım — GEO otopilot düzeltmeleri
+- 148 ölçüm/kurucu sayfası "az metin" uyarısı aldı: ölçüm şablonuna (`measurements.mjs`) "Bu tablo nasıl okunur?", "Markanız bu listede yoksa" ve aynı sektörden "Benzer ölçümler" bölümleri eklendi (yalnız tanım + sayfanın kendi sayıları). Kurucu sayfalarına "Neler yayımlıyor?" bölümü.
+- Uzun açıklamalar kısaltıldı: ana sayfa (TR/EN, `DEF`), /methodology/, /tutorials/.
+- Yeni rehber (TR+EN): Türkiye'de yapay zekâ görünürlüğü analizi (`guides-more.mjs`). Toplam 14 TR + 14 EN rehber.
 
 ## 20 Kasım — ölçüm mantığı denetimi
 - Öneri algılama (engine/src/metrics.ts): olumsuzluk yalnız markanın geçtiği cümle parçasında sayılır; "kapalı havuz", "şikayet oranı düşük", "avoids hidden fees" artık olumsuz değil; "kaçınmanız gerekenler" başlığı altındaki maddeler ve "X yerine Y"deki X önerilmiş sayılmaz; ayrı numaralı listelerde sıra kendi listesinde; gündelik kelime olan marka adları ("garanti", "getir") yalnız büyük harfle ve -li eki olmadan sayılır. Test: engine/test/detection-audit.test.ts.
