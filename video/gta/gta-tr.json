@@ -1,0 +1,433 @@
+{
+ "out": "tr",
+ "lang": "tr",
+ "order": [
+  "s1",
+  "names",
+  "s2",
+  "s3",
+  "s4",
+  "shop",
+  "net",
+  "s8"
+ ],
+ "n": 16,
+ "n2": 48,
+ "names": "Konsollar: Nintendo Switch 2, PlayStation 5, PlayStation 5 Pro, Steam Deck, Xbox Series S, Xbox Series X",
+ "names_list": [
+  "Nintendo Switch 2",
+  "PlayStation 5",
+  "PlayStation 5 Pro",
+  "Steam Deck",
+  "Xbox Series S",
+  "Xbox Series X"
+ ],
+ "footer": "ChatGPT, Claude, Perplexity: canlı web araması (ABD) · Gemini: model bilgisi · 21 Kas 2026",
+ "brands": [
+  [
+   "PlayStation 5",
+   48
+  ],
+  [
+   "Xbox Series S",
+   28
+  ],
+  [
+   "Xbox Series X",
+   26
+  ],
+  [
+   "PS5 Pro",
+   18
+  ],
+  [
+   "Switch 2",
+   16
+  ],
+  [
+   "Steam Deck",
+   6
+  ]
+ ],
+ "engines": [
+  [
+   "ChatGPT",
+   "/16"
+  ],
+  [
+   "Claude",
+   "/16"
+  ],
+  [
+   "Perplexity",
+   "/16"
+  ],
+  [
+   "Gemini",
+   "/16"
+  ]
+ ],
+ "gemini_label": "Hafızadan",
+ "eng_rows": [
+  [
+   "PS5 Pro",
+   6,
+   7,
+   5,
+   9
+  ],
+  [
+   "Switch 2",
+   4,
+   8,
+   4,
+   3
+  ],
+  [
+   "\"Henüz çıkmadı\"",
+   0,
+   0,
+   0,
+   10
+  ]
+ ],
+ "eng_hl": [
+  "\"Henüz çıkmadı\""
+ ],
+ "questions": [
+  [
+   "GTA 6 için en iyi konsol?",
+   [
+    [
+     "PS5 Pro",
+     "6/6",
+     false
+    ],
+    [
+     "Xbox Series S",
+     "0/6",
+     false
+    ]
+   ]
+  ],
+  [
+   "Sadece GTA 6 için alıyorum?",
+   [
+    [
+     "PS5",
+     "3/6",
+     false
+    ],
+    [
+     "PS5 Pro",
+     "1/6",
+     false
+    ],
+    [
+     "\"Duruma göre\"",
+     "2/6",
+     false
+    ]
+   ]
+  ],
+  [
+   "Black Friday'de hangi konsol?",
+   [
+    [
+     "Switch 2",
+     "4/6",
+     true
+    ],
+    [
+     "Xbox Series X",
+     "1/6",
+     false
+    ]
+   ]
+  ],
+  [
+   "En iyi yılbaşı hediyesi?",
+   [
+    [
+     "Switch 2",
+     "4/6",
+     true
+    ],
+    [
+     "PS5",
+     "1/6",
+     false
+    ]
+   ]
+  ]
+ ],
+ "shop": {
+  "rows": [
+   [
+    "PS5 Pro",
+    "4.",
+    "—",
+    true
+   ],
+   [
+    "PlayStation 5",
+    "1.",
+    "1.",
+    false
+   ],
+   [
+    "Xbox Series S",
+    "2.",
+    "9.",
+    false
+   ],
+   [
+    "Xbox Series X",
+    "3.",
+    "12.",
+    false
+   ],
+   [
+    "Switch 2",
+    "5.",
+    "—",
+    false
+   ]
+  ]
+ },
+ "net": {
+  "left": [
+   [
+    "tomsguide.com",
+    7
+   ],
+   [
+    "techradar.com",
+    4
+   ],
+   [
+    "dotesports.com",
+    3
+   ],
+   [
+    "rockstargames.com",
+    3
+   ],
+   [
+    "techpowerup.com",
+    3
+   ],
+   [
+    "grandleonida.com",
+    3
+   ]
+  ],
+  "right": [
+   "PS5",
+   "Xbox Series S",
+   "Xbox Series X",
+   "PS5 Pro",
+   "Switch 2"
+  ],
+  "links": [
+   [
+    0,
+    0,
+    7
+   ],
+   [
+    0,
+    1,
+    3
+   ],
+   [
+    0,
+    2,
+    3
+   ],
+   [
+    0,
+    3,
+    1
+   ],
+   [
+    0,
+    4,
+    5
+   ],
+   [
+    1,
+    0,
+    4
+   ],
+   [
+    1,
+    1,
+    3
+   ],
+   [
+    1,
+    2,
+    2
+   ],
+   [
+    1,
+    3,
+    1
+   ],
+   [
+    1,
+    4,
+    1
+   ],
+   [
+    2,
+    0,
+    3
+   ],
+   [
+    2,
+    1,
+    3
+   ],
+   [
+    2,
+    2,
+    2
+   ],
+   [
+    2,
+    3,
+    2
+   ],
+   [
+    2,
+    4,
+    2
+   ],
+   [
+    3,
+    0,
+    3
+   ],
+   [
+    3,
+    1,
+    2
+   ],
+   [
+    3,
+    2,
+    1
+   ],
+   [
+    3,
+    3,
+    2
+   ],
+   [
+    4,
+    0,
+    3
+   ],
+   [
+    4,
+    1,
+    3
+   ],
+   [
+    4,
+    2,
+    3
+   ],
+   [
+    4,
+    3,
+    3
+   ],
+   [
+    5,
+    0,
+    3
+   ],
+   [
+    5,
+    1,
+    3
+   ],
+   [
+    5,
+    2,
+    3
+   ],
+   [
+    5,
+    3,
+    3
+   ]
+  ]
+ },
+ "sources": [],
+ "t": {
+  "hook": "GTA 6 çıktı. Yapay zekâ hangi konsolu öneriyor?",
+  "badge": "Aynı mı söylüyorlar?",
+  "hook2": "ABD verisi · 6 konsol · 8 alıcı sorusu",
+  "note": "Bunlar yapay zekânın cevaplarıdır.",
+  "names_title": "Cevaplarda en çok geçen konsollar",
+  "names_sub": "Alfabetik sırayla",
+  "tag_brands": "Anılan markalar",
+  "who": "Kimin adı geçti?",
+  "who_sub": "ChatGPT + Claude + Perplexity, 48 canlı aramalı cevap (ABD)",
+  "tag_eng": "Yapay zekâ karşılaştırması",
+  "eng": "Gemini'ye göre GTA 6 daha çıkmadı",
+  "eng_sub": "Konsolun adının geçtiği cevap (16'da)",
+  "eng_note": "Gemini (hafızadan) 10 cevapta \"çıkmadı\" dedi. Oyun 19 Kasım'da çıktı.",
+  "tag_q": "Soru bazında",
+  "byq": "Soru değişince kazanan değişiyor",
+  "byq_sub": "6 canlı aramalı cevapta ilk öneri · kırmızı = GTA 6'yı çalıştıramaz",
+  "tag_shop": "Google Shopping (ABD)",
+  "shop": "Yapay zekâ ile Google Shopping",
+  "shop_sub": "Arama: \"gta 6 console\" · her konsolun ilk ürünü",
+  "shop_col_ai": "YZ sırası",
+  "shop_col_shop": "Shopping",
+  "shop_note": "1. sıra Mercari'de ikinci el bir PS5 (550 $). PS5 Pro ve Switch 2 ilk 20'de yok. — = ilk 20'de yok.",
+  "tag_net": "Kaynak ağı",
+  "net": "Yapay zekâ nereye bakıyor?",
+  "net_sub": "Çizgi kalınlığı = siteyi kaynak gösterip konsolu anan cevap sayısı",
+  "net_note": "En çok kaynak: tomsguide.com, 7 cevap.",
+  "cta": "Yapay zekâ markanız için ne diyor?",
+  "cta2": "ChatGPT, Gemini, Claude ve Perplexity'de her hafta takip edin.",
+  "free": "Ücretsiz kontrol, kayıt gerekmez",
+  "disc": "21 Kasım 2026 yapay zekâ cevapları (ABD, İngilizce sorular). 64 cevap, hepsi alındı. Sayılar konsolun adının geçtiği cevap sayısıdır; PlayStation 5 sayısına PS5 Pro da dahildir. Küçük örneklem, tüm pazarı temsil etmez. Tavsiye değildir. Adlar sahiplerine aittir."
+ },
+ "gruplar": "0,1|2|3|4,5|6,7|8,9|10,11|12,13,14",
+ "yt": {
+  "baslik": "GTA 6 çıktı: Yapay zekâ hangi konsolu öneriyor? #shorts",
+  "aciklama": "ChatGPT, Claude, Perplexity ve Gemini'ye ABD'den aynı 8 GTA 6 konsol sorusunu sorduk (21 Kasım 2026).\n\n• En iyi GTA 6 deneyimi için 6 cevabın 6'sı PS5 Pro dedi.\n• Black Friday ya da yılbaşı hediyesi sorulunca ilk öneri, GTA 6'yı çalıştıramayan Nintendo Switch 2 oldu.\n• Hafızadan cevap veren Gemini, 10 cevapta GTA 6'nın henüz çıkmadığını söyledi.\n\nBunlar yapay zekânın cevaplarıdır, bizim önerimiz değildir. Küçük örneklem, tüm pazarı temsil etmez.\n\nYapay zekâ markanız için ne diyor? aisaasavran.com\n\n#GTA6 #PS5Pro #Xbox #NintendoSwitch2 #ChatGPT #YapayZeka",
+  "etiketler": [
+   "GTA 6",
+   "GTA VI",
+   "PS5 Pro",
+   "PS5",
+   "Xbox Series X",
+   "Xbox Series S",
+   "Nintendo Switch 2",
+   "Black Friday",
+   "Efsane Cuma",
+   "ChatGPT",
+   "Gemini",
+   "yapay zeka"
+  ],
+  "listeler": []
+ },
+ "dur": {
+  "p1": 5.0,
+  "p2": 5.0,
+  "p3": 5.0,
+  "p4": 5.0,
+  "p5": 5.0,
+  "p6": 5.0,
+  "p7": 5.0,
+  "p8": 5.0
+ }
+}

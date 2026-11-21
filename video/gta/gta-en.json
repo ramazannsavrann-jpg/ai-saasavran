@@ -1,0 +1,434 @@
+{
+ "out": "en",
+ "lang": "en",
+ "order": [
+  "s1",
+  "names",
+  "s2",
+  "s3",
+  "s4",
+  "shop",
+  "net",
+  "s8"
+ ],
+ "n": 16,
+ "n2": 48,
+ "names": "Consoles: Nintendo Switch 2, PlayStation 5, PlayStation 5 Pro, Steam Deck, Xbox Series S, Xbox Series X",
+ "names_list": [
+  "Nintendo Switch 2",
+  "PlayStation 5",
+  "PlayStation 5 Pro",
+  "Steam Deck",
+  "Xbox Series S",
+  "Xbox Series X"
+ ],
+ "footer": "ChatGPT, Claude, Perplexity: live web search (US) · Gemini: model knowledge · Nov 21, 2026",
+ "brands": [
+  [
+   "PlayStation 5",
+   48
+  ],
+  [
+   "Xbox Series S",
+   28
+  ],
+  [
+   "Xbox Series X",
+   26
+  ],
+  [
+   "PS5 Pro",
+   18
+  ],
+  [
+   "Switch 2",
+   16
+  ],
+  [
+   "Steam Deck",
+   6
+  ]
+ ],
+ "engines": [
+  [
+   "ChatGPT",
+   "/16"
+  ],
+  [
+   "Claude",
+   "/16"
+  ],
+  [
+   "Perplexity",
+   "/16"
+  ],
+  [
+   "Gemini",
+   "/16"
+  ]
+ ],
+ "gemini_label": "From memory",
+ "eng_rows": [
+  [
+   "PS5 Pro",
+   6,
+   7,
+   5,
+   9
+  ],
+  [
+   "Switch 2",
+   4,
+   8,
+   4,
+   3
+  ],
+  [
+   "\"Not out yet\"",
+   0,
+   0,
+   0,
+   10
+  ]
+ ],
+ "eng_hl": [
+  "\"Not out yet\""
+ ],
+ "questions": [
+  [
+   "Best console for GTA 6?",
+   [
+    [
+     "PS5 Pro",
+     "6/6",
+     false
+    ],
+    [
+     "Xbox Series S",
+     "0/6",
+     false
+    ]
+   ]
+  ],
+  [
+   "Buying it just for GTA 6?",
+   [
+    [
+     "PS5",
+     "3/6",
+     false
+    ],
+    [
+     "PS5 Pro",
+     "1/6",
+     false
+    ],
+    [
+     "\"Depends\"",
+     "2/6",
+     false
+    ]
+   ]
+  ],
+  [
+   "Console for Black Friday?",
+   [
+    [
+     "Switch 2",
+     "4/6",
+     true
+    ],
+    [
+     "Xbox Series X",
+     "1/6",
+     false
+    ]
+   ]
+  ],
+  [
+   "Best Christmas gift?",
+   [
+    [
+     "Switch 2",
+     "4/6",
+     true
+    ],
+    [
+     "PS5",
+     "1/6",
+     false
+    ]
+   ]
+  ]
+ ],
+ "shop": {
+  "rows": [
+   [
+    "PS5 Pro",
+    "#4",
+    "—",
+    true
+   ],
+   [
+    "PlayStation 5",
+    "#1",
+    "#1",
+    false
+   ],
+   [
+    "Xbox Series S",
+    "#2",
+    "#9",
+    false
+   ],
+   [
+    "Xbox Series X",
+    "#3",
+    "#12",
+    false
+   ],
+   [
+    "Switch 2",
+    "#5",
+    "—",
+    false
+   ]
+  ]
+ },
+ "net": {
+  "left": [
+   [
+    "tomsguide.com",
+    7
+   ],
+   [
+    "techradar.com",
+    4
+   ],
+   [
+    "dotesports.com",
+    3
+   ],
+   [
+    "rockstargames.com",
+    3
+   ],
+   [
+    "techpowerup.com",
+    3
+   ],
+   [
+    "grandleonida.com",
+    3
+   ]
+  ],
+  "right": [
+   "PS5",
+   "Xbox Series S",
+   "Xbox Series X",
+   "PS5 Pro",
+   "Switch 2"
+  ],
+  "links": [
+   [
+    0,
+    0,
+    7
+   ],
+   [
+    0,
+    1,
+    3
+   ],
+   [
+    0,
+    2,
+    3
+   ],
+   [
+    0,
+    3,
+    1
+   ],
+   [
+    0,
+    4,
+    5
+   ],
+   [
+    1,
+    0,
+    4
+   ],
+   [
+    1,
+    1,
+    3
+   ],
+   [
+    1,
+    2,
+    2
+   ],
+   [
+    1,
+    3,
+    1
+   ],
+   [
+    1,
+    4,
+    1
+   ],
+   [
+    2,
+    0,
+    3
+   ],
+   [
+    2,
+    1,
+    3
+   ],
+   [
+    2,
+    2,
+    2
+   ],
+   [
+    2,
+    3,
+    2
+   ],
+   [
+    2,
+    4,
+    2
+   ],
+   [
+    3,
+    0,
+    3
+   ],
+   [
+    3,
+    1,
+    2
+   ],
+   [
+    3,
+    2,
+    1
+   ],
+   [
+    3,
+    3,
+    2
+   ],
+   [
+    4,
+    0,
+    3
+   ],
+   [
+    4,
+    1,
+    3
+   ],
+   [
+    4,
+    2,
+    3
+   ],
+   [
+    4,
+    3,
+    3
+   ],
+   [
+    5,
+    0,
+    3
+   ],
+   [
+    5,
+    1,
+    3
+   ],
+   [
+    5,
+    2,
+    3
+   ],
+   [
+    5,
+    3,
+    3
+   ]
+  ]
+ },
+ "sources": [],
+ "t": {
+  "hook": "GTA 6 is out. Which console does AI tell you to buy?",
+  "badge": "Do they agree?",
+  "hook2": "US edition · 6 consoles · 8 buyer questions",
+  "note": "These are the AI's answers.",
+  "names_title": "Consoles that came up most",
+  "names_sub": "In alphabetical order",
+  "tag_brands": "Mentions",
+  "who": "Who got named?",
+  "who_sub": "ChatGPT + Claude + Perplexity, 48 live-search answers",
+  "tag_eng": "AI comparison",
+  "eng": "One AI thinks GTA 6 isn't out",
+  "eng_sub": "Answers naming each (out of 16)",
+  "eng_note": "Gemini, from memory: 10 answers said GTA 6 isn't out; 8 gave \"Fall 2025\". It launched Nov 19, 2026.",
+  "tag_q": "By question",
+  "byq": "New question, new winner",
+  "byq_sub": "Top pick in 6 live-search answers · red = can't run GTA 6",
+  "tag_shop": "Google Shopping (US)",
+  "shop": "AI's picks vs Google Shopping",
+  "shop_sub": "Search: \"gta 6 console\" · first listing of each",
+  "shop_col_ai": "AI rank",
+  "shop_col_shop": "Shopping",
+  "shop_note": "#1 is a used PS5 on Mercari ($550). PS5 Pro and Switch 2 aren't in the top 20. — = not in top 20.",
+  "tag_net": "AI source network",
+  "net": "Which sites shape the answers?",
+  "net_sub": "Line width = answers citing the site that named the console",
+  "net_note": "Most cited: tomsguide.com, in 7 answers.",
+  "cta": "What does AI say about your brand?",
+  "cta2": "Track it weekly across ChatGPT, Gemini, Claude and Perplexity.",
+  "free": "Free check, no signup",
+  "disc": "AI answers from Nov 21, 2026 (US). 64 answers, none failed. Counts = answers naming the console. PlayStation 5 count includes PS5 Pro mentions. Small sample, not representative. Not an endorsement. Names belong to their owners."
+ },
+ "gruplar": "0,1|2|3|4,5|6,7|8,9|10,11|12,13,14",
+ "yt": {
+  "baslik": "GTA 6 is out. Which console does AI tell you to buy? #shorts",
+  "aciklama": "We asked ChatGPT, Claude, Perplexity and Gemini the same 8 GTA 6 console questions from the US (Nov 21, 2026).\n\n• PS5 Pro was the top pick for the best GTA 6 experience in 6 of 6 answers.\n• Ask about Black Friday or a Christmas gift and Nintendo Switch 2, which can't run GTA 6, becomes the top pick.\n• Gemini, answering from memory, said GTA 6 isn't out yet in 10 answers.\n\nThese are the AI's answers, not our recommendation. Small sample, not representative of the whole market.\n\nCheck what AI says about your brand: aisaasavran.com\n\n#GTA6 #PS5Pro #Xbox #NintendoSwitch2 #ChatGPT #AI",
+  "etiketler": [
+   "GTA 6",
+   "GTA VI",
+   "PS5 Pro",
+   "PS5",
+   "Xbox Series X",
+   "Xbox Series S",
+   "Nintendo Switch 2",
+   "Black Friday",
+   "ChatGPT",
+   "Gemini",
+   "Claude",
+   "Perplexity",
+   "AI"
+  ],
+  "listeler": []
+ },
+ "dur": {
+  "p1": 5.0,
+  "p2": 5.0,
+  "p3": 5.0,
+  "p4": 5.0,
+  "p5": 5.0,
+  "p6": 5.0,
+  "p7": 5.0,
+  "p8": 5.0
+ }
+}
