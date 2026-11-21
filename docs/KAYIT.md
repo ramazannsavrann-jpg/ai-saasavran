@@ -8,4 +8,5 @@ Kodlar: `EN-S-001` (İngilizce Short), `EN-U-001` (İngilizce uzun), `TR-S-001` 
 
 | kod | hesap | durum | tarih |
 | --- | --- | --- | --- |
+| YT-OTO-001 (YouTube API ile iki kanala yükleme + EN izni) | hesap-B (bu oturum) | devam | 2026-11-21 |
 | TASIMA-001 (telefon EN → EN kanalı; mağaza/kulaklık/tanıtım TR tek dil) | hesap-B (bu oturum) | devam | 2026-11-20 |
