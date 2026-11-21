@@ -1,5 +1,7 @@
 # AI SaaSavran video düzeni (kalıcı)
 
+> **TEK KALEM (21 Kasım):** Shorts üretimi `video/uret.sh` ile tek komuttur; ses/müzik/kapak/yayın saati sabitleri yalnız `video/stil.json`'da. Ayrıntı: `video/STIL.md`.
+
 ## YAYIN SAATİ: PRIME'DAN 1 SAAT ÖNCE (21 Kasım, kullanıcı kuralı — KALICI, tüm videolar)
 - Her video, hedef ülkenin prime saatinden 1 saat önce yayınlanır. TR: Shorts 18:00, uzun 20:00 (TSİ). ABD (EN): prime 19:00 ET → yayın 18:00 ET = 23:00Z = 02:00 TSİ (kış saati); ABD yaz saatinde 22:00Z = 01:00 TSİ.
 - Aynı kanala aynı saate iki video konmaz; ikinci video ertesi güne veya uzun video saatine kayar.

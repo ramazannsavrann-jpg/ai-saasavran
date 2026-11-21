@@ -1,0 +1,16 @@
+{
+  "_not": "TEK KALEM: kapak, ses, müzik, süre, yayın saati buradan okunur. Değiştirmek için yalnız bu dosya değişir (STIL.md'de açıklama).",
+  "ses": {
+    "tr": {"motor": "gemini", "model": "gemini-2.5-flash-preview-tts", "ses": "Charon", "tempo": 1.24},
+    "en": {"motor": "gemini", "model": "gemini-2.5-flash-preview-tts", "ses": "Charon", "tempo": 1.2}
+  },
+  "muzik": {"dosya": "video/music.wav", "seviye": 0.35, "ses_seviye": 1.6, "son_fade_sn": 1.5},
+  "video": {"en": 1080, "boy": 1920, "fps": 30, "azami_sn": 58},
+  "kapak": {"kaynak_sahne": "p1", "jpeg_kalite": 92},
+  "gruplar_varsayilan": "0,1|2|3,4|5,6,7|8,9,10|11,12|13,14|15,16,17",
+  "yayin": {
+    "tr": {"kanal": "tr", "saat": "18:00", "dil": "tr"},
+    "en": {"kanal": "en", "saat": "02:00", "dil": "en", "not": "18:00 ET = 02:00 TSİ (kış); ABD yaz saatinde 01:00"}
+  },
+  "youtube": {"kategori": 28}
+}
