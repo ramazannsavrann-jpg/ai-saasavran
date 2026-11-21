@@ -98,7 +98,7 @@ PR açıklamasında bu kontrollerden neyin değiştiğini kısaca yaz.
   Eğitim (Eğitim/Tutorial) videoları EN kanalına yüklenmez; TR kanalında liste dışı kalır, yalnız siteden izlenir.
   İstisna (20 Kasım, sahibinin kararı): İngilizce eğitim videoları da TR kanalında liste dışı durur (sitedeki /tutorials/ oynatıcıları için); seri 10 ders.
   Her yüklemede: çocuklara yönelik değil, ücretli tanıtım yok, yapay içerik işareti, video dili, kurala uygun kapak.
-  vidIQ yalnız TR kanalına bağlı (ikinci kanal ücretli): EN yüklemeleri YouTube Studio'dan yapılır.
+  Yükleme (21 Kasım): iki kanal da GitHub Actions `youtube-yukle` ile (iş dosyası `yt/yukle/<ad>-<dil>.json`, ayrıntı `yt/yukle/README.md`); vidIQ yalnız TR kanalı için yedek.
 - **Açıklama yapısı (20 Kasım, yeni videolar):** her YouTube açıklaması kanalın dilinde şu sırayla yazılır: 1–2 cümlelik
   doğrudan cevap (videonun ana bulgusu, gerçek sayıyla) → "Öne çıkanlar" (3–5 madde) → "Bu video hangi sorulara cevap veriyor"
   (2–4 soru + tek cümlelik cevap) → "Bölümler" (zaman damgalı, uzun videolarda) → bağımsızlık satırı ve ölçüm tarihi.
