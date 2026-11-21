@@ -2,6 +2,11 @@
 
 > **TEK KALEM (21 Kasım):** Shorts üretimi `video/uret.sh` ile tek komuttur; ses/müzik/kapak/yayın saati sabitleri yalnız `video/stil.json`'da. Ayrıntı: `video/STIL.md`.
 
+## YÜKLEME: İKİ KANAL DA API İLE (21 Kasım, kullanıcı kararı — KALICI; aşağıdaki "Studio'dan / Chrome ile / vidIQ ile" yükleme satırlarının yerine geçer)
+- TR kanalı (@AISaaSavran) ve EN kanalı (@AISaaSavranEN) artık GitHub Actions `youtube-yukle` ile yüklenir (`yt/yt_yukle.py`, ayrıntı main'de `yt/yukle/README.md`). EN izni bir kerelik alındı (`youtube-yetki`, anahtar Supabase `yt_channel_tokens`).
+- Akış: mp4 + kapak `videolar` dalına → main'e iş dosyası `yt/yukle/<ad>-<dil>.json` (kanal, video, kapak, baslik, aciklama, etiketler, kategori 28, dil, yayin, listeler) → push → iş çalışır, video kimliği log'da. Sonra PAYLAŞIM KAYDI güncellenir.
+- Haftalık uzun video görevi dahil tüm oturumlar EN videoyu da kendisi yükler; "EN: Studio'dan yüklenecek" diye bırakmaz. vidIQ yalnız yedek (TR kanalı). Kanal kuralı aynen sürer: EN içerik yalnız EN kanalına, TR yalnız TR kanalına.
+
 ## YAYIN SAATİ: PRIME'DAN 1 SAAT ÖNCE (21 Kasım, kullanıcı kuralı — KALICI, tüm videolar)
 - Her video, hedef ülkenin prime saatinden 1 saat önce yayınlanır. TR: Shorts 18:00, uzun 20:00 (TSİ). ABD (EN): prime 19:00 ET → yayın 18:00 ET = 23:00Z = 02:00 TSİ (kış saati); ABD yaz saatinde 22:00Z = 01:00 TSİ.
 - Aynı kanala aynı saate iki video konmaz; ikinci video ertesi güne veya uzun video saatine kayar.
@@ -215,7 +220,7 @@ Yeni video yükleyince ID'sini `yt/ayar.json`'a {lang, lists} ile ekle ve push e
 - Kapak: `video/uzun/kapak.py "başlık" "rozet" "alt satır" çıktı.jpg` ile sade 1280x720 (başlık + sarı bulgu rozeti). Açıklamada bölüm zaman damgaları (a01..aNN süreleri toplanarak).
 - **Uzun 3 (v2), 20 Kasım — "Dev markalar neden görünmüyor?"** (`uzun/devmarka3b-*.json`, ad `uzun3b-devmarka`, haftalık görev). İlk Uzun 3 (19 Kasım render, `uzun/dev-markalar-tr.mp4`) hiç yüklenmemişti; kapanışta site adı vardı, özellik bölümü yoktu → yeniden yapıldı, 10 bölüm, ~4:54.
   - TR: `n1mIYpg8Xlw` (vidIQ, gizli, 20 Kasım 21:00 TSİ = 18:00Z planlı), video `videolar` dalı `uzun/dev-markalar-v2-tr.mp4`, kapak `kapak/uzun3b-tr.jpg`.
-  - EN: `uzun/big-brands-v2-en.mp4` + `kapak/uzun3b-en.jpg` HAZIR; EN kanalı vidIQ'ya bağlı olmadığı için (KANAL KURALI) sahibi YouTube Studio'dan yükleyecek (plan: 20 Kasım 21:00Z). Kimlik gelince `yt/ayar.json`'a eklenecek.
+  - EN: `uzun/big-brands-v2-en.mp4` + `kapak/uzun3b-en.jpg` HAZIR; EN kanalı vidIQ'ya bağlı olmadığı için (KANAL KURALI) EN kanalında yayında: qde8_Cj8i0o (başka oturum, Studio ile).
   - **Özellik bölümü: Kayıp Nedeni Kartı** (`engine/src/insights.ts` lossCards + `Brand.tsx` LossCardView). Gerçek örnek: Growth Lab 1, Nike TR ölçümü, soru "En kaliteli ve uzun ömürlü spor ayakkabı markası hangisi?", 4 canlı cevap (ChatGPT 2, Claude 2, 14 Kasım): hedef 0/4, yerine Asics/Hoka/New Balance 3/4 (videoda Marka A/C/F, hedef Marka X), hedef sitesi hiç kaynak değil, runrepeat.com 4/4. Yeni sahne türü `loss` (`uzun.py`).
   - Kullanılan veri: Nespresso/Tom Ford/Armani/iRobot/Philips (global, canlı vs Gemini), Roborock–Philips, Lenovo–Dell, De'Longhi–Siemens (uzman marka), Xiaomi/MSI/Liv Hospital (ChatGPT vs Claude), Philips/Arzum/Fakir, Samsung/Vestel (Türkiye yerli). KULLANILMADI (sonraki bölümlere): soru bazında düşüş (Oura pil/abonelik, Starbucks Pike Place) → Uzun 4; Türkiye vs dünya karşılaştırması → Uzun 5.
   - Özellik rotasyonu kaydı: Uzun 2 = (özellik bölümü yoktu; kaynak analizi anlatıldı) · Uzun 3 = Kayıp Nedeni Kartı. Sonraki bölüm bunu KULLANMAZ (öneri: Uzun 4 = Koşullu Görünürlük Haritası / soru türü, Uzun 5 = ülke-dil karşılaştırması).
