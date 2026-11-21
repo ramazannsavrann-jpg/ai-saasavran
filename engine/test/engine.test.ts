@@ -457,8 +457,8 @@ test("rules_v2: düz paragrafta yalnızca anılan marka öneri sayılmaz", () =>
   assert.equal(h[0].recommended, false);
 });
 
-test("Marka adının ilk kelimesi tek başına geçince yakalanır (Garanti Bonus); yaygın kelime ve küçük harf yakalanmaz", () => {
-  const brands = [{ id: "g", name: "Garanti BBVA", aliases: [] }, { id: "u", name: "Usta Eller Oto", aliases: [] }];
+test("Kısaltma yalnız açıkça tanımlı takma adla sayılır (Peec yöntemi); tanımsız ilk kelime sayılmaz; yaygın kelime ve küçük harf yakalanmaz", () => {
+  const brands = [{ id: "g", name: "Garanti BBVA", aliases: ["Garanti"] }, { id: "u", name: "Usta Eller Oto", aliases: [] }];
   const r = (t: string) => Object.fromEntries(analyzeResponse({ promptId: "p", provider: "x", answerText: t, citedUrls: [] }, brands).map((h) => [h.brandId, h]));
   assert.equal(r("Kampanyalar için Garanti Bonus, Yapı Kredi World gibi kartları karşılaştırın.").g.mentioned, true);
   assert.equal(r("Garanti'nin mobil uygulaması hızlıdır.").g.mentioned, true);
@@ -836,9 +836,11 @@ test("Ad eşleşmesi: ortak ilk kelime ('Marka A' / 'Marka B') ve ürün adları
   // ürün: "Kuzey" markasının adı geçince "Kuzey Model X" ürünü anılmış sayılmaz
   const prod = analyzeResponse(r("Kuzey markasının başka modelleri de var."), [{ id: "p", name: "Kuzey Model X", aliases: ["Model X"], exactOnly: true }]);
   assert.equal(prod[0].mentioned, false);
-  // tek marka için ilk kelime eşleşmesi korunur (Garanti Bonus → Garanti BBVA)
+  // ilk kelime artık tek başına sayılmaz; yalnız tanımlı takma ad ("Garanti") ile sayılır
   const g = analyzeResponse(r("Garanti uygulaması çok iyi."), [{ id: "g", name: "Garanti BBVA", aliases: [] }]);
-  assert.equal(g[0].mentioned, true);
+  assert.equal(g[0].mentioned, false, "takma ad tanımlanmadan ilk kelime sayılmaz");
+  const g2 = analyzeResponse(r("Garanti uygulaması çok iyi."), [{ id: "g", name: "Garanti BBVA", aliases: ["Garanti"] }]);
+  assert.equal(g2[0].mentioned, true);
 });
 
 test("Alt marka ipucu: 'Mars Athletic … premium version of MACFit' → MACFit; ilgisiz ad → yok", async () => {
@@ -926,7 +928,7 @@ test("Soru bazında güven aralığı: tekrarlar bağımsız sayılmaz; başa ba
 test("Marka tespiti (18 Kasım): kısa BÜYÜK harfli ilk kelime, üst şirket takma adı, yaygın kelime adlar", async () => {
   const { analyzeResponse, listRank } = await import("../src/metrics.ts");
   const brands = [
-    { id: "one", name: "ONE Condoms", aliases: [] },
+    { id: "one", name: "ONE Condoms", aliases: ["ONE"] },
     { id: "skyn", name: "SKYN", aliases: ["parent:LifeStyles"] },
     { id: "ring", name: "Ring", aliases: [] },
   ];
