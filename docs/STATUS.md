@@ -4,6 +4,8 @@
 
 **Canlı adres:** https://aisaasavran.com (Cloudflare Pages + Supabase)
 
+> **21 Kasım (İngilizce arayüz taraması):** Dil değiştirme düğmesinin erişilebilir adı İngilizce modda İngilizce ("Switch to Turkish"); Marka sayfasındaki "Kendi sorunuzu ekleyin" formu, "Soruyu ekle" düğmesi ve "soru sınırı" uyarısı iki dilli yapıldı. Rapor dışa aktarımı, Panel ve Marka sayfasının geri kalanı zaten iki dilliydi. **Bilerek Türkçe bırakılanlar:** Gizlilik ve Kullanım koşulları metinleri (hukuki inceleme olmadan çeviri yayımlanmaz). Sonraki aşama planı: `docs/SONRAKI-ASAMA.md`.
+>
 > **Erken erişim.** Ödeme (Paddle) ve haftalık e-posta (Resend) kodu hazır ve testli, ancak gerçek bir ödeme
 > ve gerçek bir gelen kutusu teslimi uçtan uca henüz doğrulanmadı. Hukuki metinleri avukat incelemedi.
 

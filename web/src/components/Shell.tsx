@@ -67,7 +67,7 @@ export function LangSwitch() {
   const l = getLang();
   return (
     <button type="button" className="lang-switch" onClick={() => switchLang(l === "en" ? "tr" : "en")} lang={l === "en" ? "tr" : "en"}
-      aria-label={l === "en" ? "Türkçeye geç" : "Switch to English"}>
+      aria-label={l === "en" ? "Switch to Turkish" : "Switch to English"}>
       {l === "en" ? "TR" : "EN"}
     </button>
   );
