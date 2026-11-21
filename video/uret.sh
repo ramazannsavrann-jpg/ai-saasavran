@@ -52,6 +52,11 @@ c = json.load(open(sys.argv[1]))
 if c.get("dur_sabit"):
     c["dur"] = json.loads(sys.argv[2]); json.dump(c, open(sys.argv[1], "w"), ensure_ascii=False, indent=1); print("süreler elle (dur_sabit):", c["dur"])
 P
+# Konuşmaya göre hizala (sessizlik tahmini yanılabiliyor). dur_sabit ise atlanır; hata olursa sureler2 süreleri kalır.
+if ! python3 -c "import json,sys;sys.exit(0 if json.load(open('$cfg')).get('dur_sabit') else 1)"; then
+  python3 -c "import faster_whisper" 2>/dev/null || pip install -q --break-system-packages faster-whisper==1.1.1
+  python3 video/sablon/hizala.py "$cfg" "$nar" "$gruplar" "$dil" || echo "UYARI: hizalama yapılamadı, sahne sınırlarını izleyerek kontrol et"
+fi
 [ -f "$(q muzik.dosya)" ] || ( cd "$(dirname "$(q muzik.dosya)")" && python3 sablon/music.py )
 ( cd "video/$konu" && python3 make.py "$ad.json" frames && python3 make.py "$ad.json" )   # güvenli alan kontrolü + render
 ( cd "$out" && ffmpeg -y -v error -f concat -safe 0 -i list.txt -c copy video.mp4 )
