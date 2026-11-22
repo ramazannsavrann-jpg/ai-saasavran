@@ -110,9 +110,9 @@ const WEBSITE = { "@context": "https://schema.org", "@type": "WebSite", name: SI
 const crumbs = (items) => ({ "@context": "https://schema.org", "@type": "BreadcrumbList", itemListElement: items.map(([name, path], i) => ({ "@type": "ListItem", position: i + 1, name, item: SITE.url + path })) });
 const APP = {
   "@context": "https://schema.org", "@type": "SoftwareApplication", name: SITE.name, url: SITE.url, applicationCategory: "BusinessApplication",
-  operatingSystem: "Web", alternateName: "aisaasavran.com", description: `${DEF.en} Plans: Free, Plus $130/month, Pro $400/month, Business $1500/month.`,
+  operatingSystem: "Web", alternateName: "aisaasavran.com", description: `${DEF.en} Plans: Free, Silver $130/month, Gold $250/month, Platinum $400/month, Diamond $1500/month.`,
   inLanguage: ["en", "tr"],
-  offers: [["Free", 0], ["Plus", 130], ["Pro", 400], ["Business", 1500]].map(([n, p]) => ({ "@type": "Offer", name: n, price: String(p), priceCurrency: "USD" })),
+  offers: [["Free", 0], ["Silver", 130], ["Gold", 250], ["Platinum", 400], ["Diamond", 1500]].map(([n, p]) => ({ "@type": "Offer", name: n, price: String(p), priceCurrency: "USD" })),
 };
 
 
@@ -124,24 +124,27 @@ const PLAN_ROWS = (en) => [
   { name: en ? "Silver" : "Gümüş", id: "starter", price: "$130", per: en ? "/month" : "/ay", items: en
       ? ["1 brand, 25 questions, 5 competitors", "ChatGPT, Claude and Perplexity with live web search + Gemini", "Every week: ChatGPT and Gemini ask each question twice, Claude and Perplexity once", "Which websites the AI cited", "Products: AI accuracy check and weekly Google Shopping position", "Shareable report link and PDF"]
       : ["1 marka, 25 soru, 5 rakip", "ChatGPT, Claude ve Perplexity canlı web araması + Gemini", "Her hafta: ChatGPT ve Gemini her soruyu 2 kez, Claude ve Perplexity 1 kez sorar", "Yapay zekânın baktığı kaynak siteler", "Ürünler: yapay zekâ doğruluk kontrolü ve haftalık Google Shopping sırası", "Paylaşılabilir rapor bağlantısı ve PDF"] },
+  { name: en ? "Gold" : "Altın", id: "altin", price: "$250", per: en ? "/month" : "/ay", items: en
+      ? ["3 brands, 30 questions each", "6 competitors per brand", "ChatGPT, Claude and Perplexity with live web search + Gemini", "Team of 2", "Everything in Silver", "For small businesses with several brands"]
+      : ["3 marka, her biri 30 soru", "Marka başına 6 rakip", "ChatGPT, Claude ve Perplexity canlı web araması + Gemini", "2 kişilik ekip", "Gümüş'teki her şey", "Birden fazla markası olan küçük işletmeler için"] },
   { name: en ? "Platinum" : "Platin", id: "pro", price: "$400", per: en ? "/month" : "/ay", items: en
-      ? ["5 brands, 30 questions each", "8 competitors per brand", "Team of 3", "API and MCP access for AI agents", "Everything in Plus", "For multi-location businesses and freelancers"]
-      : ["5 marka, her biri 30 soru", "Marka başına 8 rakip", "3 kişilik ekip", "Yapay zekâ ajanları için API ve MCP erişimi", "Plus'taki her şey", "Çok şubeli işletmeler ve serbest çalışanlar için"] },
+      ? ["5 brands, 30 questions each", "8 competitors per brand", "Team of 3", "API and MCP access for AI agents", "Everything in Gold", "For multi-location businesses and freelancers"]
+      : ["5 marka, her biri 30 soru", "Marka başına 8 rakip", "3 kişilik ekip", "Yapay zekâ ajanları için API ve MCP erişimi", "Altın'daki her şey", "Çok şubeli işletmeler ve serbest çalışanlar için"] },
   { name: en ? "Diamond" : "Elmas", id: "agency", price: "$1500", per: en ? "/month" : "/ay", items: en
-      ? ["15 brands, 30 questions each", "10 competitors per brand", "15 team members", "Everything in Pro", "For agencies managing client brands"]
-      : ["15 marka, her biri 30 soru", "Marka başına 10 rakip", "15 kişilik ekip", "Pro'daki her şey", "Müşteri markalarını yöneten ajanslar için"] },
+      ? ["15 brands, 30 questions each", "10 competitors per brand", "15 team members", "Everything in Platinum", "For agencies managing client brands"]
+      : ["15 marka, her biri 30 soru", "Marka başına 10 rakip", "15 kişilik ekip", "Platin'deki her şey", "Müşteri markalarını yöneten ajanslar için"] },
 ];
 const plansHtml = (en) => `
 <section class="plans" id="${en ? "pricing" : "fiyatlar"}">
   <h2>${en ? "Pricing" : "Fiyatlar"}</h2>
   <div class="plan-grid">${PLAN_ROWS(en).map((p) => `
-    <div class="plan${p.name === "Plus" ? " plan-main" : ""}">
-      ${p.name === "Plus" ? `<span class="badge">${en ? "Recommended" : "Önerilen"}</span>` : ""}<h3>${p.name}</h3>
+    <div class="plan${p.id === "starter" ? " plan-main" : ""}">
+      ${p.id === "starter" ? `<span class="badge">${en ? "Recommended" : "Önerilen"}</span>` : ""}<h3>${p.name}</h3>
       <p class="price"><span>${p.price}</span>${p.per}</p>
       <ul>${p.items.map((i) => `<li>${i}</li>`).join("")}</ul>
       ${p.live
         ? `<a class="btn" href="/kayit">${en ? "Start free" : "Ücretsiz başla"}</a>`
-        : `<a class="btn${p.name === "Plus" ? "" : " ghost"}" href="/hesap?plan=${p.id}">${en ? `Choose ${p.name}` : `${p.name}'ı seç`}</a>`}
+        : `<a class="btn${p.id === "starter" ? "" : " ghost"}" href="/hesap?plan=${p.id}">${en ? `Choose ${p.name}` : `${p.name}'ı seç`}</a>`}
     </div>`).join("")}
   </div>
   <p class="small">${en
@@ -407,7 +410,7 @@ const ABOUT = {
   <h2>Facts</h2>
   <ul>
     <li>Launched: 2026, early access. Founded by <a href="/founder/">Ramazan Savran</a> in Antalya, Turkey; serves customers in Turkey and worldwide. The name combines SaaS and the founder's surname, Savran.</li>
-    <li>Plans: Free, Plus $130, Pro $400, Business $1500 per month (<a href="/pricing/">pricing</a>).</li>
+    <li>Plans: Free, Silver $130, Gold $250, Platinum $400, Diamond $1500 per month (<a href="/pricing/">pricing</a>).</li>
     <li>Not affiliated with other companies or services with a similar name.</li>
     <li>Contact: <a href="mailto:${SITE.email}">${SITE.email}</a> · YouTube: <a href="https://www.youtube.com/@aisaasavran">@aisaasavran</a></li>
   </ul>
@@ -435,7 +438,7 @@ const ABOUT = {
   <h2>Bilgiler</h2>
   <ul>
     <li>Kuruluş: 2026, erken erişim. Kurucu: <a href="/tr/kurucu/">Ramazan Savran</a> (Antalya). Türkiye'deki ve dünyadaki müşterilere hizmet verir. Ad, SaaS ile kurucunun soyadı Savran'dan gelir.</li>
-    <li>Paketler: Ücretsiz, Plus 130 $, Pro 400 $, Business 1500 $ (aylık) (<a href="/tr/#fiyatlar">fiyatlar</a>).</li>
+    <li>Paketler: Ücretsiz, Gümüş 130 $, Altın 250 $, Platin 400 $, Elmas 1500 $ (aylık) (<a href="/tr/#fiyatlar">fiyatlar</a>).</li>
     <li>Benzer adlı başka şirket veya hizmetlerle bağlantısı yoktur.</li>
     <li>İletişim: <a href="mailto:${SITE.email}">${SITE.email}</a> · YouTube: <a href="https://www.youtube.com/@aisaasavran">@aisaasavran</a></li>
   </ul>
@@ -598,14 +601,14 @@ Contact: ${SITE.email}
 - [Profound alternatives](${SITE.url}/guides/profound-alternative/): affordable alternatives after Profound retired its Starter and Growth plans, with prices from each tool's official page and the date checked.
 
 ## Pricing
-- [Plans](${SITE.url}/pricing/): Free ($0), Plus ($130/month), Pro ($400/month), Business ($1500/month). Monthly billing, cancel anytime, 14-day money-back guarantee.
+- [Plans](${SITE.url}/pricing/): Free ($0), Silver ($130/month), Gold ($250/month), Platinum ($400/month), Diamond ($1500/month). Monthly billing, cancel anytime, 14-day money-back guarantee.
 - [Free AI visibility check](${SITE.url}/check/): no signup; checks whether Gemini mentions a business for its category.
 
 ## Official profiles
 ${SITE.sameAs.map((u) => `- ${u}`).join("\n")}
 
 ## For AI agents
-- MCP server (read-only, Pro and Business): ${SITE.url}/api/mcp — Streamable HTTP, header \`Authorization: Bearer aisv_...\`; tools: list_brands, get_brand_report.
+- MCP server (read-only, Platinum and Diamond): ${SITE.url}/api/mcp — Streamable HTTP, header \`Authorization: Bearer aisv_...\`; tools: list_brands, get_brand_report.
 - REST API: ${SITE.url}/api/v1/brands and ${SITE.url}/api/v1/brands/{id} with the same key. Keys are created in the app under Account → API and MCP.
 
 ## Tutorials
@@ -640,8 +643,8 @@ writeFileSync(join(DIST, `${SITE.indexnow}.txt`), SITE.indexnow);
 const APP_ROUTES = ["/giris", "/kayit", "/sifre", "/durum", "/durum-ic", "/gizlilik", "/kosullar", "/panel", "/hesap", "/demo-lab", "/yonetim", "/calisma-alani/*", "/marka/*", "/rapor/*", "/davet/*"];
 write("/check/", page({ lang: "en", alt: "/tr/kontrol/", path: "/check/", title: "Free AI visibility check | AI SaaSavran", description: "Check for free whether Gemini mentions your business when customers ask about your category. No signup.", body: checkHtml(true), schema: [APP, faqLd(CHECK_FAQ_EN)] }));
 write("/tr/kontrol/", page({ lang: "tr", alt: "/check/", path: "/tr/kontrol/", title: "Ücretsiz yapay zekâ görünürlük kontrolü | AI SaaSavran", description: "İşletmeniz Gemini cevaplarında geçiyor mu? Üye olmadan ücretsiz kontrol edin.", body: checkHtml(false), schema: [APP, faqLd(CHECK_FAQ_TR)] }));
-write("/tr/fiyatlar/", page({ lang: "tr", path: "/tr/fiyatlar/", alt: "/pricing/", title: "Fiyatlar: yapay zekâ görünürlük aracı | AI SaaSavran", description: "AI SaaSavran paketleri: Free, Plus aylık 130 $, Pro aylık 400 $, Business aylık 1500 $. Aylık ödeme, istediğiniz zaman iptal, 14 gün para iadesi.", body: `<section class="article"><h1>Fiyatlar</h1><p>Ücretsiz başlayın. Ücretli paketler canlı web aramalı ChatGPT, Claude ve Perplexity ölçümü, daha fazla marka ve soru ekler. Aylık ödeme, istediğiniz zaman iptal, 14 gün para iadesi (<a href="/iade/">iade koşulları</a>).</p></section>${plansHtml(false)}`, schema: [APP] }));
-write("/pricing/", page({ lang: "en", path: "/pricing/", alt: "/tr/fiyatlar/", title: "Pricing: AI visibility tracking tool | AI SaaSavran", description: "AI SaaSavran plans: Free, Plus $130/month, Pro $400/month, Business $1500/month.", body: `<section class="article"><h1>Pricing</h1><p>Start free. Paid plans add live-search ChatGPT, Claude and Perplexity, more brands and more questions. Monthly billing, cancel anytime, 14-day money-back guarantee (<a href="/refund/">refund policy</a>).</p></section>${plansHtml(true)}`, schema: [APP] }));
+write("/tr/fiyatlar/", page({ lang: "tr", path: "/tr/fiyatlar/", alt: "/pricing/", title: "Fiyatlar: yapay zekâ görünürlük aracı | AI SaaSavran", description: "AI SaaSavran paketleri: Ücretsiz, Gümüş aylık 130 $, Altın aylık 250 $, Platin aylık 400 $, Elmas aylık 1500 $. Aylık ödeme, istediğiniz zaman iptal, 14 gün para iadesi.", body: `<section class="article"><h1>Fiyatlar</h1><p>Ücretsiz başlayın. Ücretli paketler canlı web aramalı ChatGPT, Claude ve Perplexity ölçümü, daha fazla marka ve soru ekler. Aylık ödeme, istediğiniz zaman iptal, 14 gün para iadesi (<a href="/iade/">iade koşulları</a>).</p></section>${plansHtml(false)}`, schema: [APP] }));
+write("/pricing/", page({ lang: "en", path: "/pricing/", alt: "/tr/fiyatlar/", title: "Pricing: AI visibility tracking tool | AI SaaSavran", description: "AI SaaSavran plans: Free, Silver $130/month, Gold $250/month, Platinum $400/month, Diamond $1500/month.", body: `<section class="article"><h1>Pricing</h1><p>Start free. Paid plans add live-search ChatGPT, Claude and Perplexity, more brands and more questions. Monthly billing, cancel anytime, 14-day money-back guarantee (<a href="/refund/">refund policy</a>).</p></section>${plansHtml(true)}`, schema: [APP] }));
 
 for (const l of Object.values(LEGAL)) write(l.path, page({ lang: l.lang, path: l.path, title: l.title, description: l.description, body: l.body }));
 

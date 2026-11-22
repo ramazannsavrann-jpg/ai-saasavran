@@ -118,7 +118,7 @@ async function logoToDataUrl(file: File): Promise<string> {
   throw new Error(L("Logo çok büyük; daha sade ya da küçük bir dosya seçin.", "The logo is too large; choose a simpler or smaller file."));
 }
 
-/** Ajans markalaması (Business): paylaşılan raporda ve PDF'te ajansın adı, logosu ve rengi görünür. */
+/** Ajans markalaması (Elmas): paylaşılan raporda ve PDF'te ajansın adı, logosu ve rengi görünür. */
 function ReportBrandingPanel({ workspaceId, agency }: { workspaceId: string; agency: boolean }) {
   const cur = useLoad(() => api.reportBranding(workspaceId), [workspaceId]);
   const [name, setName] = useState<string | null>(null);
@@ -143,9 +143,9 @@ function ReportBrandingPanel({ workspaceId, agency }: { workspaceId: string; age
   return (
     <section className="panel stack">
       <h2>{L("Rapor markalama (ajans)", "Report branding (agency)")}</h2>
-      <p className="muted">{L("Paylaşılan rapor ve PDF'te AI SaaSavran yerine kendi adınız, logonuz ve renginiz görünür. Business paketinde.", "Shared reports and PDFs show your own name, logo and colour instead of AI SaaSavran. On the Business plan.")}</p>
+      <p className="muted">{L("Paylaşılan rapor ve PDF'te AI SaaSavran yerine kendi adınız, logonuz ve renginiz görünür. Elmas paketinde.", "Shared reports and PDFs show your own name, logo and colour instead of AI SaaSavran. On the Diamond plan.")}</p>
       {!agency ? (
-        <p className="src-sup muted">{L("Bu özellik Business paketinde açılır.", "This feature unlocks on the Business plan.")}</p>
+        <p className="src-sup muted">{L("Bu özellik Elmas paketinde açılır.", "This feature unlocks on the Diamond plan.")}</p>
       ) : (
         <>
           <Field label={L("Ajans adı", "Agency name")} name="brand-name" maxLength={60} value={nm} onChange={(e) => setName(e.target.value)} />

@@ -31,7 +31,7 @@ export async function authenticate(request, env) {
 
 const ERR_TEXT = {
   invalid_key: "Invalid or revoked API key. Create one in AI SaaSavran → Account → API & MCP.",
-  plan: "API and MCP access needs the Pro or Business plan.",
+  plan: "API and MCP access needs the Platinum or Diamond plan.",
   rate_limit: "Daily limit reached (1000 requests per key).",
   unavailable: "Service unavailable.",
   not_found: "Brand not found in this workspace.",

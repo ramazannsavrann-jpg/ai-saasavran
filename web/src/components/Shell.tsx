@@ -10,7 +10,7 @@ export function Shell() {
   const nav = useNavigate();
   const customer = workspaces.filter((w) => w.kind !== "demo_lab");
   const inDemo = current?.kind === "demo_lab";
-  const paid = !!current && ["starter", "pro", "agency"].includes(current.plan) && (current.kind === "business" || current.kind === "agency");
+  const paid = !!current && ["starter", "altin", "pro", "agency"].includes(current.plan) && (current.kind === "business" || current.kind === "agency");
 
   return (
     <div className={`shell ${inDemo ? "shell-demo" : ""}`}>

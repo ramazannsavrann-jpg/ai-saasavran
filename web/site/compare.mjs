@@ -31,7 +31,7 @@ export const COMPARE_TR = [
 
 <h2>Araçlar tek tek</h2>
 <h3>AI SaaSavran</h3>
-<p>Türkiye merkezli, 2026'da erken erişimle açıldı. Ücretsiz paket: 1 marka, 15 soru, ayda 1 ölçüm; Gemini ile, canlı web araması olmadan (model bilgisi) ve bu raporda açıkça yazar. Plus (130 $/ay): 25 soru, 5 rakip, ChatGPT, Claude ve Perplexity canlı web aramasıyla + Gemini, haftalık otomatik ölçüm, yapay zekânın baktığı kaynak siteler, ürünlerde doğruluk kontrolü ve Google Shopping sırası. Pro 400 $ (5 marka, API ve MCP), Business 1500 $ (15 marka, ajanslar için). Sorular Türkçe veya İngilizce, Türkiye'den veya başka ülkeden sorulabilir. Sınırlar: Ölçüm haftalıktır, günlük değil. Google AI Overviews, AI Mode ve Microsoft Copilot henüz ölçülmüyor.</p>
+<p>Türkiye merkezli, 2026'da erken erişimle açıldı. Ücretsiz paket: 1 marka, 15 soru, ayda 1 ölçüm; Gemini ile, canlı web araması olmadan (model bilgisi) ve bu raporda açıkça yazar. Gümüş (130 $/ay): 25 soru, 5 rakip, ChatGPT, Claude ve Perplexity canlı web aramasıyla + Gemini, haftalık otomatik ölçüm, yapay zekânın baktığı kaynak siteler, ürünlerde doğruluk kontrolü ve Google Shopping sırası. Platin 400 $ (5 marka, API ve MCP), Elmas 1500 $ (15 marka, ajanslar için). Sorular Türkçe veya İngilizce, Türkiye'den veya başka ülkeden sorulabilir. Sınırlar: Ölçüm haftalıktır, günlük değil. Google AI Overviews, AI Mode ve Microsoft Copilot henüz ölçülmüyor.</p>
 <h3>Peec AI</h3>
 <p>Berlin merkezli. Marka paketlerinde seçilen yapay zekâ modellerinde günlük takip yapar; ek modeller ek ücretlidir. Ajans paketleri resmî sayfada aylık 245 $'dan başlıyor ve ChatGPT, Perplexity, Google AI Overviews, AI Mode, Gemini gibi modelleri kapsıyor; en büyük ajans paketine Claude gibi API modelleri ekleniyor. Marka paketi fiyatları: peec.ai/pricing. Birçok ülke ve dilde takip isteyen ekipler ve ajanslar için güçlü bir seçenek.</p>
 <h3>Otterly.AI</h3>
@@ -73,7 +73,7 @@ export const COMPARE_TR = [
 <ul>
 <li><b>Müşterileriniz Türkiye'de ve Türkçe soruyorsa.</b> Yapay zekâ cevabı sorunun diline ve sorulduğu ülkeye göre değişir. Türkçe sorular ve Türkiye konumu ayarlanır.</li>
 <li><b>Claude da önemliyse.</b> Ücretli paketlerde ChatGPT, Claude ve Perplexity canlı web aramasıyla ölçülür ve her motor ayrı raporlanır.</li>
-<li><b>Bütçeniz küçükse.</b> Ücretsiz paket (1 marka, 15 soru, ayda 1 ölçüm) ve Plus 130 $/ay. Ajanslar için Business 1500 $/ay ile 15 marka.</li>
+<li><b>Bütçeniz küçükse.</b> Ücretsiz paket (1 marka, 15 soru, ayda 1 ölçüm) ve Gümüş 130 $/ay. Ajanslar için Elmas 1500 $/ay ile 15 marka.</li>
 <li><b>Ürün satıyorsanız.</b> Yapay zekânın ürününüz hakkında söylediği fiyat ve özellikler resmî bilgilerle karşılaştırılır; haftalık Google Shopping sırası gösterilir.</li>
 <li><b>"Neden rakip?" sorusuna kanıt istiyorsanız.</b> Kaybettiğiniz sorular, yerinize önerilen rakip ve yapay zekânın baktığı kaynak siteler raporda yer alır.</li>
 </ul>
@@ -93,7 +93,7 @@ export const COMPARE_TR = [
 <li><a href="/tr/kontrol/">Ücretsiz kontrol</a> ile üye olmadan işletmenizin Gemini'de geçip geçmediğine bakın.</li>
 <li>Ücretsiz hesap açın, markanızı ve 3 rakibinizi ekleyin; sektörünüze hazır Türkçe soru şablonlarından seçin.</li>
 <li>İlk ölçümü başlatın; rapor motor bazında, anılma, önerilme ve kaynak ayrımıyla gelir.</li>
-<li>Canlı aramalı ChatGPT, Claude ve Perplexity için Plus pakete geçin. 14 gün içinde iptal ederseniz ücret iade edilir.</li>
+<li>Canlı aramalı ChatGPT, Claude ve Perplexity için Gümüş pakete geçin. 14 gün içinde iptal ederseniz ücret iade edilir.</li>
 </ol>
 `,
     faq: [
@@ -123,11 +123,11 @@ export const COMPARE_TR = [
 <h2>Yan yana</h2>
 <table class="mtable"><thead><tr><th></th><th>AI SaaSavran</th><th>AthenaHQ</th></tr></thead><tbody>
 <tr><td>Ücretsiz paket</td><td>1 marka, 15 soru, ayda 1 ölçüm (Gemini, canlı aramasız)</td><td>300 kredi, 5 motor</td></tr>
-<tr><td>İlk ücretli paket</td><td>Plus, 130 $/ay</td><td>Starter, 295 $/ay</td></tr>
+<tr><td>İlk ücretli paket</td><td>Gümüş, 130 $/ay</td><td>Starter, 295 $/ay</td></tr>
 <tr><td>Motorlar (ücretli)</td><td>ChatGPT, Claude, Perplexity (canlı arama) + Gemini</td><td>11 model (Google AI Overviews, AI Mode, Copilot dahil)</td></tr>
 <tr><td>Ölçüm sıklığı</td><td>Haftalık</td><td>Resmî sayfada yazmıyor</td></tr>
 <tr><td>Türkçe arayüz ve rapor</td><td>Var</td><td>Resmî sayfada yazmıyor</td></tr>
-<tr><td>Ajans paketi</td><td>Business 1500 $/ay, 15 marka</td><td>Enterprise, teklifle</td></tr>
+<tr><td>Ajans paketi</td><td>Elmas 1500 $/ay, 15 marka</td><td>Enterprise, teklifle</td></tr>
 </tbody></table>
 
 <h2>Ne zaman AI SaaSavran mantıklı?</h2>
@@ -149,7 +149,7 @@ export const COMPARE_TR = [
 <ol>
 <li><a href="/tr/kontrol/">Ücretsiz kontrol</a> ile üye olmadan işletmenizin Gemini'de geçip geçmediğine bakın.</li>
 <li>Ücretsiz hesap açın, markanızı ve 3 rakibinizi ekleyin; sektörünüze hazır Türkçe soru şablonlarından seçin.</li>
-<li>Canlı aramalı ChatGPT, Claude ve Perplexity için Plus pakete geçin. 14 gün içinde iptal ederseniz ücret iade edilir.</li>
+<li>Canlı aramalı ChatGPT, Claude ve Perplexity için Gümüş pakete geçin. 14 gün içinde iptal ederseniz ücret iade edilir.</li>
 </ol>
 <p>Diğer araçlarla karşılaştırma: <a href="/rehber/yapay-zeka-gorunurluk-araclari/">yapay zekâ görünürlük araçları</a>.</p>
 `,
@@ -180,7 +180,7 @@ export const COMPARE_TR = [
 
 <h2>Uygun fiyatlı alternatifler</h2>
 <table class="mtable"><thead><tr><th>Araç</th><th>Ücretsiz</th><th>İlk ücretli paket</th><th>Kontrol</th></tr></thead><tbody>
-<tr><td>AI SaaSavran</td><td>Var (1 marka, 15 soru, Gemini)</td><td>Plus, 130 $/ay</td><td>Kendi fiyatımız</td></tr>
+<tr><td>AI SaaSavran</td><td>Var (1 marka, 15 soru, Gemini)</td><td>Gümüş, 130 $/ay</td><td>Kendi fiyatımız</td></tr>
 <tr><td>Otterly.AI</td><td>Ücretsiz deneme</td><td>Lite, €29/ay</td><td>18 Kasım 2026</td></tr>
 <tr><td>Semrush AI Visibility Toolkit</td><td>Deneme yok</td><td>Fiyat doğrulanamadı</td><td>18 Kasım 2026</td></tr>
 <tr><td>AthenaHQ</td><td>Var (Essential, 300 kredi)</td><td>Starter, 295 $/ay</td><td>21 Kasım 2026</td></tr>
@@ -188,7 +188,7 @@ export const COMPARE_TR = [
 </tbody></table>
 
 <h3>AI SaaSavran</h3>
-<p>Türkiye merkezli. Ücretsiz paketle başlanır. Plus (130 $/ay): 25 soru, 5 rakip, ChatGPT, Claude ve Perplexity canlı web aramasıyla + Gemini, haftalık otomatik ölçüm, yapay zekânın baktığı kaynak siteler ve ürünlerde doğruluk kontrolü. Sorular Türkçe veya İngilizce, Türkiye'den veya başka ülkeden sorulur. Ajanslar için Business (1500 $/ay, 15 marka). Sınırlar: ölçüm haftalıktır; Google AI Overviews, AI Mode ve Copilot henüz ölçülmüyor.</p>
+<p>Türkiye merkezli. Ücretsiz paketle başlanır. Gümüş (130 $/ay): 25 soru, 5 rakip, ChatGPT, Claude ve Perplexity canlı web aramasıyla + Gemini, haftalık otomatik ölçüm, yapay zekânın baktığı kaynak siteler ve ürünlerde doğruluk kontrolü. Sorular Türkçe veya İngilizce, Türkiye'den veya başka ülkeden sorulur. Ajanslar için Elmas (1500 $/ay, 15 marka). Sınırlar: ölçüm haftalıktır; Google AI Overviews, AI Mode ve Copilot henüz ölçülmüyor.</p>
 <h3>Otterly.AI</h3>
 <p>En düşük başlangıç fiyatı: Lite aylık €29, 16 prompt; Google AI Overviews, ChatGPT, Perplexity ve Microsoft Copilot dahil. Gemini ve Google AI Mode ek ücretli. Google AI Overviews ve Copilot takibi önemliyse uygun.</p>
 <h3>Semrush AI Visibility Toolkit</h3>
@@ -237,7 +237,7 @@ export const COMPARE_EN = [
 
 <h2>The tools one by one</h2>
 <h3>AI SaaSavran</h3>
-<p>Based in Turkey, launched in 2026 (early access). Free plan: 1 brand, 15 questions, 1 measurement a month, using Gemini without live web search (model knowledge), clearly labelled. Plus ($130/month): 25 questions, 5 competitors, ChatGPT, Claude and Perplexity with live web search plus Gemini, weekly automatic measurement, cited sources, product accuracy checks and Google Shopping position. Pro $400 (5 brands, API and MCP), Business $1500 (15 brands, for agencies). Questions in Turkish or English, asked from Turkey or another country. Limits: measurement is weekly, not daily; Google AI Overviews, AI Mode and Microsoft Copilot are not measured yet.</p>
+<p>Based in Turkey, launched in 2026 (early access). Free plan: 1 brand, 15 questions, 1 measurement a month, using Gemini without live web search (model knowledge), clearly labelled. Silver ($130/month): 25 questions, 5 competitors, ChatGPT, Claude and Perplexity with live web search plus Gemini, weekly automatic measurement, cited sources, product accuracy checks and Google Shopping position. Platinum $400 (5 brands, API and MCP), Diamond $1500 (15 brands, for agencies). Questions in Turkish or English, asked from Turkey or another country. Limits: measurement is weekly, not daily; Google AI Overviews, AI Mode and Microsoft Copilot are not measured yet.</p>
 <h3>Peec AI</h3>
 <p>Based in Berlin. Brand plans track selected AI models daily, with extra models for an extra fee. Agency plans start at $245 a month on the official page and cover models such as ChatGPT, Perplexity, Google AI Overviews, AI Mode and Gemini; the largest agency plan adds API models such as Claude. Brand plan prices: peec.ai/pricing. A strong choice for teams and agencies tracking many countries and languages.</p>
 <h3>Otterly.AI</h3>
@@ -279,7 +279,7 @@ export const COMPARE_EN = [
 <ul>
 <li><b>Your customers are in Turkey, or you sell into Turkey.</b> AI answers change with the language and country of the question. Turkish questions and a Turkish search location are built in, alongside English and other countries.</li>
 <li><b>Claude matters to you.</b> Paid plans measure ChatGPT, Claude and Perplexity with live web search and report each engine separately.</li>
-<li><b>Small budget.</b> Free plan (1 brand, 15 questions, 1 measurement a month) and Plus at $130 a month. Agencies: Business at $1500 a month for 15 brands.</li>
+<li><b>Small budget.</b> Free plan (1 brand, 15 questions, 1 measurement a month) and Silver at $130 a month. Agencies: Diamond at $1500 a month for 15 brands.</li>
 <li><b>You sell products.</b> What the AI says about your product's price and specifications is checked against official data, with weekly Google Shopping position.</li>
 <li><b>You need evidence for "why the competitor?".</b> Reports show the questions you lose, the competitor named instead and the sources the AI relied on.</li>
 </ul>
@@ -299,7 +299,7 @@ export const COMPARE_EN = [
 <li>Run the <a href="/check/">free check</a> without signing up to see whether Gemini mentions your business.</li>
 <li>Create a free account, add your brand and 3 competitors, and pick ready-made questions for your sector.</li>
 <li>Run the first measurement; the report comes per engine, with mentions, recommendations and sources separated.</li>
-<li>Upgrade to Plus for live-search ChatGPT, Claude and Perplexity. Cancel within 14 days for a refund.</li>
+<li>Upgrade to Silver for live-search ChatGPT, Claude and Perplexity. Cancel within 14 days for a refund.</li>
 </ol>
 `,
     faq: [
@@ -330,10 +330,10 @@ export const COMPARE_EN = [
 <h2>Side by side</h2>
 <table class="mtable"><thead><tr><th></th><th>AI SaaSavran</th><th>AthenaHQ</th></tr></thead><tbody>
 <tr><td>Free plan</td><td>1 brand, 15 questions, 1 measurement a month (Gemini, no live search)</td><td>300 credits, 5 engines</td></tr>
-<tr><td>First paid plan</td><td>Plus, $130/month</td><td>Starter, $295/month</td></tr>
+<tr><td>First paid plan</td><td>Silver, $130/month</td><td>Starter, $295/month</td></tr>
 <tr><td>Engines (paid)</td><td>ChatGPT, Claude, Perplexity (live search) + Gemini</td><td>11 models (incl. Google AI Overviews, AI Mode, Copilot)</td></tr>
 <tr><td>Measurement frequency</td><td>Weekly</td><td>Not stated on the official page</td></tr>
-<tr><td>Agency plan</td><td>Business $1500/month, 15 brands</td><td>Enterprise, custom</td></tr>
+<tr><td>Agency plan</td><td>Diamond $1500/month, 15 brands</td><td>Enterprise, custom</td></tr>
 </tbody></table>
 
 <h2>When AI SaaSavran makes sense</h2>
@@ -355,7 +355,7 @@ export const COMPARE_EN = [
 <ol>
 <li>Run the <a href="/check/">free check</a> without signing up to see whether Gemini mentions your business.</li>
 <li>Create a free account, add your brand and 3 competitors, and pick ready-made questions for your sector.</li>
-<li>Upgrade to Plus for live-search ChatGPT, Claude and Perplexity. Cancel within 14 days for a refund.</li>
+<li>Upgrade to Silver for live-search ChatGPT, Claude and Perplexity. Cancel within 14 days for a refund.</li>
 </ol>
 <p>All tools compared: <a href="/guides/ai-visibility-tools-compared/">AI visibility tools compared</a>.</p>
 `,
@@ -387,7 +387,7 @@ export const COMPARE_EN = [
 
 <h2>Affordable alternatives</h2>
 <table class="mtable"><thead><tr><th>Tool</th><th>Free</th><th>First paid plan</th><th>Checked</th></tr></thead><tbody>
-<tr><td>AI SaaSavran</td><td>Yes (1 brand, 15 questions, Gemini)</td><td>Plus, $130/month</td><td>Our own pricing</td></tr>
+<tr><td>AI SaaSavran</td><td>Yes (1 brand, 15 questions, Gemini)</td><td>Silver, $130/month</td><td>Our own pricing</td></tr>
 <tr><td>Otterly.AI</td><td>Free trial</td><td>Lite, €29/month</td><td>18 November 2026</td></tr>
 <tr><td>Semrush AI Visibility Toolkit</td><td>No trial</td><td>Price not verified</td><td>18 November 2026</td></tr>
 <tr><td>AthenaHQ</td><td>Yes (Essential, 300 credits)</td><td>Starter, $295/month</td><td>21 November 2026</td></tr>
@@ -395,7 +395,7 @@ export const COMPARE_EN = [
 </tbody></table>
 
 <h3>AI SaaSavran</h3>
-<p>Based in Turkey. Start on a free plan. Plus ($130/month): 25 questions, 5 competitors, live-search ChatGPT, Claude and Perplexity plus Gemini, weekly automatic measurement, the sources the AI relied on, and product fact checks. Questions in Turkish or English, asked from Turkey or another country. Business ($1500/month, 15 brands) for agencies. Limits: measurement is weekly; Google AI Overviews, AI Mode and Copilot are not measured yet.</p>
+<p>Based in Turkey. Start on a free plan. Silver ($130/month): 25 questions, 5 competitors, live-search ChatGPT, Claude and Perplexity plus Gemini, weekly automatic measurement, the sources the AI relied on, and product fact checks. Questions in Turkish or English, asked from Turkey or another country. Diamond ($1500/month, 15 brands) for agencies. Limits: measurement is weekly; Google AI Overviews, AI Mode and Copilot are not measured yet.</p>
 <h3>Otterly.AI</h3>
 <p>The lowest entry price: Lite at €29 a month, 16 prompts, covering Google AI Overviews, ChatGPT, Perplexity and Microsoft Copilot. Gemini and Google AI Mode cost extra. A good fit if Google AI Overviews and Copilot matter most.</p>
 <h3>Semrush AI Visibility Toolkit</h3>

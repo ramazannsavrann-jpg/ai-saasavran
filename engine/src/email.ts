@@ -140,7 +140,7 @@ export function buildWelcome(lang: "en" | "tr"): { subject: string; html: string
     paid: [
       "ChatGPT, Claude ve Perplexity'nin canlı web aramalı cevapları (müşterinin gördüğüne en yakın).",
       "Ürün takibi: yapay zekâ ürününüz hakkında doğru bilgi veriyor mu, Google Shopping'de kaçıncı sıradasınız.",
-      "Paylaşılabilir rapor bağlantısı ve PDF; Pro'da ekip daveti ile yapay zekâ ajanları için API ve MCP.",
+      "Paylaşılabilir rapor bağlantısı ve PDF; Platin'de ekip daveti ile yapay zekâ ajanları için API ve MCP.",
     ],
     cta: "Panele git", help: "Sorunuz olursa bu e-postayı yanıtlayın; size yardımcı olalım.",
     foot: "Bu e-postayı AI SaaSavran'a kaydolduğunuz için bir kez aldınız.",
@@ -164,7 +164,7 @@ export function buildWelcome(lang: "en" | "tr"): { subject: string; html: string
     paid: [
       "ChatGPT, Claude and Perplexity answers with live web search (closest to what customers see).",
       "Product tracking: is the AI accurate about your product, and where you rank on Google Shopping.",
-      "Shareable report links and PDF; on Pro, team invitations and API & MCP access for AI agents.",
+      "Shareable report links and PDF; on Platinum, team invitations and API & MCP access for AI agents.",
     ],
     cta: "Go to your dashboard", help: "Questions? Just reply to this email and we'll help.",
     foot: "You received this one-time email because you signed up for AI SaaSavran.",
