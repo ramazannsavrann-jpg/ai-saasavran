@@ -4,7 +4,7 @@ import { isEn } from "./i18n";
 
 export type PaidPlan = "starter" | "pro" | "agency";
 export const PLAN_INFO: Record<PaidPlan, { name: string; price: number }> = {
-  starter: { name: "Plus", price: 130 }, pro: { name: "Pro", price: 400 }, agency: { name: "Business", price: 1500 },
+  starter: { name: "Gümüş", price: 130 }, pro: { name: "Platin", price: 400 }, agency: { name: "Elmas", price: 1500 },
 };
 export const planName = (id: string) => (id in PLAN_INFO ? PLAN_INFO[id as PaidPlan].name : id === "free" ? "Free" : id);
 
