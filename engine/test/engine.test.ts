@@ -516,9 +516,10 @@ test("Takip edilmeyen adlar: RAM, GB, GPU, 16GB, 120Hz gibi teknik terimler mark
   for (const bad of ["RAM", "GPU", "CPU", "SSD", "OLED", "16GB", "16GB RAM", "120Hz", "1TB", "32GB", "USB-C"]) assert.ok(!names.includes(bad), `${bad} çıkmamalı: ${names.join("|")}`);
 });
 
-test("Güncel paketler (Plus/Pro/Business): tipik %55+ kâr; tavan + komisyon fiyatın altında; kötü durum API'si tavana sığar", () => {
-  for (const name of ["Plus", "Pro", "Business"]) {
-    const plan = PLANS.findLast((p) => p.name.startsWith(name + " ("))!;
+test("Güncel paketler (Gümüş/Altın/Platin/Elmas): tipik %55+ kâr; tavan + komisyon fiyatın altında; kötü durum API'si tavana sığar", () => {
+  for (const name of ["Gümüş", "Altın", "Platin", "Elmas"]) {
+    const plan = PLANS.findLast((p) => p.name.startsWith(name + " "))!;
+    assert.ok(plan, name);
     const cap = PAID_CAPS[name];
     assert.ok(planCost(plan, SCENARIOS[0]).grossMarginPct > 55, name);
     assert.ok(cap + plan.priceUsd * SCENARIOS[1].paymentFeeRate + SCENARIOS[1].paymentFeeFixedUsd < plan.priceUsd, name);

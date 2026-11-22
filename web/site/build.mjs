@@ -117,6 +117,8 @@ const APP = {
 
 
 // Paketler (güncel fiyatlar migration 0060: 29 / 149 / 1500 $; satışta, ödeme Paddle ile).
+// Türkçe belirtme eki: Gümüş'ü, Altın'ı, Platin'i, Elmas'ı
+const SECIM_EKI = { starter: "'ü", altin: "'ı", pro: "'i", agency: "'ı" };
 const PLAN_ROWS = (en) => [
   { name: "Free", price: "$0", per: "", items: en
       ? ["1 brand, 15 questions, 3 competitors", "1 measurement a month (automatic)", "Gemini, model knowledge (no live search)", "Website check and recommendations"]
@@ -138,13 +140,13 @@ const plansHtml = (en) => `
 <section class="plans" id="${en ? "pricing" : "fiyatlar"}">
   <h2>${en ? "Pricing" : "Fiyatlar"}</h2>
   <div class="plan-grid">${PLAN_ROWS(en).map((p) => `
-    <div class="plan${p.id === "starter" ? " plan-main" : ""}">
-      ${p.id === "starter" ? `<span class="badge">${en ? "Recommended" : "Önerilen"}</span>` : ""}<h3>${p.name}</h3>
+    <div class="plan${p.id === "altin" ? " plan-main" : ""}">
+      ${p.id === "altin" ? `<span class="badge">${en ? "Recommended" : "Önerilen"}</span>` : ""}<h3>${p.name}</h3>
       <p class="price"><span>${p.price}</span>${p.per}</p>
       <ul>${p.items.map((i) => `<li>${i}</li>`).join("")}</ul>
       ${p.live
         ? `<a class="btn" href="/kayit">${en ? "Start free" : "Ücretsiz başla"}</a>`
-        : `<a class="btn${p.id === "starter" ? "" : " ghost"}" href="/hesap?plan=${p.id}">${en ? `Choose ${p.name}` : `${p.name}'ı seç`}</a>`}
+        : `<a class="btn${p.id === "altin" ? "" : " ghost"}" href="/hesap?plan=${p.id}">${en ? `Choose ${p.name}` : `${p.name}${SECIM_EKI[p.id] ?? "'i"} seç`}</a>`}
     </div>`).join("")}
   </div>
   <p class="small">${en

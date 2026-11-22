@@ -23,6 +23,12 @@ for (const p of PLANS) {
     prod = (await api("POST", "/products", { name: p.name, tax_category: "saas", description: p.description, custom_data: { plan: p.plan } })).data;
     prod.prices = [];
     console.log(`Ürün oluşturuldu: ${p.name}`);
+  } else if (prod.name !== p.name || prod.description !== p.description) {
+    // Ödeme penceresi ve faturada görünen ad paket adıyla aynı olsun (eski: Plus / Pro / Business)
+    const prices = prod.prices;
+    prod = (await api("PATCH", `/products/${prod.id}`, { name: p.name, description: p.description })).data;
+    prod.prices = prices;
+    console.log(`Ürün adı güncellendi: ${p.name}`);
   }
   let price = (prod.prices ?? []).find((x) => x.status === "active" && x.unit_price?.amount === String(p.cents) && x.unit_price?.currency_code === "USD" && x.billing_cycle?.interval === "month");
   if (!price) {

@@ -1,6 +1,6 @@
 # Paket maliyet hesabı
 
-Bu tablo `npm run pricing` ile fiyat kartlarından üretilir (fiyatlar 2026-11-07'de kontrol edildi; OpenAI değerleri gerçek ölçümden). Tablo 18 Kasım 2026 denetiminde `npm run pricing` çıktısıyla yenilendi. Her CI çalışmasında yeniden hesaplanır.
+Bu tablo `npm run pricing` ile fiyat kartlarından üretilir (fiyatlar 2026-11-07'de kontrol edildi; OpenAI değerleri gerçek ölçümden). Tablo 22 Kasım 2026’da güncel paketlerle (kalın satırlar) ve 18 Kasım 2026 denetiminde `npm run pricing` çıktısıyla yenilendi. Her CI çalışmasında yeniden hesaplanır.
 
 ## Sonuç
 
@@ -23,6 +23,10 @@ Bu tablo `npm run pricing` ile fiyat kartlarından üretilir (fiyatlar 2026-11-0
 | Plus + Claude (1 marka, 25 soru) | $20.00 | 542 | $9.84 / %51 | $16.71 / %16 |
 | Pro + Claude (5 marka, 30 soru) | $99.00 | 3250 | $48.71 / %51 | $83.21 / %16 |
 | Business + Claude (15 marka, 30 soru) | $249.00 | 9750 | $140.24 / %44 | $241.23 / %3 |
+| **Gümüş 130 $ (1 marka, 25 soru, 4 motor)** | $130.00 | 650 | $15.84 / %88 | $23.94 / %82 |
+| **Altın 250 $ (3 marka, 30 soru, 4 motor)** | $250.00 | 2340 | $41.29 / %83 | $66.90 / %73 |
+| **Platin 400 $ (5 marka, 30 soru, 4 motor)** | $400.00 | 3900 | $66.82 / %83 | $108.66 / %73 |
+| **Elmas 1500 $ (15 marka, 30 soru, 4 motor)** | $1500.00 | 11700 | $211.96 / %86 | $334.98 / %78 |
 
 Çağrı başı API maliyeti:
 - Tipik: gemini $0.0018, openai $0.0191, claude $0.0191, perplexity $0.0047
@@ -57,7 +61,7 @@ Bu tablo `npm run pricing` ile fiyat kartlarından üretilir (fiyatlar 2026-11-0
 ## Güncel fiyatlar (12 Kasım 2026, migration 0019)
 
 **Gümüş 130 $ · Altın 250 $ · Platin 400 $ · Elmas 1500 $** (aylık; 22 Kasım 2026 sahip onayı, migration 0062 ve 0063). Free: ayda 1 ölçüm (Gemini, aramasız). Önceki 60 / 300 / 876 $ ve Free 4 ölçüm yerine geçti. **Paddle (canlı, 22 Kasım 2026):** dört paketin ürün ve aylık fiyatı Paddle canlı ortamında oluşturuldu (`scripts/paddle-setup.mjs`, CI); site bu fiyat kimlikleriyle satış yapıyor. Sahip kararı: ödemeler canlı kalır.
-Ücretli harcama tavanları (aylık, sahip onayı 22 Kasım 2026): Gümüş 45 $, Altın 100 $, Platin 250 $, Elmas 750 $. Altın paketi (migration 0063): 3 marka, marka başı 30 soru, 6 rakip, aylık 2.340 çağrı, ChatGPT + Claude + Perplexity + Gemini. Kota ve tavan birlikte harcamayı sınırlar. Aşağıdaki
+Ücretli harcama tavanları (aylık, sahip onayı 22 Kasım 2026): Gümüş 45 $, Altın 100 $, Platin 250 $, Elmas 750 $. Altın paketi (migration 0063): 3 marka, marka başı 30 soru, 6 rakip, aylık 2.520 çağrı (0065; ihtiyaç 2.340 + %8 pay), ChatGPT + Claude + Perplexity + Gemini. Kota ve tavan birlikte harcamayı sınırlar. Aşağıdaki
 7 Kasım tablosundaki 20 / 99 / 249 $ fiyatları **eskidir**; yalnız geçmiş kayıt olarak duruyor.
 
 ## Eski karar (7 Kasım 2026): ChatGPT tarzı paketler

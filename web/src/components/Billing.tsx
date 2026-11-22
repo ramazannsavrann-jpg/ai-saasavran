@@ -3,11 +3,11 @@ import { useSearchParams } from "react-router-dom";
 import { useApp } from "../lib/app";
 import { Button, ErrorBox } from "./ui";
 import { L, isEn } from "../lib/i18n";
-import { PLAN_INFO, billingSummary, openCheckout, openPortal, paymentsEnabled, planName, purchasablePlans, type BillingSummary, type PaidPlan } from "../lib/billing";
+import { PLAN_INFO, billingSummary, openCheckout, openPortal, paymentsEnabled, planName, purchasablePlans, PLAN_DATIVE, RECOMMENDED_PLAN, type BillingSummary, type PaidPlan } from "../lib/billing";
 
 const FEATURES: Record<PaidPlan, () => string> = {
   starter: () => L("1 marka, 25 soru, 5 rakip. ChatGPT, Claude ve Perplexity canlı web araması + Gemini, her hafta.", "1 brand, 25 questions, 5 competitors. ChatGPT, Claude and Perplexity with live web search + Gemini, every week."),
-  altin: () => L("3 marka, her biri 30 soru, marka başına 6 rakip. ChatGPT, Claude ve Perplexity canlı web araması + Gemini.", "3 brands, 30 questions each, 6 competitors per brand. ChatGPT, Claude and Perplexity with live web search + Gemini."),
+  altin: () => L("3 marka, her biri 30 soru, marka başına 6 rakip. ChatGPT, Claude ve Perplexity canlı web araması + Gemini, her hafta. Önerilen paket.", "3 brands, 30 questions each, 6 competitors per brand. ChatGPT, Claude and Perplexity with live web search + Gemini, every week. Recommended plan."),
   pro: () => L("5 marka, her biri 30 soru, marka başına 8 rakip.", "5 brands, 30 questions each, 8 competitors per brand."),
   agency: () => L("15 marka, her biri 30 soru, marka başına 10 rakip. Ajanslar için.", "15 brands, 30 questions each, 10 competitors per brand. For agencies."),
 };
@@ -79,7 +79,7 @@ export function BillingPanel() {
         <h2>{L("Paketler", "Plans")}</h2>
         <div className="plan-pick">
           {(Object.keys(PLAN_INFO) as PaidPlan[]).map((p) => (
-            <div key={p} className={`plan-opt${p === "starter" ? " plan-opt-main" : ""}`}>
+            <div key={p} className={`plan-opt${p === RECOMMENDED_PLAN ? " plan-opt-main" : ""}`}>
               <h3>{PLAN_INFO[p].name} <span className="muted">${PLAN_INFO[p].price}{L("/ay", "/month")}</span></h3>
               <p className="muted">{FEATURES[p]()}</p>
             </div>
@@ -109,10 +109,10 @@ export function BillingPanel() {
       ) : (
         <div className="plan-pick">
           {purchasablePlans().map((p) => (
-            <div key={p} className={`plan-opt${p === "starter" ? " plan-opt-main" : ""}`}>
+            <div key={p} className={`plan-opt${p === RECOMMENDED_PLAN ? " plan-opt-main" : ""}`}>
               <h3>{PLAN_INFO[p].name} <span className="muted">${PLAN_INFO[p].price}{L("/ay", "/month")}</span></h3>
               <p className="muted">{FEATURES[p]()}</p>
-              <Button variant={p === "starter" ? "primary" : "quiet"} busy={busy === p} onClick={() => upgrade(p)}>{L(`${PLAN_INFO[p].name}'a geç`, `Upgrade to ${PLAN_INFO[p].name}`)}</Button>
+              <Button variant={p === RECOMMENDED_PLAN ? "primary" : "quiet"} busy={busy === p} onClick={() => upgrade(p)}>{L(`${PLAN_DATIVE[p]} geç`, `Upgrade to ${PLAN_INFO[p].name}`)}</Button>
             </div>
           ))}
           <p className="small muted">{L("Aylık ödeme, istediğiniz zaman iptal. İlk ödemeden sonraki 14 gün içinde tam iade. Ödemeler yetkili satıcımız Paddle üzerinden alınır.", "Monthly billing, cancel anytime. Full refund within 14 days of your first payment. Payments are processed by our reseller, Paddle.")}</p>
