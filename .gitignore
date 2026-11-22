@@ -9,3 +9,5 @@ e2e/screenshots/
 test-results/
 playwright-report/
 cikti/
+video/*/tr/
+video/*/en/

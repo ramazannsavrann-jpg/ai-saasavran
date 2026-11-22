@@ -2,6 +2,11 @@
 
 > **TEK KALEM (21 Kasım):** Shorts üretimi `video/uret.sh` ile tek komuttur; ses/müzik/kapak/yayın saati sabitleri yalnız `video/stil.json`'da. Ayrıntı: `video/STIL.md`.
 
+## UYARILAR SESTE YOK, EKRANDA YAZI (22 Kasım, kullanıcı kuralı — KALICI, tüm videolar)
+- "Bunlar yapay zekânın cevaplarıdır", "bağımsız ölçüm/araştırma", "yapay zekâ sorgusu" gibi uyarı ve yöntem cümleleri seslendirmede söylenmez; yalnız ekranda alt yazı/not olarak kalır (kapak sahnesindeki not, kapanıştaki küçük açıklama, YouTube açıklamasındaki bağımsızlık satırı).
+- Türkçe okunuş: ChatGPT = "Çet Ci Pi Ti" (Çet Ge Pe Te değil); airfryer = "Eyr Frayır".
+- Türkçe Kasım içeriğinde seri adı "Kasım Fırsatları" ("indirim", "Black Friday" denmez).
+
 ## YÜKLEME: İKİ KANAL DA API İLE (21 Kasım, kullanıcı kararı — KALICI; aşağıdaki "Studio'dan / Chrome ile / vidIQ ile" yükleme satırlarının yerine geçer)
 - TR kanalı (@AISaaSavran) ve EN kanalı (@AISaaSavranEN) artık GitHub Actions `youtube-yukle` ile yüklenir (`yt/yt_yukle.py`, ayrıntı main'de `yt/yukle/README.md`). EN izni bir kerelik alındı (`youtube-yetki`, anahtar Supabase `yt_channel_tokens`).
 - Akış: mp4 + kapak `videolar` dalına → main'e iş dosyası `yt/yukle/<ad>-<dil>.json` (kanal, video, kapak, baslik, aciklama, etiketler, kategori 28, dil, yayin, listeler) → push → iş çalışır, video kimliği log'da. Sonra PAYLAŞIM KAYDI güncellenir.
@@ -61,7 +66,7 @@ Bu dal (`seslendirme`) videoların tek kaynağıdır. Yeni oturumda buradan deva
 ## İçerik kuralları
 - (20 Kasım) Sonuçlarda markalar ve firmalar gerçek adlarıyla yazılır; Marka A/B/C harf etiketi gerçek videolarda kullanılmaz. Ürün adları da gerçek adlarla yazılır.
 - Ölçülen markaların gerçek adları **kancadan sonraki marka kartında** alfabetik yazılır ve grafiklerde de aynı adlarla görünür.
-- Her videoda: "Bunlar yapay zekânın cevaplarıdır" (kullanıcı: "bizim görüşümüz değildir" denmesin), tarih, örneklem, "tüm pazarı temsil etmez".
+- Her videoda ekranda (seste değil): "Bunlar yapay zekânın cevaplarıdır" (kullanıcı: "bizim görüşümüz değildir" denmesin), tarih, örneklem, "tüm pazarı temsil etmez".
 - Global video İngilizce, Türkiye videosu Türkçe; YouTube başlık/açıklama/etiketler YALNIZ kanalın dilinde (bkz. KANAL KURALI). Başlık ≤ 100 karakter.
 - Kulaklık videosu formatı esas: marka oranı, motor karşılaştırması, soru bazında kayıp, rakip ürün, ürün doğruluğu, Google Shopping sırası, kaynaklar.
 
