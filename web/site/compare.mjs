@@ -1,6 +1,6 @@
 // Rakip karşılaştırma rehberleri (18 Kasım, sahip kararı: gerçek adlarla).
 // Kurallar: rakip bilgisi yalnız kendi resmî sayfalarından (18 Kasım 2026'da kontrol edildi) veya kamuya açık şirket bilgisinden;
-// AthenaHQ bilgileri athenahq.ai/plans sayfasından 21 Kasım 2026'da kontrol edildi; Bloomreach satın alması (16 Kasım 2026) CMSWire haberinden.
+// AthenaHQ bilgileri athenahq.ai/plans sayfasından 21 Kasım 2026'da kontrol edildi; Profound bilgileri tryprofound.com/pricing sayfasından 22 Kasım 2026'da (sayfanın SSS'si 16 Kasım 2026 güncel); Bloomreach satın alması (16 Kasım 2026) CMSWire haberinden.
 // doğrulanamayan fiyat yazılmaz, "resmî sayfada" denir. Kötüleme yok. Kendi ölçümümüz (42 cevapta 0) dürüstçe yazılır.
 // Fiyatlar sık değişir: bu dosyayı en geç 3 ayda bir kontrol et (sonraki kontrol: Şubat 2027).
 
@@ -11,6 +11,8 @@ import { SELF, selfRows as rows, selfDate } from "./self.mjs";
 const selfDateTr = selfDate(true), selfDateEn = selfDate(false);
 const selfRows = rows();
 const SELFN = SELF.answers;
+// Profound'un kendi ölçümümüzdeki önerilme sayısı (self.json'dan; listede yoksa cümle yazılmaz)
+const PROF = SELF.brands.find((b) => b[0] === "Profound");
 
 export const COMPARE_TR = [
   {
@@ -156,6 +158,63 @@ export const COMPARE_TR = [
       ["AthenaHQ ne kadar?", "Resmî fiyat sayfasına göre (21 Kasım 2026) ücretsiz Essential paketi var; Starter aylık 295 $ ve ayda 3.600 kredi içerir (1 kredi = 1 yapay zekâ cevabı). Kurumsal paket teklifle fiyatlanır."],
       ["AthenaHQ'yu kim satın aldı?", "Bloomreach, 16 Kasım 2026'da AthenaHQ'yu satın aldığını duyurdu."],
       ["AI SaaSavran ile AthenaHQ arasındaki fark nedir?", "AI SaaSavran Türkiye merkezlidir, Türkçe sorulara ve küçük bütçeye odaklanır ve haftalık ölçer. AthenaHQ daha çok motoru (11 model) takip eder ve içerik ajanları sunar; ücretli paketi 295 $'dan başlar."],
+    ],
+  },
+  {
+    slug: "profound-alternatifi",
+    title: "Profound alternatifleri: uygun fiyatlı 5 seçenek (2026)",
+    short: "Profound alternatifleri",
+    description: "Profound'un uygun fiyatlı alternatifleri: AI SaaSavran, Otterly.AI, Peec AI, AthenaHQ ve Semrush. Fiyatlar resmî sayfalardan, kontrol tarihiyle.",
+    body: `
+<p class="lede">Kısa cevap: <b>Profound</b> Eylül 2026'da 399 $ ve 499 $'lık self-servis Starter ve Growth paketlerini yeni abonelere kapattı; resmî fiyat sayfasında yalnız teklifle fiyatlanan kurumsal (Enterprise) paket kaldı. Daha uygun fiyatlı alternatifler: ücretsiz paketi olan ve canlı aramalı ChatGPT, Claude ve Perplexity ölçümü aylık 60 $ olan <b>AI SaaSavran</b>; aylık 29 $'dan başlayan <b>Otterly.AI</b>; ücretsiz paketi ve aylık 295 $'lık Starter'ı olan <b>AthenaHQ</b>; alan adı başına aylık 99 $ olan <b>Semrush AI Visibility Toolkit</b>; ajans paketleri aylık 245 $'dan başlayan <b>Peec AI</b>.</p>
+<p>Bu sayfayı bir rakip olarak yazıyoruz. Profound ve diğer araçlar hakkında yalnız kendi resmî sayfalarında yazanları aktarıyoruz; her fiyatın yanında kontrol tarihini veriyoruz. Fiyatlar değişebilir; satın almadan önce aracın kendi sayfasına bakın.</p>
+
+<h2>Profound hakkında bilinenler (tryprofound.com/pricing, 22 Kasım 2026)</h2>
+<ul>
+<li><b>Paket:</b> yalnız Enterprise; fiyat "Custom" (teklifle). Satın almak için demo istenir.</li>
+<li><b>Eski paketler:</b> resmî SSS'ye göre Starter ve Growth paketleri Eylül 2026'da kaldırıldı; 399 $ ve 499 $ fiyatları yeni abonelikte geçerli değil.</li>
+<li><b>Motorlar:</b> en fazla 10 motor; ChatGPT, Perplexity, Google AI Mode, Gemini, Google AI Overviews, Claude, DeepSeek, Qwen ve diğerleri.</li>
+<li><b>Sıklık ve kapsam:</b> günlük takip; soru sayısı, dil ve bölge pakete göre belirleniyor. API, SSO ve SOC 2 uyumu var; içerik üreten yapay zekâ ajanları da sunuyor.</li>
+</ul>
+<p>Yani Profound büyük bütçeli kurumsal ekipler için tasarlanmış bir ürün. Küçük işletme, tek marka veya küçük ajanssanız aşağıdaki seçenekler fiyat olarak daha erişilebilir.</p>
+
+<h2>Uygun fiyatlı alternatifler</h2>
+<table class="mtable"><thead><tr><th>Araç</th><th>Ücretsiz</th><th>İlk ücretli paket</th><th>Kontrol</th></tr></thead><tbody>
+<tr><td>AI SaaSavran</td><td>Var (1 marka, 15 soru, Gemini)</td><td>Plus, 60 $/ay</td><td>Kendi fiyatımız</td></tr>
+<tr><td>Otterly.AI</td><td>Ücretsiz deneme</td><td>Lite, 29 $/ay (15 soru)</td><td>18 Kasım 2026</td></tr>
+<tr><td>Semrush AI Visibility Toolkit</td><td>Deneme yok</td><td>99 $/ay, alan adı başına</td><td>18 Kasım 2026</td></tr>
+<tr><td>AthenaHQ</td><td>Var (Essential, 300 kredi)</td><td>Starter, 295 $/ay</td><td>21 Kasım 2026</td></tr>
+<tr><td>Peec AI</td><td>Resmî sayfaya bakın</td><td>Ajans paketleri 245 $/ay'dan</td><td>18 Kasım 2026</td></tr>
+</tbody></table>
+
+<h3>AI SaaSavran</h3>
+<p>Türkiye merkezli. Ücretsiz paketle başlanır. Plus (60 $/ay): 25 soru, 5 rakip, ChatGPT, Claude ve Perplexity canlı web aramasıyla + Gemini, haftalık otomatik ölçüm, yapay zekânın baktığı kaynak siteler ve ürünlerde doğruluk kontrolü. Sorular Türkçe veya İngilizce, Türkiye'den veya başka ülkeden sorulur. Ajanslar için Business (876 $/ay, 15 marka). Sınırlar: ölçüm haftalıktır; Google AI Overviews, AI Mode ve Copilot henüz ölçülmüyor.</p>
+<h3>Otterly.AI</h3>
+<p>En düşük başlangıç fiyatı: Lite aylık 29 $, 15 soru; Google AI Overviews, ChatGPT, Perplexity ve Microsoft Copilot dahil. Gemini ve Google AI Mode ek ücretli. Google AI Overviews ve Copilot takibi önemliyse uygun.</p>
+<h3>Semrush AI Visibility Toolkit</h3>
+<p>Semrush yardım sayfasına göre aylık 99 $, alan adı başına, 25 takip sorusu. Zaten Semrush ile SEO yapan ekipler için doğal bir ek.</p>
+<h3>AthenaHQ</h3>
+<p>Ücretsiz Essential paketi (300 kredi, 5 motor) ve aylık 295 $'lık Starter (3.600 kredi, Claude dahil 11 model). Bloomreach 16 Kasım 2026'da satın aldığını duyurdu. Ayrıntı: <a href="/rehber/athenahq-alternatifi/">AthenaHQ alternatifi</a>.</p>
+<h3>Peec AI</h3>
+<p>Berlin merkezli; günlük takip, birçok ülke ve dil. Ajans paketleri aylık 245 $'dan başlıyor; marka paketi fiyatları peec.ai/pricing sayfasında. Ayrıntı: <a href="/rehber/peec-ai-alternatifi/">Peec AI alternatifi</a>.</p>
+
+<h2>Yapay zekâ Profound'u ne kadar öneriyor? (kendi ölçümümüz)</h2>
+<p>${selfDateTr} tarihinde bu kategorideki ${SELF.questions} markasız soruyu ${SELF.engines.join(", ")} motorlarına Türkiye'den canlı web aramasıyla sorduk. ${PROF ? `${SELFN} cevabın ${PROF[1]} tanesinde Profound önerildi.` : `Profound bu ölçümde ilk beşte yer almadı.`} ${SELF.ours === 0 ? "Biz yeni bir marka olarak hiçbir cevapta önerilmedik." : `Biz ${SELFN} cevabın ${SELF.ours} tanesinde önerildik.`} Tüm sayılar: <a href="/rehber/yapay-zeka-gorunurluk-araclari/">yapay zekâ görünürlük araçları</a>.</p>
+
+<h2>Nasıl seçmeli?</h2>
+<ul>
+<li><b>Bütçe:</b> Ücretsiz başlamak istiyorsanız AI SaaSavran veya AthenaHQ'nun ücretsiz paketi; en düşük ücretli giriş Otterly.AI.</li>
+<li><b>Müşterileriniz Türkçe soruyorsa:</b> soruların Türkçe ve Türkiye'den sorulduğu bir araç seçin; cevaplardaki markalar ülkeye ve dile göre değişebiliyor.</li>
+<li><b>Motorlar:</b> Google AI Overviews ve Copilot şartsa Otterly.AI; Claude'u ayrı görmek istiyorsanız AI SaaSavran veya AthenaHQ.</li>
+<li><b>Sıklık:</b> günlük takip gerekiyorsa Peec AI veya Otterly.AI; çoğu küçük işletme için haftalık ölçüm eğilimi görmeye yeter.</li>
+</ul>
+<p>Ayrıntılı kontrol listesi: <a href="/rehber/yapay-zeka-gorunurluk-araci-secimi/">GEO aracı nasıl seçilir?</a> · Üye olmadan deneyin: <a href="/tr/kontrol/">ücretsiz kontrol</a>.</p>
+`,
+    faq: [
+      ["Profound'un uygun fiyatlı alternatifleri neler?", "AI SaaSavran (ücretsiz paket, canlı aramalı ChatGPT, Claude ve Perplexity 60 $/ay), Otterly.AI (29 $/ay'dan), Semrush AI Visibility Toolkit (99 $/ay, alan adı başına), AthenaHQ (ücretsiz paket, Starter 295 $/ay) ve Peec AI (ajans paketleri 245 $/ay'dan). Fiyatlar 18–22 Kasım 2026'da resmî sayfalardan kontrol edildi."],
+      ["Profound ne kadar?", "Resmî fiyat sayfasına göre (22 Kasım 2026) Profound yalnız teklifle fiyatlanan Enterprise paketi sunuyor. 399 $ ve 499 $'lık Starter ve Growth paketleri Eylül 2026'da yeni abonelere kapatıldı."],
+      ["Profound'un ücretsiz alternatifi var mı?", "Evet. AI SaaSavran'ın ücretsiz paketi 1 marka, 15 soru ve ayda 4 ölçüm içerir (Gemini, canlı aramasız). AthenaHQ'nun ücretsiz Essential paketi 300 kredi içerir."],
+      ["Profound'un Türkçe alternatifi var mı?", "AI SaaSavran Türkçe arayüz ve raporlarla, Türkçe soruları Türkiye'den canlı web aramasıyla ChatGPT, Claude ve Perplexity'de ölçer."],
     ],
   },
 ];
@@ -305,6 +364,64 @@ export const COMPARE_EN = [
       ["How much does AthenaHQ cost?", "Per its official pricing page (21 November 2026): a free Essential plan; Starter at $295 a month with 3,600 credits (1 credit = 1 AI response); Enterprise is custom-priced."],
       ["Who acquired AthenaHQ?", "Bloomreach announced on 16 November 2026 that it acquired AthenaHQ."],
       ["How is AI SaaSavran different from AthenaHQ?", "AI SaaSavran focuses on small budgets and on questions in Turkish or English from your customers' country, and measures weekly. AthenaHQ tracks more engines (11 models) and offers content agents; its paid plan starts at $295 a month."],
+    ],
+  },
+  {
+    slug: "profound-alternative",
+    tr: "profound-alternatifi",
+    title: "Profound alternatives: 5 affordable options (2026)",
+    short: "Profound alternatives",
+    description: "Affordable Profound alternatives: AI SaaSavran, Otterly.AI, Peec AI, AthenaHQ and Semrush. Prices from official pages, with the date checked.",
+    body: `
+<p class="lede">Short answer: in September 2026 <b>Profound</b> retired its self-serve Starter and Growth plans ($399 and $499) for new subscribers; its official pricing page now lists only a custom-priced Enterprise plan. More affordable alternatives: <b>AI SaaSavran</b>, with a free plan and live-search ChatGPT, Claude and Perplexity at $60 a month; <b>Otterly.AI</b> from $29 a month; <b>AthenaHQ</b>, with a free plan and a $295 Starter plan; <b>Semrush AI Visibility Toolkit</b> at $99 a month per domain; and <b>Peec AI</b>, whose agency plans start at $245 a month.</p>
+<p>We are a competitor, so we only repeat what each tool's official pages say, with the date we checked them. Prices change; check each tool's own page before buying.</p>
+
+<h2>What is known about Profound (tryprofound.com/pricing, 22 November 2026)</h2>
+<ul>
+<li><b>Plan:</b> Enterprise only, priced as "Custom"; you request a demo to buy.</li>
+<li><b>Old plans:</b> per the official FAQ, the Starter and Growth plans were retired in September 2026 and the $399 and $499 prices are no longer available for new subscriptions.</li>
+<li><b>Engines:</b> up to 10, including ChatGPT, Perplexity, Google AI Mode, Gemini, Google AI Overviews, Claude, DeepSeek and Qwen.</li>
+<li><b>Frequency and scope:</b> daily tracking; prompts, languages and regions are set per package. API, SSO and SOC 2 compliance; AI agents that create content.</li>
+</ul>
+<p>Profound is built for enterprise teams with large budgets. If you are a small business, a single brand or a small agency, the options below are easier on the budget.</p>
+
+<h2>Affordable alternatives</h2>
+<table class="mtable"><thead><tr><th>Tool</th><th>Free</th><th>First paid plan</th><th>Checked</th></tr></thead><tbody>
+<tr><td>AI SaaSavran</td><td>Yes (1 brand, 15 questions, Gemini)</td><td>Plus, $60/month</td><td>Our own pricing</td></tr>
+<tr><td>Otterly.AI</td><td>Free trial</td><td>Lite, $29/month (15 prompts)</td><td>18 November 2026</td></tr>
+<tr><td>Semrush AI Visibility Toolkit</td><td>No trial</td><td>$99/month per domain</td><td>18 November 2026</td></tr>
+<tr><td>AthenaHQ</td><td>Yes (Essential, 300 credits)</td><td>Starter, $295/month</td><td>21 November 2026</td></tr>
+<tr><td>Peec AI</td><td>See official page</td><td>Agency plans from $245/month</td><td>18 November 2026</td></tr>
+</tbody></table>
+
+<h3>AI SaaSavran</h3>
+<p>Based in Turkey. Start on a free plan. Plus ($60/month): 25 questions, 5 competitors, live-search ChatGPT, Claude and Perplexity plus Gemini, weekly automatic measurement, the sources the AI relied on, and product fact checks. Questions in Turkish or English, asked from Turkey or another country. Business ($876/month, 15 brands) for agencies. Limits: measurement is weekly; Google AI Overviews, AI Mode and Copilot are not measured yet.</p>
+<h3>Otterly.AI</h3>
+<p>The lowest entry price: Lite at $29 a month, 15 prompts, covering Google AI Overviews, ChatGPT, Perplexity and Microsoft Copilot. Gemini and Google AI Mode cost extra. A good fit if Google AI Overviews and Copilot matter most.</p>
+<h3>Semrush AI Visibility Toolkit</h3>
+<p>Per Semrush's help page, $99 a month per domain with 25 tracked prompts. A natural add-on for teams already doing SEO in Semrush.</p>
+<h3>AthenaHQ</h3>
+<p>A free Essential plan (300 credits, 5 engines) and a $295 Starter plan (3,600 credits, 11 models including Claude). Bloomreach announced its acquisition on 16 November 2026. More: <a href="/guides/athenahq-alternative/">AthenaHQ alternative</a>.</p>
+<h3>Peec AI</h3>
+<p>Berlin-based; daily tracking across many countries and languages. Agency plans start at $245 a month; brand plan prices are on peec.ai/pricing. More: <a href="/guides/peec-ai-alternative/">Peec AI alternative</a>.</p>
+
+<h2>How often does AI recommend Profound? (our own measurement)</h2>
+<p>On ${selfDateEn} we asked ${SELF.questions} unbranded questions in this category to ${SELF.engines.join(", ")} with live web search from Turkey. ${PROF ? `Profound was recommended in ${PROF[1]} of ${SELFN} answers.` : `Profound was not in the top five in this measurement.`} ${SELF.ours === 0 ? "As a new brand, we were not recommended in any answer." : `We were recommended in ${SELF.ours} of ${SELFN} answers.`} All numbers: <a href="/guides/ai-visibility-tools-compared/">AI visibility tools compared</a>.</p>
+
+<h2>How to choose</h2>
+<ul>
+<li><b>Budget:</b> to start free, AI SaaSavran or AthenaHQ's free plan; the lowest paid entry is Otterly.AI.</li>
+<li><b>Customers in a specific country or language:</b> pick a tool that asks questions in that language from that country; the brands in AI answers can change by country and language.</li>
+<li><b>Engines:</b> Otterly.AI if Google AI Overviews and Copilot are a must; AI SaaSavran or AthenaHQ to see Claude separately.</li>
+<li><b>Frequency:</b> Peec AI or Otterly.AI for daily tracking; for most small businesses, weekly measurement is enough to see the trend.</li>
+</ul>
+<p>Detailed checklist: <a href="/guides/choose-ai-visibility-tool/">how to choose an AI visibility tool</a> · Try it without signing up: <a href="/check/">free check</a>.</p>
+`,
+    faq: [
+      ["What are affordable alternatives to Profound?", "AI SaaSavran (free plan; live-search ChatGPT, Claude and Perplexity at $60/month), Otterly.AI (from $29/month), Semrush AI Visibility Toolkit ($99/month per domain), AthenaHQ (free plan; Starter $295/month) and Peec AI (agency plans from $245/month). Prices checked on official pages on 18–22 November 2026."],
+      ["How much does Profound cost?", "Per its official pricing page (22 November 2026), Profound offers only a custom-priced Enterprise plan. The $399 Starter and $499 Growth plans were retired for new subscriptions in September 2026."],
+      ["Is there a free alternative to Profound?", "Yes. AI SaaSavran's free plan includes 1 brand, 15 questions and 4 measurements a month (Gemini, no live search). AthenaHQ's free Essential plan includes 300 credits."],
+      ["Does Profound still have a Starter plan?", "No. Per Profound's pricing FAQ, the Starter and Growth plans for brands were retired in September 2026; new customers are offered Enterprise plans with custom pricing."],
     ],
   },
 ];

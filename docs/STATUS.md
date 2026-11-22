@@ -1,6 +1,8 @@
 # Gerçek durum raporu
 
-**Son güncelleme:** 2026-11-21 · AthenaHQ karşılaştırma sayfası, reklam SSS'si
+**Son güncelleme:** 2026-11-22 · Profound alternatifleri rehberi (TR+EN)
+
+> **22 Kasım (GEO Otopilot):** Site denetiminde sorun yoktu (252 sayfa, 13/13). Kendi ölçümümüzde bizi anmayan "Profound'un uygun fiyatlı alternatifleri neler?" sorusuna doğrudan cevap veren `/rehber/profound-alternatifi/` ve `/guides/profound-alternative/` eklendi (`compare.mjs`). Profound bilgisi tryprofound.com/pricing'den 22 Kasım 2026'da; diğer fiyatlar mevcut karşılaştırma sayfalarının kontrol tarihleriyle. Profound'un önerilme sayısı self.json'dan kendiliğinden gelir.
 
 **Canlı adres:** https://aisaasavran.com (Cloudflare Pages + Supabase)
 
