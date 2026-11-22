@@ -7,7 +7,8 @@
   "s2",
   "s3",
   "s4",
-  "net",
+  "boxes",
+  "shop",
   "s8"
  ],
  "n": 22,
@@ -357,7 +358,7 @@
  "sources": [],
  "t": {
   "hook": "Kasım Fırsatları: Yapay zekâ hangi airfryer'ı öneriyor?",
-  "badge": "Aynı mı söylüyorlar?",
+  "badge": "Yerli marka nerede?",
   "hook2": "Türkiye verisi · 8 marka · 11 alıcı sorusu",
   "note": "Bunlar yapay zekânın cevaplarıdır.",
   "names_title": "Takip ettiğimiz markalar",
@@ -372,7 +373,7 @@
   "tag_q": "Soru bazında",
   "byq": "Soru değişince kazanan değişiyor",
   "byq_sub": "6 canlı aramalı cevapta önerilme · vurgulu = kazanan değişti",
-  "tag_shop": "Google Shopping (ABD)",
+  "tag_shop": "Google Shopping (Türkiye)",
   "tag_net": "Kaynak ağı",
   "net": "Yapay zekâ nereye bakıyor?",
   "net_sub": "Çizgi kalınlığı = siteyi kaynak gösterip markayı anan cevap sayısı",
@@ -380,9 +381,16 @@
   "cta": "Yapay zekâ markanız için ne diyor?",
   "cta2": "ChatGPT, Gemini, Claude ve Perplexity'de her hafta takip edin.",
   "free": "Ücretsiz kontrol, kayıt gerekmez",
-  "disc": "22 Kasım 2026 yapay zekâ cevapları (Türkiye, Türkçe sorular). 66 canlı aramalı cevap (ChatGPT, Claude, Perplexity; 11 soru × 2) ve 30 Gemini cevabı (15 soru × 2, hafızadan). Örneklem sınırlıdır, tüm pazarı temsil etmez. Tavsiye değildir. Adlar sahiplerine aittir."
+  "disc": "22 Kasım 2026 yapay zekâ cevapları (Türkiye, Türkçe sorular). 66 canlı aramalı cevap (ChatGPT, Claude, Perplexity; 11 soru × 2) ve 30 Gemini cevabı (15 soru × 2, hafızadan). Örneklem sınırlıdır, tüm pazarı temsil etmez. Tavsiye değildir. Adlar sahiplerine aittir.",
+  "tag_box": "Güven puanı",
+  "box": "Yapay zekâ fikir değiştiriyor mu?",
+  "shop": "Shopping'de 1. sıra, fiyat farklı",
+  "shop_sub": "Arama: model kodu · ilk ilan · 22 Kasım",
+  "shop_col_ai": "Sıra",
+  "shop_col_shop": "İlk ilan",
+  "shop_note": "ChatGPT'ye sorduk: L ~6.945 TL, XL ~9.000 TL dedi. İkisi de ilk ilandan düşük."
  },
- "gruplar": "0,1|2|3,4,5|6,7,8|9,10,11|12,13|14,15,16",
+ "gruplar": "0,1|2|3,4|5,6|7,8|9,10,11|12,13|14,15,16",
  "yt": {
   "baslik": "Kasım Fırsatları: Yapay zekâ hangi airfryer'ı öneriyor? #shorts",
   "aciklama": "Türkiye'de en iyi airfryer'ı sorduğumuzda 66 canlı aramalı yapay zekâ cevabının 56'sında Philips geçti; ikinci sırada 37 cevapla Xiaomi var.\n\nÖne çıkanlar\n• Philips önerilme: ChatGPT 17/22, Claude 18/22, Perplexity 17/22, Gemini 27/30.\n• Cosori'yi Claude 10, Gemini 21 cevapta önerdi; ChatGPT ve Perplexity hiç anmadı.\n• Yerli marka Fakir, canlı aramalı 66 cevabın hiçbirinde geçmedi.\n• Fiyat performans ve pencereli model sorulunca Xiaomi öne geçti; \"yerli mi yabancı mı\" sorusunda Karaca ve Arzum öne çıktı.\n• En çok kaynak gösterilen site: havafritozu.com (12 cevap).\n\nBu video hangi sorulara cevap veriyor\n• Yapay zekâ hangi airfryer markasını öneriyor? En çok Philips'i.\n• Yapay zekâlar aynı şeyi mi söylüyor? Hayır, özellikle Cosori ve yerli markalarda ayrışıyorlar.\n• Yapay zekâ airfryer önerirken nereye bakıyor? Çoğunlukla Türkçe inceleme ve liste sitelerine.\n\nYöntem: 22 Kasım 2026, Türkiye. ChatGPT, Claude ve Perplexity canlı web aramasıyla 11 soruyu ikişer kez cevapladı (66 cevap); Gemini hafızadan 15 soruyu ikişer kez cevapladı (30 cevap). Örneklem sınırlıdır, tüm pazarı temsil etmez. Ürün ve Google Shopping karşılaştırması uzun videoda.\n\nBunlar yapay zekânın cevaplarıdır.\nBu video bağımsız bir ölçümdür. Hiçbir markayla reklam veya iş birliğimiz yoktur.\n\nYapay zekâ markanız için ne diyor? aisaasavran.com\n\n#airfryer #KasımFırsatları #Philips #Xiaomi #Karaca #Arzum #Cosori #Ninja #Tefal #Fakir #ChatGPT #YapayZeka",
@@ -406,12 +414,57 @@
   "listeler": []
  },
  "dur": {
-  "p1": 5.66,
-  "p2": 2.73,
-  "p3": 8.2,
-  "p4": 9.58,
-  "p5": 8.85,
-  "p6": 6.15,
-  "p7": 7.58
+  "p1": 6,
+  "p2": 6,
+  "p3": 6,
+  "p4": 6,
+  "p5": 6,
+  "p6": 6,
+  "p7": 6,
+  "p8": 6
+ },
+ "boxes": [
+  {
+   "title": "Aynı soruyu iki kez sorduk (11 soru)",
+   "lines": [
+    [
+     "Claude: hiç değişmedi",
+     "good"
+    ],
+    [
+     "ChatGPT: 3 soruda değişti",
+     "bad"
+    ],
+    [
+     "Perplexity: 3 soruda değişti",
+     "bad"
+    ]
+   ]
+  },
+  {
+   "title": "Güven puanı (66 canlı cevap)",
+   "lines": [
+    [
+     "84 / 100 · Yüksek",
+     "gold"
+    ]
+   ]
+  }
+ ],
+ "shop": {
+  "rows": [
+   [
+    "Philips L (HD9252)",
+    "1.",
+    "8.500 TL",
+    false
+   ],
+   [
+    "Philips XL (HD9257)",
+    "1.",
+    "12.337 TL",
+    true
+   ]
+  ]
  }
 }
