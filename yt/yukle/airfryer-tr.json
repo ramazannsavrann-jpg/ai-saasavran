@@ -1,0 +1,29 @@
+{
+ "kanal": "tr",
+ "video": "shorts/airfryer-tr.mp4",
+ "kapak": "kapak/airfryer-tr.jpg",
+ "baslik": "Kasım Fırsatları: Yapay zekâ hangi airfryer'ı öneriyor? #shorts",
+ "aciklama": "Türkiye'de airfryer sorduğumuz 66 canlı aramalı yapay zekâ cevabının 56'sında Philips, 37'sinde Xiaomi geçti; Fakir ise hiç geçmedi.\n\nÖne çıkanlar\n• Sıralama (ChatGPT, Claude, Perplexity; 66 cevap): Philips 56, Xiaomi 37, Ninja 21, Karaca 18, Tefal 17, Arzum 12, Cosori 10, Fakir 0.\n• Xiaomi ilk 5 soruda öndeydi, 7. soruda Philips öne geçti.\n• Cosori'yi Gemini 30 cevabın 21'inde, Claude 22 cevabın 10'unda önerdi; ChatGPT ve Perplexity hiç anmadı.\n• Güven puanı 84/100: aynı soruyu iki kez sorduk, Claude cevabını hiç değiştirmedi; ChatGPT ve Perplexity 11 sorunun 3'ünde değiştirdi.\n• Google Shopping'de \"airfryer\" aramasında 1. Xiaomi, 2. Philips. Fakir 10. sırada ama yapay zekâ hiç anmadı; Ninja ilk 20 ilanda yok.\n\nBu video hangi sorulara cevap veriyor\n• Yapay zekâ hangi airfryer markasını öneriyor? En çok Philips'i, ardından Xiaomi'yi.\n• Soru değişince öneri değişiyor mu? Evet: pencereli model sorusunda Xiaomi (6 cevabın 5'i), garanti ve servis sorusunda Philips (6'da 6) öne çıktı.\n• Yapay zekâ ile Google Shopping aynı sırayı mı veriyor? Hayır; Shopping'de birinci Xiaomi, Fakir 10. ama yapay zekâda yok.\n• Yapay zekâ nereye bakıyor? En çok kaynak gösterilen site havafritozu.com (12 cevap).\n\nYöntem: 22 Kasım 2026, Türkiye, Türkçe sorular. ChatGPT, Claude ve Perplexity canlı web aramasıyla 11 soruyu ikişer kez cevapladı (66 cevap); Gemini hafızadan cevap verdi (30 cevap). Örneklem sınırlıdır, tüm pazarı temsil etmez.\n\nBunlar yapay zekânın cevaplarıdır, bizim önerimiz değildir. Bu video bağımsız bir ölçümdür; hiçbir markayla reklam veya iş birliğimiz yoktur.\n\nYapay zekâ markanız için ne diyor? aisaasavran.com\n\n#airfryer #KasımFırsatları #Philips #Xiaomi #Ninja #Karaca #Cosori #Fakir #GoogleShopping #ChatGPT #YapayZeka",
+ "etiketler": [
+  "airfryer",
+  "Kasım Fırsatları",
+  "Philips airfryer",
+  "Xiaomi airfryer",
+  "Ninja airfryer",
+  "Karaca airfryer",
+  "Tefal",
+  "Arzum",
+  "Cosori",
+  "Fakir",
+  "ChatGPT",
+  "Gemini",
+  "Claude",
+  "Perplexity",
+  "yapay zeka",
+  "Google Shopping"
+ ],
+ "kategori": 28,
+ "dil": "tr",
+ "yayin": "2026-11-23T00:05:00+03:00",
+ "listeler": []
+}
