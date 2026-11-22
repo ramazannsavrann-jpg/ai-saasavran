@@ -610,7 +610,7 @@ Contact: ${SITE.email}
 ${SITE.sameAs.map((u) => `- ${u}`).join("\n")}
 
 ## For AI agents
-- MCP server (read-only, Platinum and Diamond): ${SITE.url}/api/mcp — Streamable HTTP, header \`Authorization: Bearer aisv_...\`; tools: list_brands, get_brand_report.
+- MCP server (read-only, Platinum and Diamond): ${SITE.url}/api/mcp — Streamable HTTP, header \`Authorization: Bearer aisv_...\`; tools: list_brands, get_brand_report (includes a 0–100 confidence score per measurement type).
 - REST API: ${SITE.url}/api/v1/brands and ${SITE.url}/api/v1/brands/{id} with the same key. Keys are created in the app under Account → API and MCP.
 
 ## Tutorials
