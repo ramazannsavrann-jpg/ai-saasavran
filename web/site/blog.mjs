@@ -108,4 +108,64 @@ export const POSTS = [
       ["Are these results representative of the market?", "No. It is a small sample of 8 questions and 48 answers showing what the AI engines said that day."],
     ],
   },
+  {
+    pair: "kendi-olcum-2026-11",
+    lang: "tr",
+    slug: "kendi-markamizi-yapay-zekaya-sorduk",
+    date: "2026-11-22",
+    title: "Kendi markamızı yapay zekâya sorduk: 42 cevabın hiçbirinde önerilmedik",
+    short: "Kendi markamızı yapay zekâya sorduk",
+    description: "18 Kasım 2026'da AI SaaSavran'ı markasız 7 müşteri sorusuyla ChatGPT, Claude ve Perplexity'ye sorduk. Hiçbir cevapta önerilmedik. Sonucu nasıl okuduğumuzu ve iki hafta sonraki yeniden ölçümü anlatıyoruz.",
+    cover: "/og.png",
+    names: "",
+    body: `
+<p class="lede">Ürünümüzü satıyoruz, o yüzden kendimizi de yapay zekâda görünür olmalıyız. 18 Kasım 2026'da AI SaaSavran'ı hiç anmadan 7 müşteri sorusunu ChatGPT, Claude ve Perplexity'ye sorduk. <b>42 cevabın hiçbirinde bizi önermediler.</b> Aynı sorularda beş rakip aracın 22 ile 33 cevap arasında önerildiğini gördük.</p>
+
+<h2>Nasıl ölçtük?</h2>
+<p>Sorularda markamızın adı geçmiyor; sorular bir müşterinin kendi ihtiyacını anlatması gibi. ChatGPT, Claude ve Perplexity canlı web aramasıyla, Türkiye'den, her soruyu iki kez sordu: 7 soru × 3 motor × 2 tekrar = 42 cevap. Ölçüm 18 Kasım 2026'da yapıldı ve yaklaşık 0,59 $ tuttu.</p>
+
+<h2>Sonuç</h2>
+<p>Sonuç 0 / 42. Rakipler, aynı 42 cevapta, 22 ile 33 cevap arasında önerildi. Bu aracın adlarını bu yazıda yazmıyoruz; ölçümün tamamını <a href="/tr/olcumler/">ölçümler</a> sayfasında ve <a href="/rehber/yapay-zeka-gorunurluk-araclari/">araç karşılaştırma</a> rehberinde görebilirsiniz.</p>
+
+<h2>Bu sonuç ne söylüyor, ne söylemiyor?</h2>
+<p>Bu ölçüm bize nedenini söylemiyor. Yalnızca şunu gösteriyor: 18 Kasım'da, bu sorularda, yapay zekâ bizi bir öneri olarak göstermedi. Neden böyle olduğunu tahmin etmek yerine, yapay zekânın hangi siteleri okuduğuna ve hangi soruda kaybettiğimize bakacağız. Tek bir ölçüm de bir markayı sonsuza kadar ya da hiç öneremez; bu tablo bir anlık fotoğraf.</p>
+
+<h2>Bundan sonra ne yapacağız?</h2>
+<p>İki hafta sonra aynı sorularla yeniden ölçeceğiz ve sonucu, ne olursa olsun, bu sayfada yayınlayacağız. Kendi ürünümüzü kendi verisiyle gösteremiyorsak, müşterilerimize de gösteremeyiz.</p>`,
+    faq: [
+      ["AI SaaSavran ChatGPT, Claude ve Perplexity'de önerilir mi?", "18 Kasım 2026 ölçümünde 42 cevabın hiçbirinde önerilmedik. Bu tek bir ölçüm; iki hafta sonra yeniden ölçülecek."],
+      ["Neden önerilmediniz?", "Bu ölçüm nedenini göstermiyor. Kaynak siteleri ve kayıp soruları ayrıca inceleyeceğiz."],
+      ["Bu sonuç ürünün kalitesini gösterir mi?", "Hayır. Yapay zekânın cevapları değişkendir ve bu, 42 cevaplık küçük bir örneklemdir."],
+    ],
+  },
+  {
+    pair: "kendi-olcum-2026-11",
+    lang: "en",
+    slug: "we-asked-ai-about-our-own-brand",
+    date: "2026-11-22",
+    title: "We asked AI about our own brand: recommended in 0 of 42 answers",
+    short: "We asked AI about our own brand",
+    description: "On 18 November 2026 we asked ChatGPT, Claude and Perplexity 7 unbranded customer questions about AI SaaSavran. We were recommended in none of the answers. Here is how we read it and what we measure next.",
+    cover: "/og.png",
+    names: "",
+    body: `
+<p class="lede">We sell this product, so we need to be visible in AI answers ourselves. On 18 November 2026 we asked ChatGPT, Claude and Perplexity 7 customer questions that never mention AI SaaSavran. <b>We were recommended in none of the 42 answers.</b> In the same questions, five competing tools were recommended in between 22 and 33 answers.</p>
+
+<h2>How we measured</h2>
+<p>Our brand name is not in any question; each question describes a customer's own need. ChatGPT, Claude and Perplexity answered with live web search from Turkey, and each question was asked twice: 7 questions × 3 engines × 2 repeats = 42 answers. The measurement ran on 18 November 2026 and cost about $0.59.</p>
+
+<h2>The result</h2>
+<p>The result is 0 of 42. Over the same 42 answers, the competitors were recommended between 22 and 33 times. We do not name the tools in this post; the full measurements are on our <a href="/measurements/">measurements</a> page and the comparison is in our <a href="/guides/ai-visibility-tools-compared/">tools guide</a>.</p>
+
+<h2>What this does and does not tell us</h2>
+<p>This measurement does not tell us why. It shows only that on 18 November, for these questions, the assistants never recommended us. Rather than guess the reason, we will look at which sites the AI read and in which questions we lost. One measurement also cannot fix a brand's position forever; this table is a snapshot.</p>
+
+<h2>What we will do next</h2>
+<p>We will measure the same questions again in two weeks and publish the result on this page, whatever it shows. If we cannot show our own product's results with our own data, we cannot expect customers to trust it.</p>`,
+    faq: [
+      ["Does AI SaaSavran get recommended by ChatGPT, Claude or Perplexity?", "In the 18 November 2026 measurement, we were recommended in none of 42 answers. It is one measurement; we will measure again in two weeks."],
+      ["Why were you not recommended?", "This measurement does not show the reason. We will review the sites the AI cited and the questions we lost."],
+      ["Does this result show the quality of the product?", "No. AI answers vary, and 42 answers is a small sample."],
+    ],
+  },
 ];
