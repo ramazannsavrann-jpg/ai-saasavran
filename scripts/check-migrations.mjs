@@ -338,4 +338,18 @@ console.log("ok tanımsız paket atanamıyor");
   }
   console.log("ok 0066: güven puanı girdileri doğru; RLS korunuyor" + (br ? "" : " (marka yok, atlandı)"));
 }
+// 0067: müşteri adı — uzunluk sınırı; başka alanın kullanıcısı yazamaz
+{
+  const br = (await db.query(`select id from brands where workspace_id=$1 and not is_competitor limit 1`, [A])).rows[0];
+  if (br) {
+    await as(U1, `update brands set client_name = 'Akdeniz Otel Grubu' where id = '${br.id}'`);
+    assert.equal((await db.query(`select client_name from brands where id=$1`, [br.id])).rows[0].client_name, "Akdeniz Otel Grubu");
+    await assert.rejects(db.query(`update brands set client_name = $2 where id=$1`, [br.id, "x".repeat(81)]), "en fazla 80 karakter");
+    await assert.rejects(db.query(`update brands set client_name = '   ' where id=$1`, [br.id]), "boş ad olmaz");
+    await as(U2, `update brands set client_name = 'Sızma' where id = '${br.id}'`);
+    assert.equal((await db.query(`select client_name from brands where id=$1`, [br.id])).rows[0].client_name, "Akdeniz Otel Grubu", "başka alan yazamaz");
+    await db.query(`update brands set client_name = null where id=$1`, [br.id]);
+  }
+  console.log("ok 0067: müşteri adı doğrulanıyor; başka alan yazamıyor" + (br ? "" : " (marka yok, atlandı)"));
+}
 console.log("TÜM DB TESTLERİ GEÇTİ");
