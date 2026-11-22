@@ -7,3 +7,4 @@
 - 2026-11-22 atlandı: BetaList (betalist.com/faq: "All submissions are paid"), Toolify (yalnız ücretli, 99 $ tek sefer; kaynak saascity.io ve orangebot.ai), AI Tools Directory (aitoolsdirectory.com sayfası doğrulanamadı; sonraki turda tekrar bakılacak)
 - 2026-11-22: SaaSworthy (saasworthy.com, "List Your Product / Get Listed": "list it on SaaSworthy for FREE")
 - 2026-11-22 sonuç: SaaSworthy'ye gönderildi; onay e-postası henüz gelmedi (bekleniyor).
+- 2026-11-22 sonuç: SaaSHub onaylandı (saashub.com, AI/SEO; fiyat 60 $ olarak düzeltildi; ad hâlâ bitişik "AISaaSavran", düzeltme bekleniyor).
