@@ -15,6 +15,7 @@ import { FactCardInline } from "../components/FactCardInline";
 import { downloadCsv, fileSlug } from "../lib/csv";
 import { buildRecommendations, previousSameTypeRun, type RecInput } from "../../../engine/src/recommendations.ts";
 import { relatedBrand, untrackedNames } from "../../../engine/src/metrics.ts";
+import { ConfidenceCard } from "../components/Confidence";
 import { aiVsShopping, type AiShopBrand } from "../../../engine/src/shopping.ts";
 import { campaignFor, taskProgress } from "../../../engine/src/campaign.ts";
 import { guessIntent } from "../../../engine/src/discovery.ts";
@@ -775,6 +776,7 @@ function Report({ brand, type, onBrandChange, paid = false, runs = [] }: { brand
   const pts = series(rows ?? []);
   const last = pts[pts.length - 1];
   const prompts = useLoad(() => (last ? api.promptResults(last.runId, eng) : Promise.resolve([])), [last?.runId, eng]);
+  const conf = useLoad(() => (last && type !== "simulated" ? api.runConfidence(last.runId) : Promise.resolve([])), [last?.runId, type]);
   const answersAll = useLoad(() => (last ? api.answers(last.runId) : Promise.resolve([])), [last?.runId]);
   // useMemo: süzülmüş dizi her çizimde yeniden oluşmasın (aşağıdaki yüklemeler buna bağlı)
   const answersData = useMemo(() => (answersAll.data && eng ? answersAll.data.filter((x) => x.provider === eng) : answersAll.data), [answersAll.data, eng]);
@@ -856,6 +858,7 @@ function Report({ brand, type, onBrandChange, paid = false, runs = [] }: { brand
                 ? <div><dt>{L("Sitenizin kaynak gösterilmesi", "Your site cited")}</dt><dd className="num">{pct(last.cite.value)}</dd><dd className="range">{last.cite.k}/{last.cite.n} {L("cevapta", "answers")}</dd></div>
                 : <div><dt>{L("Kaynak gösterilme", "Cited")}</dt><dd className="num na">{L("Ölçülmedi", "Not measured")}</dd><dd className="range">{L("yalnızca canlı aramada vardır", "only with live search")}</dd></div>}
             </dl>
+            {conf.data && <ConfidenceCard rows={conf.data} provider={eng} />}
             {lowSample(last.recommend) && (
               <p className="caution">{isEn() ? `Small sample (${last.recommend.n} answers). Don't read these rates as final; the ranges are wide. Add more questions and measure again.` : `Örneklem küçük (${last.recommend.n} cevap). Oranları kesin sonuç gibi okumayın; aralıklar geniştir. Daha fazla soru ekleyip tekrar ölçün.`}</p>
             )}
