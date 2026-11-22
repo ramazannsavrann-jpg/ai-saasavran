@@ -534,6 +534,7 @@ function Products({ brand, paidAllowed, manualShopping }: { brand: Brand; paidAl
 const splitAliases = (v: FormDataEntryValue | null) => String(v || "").split(",").map((x) => x.trim()).filter(Boolean);
 
 function BrandEditForm({ brand, onDone }: { brand: Brand; onDone: (changed: boolean) => void }) {
+  const { current } = useApp();
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
   async function save(e: FormEvent<HTMLFormElement>) {
@@ -548,6 +549,7 @@ function BrandEditForm({ brand, onDone }: { brand: Brand; onDone: (changed: bool
         website: String(f.get("website") || "").trim() || null,
         sector: String(f.get("sector") || "") || null,
         offering: String(f.get("offering") || "").trim().slice(0, 120) || null,
+        ...(f.has("client_name") ? { client_name: String(f.get("client_name") || "").trim().slice(0, 80) || null } : {}),
         city: String(f.get("city") || "").trim() || null,
         country: /^[A-Za-z]{2}$/.test(String(f.get("country") || "").trim()) ? String(f.get("country")).trim().toUpperCase() : null,
         ...(brand.data_origin !== "simulated" ? { auto_weekly: f.get("auto_weekly") === "on" } : {}),
@@ -561,7 +563,8 @@ function BrandEditForm({ brand, onDone }: { brand: Brand; onDone: (changed: bool
       <h2>{L("Markayı düzenle", "Edit brand")}</h2>
       <Field label={L("Marka adı", "Brand name")} name="name" defaultValue={brand.name} required maxLength={120} />
       <Field label={L("Diğer yazılışlar", "Other spellings")} name="aliases" defaultValue={brand.aliases.join(", ")} hint={L("Virgülle ayırın", "Comma-separated")} />
-      <Field label="Web sitesi" name="website" defaultValue={brand.website ?? ""} inputMode="url" />
+      <Field label={L("Web sitesi", "Website")} name="website" defaultValue={brand.website ?? ""} inputMode="url" />
+      {current?.kind === "agency" && <Field label={L("Müşteri (ajans)", "Client (agency)")} name="client_name" defaultValue={brand.client_name ?? ""} maxLength={80} placeholder={L("Örn. Akdeniz Otel Grubu", "e.g. Harbor Hotels")} hint={L("Aynı müşterinin markalarını gruplamak için. Erişim vermez; müşteriye rapor bağlantısı gönderin.", "Groups a client's brands. It grants no access; send the client a report link.")} />}
       <Select label={L("Sektör", "Sector")} name="sector" defaultValue={brand.sector ?? ""}>
         <option value="">{L("Seçilmedi", "Not set")}</option>
         {SECTORS.map((x) => <option key={x}>{x}</option>)}
@@ -588,7 +591,7 @@ function BrandEditForm({ brand, onDone }: { brand: Brand; onDone: (changed: bool
       <p className="muted">{L("Ad veya yazılışlar değişirse yeni ölçümler yeni adla yapılır; eski ölçümler olduğu gibi kalır.", "If the name or spellings change, past measurements are recalculated for free with the new details.")}</p>
       <ErrorBox message={err} />
       <div className="form-actions">
-        <Button type="submit" busy={busy}>Kaydet</Button>
+        <Button type="submit" busy={busy}>{L("Kaydet", "Save")}</Button>
         <Button type="button" variant="quiet" onClick={() => onDone(false)}>{L("Vazgeç", "Cancel")}</Button>
       </div>
       <DeleteBrand brand={brand} />
