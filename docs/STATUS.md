@@ -2,6 +2,8 @@
 
 **Son güncelleme:** 2026-11-22 · Profound alternatifleri rehberi (TR+EN)
 
+> **22 Kasım (canlı site denetimi ve düzeltmeler):** Canlı HTML doğrudan kontrol edildi (özet araçla yapılan ilk okuma bazı sorunları yanlış göstermişti: `==` işaretleri ve "5 şaşırtıcı" listesi sorunu gerçekte yoktu). Düzeltilenler: İngilizce alt bilgi artık dört motoru sayıyor (ChatGPT, Gemini, Claude, Perplexity); ücretsiz kontrol formunun altına Gemini'nin AEA/İsviçre/BK'da kullanılamadığı notu eklendi; "ChatGPT tarzı" ifadesi "aylık ödenir" oldu. Yeni blog yazısı (TR+EN, 22 Kasım): kendi 18 Kasım ölçümümüz (7 soru × 3 motor × 2 = 42 cevapta 0 öneri; rakipler 22–33), iki hafta sonra yeniden ölçüm sözü. Açık kalanlar: Turnstile panel ayarı (sahibin akşam işi), plan kimliklerinin (`starter`, `agency`) adları billing'e bağlı olduğu için değiştirilmedi.
+
 > **22 Kasım (GEO Otopilot):** Site denetiminde sorun yoktu (252 sayfa, 13/13). Kendi ölçümümüzde bizi anmayan "Profound'un uygun fiyatlı alternatifleri neler?" sorusuna doğrudan cevap veren `/rehber/profound-alternatifi/` ve `/guides/profound-alternative/` eklendi (`compare.mjs`). Profound bilgisi tryprofound.com/pricing'den 22 Kasım 2026'da; diğer fiyatlar mevcut karşılaştırma sayfalarının kontrol tarihleriyle. Profound'un önerilme sayısı self.json'dan kendiliğinden gelir.
 
 **Canlı adres:** https://aisaasavran.com (Cloudflare Pages + Supabase)

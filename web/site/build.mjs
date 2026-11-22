@@ -83,7 +83,7 @@ ${schema.map(ld).join("\n")}
 ${body}
 </main>
 <footer class="foot">
-  ${en ? `<p><b>AI SaaSavran</b> measures whether ChatGPT and Gemini recommend your business. Early access.</p>
+  ${en ? `<p><b>AI SaaSavran</b> measures whether ChatGPT, Gemini, Claude and Perplexity recommend your business. Early access.</p>
   <p><a href="/pricing/">Pricing</a> · <a href="/guides/">Guides</a> · <a href="/blog/">Blog</a> · <a href="/ai-visibility-index/">AI Visibility Index</a> · <a href="/tutorials/">Tutorials</a> · <a href="/about/">About</a> · <a href="/founder/">Founder</a> · <a href="/methodology/">Methodology</a> · <a href="/terms/">Terms</a> · <a href="/privacy/">Privacy</a> · <a href="/refund/">Refunds</a> · <a href="/tr/">Türkçe</a></p>
   <p>Contact: <a href="mailto:${SITE.email}">${SITE.email}</a></p>` : `<p><b>AI SaaSavran</b>: markaların yapay zekâ asistanlarındaki görünürlüğünü ölçen araç. Erken erişim.</p>
   <p><a href="/tr/#fiyatlar">Fiyatlar</a> · <a href="/rehber/">Rehberler</a> · <a href="/tr/blog/">Blog</a> · <a href="/tr/yapay-zeka-gorunurluk-endeksi/">Görünürlük Endeksi</a> · <a href="/tr/egitim/">Eğitim</a> · <a href="/tr/hakkimizda/">Hakkımızda</a> · <a href="/tr/kurucu/">Kurucu</a> · <a href="/tr/metodoloji/">Metodoloji</a> · <a href="/durum">Ürün durumu</a> · <a href="/kosullar">Kullanım koşulları</a> · <a href="/gizlilik">Gizlilik</a> · <a href="/iade/">İade</a> · <a href="/">English</a></p>
