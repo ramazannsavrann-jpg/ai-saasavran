@@ -62,7 +62,7 @@ export function ApiPanel() {
               <pre className="code">{`URL: ${origin}/api/mcp\nHeader: Authorization: Bearer aisv_...`}</pre>
               <p>{L("Claude Code örneği:", "Claude Code example:")}</p>
               <pre className="code">{`claude mcp add --transport http aisaasavran ${origin}/api/mcp --header "Authorization: Bearer aisv_..."`}</pre>
-              <p>{L("Araçlar: list_brands (markalar), get_brand_report (marka raporu).", "Tools: list_brands, get_brand_report.")}</p>
+              <p>{L("Araçlar: list_brands (markalar), get_brand_report (marka raporu; 0–100 güven puanı dahil).", "Tools: list_brands, get_brand_report (brand report, including a 0–100 confidence score).")}</p>
               <p><strong>REST API</strong></p>
               <pre className="code">{`GET ${origin}/api/v1/brands\nGET ${origin}/api/v1/brands/<brand_id>\nAuthorization: Bearer aisv_...`}</pre>
             </div>
