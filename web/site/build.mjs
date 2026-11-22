@@ -125,8 +125,8 @@ const PLAN_ROWS = (en) => [
       ? ["1 brand, 25 questions, 5 competitors", "ChatGPT, Claude and Perplexity with live web search + Gemini", "Every week: ChatGPT and Gemini ask each question twice, Claude and Perplexity once", "Which websites the AI cited", "Products: AI accuracy check and weekly Google Shopping position", "Shareable report link and PDF"]
       : ["1 marka, 25 soru, 5 rakip", "ChatGPT, Claude ve Perplexity canlı web araması + Gemini", "Her hafta: ChatGPT ve Gemini her soruyu 2 kez, Claude ve Perplexity 1 kez sorar", "Yapay zekânın baktığı kaynak siteler", "Ürünler: yapay zekâ doğruluk kontrolü ve haftalık Google Shopping sırası", "Paylaşılabilir rapor bağlantısı ve PDF"] },
   { name: en ? "Gold" : "Altın", id: "altin", price: "$250", per: en ? "/month" : "/ay", items: en
-      ? ["3 brands, 30 questions each", "6 competitors per brand", "ChatGPT, Claude and Perplexity with live web search + Gemini", "Team of 2", "Everything in Silver", "For small businesses with several brands"]
-      : ["3 marka, her biri 30 soru", "Marka başına 6 rakip", "ChatGPT, Claude ve Perplexity canlı web araması + Gemini", "2 kişilik ekip", "Gümüş'teki her şey", "Birden fazla markası olan küçük işletmeler için"] },
+      ? ["3 brands, 30 questions each", "6 competitors per brand", "ChatGPT, Claude and Perplexity with live web search + Gemini", "Single user", "Everything in Silver", "For small businesses with several brands"]
+      : ["3 marka, her biri 30 soru", "Marka başına 6 rakip", "ChatGPT, Claude ve Perplexity canlı web araması + Gemini", "Tek kullanıcı", "Gümüş'teki her şey", "Birden fazla markası olan küçük işletmeler için"] },
   { name: en ? "Platinum" : "Platin", id: "pro", price: "$400", per: en ? "/month" : "/ay", items: en
       ? ["5 brands, 30 questions each", "8 competitors per brand", "Team of 3", "API and MCP access for AI agents", "Everything in Gold", "For multi-location businesses and freelancers"]
       : ["5 marka, her biri 30 soru", "Marka başına 8 rakip", "3 kişilik ekip", "Yapay zekâ ajanları için API ve MCP erişimi", "Altın'daki her şey", "Çok şubeli işletmeler ve serbest çalışanlar için"] },
