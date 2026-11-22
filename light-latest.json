@@ -3,12 +3,12 @@
   "mode": "light",
   "costUsd": 0,
   "capUsd": 0.4,
-  "pages": 254,
-  "pagesWithIssues": 0,
+  "pages": 256,
+  "pagesWithIssues": 2,
   "auditPassed": 13,
   "auditTotal": 13,
   "indexnow": {
-    "sent": 34,
+    "sent": 146,
     "status": 200,
     "note": "kabul edildi"
   },
@@ -16,9 +16,25 @@
   "engineStatus": {},
   "competitorCount": 0,
   "topSources": [],
-  "forClaude": [],
+  "forClaude": [
+    "Sayfa /blog/we-asked-ai-about-our-own-brand/: açıklama uzun (203)",
+    "Sayfa /tr/blog/kendi-markamizi-yapay-zekaya-sorduk/: açıklama uzun (203)"
+  ],
   "forUser": [],
-  "pageIssues": [],
+  "pageIssues": [
+    {
+      "url": "https://aisaasavran.com/blog/we-asked-ai-about-our-own-brand/",
+      "issues": [
+        "açıklama uzun (203)"
+      ]
+    },
+    {
+      "url": "https://aisaasavran.com/tr/blog/kendi-markamizi-yapay-zekaya-sorduk/",
+      "issues": [
+        "açıklama uzun (203)"
+      ]
+    }
+  ],
   "answers": [],
   "questions": [
     {
