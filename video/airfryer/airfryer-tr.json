@@ -385,17 +385,33 @@
  "gruplar": "0,1|2|3,4,5|6,7,8|9,10,11|12,13|14,15,16",
  "yt": {
   "baslik": "Kasım Fırsatları: Yapay zekâ hangi airfryer'ı öneriyor? #shorts",
-  "aciklama": "PLACEHOLDER",
-  "etiketler": [],
+  "aciklama": "Türkiye'de en iyi airfryer'ı sorduğumuzda 66 canlı aramalı yapay zekâ cevabının 56'sında Philips geçti; ikinci sırada 37 cevapla Xiaomi var.\n\nÖne çıkanlar\n• Philips önerilme: ChatGPT 17/22, Claude 18/22, Perplexity 17/22, Gemini 27/30.\n• Cosori'yi Claude 10, Gemini 21 cevapta önerdi; ChatGPT ve Perplexity hiç anmadı.\n• Yerli marka Fakir, canlı aramalı 66 cevabın hiçbirinde geçmedi.\n• Fiyat performans ve pencereli model sorulunca Xiaomi öne geçti; \"yerli mi yabancı mı\" sorusunda Karaca ve Arzum öne çıktı.\n• En çok kaynak gösterilen site: havafritozu.com (12 cevap).\n\nBu video hangi sorulara cevap veriyor\n• Yapay zekâ hangi airfryer markasını öneriyor? En çok Philips'i.\n• Yapay zekâlar aynı şeyi mi söylüyor? Hayır, özellikle Cosori ve yerli markalarda ayrışıyorlar.\n• Yapay zekâ airfryer önerirken nereye bakıyor? Çoğunlukla Türkçe inceleme ve liste sitelerine.\n\nYöntem: 22 Kasım 2026, Türkiye. ChatGPT, Claude ve Perplexity canlı web aramasıyla 11 soruyu ikişer kez cevapladı (66 cevap); Gemini hafızadan 15 soruyu ikişer kez cevapladı (30 cevap). Örneklem sınırlıdır, tüm pazarı temsil etmez. Ürün ve Google Shopping karşılaştırması uzun videoda.\n\nBunlar yapay zekânın cevaplarıdır.\nBu video bağımsız bir ölçümdür. Hiçbir markayla reklam veya iş birliğimiz yoktur.\n\nYapay zekâ markanız için ne diyor? aisaasavran.com\n\n#airfryer #KasımFırsatları #Philips #Xiaomi #Karaca #Arzum #Cosori #Ninja #Tefal #Fakir #ChatGPT #YapayZeka",
+  "etiketler": [
+   "airfryer",
+   "Kasım Fırsatları",
+   "Philips airfryer",
+   "Xiaomi airfryer",
+   "Karaca airfryer",
+   "Arzum",
+   "Cosori",
+   "Ninja",
+   "Tefal",
+   "Fakir",
+   "ChatGPT",
+   "Gemini",
+   "Claude",
+   "Perplexity",
+   "yapay zeka"
+  ],
   "listeler": []
  },
  "dur": {
-  "p1": 6,
-  "p2": 6,
-  "p3": 6,
-  "p4": 6,
-  "p5": 6,
-  "p6": 6,
-  "p7": 6
+  "p1": 5.66,
+  "p2": 2.73,
+  "p3": 8.2,
+  "p4": 9.58,
+  "p5": 8.85,
+  "p6": 6.15,
+  "p7": 7.58
  }
 }
