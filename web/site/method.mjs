@@ -79,7 +79,7 @@ export const METHOD_PAGES = [
     faq: [
       ["How does AI SaaSavran calculate recommendation rate?", "Recommendation rate is the share of answers that recommend the brand: it appears in a list without negative wording, or next to a recommendation phrase. Ambiguous plain-text mentions are checked by a small AI classifier."],
       ["Does AI SaaSavran use live web search?", "Yes on paid plans: ChatGPT, Claude and Perplexity answer with live web search and their sources are recorded. The free plan uses Gemini without live search, labelled as model knowledge."],
-      ["How many times is each question asked?", "Once a week. On paid plans ChatGPT and Gemini ask each question twice per run, Claude and Perplexity once; on the free plan Gemini asks once."],
+      ["How many times is each question asked?", "Once a week on paid plans, once a month on the free plan. On paid plans ChatGPT and Gemini ask each question twice per run, Claude and Perplexity once; on the free plan Gemini asks once."],
     ],
   },
   {
@@ -103,7 +103,7 @@ export const METHOD_PAGES = [
 <h2>Çalıştırma modeli</h2>
 <ul>
 <li>Ölçümler haftada bir otomatik çalışır.</li>
-<li>Ücretsiz paket: Gemini, her soru bir kez, canlı web araması olmadan (ayda 4 ölçüm).</li>
+<li>Ücretsiz paket: Gemini, her soru bir kez, canlı web araması olmadan (ayda 1 ölçüm).</li>
 <li>Ücretli paketler: her ölçümde ChatGPT ve Gemini her soruyu iki kez, Claude ve Perplexity bir kez sorar. ChatGPT, Claude ve Perplexity canlı web aramasıyla cevap verir.</li>
 <li>Cevaplar resmî API'ler üzerinden, oturum açmış bir kullanıcı olmadan alınır; kişisel geçmiş veya kişiselleştirme yoktur.</li>
 </ul>
@@ -151,7 +151,7 @@ export const METHOD_PAGES = [
     faq: [
       ["AI SaaSavran önerilme oranını nasıl hesaplar?", "Önerilme oranı, markayı öneren cevapların oranıdır: marka olumsuz ifade olmadan bir listede veya bir öneri ifadesinin yanında geçer. Belirsiz düz metin anılmaları küçük bir yapay zekâ sınıflandırıcısıyla kontrol edilir."],
       ["AI SaaSavran canlı web araması kullanıyor mu?", "Ücretli paketlerde evet: ChatGPT, Claude ve Perplexity canlı web aramasıyla cevap verir ve kaynakları kaydedilir. Ücretsiz paket Gemini'yi canlı arama olmadan kullanır ve bu model bilgisi olarak etiketlenir."],
-      ["Her soru kaç kez soruluyor?", "Haftada bir ölçüm yapılır. Ücretli paketlerde her ölçümde ChatGPT ve Gemini her soruyu iki kez, Claude ve Perplexity bir kez sorar; ücretsiz pakette Gemini bir kez sorar."],
+      ["Her soru kaç kez soruluyor?", "Ücretli paketlerde haftada bir ölçüm yapılır; ücretsiz pakette ayda bir ölçüm yapılır. Ücretli paketlerde her ölçümde ChatGPT ve Gemini her soruyu iki kez, Claude ve Perplexity bir kez sorar; ücretsiz pakette Gemini bir kez sorar."],
     ],
   },
   {

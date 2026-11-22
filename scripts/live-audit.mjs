@@ -17,7 +17,7 @@ async function step(area, name, fn) {
 // 1) Herkese açık sayfalar
 await step("Site", "İngilizce ana sayfa açılıyor", async () => { const r = await get("/"); return { ok: r.status === 200 && r.text.includes("are you in the answer?"), note: `HTTP ${r.status}` }; });
 await step("Site", "Türkçe ana sayfa açılıyor", async () => { const r = await get("/tr/"); return { ok: r.status === 200 && r.text.includes("Müşteriniz yapay zekâya sorduğunda"), note: `HTTP ${r.status}` }; });
-await step("Site", "Fiyatlar 60 / 300 / 876 $", async () => { const r = await get("/pricing/"); const ok = ["$60", "$300", "$876"].every((p) => r.text.includes(p)) && !r.text.includes("$20") && !r.text.includes("$249"); return { ok, note: ok ? "" : "eski ya da eksik fiyat" }; });
+await step("Site", "Fiyatlar 130 / 400 / 1500 $", async () => { const r = await get("/pricing/"); const ok = ["$130", "$400", "$1500"].every((p) => r.text.includes(p)) && !r.text.includes("$20") && !r.text.includes("$249"); return { ok, note: ok ? "" : "eski ya da eksik fiyat" }; });
 await step("Site", "Ücretsiz kontrol sayfası", async () => { const r = await get("/tr/kontrol/"); return { ok: r.status === 200, note: `HTTP ${r.status}` }; });
 for (const p of ["/robots.txt", "/sitemap.xml", "/llms.txt", "/gizlilik", "/kosullar", "/refund/"])
   await step("Site", `${p} açılıyor`, async () => { const r = await get(p); return { ok: r.status === 200, note: `HTTP ${r.status}` }; });
