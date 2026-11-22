@@ -431,3 +431,38 @@ export function relatedBrand(texts: string[], name: string, brands: { name: stri
   for (const [k, v] of hits) if (v > max) { best = k; max = v; }
   return best;
 }
+
+// ---- Güven puanı (Confidence Score), 22 Kasım 2026 ----
+// Sonucun ne kadar sağlam olduğunu 0–100 arası tek sayıyla anlatır. İki bileşen, ikisi de ölçüm verisinden:
+//  1) Örneklem (en çok 50): farklı soru × motor sayısı (20'de dolar, 30 puan) + cevap sayısı (100'de dolar, 20 puan)
+//  2) Tekrar tutarlılığı (en çok 50): aynı soru aynı motora birden çok kez sorulduğunda "önerildi / önerilmedi"
+//     sonucunun aynı çıktığı grupların oranı. En az 5 tekrar grubu yoksa puan orantılı azalır; hiç tekrar yoksa 0.
+// Seviye: 70+ yüksek, 40–69 orta, altı düşük. Uydurma ağırlık yok; formül bu dosyada ve testte sabit.
+export interface ConfidenceInput { provider?: string; answers: number; prompts: number; repeat_groups: number; consistent_groups: number }
+export interface Confidence {
+  score: number; level: "high" | "medium" | "low";
+  answers: number; clusters: number; repeatGroups: number; consistency: number | null;
+  /** Puanı düşüren nedenler: few_questions, few_answers, no_repeats, few_repeats, inconsistent */
+  reasons: ("few_questions" | "few_answers" | "no_repeats" | "few_repeats" | "inconsistent")[];
+}
+export const CONF_FULL_CLUSTERS = 20;
+export const CONF_FULL_ANSWERS = 100;
+export const CONF_MIN_REPEAT_GROUPS = 5;
+export function confidenceScore(rows: ConfidenceInput[]): Confidence | null {
+  const answers = rows.reduce((a, r) => a + r.answers, 0);
+  if (!answers) return null;
+  const clusters = rows.reduce((a, r) => a + r.prompts, 0);
+  const repeatGroups = rows.reduce((a, r) => a + r.repeat_groups, 0);
+  const consistent = rows.reduce((a, r) => a + r.consistent_groups, 0);
+  const consistency = repeatGroups ? consistent / repeatGroups : null;
+  const sample = 30 * Math.min(clusters / CONF_FULL_CLUSTERS, 1) + 20 * Math.min(answers / CONF_FULL_ANSWERS, 1);
+  const repeat = consistency == null ? 0 : 50 * consistency * Math.min(repeatGroups / CONF_MIN_REPEAT_GROUPS, 1);
+  const score = Math.round(sample + repeat);
+  const reasons: Confidence["reasons"] = [];
+  if (clusters < CONF_FULL_CLUSTERS) reasons.push("few_questions");
+  if (answers < CONF_FULL_ANSWERS / 2) reasons.push("few_answers");
+  if (!repeatGroups) reasons.push("no_repeats");
+  else if (repeatGroups < CONF_MIN_REPEAT_GROUPS) reasons.push("few_repeats");
+  if (consistency != null && consistency < 0.8) reasons.push("inconsistent");
+  return { score, level: score >= 70 ? "high" : score >= 40 ? "medium" : "low", answers, clusters, repeatGroups, consistency, reasons };
+}

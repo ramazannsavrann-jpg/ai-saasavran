@@ -54,6 +54,8 @@ export const METHOD_PAGES = [
 <h2>Confidence ranges and sample size</h2>
 <p>AI assistants can answer the same question differently each time. Every rate comes with a 95% confidence range (Wilson interval), so 3 of 5 shows as roughly 23–88%, not as a precise 60%. Repeats of the same question tend to give the same answer, so they are not counted as independent: the range is widened according to the number of different questions behind it (in our own data, two repeats of a question agree about 85% of the time). When a result rests on fewer than 20 answers or fewer than 10 different questions, the report marks it as low confidence.</p>
 <p>When two brands are less than 10 points apart, or their ranges overlap, we call it a tie and do not rank one above the other.</p>
+<h2>Confidence score</h2>
+<p>Each report also shows a confidence score from 0 to 100. It tells you how solid the result is, not whether the brand is doing well. Half of it (up to 50 points) comes from sample size: how many different question × engine pairs were measured (full at 20) and how many answers were collected (full at 100). The other half (up to 50 points) comes from repeat consistency: when the same question is asked to the same engine more than once, how often the "recommended / not recommended" result stays the same. With fewer than 5 repeated questions this part is scaled down; with no repeats (the free plan asks each question once) it is 0. 70 and above is high, 40–69 medium, below 40 low. The report lists what lowered the score.</p>
 
 <h2>Product-level checks</h2>
 <ul>
@@ -126,6 +128,8 @@ export const METHOD_PAGES = [
 <h2>Güven aralığı ve örneklem</h2>
 <p>Yapay zekâ aynı soruya her seferinde farklı cevap verebilir. Her oran %95 güven aralığıyla (Wilson aralığı) gösterilir; yani 5'te 3, kesin bir %60 olarak değil, yaklaşık %23–88 olarak görünür. Aynı sorunun tekrarları çoğu zaman aynı cevabı verdiği için bağımsız sayılmaz: aralık, arkasındaki farklı soru sayısına göre genişletilir (kendi verimizde bir sorunun iki tekrarı yaklaşık %85 oranında aynı sonucu veriyor). Bir sonuç 20'den az cevaba ya da 10'dan az farklı soruya dayanıyorsa raporda düşük güven olarak işaretlenir.</p>
 <p>İki marka arasındaki fark 10 puandan azsa ya da aralıkları çakışıyorsa bunu "başa baş" sayarız ve birini diğerinin önüne koymayız.</p>
+<h2>Güven puanı</h2>
+<p>Her raporda 0–100 arası bir güven puanı da gösterilir. Puan, sonucun ne kadar sağlam olduğunu anlatır; markanın iyi ya da kötü olduğunu değil. Yarısı (en çok 50 puan) örneklemden gelir: kaç farklı soru × motor ölçüldüğü (20'de tam puan) ve kaç cevap toplandığı (100'de tam puan). Diğer yarısı (en çok 50 puan) tekrar tutarlılığıdır: aynı soru aynı motora birden çok kez sorulduğunda "önerildi / önerilmedi" sonucunun ne sıklıkla aynı kaldığı. 5'ten az soru tekrarlandıysa bu kısım orantılı azalır; hiç tekrar yoksa (ücretsiz paket her soruyu bir kez sorar) 0'dır. 70 ve üstü yüksek, 40–69 orta, altı düşük sayılır. Rapor, puanı neyin düşürdüğünü de yazar.</p>
 
 <h2>Ürün düzeyindeki kontroller</h2>
 <ul>

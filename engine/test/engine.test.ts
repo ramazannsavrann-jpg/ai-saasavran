@@ -985,3 +985,28 @@ test("Markalı soru (19 Kasım pilot): marka soruda geçiyorsa başlık/liste ö
   const r3 = analyzeResponse({ promptId: "p", provider: "gemini", answerText: list, citedUrls: [] }, b, { question: "Kumluca'da zirai ürün nereden alınır?" })[0];
   assert.equal(r3.recommended, true);
 });
+
+test("Güven puanı: örneklem + tekrar tutarlılığı; tekrar yoksa düşük, tutarsızlık puanı düşürür", async () => {
+  const { confidenceScore } = await import("../src/metrics.ts");
+  assert.equal(confidenceScore([]), null);
+  // Gümüş benzeri: 25 soru × 4 motor, ChatGPT ve Gemini 2 tekrar, hepsi tutarlı → 100
+  const full = confidenceScore([
+    { answers: 50, prompts: 25, repeat_groups: 25, consistent_groups: 25 },
+    { answers: 50, prompts: 25, repeat_groups: 25, consistent_groups: 25 },
+    { answers: 25, prompts: 25, repeat_groups: 0, consistent_groups: 0 },
+    { answers: 25, prompts: 25, repeat_groups: 0, consistent_groups: 0 },
+  ])!;
+  assert.deepEqual([full.score, full.level, full.reasons], [100, "high", []]);
+  // Free benzeri: 15 soru, tek motor, tekrar yok → 30*15/20 + 20*15/100 = 22.5 + 3 = 25.5 → 26, düşük
+  const free = confidenceScore([{ answers: 15, prompts: 15, repeat_groups: 0, consistent_groups: 0 }])!;
+  assert.deepEqual([free.score, free.level, free.consistency], [26, "low", null]);
+  assert.deepEqual(free.reasons, ["few_questions", "few_answers", "no_repeats"]);
+  // Tekrarların yarısı tutarsız: tutarlılık bileşeni yarıya iner ve neden yazılır
+  const half = confidenceScore([{ answers: 100, prompts: 50, repeat_groups: 50, consistent_groups: 25 }])!;
+  assert.equal(half.score, 75);
+  assert.ok(half.reasons.includes("inconsistent"));
+  // Az tekrar grubu (2 < 5): tutarlılık puanı orantılı
+  const few = confidenceScore([{ answers: 22, prompts: 20, repeat_groups: 2, consistent_groups: 2 }])!;
+  assert.equal(few.score, Math.round(30 + 20 * 0.22 + 50 * 2 / 5));
+  assert.ok(few.reasons.includes("few_repeats"));
+});

@@ -205,7 +205,7 @@ const home = `
   <h2>Üç adımda nerede durduğunuzu görün</h2>
   <ol>
     <li><h3>Markanızı ve rakiplerinizi ekleyin</h3><p>Sektörünüzü seçin; örnek rakipler ve hazır Türkçe sorular gelsin.</p></li>
-    <li><h3>Ölçümü başlatın</h3><p>Her soru birden fazla kez sorulur; sonuç güven aralığıyla gösterilir.</p></li>
+    <li><h3>Ölçümü başlatın</h3><p>Her soru birden fazla kez sorulur; sonuç güven aralığı ve 0–100 güven puanıyla gösterilir.</p></li>
     <li><h3>Ne yapacağınızı görün</h3><p>Web siteniz kontrol edilir, eksikler önem sırasına göre listelenir. Haftalık ölçümle değişimi izleyin.</p></li>
   </ol>
 </section>
@@ -258,7 +258,7 @@ const enHome = `
   <h2>Built to be honest about the numbers</h2>
   <ol>
     <li><h3>Every question is asked more than once</h3><p>One answer is luck; rates over many answers are signal.</p></li>
-    <li><h3>Ranges, not false precision</h3><p>Results come with a confidence range and a warning when the sample is small.</p></li>
+    <li><h3>Ranges, not false precision</h3><p>Results come with a confidence range, a 0–100 confidence score and a warning when the sample is small.</p></li>
     <li><h3>Live search or not, always labelled</h3><p>Answers from model knowledge and answers from live web search are never mixed.</p></li>
   </ol>
 </section>

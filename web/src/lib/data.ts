@@ -184,6 +184,10 @@ export const api = {
   async visibility(brandId: string, type: MeasurementType): Promise<VisRow[]> {
     return must(await sb().rpc("brand_visibility", { p_brand: brandId, p_type: type }));
   },
+  /** Güven puanı girdileri (0066): motor bazında cevap, soru, tekrar grubu ve tutarlı grup sayısı. */
+  async runConfidence(runId: string): Promise<{ provider: string; answers: number; prompts: number; repeat_groups: number; consistent_groups: number }[]> {
+    return must(await sb().rpc("run_confidence", { p_run: runId }));
+  },
   async promptResults(runId: string, provider?: string | null): Promise<PromptResult[]> {
     return must(await sb().rpc("run_prompt_results", provider ? { p_run: runId, p_provider: provider } : { p_run: runId }));
   },

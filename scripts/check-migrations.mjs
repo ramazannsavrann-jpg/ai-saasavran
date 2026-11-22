@@ -312,4 +312,30 @@ console.log("ok tanımsız paket atanamıyor");
   await db.query(`update workspaces set kind=$2, plan=$3, subscription_status=$4, report_brand_name=null, report_logo=null, report_accent=null where id=$1`, [A, prev.kind, prev.plan, prev.subscription_status]);
   console.log("ok 0042: rapor markalama yalnız Business abonesinde; doğrulama ve rapor çıktısı");
 }
+// 0066: güven puanı girdileri — tekrar grupları ve tutarlılık doğru sayılıyor; başka alanın verisi görünmüyor
+{
+  const br = (await db.query(`select id from brands where workspace_id=$1 and not is_competitor limit 1`, [A])).rows[0];
+  if (br) {
+    const run = (await db.query(`insert into runs (workspace_id, brand_id, status, data_origin, measurement_type, max_cost_usd)
+      values ($1, $2, 'done', 'live_api', 'live_search', 1) returning id`, [A, br.id])).rows[0].id;
+    const p = [];
+    for (const t of ["Soru bir", "Soru iki", "Soru üç"]) p.push((await db.query(`insert into prompts (workspace_id, brand_id, text, intent) values ($1, $2, $3, 'informational') returning id`, [A, br.id, t])).rows[0].id);
+    // openai: soru1 2 tekrar (evet, evet) tutarlı; soru2 2 tekrar (evet, hayır) tutarsız; soru3 1 cevap. claude: soru1 1 cevap
+    const plan = [["openai", p[0], 1, true], ["openai", p[0], 2, true], ["openai", p[1], 1, true], ["openai", p[1], 2, false], ["openai", p[2], 1, false], ["claude", p[0], 1, false]];
+    for (const [prov, pid, rep, rec] of plan) {
+      const rid = (await db.query(`insert into responses (workspace_id, run_id, prompt_id, provider, model, method, repetition, answer_text, data_origin, measurement_type)
+        values ($1, $2, $3, $4, 'm', 'api_with_search', $5, 'cevap', 'live_api', 'live_search') returning id`, [A, run, pid, prov, rep])).rows[0].id;
+      await db.query(`insert into mentions (response_id, workspace_id, brand_id, mentioned, recommended, cited, classifier) values ($1, $2, $3, $4, $4, false, 'rules_v1')`, [rid, A, br.id, rec]);
+    }
+    const rows = (await db.query(`select * from run_confidence($1)`, [run])).rows;
+    assert.deepEqual(rows, [
+      { provider: "claude", answers: 1, prompts: 1, repeat_groups: 0, consistent_groups: 0 },
+      { provider: "openai", answers: 5, prompts: 3, repeat_groups: 2, consistent_groups: 1 },
+    ]);
+    assert.equal((await as(U2, `select count(*)::int n from run_confidence('${run}')`)).rows[0].n, 0, "başka alanın kullanıcısı göremez");
+    await db.query(`delete from runs where id=$1`, [run]);
+    await db.query(`delete from prompts where id = any($1)`, [p]);
+  }
+  console.log("ok 0066: güven puanı girdileri doğru; RLS korunuyor" + (br ? "" : " (marka yok, atlandı)"));
+}
 console.log("TÜM DB TESTLERİ GEÇTİ");
