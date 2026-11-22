@@ -52,7 +52,10 @@ function tokens(s: string): string[] { return normalize(s).split(" ").filter((t)
  * Marka verildiyse marka adı da başlıkta ya da satıcı adında geçmeli (aynı adlı başka markanın ürünü sayılmasın).
  */
 /** Ürünün kendisi olmayan ilanlar: kitap/kılavuz, kılıf, yastık, kablo, yedek parça, "uyumlu" aksesuar. */
-const NOT_PRODUCT = /\b(user guide|guide|manual|(?<!\be )book|(?<!\be )kitap|kilavuz\w*|rehber\w*|kilif\w*|case for|cases|protective case|phone case|cover|kapak\w*|pads?|ear ?pads?|yastig\w*|yastik\w*|sunger\w*|kablo\w*|cable|stands?|standi|standlar\w*|aski\w*|sticker|etiket\w*|compatible|uyumlu|replacement|yedek|aksesuar\w*|accessor\w*|koruyucu|protector|skin)\b/;
+const NOT_PRODUCT = /\b(user guide|guide|manual|(?<!\be )book|(?<!\be )kitap|kilavuz\w*|rehber\w*|kilif\w*|case for|cases|protective case|phone case|cover|kapak\w*|pads?|ear ?pads?|yastig\w*|yastik\w*|sunger\w*|kablo\w*|cable|stands?|standi|standlar\w*|aski\w*|sticker|etiket\w*|compatible|uyumlu|replacement|yedek|aksesuar\w*|accessor\w*|koruyucu|protector|skin|aparat\w*|kalip\w*|kagit\w*|kagid\w*)\b/;
+/** İkinci el / yenilenmiş ilanlar ürünün güncel satış fiyatını göstermez (22 Kasım: letgo'daki ikinci el ilan Philips'in 1. sırası sanılmıştı). */
+const USED = /\b(ikinci el|2\.? ?el|used|refurbished|renewed|yenilenmis\w*|outlet)\b/;
+const USED_SOURCE = /\b(letgo|dolap)\b/;
 /** Harf ve rakamı birlikte içeren, en az 5 karakterlik bir model kodu (ör. WH-1000XM6'daki 1000xm6): markası yazmasa da yeterince ayırt edicidir. */
 export function isModelCode(name: string): boolean {
   return normalize(name).split(/[\s.]+/).some((w) => w.length >= 5 && /\d/.test(w) && /[a-z]/.test(w));
@@ -62,7 +65,13 @@ export function titleMatches(title: string, target: { name: string; brand?: stri
   const t = normalize(title);
   const words = tokens(target.name);
   if (!words.length) return false;
-  if (!words.every((w) => hasName(t, w))) return false;
+  // Ürün adında model kodu varsa (HD9252/90, WH-1000XM6) yalnız model kodu aranır: satıcılar "3000 Serisi" gibi seri adını
+  // çoğu zaman yazmaz (22 Kasım: "Philips Airfryer HD9252/90 Essential Fritöz" 1. sıradaydı ama eşleşmemişti).
+  const codes = words.filter((w) => w.length >= 5 && /\d/.test(w) && /[a-z]/.test(w));
+  const required = codes.length ? codes : words;
+  if (!required.every((w) => hasName(t, w))) return false;
+  if (USED.test(t) && !USED.test(normalize(target.name))) return false;
+  if (source && USED_SOURCE.test(normalize(source))) return false;
   if (NOT_PRODUCT.test(t) && !NOT_PRODUCT.test(normalize(target.name))) return false;
   // "... for Apple Watch Series 12" / "fits ..." = o ürün İÇİN satılan aksesuar (şarj aleti, kayış, AppleCare). 17 Kasım: 11 $'lık
   // bir aksesuar Apple Watch'un kendisi sayılmıştı; saat ilanlarındaki "Aluminum Case" ise kasadır, kılıf değil.
