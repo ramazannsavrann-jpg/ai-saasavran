@@ -1,5 +1,5 @@
 {
- "out": "tr",
+ "out": "on_sicak",
  "lang": "tr",
  "order": [
   "s1",
@@ -495,5 +495,6 @@
     true
    ]
   ]
- }
+ },
+ "tema": "sicak"
 }

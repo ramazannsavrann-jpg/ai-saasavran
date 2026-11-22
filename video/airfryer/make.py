@@ -12,11 +12,15 @@ def font(w, s): return ImageFont.truetype(F.format(w), s)
 BG = (14, 26, 23); INK = (236, 244, 241); MUTED = (157, 178, 171); GREEN = (17, 112, 94); ACC = (60, 200, 160)
 BAR_BG = (36, 56, 50); GOLD = (240, 190, 70)
 CARD = (30, 48, 43); HL = (40, 62, 55); CHIP = (22, 44, 39); PILL_TXT = (255, 255, 255)
+BADGE_TXT = None; ENG_COLS = None
 BG2 = None; GLOW = None
 # Tema (22 Kasım): koyu yeşil yerine seçilebilir zemin. CFG["tema"] yoksa eski görünüm aynen kalır.
 TEMALAR = {
  "gece":  dict(BG=(14, 16, 44), BG2=(54, 20, 82), GLOW=(120, 60, 220), INK=(246, 246, 255), MUTED=(180, 182, 220), ACC=(96, 205, 255),
                GOLD=(255, 198, 64), RED=(255, 112, 140), GREEN=(112, 72, 232), BAR_BG=(46, 42, 98), CARD=(34, 32, 82), HL=(64, 54, 128), CHIP=(30, 28, 72)),
+ "sicak": dict(BG=(255, 246, 236), BG2=(255, 231, 209), GLOW=(255, 150, 80), INK=(30, 22, 18), MUTED=(122, 106, 94), ACC=(31, 95, 191),
+               GOLD=(184, 110, 0), RED=(200, 40, 60), GREEN=(232, 84, 28), BAR_BG=(244, 222, 202), CARD=(255, 255, 255), HL=(255, 210, 172), CHIP=(255, 255, 255),
+               BADGE_TXT=(255, 255, 255), ENG_COLS=[(16, 120, 90), (196, 90, 40), (31, 95, 191), (150, 60, 160)]),
  "komur": dict(BG=(18, 18, 22), BG2=(46, 30, 22), GLOW=(255, 120, 40), INK=(250, 246, 240), MUTED=(190, 182, 174), ACC=(120, 180, 255),
                GOLD=(255, 196, 70), RED=(255, 100, 100), GREEN=(232, 98, 30), BAR_BG=(56, 50, 48), CARD=(42, 38, 38), HL=(74, 58, 46), CHIP=(34, 30, 30)),
 }
@@ -73,11 +77,9 @@ def _zemin():
                 k = y / (H - 1); px[0, y] = tuple(int(BG[i] + (BG2[i] - BG[i]) * k) for i in range(3))
             z = g.resize((W, H))
             if GLOW:
-                l = Image.new("RGB", (W, H), (0, 0, 0)); ld = ImageDraw.Draw(l)
-                ld.ellipse([W - 520, 120, W + 280, 920], fill=tuple(int(c * 0.55) for c in GLOW))
-                ld.ellipse([-360, 1180, 360, 1900], fill=tuple(int(c * 0.30) for c in GLOW))
-                from PIL import ImageChops
-                z = ImageChops.add(z, l.filter(ImageFilter.GaussianBlur(160)))
+                m = Image.new("L", (W, H), 0); md = ImageDraw.Draw(m)
+                md.ellipse([W - 520, 120, W + 280, 920], fill=150); md.ellipse([-360, 1180, 360, 1900], fill=80)
+                z = Image.composite(Image.new("RGB", (W, H), GLOW), z, m.filter(ImageFilter.GaussianBlur(170)))
             _ZEMIN = z
     return _ZEMIN
 def base():
@@ -116,7 +118,7 @@ T = CFG["t"]
 def s1(t, dur):
     im, d = base()
     x = 80; y = 320
-    for e, c in zip([x[0] for x in CFG.get("engines", [])] or ["ChatGPT", "Claude", "Gemini"], (GOLD, ACC, (150, 170, 240), (230, 160, 210))):
+    for e, c in zip([x[0] for x in CFG.get("engines", [])] or ["ChatGPT", "Claude", "Gemini"], (ENG_COLS or (GOLD, ACC, (150, 170, 240), (230, 160, 210)))):
         f = font("Bold", 38); w = d.textlength(e, font=f) + 44
         d.rounded_rectangle([x, y, x + w, y + 72], radius=36, outline=c, width=4); d.text((x + 22, y + 12), e, font=f, fill=c); x += w + 18
     fb0, fh2 = font("ExtraBold", 64), font("SemiBold", 50)
@@ -129,7 +131,7 @@ def s1(t, dur):
     b = T.get("badge")
     if b:
         a = ease((t - 0.3) / 0.5); fb = font("ExtraBold", 64); w = d.textlength(b, font=fb) + 80
-        d.rounded_rectangle([80, y + 40, 80 + w, y + 160], radius=30, fill=mix(GOLD, a)); d.text((120, y + 62), b, font=fb, fill=BG if a > 0.5 else mix(GOLD, a)); y += 200
+        d.rounded_rectangle([80, y + 40, 80 + w, y + 160], radius=30, fill=mix(GOLD, a)); d.text((120, y + 62), b, font=fb, fill=(BADGE_TXT or BG) if a > 0.5 else mix(GOLD, a)); y += 200
     y = text_block(d, T["hook2"], font("SemiBold", 50), y + 40, ACC, ease((t - 0.6) / 0.6))
     text_block(d, T["note"], font("Medium", 38), y + 40, MUTED, ease((t - 1.4) / 0.6))
     footer_note(d); return im
@@ -146,7 +148,7 @@ def s2(t, dur):
 def s3(t, dur):
     im, d = base(); tag(d, t, T["tag_eng"]); y = title(d, t, T["eng"], T["eng_sub"]) + (140 if len(CFG["engines"]) >= 4 else 90)
     four = len(CFG["engines"]) >= 4 or any(len(e[0]) > 8 for e in CFG["engines"])
-    xs = [470, 605, 742, 880] if len(CFG["engines"]) >= 4 else ([560, 720, 880] if four else [540, 710, 880]); cols = [GOLD, ACC, (150, 170, 240), (230, 160, 210)]
+    xs = [470, 605, 742, 880] if len(CFG["engines"]) >= 4 else ([560, 720, 880] if four else [540, 710, 880]); cols = list(ENG_COLS) if ENG_COLS else [GOLD, ACC, (150, 170, 240), (230, 160, 210)]
     for (lab, sub), x, c in zip(CFG["engines"], xs, cols):
         rtext(d, x, y - 80, lab, font("Bold", 26 if four else 36), c); rtext(d, x, y - 36, sub, font("Medium", 26 if four else 28), MUTED)
         if lab == "Gemini" and CFG.get("gemini_label"):
