@@ -4,7 +4,7 @@
 
 ## UYARILAR SESTE YOK, EKRANDA YAZI (22 Kasım, kullanıcı kuralı — KALICI, tüm videolar)
 - "Bunlar yapay zekânın cevaplarıdır", "bağımsız ölçüm/araştırma", "yapay zekâ sorgusu" gibi uyarı ve yöntem cümleleri seslendirmede söylenmez; yalnız ekranda alt yazı/not olarak kalır (kapak sahnesindeki not, kapanıştaki küçük açıklama, YouTube açıklamasındaki bağımsızlık satırı).
-- Türkçe okunuş: ChatGPT = "Çet Ci Pi Ti" (Çet Ge Pe Te değil); airfryer = "Eyr Frayır".
+- Türkçe okunuş: ChatGPT = "Çet Ci Pi Ti" (Çet Ge Pe Te değil); airfryer = "Eyr Frayır". Xiaomi = "Şaomi"; Google Shopping = "Gugıl Şoping" (ek: "Şopingde"). Fakir için "yerli" ya da "Türk şirketi" denmez, yalnız "Fakir".
 - (22 Kasım, kullanıcı kuralı — KALICI) **Önce görsel onayı:** her yeni videoda sahne görselleri (`make.py … frames` kareleri) seslendirme ve video üretiminden ÖNCE kullanıcıya gönderilir; onay gelmeden seslendirme/render yapılmaz.
 - (22 Kasım) Ürün içeren veri videolarında **Google Shopping sırası ile yapay zekâ sırası** marka düzeyinde yan yana konur (kategori araması, ör. "airfryer"; GTA videosundaki gibi) ve **kaynak ağı** sahnesi kalır. Fiyat ekranda gösterilmez (kullanıcı istemedikçe).
 - Türkçe Kasım içeriğinde seri adı "Kasım Fırsatları" ("indirim", "Black Friday" denmez).
