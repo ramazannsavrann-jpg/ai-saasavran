@@ -41,22 +41,28 @@ def background():
         img = img * (1 - m[..., None]) + np.array(c) * m[..., None]
     return Image.fromarray(img.astype("uint8"), "RGB")
 
+_BG = None
+_SPH = {}
 class Frame:
     def __init__(self):
-        self.im = background()
+        global _BG
+        if _BG is None: _BG = background()
+        self.im = _BG.copy()
+        self.d = ImageDraw.Draw(self.im, "RGBA")
+    def _blurpaste(self, x0, y0, x1, y1, drawfn, blur):
+        m = int(blur * 3) + 2
+        X0, Y0, X1, Y1 = int((x0 - m) * S), int((y0 - m) * S), int((x1 + m) * S), int((y1 + m) * S)
+        lay = Image.new("L", (max(1, X1 - X0), max(1, Y1 - Y0)), 0)
+        drawfn(ImageDraw.Draw(lay), X0, Y0)
+        lay = lay.filter(ImageFilter.GaussianBlur(blur * S))
+        self.im.paste((40, 40, 90), (X0, Y0, X0 + lay.size[0], Y0 + lay.size[1]), lay)
         self.d = ImageDraw.Draw(self.im, "RGBA")
     def shadow(self, box, r=30, blur=26, alpha=70, dy=18):
-        lay = Image.new("L", self.im.size, 0)
-        ImageDraw.Draw(lay).rounded_rectangle(P(box[0], box[1] + dy, box[2], box[3] + dy), radius=r * S, fill=alpha)
-        lay = lay.filter(ImageFilter.GaussianBlur(blur * S))
-        self.im.paste(Image.new("RGB", self.im.size, (40, 40, 90)), (0, 0), lay)
-        self.d = ImageDraw.Draw(self.im, "RGBA")
+        b = (box[0], box[1] + dy, box[2], box[3] + dy)
+        self._blurpaste(*b, lambda d, X0, Y0: d.rounded_rectangle((b[0]*S-X0, b[1]*S-Y0, b[2]*S-X0, b[3]*S-Y0), radius=r*S, fill=alpha), blur)
     def ellipse_shadow(self, cx, cy, rx, ry, alpha=80, blur=14):
-        lay = Image.new("L", self.im.size, 0)
-        ImageDraw.Draw(lay).ellipse(P(cx - rx, cy - ry, cx + rx, cy + ry), fill=alpha)
-        lay = lay.filter(ImageFilter.GaussianBlur(blur * S))
-        self.im.paste(Image.new("RGB", self.im.size, (40, 40, 90)), (0, 0), lay)
-        self.d = ImageDraw.Draw(self.im, "RGBA")
+        b = (cx - rx, cy - ry, cx + rx, cy + ry)
+        self._blurpaste(*b, lambda d, X0, Y0: d.ellipse((b[0]*S-X0, b[1]*S-Y0, b[2]*S-X0, b[3]*S-Y0), fill=alpha), blur)
     def card(self, box, r=36, fill=(255, 255, 255, 235), sh=True):
         if sh: self.shadow(box, r)
         self.d.rounded_rectangle(P(*box), radius=r * S, fill=fill)
@@ -89,6 +95,8 @@ class Frame:
         self.text((80, 1372), s, f("Medium", 20, False), (120, 126, 160))
     def save(self, path):
         self.im.resize((W, H), Image.LANCZOS).save(path, quality=93)
+    def out(self):
+        return (self.im.reduce(S) if S > 1 else self.im).tobytes()
 
     # ---------- 3B öğeler ----------
     def hbar(self, x, y, length, h, c, depth=22):
@@ -111,7 +119,11 @@ class Frame:
             self.d.line([(x * S + i, (base - h) * S), (x * S + i, base * S)], fill=mix(shade(c, 1.1), shade(c, 0.88), t))
     def sphere(self, cx, cy, r, c):
         self.ellipse_shadow(cx + r * 0.12, cy + r * 0.92, r * 0.85, r * 0.2, alpha=90, blur=max(6, r * 0.12))
-        R = int(r * S); yy, xx = np.mgrid[-R:R, -R:R]
+        R = max(2, int(r * S)); key = (R, c)
+        if key in _SPH:
+            sp = _SPH[key]; self.im.paste(sp, (int(cx * S) - R, int(cy * S) - R), sp)
+            self.d = ImageDraw.Draw(self.im, "RGBA"); return
+        yy, xx = np.mgrid[-R:R, -R:R]
         dist = np.sqrt(xx ** 2 + yy ** 2) / R
         mask = (dist <= 1).astype(float)
         lx, ly = -0.38, -0.45
@@ -122,5 +134,6 @@ class Frame:
         rgb = rgb * (1 - rim * 0.25)
         a = (np.clip((1 - dist) * R / 1.5, 0, 1) * 255).astype("uint8")
         sp = Image.fromarray(rgb.astype("uint8"), "RGB"); sp.putalpha(Image.fromarray(a))
+        if len(_SPH) < 400: _SPH[key] = sp
         self.im.paste(sp, (int(cx * S) - R, int(cy * S) - R), sp)
         self.d = ImageDraw.Draw(self.im, "RGBA")
