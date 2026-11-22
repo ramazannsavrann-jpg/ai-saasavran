@@ -18,6 +18,8 @@ test.describe.configure({ mode: "serial" });
 test.beforeAll(async () => {
   mkdirSync(SHOTS, { recursive: true });
   stack = await startStack({ quiet: true });
+  // Test düzeneği: Free ayda 4 ölçüm (gerçek limit 1, migration 0062). Entegrasyon testiyle aynı.
+  stack.sql("update plans set monthly_runs = 4 where id = 'free';");
 });
 test.afterAll(async () => { await stack?.stop(); });
 
