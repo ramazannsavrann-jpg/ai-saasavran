@@ -56,7 +56,7 @@ Bu tablo `npm run pricing` ile fiyat kartlarından üretilir (fiyatlar 2026-11-0
 
 ## Güncel fiyatlar (12 Kasım 2026, migration 0019)
 
-**Plus 60 $ · Pro 300 $ · Business 876 $** (aylık; 21 Kasım 2026, maliyet×5, Paddle komisyonu dahil). Site ve `engine/src/pricing.ts` bu fiyatları kullanır.
+**Plus 130 $ · Pro 400 $ · Business 1500 $** (aylık; 22 Kasım 2026 sahip onayı, migration 0062). Free: ayda 1 ölçüm (Gemini, aramasız). Önceki 60 / 300 / 876 $ ve Free 4 ölçüm yerine geçti. **Önerilen (250 $)** paketinin içeriği sahip onayını bekliyor; henüz uygulanmadı. **Paddle'daki fiyat kimlikleri ve `scripts/paddle-setup.mjs` içindeki tutarlar bu değişiklikle güncellenmedi**; Paddle işi askıda, yeniden başlayınca güncellenecek.
 Limitler ve aylık ücretli harcama tavanları değişmedi (Plus 9 $, Pro 50 $, Business 150 $). Aşağıdaki
 7 Kasım tablosundaki 20 / 99 / 249 $ fiyatları **eskidir**; yalnız geçmiş kayıt olarak duruyor.
 
