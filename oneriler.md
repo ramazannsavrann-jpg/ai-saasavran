@@ -6,3 +6,4 @@
 - 2026-11-21: AlternativeTo (alternativeto.net, ücretsiz hesapla uygulama ekleme, moderatör onaylı), SaaSHub (saashub.com, ücretsiz ürün gönderimi; ücretli hızlandırma isteğe bağlı, gerekmez)
 - 2026-11-22 atlandı: BetaList (betalist.com/faq: "All submissions are paid"), Toolify (yalnız ücretli, 99 $ tek sefer; kaynak saascity.io ve orangebot.ai), AI Tools Directory (aitoolsdirectory.com sayfası doğrulanamadı; sonraki turda tekrar bakılacak)
 - 2026-11-22: SaaSworthy (saasworthy.com, "List Your Product / Get Listed": "list it on SaaSworthy for FREE")
+- 2026-11-22 sonuç: SaaSworthy'ye gönderildi; onay e-postası henüz gelmedi (bekleniyor).
