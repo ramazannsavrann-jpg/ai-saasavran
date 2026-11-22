@@ -595,6 +595,7 @@ Contact: ${SITE.email}
 - [AI visibility tools compared](${SITE.url}/guides/ai-visibility-tools-compared/): AI SaaSavran, Peec AI, Otterly.AI, Profound, AthenaHQ, Semrush and Ahrefs, with our own measurement of which ones AI recommends.
 - [Peec AI alternative](${SITE.url}/guides/peec-ai-alternative/): when AI SaaSavran fits (free plan, Turkish and English questions, Claude included) and when another tool fits better.
 - [AthenaHQ alternative](${SITE.url}/guides/athenahq-alternative/): AthenaHQ vs AI SaaSavran on engines, price and free plan, from AthenaHQ's official pricing page.
+- [Profound alternatives](${SITE.url}/guides/profound-alternative/): affordable alternatives after Profound retired its Starter and Growth plans, with prices from each tool's official page and the date checked.
 
 ## Pricing
 - [Plans](${SITE.url}/pricing/): Free ($0), Plus ($60/month), Pro ($300/month), Business ($876/month). Monthly billing, cancel anytime, 14-day money-back guarantee.
