@@ -21,7 +21,7 @@ export async function verifyPaddle(header, rawBody, secret, nowSec = Math.floor(
   return header.split(";").some((p) => p.startsWith("h1=") && safeEqual(p.slice(3), sig));
 }
 
-export const PLAN_IDS = ["starter", "pro", "agency"];
+export const PLAN_IDS = ["starter", "altin", "pro", "agency"];
 
 /** Abonelik olayından alan, paket, durum, checkout'u başlatan kullanıcı ve olay zamanı çıkarır. */
 export function subscriptionUpdate(data, occurredAt = null) {
