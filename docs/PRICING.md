@@ -56,8 +56,8 @@ Bu tablo `npm run pricing` ile fiyat kartlarından üretilir (fiyatlar 2026-11-0
 
 ## Güncel fiyatlar (12 Kasım 2026, migration 0019)
 
-**Plus 130 $ · Pro 400 $ · Business 1500 $** (aylık; 22 Kasım 2026 sahip onayı, migration 0062). Free: ayda 1 ölçüm (Gemini, aramasız). Önceki 60 / 300 / 876 $ ve Free 4 ölçüm yerine geçti. **Önerilen (250 $)** paketinin içeriği sahip onayını bekliyor; henüz uygulanmadı. **Paddle'daki fiyat kimlikleri ve `scripts/paddle-setup.mjs` içindeki tutarlar bu değişiklikle güncellenmedi**; Paddle işi askıda, yeniden başlayınca güncellenecek.
-Limitler ve aylık ücretli harcama tavanları değişmedi (Plus 9 $, Pro 50 $, Business 150 $). Aşağıdaki
+**Gümüş 130 $ · Altın 250 $ · Platin 400 $ · Elmas 1500 $** (aylık; 22 Kasım 2026 sahip onayı, migration 0062 ve 0063). Free: ayda 1 ölçüm (Gemini, aramasız). Önceki 60 / 300 / 876 $ ve Free 4 ölçüm yerine geçti. **Altın** paketinin Paddle fiyat kimliği henüz yok; satın alma düğmesi Paddle fiyatı tanımlanana kadar gizli kalır (`purchasablePlans`). **Paddle'daki fiyat kimlikleri ve `scripts/paddle-setup.mjs` içindeki tutarlar güncellenmedi**; Paddle işi askıda, yeniden başlayınca güncellenecek.
+Ücretli harcama tavanları (aylık, sahip onayı 22 Kasım 2026): Gümüş 45 $, Altın 100 $, Platin 250 $, Elmas 750 $. Altın paketi (migration 0063): 3 marka, marka başı 30 soru, 6 rakip, aylık 2.340 çağrı, ChatGPT + Claude + Perplexity + Gemini. Kota ve tavan birlikte harcamayı sınırlar. Aşağıdaki
 7 Kasım tablosundaki 20 / 99 / 249 $ fiyatları **eskidir**; yalnız geçmiş kayıt olarak duruyor.
 
 ## Eski karar (7 Kasım 2026): ChatGPT tarzı paketler

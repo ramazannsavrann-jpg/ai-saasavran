@@ -33,7 +33,7 @@ export function ApiPanel() {
     <section className="panel stack" id="api">
       <h2>{L("API ve MCP (yapay zekâ ajanları)", "API and MCP (AI agents)")}</h2>
       <p className="muted">{L("Claude, ChatGPT ya da kendi araçlarınız raporlarınızı okuyabilsin: markalar, son ölçümler, rakipler, sorular ve kaynak siteler. Salt okunur; ölçüm başlatmaz, ücret doğurmaz. Anahtar başına günde 1000 istek.", "Let Claude, ChatGPT or your own tools read your reports: brands, latest measurements, competitors, questions and sources. Read-only; it doesn't start measurements or cost anything. 1000 requests per key per day.")}</p>
-      {!eligible ? <p className="caution">{L("API ve MCP erişimi Pro ve Business paketlerinde var.", "API and MCP access is available on Pro and Business.")}</p> : !isAdmin ? <p className="muted">{L("Anahtarları sahip ya da yönetici oluşturur.", "Owners and admins create keys.")}</p> : (
+      {!eligible ? <p className="caution">{L("API ve MCP erişimi Platin ve Elmas paketlerinde var.", "API and MCP access is available on Platinum and Diamond.")}</p> : !isAdmin ? <p className="muted">{L("Anahtarları sahip ya da yönetici oluşturur.", "Owners and admins create keys.")}</p> : (
         <>
           <form className="row-form" onSubmit={create} aria-label={L("API anahtarı oluştur", "Create API key")}>
             <Field label={L("Anahtar adı", "Key name")} name="name" maxLength={60} placeholder={L("Örn. Claude", "e.g. Claude")} />

@@ -24,7 +24,7 @@ export const METHOD_PAGES = [
 <h2>Question set</h2>
 <ul>
 <li>Questions are the ones your customers would ask: you write them or pick from suggestions. Each brand has its own set in Turkish or English, for a chosen country.</li>
-<li>Set size by plan: Free 15 questions, Plus 25, Pro and Business 30 per brand.</li>
+<li>Set size by plan: Free 15 questions, Silver 25, Gold, Platinum and Diamond 30 per brand.</li>
 <li>The set stays fixed between runs so results are comparable week to week. If you change questions, the trend restarts from that point.</li>
 </ul>
 
@@ -96,7 +96,7 @@ export const METHOD_PAGES = [
 <h2>Soru seti</h2>
 <ul>
 <li>Sorular, müşterilerinizin soracağı sorulardır: siz yazarsınız ya da önerilerden seçersiniz. Her markanın seçilen ülke için Türkçe veya İngilizce kendi soru seti vardır.</li>
-<li>Paket başına soru sayısı: Ücretsiz 15, Plus 25, Pro ve Business marka başına 30.</li>
+<li>Paket başına soru sayısı: Ücretsiz 15, Gümüş 25, Altın, Platin ve Elmas marka başına 30.</li>
 <li>Sonuçlar haftadan haftaya karşılaştırılabilsin diye soru seti ölçümler arasında sabit kalır. Soruları değiştirirseniz eğilim o noktadan yeniden başlar.</li>
 </ul>
 

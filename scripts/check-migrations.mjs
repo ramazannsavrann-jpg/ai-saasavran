@@ -106,9 +106,9 @@ console.log("ok müşteri alanında ücretli çağrı reddedildi (paid_not_allow
   console.log("ok abonelik: aktifken ücretli ölçüm açık, eski aboneliğin iptali yok sayıldı, iptalde Free'ye döndü");
 }
 
-// Ücretli tavan (Plus 9 $) — izinli alan (growth_lab) üzerinde, toplam tavan geniş tutularak
+// Ücretli tavan (Gümüş 45 $, 22 Kasım 2026 onayı) — izinli alan (growth_lab) üzerinde, toplam tavan geniş tutularak
 await db.exec(`update workspaces set kind='growth_lab', paid_live_allowed=true where id='${C}'; update app_settings set paid_total_cap_usd = 1000;`);
-await record("paid", 8.5, 8.5);
+await record("paid", 44.5, 44.5);
 assert.equal(await reserve("paid", 1.0), "monthly_cost_cap");
 const ws = (await db.query(`select status, paused_reason from workspaces where id=$1`, [C])).rows[0];
 assert.deepEqual(ws, { status: "paused", paused_reason: "monthly_cost_cap" });
@@ -198,7 +198,7 @@ console.log("ok tanımsız paket atanamıyor");
   const u = (await db.query(`select count(*) filter (where task='query_engine')::int q, sum(cost_usd)::float c from cost_ledger where workspace_id=$1`, [F])).rows[0];
   assert.deepEqual(u, { q: 0, c: 0.0002 });
   await assert.rejects(db.query(`select record_aux_call($1, null, 'query_engine', 'openai', 'm', 1, 1, 0.1)`, [F]));
-  await db.query(`select record_aux_call($1, null, 'classify', 'openai', 'm', 1, 1, 9.5)`, [F]);
+  await db.query(`select record_aux_call($1, null, 'classify', 'openai', 'm', 1, 1, 45.5)`, [F]);
   assert.equal((await db.query(`select status from workspaces where id=$1`, [F])).rows[0].status, "paused", "tavan aşılınca durur");
   await assert.rejects(as(U1, `select record_aux_call('${A}', null, 'classify', 'openai', 'm', 1, 1, 0.1)`));
   assert.equal((await db.query(`select count(*)::int n from pg_constraint where conrelid = 'prompts'::regclass and pg_get_constraintdef(oid) like '%segment%'`)).rows[0].n, 1);
