@@ -6,6 +6,9 @@ export type PaidPlan = "starter" | "altin" | "pro" | "agency";
 export const PLAN_INFO: Record<PaidPlan, { name: string; price: number }> = {
   starter: { name: "Gümüş", price: 130 }, altin: { name: "Altın", price: 250 }, pro: { name: "Platin", price: 400 }, agency: { name: "Elmas", price: 1500 },
 };
+/** Türkçe yönelme eki: Gümüş'e, Altın'a, Platin'e, Elmas'a geç. */
+export const PLAN_DATIVE: Record<PaidPlan, string> = { starter: "Gümüş'e", altin: "Altın'a", pro: "Platin'e", agency: "Elmas'a" };
+export const RECOMMENDED_PLAN: PaidPlan = "altin";
 export const planName = (id: string) => (id in PLAN_INFO ? PLAN_INFO[id as PaidPlan].name : id === "free" ? "Free" : id);
 
 interface PaddleCfg { clientToken: string; environment: "production" | "sandbox"; prices: Partial<Record<PaidPlan, string>> }

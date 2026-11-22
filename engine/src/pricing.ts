@@ -129,11 +129,16 @@ export const PLANS: PlanSpec[] = [
   { name: "Plus 60 $ (ChatGPT + Claude + Perplexity + Gemini)", priceUsd: 60, brands: 1, promptsPerBrand: 25, repetitions: 2, runsPerMonth: WEEKS_PER_MONTH, engines: ["gemini", "openai", "claude", "perplexity"], engineReps: { claude: 1, perplexity: 1 } },
   { name: "Pro 300 $ (ChatGPT + Claude + Perplexity + Gemini)", priceUsd: 300, brands: 5, promptsPerBrand: 30, repetitions: 2, runsPerMonth: WEEKS_PER_MONTH, engines: ["gemini", "openai", "claude", "perplexity"], engineReps: { claude: 1, perplexity: 1 } },
   { name: "Business 876 $ (ChatGPT + Claude + Perplexity + Gemini)", priceUsd: 876, brands: 15, promptsPerBrand: 30, repetitions: 2, runsPerMonth: WEEKS_PER_MONTH, engines: ["gemini", "openai", "claude", "perplexity"], engineReps: { claude: 1, perplexity: 1 } },
+  // ---- 22 Kasım 2026 fiyatları (0062–0065): Gümüş 130, Altın 250, Platin 400, Elmas 1500 $ ----
+  { name: "Gümüş 130 $ (1 marka, 25 soru, 4 motor)", priceUsd: 130, brands: 1, promptsPerBrand: 25, repetitions: 2, runsPerMonth: WEEKS_PER_MONTH, engines: ["gemini", "openai", "claude", "perplexity"], engineReps: { claude: 1, perplexity: 1 } },
+  { name: "Altın 250 $ (3 marka, 30 soru, 4 motor)", priceUsd: 250, brands: 3, promptsPerBrand: 30, repetitions: 2, runsPerMonth: WEEKS_PER_MONTH, engines: ["gemini", "openai", "claude", "perplexity"], engineReps: { claude: 1, perplexity: 1 } },
+  { name: "Platin 400 $ (5 marka, 30 soru, 4 motor)", priceUsd: 400, brands: 5, promptsPerBrand: 30, repetitions: 2, runsPerMonth: WEEKS_PER_MONTH, engines: ["gemini", "openai", "claude", "perplexity"], engineReps: { claude: 1, perplexity: 1 } },
+  { name: "Elmas 1500 $ (15 marka, 30 soru, 4 motor)", priceUsd: 1500, brands: 15, promptsPerBrand: 30, repetitions: 2, runsPerMonth: WEEKS_PER_MONTH, engines: ["gemini", "openai", "claude", "perplexity"], engineReps: { claude: 1, perplexity: 1 } },
   // ---- 11 Kasım 2026: Claude müşteri paketlerinde (ChatGPT 2 tekrar, Claude 1 tekrar) — işçi ve migration 0017 ile aynı ----
   { name: "Plus + Claude (1 marka, 25 soru)", priceUsd: 20, brands: 1, promptsPerBrand: 25, repetitions: 2, runsPerMonth: WEEKS_PER_MONTH, engines: ["gemini", "openai", "claude"], engineReps: { claude: 1 } },
   { name: "Pro + Claude (5 marka, 30 soru)", priceUsd: 99, brands: 5, promptsPerBrand: 30, repetitions: 2, runsPerMonth: WEEKS_PER_MONTH, engines: ["gemini", "openai", "claude"], engineReps: { claude: 1 } },
   { name: "Business + Claude (15 marka, 30 soru)", priceUsd: 249, brands: 15, promptsPerBrand: 30, repetitions: 2, runsPerMonth: WEEKS_PER_MONTH, engines: ["gemini", "openai", "claude"], engineReps: { claude: 1 } },
 ];
 
-/** Güncel paketlerin aylık ücretli harcama tavanı (migration 0007). Tavan + ödeme komisyonu < fiyat olmalı. */
-export const PAID_CAPS: Record<string, number> = { Plus: 9, Pro: 50, Business: 150 };
+/** Güncel paketlerin aylık ücretli harcama tavanı (migration 0063, 22 Kasım 2026). Tavan + ödeme komisyonu < fiyat olmalı. */
+export const PAID_CAPS: Record<string, number> = { "Gümüş": 45, "Altın": 100, "Platin": 250, "Elmas": 750 };
