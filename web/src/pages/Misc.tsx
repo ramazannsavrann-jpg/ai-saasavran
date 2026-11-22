@@ -20,8 +20,8 @@ const STATUS: { area: string; items: [Level, string, string][] }[] = [
       ["works", L("Şifre sıfırlama ve e-posta doğrulama", "Password reset and email confirmation"), L("Kendi alan adımızdan (report@aisaasavran.com) gönderilir.", "Sent from our own domain (report@aisaasavran.com).")],
       ["works", L("Müşteri verisi izolasyonu", "Customer data isolation"), L("Veritabanı satır güvenliğiyle; her sürümde otomatik test ediliyor.", "Enforced by database row-level security; tested on every release.")],
       ["works", L("Paket limitleri ve aylık kota", "Plan limits and monthly quota"), L("Limit aşılınca ölçüm durur.", "Measurements stop when a limit is reached.")],
-      ["works", L("Ekip üyesi davet etme", "Team invitations"), L("Pro'da 3, Business'ta 15 kişi; roller (sahip, editör, izleyici).", "3 seats on Pro, 15 on Business; roles (owner, editor, viewer).")],
-      ["works", L("API ve MCP erişimi", "API and MCP access"), L("Pro ve Business'ta; raporları kendi sisteminize veya yapay zekâ ajanınıza bağlama.", "On Pro and Business; connect reports to your own system or AI agent.")],
+      ["works", L("Ekip üyesi davet etme", "Team invitations"), L("Platin'de 3, Elmas'ta 15 kişi; roller (sahip, editör, izleyici).", "3 seats on Platinum, 15 on Diamond; roles (owner, editor, viewer).")],
+      ["works", L("API ve MCP erişimi", "API and MCP access"), L("Platin ve Elmas'ta; raporları kendi sisteminize veya yapay zekâ ajanınıza bağlama.", "On Platinum and Diamond; connect reports to your own system or AI agent.")],
       ["works", L("Günlük otomatik test ve haftalık yedek", "Daily automated test and weekly backup"), L("Her sabah canlı sitede müşteri akışı denenir; veritabanı her hafta gizli depoya yedeklenir.", "Every morning the customer flow is tested on the live site; the database is backed up weekly to a private repository.")],
       ["works", L("Ödeme ve paket yükseltme", "Payments and upgrades"), L("Paddle üzerinden aylık abonelik; ödeme sonrası paket otomatik açılır, iptal Paddle sayfasından.", "Monthly subscriptions via Paddle; the plan opens automatically after payment, cancel from the Paddle page.")],
         ["works", L("Haftalık e-posta özeti", "Weekly email summary"), L("Pazartesi sabahı, o hafta ölçüm yapıldıysa; hesap sayfasından kapatılabilir.", "Monday mornings when there were measurements; can be turned off from the account page.")],
@@ -31,7 +31,7 @@ const STATUS: { area: string; items: [Level, string, string][] }[] = [
     area: L("Ölçüm", "Measurement"),
     items: [
       ["works", L("Gemini aramasız ölçüm (model bilgisi)", "Gemini without search (model knowledge)"), L("Ücretsiz katmanda çalışıyor; ayrı veri türü olarak gösterilir.", "Runs on the free tier; shown as its own data type.")],
-      ["works", L("ChatGPT, Claude ve Perplexity ile canlı web aramalı ölçüm", "ChatGPT, Claude and Perplexity live web-search measurement"), L("Ücretli paketlerde (Plus, Pro, Business), paket başına aylık harcama tavanıyla.", "On paid plans (Plus, Pro, Business), with a monthly spending cap per plan.")],
+      ["works", L("ChatGPT, Claude ve Perplexity ile canlı web aramalı ölçüm", "ChatGPT, Claude and Perplexity live web-search measurement"), L("Ücretli paketlerde (Gümüş, Altın, Platin, Elmas), paket başına aylık harcama tavanıyla.", "On paid plans (Silver, Gold, Platinum, Diamond), with a monthly spending cap per plan.")],
       ["works", L("Ülke karşılaştırması ve ölçüm sıklığı", "Country comparison and measurement frequency"), L("Aynı sorular farklı ülkelerde; marka başına ölçüm aralığı ayarlanabilir.", "The same questions across countries; measurement interval per brand.")],
             ["works", L("Otomatik ölçüm işleme ve haftalık ölçüm", "Automatic processing and weekly runs"), L("Ölçümler saatlik işlenir; her marka haftada bir otomatik ölçülür.", "Measurements are processed hourly; each brand is measured weekly.")],
       ["partial", L("Önerilme tespiti", "Recommendation detection"), L("Kural tabanlı; ürün adları ve yazılışlar marka ile eşleştirilir.", "Rule-based; product names and spellings are matched to brands.")],
@@ -159,7 +159,7 @@ export function DemoLab() {
   );
 }
 
-const PLAN_NAMES: Record<string, string> = { free: "Free", starter: "Plus", pro: "Pro", agency: "Business" };
+const PLAN_NAMES: Record<string, string> = { free: "Free", starter: "Gümüş", altin: "Altın", pro: "Platin", agency: "Elmas" };
 
 /** Yönetici: müşteri çalışma alanları ve ücretsiz paket verme. */
 export function AdminCustomers() {

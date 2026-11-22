@@ -557,3 +557,5 @@
 - Migration 0043: aylık motor çağrısı kotaları Plus 620→760, Pro 3600→4200, Business 10800→12600. Harcama tavanları aynı (9 / 50 / 150 $).
 - Maliyet (gerçek ölçüm 0,004 $/çağrı): tipik aylık Perplexity Plus 0,51 $, Pro 3,06 $, Business 9,16 $. Kötü durumda 1,73 / 10,4 / 31,2 $. Tipik brüt kâr %63–64, kötü durumda %35–37.
 - Siteler, yöntem sayfası, paket metinleri, e-posta ve SSS "ChatGPT, Claude ve Perplexity" diyecek şekilde güncellendi. Eski blog yazıları (o günkü ölçümü anlatır) değişmedi.
+
+- 2026-11-22: Altın paketi eklendi (250 $/ay; 3 marka, marka başı 30 soru, 6 rakip, 2.340 çağrı/ay, ChatGPT + Claude + Perplexity + Gemini; migration 0063). Ücretli aylık tavanlar sahip onayıyla: Gümüş 45 $, Altın 100 $, Platin 250 $, Elmas 750 $. Eski paket adları site ve uygulama metinlerinde Gümüş / Altın / Platin / Elmas (EN: Silver / Gold / Platinum / Diamond) olarak değiştirildi. Altın için Paddle fiyat kimliği henüz yok; satın alma düğmesi yalnız fiyat kimliği tanımlı paketlerde görünür. Ajans paneli (çok müşterili) bu PR kapsamında değil; ayrı tasarım onayı bekliyor.
