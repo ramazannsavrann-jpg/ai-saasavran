@@ -37,8 +37,8 @@ FOOT = "22 Kasım 2026 · Türkiye · Yapay zekâ cevapları, tavsiye değildir.
 # ---------------- 1) Kanca ----------------
 def s_hook(F, t, M, dur):
     F.pill(80, 200, "KASIM FIRSATLARI · AIRFRYER", bg=RED, size=26)
-    lines = ["66 yapay zekâ cevabı.", "Türk şirketine ait", "Fakir’in adı kaç kez geçti?"]
-    sizes = [64, 64, 58]
+    lines = ["66 yapay zekâ cevabı.", "Fakir’in adı", "kaç kez geçti?"]
+    sizes = [64, 64, 64]
     for i, s in enumerate(lines):
         k = eo(ph(t, 0.1 + i * 0.35, 0.4))
         F.text((80 - 100 * (1 - k), 300 + i * 80), s, f("Black", sizes[i]))
