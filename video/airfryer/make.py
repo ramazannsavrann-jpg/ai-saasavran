@@ -11,6 +11,16 @@ def font(w, s): return ImageFont.truetype(F.format(w), s)
 
 BG = (14, 26, 23); INK = (236, 244, 241); MUTED = (157, 178, 171); GREEN = (17, 112, 94); ACC = (60, 200, 160)
 BAR_BG = (36, 56, 50); GOLD = (240, 190, 70)
+CARD = (30, 48, 43); HL = (40, 62, 55); CHIP = (22, 44, 39); PILL_TXT = (255, 255, 255)
+BG2 = None; GLOW = None
+# Tema (22 Kasım): koyu yeşil yerine seçilebilir zemin. CFG["tema"] yoksa eski görünüm aynen kalır.
+TEMALAR = {
+ "gece":  dict(BG=(14, 16, 44), BG2=(54, 20, 82), GLOW=(120, 60, 220), INK=(246, 246, 255), MUTED=(180, 182, 220), ACC=(96, 205, 255),
+               GOLD=(255, 198, 64), RED=(255, 112, 140), GREEN=(112, 72, 232), BAR_BG=(46, 42, 98), CARD=(34, 32, 82), HL=(64, 54, 128), CHIP=(30, 28, 72)),
+ "komur": dict(BG=(18, 18, 22), BG2=(46, 30, 22), GLOW=(255, 120, 40), INK=(250, 246, 240), MUTED=(190, 182, 174), ACC=(120, 180, 255),
+               GOLD=(255, 196, 70), RED=(255, 100, 100), GREEN=(232, 98, 30), BAR_BG=(56, 50, 48), CARD=(42, 38, 38), HL=(74, 58, 46), CHIP=(34, 30, 30)),
+}
+if CFG.get("tema") in TEMALAR: globals().update(TEMALAR[CFG["tema"]])
 
 N = 8
 RED = (230, 110, 100)
@@ -50,8 +60,28 @@ def text_block(d, text, f, y, fill=INK, alpha=1.0, gap=1.18, x=80, maxw=XR - 80)
         d.text((x, y), line, font=f, fill=col); y += int(f.size * gap)
     return y
 
+_ZEMIN = None
+def _zemin():
+    global _ZEMIN
+    if _ZEMIN is None:
+        if BG2 is None:
+            _ZEMIN = Image.new("RGB", (W, H), BG)
+        else:
+            from PIL import ImageFilter
+            g = Image.new("RGB", (1, H)); px = g.load()
+            for y in range(H):
+                k = y / (H - 1); px[0, y] = tuple(int(BG[i] + (BG2[i] - BG[i]) * k) for i in range(3))
+            z = g.resize((W, H))
+            if GLOW:
+                l = Image.new("RGB", (W, H), (0, 0, 0)); ld = ImageDraw.Draw(l)
+                ld.ellipse([W - 520, 120, W + 280, 920], fill=tuple(int(c * 0.55) for c in GLOW))
+                ld.ellipse([-360, 1180, 360, 1900], fill=tuple(int(c * 0.30) for c in GLOW))
+                from PIL import ImageChops
+                z = ImageChops.add(z, l.filter(ImageFilter.GaussianBlur(160)))
+            _ZEMIN = z
+    return _ZEMIN
 def base():
-    im = Image.new("RGB", (W, H), BG); d = ImageDraw.Draw(im); header(d)
+    im = _zemin().copy(); d = ImageDraw.Draw(im); header(d)
     return im, d
 
 def footer_note(d, a=1.0):
@@ -126,7 +156,7 @@ def s3(t, dur):
     y += 20; step = rows_step(y, len(CFG["eng_rows"]), 125, YB - 120)
     for i, row in enumerate(CFG["eng_rows"]):
         al = ease((t - 0.5 - i * 0.3) / 0.5); hl = row[0] in CFG["eng_hl"]
-        if hl: d.rounded_rectangle([60, y - 14, XR + 10, y + 92], radius=20, fill=mix((40, 62, 55), al))
+        if hl: d.rounded_rectangle([60, y - 14, XR + 10, y + 92], radius=20, fill=mix(HL, al))
         d.text((80, y + 14), row[0], font=fit(d, row[0], "Bold", 40 if four else 50, xs[0] - 80 - 75, 26), fill=mix(INK, al))
         for v, x, c in zip(row[1:], xs, cols): rtext(d, x, y, str(v), font("ExtraBold", 56 if four else 64), mix(c if v else RED, al))
         y += step
@@ -137,7 +167,7 @@ def s4(t, dur):
     step = rows_step(y, len(CFG["questions"]), 225, YB + 25); bh = step - 25
     for i, (q, parts) in enumerate(CFG["questions"]):
         al = ease((t - 0.4 - i * 0.6) / 0.5)
-        d.rounded_rectangle([80, y, XR, y + bh], radius=24, fill=mix((30, 48, 43), al))
+        d.rounded_rectangle([80, y, XR, y + bh], radius=24, fill=mix(CARD, al))
         d.text((112, y + 22), q, font=fit(d, q, "Medium", 38, XR - 144), fill=mix(MUTED, al)); x = 112
         joined = "    ".join(f"{a} {b}" for a, b, _ in parts); f = fit(d, joined, "Bold", 42, XR - 144, 24)
         for name, val, bad in parts:
@@ -157,13 +187,13 @@ def s5(t, dur):
     footer_note(d); return im
 def s6(t, dur):
     im, d = base(); tag(d, t, T["tag_acc"]); y = title(d, t, T["acc"]) + 60
-    a1 = ease((t - 0.4) / 0.5); d.rounded_rectangle([80, y, XR, y + 360], radius=28, fill=mix((30, 48, 43), a1))
+    a1 = ease((t - 0.4) / 0.5); d.rounded_rectangle([80, y, XR, y + 360], radius=28, fill=mix(CARD, a1))
     d.text((112, y + 26), T["acc_box"], font=font("Medium", 38), fill=mix(MUTED, a1))
     for j, (lab, v, c) in enumerate(CFG["accuracy"]):
         x = 112 + j * 250; d.text((x, y + 100), str(v), font=font("ExtraBold", 110), fill=mix(c and tuple(c) or INK, a1))
         d.text((x, y + 240), lab, font=font("SemiBold", 36), fill=mix(INK, a1))
     y += 400; a2 = ease((t - 1.6) / 0.5)
-    d.rounded_rectangle([80, y, XR, y + 300], radius=28, fill=mix((30, 48, 43), a2))
+    d.rounded_rectangle([80, y, XR, y + 300], radius=28, fill=mix(CARD, a2))
     d.text((112, y + 26), T["shop_box"], font=font("Medium", 38), fill=mix(MUTED, a2))
     d.text((112, y + 90), T["shop_big"], font=font("ExtraBold", 96), fill=mix(GOLD, a2))
     d.text((112, y + 215), T["shop_sub"], font=font("SemiBold", 36), fill=mix(INK, a2))
@@ -207,7 +237,7 @@ def s_boxes(t, dur):
     im, d = base(); tag(d, t, T["tag_box"]); y = title(d, t, T["box"]) + 50
     for i, b in enumerate(CFG["boxes"]):
         a = ease((t - 0.4 - i * 1.0) / 0.5); h = 110 + 66 * len(b["lines"])
-        d.rounded_rectangle([80, y, XR, y + h], radius=28, fill=mix((30, 48, 43), a))
+        d.rounded_rectangle([80, y, XR, y + h], radius=28, fill=mix(CARD, a))
         d.text((112, y + 26), b["title"], font=fit(d, b["title"], "Medium", 36, XR - 144), fill=mix(MUTED, a)); yy = y + 92
         for txt, kind in b["lines"]:
             col = {"good": ACC, "bad": RED, "gold": GOLD}.get(kind, INK)
@@ -221,10 +251,10 @@ def s_shop(t, dur):
     im, d = base(); tag(d, t, T["tag_shop"]); y = title(d, t, T["shop"], T["shop_sub"]) + 110
     xa, xs = 640, XR
     rtext(d, xa, y - 60, T["shop_col_ai"], font("Bold", 32), ACC); rtext(d, xs, y - 60, T["shop_col_shop"], font("Bold", 32), GOLD)
-    step = rows_step(y, len(S["rows"]), 120, YB - 260)
+    step = rows_step(y, len(S["rows"]), 110, YB - 150)
     for i, (name, ai, sh, hl) in enumerate(S["rows"]):
         a = ease((t - 0.4 - i * 0.25) / 0.5)
-        if hl: d.rounded_rectangle([64, y - 18, XR + 16, y + 76], radius=20, fill=mix((40, 62, 55), a))
+        if hl: d.rounded_rectangle([64, y - 18, XR + 16, y + 76], radius=20, fill=mix(HL, a))
         d.text((80, y), name, font=fit(d, name, "Bold", 46, 380, 28), fill=mix(GOLD if hl else INK, a))
         rtext(d, xa, y, ai, font("Bold", 46), mix(ACC if ai != "—" else MUTED, a))
         rtext(d, xs, y, sh, font("Bold", 46), mix(RED if sh == "—" else INK, a)); y += step
@@ -254,7 +284,7 @@ def s_names(t, dur):
             a = ease((t - 0.15 - k * 0.1) / 0.3); k += 1
             if a > 0:
                 yy = y + (1 - a) * 30
-                d.rounded_rectangle([x, yy, x + tw, yy + h], radius=h // 2, outline=mix(ACC, a), width=5, fill=mix((22, 44, 39), a))
+                d.rounded_rectangle([x, yy, x + tw, yy + h], radius=h // 2, outline=mix(ACC, a), width=5, fill=mix(CHIP, a))
                 d.text((x + 32, yy + 13), n, font=f, fill=mix(INK, a))
             x += tw + gap
         y += h + gap
@@ -268,11 +298,11 @@ def s_names(t, dur):
 
 def guvenli_alan_kontrol(im, ad):
     """Shorts arayüzünün kapattığı alanlarda yazı/grafik varsa hata ver."""
-    px = im.load(); hata = []
+    px = im.load(); zp = _zemin().load(); hata = []
     for x0, y0, x1, y1 in BLOCKED:
         for yy in range(y0, y1, 4):
             for xx in range(x0, x1, 4):
-                if max(abs(px[xx, yy][i] - BG[i]) for i in range(3)) > 12: hata.append((xx, yy)); break
+                if max(abs(px[xx, yy][i] - zp[xx, yy][i]) for i in range(3)) > 12: hata.append((xx, yy)); break
             if hata: break
     if hata: print(f"GÜVENLİ ALAN HATASI: {ad} -> {hata[0]} (kapalı bölgede içerik var)")
     return not hata

@@ -9,6 +9,7 @@
   "s4",
   "boxes",
   "shop",
+  "net",
   "s8"
  ],
  "n": 22,
@@ -384,11 +385,11 @@
   "disc": "22 Kasım 2026 yapay zekâ cevapları (Türkiye, Türkçe sorular). 66 canlı aramalı cevap (ChatGPT, Claude, Perplexity; 11 soru × 2) ve 30 Gemini cevabı (15 soru × 2, hafızadan). Örneklem sınırlıdır, tüm pazarı temsil etmez. Tavsiye değildir. Adlar sahiplerine aittir.",
   "tag_box": "Güven puanı",
   "box": "Yapay zekâ fikir değiştiriyor mu?",
-  "shop": "Shopping'de 1. sıra, fiyat farklı",
-  "shop_sub": "Arama: model kodu · ilk ilan · 22 Kasım",
-  "shop_col_ai": "Sıra",
-  "shop_col_shop": "İlk ilan",
-  "shop_note": "ChatGPT'ye sorduk: L ~6.945 TL, XL ~9.000 TL dedi. İkisi de ilk ilandan düşük."
+  "shop": "Yapay zekâ ile Google Shopping",
+  "shop_sub": "Arama: \"airfryer\" · her markanın ilk ilanı",
+  "shop_col_ai": "YZ sırası",
+  "shop_col_shop": "Shopping",
+  "shop_note": "Fakir Shopping'de 10., yapay zekâ hiç anmadı. Ninja ilk 20'de yok."
  },
  "gruplar": "0,1|2|3,4|5,6|7,8|9,10,11|12,13|14,15",
  "yt": {
@@ -417,14 +418,15 @@
   "listeler": []
  },
  "dur": {
-  "p1": 5.6,
-  "p2": 2.1,
-  "p3": 4.95,
-  "p4": 5.9,
-  "p5": 5.8,
-  "p6": 8.75,
-  "p7": 6.95,
-  "p8": 5.4
+  "p1": 6,
+  "p2": 6,
+  "p3": 6,
+  "p4": 6,
+  "p5": 6,
+  "p6": 6,
+  "p7": 6,
+  "p8": 6,
+  "p9": 6
  },
  "boxes": [
   {
@@ -457,18 +459,41 @@
  "shop": {
   "rows": [
    [
-    "Philips L (HD9252)",
+    "Philips",
     "1.",
-    "8.500 TL",
+    "2.",
     false
    ],
    [
-    "Philips XL (HD9257)",
+    "Xiaomi",
+    "2.",
     "1.",
-    "12.337 TL",
+    false
+   ],
+   [
+    "Ninja",
+    "3.",
+    "—",
+    false
+   ],
+   [
+    "Karaca",
+    "4.",
+    "13.",
+    false
+   ],
+   [
+    "Arzum",
+    "6.",
+    "17.",
+    false
+   ],
+   [
+    "Fakir",
+    "—",
+    "10.",
     true
    ]
   ]
- },
- "dur_sabit": true
+ }
 }
