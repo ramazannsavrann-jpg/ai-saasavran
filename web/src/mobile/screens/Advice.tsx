@@ -1,7 +1,7 @@
 // Öneriler: iyileştirme rehberi (kampanya başlatma), yaptıklarım ve sonuçları (önce/sonra), içerik planları, site kontrolü.
 // Öneriler sitedekiyle aynı kurallardan çıkar (lib/recommend.ts + engine/src/recommendations.ts); yapay zekâ ile üretilmez.
 import { useState, type FormEvent } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useApp, useLoad } from "../../lib/app";
 import { api, type Brand, type BrandAction, type MeasurementType, type Run } from "../../lib/data";
 import { friendlyError } from "../../lib/supabase";
@@ -24,6 +24,15 @@ const TABS = [
 ] as const;
 type Tab = (typeof TABS)[number]["id"];
 
+/** Önerinin uygulamada yapılacağı yer: kullanıcı tarif okumak yerine tek dokunuşla oraya gider. */
+const GO: Record<string, { to: string; tr: string; en: string }> = {
+  no_website: { to: "/marka-duzenle", tr: "Web sitesini ekle", en: "Add website" },
+  aliases: { to: "/marka-duzenle", tr: "Yazılışları ekle", en: "Add spellings" },
+  weekly: { to: "/marka-duzenle", tr: "Haftalık ölçümü aç", en: "Turn on weekly measurement" },
+  more_prompts: { to: "/rapor?b=sorular", tr: "Soru ekle", en: "Add questions" },
+  absent_prompts: { to: "/rapor?b=sorular", tr: "Soruları gör", en: "See questions" },
+};
+
 export function Advice() {
   const [params, setParams] = useSearchParams();
   const tab = (TABS.find((t) => t.id === params.get("b"))?.id ?? "yapilacak") as Tab;
@@ -45,6 +54,7 @@ export function Advice() {
 
 function AdviceBody({ brand, type, runs, tab, goTab }: { brand: Brand; type: MeasurementType; runs: Run[]; tab: Tab; goTab: (t: Tab) => void }) {
   const rec = useRecommendations(brand, type, runs);
+  const nav = useNavigate();
   const camps = useLoad(() => api.actions(brand.id), [brand.id]);
   const [err, setErr] = useState<string | null>(null);
   const [msg, setMsg] = useState<string | null>(null);
@@ -81,6 +91,7 @@ function AdviceBody({ brand, type, runs, tab, goTab }: { brand: Brand; type: Mea
             <p className="muted small" style={{ margin: 0 }}>{L("Neden: ", "Why: ")}{r.why}</p>
             {r.check && <p className="muted small" style={{ margin: 0 }}>{L("İşe yaradığını nasıl anlarsınız: ", "How you'll know it worked: ")}{r.check}</p>}
             {r.progress && <p className="small" style={{ margin: 0, color: r.progress.status === "improved" ? "var(--accent)" : r.progress.status === "worse" ? "var(--warn)" : "var(--muted)" }}>{r.progress.text}</p>}
+            {GO[r.id] && <button className="btn btn-ghost" onClick={() => { haptic.tap(); nav(GO[r.id].to); }}>{L(GO[r.id].tr, GO[r.id].en)}</button>}
             {tasks && (activeRecs.has(r.id)
               ? <button className="btn btn-text" style={{ alignSelf: "flex-start", padding: 0 }} onClick={() => goTab("yaptiklarim")}>{L("Görevleriniz sürüyor", "Your tasks are in progress")} {Icon.chevron}</button>
               : <button className="btn btn-ghost" onClick={() => startCampaign(r, tasks)}>{L(`Adım adım yap (${tasks.length} görev)`, `Do it step by step (${tasks.length} tasks)`)}</button>)}

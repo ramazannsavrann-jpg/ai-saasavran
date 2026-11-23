@@ -89,6 +89,15 @@ test("Mobil: kayıt → işletme kurulumu → ölçüm → rakip → bildirimler
   await expect(page.getByRole("heading", { name: "Öneriler" })).toBeVisible();
   await expect(page.locator("article.card").first()).toBeVisible();
   await noOverflow(page); await shot(page, "05c-oneriler");
+  await page.getByRole("button", { name: "Web sitesini ekle" }).click();
+  await expect(page.getByRole("heading", { name: "İşletme bilgileri" })).toBeVisible();
+  await page.getByLabel("Web sitesi").fill("mobildoner.example");
+  await page.getByLabel("Diğer yazılışlar").fill("Mobil Doner");
+  await page.getByLabel("Doğru bilgi kartı").fill("Her gün 10:00-02:00 açığız. Paket servis var.");
+  await noOverflow(page); await shot(page, "05f-isletme-bilgileri");
+  await page.getByRole("button", { name: "Kaydet" }).click();
+  await expect(page.getByRole("heading", { name: "Öneriler" })).toBeVisible();
+  await expect(page.getByText("Markaya web sitesi ekleyin")).toBeHidden();
   const step = page.getByRole("button", { name: /Adım adım yap/ }).first();
   if (await step.count()) {
     await step.click();
@@ -107,6 +116,7 @@ test("Mobil: kayıt → işletme kurulumu → ölçüm → rakip → bildirimler
   await page.getByRole("tab", { name: "İçerik" }).click();
   await expect(page.getByText("İçerik planları ücretli paketlerde açık.")).toBeVisible();
   await page.getByRole("tab", { name: "Site" }).click();
+  await expect(page.getByRole("button", { name: "Siteyi şimdi kontrol et" })).toBeVisible();
   await noOverflow(page); await shot(page, "05e-site");
 
   await page.getByRole("navigation", { name: "Alt menü" }).getByRole("link", { name: "Bildirimler" }).click();

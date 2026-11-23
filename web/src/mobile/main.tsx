@@ -14,6 +14,7 @@ import { AppProvider, useApp } from "../lib/app";
 import { L } from "../lib/i18n";
 import { Spinner, TabBar } from "./ui";
 import { Advice } from "./screens/Advice";
+import { BrandEdit } from "./screens/BrandEdit";
 import { Forgot, Login, Signup, Welcome } from "./screens/Auth";
 import { BrandForm, Setup } from "./screens/Setup";
 import { Home } from "./screens/Home";
@@ -47,6 +48,7 @@ function App() {
       <Route path="/kayit" element={<PublicOnly><div className="app"><Signup /></div></PublicOnly>} />
       <Route path="/sifre" element={<div className="app"><Forgot /></div>} />
       <Route path="/kurulum" element={<Private><div className="app"><Setup /></div></Private>} />
+      <Route path="/marka-duzenle" element={<Private><div className="app"><BrandEdit /></div></Private>} />
       <Route path="/marka-ekle" element={<Private><div className="app"><AddBrand /></div></Private>} />
       <Route element={<Private><Tabs /></Private>}>
         <Route path="/ana" element={<Home />} />

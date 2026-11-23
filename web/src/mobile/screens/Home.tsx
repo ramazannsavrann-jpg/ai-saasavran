@@ -154,6 +154,7 @@ export function Home() {
             </button>
           ))}
         </div>
+        <button className="btn btn-ghost" onClick={() => { setPicker(false); nav("/marka-duzenle"); }}>{L(`${b.name} bilgilerini düzenle`, `Edit ${b.name} details`)}</button>
         <button className="btn btn-ghost" onClick={() => { setPicker(false); nav("/marka-ekle"); }}>{Icon.plus}{L("Marka ekle", "Add brand")}</button>
       </Sheet>
     </div>
