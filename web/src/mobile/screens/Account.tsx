@@ -64,7 +64,7 @@ export function Account() {
       )}
       <span className="label">{L("Bildirim tercihleri", "Notification preferences")}</span>
       <div className="list">
-        <label className="row">{L("Önerilme düşünce / rakip öne geçince haber ver", "Alert me on drops / when a competitor overtakes me")}<input type="checkbox" checked={drop} onChange={(e) => setPref("drop", e.target.checked)} /></label>
+        <label className="row">{L("Önerilme oranım belirgin değişince haber ver", "Alert me when my recommendation rate changes clearly")}<input type="checkbox" checked={drop} onChange={(e) => setPref("drop", e.target.checked)} /></label>
         {weekly !== null && <label className="row">{L("Haftalık özet e-postası", "Weekly summary email")}<input type="checkbox" checked={weekly} onChange={(e) => setPref("weekly", e.target.checked)} /></label>}
       </div>
       <Err msg={err} />

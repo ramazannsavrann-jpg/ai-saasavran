@@ -1,11 +1,11 @@
-// Ana sayfa: seçili markanın önerilme oranı, en güçlü rakiple kıyas, bu haftanın işleri ve "Yeni ölçüm başlat".
+// Ana sayfa: seçili markanın önerilme oranı (yapay zekâ bazında), önceki ölçüme göre değişim, bu haftanın işleri ve "Yeni ölçüm başlat". Rakip bilgisi yok.
 // Rakamlar yalnız gerçek ölçümlerden gelir; ölçüm yoksa açıkça "henüz ölçüm yok" denir.
 import { useEffect, useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { useApp, useLoad } from "../../lib/app";
 import { api, type Brand, type MeasurementType } from "../../lib/data";
 import { friendlyError } from "../../lib/supabase";
-import { competitorsInRun, formatDateTime, lowSample, series } from "../../lib/report";
+import { formatDateTime, lowSample, providerLabel, series } from "../../lib/report";
 import { L } from "../../lib/i18n";
 import { SITE_ORIGIN } from "../../lib/env";
 import { Err, Icon, Spinner, greeting } from "../ui";
@@ -57,7 +57,10 @@ export function Home() {
   const last = pts[pts.length - 1], prev = pts[pts.length - 2];
   const rate = last ? Math.round(last.recommend.value * 100) : null;
   const delta = last && prev ? Math.round((last.recommend.value - prev.recommend.value) * 100) : null;
-  const top = last ? competitorsInRun(vis.data ?? [], last.runId).find((c) => !c.isTarget) : undefined;
+  // Yapay zekâ bazında kendi önerilme oranınız (son ölçüm); rakip bilgisi ana sayfada gösterilmez (23 Kasım kararı)
+  const engines = last ? Object.entries((vis.data ?? []).filter((r) => r.run_id === last.runId && r.is_target).reduce<Record<string, { k: number; n: number }>>((acc, r) => {
+    const a = acc[r.provider] ?? { k: 0, n: 0 }; a.k += r.recommended; a.n += r.n; acc[r.provider] = a; return acc;
+  }, {})).filter(([, v]) => v.n > 0).map(([p, v]) => ({ name: providerLabel(p).replace(/ \(.*\)$/, ""), rate: Math.round((v.k / v.n) * 100) })) : [];
   const name = (session?.user.email ?? "").split("@")[0];
   const actions = (b.top_actions ?? []).slice(0, 3);
 
@@ -110,17 +113,14 @@ export function Home() {
                 </div>
               )}
             </div>
-            {top && (
-              <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-                <div style={{ display: "flex", justifyContent: "space-between", fontSize: 13, color: "#D3E7E0" }}>
-                  <span>{L("Siz", "You")}</span><span>{L("En güçlü rakip", "Top competitor")}: {top.name} · %{Math.round(top.recommend.value * 100)}</span>
-                </div>
-                <div className="bar"><i style={{ width: `${rate}%` }} /><b style={{ left: `${Math.min(98, Math.round(top.recommend.value * 100))}%` }} /></div>
+            {engines.length > 0 && (
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }} aria-label={L("Yapay zekâlara göre", "By AI")}>
+                {engines.map((e) => <span key={e.name} style={{ background: "rgba(18,35,31,.45)", borderRadius: 999, padding: "6px 10px", fontSize: 13 }}>{e.name} · %{e.rate}</span>)}
               </div>
             )}
             {last && lowSample(last.recommend) && <span style={{ fontSize: 12, color: "#D3E7E0" }}>{L("Az sayıda cevaba dayanıyor; daha fazla soru ve ölçümle netleşir.", "Based on few answers; becomes clearer with more questions and measurements.")}</span>}
             <div style={{ display: "flex", gap: 8 }}>
-              <button className="act" onClick={() => nav("/rakipler")}>{L("Rakipleri gör", "See competitors")}</button>
+              <button className="act" onClick={() => nav("/bildirimler")}>{L("Ölçüm geçmişi", "History")}</button>
               <button className="act" onClick={share} disabled={busy === "share"}>{Icon.share}{L("Paylaş", "Share")}</button>
             </div>
           </>

@@ -1,4 +1,4 @@
-// Bildirimler: gerçek düşüş uyarıları (önerilme oranı belirgin düştü, hangi soruda yerinize hangi rakip önerildi)
+// Bildirimler: müşterinin kendi sonuçlarındaki belirgin değişiklikler ve ölçüm geçmişi ("Haftalık ölçüm yapıldı", "Sorgunuz tamamlandı"). Rakip dili yok.
 // ve ölçüm geçmişi. Uyarı mantığı e-posta uyarısıyla aynıdır (engine/src/alerts.ts): ≥10 puan ve istatistiksel olarak belirgin.
 import { useLoad } from "../../lib/app";
 import { api } from "../../lib/data";
@@ -29,28 +29,25 @@ export function Activity() {
   return (
     <div className="screen">
       <Head title={L("Bildirimler", "Alerts")} />
-      <span className="label">{L("Uyarılar", "Alerts")}</span>
-      {list.length === 0 ? <p className="muted" style={{ margin: 0 }}>{L("Şu an uyarı yok. Önerilme oranınız belirgin düşerse veya bir rakip sizin yerinize önerilmeye başlarsa burada görünür.", "No alerts. If your recommendation rate drops clearly or a competitor starts being recommended instead of you, it shows here.")}</p> : list.map((a) => (
+      <span className="label">{L("Sonuçlarınızdaki değişiklikler", "Changes in your results")}</span>
+      {list.length === 0 ? <p className="muted" style={{ margin: 0 }}>{L("Şu an uyarı yok. Önerilme oranınız belirgin değişirse burada görünür.", "No alerts. If your recommendation rate changes clearly, it shows here.")}</p> : list.map((a) => (
         (a.detail?.drops ?? []).map((d, i) => (
           <article key={`${a.run_id}-${i}`} className="card" style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-            <span style={{ color: "var(--warn)", fontWeight: 700, fontSize: 13 }}>{L("ÖNERİLME DÜŞTÜ", "RECOMMENDATIONS DROPPED")} · {providerLabel(d.provider)}</span>
-            <span style={{ fontWeight: 600 }}>{L(`%${pctOf(d.prev)} → %${pctOf(d.now)}`, `${pctOf(d.prev)}% → ${pctOf(d.now)}%`)}</span>
+            <span style={{ color: "var(--warn)", fontWeight: 700, fontSize: 13 }}>{L("SONUCUNUZ DEĞİŞTİ", "YOUR RESULT CHANGED")} · {providerLabel(d.provider)}</span>
+            <span style={{ fontWeight: 600 }}>{L(`Önerilme oranınız %${pctOf(d.prev)}'den %${pctOf(d.now)}'ye indi.`, `Your recommendation rate went from ${pctOf(d.prev)}% to ${pctOf(d.now)}%.`)}</span>
             {(d.lost_items ?? []).map((x, j) => (
-              <span key={j} className="muted small" style={{ lineHeight: 1.4 }}>
-                {x.instead ? L(`“${x.prompt}” sorusunda artık sizin yerinize ${x.instead} öneriliyor.`, `For “${x.prompt}”, ${x.instead} is now recommended instead of you.`)
-                  : L(`“${x.prompt}” sorusunda artık önerilmiyorsunuz.`, `You are no longer recommended for “${x.prompt}”.`)}
-              </span>
+              <span key={j} className="muted small" style={{ lineHeight: 1.4 }}>{L(`“${x.prompt}” sorusunda bu ölçümde önerilmediniz.`, `Not recommended for “${x.prompt}” in this measurement.`)}</span>
             ))}
             <span className="muted small">{formatDateTime(a.checked_at)}</span>
           </article>
         ))
       ))}
-      <span className="label" style={{ marginTop: 6 }}>{L("Ölçüm geçmişi", "Measurement history")}</span>
+      <span className="label" style={{ marginTop: 6 }}>{L("Ölçümleriniz", "Your measurements")}</span>
       {done.length === 0 ? <p className="muted" style={{ margin: 0 }}>{L("Henüz ölçüm yok.", "No measurements yet.")}</p> : (
         <div className="list">
           {done.map((r) => (
             <div key={r.id} className="row">
-              <span>{r.status === "done" ? L("Ölçüm tamamlandı", "Measurement finished") : L("Ölçüm tamamlanamadı", "Measurement failed")}{r.trigger === "weekly" ? L(" (otomatik)", " (automatic)") : ""}</span>
+              <span>{r.status !== "done" ? L("Ölçüm tamamlanamadı", "Measurement failed") : r.trigger === "weekly" ? L("Haftalık ölçüm yapıldı. Sonuçlarınızı inceleyebilirsiniz.", "Weekly measurement done. You can review your results.") : L("Sorgunuz tamamlandı. İnceleyebilirsiniz.", "Your query is done. You can review it.")}</span>
               <span className="muted small">{formatDateTime(r.created_at)}</span>
             </div>
           ))}

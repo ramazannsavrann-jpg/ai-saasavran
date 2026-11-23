@@ -67,8 +67,8 @@ test("Mobil: kayıt → işletme kurulumu → ölçüm → rakip → bildirimler
   await noOverflow(page); await shot(page, "05-rakipler");
 
   await page.getByRole("navigation", { name: "Alt menü" }).getByRole("link", { name: "Bildirimler" }).click();
-  await expect(page.getByText("Ölçüm geçmişi")).toBeVisible();
-  await expect(page.getByText("Ölçüm tamamlandı")).toBeVisible();
+  await expect(page.getByText("Ölçümleriniz")).toBeVisible();
+  await expect(page.getByText("Sorgunuz tamamlandı. İnceleyebilirsiniz.")).toBeVisible();
   await shot(page, "06-bildirimler");
 
   await page.getByRole("navigation", { name: "Alt menü" }).getByRole("link", { name: "Hesap" }).click();
