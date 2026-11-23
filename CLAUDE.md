@@ -38,6 +38,8 @@ web/src/mobile       Mobil uygulama ekranları (Capacitor, Android: web/android)
                      Uygulamada Paddle yok (Google Play / App Store ödemesi); uygulama fiyatı sitedekiyle aynı (TL: kurdan, sonu 9),
                      Elmas yalnız sitede; ek sorgu paketi yalnız hakkını bitiren abonelere. Ana sayfada ve bildirimlerde
                      rakip dili yok; uygulama müşterinin kendi sonuçlarına odaklanır (23 Kasım kararları)
+                     Mobil ekran tasarımından önce taste-skill okunur (github.com/Leonxlnx/taste-skill,
+                     skills/taste-skill/SKILL.md + references/copy-tells.md): "yapay zekâ yapmış gibi" görünmesin (23 Kasım)
 functions/api/       Cloudflare Pages Functions (check, report, paddle, mcp, v1 API…)
 scripts/             İşçi, testler, gizli bilgi taraması, smoke testleri, geo-autopilot
 e2e/                 Playwright mobil uçtan uca testler
