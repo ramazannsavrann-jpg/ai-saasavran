@@ -101,7 +101,8 @@ test("Mobil: kayıt → işletme kurulumu → ölçüm → rakip → bildirimler
   const vp = page.viewportSize();
   await page.setViewportSize({ width: 360, height: 760 });
   await noOverflow(page);
-  for (const t of ["Yapılacaklar", "Yaptıklarım", "İçerik", "Site"]) {
+  expect(await page.getByRole("tablist").evaluate((el) => el.scrollWidth <= el.clientWidth + 1), "sekmeler 360 px'te sığmalı").toBeTruthy();
+  for (const t of ["Yapılacak", "Yapılan", "İçerik", "Site"]) {
     const ok = await page.getByRole("tab", { name: t }).evaluate((el) => el.scrollWidth <= el.clientWidth + 1);
     expect(ok, `${t} sekmesi 360 px'te sığmalı`).toBeTruthy();
   }
@@ -122,7 +123,7 @@ test("Mobil: kayıt → işletme kurulumu → ölçüm → rakip → bildirimler
     await page.locator("article.card input[type=checkbox]").first().check();
     await expect(page.getByText(/görevden 1 tanesi bitti/)).toBeVisible();
   } else {
-    await page.getByRole("tab", { name: "Yaptıklarım" }).click();
+    await page.getByRole("tab", { name: "Yapılan" }).click();
   }
   await page.getByRole("button", { name: "Yaptığım bir işi ekle" }).click();
   await page.getByLabel("Yaptığınız iş").fill("Menüye fiyat ekledik");

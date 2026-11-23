@@ -17,8 +17,8 @@ import { useSelectedBrand } from "./Home";
 const localDay = () => { const d = new Date(); return new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 10); };
 
 const TABS = [
-  { id: "yapilacak", tr: "Yapılacaklar", en: "To do" },
-  { id: "yaptiklarim", tr: "Yaptıklarım", en: "Done" },
+  { id: "yapilacak", tr: "Yapılacak", en: "To do" },
+  { id: "yaptiklarim", tr: "Yapılan", en: "Done" },
   { id: "icerik", tr: "İçerik", en: "Content" },
   { id: "site", tr: "Site", en: "Website" },
 ] as const;

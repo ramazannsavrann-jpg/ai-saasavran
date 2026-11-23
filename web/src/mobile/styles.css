@@ -85,9 +85,9 @@ button.row, a.row { cursor: pointer; }
 .avatar { width: 88px; height: 88px; border-radius: 50%; background: var(--tint); color: var(--on-tint); display: flex; align-items: center; justify-content: center; font-family: var(--num); font-size: 32px; font-weight: 700; }
 
 /* Üst sekmeler: alt çizgili, eşit, kaydırınca sabit */
-.tabs { position: sticky; top: calc(-1 * (max(env(safe-area-inset-top), var(--safe-area-inset-top, 0px)) + 16px)); z-index: 2; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); background: var(--bg); margin: 0 -16px; padding: 0 8px; border-bottom: 1px solid var(--line); }
-.tabs button { min-height: 48px; border: 0; background: none; color: var(--muted); font-weight: 600; font-size: 14px; border-bottom: 3px solid transparent; padding: 0 2px; white-space: nowrap; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
-@media (max-width: 380px) { .tabs button { font-size: 13px; } }
+.tabs { position: sticky; top: calc(-1 * (max(env(safe-area-inset-top), var(--safe-area-inset-top, 0px)) + 16px)); z-index: 2; display: flex; gap: 4px; background: var(--bg); margin: 0 -16px; padding: 0 8px; border-bottom: 1px solid var(--line); }
+.tabs button { min-height: 48px; border: 0; background: none; color: var(--muted); font-weight: 600; font-size: 14px; border-bottom: 3px solid transparent; padding: 0 6px; white-space: nowrap; flex: 1 1 auto; }
+@media (max-width: 380px) { .tabs button { font-size: 13px; padding: 0 2px; } }
 .tabs button[aria-selected="true"] { color: var(--accent); border-bottom-color: var(--accent); }
 
 /* Çubuk grafik */
