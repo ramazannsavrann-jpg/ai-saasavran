@@ -1,4 +1,5 @@
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
+import { API_BASE } from "./env";
 import { L, isEn } from "./i18n";
 
 export interface RuntimeConfig { supabaseUrl: string; supabaseAnonKey: string; environment: string; paddle?: unknown }
@@ -8,7 +9,7 @@ let config: RuntimeConfig | null = null;
 
 /** Yapılandırma derleme anında değil, çalışma anında /config.json'dan okunur. */
 export async function initSupabase(): Promise<RuntimeConfig> {
-  const res = await fetch("/config.json", { cache: "no-store" });
+  const res = await fetch(`${API_BASE}/config.json`, { cache: "no-store" });
   config = (await res.json()) as RuntimeConfig;
   if (!config.supabaseUrl || !config.supabaseAnonKey) throw new Error("not_configured");
   client = createClient(config.supabaseUrl, config.supabaseAnonKey, {

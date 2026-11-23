@@ -1,5 +1,6 @@
 // Paddle ödeme penceresi ve abonelik yönetimi. Yalnız herkese açık istemci anahtarı kullanılır.
 import { runtimeConfig, sb } from "./supabase";
+import { API_BASE } from "./env";
 import { isEn } from "./i18n";
 
 export type PaidPlan = "starter" | "altin" | "pro" | "agency";
@@ -58,7 +59,7 @@ export async function openCheckout(plan: PaidPlan, workspaceId: string, email: s
 
 export async function openPortal(workspaceId: string): Promise<void> {
   const { data } = await sb().auth.getSession();
-  const res = await fetch("/api/paddle/portal", {
+  const res = await fetch(`${API_BASE}/api/paddle/portal`, {
     method: "POST", headers: { "content-type": "application/json", Authorization: `Bearer ${data.session?.access_token ?? ""}` },
     body: JSON.stringify({ workspace_id: workspaceId }),
   });

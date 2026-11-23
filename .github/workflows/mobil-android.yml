@@ -1,0 +1,67 @@
+name: Mobil uygulama (Android)
+# Capacitor uygulaması: ekranlar telefonun içinde (web/src/mobile), veriler aisaasavran.com + Supabase.
+# Çıktı: Google Play için .aab ve telefona doğrudan kurulabilen .apk (GitHub sürümü olarak yayınlanır).
+on:
+  push:
+    branches: [main]
+    paths: ["web/src/mobile/**", "web/src/lib/**", "web/android/**", "web/capacitor.config.json", "web/vite.mobile.config.ts", "web/mobile.html", "scripts/android/**", ".github/workflows/mobil-android.yml"]
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: mobil-android
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+      - run: npm ci
+      - run: npm ci --prefix web
+      - name: Ekranları derle ve Android projesine kopyala
+        working-directory: web
+        run: |
+          npm run build:mobile
+          npx cap sync android
+      - name: Sürüm numarası
+        working-directory: web/android/app
+        run: |
+          sed -i "s/versionCode [0-9]*/versionCode ${{ github.run_number }}/; s/versionName \"[^\"]*\"/versionName \"1.0.${{ github.run_number }}\"/" build.gradle
+          grep -n "versionCode\|versionName" build.gradle
+      - name: İmza anahtarı (gizli depodan)
+        id: key
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: node scripts/android/keystore.mjs "$RUNNER_TEMP/upload.keystore" "$RUNNER_TEMP/signing.env"
+      - name: Derle ve imzala (.aab + .apk)
+        working-directory: web/android
+        run: |
+          set -a; . "$RUNNER_TEMP/signing.env"; set +a
+          chmod +x gradlew
+          ./gradlew --no-daemon bundleRelease assembleRelease \
+            -Pandroid.injected.signing.store.file="$RUNNER_TEMP/upload.keystore" \
+            -Pandroid.injected.signing.store.password="$KS_PASS" \
+            -Pandroid.injected.signing.key.alias="$KEY_ALIAS" \
+            -Pandroid.injected.signing.key.password="$KEY_PASS"
+          mkdir -p "$RUNNER_TEMP/out"
+          cp app/build/outputs/bundle/release/*.aab "$RUNNER_TEMP/out/AI-SaaSavran-${{ github.run_number }}.aab"
+          cp app/build/outputs/apk/release/*.apk "$RUNNER_TEMP/out/AI-SaaSavran-${{ github.run_number }}.apk"
+          rm -f "$RUNNER_TEMP/upload.keystore" "$RUNNER_TEMP/signing.env"
+      - name: Sürüm yayınla (telefondan indirilebilir)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "mobil-android-${{ github.run_number }}" "$RUNNER_TEMP"/out/* \
+            --title "Mobil uygulama (Android) 1.0.${{ github.run_number }}" \
+            --notes "Telefona kurmak için: .apk dosyası. Google Play'e yüklenecek dosya: .aab." --latest=false
+          echo "### Android 1.0.${{ github.run_number }} hazır" >> "$GITHUB_STEP_SUMMARY"

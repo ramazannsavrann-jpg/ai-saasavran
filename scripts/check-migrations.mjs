@@ -375,4 +375,16 @@ console.log("ok tanımsız paket atanamıyor");
   await db.exec(`delete from workspaces where id='${T}'; delete from auth.users where id='${Y}'`);
   console.log("ok 0069: hesap silme — abonelik engeli, ekip devri, tek kişilik alan ve kişisel kayıtlar siliniyor");
 }
+// 0070: marka uyarıları yalnız üyelere
+{
+  const br = (await db.query(`select id from brands where workspace_id=$1 and not is_competitor limit 1`, [A])).rows[0];
+  if (br) {
+    const run = (await db.query(`insert into runs (workspace_id,brand_id,data_origin,max_cost_usd,status,measurement_type) values ($1,$2,'live_api',1,'done','model_knowledge') returning id`, [A, br.id])).rows[0].id;
+    await db.query(`insert into drop_alerts (run_id,brand_id,alerted,detail) values ($1,$2,true,'{"drops":[{"provider":"gemini","lost":1,"lost_items":[{"prompt":"x","instead":"Rakip"}]}]}')`, [run, br.id]);
+    assert.equal((await as(U1, `select count(*)::int n from brand_alerts('${br.id}')`)).rows[0].n, 1, "üye görür");
+    assert.equal((await as(U2, `select count(*)::int n from brand_alerts('${br.id}')`)).rows[0].n, 0, "başka alan göremez");
+    await db.query(`delete from runs where id=$1`, [run]);
+  }
+  console.log("ok 0070: marka uyarıları yalnız üyelere görünüyor" + (br ? "" : " (marka yok, atlandı)"));
+}
 console.log("TÜM DB TESTLERİ GEÇTİ");
