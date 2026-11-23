@@ -16,6 +16,7 @@ export const Icon = {
   chevron: <svg width="18" height="18" viewBox="0 0 24 24" {...P} aria-hidden="true"><path d="M9 6l6 6-6 6" /></svg>,
   down: <svg width="16" height="16" viewBox="0 0 24 24" {...P} aria-hidden="true"><path d="M6 9l6 6 6-6" /></svg>,
   plus: <svg width="20" height="20" viewBox="0 0 24 24" {...P} aria-hidden="true"><path d="M12 5v14M5 12h14" /></svg>,
+  bulb: <svg width="24" height="24" viewBox="0 0 24 24" {...P} aria-hidden="true"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z" /></svg>,
   more: <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="2" /><circle cx="12" cy="12" r="2" /><circle cx="19" cy="12" r="2" /></svg>,
 };
 
@@ -25,6 +26,7 @@ export function TabBar() {
     <nav className="tabbar" aria-label={L("Alt menü", "Bottom menu")}>
       <NavLink to="/ana" className={cls}>{Icon.home}{L("Ana sayfa", "Home")}</NavLink>
       <NavLink to="/rapor" className={cls}>{Icon.bars}{L("Rapor", "Report")}</NavLink>
+      <NavLink to="/oneriler" className={cls}>{Icon.bulb}{L("Öneriler", "Tips")}</NavLink>
       <NavLink to="/bildirimler" className={cls}>{Icon.bell}{L("Bildirimler", "Alerts")}</NavLink>
       <NavLink to="/hesap" className={cls}>{Icon.user}{L("Hesap", "Account")}</NavLink>
     </nav>

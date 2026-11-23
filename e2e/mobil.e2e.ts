@@ -84,6 +84,31 @@ test("Mobil: kayıt → işletme kurulumu → ölçüm → rakip → bildirimler
   await expect(page.getByText("Rakip Kebap").first()).toBeVisible();
   await noOverflow(page); await shot(page, "05-rakipler");
 
+  const nav = page.getByRole("navigation", { name: "Alt menü" });
+  await nav.getByRole("link", { name: "Öneriler" }).click();
+  await expect(page.getByRole("heading", { name: "Öneriler" })).toBeVisible();
+  await expect(page.locator("article.card").first()).toBeVisible();
+  await noOverflow(page); await shot(page, "05c-oneriler");
+  const step = page.getByRole("button", { name: /Adım adım yap/ }).first();
+  if (await step.count()) {
+    await step.click();
+    await expect(page.getByText(/görevden 0 tanesi bitti/)).toBeVisible();
+    await page.locator("article.card input[type=checkbox]").first().check();
+    await expect(page.getByText(/görevden 1 tanesi bitti/)).toBeVisible();
+  } else {
+    await page.getByRole("tab", { name: "Yaptıklarım" }).click();
+  }
+  await page.getByRole("button", { name: "Yaptığım bir işi ekle" }).click();
+  await page.getByLabel("Yaptığınız iş").fill("Menüye fiyat ekledik");
+  await page.getByRole("button", { name: "Kaydet" }).click();
+  await expect(page.getByText("Menüye fiyat ekledik")).toBeVisible();
+  await expect(page.getByText(/öncesinde ölçüm yok|sonraki ölçüm bekleniyor/).first()).toBeVisible();
+  await noOverflow(page); await shot(page, "05d-yaptiklarim");
+  await page.getByRole("tab", { name: "İçerik" }).click();
+  await expect(page.getByText("İçerik planları ücretli paketlerde açık.")).toBeVisible();
+  await page.getByRole("tab", { name: "Site" }).click();
+  await noOverflow(page); await shot(page, "05e-site");
+
   await page.getByRole("navigation", { name: "Alt menü" }).getByRole("link", { name: "Bildirimler" }).click();
   await expect(page.getByText("Ölçümleriniz")).toBeVisible();
   await expect(page.getByText("Ölçüm bitti", { exact: true })).toBeVisible();

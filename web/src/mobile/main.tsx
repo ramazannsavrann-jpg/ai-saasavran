@@ -13,6 +13,7 @@ import { initSupabase } from "../lib/supabase";
 import { AppProvider, useApp } from "../lib/app";
 import { L } from "../lib/i18n";
 import { Spinner, TabBar } from "./ui";
+import { Advice } from "./screens/Advice";
 import { Forgot, Login, Signup, Welcome } from "./screens/Auth";
 import { BrandForm, Setup } from "./screens/Setup";
 import { Home } from "./screens/Home";
@@ -51,6 +52,7 @@ function App() {
         <Route path="/ana" element={<Home />} />
         <Route path="/rapor" element={<Report />} />
         <Route path="/rakipler" element={<Navigate to="/rapor?b=rakipler" replace />} />
+        <Route path="/oneriler" element={<Advice />} />
         <Route path="/bildirimler" element={<Activity />} />
         <Route path="/hesap" element={<Account />} />
       </Route>
