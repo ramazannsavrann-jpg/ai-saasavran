@@ -390,6 +390,25 @@ test("Hesap silme: kullanıcı Hesap sayfasından hesabını siler, tekrar giri�
   await expect(page.getByRole("alert")).toBeVisible();
 });
 
+test("Mağaza uygulaması (Android): yükseltme/satın alma düğmeleri görünmez, paket bilgisi görünür", async ({ page }) => {
+  await page.goto("/kayit");
+  await page.getByLabel("E-posta").fill("uygulama@ornek.test");
+  await page.getByLabel("Şifre").fill("Guclu-Sifre-2026");
+  await page.getByRole("checkbox").check();
+  await page.getByRole("button", { name: "Hesap oluştur" }).click();
+  await expect(page.getByRole("heading", { name: "Çalışma alanı oluşturun" })).toBeVisible();
+  await page.getByLabel("İşletme adı").fill("Uygulama Test");
+  await page.getByRole("button", { name: "Çalışma alanını oluştur" }).click();
+  await expect(page.getByRole("heading", { name: "Çalışma alanı oluşturun" })).toBeHidden();
+  await page.goto("/hesap?kaynak=android");
+  await expect(page.getByRole("heading", { name: "Paket", exact: true })).toBeVisible();
+  await expect(page.getByRole("navigation", { name: "Alt menü" }).getByRole("link", { name: "Yükselt" })).toBeHidden();
+  await expect(page.getByRole("heading", { name: "Paketler" })).toHaveCount(0);
+  await page.goto("/panel"); // bayrak kalıcı: sonraki açılışlarda da gizli
+  await expect(page.getByRole("navigation", { name: "Alt menü" }).getByRole("link", { name: "Yükselt" })).toBeHidden();
+  await shot(page, "14-android-uygulama");
+});
+
 test("Demo Lab: simülasyon açıkça etiketli ve müşteriden ayrı", async ({ page }) => {
   // Platform yöneticisi + demo çalışma alanı (yalnızca sunucu tarafında oluşturulabilir)
   await page.goto("/kayit");

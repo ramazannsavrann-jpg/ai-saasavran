@@ -580,3 +580,6 @@ pre.code { white-space: pre-wrap; word-break: break-all; padding: 8px 10px; back
 .client-group + .client-group { margin-top: 16px; }
 .client-head { font-size: 1rem; margin: 12px 0 6px; display: flex; flex-wrap: wrap; gap: 6px; align-items: baseline; }
 .client-head .muted { font-weight: 400; font-size: .85rem; }
+
+/* Mağaza uygulaması (Google Play / App Store): satın alma ve yükseltme yönlendirmeleri gösterilmez (mağaza ödeme kuralları) */
+.magaza .nav-upgrade, .magaza .nav-upgrade-b, .magaza a[href*="hesap#paket"], .magaza .store-hide { display: none !important; }

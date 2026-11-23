@@ -3,6 +3,7 @@ import { useSearchParams } from "react-router-dom";
 import { useApp } from "../lib/app";
 import { Button, ErrorBox } from "./ui";
 import { L, isEn } from "../lib/i18n";
+import { isStoreApp } from "../lib/platform";
 import { PLAN_INFO, billingSummary, openCheckout, openPortal, paymentsEnabled, planName, purchasablePlans, PLAN_DATIVE, RECOMMENDED_PLAN, type BillingSummary, type PaidPlan } from "../lib/billing";
 
 const FEATURES: Record<PaidPlan, () => string> = {
@@ -62,7 +63,7 @@ export function BillingPanel() {
   // Fiyat sayfasından gelen ?plan=… ile pencereyi bir kez otomatik aç
   useEffect(() => {
     const p = params.get("plan") as PaidPlan | null;
-    if (!p || !(p in PLAN_INFO) || autoOpened.current || !current || !customerWs || !sum || subscribed || !paymentsEnabled()) return;
+    if (!p || !(p in PLAN_INFO) || isStoreApp() || autoOpened.current || !current || !customerWs || !sum || subscribed || !paymentsEnabled()) return;
     autoOpened.current = true;
     params.delete("plan"); setParams(params, { replace: true });
     upgrade(p);
@@ -72,6 +73,15 @@ export function BillingPanel() {
   useEffect(() => { if (location.hash === "#paket") setTimeout(() => document.getElementById("paket")?.scrollIntoView({ behavior: "smooth" }), 300); }, []);
 
   if (!current) return null;
+  if (isStoreApp()) {
+    // Mağaza uygulaması: yalnız mevcut paket bilgisi; satın alma/yükseltme yok
+    return (
+      <section className="panel stack" id="paket">
+        <h2>{L("Paket", "Plan")}</h2>
+        <p className="muted">{L("Çalışma alanı", "Workspace")}: <strong>{current.name}</strong>. {L("Şu anki paket", "Current plan")}: <strong>{planName(sum?.plan ?? current.plan)}</strong>.</p>
+      </section>
+    );
+  }
   if (!customerWs) {
     // İç test / demo alanı: paketleri göster, satın alma işletme alanında
     return (

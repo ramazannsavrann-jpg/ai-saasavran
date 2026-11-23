@@ -8,6 +8,8 @@ import "@fontsource/bricolage-grotesque/600.css";
 import "@fontsource/bricolage-grotesque/700.css";
 import "./styles.css";
 import { initSupabase } from "./lib/supabase";
+import { detectStoreApp } from "./lib/platform";
+detectStoreApp();
 import { AppProvider, useApp } from "./lib/app";
 import { Shell } from "./components/Shell";
 import { Loading } from "./components/ui";

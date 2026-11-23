@@ -1,0 +1,75 @@
+name: Android uygulaması (Google Play)
+# Google Play'e yüklenecek .aab ve telefona doğrudan kurulabilecek .apk üretir.
+# Uygulama sitenin kendisini açar (TWA): site güncellenince uygulama da anında güncellenir, yeniden kurmak gerekmez.
+# Mağazaya yeni paket yalnız uygulama ayarı (ikon, ad, android/ klasörü) değişince gerekir.
+on:
+  push:
+    branches: [main]
+    paths: ["android/**", "scripts/android/**", ".github/workflows/android.yml"]
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: android
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+      - run: npm ci
+      - run: npm i --no-save @bubblewrap/core@1.27.0
+      - name: Sitenin yeni sürümü yayında mı? (manifest ve ikonlar, en çok 15 dk bekler)
+        run: |
+          for i in $(seq 1 30); do
+            if curl -sf https://aisaasavran.com/manifest.webmanifest >/dev/null && curl -sf https://aisaasavran.com/icons/maskable-512.png >/dev/null; then echo "hazır"; exit 0; fi
+            sleep 30
+          done
+          echo "Site manifesti yayında değil"; exit 1
+      - name: Android projesini üret
+        env:
+          VERSION_CODE: ${{ github.run_number }}
+          VERSION_NAME: 1.0.${{ github.run_number }}
+        run: node scripts/android/generate.mjs android/build
+      - name: İmza anahtarı (gizli depodan)
+        id: key
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: node scripts/android/keystore.mjs "$RUNNER_TEMP/upload.keystore" "$RUNNER_TEMP/signing.env"
+      - name: Derle ve imzala (.aab + .apk)
+        working-directory: android/build
+        run: |
+          set -a; . "$RUNNER_TEMP/signing.env"; set +a
+          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses >/dev/null || true
+          chmod +x gradlew
+          ./gradlew --no-daemon bundleRelease assembleRelease \
+            -Pandroid.injected.signing.store.file="$RUNNER_TEMP/upload.keystore" \
+            -Pandroid.injected.signing.store.password="$KS_PASS" \
+            -Pandroid.injected.signing.key.alias="$KEY_ALIAS" \
+            -Pandroid.injected.signing.key.password="$KEY_PASS"
+          mkdir -p "$RUNNER_TEMP/out"
+          cp app/build/outputs/bundle/release/*.aab "$RUNNER_TEMP/out/AI-SaaSavran-${{ github.run_number }}.aab"
+          cp app/build/outputs/apk/release/*.apk "$RUNNER_TEMP/out/AI-SaaSavran-${{ github.run_number }}.apk"
+          rm -f "$RUNNER_TEMP/upload.keystore" "$RUNNER_TEMP/signing.env"
+      - name: Sürüm yayınla (telefondan indirilebilir)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "android-${{ github.run_number }}" "$RUNNER_TEMP"/out/* \
+            --title "Android uygulaması 1.0.${{ github.run_number }}" \
+            --notes "Google Play'e yüklenecek dosya: .aab · Telefona doğrudan kurmak için: .apk
+          Upload anahtarı SHA-256: ${{ steps.key.outputs.sha256 }}" --latest=false
+          {
+            echo "### Android uygulaması 1.0.${{ github.run_number }}"
+            echo "Upload anahtarı SHA-256: \`${{ steps.key.outputs.sha256 }}\`"
+          } >> "$GITHUB_STEP_SUMMARY"

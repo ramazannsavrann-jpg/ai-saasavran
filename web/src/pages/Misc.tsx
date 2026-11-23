@@ -10,6 +10,7 @@ import { BillingPanel } from "../components/Billing";
 import { EmailPrefs } from "../components/EmailPrefs";
 import { TeamPanel } from "../components/Team";
 import { ApiPanel } from "../components/ApiPanel";
+import { isStoreApp } from "../lib/platform";
 
 type Level = "works" | "partial" | "missing";
 const STATUS: { area: string; items: [Level, string, string][] }[] = [
@@ -148,7 +149,9 @@ function DeleteAccount() {
     if (error) { setBusy(false); setErr(friendlyError(error)); return; }
     if (data === "active_subscription") {
       setBusy(false);
-      setErr(L("Aktif bir aboneliğiniz var. Önce yukarıdaki Ödeme bölümünden aboneliği iptal edin, sonra hesabınızı silebilirsiniz.", "You have an active subscription. Cancel it first in the Billing section above, then you can delete your account."));
+      setErr(isStoreApp()
+        ? L("Aktif bir aboneliğiniz var. Aboneliği satın aldığınız aisaasavran.com Hesap sayfasından iptal ettikten sonra hesabınızı silebilirsiniz.", "You have an active subscription. Cancel it on the aisaasavran.com Account page where you bought it, then you can delete your account.")
+        : L("Aktif bir aboneliğiniz var. Önce yukarıdaki Ödeme bölümünden aboneliği iptal edin, sonra hesabınızı silebilirsiniz.", "You have an active subscription. Cancel it first in the Billing section above, then you can delete your account."));
       return;
     }
     if (data !== "deleted") { setBusy(false); setErr(L("Hesap silinemedi. Lütfen info@aisaasavran.com adresine yazın.", "The account could not be deleted. Please email info@aisaasavran.com.")); return; }
