@@ -60,7 +60,10 @@ test("Mobil: kayıt → işletme kurulumu → ölçüm → rakip → bildirimler
   await expect(page.getByText("Yapay zekâlar sizi önerdi", { exact: true })).toBeVisible({ timeout: 20_000 });
   await expect(page.getByText(/\d+ cevabın \d+'\p{L}+ önerildiniz/u)).toBeVisible();
   await expect(page.getByRole("button", { name: "Şimdi ölç" })).toBeVisible();
+  await expect(page.getByText("Sonucunuzu güçlendirin")).toBeVisible();
+  await page.mouse.wheel(0, 900);
   await noOverflow(page); await shot(page, "04-ana-sayfa-sonuc");
+  await page.mouse.wheel(0, -2000);
 
   await page.getByRole("navigation", { name: "Alt menü" }).getByRole("link", { name: "Rapor" }).click();
   await expect(page.getByText(/Son ölçümde yapay zekâ cevaplarının %\d+'\p{L}+ önerildiniz/u)).toBeVisible();

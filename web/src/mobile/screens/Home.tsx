@@ -12,6 +12,45 @@ import { Err, Icon, Sheet, Spinner, greeting, haptic } from "../ui";
 
 const KEY = "mobil-marka";
 const PRELIM = 20; // bundan az cevap: ön sonuç
+/** Başlangıç adımları: ilk ölçümden sonra sonucu güçlendiren 3 iş. Durum gerçek veriden okunur; bitince ya da kapatılınca görünmez. */
+function StartSteps({ brand, doneRuns }: { brand: Brand; doneRuns: number }) {
+  const nav = useNavigate();
+  const prompts = useLoad(() => api.prompts(brand.id), [brand.id]);
+  const rivals = useLoad(() => api.competitors(brand.id), [brand.id]);
+  const key = `mobil-rehber-${brand.id}`;
+  const [off, setOff] = useState(() => { try { return localStorage.getItem(key) === "1"; } catch { return false; } });
+  if (off || doneRuns >= 4 || !prompts.data || !rivals.data || brand.data_origin === "simulated") return null;
+  const active = prompts.data.filter((p) => p.active).length;
+  const steps = [
+    { done: active >= 10, to: "/rapor?b=sorular", t: L(`Soru sayısını 10'a çıkarın (şu an ${active})`, `Grow to 10 questions (now ${active})`), d: L("Daha çok soru, daha güvenilir sonuç.", "More questions, a more reliable result.") },
+    { done: rivals.data.length > 0, to: "/rapor?b=rakipler", t: L("Rakiplerinizi ekleyin", "Add your competitors"), d: L("Kimin sizin yerinize önerildiğini görün.", "See who gets recommended instead of you.") },
+    { done: !!brand.fact_card, to: "/marka-duzenle", t: L("Doğru bilgilerinizi yazın", "Write your correct facts"), d: L("Adres, saatler, fiyatlar: yapay zekâların söyledikleri bunlarla karşılaştırılır.", "Address, hours, prices: what the AIs say is checked against them.") },
+  ];
+  const left = steps.filter((x) => !x.done);
+  if (!left.length) return null;
+  const close = () => { try { localStorage.setItem(key, "1"); } catch { /* yok say */ } setOff(true); };
+  return (
+    <>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
+        <h2 className="section-title">{L("Sonucunuzu güçlendirin", "Strengthen your result")}</h2>
+        <button className="btn btn-text" style={{ minHeight: 40, padding: "0 4px", color: "var(--muted)" }} onClick={close}>{L("Gizle", "Hide")}</button>
+      </div>
+      <div className="list">
+        {steps.map((x) => (
+          <button key={x.to} className="row" disabled={x.done} onClick={() => nav(x.to)} style={{ alignItems: "center" }}>
+            <span className={`stepmark${x.done ? " done" : ""}`} aria-hidden="true">{x.done ? "✓" : ""}</span>
+            <span style={{ display: "flex", flexDirection: "column", gap: 2, textAlign: "left", flex: 1, minWidth: 0 }}>
+              <span style={{ fontWeight: 600, color: x.done ? "var(--muted)" : "var(--text)", textDecoration: x.done ? "line-through" : "none" }}>{x.t}</span>
+              {!x.done && <span className="muted small">{x.d}</span>}
+            </span>
+            {!x.done && Icon.chevron}
+          </button>
+        ))}
+      </div>
+    </>
+  );
+}
+
 /** Kendi özelliklerine giden kısayollar (ana sayfa ve rapor özetinde). */
 export function MoreLinks() {
   const nav = useNavigate();
@@ -164,9 +203,11 @@ export function Home() {
                 </button>
               ))}
             </div>
-          ) : <p className="muted" style={{ margin: 0 }}>{L("Öneriler birkaç ölçümden sonra burada çıkar.", "Suggestions appear here after a few measurements.")}</p>}
+          ) : <button className="btn btn-ghost" onClick={() => nav("/oneriler")}>{L("Önerileri gör", "See suggestions")}</button>}
         </>
       )}
+
+      {b && runList.some((r) => r.status === "done") && <StartSteps brand={b} doneRuns={runList.filter((r) => r.status === "done").length} />}
 
       <h2 className="section-title">{L("İşletmeniz", "Your business")}</h2>
       <MoreLinks />

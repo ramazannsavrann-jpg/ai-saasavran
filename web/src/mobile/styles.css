@@ -125,3 +125,6 @@ button.row:active, a.row:active { background: var(--surface2); }
 .senti { display: flex; height: 12px; border-radius: 6px; overflow: hidden; gap: 2px; }
 .senti i { min-width: 0; }
 .senti .pos { background: var(--accent); } .senti .mix { background: var(--warn); opacity: .6; } .senti .neu { background: var(--line2); } .senti .neg { background: var(--danger); }
+.stepmark { width: 24px; height: 24px; border-radius: 12px; border: 2px solid var(--line2); flex-shrink: 0; display: grid; place-items: center; font-size: 13px; font-weight: 700; }
+.stepmark.done { background: var(--brand); border-color: var(--brand); color: #fff; }
+button.row:disabled { opacity: 1; }
