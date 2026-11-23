@@ -38,7 +38,7 @@ export function Account() {
     const { data, error } = await sb().rpc("delete_my_account");
     setBusy(false);
     if (error) { setErr(friendlyError(error)); return; }
-    if (data === "active_subscription") { setErr(L("Aktif bir aboneliğiniz var. Önce aboneliği iptal edin, sonra hesabınızı silebilirsiniz.", "You have an active subscription. Cancel it first, then delete your account.")); return; }
+    if (data === "active_subscription") { setErr(L("Aktif bir aboneliğiniz var. Önce aboneliği iptal edin, sonra hesabınızı silebilirsiniz. İptal için info@aisaasavran.com adresine yazın.", "You have an active subscription. Cancel it first, then delete your account. To cancel, email info@aisaasavran.com.")); return; }
     if (data !== "deleted") { setErr(L("Hesap silinemedi. Lütfen info@aisaasavran.com adresine yazın.", "Could not delete the account. Please email info@aisaasavran.com.")); return; }
     await sb().auth.signOut().catch(() => undefined);
     try { localStorage.clear(); } catch { /* yok say */ }

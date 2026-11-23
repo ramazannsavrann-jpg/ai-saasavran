@@ -3,7 +3,7 @@
 import { useLoad } from "../../lib/app";
 import { api } from "../../lib/data";
 import { sb } from "../../lib/supabase";
-import { formatDateTime } from "../../lib/report";
+import { formatDateTime, providerLabel } from "../../lib/report";
 import { L } from "../../lib/i18n";
 import { Head, Spinner } from "../ui";
 import { useSelectedBrand } from "./Home";
@@ -33,7 +33,7 @@ export function Activity() {
       {list.length === 0 ? <p className="muted" style={{ margin: 0 }}>{L("Şu an uyarı yok. Önerilme oranınız belirgin düşerse veya bir rakip sizin yerinize önerilmeye başlarsa burada görünür.", "No alerts. If your recommendation rate drops clearly or a competitor starts being recommended instead of you, it shows here.")}</p> : list.map((a) => (
         (a.detail?.drops ?? []).map((d, i) => (
           <article key={`${a.run_id}-${i}`} className="card" style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-            <span style={{ color: "var(--warn)", fontWeight: 700, fontSize: 13 }}>{L("ÖNERİLME DÜŞTÜ", "RECOMMENDATIONS DROPPED")} · {d.provider}</span>
+            <span style={{ color: "var(--warn)", fontWeight: 700, fontSize: 13 }}>{L("ÖNERİLME DÜŞTÜ", "RECOMMENDATIONS DROPPED")} · {providerLabel(d.provider)}</span>
             <span style={{ fontWeight: 600 }}>{L(`%${pctOf(d.prev)} → %${pctOf(d.now)}`, `${pctOf(d.prev)}% → ${pctOf(d.now)}%`)}</span>
             {(d.lost_items ?? []).map((x, j) => (
               <span key={j} className="muted small" style={{ lineHeight: 1.4 }}>

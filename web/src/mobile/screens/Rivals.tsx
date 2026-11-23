@@ -45,7 +45,7 @@ export function Rivals() {
   return (
     <div className="screen">
       <Head title={L("Rakipler", "Competitors")} />
-      <p className="muted" style={{ margin: 0, fontSize: 14 }}>{last ? L("Son ölçümde yapay zekâ cevaplarında kim ne sıklıkla önerildi?", "How often was each brand recommended in the last measurement?") : L("İlk ölçümden sonra sıralama burada görünür.", "The ranking appears here after the first measurement.")}</p>
+      <p className="muted" style={{ margin: 0, fontSize: 14 }}>{last ? L("Son ölçümde yapay zekâ cevaplarında kim ne sıklıkla önerildi?", "How often was each brand recommended in AI answers in the last measurement?") : L("İlk ölçümden sonra sıralama burada görünür.", "The ranking appears here after the first measurement.")}</p>
       {ranking.length > 0 && (
         <div className="list">
           {ranking.map((r, i) => (
@@ -70,7 +70,7 @@ export function Rivals() {
           {list.map((c) => (
             <div key={c.id} className="row">
               <span style={{ fontWeight: 600 }}>{c.name}</span>
-              <button className="btn-danger" style={{ background: "none", border: 0, minHeight: 44 }} onClick={() => remove(c.id, c.name)}>{L("Çıkar", "Remove")}</button>
+              <button className="btn-danger" style={{ background: "none", border: 0, minHeight: 44 }} aria-label={L(`${c.name} rakibini çıkar`, `Remove ${c.name}`)} onClick={() => remove(c.id, c.name)}>{L("Çıkar", "Remove")}</button>
             </div>
           ))}
         </div>

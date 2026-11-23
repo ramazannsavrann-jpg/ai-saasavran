@@ -94,13 +94,13 @@ export function Home() {
         {rate === null ? (
           <>
             <span className="sub">{L("Henüz ölçüm yok", "No measurement yet")}</span>
-            <p style={{ margin: 0, fontSize: 17, lineHeight: 1.4 }}>{L("İlk ölçümü başlatın; yapay zekâların markanızı önerip önermediğini birkaç dakika içinde görün.", "Start the first measurement and see within minutes whether AI assistants recommend your brand.")}</p>
+            <p style={{ margin: 0, fontSize: 17, lineHeight: 1.4 }}>{L("İlk ölçümü başlatın; yapay zekâların markanızı önerip önermediğini görün. Sonuç hazır olunca bu ekran güncellenir.", "Start the first measurement to see whether AIs recommend your brand. This screen updates when results are ready.")}</p>
           </>
         ) : (
           <>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
               <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-                <span className="sub">{L("Yapay zekâ cevaplarında önerilme oranı", "Recommended in AI answers")}</span>
+                <span className="sub">{L("Yapay zekâ cevaplarında önerilme oranı", "Recommendation rate in AI answers")}</span>
                 <span className="big">%{rate}</span>
               </div>
               {delta !== null && (
@@ -120,7 +120,7 @@ export function Home() {
             )}
             {last && lowSample(last.recommend) && <span style={{ fontSize: 12, color: "#D3E7E0" }}>{L("Az sayıda cevaba dayanıyor; daha fazla soru ve ölçümle netleşir.", "Based on few answers; becomes clearer with more questions and measurements.")}</span>}
             <div style={{ display: "flex", gap: 8 }}>
-              <button className="act" onClick={() => nav("/rakipler")}>{L("Rakipleri gör", "Competitors")}</button>
+              <button className="act" onClick={() => nav("/rakipler")}>{L("Rakipleri gör", "See competitors")}</button>
               <button className="act" onClick={share} disabled={busy === "share"}>{Icon.share}{L("Paylaş", "Share")}</button>
             </div>
           </>

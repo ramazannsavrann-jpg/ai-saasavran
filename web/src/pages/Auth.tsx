@@ -128,7 +128,7 @@ export function Signup() {
     else setSent(true); // e-posta doğrulaması açık ortamlar
   }
   return (
-    <AuthLayout title={L("Hesap oluşturun", "Create your account")} lead={L("Ücretsiz pakette 1 marka, 3 rakip, 15 soru ve ayda 4 ölçümle başlarsınız. Kart bilgisi istenmez.", "The free plan includes 1 brand, 3 competitors, 15 questions and 4 measurements a month. No card required.")}>
+    <AuthLayout title={L("Hesap oluşturun", "Create your account")} lead={L("Ücretsiz pakette 1 marka, 3 rakip, 15 soru ve ayda 1 ölçümle başlarsınız. Kart bilgisi istenmez.", "The free plan includes 1 brand, 3 competitors, 15 questions and 1 measurement a month. No card required.")}>
       {sent ? <p className="success-box">{t("auth.checkEmail")}</p> : (
         <form onSubmit={submit} noValidate>
           <h2>{t("auth.signup")}</h2>

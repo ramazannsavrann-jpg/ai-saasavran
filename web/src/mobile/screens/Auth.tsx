@@ -31,7 +31,7 @@ export function Welcome() {
       ) : (
         <>
           <h2 style={{ fontSize: 26, lineHeight: 1.2, marginTop: 8 }}>{L("Markanız yapay zekâlarda öneriliyor mu?", "Is your brand recommended by AIs?")}</h2>
-          <p className="muted" style={{ margin: 0, lineHeight: 1.45 }}>{L("ChatGPT, Gemini, Claude ve Perplexity cevaplarında markanızın yerini ölçün, rakiplerinizi takip edin.", "Measure where your brand stands in ChatGPT, Gemini, Claude and Perplexity answers and track your competitors.")}</p>
+          <p className="muted" style={{ margin: 0, lineHeight: 1.45 }}>{L("Markanızın yapay zekâ cevaplarındaki yerini ölçün, rakiplerinizi takip edin. Ücretsiz pakette Gemini ile ayda 1 ölçüm.", "Measure where your brand stands in AI answers and track competitors. Free plan: 1 measurement a month with Gemini.")}</p>
           <div style={{ marginTop: "auto", width: "100%", display: "flex", flexDirection: "column", gap: 12 }}>
             <Link className="btn btn-primary" to="/kayit">{L("Ücretsiz başla", "Start free")}</Link>
             <Link className="btn btn-ghost" to="/giris">{L("Giriş yap", "Sign in")}</Link>
@@ -113,7 +113,7 @@ export function Signup() {
         <span>{L("Aydınlatma metnini okudum, kullanım koşullarını kabul ediyorum.", "I've read the privacy notice and accept the terms.")} <a href={`${SITE_ORIGIN}/gizlilik`} target="_blank" rel="noreferrer">{L("Gizlilik", "Privacy")}</a> · <a href={`${SITE_ORIGIN}/kosullar`} target="_blank" rel="noreferrer">{L("Koşullar", "Terms")}</a></span>
       </label>
       <Err msg={err} />
-      <button className="btn btn-primary" disabled={busy}>{busy ? L("Hesap açılıyor…", "Creating…") : L("Hesap aç", "Create account")}</button>
+      <button className="btn btn-primary" disabled={busy}>{busy ? L("Hesap açılıyor…", "Creating account…") : L("Hesap aç", "Create account")}</button>
       <p className="muted" style={{ textAlign: "center", margin: "auto 0 0" }}>{L("Hesabınız var mı?", "Have an account?")} <Link to="/giris">{L("Giriş yapın", "Sign in")}</Link></p>
     </form>
   );
