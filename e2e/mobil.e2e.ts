@@ -61,7 +61,7 @@ test("Mobil: kayıt → işletme kurulumu → ölçüm → rakip → bildirimler
   await noOverflow(page); await shot(page, "04-ana-sayfa-sonuc");
 
   await page.getByRole("navigation", { name: "Alt menü" }).getByRole("link", { name: "Rapor" }).click();
-  await expect(page.getByText(/Son ölçümde yapay zekâ cevaplarının %\d+'inde önerildiniz/)).toBeVisible();
+  await expect(page.getByText(/Son ölçümde yapay zekâ cevaplarının %\d+'\p{L}+ önerildiniz/u)).toBeVisible();
   await expect(page.getByText(/Güven puanı \d+\/100/)).toBeVisible();
   await noOverflow(page); await shot(page, "05a-rapor-ozet");
   await page.getByRole("button", { name: "Sorular" }).click();
