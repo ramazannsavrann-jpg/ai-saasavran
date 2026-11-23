@@ -28,7 +28,7 @@ const noOverflow = async (page: import("@playwright/test").Page) =>
 
 test("Mobil: kayıt → işletme kurulumu → ölçüm → rakip → bildirimler → hesap silme", async ({ page }) => {
   await page.goto("/");
-  await expect(page.getByRole("heading", { name: "Markanız ChatGPT'de öneriliyor mu?" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Markanız yapay zekâlarda öneriliyor mu?" })).toBeVisible();
   await noOverflow(page); await shot(page, "01-karsilama");
   await page.getByRole("link", { name: "Ücretsiz başla" }).click();
   await page.getByLabel("E-posta").fill("mobil@ornek.test");

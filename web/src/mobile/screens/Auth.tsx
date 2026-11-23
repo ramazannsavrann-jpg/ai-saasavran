@@ -30,7 +30,7 @@ export function Welcome() {
         </>
       ) : (
         <>
-          <h2 style={{ fontSize: 26, lineHeight: 1.2, marginTop: 8 }}>{L("Markanız ChatGPT'de öneriliyor mu?", "Is your brand recommended by ChatGPT?")}</h2>
+          <h2 style={{ fontSize: 26, lineHeight: 1.2, marginTop: 8 }}>{L("Markanız yapay zekâlarda öneriliyor mu?", "Is your brand recommended by AIs?")}</h2>
           <p className="muted" style={{ margin: 0, lineHeight: 1.45 }}>{L("ChatGPT, Gemini, Claude ve Perplexity cevaplarında markanızın yerini ölçün, rakiplerinizi takip edin.", "Measure where your brand stands in ChatGPT, Gemini, Claude and Perplexity answers and track your competitors.")}</p>
           <div style={{ marginTop: "auto", width: "100%", display: "flex", flexDirection: "column", gap: 12 }}>
             <Link className="btn btn-primary" to="/kayit">{L("Ücretsiz başla", "Start free")}</Link>
