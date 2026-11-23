@@ -352,4 +352,27 @@ console.log("ok tanımsız paket atanamıyor");
   }
   console.log("ok 0067: müşteri adı doğrulanıyor; başka alan yazamıyor" + (br ? "" : " (marka yok, atlandı)"));
 }
+// 0069: hesap silme — abonelik engeli, ekipte sahiplik devri, tek kişilik alan silinir
+{
+  await db.exec(`create table if not exists auth.users (id uuid primary key, email text)`);
+  const X = "aaaaaaaa-0000-0000-0000-0000000000d1", Y = "aaaaaaaa-0000-0000-0000-0000000000d2";
+  const S = "55555555-5555-5555-5555-555555555501", T = "55555555-5555-5555-5555-555555555502", P = "55555555-5555-5555-5555-555555555503";
+  await db.exec(`insert into auth.users values ('${X}','x@ornek.com'), ('${Y}','y@ornek.com');
+    insert into workspaces (id,name,kind) values ('${S}','Tek Kişi','business'), ('${T}','Ekip','agency'), ('${P}','Abone','business');
+    insert into workspace_members values ('${S}','${X}','owner',now()), ('${T}','${X}','owner',now()), ('${T}','${Y}','editor',now()), ('${P}','${X}','owner',now());
+    insert into brands (workspace_id,name) values ('${S}','Silinecek Marka'), ('${T}','Ekip Markası');
+    update workspaces set subscription_status='active' where id='${P}';`);
+  assert.equal((await as(X, "select delete_my_account() r")).rows[0].r, "active_subscription");
+  assert.equal((await db.query(`select count(*)::int n from auth.users where id=$1`, [X])).rows[0].n, 1, "abonelik varken silinmez");
+  await db.exec(`update workspaces set subscription_status='canceled' where id='${P}'`);
+  assert.equal((await as(X, "select delete_my_account() r")).rows[0].r, "deleted");
+  assert.equal((await db.query(`select count(*)::int n from auth.users where id=$1`, [X])).rows[0].n, 0);
+  assert.equal((await db.query(`select count(*)::int n from workspaces where id in ('${S}','${P}')`)).rows[0].n, 0, "tek kişilik alanlar silindi");
+  assert.equal((await db.query(`select count(*)::int n from brands where name='Silinecek Marka'`)).rows[0].n, 0);
+  assert.equal((await db.query(`select role from workspace_members where workspace_id=$1 and user_id=$2`, [T, Y])).rows[0].role, "owner", "ekip alanı devredildi");
+  assert.equal((await db.query(`select count(*)::int n from brands where name='Ekip Markası'`)).rows[0].n, 1);
+  assert.equal((await db.query(`select count(*)::int n from workspace_members where user_id=$1`, [X])).rows[0].n, 0);
+  await db.exec(`delete from workspaces where id='${T}'; delete from auth.users where id='${Y}'`);
+  console.log("ok 0069: hesap silme — abonelik engeli, ekip devri, tek kişilik alan ve kişisel kayıtlar siliniyor");
+}
 console.log("TÜM DB TESTLERİ GEÇTİ");

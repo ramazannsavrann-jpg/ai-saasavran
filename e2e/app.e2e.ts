@@ -366,6 +366,30 @@ test("İzolasyon arayüzde: ikinci müşteri ilk müşterinin markasını görem
   await expect(page.getByText("Marka bulunamadı veya bu markayı görme yetkiniz yok")).toBeVisible();
 });
 
+test("Hesap silme: kullanıcı Hesap sayfasından hesabını siler, tekrar giriş yapamaz", async ({ page }) => {
+  await page.goto("/kayit");
+  await page.getByLabel("E-posta").fill("silinecek@ornek.test");
+  await page.getByLabel("Şifre").fill("Guclu-Sifre-2026");
+  await page.getByRole("checkbox").check();
+  await page.getByRole("button", { name: "Hesap oluştur" }).click();
+  await expect(page.getByRole("heading", { name: "Çalışma alanı oluşturun" })).toBeVisible();
+  await page.goto("/hesap");
+  await page.getByRole("button", { name: "Hesabımı sil" }).click();
+  const final = page.getByRole("button", { name: "Hesabımı kalıcı olarak sil" });
+  await expect(final).toBeDisabled();
+  await page.getByLabel("Onaylamak için SİL yazın").fill("sil");
+  await expect(final).toBeEnabled();
+  await noHorizontalScroll(page);
+  await shot(page, "13-hesap-silme");
+  await final.click();
+  await expect(page.getByText("Hesabınız ve verileriniz silindi.")).toBeVisible();
+  expect(stack.sql(`select count(*) from auth.users where email = 'silinecek@ornek.test'`).trim()).toBe("0");
+  await page.getByLabel("E-posta").fill("silinecek@ornek.test");
+  await page.getByLabel("Şifre").fill("Guclu-Sifre-2026");
+  await page.getByRole("button", { name: "Giriş yap" }).click();
+  await expect(page.getByRole("alert")).toBeVisible();
+});
+
 test("Demo Lab: simülasyon açıkça etiketli ve müşteriden ayrı", async ({ page }) => {
   // Platform yöneticisi + demo çalışma alanı (yalnızca sunucu tarafında oluşturulabilir)
   await page.goto("/kayit");

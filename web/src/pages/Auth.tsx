@@ -56,6 +56,7 @@ export function Login() {
   const nav = useNavigate();
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
+  const [deleted] = useState(() => { try { const d = sessionStorage.getItem("deleted") === "1"; sessionStorage.removeItem("deleted"); return d; } catch { return false; } });
   async function submit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const f = new FormData(e.currentTarget);
@@ -70,6 +71,7 @@ export function Login() {
   return (
     <AuthLayout title={L("Markanız yapay zekâ cevaplarında nerede?", "Where does your brand stand in AI answers?")} lead={L("Gemini'ye müşterilerinizin sorduğu soruları sorar, markanızın anılıp anılmadığını ve önerilip önerilmediğini ölçeriz.", "We ask AI assistants the questions your customers ask, and measure whether your brand is mentioned and recommended.")}>
       <form onSubmit={submit} noValidate>
+        {deleted && <p className="success-box" role="status">{L("Hesabınız ve verileriniz silindi.", "Your account and data have been deleted.")}</p>}
         <h2>{t("auth.login")}</h2>
         <GoogleButton />
         <Field label={t("auth.email")} name="email" type="email" autoComplete="email" required />

@@ -86,7 +86,7 @@ export function ProductStatus() {
 }
 
 export function Account() {
-  const { session } = useApp();
+  const { session, current } = useApp();
   const nav = useNavigate();
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState<string | null>(null);
@@ -113,9 +113,8 @@ export function Account() {
   return (
     <div className="stack narrow">
       <header className="page-head"><h1>{L("Hesap", "Account")}</h1><p className="muted">{session?.user.email}</p></header>
-      <BillingPanel />
-      <TeamPanel />
-      <ApiPanel />
+      {/* Çalışma alanı olmayan kullanıcıda bu paneller açılmaz (önceden sayfa çöküyordu) */}
+      {current && <><BillingPanel /><TeamPanel /><ApiPanel /></>}
       <EmailPrefs />
       {recovery && <p className="caution" role="alert">{L("Şifre sıfırlama bağlantısıyla giriş yaptınız. Lütfen aşağıdan yeni şifrenizi belirleyin.", "You signed in with a password reset link. Please set your new password below.")}</p>}
       <form className="panel stack" onSubmit={changePassword} noValidate id="yeni-sifre">
@@ -129,12 +128,49 @@ export function Account() {
         <h2>{L("Dil", "Language")}</h2>
         <p className="muted">{L("Arayüz dili: Türkçe.", "Interface language: English.")} <LangSwitch /></p>
       </section>
-      <section className="panel">
-        <h2>{L("Verileriniz", "Your data")}</h2>
-        <p className="muted">{L("Hesabınızın ve verilerinizin silinmesini istemek için kayıtlı e-postanızdan şu adrese yazın:", "To delete your account and data, email us from your registered address:")} info@aisaasavran.com. <Link to="/gizlilik">{L("Gizlilik politikası", "Privacy policy")}</Link> · <Link to="/kosullar">{L("Kullanım koşulları", "Terms of use")}</Link></p>
-      </section>
+      <DeleteAccount />
       <Button variant="quiet" onClick={async () => { await sb().auth.signOut(); nav("/giris"); }}>{L("Çıkış yap", "Sign out")}</Button>
     </div>
+  );
+}
+
+function DeleteAccount() {
+  const nav = useNavigate();
+  const word = L("SİL", "DELETE");
+  const [open, setOpen] = useState(false);
+  const [typed, setTyped] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [err, setErr] = useState<string | null>(null);
+  useEffect(() => { if (location.hash === "#hesap-sil") { setOpen(true); document.getElementById("hesap-sil")?.scrollIntoView({ block: "center" }); } }, []);
+  async function remove() {
+    setBusy(true); setErr(null);
+    const { data, error } = await sb().rpc("delete_my_account");
+    if (error) { setBusy(false); setErr(friendlyError(error)); return; }
+    if (data === "active_subscription") {
+      setBusy(false);
+      setErr(L("Aktif bir aboneliğiniz var. Önce yukarıdaki Ödeme bölümünden aboneliği iptal edin, sonra hesabınızı silebilirsiniz.", "You have an active subscription. Cancel it first in the Billing section above, then you can delete your account."));
+      return;
+    }
+    if (data !== "deleted") { setBusy(false); setErr(L("Hesap silinemedi. Lütfen info@aisaasavran.com adresine yazın.", "The account could not be deleted. Please email info@aisaasavran.com.")); return; }
+    await sb().auth.signOut().catch(() => undefined);
+    try { sessionStorage.setItem("deleted", "1"); } catch { /* yok say */ }
+    nav("/giris");
+  }
+  return (
+    <section className="panel stack" id="hesap-sil">
+      <h2>{L("Verileriniz ve hesabı silme", "Your data and account deletion")}</h2>
+      <p className="muted">{L("Hesabınızı silerseniz giriş bilgileriniz, tek başınıza sahip olduğunuz çalışma alanları ve içindeki markalar, sorular, ölçümler ve raporlar kalıcı olarak silinir. Ekip üyeleri olan bir alanda sahiplik en eski ekip üyesine geçer. Bu işlem geri alınamaz.", "Deleting your account permanently removes your sign-in, the workspaces you own alone and their brands, questions, measurements and reports. In a workspace with team members, ownership passes to the longest-standing member. This cannot be undone.")} <Link to="/gizlilik">{L("Gizlilik politikası", "Privacy policy")}</Link> · <Link to="/kosullar">{L("Kullanım koşulları", "Terms of use")}</Link></p>
+      {!open ? (
+        <Button variant="danger" onClick={() => setOpen(true)}>{L("Hesabımı sil", "Delete my account")}</Button>
+      ) : (
+        <div className="stack">
+          <Field label={L(`Onaylamak için ${word} yazın`, `Type ${word} to confirm`)} name="confirm-delete" value={typed} onChange={(e) => setTyped(e.target.value)} autoComplete="off" />
+          <ErrorBox message={err} />
+          <Button variant="danger" busy={busy} disabled={typed.trim().toLocaleUpperCase(isEn() ? "en" : "tr") !== word} onClick={remove}>{L("Hesabımı kalıcı olarak sil", "Permanently delete my account")}</Button>
+          <Button variant="quiet" onClick={() => { setOpen(false); setTyped(""); setErr(null); }}>{L("Vazgeç", "Cancel")}</Button>
+        </div>
+      )}
+    </section>
   );
 }
 
