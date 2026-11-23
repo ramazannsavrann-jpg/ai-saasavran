@@ -1,6 +1,8 @@
 # Gerçek durum raporu
 
-**Son güncelleme:** 2026-11-22 · Profound alternatifleri rehberi (TR+EN)
+**Son güncelleme:** 2026-11-23 · Mobil uygulama hazırlığı: hesap silme + PWA
+
+> **23 Kasım (mobil uygulama Faz 0):** Kullanıcı hesabını kendisi silebiliyor: Hesap sayfası → "Hesabımı sil" (SİL/DELETE yazarak onay), `delete_my_account()` (migration 0069). Aktif abonelik varken silmez (önce iptal); ekipli alanda sahiplik en eski üyeye geçer, tek kişilik alan ve verisi silinir. Uygulama dışı silme sayfası (Google Play/App Store şartı): `/tr/hesap-silme/`, `/delete-account/`. PWA: `manifest.webmanifest`, `icons/`, önbelleksiz `sw.js` (çevrimdışı ekranı + bildirim altyapısı). Düzeltme: çalışma alanı olmayan kullanıcıda Hesap sayfası çöküyordu. **Sıradaki:** Android TWA paketi (Google Play), sonra iOS (Capacitor).
 
 > **22 Kasım (sahip onaylı değişiklikler):** Fiyatlar Plus 130 $, Pro 400 $, Business 1500 $ (migration 0062; Free ayda 1 ölçüm, Gemini). Site, JSON-LD, `billing.ts`, yasal metinler ve README güncellendi. PR #145 ve #146 birleştirildi. Karşılaştırma sayfasında Semrush fiyatı kaldırıldı (doğrulanamadı), Otterly para birimi €29 olarak düzeltildi. Ücretsiz kontrol sonucuna "Ücretsiz AI Model Bilgisi Kontrolü" etiketi eklendi. **Açık:** Önerilen (250 $) paketi içeriği onay bekliyor; Confidence Score ve Drop Alerts henüz başlanmadı; sektör havuzu yalnız sekiz TR ve dört EN sektörde genişletildi. **Askıda:** Paddle ve hukuki metin işleri (müşteri yok).
 
