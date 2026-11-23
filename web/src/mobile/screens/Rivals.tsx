@@ -7,6 +7,7 @@ import { competitorsInRun, series } from "../../lib/report";
 import { L } from "../../lib/i18n";
 import { Confirm, Err, Spinner } from "../ui";
 import { useSelectedBrand } from "./Home";
+import { RivalTraits } from "./Insights";
 
 export function RivalsBody() {
   const { current } = useApp();
@@ -83,6 +84,7 @@ export function RivalsBody() {
       )}
       <Err msg={err} />
       <Confirm open={!!rm} title={L(`${rm?.name ?? ""} rakiplerden çıkarılsın mı?`, `Remove ${rm?.name ?? ""} from competitors?`)} text={L("Bu rakip sonraki ölçümlerde takip edilmez.", "This competitor won't be tracked in later measurements.")} action={L("Çıkar", "Remove")} danger onYes={() => rm && remove(rm.id)} onNo={() => setRm(null)} />
+      {b && <RivalTraits brand={b} />}
     </>
   );
 }

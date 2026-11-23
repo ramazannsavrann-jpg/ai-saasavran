@@ -119,6 +119,36 @@ test("Mobil: kayıt → işletme kurulumu → ölçüm → rakip → bildirimler
   await expect(page.getByRole("button", { name: "Siteyi şimdi kontrol et" })).toBeVisible();
   await noOverflow(page); await shot(page, "05e-site");
 
+  await nav.getByRole("link", { name: "Ana sayfa" }).click();
+  await page.getByRole("button", { name: /^Ürünler/ }).click();
+  await expect(page.getByRole("heading", { name: "Ürünler" })).toBeVisible();
+  await page.getByRole("button", { name: "Ürün ekle" }).click();
+  await page.getByLabel("Ürün adı").fill("Karışık döner");
+  await page.getByLabel("Doğru bilgiler").fill("200 gram et. Lavaş arası. Paket serviste de var.");
+  await page.getByRole("button", { name: "Ekle", exact: true }).click();
+  await page.getByRole("button", { name: /Karışık döner/ }).click();
+  await expect(page.getByRole("heading", { name: "Karışık döner" })).toBeVisible();
+  await expect(page.getByText("Bilgileri doğru mu?")).toBeVisible();
+  await page.getByRole("button", { name: "Rakip ürün ekle" }).click();
+  await page.getByLabel("Rakip ürün adı").fill("Tavuk döner");
+  await page.getByRole("button", { name: "Ekle", exact: true }).click();
+  await expect(page.getByText("Tavuk döner").first()).toBeVisible();
+  await noOverflow(page); await shot(page, "07-urun");
+  await page.getByRole("button", { name: "Geri" }).click();
+  await page.getByRole("button", { name: "Geri" }).click();
+  await page.getByRole("button", { name: /^Bilgi doğruluğu/ }).click();
+  await expect(page.getByRole("heading", { name: "Bilgi doğruluğu" })).toBeVisible();
+  await noOverflow(page); await shot(page, "08-dogruluk");
+  await page.getByRole("button", { name: "Geri" }).click();
+  await page.getByRole("button", { name: /^Kaynaklar/ }).click();
+  await expect(page.getByRole("heading", { name: "Kaynaklar" })).toBeVisible();
+  await noOverflow(page);
+  await page.getByRole("button", { name: "Geri" }).click();
+  await page.getByRole("button", { name: /^Ziyaretçi ve botlar/ }).click();
+  await expect(page.getByText("Yapay zekâdan gelen ziyaretçi")).toBeVisible();
+  await noOverflow(page); await shot(page, "09-trafik");
+  await page.getByRole("button", { name: "Geri" }).click();
+
   await page.getByRole("navigation", { name: "Alt menü" }).getByRole("link", { name: "Bildirimler" }).click();
   await expect(page.getByText("Ölçümleriniz")).toBeVisible();
   await expect(page.getByText("Ölçüm bitti", { exact: true })).toBeVisible();

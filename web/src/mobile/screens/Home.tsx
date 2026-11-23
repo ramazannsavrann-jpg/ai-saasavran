@@ -12,6 +12,28 @@ import { Err, Icon, Sheet, Spinner, greeting, haptic } from "../ui";
 
 const KEY = "mobil-marka";
 const PRELIM = 20; // bundan az cevap: ön sonuç
+/** Kendi özelliklerine giden kısayollar (ana sayfa ve rapor özetinde). */
+export function MoreLinks() {
+  const nav = useNavigate();
+  const items: [string, string, string, string, string][] = [
+    ["/urunler", "Ürünler", "Products", "Ürünleriniz öneriliyor mu, doğru anlatılıyor mu", "Are your products recommended and described correctly"],
+    ["/dogruluk", "Bilgi doğruluğu", "Accuracy", "Yapay zekâlar hakkınızda doğru mu söylüyor", "Are the AIs saying correct things about you"],
+    ["/kaynaklar", "Kaynaklar", "Sources", "Yapay zekâların baktığı siteler", "The sites the AIs rely on"],
+    ["/trafik", "Ziyaretçi ve botlar", "Visitors and bots", "Yapay zekâdan sitenize gelenler", "Who comes to your site from AI"],
+    ["/marka-duzenle", "İşletme bilgileri", "Business details", "Ad, web sitesi, doğru bilgiler", "Name, website, facts"],
+  ];
+  return (
+    <div className="list">
+      {items.map(([to, tr, en, dtr, den]) => (
+        <button key={to} className="row" onClick={() => nav(to)}>
+          <span style={{ display: "flex", flexDirection: "column", gap: 2, textAlign: "left" }}><span style={{ fontWeight: 600 }}>{L(tr, en)}</span><span className="muted small">{L(dtr, den)}</span></span>
+          {Icon.chevron}
+        </button>
+      ))}
+    </div>
+  );
+}
+
 export function useSelectedBrand() {
   const { current } = useApp();
   const brands = useLoad(() => (current ? api.brands(current.id) : Promise.resolve([] as Brand[])), [current?.id]);
@@ -136,15 +158,18 @@ export function Home() {
           {actions.length ? (
             <div className="list">
               {actions.map((a, i) => (
-                <div key={i} className="row" style={{ alignItems: "flex-start", flexDirection: "column", gap: 2 }}>
+                <button key={i} className="row" style={{ alignItems: "flex-start", flexDirection: "column", gap: 2, textAlign: "left" }} onClick={() => nav("/oneriler")}>
                   <span style={{ fontWeight: 600 }}>{a.title}</span>
                   <span className="muted small">{a.action}</span>
-                </div>
+                </button>
               ))}
             </div>
           ) : <p className="muted" style={{ margin: 0 }}>{L("Öneriler birkaç ölçümden sonra burada çıkar.", "Suggestions appear here after a few measurements.")}</p>}
         </>
       )}
+
+      <h2 className="section-title">{L("İşletmeniz", "Your business")}</h2>
+      <MoreLinks />
 
       <Sheet open={picker} onClose={() => setPicker(false)} title={L("Markalarınız", "Your brands")}>
         <div className="list" style={{ background: "var(--surface2)" }}>

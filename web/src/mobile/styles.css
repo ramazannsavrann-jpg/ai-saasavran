@@ -115,3 +115,13 @@ button.row, a.row { cursor: pointer; }
 .btn:active, .act:active, .iconbtn:active, .card.tap:active { transform: scale(.98); }
 button.row:active, a.row:active { background: var(--surface2); }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+
+/* Ayrıntı ekranları */
+.stats3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.stats3 > div { background: var(--surface); border-radius: 16px; padding: 14px 12px; display: flex; flex-direction: column; gap: 4px; }
+.stats3 b { font-family: var(--num); font-size: 28px; line-height: 1; }
+.stats3 b.bad { color: var(--warn); }
+.stats3 span { font-size: 13px; color: var(--muted); }
+.senti { display: flex; height: 12px; border-radius: 6px; overflow: hidden; gap: 2px; }
+.senti i { min-width: 0; }
+.senti .pos { background: var(--accent); } .senti .mix { background: var(--warn); opacity: .6; } .senti .neu { background: var(--line2); } .senti .neg { background: var(--danger); }
