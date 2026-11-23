@@ -38,8 +38,8 @@ web/src/mobile       Mobil uygulama ekranları (Capacitor, Android: web/android)
                      Uygulamada Paddle yok (Google Play / App Store ödemesi); uygulama fiyatı sitedekiyle aynı (TL: kurdan, sonu 9),
                      Elmas yalnız sitede; ek sorgu paketi yalnız hakkını bitiren abonelere. Ana sayfada ve bildirimlerde
                      rakip dili yok; uygulama müşterinin kendi sonuçlarına odaklanır (23 Kasım kararları)
-                     Mobil ekran tasarımından önce taste-skill okunur (github.com/Leonxlnx/taste-skill,
-                     skills/taste-skill/SKILL.md + references/copy-tells.md): "yapay zekâ yapmış gibi" görünmesin (23 Kasım)
+                     Mobil ekran tasarımından önce taste-skill okunur (.claude/skills/taste-skill:
+                     SKILL.md + references/copy-tells.md): "yapay zekâ yapmış gibi" görünmesin (23 Kasım)
 functions/api/       Cloudflare Pages Functions (check, report, paddle, mcp, v1 API…)
 scripts/             İşçi, testler, gizli bilgi taraması, smoke testleri, geo-autopilot
 e2e/                 Playwright mobil uçtan uca testler
@@ -110,6 +110,7 @@ PR açıklamasında bu kontrollerden neyin değiştiğini kısaca yaz.
   (2–4 soru + tek cümlelik cevap) → "Bölümler" (zaman damgalı, uzun videolarda) → bağımsızlık satırı ve ölçüm tarihi.
   Yapay zekâ bu yapıyı kolay alıntılıyor (rakip kanallarda da böyle). Uydurma sayı yok; sayılar ölçüm verisinden.
 - Video kurulumu ve şablonlar: `seslendirme` dalında `video/README.md` + `video/sablon/`.
+- Dış skill'ler (23 Kasım, güvenlik taraması temiz): `.claude/skills/remotion-*` (Remotion'ın resmi `remotion-dev/skills`, commit 89c8afa; Remotion ile video/animasyon yapılırken önce `remotion-best-practices` okunur; lisans ≤3 çalışanlı şirkete ücretsiz) ve `.claude/skills/taste-skill` (`Leonxlnx/taste-skill`, commit 6c0b5c7, MIT; site/mobil uygulama arayüz tasarımı). Yeni dış skill eklemeden önce aynı tarama yapılır (kurulumda çalışan script, ağ çağrısı/telemetri, gizli talimat, lisans). Kullanılmaz: `anything2explainer` (ticari kullanım yasak lisans); `effectcraft-app/effectcraft` (zararlı sahte kopya, gerçeği `storytold/effectcraft`).
 - Paylaşım kuralları (Instagram 3'lü set: TR Reels → EN Reels → ayrı gönderi; YouTube oynatma listeleri,
   açıklama metinleri): aynı dosyada "PAYLAŞIM KURALLARI" bölümü. Yeni video işinden önce oku.
 - ZORUNLU (19 Kasım): YouTube/Instagram paylaşımından önce README'deki "PAYLAŞMADAN ÖNCE KONTROL LİSTESİ"
