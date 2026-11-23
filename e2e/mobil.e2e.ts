@@ -60,7 +60,18 @@ test("Mobil: kayıt → işletme kurulumu → ölçüm → rakip → bildirimler
   await expect(page.getByText("Yapay zekâ cevaplarında önerilme oranı")).toBeVisible({ timeout: 20_000 });
   await noOverflow(page); await shot(page, "04-ana-sayfa-sonuc");
 
-  await page.getByRole("navigation", { name: "Alt menü" }).getByRole("link", { name: "Rakipler" }).click();
+  await page.getByRole("navigation", { name: "Alt menü" }).getByRole("link", { name: "Rapor" }).click();
+  await expect(page.getByText(/Son ölçümde yapay zekâ cevaplarının %\d+'inde önerildiniz/)).toBeVisible();
+  await expect(page.getByText(/Güven puanı \d+\/100/)).toBeVisible();
+  await noOverflow(page); await shot(page, "05a-rapor-ozet");
+  await page.getByRole("button", { name: "Sorular" }).click();
+  await expect(page.getByText(/Açık soru: \d+ \/ \d+/)).toBeVisible();
+  await page.getByLabel("Yeni soru").fill("Antalya'da gece açık döner nerede yenir?");
+  await page.getByRole("button", { name: "Soruyu ekle" }).click();
+  await expect(page.getByText("Antalya'da gece açık döner nerede yenir?")).toBeVisible();
+  await expect(page.getByText(/Önerildiniz|Adınız geçti|Geçmediniz/).first()).toBeVisible();
+  await noOverflow(page); await shot(page, "05b-rapor-sorular");
+  await page.getByRole("button", { name: "Rakipler" }).click();
   await page.getByPlaceholder("Rakip adı ekleyin").fill("Rakip Kebap");
   await page.getByRole("button", { name: "Ekle" }).click();
   await expect(page.getByText("Rakip Kebap").first()).toBeVisible();
@@ -74,6 +85,12 @@ test("Mobil: kayıt → işletme kurulumu → ölçüm → rakip → bildirimler
   await page.getByRole("navigation", { name: "Alt menü" }).getByRole("link", { name: "Hesap" }).click();
   await expect(page.getByText("mobil@ornek.test")).toBeVisible();
   await expect(page.getByText("Bu ayki kullanım", { exact: false })).toBeVisible();
+  await expect(page.getByLabel("Dil")).toBeVisible();
+  await page.getByRole("button", { name: "Şifre değiştir" }).click();
+  await page.getByLabel("Yeni şifre", { exact: true }).fill("Yeni-Sifre-2026");
+  await page.getByLabel("Yeni şifre (tekrar)").fill("Yeni-Sifre-2026");
+  await page.getByRole("button", { name: "Şifreyi kaydet" }).click();
+  await expect(page.getByText("Şifreniz değiştirildi.")).toBeVisible();
   await shot(page, "07-hesap");
   await page.getByRole("button", { name: "Hesabımı sil" }).click();
   await page.getByRole("button", { name: "Hesabımı kalıcı olarak sil" }).click();

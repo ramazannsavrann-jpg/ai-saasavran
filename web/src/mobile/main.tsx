@@ -16,7 +16,7 @@ import { Spinner, TabBar } from "./ui";
 import { Forgot, Login, Signup, Welcome } from "./screens/Auth";
 import { BrandForm, Setup } from "./screens/Setup";
 import { Home } from "./screens/Home";
-import { Rivals } from "./screens/Rivals";
+import { Report } from "./screens/Report";
 import { Activity } from "./screens/Activity";
 import { Account } from "./screens/Account";
 
@@ -49,7 +49,8 @@ function App() {
       <Route path="/marka-ekle" element={<Private><div className="app"><AddBrand /></div></Private>} />
       <Route element={<Private><Tabs /></Private>}>
         <Route path="/ana" element={<Home />} />
-        <Route path="/rakipler" element={<Rivals />} />
+        <Route path="/rapor" element={<Report />} />
+        <Route path="/rakipler" element={<Navigate to="/rapor?b=rakipler" replace />} />
         <Route path="/bildirimler" element={<Activity />} />
         <Route path="/hesap" element={<Account />} />
       </Route>

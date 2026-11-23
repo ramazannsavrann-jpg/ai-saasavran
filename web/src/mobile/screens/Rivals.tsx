@@ -5,10 +5,10 @@ import { api, type MeasurementType } from "../../lib/data";
 import { friendlyError } from "../../lib/supabase";
 import { competitorsInRun, series } from "../../lib/report";
 import { L } from "../../lib/i18n";
-import { Err, Head, Spinner } from "../ui";
+import { Err, Spinner } from "../ui";
 import { useSelectedBrand } from "./Home";
 
-export function Rivals() {
+export function RivalsBody() {
   const { current } = useApp();
   const sel = useSelectedBrand();
   const b = sel.brand;
@@ -43,8 +43,7 @@ export function Rivals() {
   }
 
   return (
-    <div className="screen">
-      <Head title={L("Rakipler", "Competitors")} />
+    <>
       <p className="muted" style={{ margin: 0, fontSize: 14 }}>{last ? L("Son ölçümde yapay zekâ cevaplarında kim ne sıklıkla önerildi?", "How often was each brand recommended in AI answers in the last measurement?") : L("İlk ölçümden sonra sıralama burada görünür.", "The ranking appears here after the first measurement.")}</p>
       {ranking.length > 0 && (
         <div className="list">
@@ -62,7 +61,7 @@ export function Rivals() {
         </div>
       )}
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginTop: 4 }}>
-        <h2 style={{ fontSize: 19 }}>{L("Takip ettiğiniz rakipler", "Competitors you track")}</h2>
+        <h2 className="label" style={{ margin: 0 }}>{L("Takip ettiğiniz rakipler", "Competitors you track")}</h2>
         {limit > 0 && <span className="muted small">{list.length} / {limit}</span>}
       </div>
       {list.length > 0 && (
@@ -82,6 +81,6 @@ export function Rivals() {
         </form>
       )}
       <Err msg={err} />
-    </div>
+    </>
   );
 }

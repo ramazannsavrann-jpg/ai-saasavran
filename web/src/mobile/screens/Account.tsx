@@ -1,11 +1,11 @@
 // Hesap: paket ve bu ayki kullanım, e-posta/uyarı tercihleri, çıkış, hesap silme.
 // Uygulamada Paddle yok (mağaza kuralı); uygulama içi satın alma (Google Play / App Store) sonraki adımda eklenecek.
-import { useEffect, useState } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { useApp, useLoad } from "../../lib/app";
 import { api } from "../../lib/data";
 import { sb, friendlyError } from "../../lib/supabase";
-import { L, getLang } from "../../lib/i18n";
+import { L, getLang, switchLang } from "../../lib/i18n";
 import { Err, Head } from "../ui";
 
 export function Account() {
@@ -17,6 +17,19 @@ export function Account() {
   const [err, setErr] = useState<string | null>(null);
   const [del, setDel] = useState(false);
   const [busy, setBusy] = useState(false);
+  const [pwOpen, setPwOpen] = useState(false);
+  const [pwMsg, setPwMsg] = useState<string | null>(null);
+  async function changePassword(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const f = new FormData(e.currentTarget);
+    const p1 = String(f.get("p1") ?? ""), p2 = String(f.get("p2") ?? "");
+    setErr(null); setPwMsg(null);
+    if (p1.length < 8) { setErr(L("Yeni şifre en az 8 karakter olmalı.", "The new password must be at least 8 characters.")); return; }
+    if (p1 !== p2) { setErr(L("İki şifre aynı değil.", "The two passwords don't match.")); return; }
+    const { error } = await sb().auth.updateUser({ password: p1 });
+    if (error) { setErr(friendlyError(error)); return; }
+    setPwOpen(false); setPwMsg(L("Şifreniz değiştirildi.", "Your password was changed."));
+  }
   useEffect(() => {
     (async () => {
       try {
@@ -54,7 +67,7 @@ export function Account() {
       </div>
       {u && (
         <>
-          <span className="label">{L("Bu ayki kullanım", "This month")}</span>
+          <h2 className="label">{L("Bu ayki kullanım", "This month")}</h2>
           <div className="card" style={{ display: "flex", flexDirection: "column", gap: 8 }}>
             <div style={{ display: "flex", justifyContent: "space-between" }}><span>{L("Yapay zekâ sorgusu", "AI queries")}</span><span style={{ fontWeight: 700 }}>{u.engine_calls.toLocaleString("tr-TR")} / {u.engine_call_limit.toLocaleString("tr-TR")}</span></div>
             <div className="meter"><i style={{ width: `${Math.min(100, Math.round((u.engine_calls / Math.max(1, u.engine_call_limit)) * 100))}%`, background: "var(--accent)" }} /></div>
@@ -62,11 +75,28 @@ export function Account() {
           </div>
         </>
       )}
-      <span className="label">{L("Bildirim tercihleri", "Notification preferences")}</span>
+      <h2 className="label">{L("Bildirim tercihleri", "Notification preferences")}</h2>
       <div className="list">
         <label className="row">{L("Önerilme oranım belirgin değişince haber ver", "Alert me when my recommendation rate changes clearly")}<input type="checkbox" checked={drop} onChange={(e) => setPref("drop", e.target.checked)} /></label>
         {weekly !== null && <label className="row">{L("Haftalık özet e-postası", "Weekly summary email")}<input type="checkbox" checked={weekly} onChange={(e) => setPref("weekly", e.target.checked)} /></label>}
       </div>
+      <h2 className="label">{L("Ayarlar", "Settings")}</h2>
+      <div className="list">
+        <label className="row">{L("Dil", "Language")}
+          <select value={getLang()} onChange={(e) => switchLang(e.target.value as "tr" | "en")} style={{ background: "transparent", border: 0, color: "var(--muted)", fontSize: 15, minHeight: 44 }}>
+            <option value="tr">Türkçe</option><option value="en">English</option>
+          </select>
+        </label>
+        <button className="row" onClick={() => { setPwOpen(!pwOpen); setPwMsg(null); }} aria-expanded={pwOpen}>{L("Şifre değiştir", "Change password")}<span className="muted">{pwOpen ? "−" : "+"}</span></button>
+        {pwOpen && (
+          <form onSubmit={changePassword} style={{ display: "flex", flexDirection: "column", gap: 10, padding: "10px 0 14px" }} noValidate>
+            <label className="field">{L("Yeni şifre", "New password")}<input name="p1" type="password" autoComplete="new-password" /></label>
+            <label className="field">{L("Yeni şifre (tekrar)", "New password (again)")}<input name="p2" type="password" autoComplete="new-password" /></label>
+            <button className="btn btn-primary">{L("Şifreyi kaydet", "Save password")}</button>
+          </form>
+        )}
+      </div>
+      {pwMsg && <p className="ok" role="status">{pwMsg}</p>}
       <Err msg={err} />
       <button className="btn btn-ghost" onClick={signOut}>{L("Çıkış yap", "Sign out")}</button>
       {!del ? <button className="btn btn-danger" onClick={() => setDel(true)}>{L("Hesabımı sil", "Delete my account")}</button> : (

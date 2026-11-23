@@ -23,7 +23,7 @@ export function TabBar() {
   return (
     <nav className="tabbar" aria-label={L("Alt menü", "Bottom menu")}>
       <NavLink to="/ana" className={cls}>{Icon.home}{L("Ana sayfa", "Home")}</NavLink>
-      <NavLink to="/rakipler" className={cls}>{Icon.bars}{L("Rakipler", "Competitors")}</NavLink>
+      <NavLink to="/rapor" className={cls}>{Icon.bars}{L("Rapor", "Report")}</NavLink>
       <NavLink to="/bildirimler" className={cls}>{Icon.bell}{L("Bildirimler", "Alerts")}</NavLink>
       <NavLink to="/hesap" className={cls}>{Icon.user}{L("Hesap", "Account")}</NavLink>
     </nav>
@@ -52,3 +52,13 @@ export const greeting = () => {
   const h = new Date().getHours();
   return h < 12 ? L("Günaydın", "Good morning") : h < 18 ? L("İyi günler", "Good afternoon") : L("İyi akşamlar", "Good evening");
 };
+
+// Türkçe sayı ekleri (sayının okunuşunun son kelimesine göre): %40'tan, %32'ye
+const ABL_U = ["dan", "den", "den", "ten", "ten", "ten", "dan", "den", "den", "dan"];
+const ABL_T = ["", "dan", "den", "dan", "tan", "den", "tan", "ten", "den", "dan"];
+const DAT_U = ["a", "e", "ye", "e", "e", "e", "ya", "ye", "e", "a"];
+const DAT_T = ["", "a", "ye", "a", "a", "ye", "a", "e", "e", "a"];
+const pick = (n: number, u: string[], t: string[], hundred: string, zero: string) =>
+  n === 0 ? zero : n % 10 ? u[n % 10] : n % 100 ? t[(n % 100) / 10] : hundred;
+export const trAbl = (n: number) => `${n}'${pick(n, ABL_U, ABL_T, "den", "dan")}`;
+export const trDat = (n: number) => `${n}'${pick(n, DAT_U, DAT_T, "e", "a")}`;
