@@ -1,6 +1,6 @@
 // AI SaaSavran mobil uygulaması (Android/iOS, Capacitor). Ekranlar telefonun içinde çalışır;
 // veri katmanı sitedekiyle aynıdır (web/src/lib): aynı hesap, aynı markalar, aynı ölçümler.
-import { StrictMode, type ReactNode } from "react";
+import { StrictMode, useEffect, type ReactNode } from "react";
 import { createRoot } from "react-dom/client";
 import { HashRouter, Navigate, Outlet, Route, Routes, useNavigate } from "react-router-dom";
 import "@fontsource/instrument-sans/400.css";
@@ -23,6 +23,7 @@ import { Home } from "./screens/Home";
 import { Report } from "./screens/Report";
 import { Activity } from "./screens/Activity";
 import { Account } from "./screens/Account";
+import { initPush } from "./push";
 
 function Private({ children }: { children: ReactNode }) {
   const { session, loading } = useApp();
@@ -35,6 +36,8 @@ function PublicOnly({ children }: { children: ReactNode }) {
   return session ? <Navigate to="/ana" replace /> : <>{children}</>;
 }
 function Tabs() {
+  const nav = useNavigate();
+  useEffect(() => { initPush((p) => nav(p)); }, [nav]);
   return <div className="app"><Outlet /><TabBar /></div>;
 }
 function AddBrand() {

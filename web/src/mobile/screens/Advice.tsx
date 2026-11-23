@@ -1,7 +1,7 @@
 // Öneriler: iyileştirme rehberi (kampanya başlatma), yaptıklarım ve sonuçları (önce/sonra), içerik planları, site kontrolü.
 // Öneriler sitedekiyle aynı kurallardan çıkar (lib/recommend.ts + engine/src/recommendations.ts); yapay zekâ ile üretilmez.
 import { useState, type FormEvent } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { Navigate, useNavigate, useSearchParams } from "react-router-dom";
 import { useApp, useLoad } from "../../lib/app";
 import { api, type Brand, type BrandAction, type MeasurementType, type Run } from "../../lib/data";
 import { friendlyError } from "../../lib/supabase";
@@ -10,7 +10,7 @@ import { useRecommendations } from "../../lib/recommend";
 import { campaignFor, taskProgress } from "../../../../engine/src/campaign.ts";
 import { actionImpact } from "../../../../engine/src/insights.ts";
 import { L, isEn } from "../../lib/i18n";
-import { Confirm, Err, Head, Icon, Sheet, Spinner, haptic } from "../ui";
+import { Confirm, Err, Head, Icon, Sheet, Spinner, haptic, isPaid, shownType } from "../ui";
 import { useSelectedBrand } from "./Home";
 
 /** Telefonun kendi saatine göre bugünün tarihi (toISOString UTC verir; Türkiye'de gece yarısından sonra bir gün geri kalır). */
@@ -39,8 +39,9 @@ export function Advice() {
   const sel = useSelectedBrand();
   const b = sel.brand;
   const runs = useLoad(() => (b ? api.runs(b.id) : Promise.resolve([] as Run[])), [b?.id]);
-  if (sel.loading || !b || runs.loading) return <Spinner />;
-  const type: MeasurementType = (runs.data ?? []).some((r) => r.measurement_type === "live_search" && r.status === "done") ? "live_search" : "model_knowledge";
+  if (sel.loading || runs.loading) return <Spinner />;
+  if (!b) return <Navigate to="/kurulum" replace />;
+  const type = shownType(b, runs.data) as MeasurementType;
   return (
     <div className="screen">
       <Head title={L("Öneriler", "Suggestions")} right={<span className="muted small">{b.name}</span>} />
@@ -110,8 +111,10 @@ function Done({ brandId, workspaceId }: { brandId: string; workspaceId: string }
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
   const [rm, setRm] = useState<string | null>(null);
+  // Görevler yerelde hemen işaretlenir; kayıt sırayla yapılır, böylece art arda iki dokunuş birbirini silmez
+  const [local, setLocal] = useState<Record<string, BrandAction["tasks"]>>({});
   const today = localDay();
-  if (actions.loading) return <Spinner />;
+  if (actions.loading && !actions.data) return <Spinner />;
   const toPoints = (rows: typeof live.data) => series(rows ?? []).map((p) => ({ at: p.at, k: p.recommend.k, n: p.recommend.n }));
   const engines = [
     ...[...new Set((live.data ?? []).map((r) => r.provider))].map((e) => ({ label: providerLabel(e), points: toPoints((live.data ?? []).filter((r) => r.provider === e)) })),
@@ -127,10 +130,12 @@ function Done({ brandId, workspaceId }: { brandId: string; workspaceId: string }
     try { await api.addAction({ workspace_id: workspaceId, brand_id: brandId, title, note: String(f.get("n") || "").trim() || null, done_on: String(f.get("d") || today) }); setAdding(false); actions.reload(); }
     catch (x) { setErr(friendlyError(x)); } finally { setBusy(false); }
   }
+  const tasksOf = (a: BrandAction) => local[a.id] ?? a.tasks;
   async function toggle(a: BrandAction, ix: number) {
-    const tasks = (a.tasks ?? []).map((t, j) => (j === ix ? { ...t, done: !t.done } : t));
+    const tasks = (tasksOf(a) ?? []).map((t, j) => (j === ix ? { ...t, done: !t.done } : t));
+    setLocal((m) => ({ ...m, [a.id]: tasks }));
     haptic.tap();
-    try { await api.updateActionTasks(a.id, tasks); actions.reload(); } catch (x) { setErr(friendlyError(x)); }
+    try { await api.updateActionTasks(a.id, tasks!); } catch (x) { setErr(friendlyError(x)); setLocal((m) => { const n = { ...m }; delete n[a.id]; return n; }); }
   }
   async function remove(id: string) { setRm(null); try { await api.deleteAction(id); actions.reload(); } catch (x) { setErr(friendlyError(x)); } }
   const rate = (p: { k: number; n: number }) => (p.n ? pct(p.k / p.n) : "%0");
@@ -142,7 +147,8 @@ function Done({ brandId, workspaceId }: { brandId: string; workspaceId: string }
       <Err msg={err} />
       {list.length === 0 && <p className="muted" style={{ margin: 0 }}>{L("Henüz kayıt yok.", "Nothing logged yet.")}</p>}
       {list.map((a) => {
-        const pr = a.tasks ? taskProgress(a.tasks) : null;
+        const tk = tasksOf(a);
+        const pr = tk ? taskProgress(tk) : null;
         return (
           <article key={a.id} className="card" style={{ display: "flex", flexDirection: "column", gap: 8 }}>
             <div style={{ display: "flex", justifyContent: "space-between", gap: 8 }}>
@@ -154,9 +160,9 @@ function Done({ brandId, workspaceId }: { brandId: string; workspaceId: string }
                 <span className="small">{L(`${pr.total} görevden ${pr.done} tanesi bitti`, `${pr.done} of ${pr.total} tasks done`)}</span>
                 <div className="meter"><i style={{ width: `${pr.total ? (100 * pr.done) / pr.total : 0}%` }} /></div>
                 <div className="list" style={{ background: "var(--surface2)" }}>
-                  {a.tasks!.map((t, ix) => (
+                  {tk!.map((t, ix) => (
                     <label key={ix} className="row" style={{ justifyContent: "flex-start" }}>
-                      <input type="checkbox" checked={t.done} onChange={() => toggle(a, ix)} style={{ width: 22, height: 22, accentColor: "var(--brand)", flexShrink: 0 }} />
+                      <input type="checkbox" checked={t.done} onChange={() => toggle(a, ix)} style={{ width: 24, height: 24, accentColor: "var(--brand)", flexShrink: 0 }} />
                       <span style={{ color: t.done ? "var(--muted)" : "var(--text)", textDecoration: t.done ? "line-through" : "none" }}>{t.t}</span>
                     </label>
                   ))}
@@ -171,7 +177,7 @@ function Done({ brandId, workspaceId }: { brandId: string; workspaceId: string }
                   + (im.verdict === "up" ? L(" · belirgin artış", " · clear rise") : im.verdict === "down" ? L(" · belirgin düşüş", " · clear drop") : L(" · fark ölçüm oynaklığı içinde", " · within measurement noise"));
               return <span key={en.label} className="small"><span className="muted">{en.label}: </span>{text}</span>;
             })}
-            <button className="btn btn-text" style={{ alignSelf: "flex-end", color: "var(--muted)", minHeight: 40, padding: "0 4px" }} onClick={() => setRm(a.id)}>{L("Sil", "Delete")}</button>
+            <button className="btn btn-text" style={{ alignSelf: "flex-end", color: "var(--muted)", minHeight: 48, padding: "0 8px" }} onClick={() => setRm(a.id)}>{L("Sil", "Delete")}</button>
           </article>
         );
       })}
@@ -192,7 +198,8 @@ function Done({ brandId, workspaceId }: { brandId: string; workspaceId: string }
 
 function Briefs({ brandId, results }: { brandId: string; results: { prompt_id: string; prompt_text: string; answers: number; target_recommended: number }[] }) {
   const { current } = useApp();
-  const paid = current?.kind === "growth_lab" || (!!current?.plan && current.plan !== "free");
+  const paid = isPaid(current);
+  const nav = useNavigate();
   const briefs = useLoad(() => (paid ? api.contentBriefs(brandId) : Promise.resolve([])), [brandId, paid]);
   const [open, setOpen] = useState<string | null>(null);
   const [err, setErr] = useState<string | null>(null);
@@ -204,7 +211,7 @@ function Briefs({ brandId, results }: { brandId: string; results: { prompt_id: s
   return (
     <>
       <p className="muted small" style={{ margin: 0 }}>{L("Önerilmediğiniz her soru için sitenize yazılacak sayfanın planı: başlık, bölümler, yazılması gereken bilgiler ve sık sorulan sorular.", "For each question you weren't recommended in, a plan for the page to add to your website: title, sections, facts to include and FAQ.")}</p>
-      {!paid ? <p className="card" style={{ margin: 0 }}>{L("İçerik planları ücretli paketlerde açık.", "Content plans are available on paid plans.")}</p>
+      {!paid ? <div className="card" style={{ display: "flex", flexDirection: "column", gap: 8 }}><span>{L("İçerik planları ücretli paketlerde açık.", "Content plans are available on paid plans.")}</span><button className="btn btn-text" style={{ alignSelf: "flex-start", padding: 0 }} onClick={() => nav("/hesap")}>{L("Paketinizi görün", "See your plan")} {Icon.chevron}</button></div>
         : lost.length === 0 ? <p className="muted" style={{ margin: 0 }}>{L("Son ölçümde önerilmediğiniz soru yok.", "No questions you weren't recommended in last time.")}</p> : (
         <div className="list">
           {lost.map((r) => {
@@ -213,7 +220,7 @@ function Briefs({ brandId, results }: { brandId: string; results: { prompt_id: s
               <div key={r.prompt_id} className="row" style={{ flexDirection: "column", alignItems: "stretch", gap: 6 }}>
                 <span>{r.prompt_text}</span>
                 {!b ? <button className="btn btn-text" style={{ alignSelf: "flex-start", padding: 0 }} onClick={() => req(r.prompt_id)}>{L("Plan hazırla", "Prepare a plan")}</button>
-                  : b.status === "queued" ? <span className="muted small">{L("Plan hazırlanıyor. Bitince bildirim gelir.", "Preparing the plan. You'll be notified when it's ready.")}</span>
+                  : b.status === "queued" ? <span className="muted small">{L("Plan hazırlanıyor. Hazır olunca burada görünür.", "Preparing the plan. It appears here when ready.")}</span>
                   : b.status === "failed" ? <button className="btn btn-text" style={{ alignSelf: "flex-start", padding: 0 }} onClick={() => req(r.prompt_id)}>{L("Hazırlanamadı, tekrar dene", "Failed, try again")}</button>
                   : <button className="btn btn-text" style={{ alignSelf: "flex-start", padding: 0 }} onClick={() => setOpen(b.id)}>{L("Planı aç", "Open plan")} {Icon.chevron}</button>}
               </div>
@@ -246,7 +253,7 @@ function Website({ brandId, website, audit, pendingSince, reload }: { brandId: s
   const pending = pendingSince && (!audit || audit.created_at < pendingSince);
   async function check() {
     setBusy(true); setErr(null); setMsg(null); haptic.tap();
-    try { await api.requestAudit(brandId); setMsg(L("Kontrol sıraya alındı. Sonuç en geç bir saat içinde burada görünür.", "Check queued. Results appear here within an hour.")); reload(); }
+    try { await api.requestAudit(brandId); setMsg(L("Kontrol sıraya alındı. Sonuç hazır olunca burada görünür.", "Check queued. Results appear here when ready.")); reload(); }
     catch (e) { setErr(friendlyError(e)); } finally { setBusy(false); }
   }
   const failing = (audit?.checks ?? []).filter((c) => !c.ok);

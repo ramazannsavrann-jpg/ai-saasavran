@@ -1,13 +1,13 @@
 // Marka bilgileri: ad, diğer yazılışlar, web sitesi, sektör, ne sattığı, şehir, haftalık ölçüm, doğru bilgi kartı, markayı silme.
 // Sitedeki "Markayı düzenle" formuyla aynı alanları aynı kurallarla yazar.
 import { useState, type FormEvent } from "react";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { useApp } from "../../lib/app";
 import { api } from "../../lib/data";
 import { friendlyError } from "../../lib/supabase";
 import { SECTORS } from "../../lib/sectors";
 import { L } from "../../lib/i18n";
-import { Confirm, Err, Head, Spinner, haptic } from "../ui";
+import { Confirm, Err, Head, Spinner, goBack, haptic, isPaid } from "../ui";
 import { useSelectedBrand } from "./Home";
 
 const splitAliases = (v: FormDataEntryValue | null) => String(v || "").split(",").map((x) => x.trim()).filter(Boolean).slice(0, 20);
@@ -21,9 +21,9 @@ export function BrandEdit() {
   const [del, setDel] = useState(false);
   const b = sel.brand;
   if (sel.loading) return <div className="app"><Spinner /></div>;
-  if (!b) { nav("/ana", { replace: true }); return null; }
+  if (!b) return <Navigate to="/kurulum" replace />;
   const sim = b.data_origin === "simulated";
-  const paid = current?.kind === "growth_lab" || (!!current?.plan && current.plan !== "free");
+  const paid = isPaid(current);
 
   async function save(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -34,6 +34,7 @@ export function BrandEdit() {
     if (website && !/^https?:\/\//i.test(website)) website = `https://${website}`;
     if (website && !/^https?:\/\/[^\s/.]+\.[^\s]+$/i.test(website)) { setErr(L("Web sitesi adresi geçerli görünmüyor. Örn. ornek.com", "The website address doesn't look valid. e.g. example.com")); return; }
     const fact = String(f.get("fact_card") || "").trim();
+    if (fact.length > 0 && fact.length < 10) { setErr(L("Doğru bilgiler en az bir tam cümle olmalı. Örn. Her gün 10:00-22:00 açığız.", "Facts need at least one full sentence. e.g. Open daily 10am-10pm.")); return; }
     setBusy(true); setErr(null);
     try {
       await api.updateBrand(b!.id, {
@@ -44,7 +45,7 @@ export function BrandEdit() {
         ...(!sim ? { auto_weekly: f.get("auto_weekly") === "on", fact_card: fact.length >= 10 ? fact.slice(0, 3000) : null } : {}),
       });
       haptic.done();
-      nav(-1);
+      goBack(nav);
     } catch (x) { setErr(friendlyError(x)); setBusy(false); }
   }
   async function remove() {
@@ -55,7 +56,7 @@ export function BrandEdit() {
 
   return (
     <form className="screen" onSubmit={save} noValidate>
-      <Head title={L("İşletme bilgileri", "Business details")} back={() => nav(-1)} />
+      <Head title={L("İşletme bilgileri", "Business details")} back={() => goBack(nav)} />
       <label className="field">{L("İşletme veya marka adı", "Business or brand name")}<input name="name" defaultValue={b.name} maxLength={120} /></label>
       <label className="field">{L("Diğer yazılışlar", "Other spellings")}<input name="aliases" defaultValue={b.aliases.join(", ")} placeholder={L("Örn. Ali Usta, AliUsta", "e.g. Joe's, Joes Pizza")} />
         <span className="hint">{L("Müşterilerin farklı yazdığı adlar. Virgülle ayırın.", "Names customers write differently. Separate with commas.")}</span></label>

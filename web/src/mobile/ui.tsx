@@ -1,7 +1,7 @@
 // Mobil uygulamanın ortak parçaları: ikonlar, alt menü, yükleniyor, hata kutusu.
 import { useEffect, type ReactNode } from "react";
 import { Haptics, ImpactStyle, NotificationType } from "@capacitor/haptics";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation, type NavigateFunction } from "react-router-dom";
 import { L } from "../lib/i18n";
 
 const P = { fill: "none", stroke: "currentColor", strokeWidth: 2, strokeLinecap: "round", strokeLinejoin: "round" } as const;
@@ -20,11 +20,27 @@ export const Icon = {
   more: <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="2" /><circle cx="12" cy="12" r="2" /><circle cx="19" cy="12" r="2" /></svg>,
 };
 
+/** Gösterilecek ölçüm türü: en son biten ölçümün türü (sitedeki gibi tek kural). Demo markada simülasyon. */
+export function shownType(brand: { data_origin: string } | null, runs: { status: string; measurement_type: string }[] | null | undefined): "live_search" | "model_knowledge" | "simulated" {
+  if (brand?.data_origin === "simulated") return "simulated";
+  const last = (runs ?? []).find((r) => r.status === "done" && r.measurement_type !== "simulated");
+  return last?.measurement_type === "live_search" ? "live_search" : "model_knowledge";
+}
+/** Geri: geçmiş yoksa (bildirimden açıldıysa) ana sayfaya. */
+export function goBack(nav: NavigateFunction) {
+  if (typeof history !== "undefined" && history.length > 1) nav(-1); else nav("/ana", { replace: true });
+}
+/** Ücretli paket (sitedeki koşul): Growth Lab ya da ücretsiz olmayan paket. */
+export const isPaid = (c: { kind: string; plan: string } | null | undefined) => c?.kind === "growth_lab" || (!!c?.plan && c.plan !== "free");
+
 export function TabBar() {
+  const { pathname } = useLocation();
+  // Ana sayfadaki kısayollardan açılan ayrıntı ekranlarında "Ana sayfa" seçili kalır
+  const fromHome = /^\/(urunler|dogruluk|kaynaklar|trafik)(\/|$)/.test(pathname);
   const cls = ({ isActive }: { isActive: boolean }) => (isActive ? "active" : "");
   return (
     <nav className="tabbar" aria-label={L("Alt menü", "Bottom menu")}>
-      <NavLink to="/ana" className={cls}>{Icon.home}{L("Ana sayfa", "Home")}</NavLink>
+      <NavLink to="/ana" className={({ isActive }) => (isActive || fromHome ? "active" : "")}>{Icon.home}{L("Ana sayfa", "Home")}</NavLink>
       <NavLink to="/rapor" className={cls}>{Icon.bars}{L("Rapor", "Report")}</NavLink>
       <NavLink to="/oneriler" className={cls}>{Icon.bulb}{L("Öneriler", "Tips")}</NavLink>
       <NavLink to="/bildirimler" className={cls}>{Icon.bell}{L("Bildirimler", "Alerts")}</NavLink>

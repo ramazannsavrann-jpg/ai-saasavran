@@ -1,7 +1,7 @@
 // Rapor: seçili markanın ayrıntıları. Başlıklar: Özet, Sorular, Rakipler, Ölçümler.
 // Rakamlar sitedeki raporla aynı kaynaktan ve aynı hesapla gelir (web/src/lib/report.ts, engine/src/metrics.ts).
 import { useState, type FormEvent } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, Navigate } from "react-router-dom";
 import { useApp, useLoad } from "../../lib/app";
 import { api, type MeasurementType, type PromptResult } from "../../lib/data";
 import { friendlyError } from "../../lib/supabase";
@@ -9,7 +9,7 @@ import { formatDateTime, lowSample, numLoc, providerLabel, series } from "../../
 import { confidenceScore } from "../../../../engine/src/metrics.ts";
 import { lossCards } from "../../../../engine/src/insights.ts";
 import { L } from "../../lib/i18n";
-import { Confirm, Err, Head, Icon, Sheet, Spinner } from "../ui";
+import { Confirm, Err, Head, Icon, Sheet, Spinner, shownType } from "../ui";
 import { useSelectedBrand } from "./Home";
 import { RivalsBody } from "./Rivals";
 
@@ -28,9 +28,10 @@ export function Report() {
   const sel = useSelectedBrand();
   const b = sel.brand;
   const runs = useLoad(() => (b ? api.runs(b.id) : Promise.resolve([])), [b?.id]);
-  const type: MeasurementType = (runs.data ?? []).some((r) => r.measurement_type === "live_search" && r.status === "done") ? "live_search" : "model_knowledge";
+  const type = shownType(b, runs.data) as MeasurementType;
   const vis = useLoad(() => (b ? api.visibility(b.id, type) : Promise.resolve([])), [b?.id, type]);
-  if (sel.loading || !b) return <Spinner />;
+  if (sel.loading) return <Spinner />;
+  if (!b) return <Navigate to="/kurulum" replace />;
   const pts = series(vis.data ?? []);
   const last = pts[pts.length - 1];
 
@@ -169,6 +170,7 @@ function Questions({ brandId, workspaceId, lastRunId }: { brandId: string; works
           })}
         </div>
       )}
+      {limit > 0 && active >= limit && <p className="card" style={{ margin: 0 }}>{L(`Paketinizdeki soru sınırına ulaştınız (${active} / ${limit}). Yeni soru eklemek için bir soruda "Ölçmeyi durdur"u seçin.`, `You've reached your plan's question limit (${active} / ${limit}). To add one, choose "Stop measuring" on a question.`)}</p>}
       {(!limit || active < limit) && <button className="btn btn-ghost" onClick={() => { setErr(null); setAdding(true); }}>{Icon.plus}{L("Soru ekle", "Add question")}</button>}
 
       <Sheet open={adding} onClose={() => setAdding(false)} title={L("Yeni soru", "New question")}>
@@ -180,10 +182,10 @@ function Questions({ brandId, workspaceId, lastRunId }: { brandId: string; works
       </Sheet>
       <Sheet open={!!menu} onClose={() => setMenu(null)} title={menu?.text}>
         {menu && lastRunId && <WhyBlock brandId={brandId} runId={lastRunId} promptId={menu.id} />}
-        {menu && <button className="btn btn-ghost" onClick={() => toggle(menu.id, !menu.active)}>{menu.active ? L("Ölçmeyi durdur", "Stop measuring") : L("Yeniden ölç", "Measure again")}</button>}
+        {menu && <button className="btn btn-ghost" onClick={() => toggle(menu.id, !menu.active)}>{menu.active ? L("Ölçmeyi durdur", "Stop measuring") : L("Ölçmeye devam et", "Resume measuring")}</button>}
         {menu && <button className="btn btn-danger" onClick={() => setDel(menu.id)}>{L("Soruyu sil", "Delete question")}</button>}
       </Sheet>
-      <Confirm open={!!del} danger title={L("Soru silinsin mi?", "Delete this question?")} text={L("Eski ölçümlerdeki sonuçları raporda kalır.", "Its results in past measurements stay in the report.")} action={L("Sil", "Delete")} onYes={() => del && remove(del)} onNo={() => setDel(null)} />
+      <Confirm open={!!del} danger title={L("Soru silinsin mi?", "Delete this question?")} text={L("Eski ölçümlerdeki sonuçlar raporda kalır.", "Its results in past measurements stay in the report.")} action={L("Sil", "Delete")} onYes={() => del && remove(del)} onNo={() => setDel(null)} />
     </>
   );
 }
@@ -221,7 +223,7 @@ function WhyBlock({ brandId, runId, promptId }: { brandId: string; runId: string
       <span style={{ fontWeight: 600 }}>{recIn > 0 ? L(`Son ölçümde ${answers.length} cevabın ${recIn} tanesinde önerildiniz.`, `Recommended in ${recIn} of ${answers.length} answers last time.`) : L("Son ölçümde bu soruda önerilmediniz.", "Not recommended for this question last time.")}</span>
       {lines.length > 0 && (
         <div className="card" style={{ display: "flex", flexDirection: "column", gap: 6, background: "var(--surface2)" }}>
-          <span className="small" style={{ fontWeight: 600 }}>{L("Neden önerilmediniz: kanıtlar", "Why not: the evidence")}</span>
+          <span className="small" style={{ fontWeight: 600 }}>{L("Neden önerilmemiş olabilirsiniz?", "Why you may not have been recommended")}</span>
           {lines.map((l) => <span key={l} className="small">{l}</span>)}
           <span className="muted tiny">{L("Bunlar kanıttır, kesin neden değildir; cevaplar ölçümden ölçüme değişir.", "This is evidence, not a proven cause; answers vary between measurements.")}</span>
         </div>
@@ -234,7 +236,7 @@ function WhyBlock({ brandId, runId, promptId }: { brandId: string; runId: string
           <div key={a.id} className="card" style={{ display: "flex", flexDirection: "column", gap: 6, background: "var(--surface2)" }}>
             <span className="small" style={{ display: "flex", justifyContent: "space-between", gap: 8 }}><b>{providerLabel(a.provider)}</b><span className={`badge ${rec ? "b-rec" : "b-no"}`}>{rec ? L("Önerildiniz", "Recommended") : L("Önerilmediniz", "Not recommended")}</span></span>
             <span className="small" style={{ whiteSpace: "pre-wrap", lineHeight: 1.5 }}>{long && !isOpen ? a.answer_text.slice(0, 280) + "…" : a.answer_text}</span>
-            {long && <button className="btn btn-text" style={{ alignSelf: "flex-start", padding: 0, minHeight: 36 }} onClick={() => setOpen(isOpen ? null : a.id)}>{isOpen ? L("Kısalt", "Show less") : L("Devamını oku", "Read more")}</button>}
+            {long && <button className="btn btn-text" style={{ alignSelf: "flex-start", padding: 0, minHeight: 48 }} onClick={() => setOpen(isOpen ? null : a.id)}>{isOpen ? L("Kısalt", "Show less") : L("Devamını oku", "Read more")}</button>}
           </div>
         );
       })}

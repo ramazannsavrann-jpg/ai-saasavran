@@ -97,6 +97,15 @@ test("Mobil: kayıt → işletme kurulumu → ölçüm → rakip → bildirimler
   await expect(page.getByRole("heading", { name: "Öneriler" })).toBeVisible();
   await expect(page.locator("article.card").first()).toBeVisible();
   await noOverflow(page); await shot(page, "05c-oneriler");
+  // Küçük telefon (360 px): sekmeler sığmalı
+  const vp = page.viewportSize();
+  await page.setViewportSize({ width: 360, height: 760 });
+  await noOverflow(page);
+  for (const t of ["Yapılacaklar", "Yaptıklarım", "İçerik", "Site"]) {
+    const ok = await page.getByRole("tab", { name: t }).evaluate((el) => el.scrollWidth <= el.clientWidth + 1);
+    expect(ok, `${t} sekmesi 360 px'te sığmalı`).toBeTruthy();
+  }
+  if (vp) await page.setViewportSize(vp);
   await page.getByRole("button", { name: "Web sitesini ekle" }).click();
   await expect(page.getByRole("heading", { name: "İşletme bilgileri" })).toBeVisible();
   await page.getByLabel("Web sitesi").fill("mobildoner.example");

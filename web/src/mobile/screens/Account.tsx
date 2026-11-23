@@ -7,6 +7,7 @@ import { api } from "../../lib/data";
 import { sb, friendlyError } from "../../lib/supabase";
 import { L, getLang, switchLang } from "../../lib/i18n";
 import { Err, Head, Icon, Sheet } from "../ui";
+import { disablePush, enablePush, pushState, type PushState } from "../push";
 
 const PLAN_TR: Record<string, [string, string]> = { free: ["Ücretsiz", "Free"], starter: ["Gümüş", "Silver"], altin: ["Altın", "Gold"], pro: ["Platin", "Platinum"], agency: ["Elmas", "Diamond"] };
 const planTr = (id: string, name: string) => (PLAN_TR[id] ? L(PLAN_TR[id][0], PLAN_TR[id][1]) : name);
@@ -17,6 +18,15 @@ export function Account() {
   const usage = useLoad(() => (current ? api.usage(current.id) : Promise.resolve(null)), [current?.id]);
   const [weekly, setWeekly] = useState<boolean | null>(null);
   const [drop, setDrop] = useState(true);
+  const [push, setPush] = useState<PushState>("unavailable");
+  useEffect(() => { void pushState().then(setPush); }, []);
+  async function togglePush(on: boolean) {
+    setErr(null);
+    try {
+      if (on) { const ok = await enablePush(); setPush(ok ? "on" : await pushState()); if (!ok) setErr(L("Bildirim izni verilmedi. Telefonun Ayarlar > Uygulamalar > SaaSavran > Bildirimler bölümünden açabilirsiniz.", "Notification permission wasn't granted. You can turn it on in your phone's Settings > Apps > SaaSavran > Notifications.")); }
+      else { await disablePush(); setPush("off"); }
+    } catch (e) { setErr(friendlyError(e)); }
+  }
   const [err, setErr] = useState<string | null>(null);
   const [del, setDel] = useState(false);
   const [busy, setBusy] = useState(false);
@@ -48,7 +58,7 @@ export function Account() {
     const { error } = kind === "weekly" ? await sb().rpc("set_email_prefs", { p_weekly: v, p_lang: getLang() }) : await sb().rpc("set_drop_alerts", { p_on: v });
     if (error) setErr(friendlyError(error)); else if (kind === "weekly") setWeekly(v); else setDrop(v);
   }
-  async function signOut() { await sb().auth.signOut(); nav("/", { replace: true }); }
+  async function signOut() { await disablePush().catch(() => undefined); await sb().auth.signOut(); nav("/", { replace: true }); }
   async function remove() {
     setBusy(true); setErr(null);
     const { data, error } = await sb().rpc("delete_my_account");
@@ -56,6 +66,7 @@ export function Account() {
     if (error) { setErr(friendlyError(error)); return; }
     if (data === "active_subscription") { setErr(L("Aktif bir aboneliğiniz var. Önce aboneliği iptal edin, sonra hesabınızı silebilirsiniz. İptal için info@aisaasavran.com adresine yazın.", "You have an active subscription. Cancel it first, then delete your account. To cancel, email info@aisaasavran.com.")); return; }
     if (data !== "deleted") { setErr(L("Hesap silinemedi. Lütfen info@aisaasavran.com adresine yazın.", "Could not delete the account. Please email info@aisaasavran.com.")); return; }
+    await disablePush().catch(() => undefined);
     await sb().auth.signOut().catch(() => undefined);
     try { localStorage.clear(); } catch { /* yok say */ }
     nav("/", { replace: true });
@@ -80,7 +91,8 @@ export function Account() {
       )}
       <h2 className="label">{L("Bildirimler", "Notifications")}</h2>
       <div className="list">
-        <label className="row">{L("Sonucum belirgin değişince haber ver", "Tell me when my result changes clearly")}<input type="checkbox" role="switch" className="switch" checked={drop} onChange={(e) => setPref("drop", e.target.checked)} /></label>
+        {push !== "unavailable" && <label className="row">{L("Ölçüm bitince telefona bildirim", "Phone notification when a measurement is done")}<input type="checkbox" role="switch" className="switch" checked={push === "on"} onChange={(e) => togglePush(e.target.checked)} /></label>}
+        <label className="row">{L("Sonucum belirgin değişince e-posta gönder", "Email me when my result changes clearly")}<input type="checkbox" role="switch" className="switch" checked={drop} onChange={(e) => setPref("drop", e.target.checked)} /></label>
         {weekly !== null && <label className="row">{L("Haftalık özet e-postası", "Weekly summary email")}<input type="checkbox" role="switch" className="switch" checked={weekly} onChange={(e) => setPref("weekly", e.target.checked)} /></label>}
       </div>
       <h2 className="label">{L("Ayarlar", "Settings")}</h2>

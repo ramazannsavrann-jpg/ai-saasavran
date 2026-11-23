@@ -1,14 +1,14 @@
 // Ürünler: ürün görünürlüğü ve önerilme oranı, rakip ürün karşılaştırması, ürün bilgi doğruluğu, Google Shopping, nereden satın alınır.
 // Hesaplamalar sitedekiyle aynı motor fonksiyonları (engine/src/insights.ts, shopping.ts); ek ücretli çağrı yapılmaz.
 import { useState, type FormEvent, type ReactNode } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { useApp, useLoad } from "../../lib/app";
 import { api, type Brand, type Product } from "../../lib/data";
 import { friendlyError } from "../../lib/supabase";
 import { MIN_SAMPLE, pct, providerLabel } from "../../lib/report";
 import { L, isEn } from "../../lib/i18n";
 import { compareProducts, productVisibility, rivalReasons, shoppingSources } from "../../../../engine/src/insights.ts";
-import { Confirm, Err, Head, Icon, Sheet, Spinner, haptic } from "../ui";
+import { Confirm, Err, Head, Icon, Sheet, Spinner, goBack, haptic } from "../ui";
 import { useSelectedBrand } from "./Home";
 
 /** Ürün ekranlarının ortak verisi: ürünler, son ölçümlerin cevapları, rakip markalar. */
@@ -21,7 +21,8 @@ function useProductData(brand: Brand) {
   const lastIds = (["live_search", "model_knowledge"] as const).map((t) => (runs.data ?? []).find((r) => r.status === "done" && r.measurement_type === t)?.id).filter((x): x is string => !!x);
   const answers = useLoad(() => Promise.all(lastIds.map((id) => api.answers(id))).then((a) => a.flat()), [lastIds.join(",")]);
   const comps = useLoad(() => api.competitors(brand.id), [brand.id]);
-  const loading = products.loading || runs.loading || answers.loading || comps.loading;
+  // İlk yüklemede bekle; sonraki yenilemelerde ekran yerinde kalsın (kaydırma kaybolmasın)
+  const loading = !products.data || !runs.data || !answers.data || !comps.data;
   return { products, checks, shop, answers: answers.data ?? [], comps: comps.data ?? [], hasRuns: lastIds.length > 0, loading };
 }
 
@@ -29,10 +30,9 @@ const Note = ({ children }: { children: ReactNode }) => <p className="muted smal
 const Section = ({ title, children }: { title: string; children: ReactNode }) => <section style={{ display: "flex", flexDirection: "column", gap: 10 }}><h2 className="label">{title}</h2>{children}</section>;
 
 export function Products() {
-  const nav = useNavigate();
   const sel = useSelectedBrand();
   if (sel.loading) return <Spinner />;
-  if (!sel.brand) { nav("/ana", { replace: true }); return null; }
+  if (!sel.brand) return <Navigate to="/kurulum" replace />;
   return <ProductList brand={sel.brand} />;
 }
 
@@ -55,7 +55,7 @@ function ProductList({ brand }: { brand: Brand }) {
   }
   return (
     <div className="screen">
-      <Head title={L("Ürünler", "Products")} back={() => nav(-1)} right={<span className="muted small">{brand.name}</span>} />
+      <Head title={L("Ürünler", "Products")} back={() => goBack(nav)} right={<span className="muted small">{brand.name}</span>} />
       {brand.data_origin === "simulated" ? <p className="card" style={{ margin: 0 }}>{L("Ürünler demo markalarda kullanılmaz.", "Products aren't available for demo brands.")}</p> : (
         <>
           <Note>{L("Ürünlerinizin yapay zekâ cevaplarında geçip geçmediğine, önerilip önerilmediğine ve doğru anlatılıp anlatılmadığına bakarız.", "We check whether your products appear in AI answers, get recommended and are described correctly.")}</Note>
@@ -98,10 +98,9 @@ function ProductList({ brand }: { brand: Brand }) {
 }
 
 export function ProductDetail() {
-  const nav = useNavigate();
   const sel = useSelectedBrand();
   if (sel.loading) return <Spinner />;
-  if (!sel.brand) { nav("/ana", { replace: true }); return null; }
+  if (!sel.brand) return <Navigate to="/kurulum" replace />;
   return <ProductBody brand={sel.brand} />;
 }
 
@@ -140,7 +139,7 @@ function ProductBody({ brand }: { brand: Brand }) {
 
   async function check() {
     setBusy(true); setErr(null); setMsg(null); haptic.tap();
-    try { await api.requestProductCheck(p!.id); setMsg(L("Kontrol sıraya alındı. Sonuç en geç bir saat içinde burada görünür.", "Check queued. The result appears here within an hour.")); d.products.reload(); }
+    try { await api.requestProductCheck(p!.id); setMsg(L("Kontrol sıraya alındı. Sonuç hazır olunca burada görünür.", "Check queued. The result appears here when ready.")); d.products.reload(); }
     catch (x) { setErr(friendlyError(x)); } finally { setBusy(false); }
   }
   async function saveRival(e: FormEvent<HTMLFormElement>) {
@@ -167,7 +166,7 @@ function ProductBody({ brand }: { brand: Brand }) {
 
   return (
     <div className="screen">
-      <Head title={p.name} back={() => nav(-1)} />
+      <Head title={p.name} back={() => goBack(nav)} />
       {p.price && <span className="muted">{p.price}</span>}
       {msg && <p className="ok" role="status">{msg}</p>}
       <Err msg={err} />
@@ -178,10 +177,13 @@ function ProductBody({ brand }: { brand: Brand }) {
             {v.engines.map((e) => (
               <div key={e.provider} className="card" style={{ display: "flex", flexDirection: "column", gap: 4 }}>
                 <span style={{ display: "flex", justifyContent: "space-between" }}><b>{providerLabel(e.provider)}</b><span className="num">{pct(e.answers ? e.recommended / e.answers : 0)}</span></span>
-                <span className="muted small">{L(`${e.answers} cevabın ${e.mentioned} tanesinde geçti, ${e.recommended} tanesinde önerildi`, `Named in ${e.mentioned} of ${e.answers} answers, recommended in ${e.recommended}`)}{e.recommended > 0 && L(`; ${e.wins} tanesinde ilk sırada`, `; first in ${e.wins}`)}{e.answers < MIN_SAMPLE && L(" · örneklem küçük", " · small sample")}</span>
+                <span className="muted small">{L(`${e.answers} cevabın ${e.mentioned} tanesinde geçti, ${e.recommended} tanesinde önerildi`, `Named in ${e.mentioned} of ${e.answers} answers, recommended in ${e.recommended}`)}{e.recommended > 0 && L(`; ${e.wins} tanesinde ilk sırada`, `; first in ${e.wins}`)}{e.answers < MIN_SAMPLE && L(" · az cevap var", " · few answers")}</span>
               </div>
             ))}
-            {v.engines.every((e) => e.mentioned === 0) && <Note>{L("Ürün adı hiçbir cevapta geçmedi. Sorularınız işletme düzeyindeyse bu beklenir; bu ürünün kategorisine dair sorular ekleyin (örn. \"Antalya'da en iyi karışık döner nerede?\").", "The product wasn't named in any answer. That's expected if your questions are business-level; add questions about this product's category.")}</Note>}
+            {v.engines.every((e) => e.mentioned === 0) && <>
+              <Note>{L("Ürün adı hiçbir cevapta geçmedi. Sorularınız işletme düzeyindeyse bu beklenir; bu ürünün kategorisine dair sorular ekleyin (örn. \"Antalya'da en iyi karışık döner nerede?\").", "The product wasn't named in any answer. That's expected if your questions are business-level; add questions about this product's category.")}</Note>
+              <button className="btn btn-ghost" onClick={() => nav("/rapor?b=sorular")}>{L("Soru ekle", "Add questions")}</button>
+            </>}
             {topWinners.length > 0 && <Note>{L(`${v.losses.length} soruda ürününüz yerine önerilenler: ${topWinners.join(", ")}.`, `Recommended instead in ${v.losses.length} questions: ${topWinners.join(", ")}.`)}</Note>}
           </>
         )}
@@ -198,7 +200,7 @@ function ProductBody({ brand }: { brand: Brand }) {
             ); })}</div>
           </div>
         ))}
-        {reasons.map((x) => (
+        {reasons.filter((x) => rows.some((r) => r.id === x.rivalId)).map((x) => (
           <article key={x.rivalId} className="card" style={{ display: "flex", flexDirection: "column", gap: 8 }}>
             <b>{L(`${rows.find((r) => r.id === x.rivalId)?.name} sizin yerinize önerildiğinde`, `When ${rows.find((r) => r.id === x.rivalId)?.name} was recommended instead`)}</b>
             {x.quotes.map((q) => <span key={q.answerId} className="small"><span className="muted">{providerLabel(q.provider)}: </span>“{q.text}”</span>)}
@@ -207,7 +209,7 @@ function ProductBody({ brand }: { brand: Brand }) {
         ))}
         {rivals.length > 0 && rows.length > 0 && <span className="small" style={{ fontWeight: 600 }}>{L("Eklediğiniz rakip ürünler", "Competitor products you added")}</span>}
         {rivals.length > 0 && <div className="list">{rivals.map((r) => (
-          <div key={r.id} className="row"><span>{r.rival_brand ? `${r.rival_brand} ` : ""}{r.name}</span><button className="btn btn-text" style={{ minHeight: 40, padding: "0 4px", color: "var(--muted)" }} onClick={() => setRm(r)}>{L("Sil", "Delete")}</button></div>
+          <div key={r.id} className="row"><span>{r.rival_brand ? `${r.rival_brand} ` : ""}{r.name}</span><button className="btn btn-text" style={{ minHeight: 48, padding: "0 8px", color: "var(--muted)" }} onClick={() => setRm(r)}>{L("Sil", "Delete")}</button></div>
         ))}</div>}
         {rivals.length < 5 && <button className="btn btn-ghost" onClick={() => { setErr(null); setAddRival(true); }}>{Icon.plus}{L("Rakip ürün ekle", "Add competitor product")}</button>}
       </Section>

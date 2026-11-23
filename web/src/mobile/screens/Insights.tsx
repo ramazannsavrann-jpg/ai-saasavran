@@ -1,7 +1,7 @@
 // Ayrıntı ekranları: Bilgi doğruluğu (TruthGuard, çelişkiler, algı, kaynaksız sayılar), Kaynaklar (kaynak etkisi, fırsatlar, yapay zekânın aramaları),
 // Ziyaretçi ve botlar. Hesaplamalar sitedekiyle aynı motor fonksiyonlarından gelir; yeni veri üretilmez.
 import { useState, type ReactNode } from "react";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { useApp, useLoad } from "../../lib/app";
 import { api, type Brand, type Run } from "../../lib/data";
 import { pct, providerLabel, series, sourceOpportunities } from "../../lib/report";
@@ -11,20 +11,19 @@ import { fanoutQueries, perceptionSummary, rivalTraits } from "../../../../engin
 import { sourceNetwork } from "../../../../engine/src/network.ts";
 import { sourceMix, statSummary, truthSummary, type SourceType } from "../../../../engine/src/truth.ts";
 import { botSummary, snippet, trafficSummary, workerCode, SOURCE_PROVIDER, type AiSource, type BotKind } from "../../../../engine/src/traffic.ts";
-import { Head, Spinner, haptic } from "../ui";
+import { Head, Icon, Spinner, goBack, haptic, isPaid } from "../ui";
 import { useSelectedBrand } from "./Home";
 
-export const isPaid = (c: { kind: string; plan: string } | null | undefined) => c?.kind === "growth_lab" || (!!c?.plan && c.plan !== "free");
 
 /** Ekran iskeleti: geri düğmesi, başlık, seçili marka. */
 function Frame({ title, children }: { title: string; children: (b: Brand) => ReactNode }) {
   const nav = useNavigate();
   const sel = useSelectedBrand();
   if (sel.loading) return <Spinner />;
-  if (!sel.brand) { nav("/ana", { replace: true }); return null; }
+  if (!sel.brand) return <Navigate to="/kurulum" replace />;
   return (
     <div className="screen">
-      <Head title={title} back={() => nav(-1)} right={<span className="muted small">{sel.brand.name}</span>} />
+      <Head title={title} back={() => goBack(nav)} right={<span className="muted small">{sel.brand.name}</span>} />
       {children(sel.brand)}
     </div>
   );
@@ -32,7 +31,15 @@ function Frame({ title, children }: { title: string; children: (b: Brand) => Rea
 
 const Note = ({ children }: { children: ReactNode }) => <p className="muted small" style={{ margin: 0 }}>{children}</p>;
 const Section = ({ title, children }: { title: string; children: ReactNode }) => <section style={{ display: "flex", flexDirection: "column", gap: 10 }}><h2 className="label">{title}</h2>{children}</section>;
-const PaidOnly = ({ text }: { text: string }) => <p className="card" style={{ margin: 0 }}>{text} {L("Ücretli paketlerde açık.", "Available on paid plans.")}</p>;
+function PaidOnly({ text }: { text: string }) {
+  const nav = useNavigate();
+  return (
+    <div className="card" style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+      <span>{text} {L("Ücretli paketlerde açık.", "Available on paid plans.")}</span>
+      <button className="btn btn-text" style={{ alignSelf: "flex-start", padding: 0 }} onClick={() => nav("/hesap")}>{L("Paketinizi görün", "See your plan")} {Icon.chevron}</button>
+    </div>
+  );
+}
 function Quote({ text }: { text: string }) {
   return <blockquote style={{ margin: 0, padding: "8px 12px", borderLeft: "3px solid var(--line2)", color: "var(--soft)", fontSize: 14, lineHeight: 1.45 }}>“{text}”</blockquote>;
 }
@@ -91,8 +98,8 @@ function AccuracyBody({ brand }: { brand: Brand }) {
               <button className="btn btn-primary" onClick={() => nav("/marka-duzenle")}>{L("Doğru bilgileri yaz", "Write your facts")}</button>
             </div>
           ) : s.checks === 0 ? <Note>{s.failed > 0
-              ? L(`${s.failed} kontrol teknik bir hata yüzünden yapılamadı; yaklaşık bir hafta sonra yeniden denenir.`, `${s.failed} check(s) failed with a technical error; they're retried about a week later.`)
-              : L("Henüz kontrol yok. İşletmenizin geçtiği yeni cevaplar birkaç saat içinde bilgilerinizle karşılaştırılır.", "No checks yet. New answers mentioning your business are compared with your facts within hours.")}</Note>
+              ? L(`${s.failed} kontrol teknik bir hata yüzünden yapılamadı; sonraki ölçümde yeniden denenir.`, `${s.failed} check(s) failed with a technical error; they're retried with a later measurement.`)
+              : L("Henüz kontrol yok. İşletmenizin geçtiği yeni cevaplar bilgilerinizle karşılaştırılır; sonuç burada görünür.", "No checks yet. New answers mentioning your business are compared with your facts; results appear here.")}</Note>
           : (
             <>
               <Note>{L(`Son 30 gün: ${s.checks} cevap karşılaştırıldı, işletmeniz hakkında ${total} iddia bulundu.`, `Last 30 days: ${s.checks} answers checked, ${total} claims about your business.`)}</Note>
@@ -139,7 +146,7 @@ function AccuracyBody({ brand }: { brand: Brand }) {
               <i className="pos" style={{ flex: per.sentiment.positive }} /><i className="mix" style={{ flex: per.sentiment.mixed }} /><i className="neu" style={{ flex: per.sentiment.neutral }} /><i className="neg" style={{ flex: per.sentiment.negative }} />
             </div>
             <span className="small">{L(`Olumlu ${per.sentiment.positive} · Karışık ${per.sentiment.mixed} · Nötr ${per.sentiment.neutral} · Olumsuz ${per.sentiment.negative}`, `Positive ${per.sentiment.positive} · Mixed ${per.sentiment.mixed} · Neutral ${per.sentiment.neutral} · Negative ${per.sentiment.negative}`)}</span>
-            <Note>{L(`${per.answers} cevap incelendi.`, `${per.answers} answers analysed.`)}{per.answers < MIN_SAMPLE && L(" Örneklem küçük; tek bir cevap tabloyu değiştirebilir.", " Small sample; one answer can change the picture.")}</Note>
+            <Note>{L(`${per.answers} cevap incelendi.`, `${per.answers} answers analysed.`)}{per.answers < MIN_SAMPLE && L(" Az cevap var; sonuç değişebilir.", " Few answers; this may change.")}</Note>
             {per.traits.length > 0 && (
               <div className="list">
                 {per.traits.map((t) => (
@@ -219,7 +226,7 @@ function SourcesBody({ brand }: { brand: Brand }) {
         </Section>
       )}
       {fan.rows.length > 0 && (
-        <Section title={L("Yapay zekânın yaptığı aramalar", "What the AI searched for")}>
+        <Section title={L("Yapay zekâların yaptığı aramalar", "What the AIs searched for")}>
           <Note>{L(`Cevap vermeden önce internette bu ifadelerle arama yapıldı (${fan.answers} cevabın ${fan.searched} tanesinde). Bu aramalarda çıkan sayfalar yapay zekânın okuduğu sayfalardır.`, `Before answering, the AI searched with these phrases (${fan.searched} of ${fan.answers} answers). Pages ranking for them are what the AI reads.`)}</Note>
           <div className="list">{fan.rows.map((r) => <div key={r.query} className="row"><span>{r.query}</span><span className="muted small num">{r.count}</span></div>)}</div>
         </Section>
@@ -249,7 +256,7 @@ export function RivalTraits({ brand }: { brand: Brand }) {
           ))}
         </article>
       ))}
-      {rows.reduce((a, r) => a + r.answers, 0) < 10 && <Note>{L("Örneklem küçük; tek bir cevap tabloyu değiştirebilir.", "Small sample; one answer can change this.")}</Note>}
+      {rows.reduce((a, r) => a + r.answers, 0) < 10 && <Note>{L("Az cevap var; sonuç değişebilir.", "Few answers; this may change.")}</Note>}
     </Section>
   );
 }

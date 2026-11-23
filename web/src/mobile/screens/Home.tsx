@@ -8,7 +8,7 @@ import { friendlyError } from "../../lib/supabase";
 import { formatDateTime, numLoc, providerLabel, series } from "../../lib/report";
 import { L } from "../../lib/i18n";
 import { SITE_ORIGIN } from "../../lib/env";
-import { Err, Icon, Sheet, Spinner, greeting, haptic } from "../ui";
+import { Err, Icon, Sheet, Spinner, greeting, haptic, isPaid, shownType } from "../ui";
 
 const KEY = "mobil-marka";
 const PRELIM = 20; // bundan az cevap: ön sonuç
@@ -16,15 +16,18 @@ const PRELIM = 20; // bundan az cevap: ön sonuç
 function StartSteps({ brand, doneRuns }: { brand: Brand; doneRuns: number }) {
   const nav = useNavigate();
   const prompts = useLoad(() => api.prompts(brand.id), [brand.id]);
-  const rivals = useLoad(() => api.competitors(brand.id), [brand.id]);
+  const { current } = useApp();
+  const paid = isPaid(current);
   const key = `mobil-rehber-${brand.id}`;
   const [off, setOff] = useState(() => { try { return localStorage.getItem(key) === "1"; } catch { return false; } });
-  if (off || doneRuns >= 4 || !prompts.data || !rivals.data || brand.data_origin === "simulated") return null;
+  if (off || doneRuns >= 4 || !prompts.data || brand.data_origin === "simulated") return null;
   const active = prompts.data.filter((p) => p.active).length;
   const steps = [
     { done: active >= 10, to: "/rapor?b=sorular", t: L(`Soru sayısını 10'a çıkarın (şu an ${active})`, `Grow to 10 questions (now ${active})`), d: L("Daha çok soru, daha güvenilir sonuç.", "More questions, a more reliable result.") },
-    { done: rivals.data.length > 0, to: "/rapor?b=rakipler", t: L("Rakiplerinizi ekleyin", "Add your competitors"), d: L("Kimin sizin yerinize önerildiğini görün.", "See who gets recommended instead of you.") },
-    { done: !!brand.fact_card, to: "/marka-duzenle", t: L("Doğru bilgilerinizi yazın", "Write your correct facts"), d: L("Adres, saatler, fiyatlar: yapay zekâların söyledikleri bunlarla karşılaştırılır.", "Address, hours, prices: what the AIs say is checked against them.") },
+    { done: !!brand.website, to: "/marka-duzenle", t: L("Web sitenizi ekleyin", "Add your website"), d: L("Sitenizin yapay zekâlarda kaynak gösterilip gösterilmediğine bakarız.", "We check whether the AIs cite your site.") },
+    { done: !!brand.fact_card, to: "/marka-duzenle", t: L("Doğru bilgilerinizi yazın", "Write your correct facts"), d: paid
+      ? L("Adres, saat ve fiyatlarınızı yazın. Yapay zekâların söyledikleri bunlarla karşılaştırılır.", "Write your address, hours and prices. What the AIs say is checked against them.")
+      : L("Adres, saat ve fiyatlarınızı yazın. Ücretli paketlerde yapay zekâların söyledikleri bunlarla karşılaştırılır.", "Write your address, hours and prices. On paid plans, what the AIs say is checked against them.") },
   ];
   const left = steps.filter((x) => !x.done);
   if (!left.length) return null;
@@ -33,7 +36,7 @@ function StartSteps({ brand, doneRuns }: { brand: Brand; doneRuns: number }) {
     <>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
         <h2 className="section-title">{L("Sonucunuzu güçlendirin", "Strengthen your result")}</h2>
-        <button className="btn btn-text" style={{ minHeight: 40, padding: "0 4px", color: "var(--muted)" }} onClick={close}>{L("Gizle", "Hide")}</button>
+        <button className="btn btn-text" style={{ minHeight: 48, padding: "0 8px", color: "var(--muted)" }} onClick={close}>{L("Gizle", "Hide")}</button>
       </div>
       <div className="list">
         {steps.map((x) => (
@@ -101,8 +104,13 @@ export function Home() {
   const runs = useLoad(() => (b ? api.runs(b.id) : Promise.resolve([])), [b?.id]);
   const usage = useLoad(() => (current ? api.usage(current.id) : Promise.resolve(null)), [current?.id]);
   const runList = runs.data ?? [];
-  const type: MeasurementType = runList.some((r) => r.measurement_type === "live_search" && r.status === "done") ? "live_search" : "model_knowledge";
-  const vis = useLoad(() => (b ? api.visibility(b.id, type) : Promise.resolve([])), [b?.id, type, runList.length]);
+  const type = shownType(b, runList) as MeasurementType;
+  const lastDone = runList.find((r) => r.status === "done")?.id ?? "";
+  // Ölçüm bitince (durumu değişince) sonuç yeniden okunur
+  const vis = useLoad(() => (b ? api.visibility(b.id, type) : Promise.resolve([])), [b?.id, type, lastDone]);
+  const sim = b?.data_origin === "simulated";
+  const canLive = !!current?.paid_live_allowed && !sim;
+  const budget = useLoad(() => (canLive && current ? api.paidBudget(current.id) : Promise.resolve(null)), [canLive, current?.id, lastDone]);
   const [busy, setBusy] = useState<string | null>(null);
   const [err, setErr] = useState<string | null>(null);
   const [note, setNote] = useState<string | null>(null);
@@ -117,6 +125,8 @@ export function Home() {
 
   if (loading || sel.loading) return <Spinner />;
   if (!current || !b) return <Navigate to="/kurulum" replace />;
+  // İlk yüklemede bekle: ölçümü olan kullanıcı bir an "İlk ölçümü başlat" görmesin
+  if (!runs.data || !vis.data) return <Spinner />;
 
   const pts = series(vis.data ?? []);
   const last = pts[pts.length - 1], prev = pts[pts.length - 2];
@@ -131,7 +141,9 @@ export function Home() {
 
   async function start() {
     setBusy("run"); setErr(null); haptic.tap();
-    try { await api.requestRun(b!.id, !!current?.paid_live_allowed); runs.reload(); usage.reload(); }
+    // Canlı (ücretli) ölçüm yalnız izin ve bütçe varsa; yoksa aramasız ölçüm (sitedeki kural)
+    const left = budget.data ? Number(budget.data.cap_usd) - Number(budget.data.spent_usd) : 0;
+    try { await api.requestRun(b!.id, canLive && left >= 0.05); runs.reload(); usage.reload(); }
     catch (e) { setErr(friendlyError(e)); } finally { setBusy(null); }
   }
   async function share() {
@@ -147,7 +159,7 @@ export function Home() {
     <div className="screen">
       <div>
         <span className="muted small">{greeting()},</span>
-        <button onClick={() => setPicker(true)} aria-haspopup="dialog" aria-label={L(`${b.name}, marka değiştir`, `${b.name}, switch brand`)} style={{ display: "flex", alignItems: "center", gap: 6, background: "none", border: 0, padding: 0, minHeight: 44, fontSize: 24, fontWeight: 600, color: "var(--text)", maxWidth: "100%" }}>
+        <button onClick={() => setPicker(true)} aria-haspopup="dialog" aria-label={L(`${b.name}, marka değiştir`, `${b.name}, switch brand`)} style={{ display: "flex", alignItems: "center", gap: 6, background: "none", border: 0, padding: 0, minHeight: 48, fontSize: 24, fontWeight: 600, color: "var(--text)", maxWidth: "100%" }}>
           <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{b.name}</span>{Icon.down}
         </button>
       </div>
@@ -155,9 +167,9 @@ export function Home() {
       <section className="hero" aria-label={L("Yapay zekâlar sizi önerdi", "AIs recommended you")}>
         {rate === null ? (
           <>
-            <span className="sub">{L("Henüz ölçüm yok", "No measurement yet")}</span>
+            <span className="sub">{sim ? L("SİMÜLASYON · demo marka", "SIMULATION · demo brand") : L("Henüz ölçüm yok", "No measurement yet")}</span>
             <p style={{ margin: 0, fontSize: 17, lineHeight: "24px" }}>{L("Yapay zekâlara müşterilerinizin soracağı soruları sorup sizi önerip önermediklerine bakacağız.", "We'll ask the AIs the questions your customers would ask and check whether they recommend you.")}</p>
-            {pending ? <p style={{ margin: 0 }} role="status">{pending.status === "queued" ? L("Ölçüm sırada.", "Measurement queued.") : L("Ölçüm sürüyor.", "Measurement running.")} {L("Bitince bu ekran yenilenir.", "This screen refreshes when it's done.")}</p> : startBtn(true)}
+            {pending ? <p style={{ margin: 0 }} role="status">{pending.status === "queued" ? L("Ölçüm sırada.", "Measurement queued.") : L("Ölçüm sürüyor.", "Measurement running.")} {L("Bitince bu ekran yenilenir.", "This screen refreshes when it's done.")}</p> : !sim && startBtn(true)}
           </>
         ) : (
           <>
@@ -186,8 +198,8 @@ export function Home() {
 
       {rate !== null && (pending
         ? <p className="ok" role="status">{pending.status === "queued" ? L("Ölçüm sırada.", "Measurement queued.") : L("Ölçüm sürüyor.", "Measurement running.")} {formatDateTime(pending.created_at)}. {L("Bitince bu ekran yenilenir.", "This screen refreshes when it's done.")}</p>
-        : startBtn(false))}
-      {u && <span className="muted small" style={{ marginTop: -8 }}>{L(`Bu ay ${u.engine_calls.toLocaleString("tr-TR")} / ${u.engine_call_limit.toLocaleString("tr-TR")} soru soruldu.`, `${u.engine_calls.toLocaleString("en-US")} / ${u.engine_call_limit.toLocaleString("en-US")} questions asked this month.`)}</span>}
+        : !sim && startBtn(false))}
+      {u && <span className="muted small" style={{ marginTop: -8 }}>{L(`Bu ay ${u.engine_calls.toLocaleString("tr-TR")} / ${u.engine_call_limit.toLocaleString("tr-TR")} yapay zekâ cevabı kullanıldı.`, `${u.engine_calls.toLocaleString("en-US")} / ${u.engine_call_limit.toLocaleString("en-US")} AI answers used this month.`)}</span>}
       <Err msg={err} />
       {note && <p className="ok" role="status">{note}</p>}
 

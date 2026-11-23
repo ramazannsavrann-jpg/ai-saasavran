@@ -1,11 +1,12 @@
 // Rakipler: son ölçümde kim ne sıklıkla önerildi + takip edilen rakipleri ekleme/silme.
 import { useState, type FormEvent } from "react";
+import { Navigate } from "react-router-dom";
 import { useApp, useLoad } from "../../lib/app";
 import { api, type MeasurementType } from "../../lib/data";
 import { friendlyError } from "../../lib/supabase";
 import { competitorsInRun, series } from "../../lib/report";
 import { L } from "../../lib/i18n";
-import { Confirm, Err, Spinner } from "../ui";
+import { Confirm, Err, Spinner, shownType } from "../ui";
 import { useSelectedBrand } from "./Home";
 import { RivalTraits } from "./Insights";
 
@@ -14,14 +15,15 @@ export function RivalsBody() {
   const sel = useSelectedBrand();
   const b = sel.brand;
   const runs = useLoad(() => (b ? api.runs(b.id) : Promise.resolve([])), [b?.id]);
-  const type: MeasurementType = (runs.data ?? []).some((r) => r.measurement_type === "live_search" && r.status === "done") ? "live_search" : "model_knowledge";
+  const type = shownType(b, runs.data) as MeasurementType;
   const vis = useLoad(() => (b ? api.visibility(b.id, type) : Promise.resolve([])), [b?.id, type]);
   const comps = useLoad(() => (b ? api.competitors(b.id) : Promise.resolve([])), [b?.id]);
   const usage = useLoad(() => (current ? api.usage(current.id) : Promise.resolve(null)), [current?.id]);
   const [err, setErr] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [rm, setRm] = useState<{ id: string; name: string } | null>(null);
-  if (sel.loading || !b) return <Spinner />;
+  if (sel.loading) return <Spinner />;
+  if (!b) return <Navigate to="/kurulum" replace />;
 
   const pts = series(vis.data ?? []);
   const last = pts[pts.length - 1];

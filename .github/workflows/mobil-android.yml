@@ -29,7 +29,17 @@ jobs:
       - run: npm ci --prefix web
       - name: Ekranları derle ve Android projesine kopyala
         working-directory: web
+        env:
+          GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
         run: |
+          # Telefon bildirimleri yalnız Firebase ayarı (GOOGLE_SERVICES_JSON) varsa açılır
+          if [ -n "$GOOGLE_SERVICES_JSON" ]; then
+            printf '%s' "$GOOGLE_SERVICES_JSON" > android/app/google-services.json
+            export VITE_PUSH=1
+            echo "Bildirimler: açık"
+          else
+            echo "Bildirimler: kapalı (GOOGLE_SERVICES_JSON yok)"
+          fi
           npm run build:mobile
           npx cap sync android
       - name: Sürüm numarası

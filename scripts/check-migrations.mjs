@@ -387,4 +387,25 @@ console.log("ok tanımsız paket atanamıyor");
   }
   console.log("ok 0070: marka uyarıları yalnız üyelere görünüyor" + (br ? "" : " (marka yok, atlandı)"));
 }
+// 0071: telefon bildirimi cihazları yalnız sahibine; bildirilen ölçüm bir kez
+{
+  const tok = "tok_" + "x".repeat(30);
+  await as(U1, `select register_push_device('${tok}', 'android', 'tr')`);
+  assert.equal((await as(U1, `select count(*)::int n from push_devices`)).rows[0].n, 1, "sahibi görür");
+  assert.equal((await as(U2, `select count(*)::int n from push_devices`)).rows[0].n, 0, "başkası göremez");
+  await assert.rejects(as(U1, `select register_push_device('kisa', 'android', 'tr')`), /invalid_token/);
+  await assert.rejects(as(U1, `select pending_run_pushes(10)`), /permission denied/);
+  const br = (await db.query(`select id from brands where workspace_id=$1 and not is_competitor limit 1`, [A])).rows[0];
+  if (br) {
+    const run = (await db.query(`insert into runs (workspace_id,brand_id,data_origin,max_cost_usd,status,measurement_type,finished_at) values ($1,$2,'live_api',1,'done','model_knowledge',now()) returning id`, [A, br.id])).rows[0].id;
+    const rows = (await db.query(`select * from pending_run_pushes(100) where run_id=$1`, [run])).rows;
+    assert.ok(rows.some((r) => r.token === tok), "üyenin cihazı listede");
+    await db.query(`select record_run_push($1, 1)`, [run]);
+    assert.equal((await db.query(`select count(*)::int n from pending_run_pushes(100) where run_id=$1`, [run])).rows[0].n, 0, "ikinci kez listelenmez");
+    await db.query(`delete from runs where id=$1`, [run]);
+  }
+  await as(U1, `select unregister_push_device('${tok}')`);
+  assert.equal((await db.query(`select count(*)::int n from push_devices where token=$1`, [tok])).rows[0].n, 0, "kapatınca silinir");
+  console.log("ok 0071: bildirim cihazları yalnız sahibine, ölçüm bildirimi bir kez");
+}
 console.log("TÜM DB TESTLERİ GEÇTİ");
