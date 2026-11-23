@@ -8,7 +8,7 @@ import { friendlyError } from "../../lib/supabase";
 import { formatDateTime, lowSample, numLoc, providerLabel, series } from "../../lib/report";
 import { confidenceScore } from "../../../../engine/src/metrics.ts";
 import { L } from "../../lib/i18n";
-import { Err, Head, Spinner } from "../ui";
+import { Confirm, Err, Head, Icon, Sheet, Spinner } from "../ui";
 import { useSelectedBrand } from "./Home";
 import { RivalsBody } from "./Rivals";
 
@@ -36,9 +36,9 @@ export function Report() {
   return (
     <div className="screen">
       <Head title={L("Rapor", "Report")} right={<span className="muted small">{b.name}</span>} />
-      <div className="seg" role="group" aria-label={L("Rapor bölümleri", "Report sections")}>
+      <div className="tabs" role="tablist" aria-label={L("Rapor bölümleri", "Report sections")}>
         {TABS.map((t) => (
-          <button key={t.id} aria-pressed={tab === t.id} onClick={() => setParams({ b: t.id }, { replace: true })}>{L(t.tr, t.en)}</button>
+          <button key={t.id} role="tab" aria-selected={tab === t.id} onClick={() => setParams({ b: t.id }, { replace: true })}>{L(t.tr, t.en)}</button>
         ))}
       </div>
       {tab === "ozet" && <Summary brandId={b.id} pts={pts} rows={vis.data ?? []} type={type} />}
@@ -73,7 +73,7 @@ function Summary({ pts, rows, type }: { brandId: string; pts: ReturnType<typeof 
             <span className="muted small">{formatDateTime(recent[0].at)} – {formatDateTime(last.at)}</span>
           </>
         )}
-        {lowSample(last.recommend) && <span className="muted small">{L("Az sayıda cevaba dayanıyor; soru ekledikçe netleşir.", "Based on few answers; adding questions makes it clearer.")}</span>}
+        {lowSample(last.recommend) && <span className="muted small">{L(`Henüz ${last.recommend.n} cevap var. Soru ekledikçe sonuç netleşir.`, `Only ${last.recommend.n} answers so far. Adding questions makes it clearer.`)}</span>}
         <span className="muted small">{type === "live_search" ? L("Canlı aramalı ölçüm", "Live search measurement") : L("Aramasız ölçüm (yapay zekânın kendi bilgisi)", "Measurement without search (the AI's own knowledge)")}</span>
       </div>
       {byEngine.length > 0 && (
@@ -91,11 +91,11 @@ function Summary({ pts, rows, type }: { brandId: string; pts: ReturnType<typeof 
       )}
       {c && (
         <>
-          <h2 className="label">{L("Sonuç ne kadar sağlam?", "How solid is the result?")}</h2>
+          <h2 className="label">{L("Güvenilirlik", "Reliability")}</h2>
           <div className="card" style={{ display: "flex", flexDirection: "column", gap: 6 }}>
             <span style={{ fontWeight: 700, fontSize: 18 }}>{L("Güven puanı", "Confidence")} {c.score}/100</span>
             <span className="muted small" style={{ lineHeight: 1.45 }}>{L(`${c.clusters} soru ve yapay zekâ eşleşmesi, ${c.answers} cevap.`, `${c.clusters} question and AI pairs, ${c.answers} answers.`)}{c.consistency != null ? L(` Tekrar sorulan sorularda aynı sonuç oranı %${pct(c.consistency)}.`, ` Same result when asked again: ${pct(c.consistency)}%.`) : ""}</span>
-            <span className="muted small">{L("Bu puan markanızın iyi ya da kötü olduğunu değil, ölçümün ne kadar güvenilir olduğunu gösterir.", "This score shows how reliable the measurement is, not whether your brand is good or bad.")}</span>
+            <span className="muted small">{L("Puan, ölçümün ne kadar güvenilir olduğunu gösterir. Soru ve ölçüm sayısı arttıkça yükselir.", "The score shows how reliable the measurement is. It rises with more questions and measurements.")}</span>
           </div>
         </>
       )}
@@ -104,9 +104,9 @@ function Summary({ pts, rows, type }: { brandId: string; pts: ReturnType<typeof 
 }
 
 function verdict(r: PromptResult) {
-  if (r.target_recommended > 0) return { cls: "v-rec", t: L("Önerildiniz", "Recommended") };
-  if (r.target_mentioned > 0) return { cls: "v-men", t: L("Adınız geçti", "Mentioned") };
-  return { cls: "v-no", t: L("Geçmediniz", "Not mentioned") };
+  if (r.target_recommended > 0) return { cls: "b-rec", t: L("Önerildiniz", "Recommended") };
+  if (r.target_mentioned > 0) return { cls: "b-men", t: L("Adınız geçti", "Mentioned") };
+  return { cls: "b-no", t: L("Adınız geçmedi", "Not mentioned") };
 }
 
 function Questions({ brandId, workspaceId, lastRunId }: { brandId: string; workspaceId: string; lastRunId: string | null }) {
@@ -116,6 +116,9 @@ function Questions({ brandId, workspaceId, lastRunId }: { brandId: string; works
   const usage = useLoad(() => (current ? api.usage(current.id) : Promise.resolve(null)), [current?.id]);
   const [err, setErr] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const [adding, setAdding] = useState(false);
+  const [menu, setMenu] = useState<{ id: string; text: string; active: boolean } | null>(null);
+  const [del, setDel] = useState<string | null>(null);
   if (prompts.loading) return <Spinner />;
   const list = prompts.data ?? [];
   const active = list.filter((p) => p.active).length;
@@ -128,50 +131,57 @@ function Questions({ brandId, workspaceId, lastRunId }: { brandId: string; works
     const text = String(new FormData(form).get("q") ?? "").trim();
     if (text.length < 8) { setErr(L("Soruyu bir müşterinin yazacağı gibi tam cümle yazın.", "Write the question as a full sentence, the way a customer would.")); return; }
     setBusy(true); setErr(null);
-    try { await api.addPrompt({ workspace_id: workspaceId, brand_id: brandId, text, intent: "informational" }); form.reset(); prompts.reload(); }
+    try { await api.addPrompt({ workspace_id: workspaceId, brand_id: brandId, text, intent: "informational" }); setAdding(false); prompts.reload(); }
     catch (e2) { setErr(friendlyError(e2)); } finally { setBusy(false); }
   }
   async function toggle(id: string, on: boolean) {
-    setErr(null);
+    setErr(null); setMenu(null);
     try { await api.setPromptActive(id, on); prompts.reload(); } catch (e2) { setErr(friendlyError(e2)); }
   }
   async function remove(id: string) {
-    if (!confirm(L("Bu soru silinsin mi? Eski ölçümlerdeki sonuçları raporda kalır.", "Delete this question? Its results in past measurements stay in the report."))) return;
+    setDel(null); setMenu(null);
     try { await api.deletePrompt(id); prompts.reload(); } catch (e2) { setErr(friendlyError(e2)); }
   }
 
   return (
     <>
-      <p className="muted" style={{ margin: 0, fontSize: 14, lineHeight: 1.45 }}>
+      <p className="muted small" style={{ margin: 0 }}>
         {L("Yapay zekâlara sorduğumuz sorular. Müşterilerinizin gerçekten soracağı sorular en doğru sonucu verir.", "The questions we ask the AIs. Questions your customers would really ask give the most accurate result.")}
-        {limit > 0 && L(` Açık soru: ${active} / ${limit}.`, ` Active: ${active} / ${limit}.`)}
+        {limit > 0 && L(` ${active} / ${limit} soru ölçülüyor.`, ` ${active} / ${limit} questions measured.`)}
       </p>
-      {(!limit || active < limit) && (
-        <form onSubmit={add} style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-          <label className="field">{L("Yeni soru", "New question")}<input name="q" maxLength={300} placeholder={L("Örn. Antalya'da en iyi döner nerede yenir?", "e.g. Where can I get the best pizza in Austin?")} /></label>
-          <button className="btn btn-ghost" disabled={busy}>{L("Soruyu ekle", "Add question")}</button>
-        </form>
-      )}
       <Err msg={err} />
-      <div className="list">
-        {list.map((p) => {
-          const r = byPrompt.get(p.id);
-          const v = r ? verdict(r) : null;
-          return (
-            <div key={p.id} className="row" style={{ flexDirection: "column", alignItems: "stretch", gap: 8, opacity: p.active ? 1 : 0.6 }}>
-              <span style={{ lineHeight: 1.4 }}>{p.text}</span>
-              <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
-                {v && <span className={`verdict ${v.cls}`}>{v.t}{r && r.answers ? ` · ${r.target_recommended}/${r.answers}` : ""}</span>}
-                {!p.active && <span className="verdict v-no">{L("Kapalı", "Off")}</span>}
-                <span style={{ marginLeft: "auto", display: "flex", gap: 4 }}>
-                  <button className="btn btn-text" style={{ width: "auto", minHeight: 44, fontSize: 14 }} onClick={() => toggle(p.id, !p.active)}>{p.active ? L("Kapat", "Turn off") : L("Aç", "Turn on")}</button>
-                  <button className="btn btn-danger" style={{ width: "auto", minHeight: 44, fontSize: 14 }} aria-label={L(`Soruyu sil: ${p.text}`, `Delete question: ${p.text}`)} onClick={() => remove(p.id)}>{L("Sil", "Delete")}</button>
+      {list.length > 0 && (
+        <div className="list">
+          {list.map((p) => {
+            const r = byPrompt.get(p.id);
+            const v = r ? verdict(r) : null;
+            return (
+              <button key={p.id} className="row" onClick={() => setMenu({ id: p.id, text: p.text, active: p.active })} aria-haspopup="dialog" style={{ flexDirection: "column", alignItems: "stretch", gap: 8 }}>
+                <span style={{ lineHeight: "22px", color: p.active ? "var(--text)" : "var(--muted)" }}>{p.text}</span>
+                <span style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                  {!p.active ? <span className="badge b-no">{L("Ölçülmüyor", "Not measured")}</span> : v && <span className={`badge ${v.cls}`}>{v.t}</span>}
+                  {p.active && r && r.answers > 0 && <span className="muted tiny">{L(`${r.answers} cevapta`, `in ${r.answers} answers`)}</span>}
+                  <span className="muted" style={{ marginLeft: "auto" }}>{Icon.more}</span>
                 </span>
-              </div>
-            </div>
-          );
-        })}
-      </div>
+              </button>
+            );
+          })}
+        </div>
+      )}
+      {(!limit || active < limit) && <button className="btn btn-ghost" onClick={() => { setErr(null); setAdding(true); }}>{Icon.plus}{L("Soru ekle", "Add question")}</button>}
+
+      <Sheet open={adding} onClose={() => setAdding(false)} title={L("Yeni soru", "New question")}>
+        <form onSubmit={add} style={{ display: "flex", flexDirection: "column", gap: 12 }} noValidate>
+          <label className="field">{L("Müşterinizin yapay zekâya soracağı soru", "The question your customer would ask an AI")}<input name="q" maxLength={300} autoFocus placeholder={L("Örn. Antalya'da en iyi döner nerede yenir?", "e.g. Where can I get the best pizza in Austin?")} /></label>
+          <Err msg={err} />
+          <button className="btn btn-primary" disabled={busy}>{L("Soruyu ekle", "Add question")}</button>
+        </form>
+      </Sheet>
+      <Sheet open={!!menu} onClose={() => setMenu(null)} title={menu?.text}>
+        {menu && <button className="btn btn-ghost" onClick={() => toggle(menu.id, !menu.active)}>{menu.active ? L("Ölçmeyi durdur", "Stop measuring") : L("Yeniden ölç", "Measure again")}</button>}
+        {menu && <button className="btn btn-danger" onClick={() => setDel(menu.id)}>{L("Soruyu sil", "Delete question")}</button>}
+      </Sheet>
+      <Confirm open={!!del} danger title={L("Soru silinsin mi?", "Delete this question?")} text={L("Eski ölçümlerdeki sonuçları raporda kalır.", "Its results in past measurements stay in the report.")} action={L("Sil", "Delete")} onYes={() => del && remove(del)} onNo={() => setDel(null)} />
     </>
   );
 }
@@ -183,7 +193,7 @@ function Runs({ list }: { list: { id: string; status: string; created_at: string
     <div className="list">
       {list.map((r) => (
         <div key={r.id} className="row" style={{ flexDirection: "column", alignItems: "stretch", gap: 2 }}>
-          <div style={{ display: "flex", justifyContent: "space-between" }}><span style={{ fontWeight: 600 }}>{r.trigger === "weekly" ? L("Haftalık otomatik ölçüm", "Weekly automatic measurement") : L("Sizin başlattığınız ölçüm", "Measurement you started")}</span><span className="muted small">{st(r.status)}</span></div>
+          <div style={{ display: "flex", justifyContent: "space-between", gap: 8 }}><span style={{ fontWeight: 600 }}>{r.trigger === "weekly" ? L("Haftalık otomatik ölçüm", "Weekly automatic measurement") : L("Sizin başlattığınız ölçüm", "Measurement you started")}</span><span className="muted small time">{st(r.status)}</span></div>
           <span className="muted small">{formatDateTime(r.created_at)} · {r.measurement_type === "live_search" ? L("canlı aramalı", "live search") : L("aramasız", "without search")}{r.prompts_total ? L(` · ${r.prompts_total} soru`, ` · ${r.prompts_total} questions`) : ""}</span>
         </div>
       ))}

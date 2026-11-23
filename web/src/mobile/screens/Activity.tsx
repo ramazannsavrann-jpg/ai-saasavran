@@ -5,7 +5,8 @@ import { api } from "../../lib/data";
 import { sb } from "../../lib/supabase";
 import { formatDateTime, providerLabel } from "../../lib/report";
 import { L } from "../../lib/i18n";
-import { Head, Spinner, trAbl, trDat } from "../ui";
+import { Link } from "react-router-dom";
+import { Head, Icon, Spinner, trAbl, trDat } from "../ui";
 import { useSelectedBrand } from "./Home";
 
 interface Drop { provider: string; prev: { k: number; n: number }; now: { k: number; n: number }; lost: number; lost_items?: { prompt: string; instead: string | null }[] }
@@ -42,14 +43,17 @@ export function Activity() {
           </article>
         ))
       ))}
-      <h2 className="label" style={{ marginTop: 6 }}>{L("Ölçümleriniz", "Your measurements")}</h2>
+      <h2 className="label">{L("Ölçümleriniz", "Your measurements")}</h2>
       {done.length === 0 ? <p className="muted" style={{ margin: 0 }}>{L("Henüz ölçüm yok.", "No measurements yet.")}</p> : (
         <div className="list">
           {done.map((r) => (
-            <div key={r.id} className="row">
-              <span>{r.status !== "done" ? L("Ölçüm tamamlanamadı", "Measurement failed") : r.trigger === "weekly" ? L("Haftalık ölçüm yapıldı. Sonuçlarınızı inceleyebilirsiniz.", "Weekly measurement done. You can review your results.") : L("Sorgunuz tamamlandı. İnceleyebilirsiniz.", "Your query is done. You can review it.")}</span>
-              <span className="muted small">{formatDateTime(r.created_at)}</span>
-            </div>
+            <Link key={r.id} className="row" to="/rapor">
+              <span style={{ display: "flex", flexDirection: "column", gap: 2, minWidth: 0 }}>
+                <span style={{ fontWeight: 600 }}>{r.status !== "done" ? L("Ölçüm tamamlanamadı", "Measurement failed") : r.trigger === "weekly" ? L("Haftalık ölçüm bitti", "Weekly measurement done") : L("Ölçüm bitti", "Measurement done")}</span>
+                <span className="muted small time">{formatDateTime(r.created_at)}</span>
+              </span>
+              <span className="muted">{Icon.chevron}</span>
+            </Link>
           ))}
         </div>
       )}

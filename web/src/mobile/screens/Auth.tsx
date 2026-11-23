@@ -16,22 +16,22 @@ export function Welcome() {
   const email = remembered();
   return (
     <div className="screen" style={{ alignItems: "center", textAlign: "center", gap: 18 }}>
-      <div className="logo" style={{ marginTop: 12 }}>{Icon.logo}</div>
-      <h1 style={{ fontSize: 30 }}>{greeting()}</h1>
+      <div className="logo" style={{ marginTop: 12 }} aria-hidden="true">S</div>
       {email ? (
         <>
+          <h1 style={{ fontSize: 28, lineHeight: "34px" }}>{greeting()}</h1>
           <div className="avatar">{initials(email)}</div>
           <p style={{ margin: 0, fontWeight: 600, fontSize: 18 }}>{email}</p>
-          <Link className="btn btn-light" to="/giris" style={{ letterSpacing: ".04em" }}>{L("GİRİŞ YAP", "SIGN IN")}</Link>
-          <div style={{ display: "flex", justifyContent: "space-between", width: "100%", fontWeight: 600, fontSize: 15 }}>
+          <Link className="btn btn-primary" to="/giris">{L("Giriş yap", "Sign in")}</Link>
+          <div style={{ display: "flex", justifyContent: "space-between", width: "100%", fontWeight: 600, fontSize: 15, minHeight: 48, alignItems: "center" }}>
             <Link to="/giris?baska=1" className="muted">{L("Başka hesap", "Other account")}</Link>
-            <Link to="/sifre">{L("ŞİFREMİ UNUTTUM", "FORGOT PASSWORD")}</Link>
+            <Link to="/sifre">{L("Şifremi unuttum", "Forgot password")}</Link>
           </div>
         </>
       ) : (
         <>
-          <h2 style={{ fontSize: 26, lineHeight: 1.2, marginTop: 8 }}>{L("Markanız yapay zekâlarda öneriliyor mu?", "Is your brand recommended by AIs?")}</h2>
-          <p className="muted" style={{ margin: 0, lineHeight: 1.45 }}>{L("Markanızın yapay zekâ cevaplarındaki yerini ölçün, rakiplerinizi takip edin. Ücretsiz pakette Gemini ile ayda 1 ölçüm.", "Measure where your brand stands in AI answers and track competitors. Free plan: 1 measurement a month with Gemini.")}</p>
+          <h1 style={{ fontSize: 28, lineHeight: "34px", marginTop: 24 }}>{L("Markanız yapay zekâlarda öneriliyor mu?", "Is your brand recommended by AIs?")}</h1>
+          <p className="muted" style={{ margin: 0, lineHeight: 1.45 }}>{L("ChatGPT, Gemini, Claude ve Perplexity'nin cevaplarında işletmenizin önerilip önerilmediğini ölçün. Ücretsiz pakette Gemini ile ayda 1 ölçüm.", "See whether ChatGPT, Gemini, Claude and Perplexity recommend your business. Free plan: 1 measurement a month with Gemini.")}</p>
           <div style={{ marginTop: "auto", width: "100%", display: "flex", flexDirection: "column", gap: 12 }}>
             <Link className="btn btn-primary" to="/kayit">{L("Ücretsiz başla", "Start free")}</Link>
             <Link className="btn btn-ghost" to="/giris">{L("Giriş yap", "Sign in")}</Link>

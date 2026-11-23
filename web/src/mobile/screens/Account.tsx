@@ -6,7 +6,10 @@ import { useApp, useLoad } from "../../lib/app";
 import { api } from "../../lib/data";
 import { sb, friendlyError } from "../../lib/supabase";
 import { L, getLang, switchLang } from "../../lib/i18n";
-import { Err, Head } from "../ui";
+import { Err, Head, Icon, Sheet } from "../ui";
+
+const PLAN_TR: Record<string, [string, string]> = { free: ["Ücretsiz", "Free"], starter: ["Gümüş", "Silver"], altin: ["Altın", "Gold"], pro: ["Platin", "Platinum"], agency: ["Elmas", "Diamond"] };
+const planTr = (id: string, name: string) => (PLAN_TR[id] ? L(PLAN_TR[id][0], PLAN_TR[id][1]) : name);
 
 export function Account() {
   const { session, current } = useApp();
@@ -63,22 +66,22 @@ export function Account() {
       <Head title={L("Hesap", "Account")} />
       <div className="card" style={{ display: "flex", flexDirection: "column", gap: 4 }}>
         <span style={{ fontWeight: 700, fontSize: 18 }}>{session?.user.email}</span>
-        {current && <span className="muted">{current.name}{u ? ` · ${L("Paket", "Plan")}: ${u.plan_name}` : ""}</span>}
+        {current && <span className="muted">{current.name}{u ? ` · ${L("Paket", "Plan")}: ${planTr(u.plan_id, u.plan_name)}` : ""}</span>}
       </div>
       {u && (
         <>
           <h2 className="label">{L("Bu ayki kullanım", "This month")}</h2>
           <div className="card" style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            <div style={{ display: "flex", justifyContent: "space-between" }}><span>{L("Yapay zekâ sorgusu", "AI queries")}</span><span style={{ fontWeight: 700 }}>{u.engine_calls.toLocaleString("tr-TR")} / {u.engine_call_limit.toLocaleString("tr-TR")}</span></div>
+            <div style={{ display: "flex", justifyContent: "space-between" }}><span>{L("Sorulan soru", "Questions asked")}</span><span style={{ fontWeight: 700 }}>{u.engine_calls.toLocaleString("tr-TR")} / {u.engine_call_limit.toLocaleString("tr-TR")}</span></div>
             <div className="meter"><i style={{ width: `${Math.min(100, Math.round((u.engine_calls / Math.max(1, u.engine_call_limit)) * 100))}%`, background: "var(--accent)" }} /></div>
             <span className="muted small">{L(`${u.brand_limit} marka · marka başına ${u.prompt_limit} soru · ${u.competitor_limit} rakip`, `${u.brand_limit} brands · ${u.prompt_limit} questions per brand · ${u.competitor_limit} competitors`)}</span>
           </div>
         </>
       )}
-      <h2 className="label">{L("Bildirim tercihleri", "Notification preferences")}</h2>
+      <h2 className="label">{L("Bildirimler", "Notifications")}</h2>
       <div className="list">
-        <label className="row">{L("Önerilme oranım belirgin değişince haber ver", "Alert me when my recommendation rate changes clearly")}<input type="checkbox" checked={drop} onChange={(e) => setPref("drop", e.target.checked)} /></label>
-        {weekly !== null && <label className="row">{L("Haftalık özet e-postası", "Weekly summary email")}<input type="checkbox" checked={weekly} onChange={(e) => setPref("weekly", e.target.checked)} /></label>}
+        <label className="row">{L("Sonucum belirgin değişince haber ver", "Tell me when my result changes clearly")}<input type="checkbox" role="switch" className="switch" checked={drop} onChange={(e) => setPref("drop", e.target.checked)} /></label>
+        {weekly !== null && <label className="row">{L("Haftalık özet e-postası", "Weekly summary email")}<input type="checkbox" role="switch" className="switch" checked={weekly} onChange={(e) => setPref("weekly", e.target.checked)} /></label>}
       </div>
       <h2 className="label">{L("Ayarlar", "Settings")}</h2>
       <div className="list">
@@ -87,7 +90,7 @@ export function Account() {
             <option value="tr">Türkçe</option><option value="en">English</option>
           </select>
         </label>
-        <button className="row" onClick={() => { setPwOpen(!pwOpen); setPwMsg(null); }} aria-expanded={pwOpen}>{L("Şifre değiştir", "Change password")}<span className="muted">{pwOpen ? "−" : "+"}</span></button>
+        <button className="row" onClick={() => { setPwOpen(!pwOpen); setPwMsg(null); }} aria-expanded={pwOpen}>{L("Şifre değiştir", "Change password")}<span className="muted">{Icon.chevron}</span></button>
         {pwOpen && (
           <form onSubmit={changePassword} style={{ display: "flex", flexDirection: "column", gap: 10, padding: "10px 0 14px" }} noValidate>
             <label className="field">{L("Yeni şifre", "New password")}<input name="p1" type="password" autoComplete="new-password" /></label>
@@ -99,13 +102,13 @@ export function Account() {
       {pwMsg && <p className="ok" role="status">{pwMsg}</p>}
       <Err msg={err} />
       <button className="btn btn-ghost" onClick={signOut}>{L("Çıkış yap", "Sign out")}</button>
-      {!del ? <button className="btn btn-danger" onClick={() => setDel(true)}>{L("Hesabımı sil", "Delete my account")}</button> : (
-        <div className="card" style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-          <span style={{ lineHeight: 1.45 }}>{L("Hesabınız, tek başınıza sahip olduğunuz çalışma alanları ve tüm ölçümleri kalıcı olarak silinir. Ekipli alanda sahiplik en eski üyeye geçer. Geri alınamaz.", "Your account, the workspaces you own alone and all their measurements are permanently deleted. In a team workspace, ownership passes to the longest-standing member. This cannot be undone.")}</span>
-          <button className="btn" style={{ background: "#B3261E", color: "#fff" }} disabled={busy} onClick={remove}>{L("Hesabımı kalıcı olarak sil", "Permanently delete my account")}</button>
-          <button className="btn btn-text" onClick={() => setDel(false)}>{L("Vazgeç", "Cancel")}</button>
-        </div>
-      )}
+      <button className="btn btn-text" style={{ alignSelf: "center", color: "var(--muted)" }} onClick={() => setDel(true)}>{L("Hesap ve veriler", "Account and data")}</button>
+      <Sheet open={del} onClose={() => setDel(false)} title={L("Hesabı silmek", "Deleting your account")}>
+        <p style={{ margin: 0 }}>{L("Hesabınız, tek başınıza sahip olduğunuz çalışma alanları ve bütün ölçümleri kalıcı olarak silinir. Ekipli alanda sahiplik en eski üyeye geçer. Geri alınamaz.", "Your account, the workspaces you own alone and all their measurements are permanently deleted. In a team workspace, ownership passes to the longest-standing member. This cannot be undone.")}</p>
+        <Err msg={err} />
+        <button className="btn btn-danger-solid" disabled={busy} onClick={remove}>{L("Hesabımı kalıcı olarak sil", "Permanently delete my account")}</button>
+        <button className="btn btn-ghost" onClick={() => setDel(false)}>{L("Vazgeç", "Cancel")}</button>
+      </Sheet>
     </div>
   );
 }

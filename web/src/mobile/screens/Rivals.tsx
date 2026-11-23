@@ -5,7 +5,7 @@ import { api, type MeasurementType } from "../../lib/data";
 import { friendlyError } from "../../lib/supabase";
 import { competitorsInRun, series } from "../../lib/report";
 import { L } from "../../lib/i18n";
-import { Err, Spinner } from "../ui";
+import { Confirm, Err, Spinner } from "../ui";
 import { useSelectedBrand } from "./Home";
 
 export function RivalsBody() {
@@ -19,6 +19,7 @@ export function RivalsBody() {
   const usage = useLoad(() => (current ? api.usage(current.id) : Promise.resolve(null)), [current?.id]);
   const [err, setErr] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const [rm, setRm] = useState<{ id: string; name: string } | null>(null);
   if (sel.loading || !b) return <Spinner />;
 
   const pts = series(vis.data ?? []);
@@ -37,8 +38,8 @@ export function RivalsBody() {
     try { await api.addBrand({ workspace_id: b!.workspace_id, name, is_competitor: true, owner_brand_id: b!.id, aliases: [] }); form.reset(); comps.reload(); }
     catch (e2) { setErr(friendlyError(e2)); } finally { setBusy(false); }
   }
-  async function remove(id: string, name: string) {
-    if (!confirm(L(`${name} rakiplerden çıkarılsın mı?`, `Remove ${name} from competitors?`))) return;
+  async function remove(id: string) {
+    setRm(null);
     try { await api.deleteBrand(id); comps.reload(); } catch (e2) { setErr(friendlyError(e2)); }
   }
 
@@ -69,7 +70,7 @@ export function RivalsBody() {
           {list.map((c) => (
             <div key={c.id} className="row">
               <span style={{ fontWeight: 600 }}>{c.name}</span>
-              <button className="btn-danger" style={{ background: "none", border: 0, minHeight: 44 }} aria-label={L(`${c.name} rakibini çıkar`, `Remove ${c.name}`)} onClick={() => remove(c.id, c.name)}>{L("Çıkar", "Remove")}</button>
+              <button className="btn btn-text" style={{ color: "var(--danger)" }} aria-label={L(`${c.name} rakibini çıkar`, `Remove ${c.name}`)} onClick={() => setRm({ id: c.id, name: c.name })}>{L("Çıkar", "Remove")}</button>
             </div>
           ))}
         </div>
@@ -81,6 +82,7 @@ export function RivalsBody() {
         </form>
       )}
       <Err msg={err} />
+      <Confirm open={!!rm} title={L(`${rm?.name ?? ""} rakiplerden çıkarılsın mı?`, `Remove ${rm?.name ?? ""} from competitors?`)} text={L("Bu rakip sonraki ölçümlerde takip edilmez.", "This competitor won't be tracked in later measurements.")} action={L("Çıkar", "Remove")} danger onYes={() => rm && remove(rm.id)} onNo={() => setRm(null)} />
     </>
   );
 }

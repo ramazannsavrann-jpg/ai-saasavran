@@ -1,5 +1,6 @@
 // Mobil uygulamanın ortak parçaları: ikonlar, alt menü, yükleniyor, hata kutusu.
-import type { ReactNode } from "react";
+import { useEffect, type ReactNode } from "react";
+import { Haptics, ImpactStyle, NotificationType } from "@capacitor/haptics";
 import { NavLink } from "react-router-dom";
 import { L } from "../lib/i18n";
 
@@ -15,7 +16,7 @@ export const Icon = {
   chevron: <svg width="18" height="18" viewBox="0 0 24 24" {...P} aria-hidden="true"><path d="M9 6l6 6-6 6" /></svg>,
   down: <svg width="16" height="16" viewBox="0 0 24 24" {...P} aria-hidden="true"><path d="M6 9l6 6 6-6" /></svg>,
   plus: <svg width="20" height="20" viewBox="0 0 24 24" {...P} aria-hidden="true"><path d="M12 5v14M5 12h14" /></svg>,
-  logo: <svg width="30" height="30" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="5" fill="#F4F7F5" /><circle cx="16" cy="16" r="10" fill="none" stroke="#F4F7F5" strokeWidth="2" strokeDasharray="3 3" /></svg>,
+  more: <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="2" /><circle cx="12" cy="12" r="2" /><circle cx="19" cy="12" r="2" /></svg>,
 };
 
 export function TabBar() {
@@ -30,9 +31,54 @@ export function TabBar() {
   );
 }
 
+/** İskelet yükleme: ekranın şeklini gri bloklarla gösterir (ortada dönen simge yerine). */
 export function Spinner() {
-  return <div className="center" role="status" aria-label={L("Yükleniyor", "Loading")}><div className="spinner" /></div>;
+  return (
+    <div className="screen" role="status" aria-label={L("Yükleniyor", "Loading")}>
+      <div className="skel" style={{ height: 28, width: "45%" }} />
+      <div className="skel" style={{ height: 180, borderRadius: 16 }} />
+      <div className="skel" style={{ height: 20, width: "60%" }} />
+      <div className="skel" style={{ height: 120, borderRadius: 16 }} />
+    </div>
+  );
 }
+
+/** Alt sayfa (bottom sheet): seçimler ve onaylar için; tarayıcının alert/confirm pencereleri kullanılmaz. */
+export function Sheet({ open, onClose, title, children }: { open: boolean; onClose: () => void; title?: string; children: ReactNode }) {
+  useEffect(() => {
+    if (!open) return;
+    const k = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
+    addEventListener("keydown", k);
+    return () => removeEventListener("keydown", k);
+  }, [open, onClose]);
+  if (!open) return null;
+  return (
+    <div className="sheet-back" onClick={onClose}>
+      <div className="sheet" role="dialog" aria-modal="true" aria-label={title} onClick={(e) => e.stopPropagation()}>
+        <span className="grip" aria-hidden="true" />
+        {title && <h2 className="section-title" style={{ margin: 0 }}>{title}</h2>}
+        {children}
+      </div>
+    </div>
+  );
+}
+
+/** Onay alt sayfası */
+export function Confirm({ open, title, text, action, danger, onYes, onNo }: { open: boolean; title: string; text?: string; action: string; danger?: boolean; onYes: () => void; onNo: () => void }) {
+  return (
+    <Sheet open={open} onClose={onNo} title={title}>
+      {text && <p className="muted" style={{ margin: 0 }}>{text}</p>}
+      <button className={`btn ${danger ? "btn-danger-solid" : "btn-primary"}`} onClick={onYes}>{action}</button>
+      <button className="btn btn-ghost" onClick={onNo}>{L("Vazgeç", "Cancel")}</button>
+    </Sheet>
+  );
+}
+
+/** Dokunma titreşimi (telefonda); tarayıcıda sessizce geçer */
+export const haptic = {
+  tap: () => { Haptics.impact({ style: ImpactStyle.Light }).catch(() => undefined); },
+  done: () => { Haptics.notification({ type: NotificationType.Success }).catch(() => undefined); },
+};
 
 export function Err({ msg }: { msg?: string | null }) {
   return msg ? <p className="error" role="alert">{msg}</p> : null;

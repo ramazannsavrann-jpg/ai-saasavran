@@ -46,8 +46,8 @@ test("Mobil: kayıt → işletme kurulumu → ölçüm → rakip → bildirimler
   await expect(page.getByText("Henüz ölçüm yok")).toBeVisible();
   await expect(page.getByRole("navigation", { name: "Alt menü" })).toBeVisible();
   await noOverflow(page); await shot(page, "03-ana-sayfa-bos");
-  await page.getByRole("button", { name: "Yeni ölçüm başlat" }).click();
-  await expect(page.getByText(/Ölçüm (sırada|çalışıyor)/)).toBeVisible();
+  await page.getByRole("button", { name: "İlk ölçümü başlat" }).click();
+  await expect(page.getByText(/Ölçüm (sırada|sürüyor)/)).toBeVisible();
 
   // Ölçümü test cevaplarıyla işle (gerçek API yok)
   const fake = async () => new Response(JSON.stringify({
@@ -57,21 +57,28 @@ test("Mobil: kayıt → işletme kurulumu → ölçüm → rakip → bildirimler
   const db = createClient(stack.url, stack.serviceKey, { auth: { persistSession: false } });
   await processNextRun({ db, env: { GEMINI_API_KEY: "test", GEMINI_TIER: "free", ALLOW_PAID_API: "false" }, fetchFn: fake as never, sleep: async () => {} });
   await page.reload();
-  await expect(page.getByText("Yapay zekâ cevaplarında önerilme oranı")).toBeVisible({ timeout: 20_000 });
+  await expect(page.getByText("Yapay zekâlar sizi önerdi", { exact: true })).toBeVisible({ timeout: 20_000 });
+  await expect(page.getByText(/\d+ cevabın \d+'\p{L}+ önerildiniz/u)).toBeVisible();
+  await expect(page.getByRole("button", { name: "Şimdi ölç" })).toBeVisible();
   await noOverflow(page); await shot(page, "04-ana-sayfa-sonuc");
 
   await page.getByRole("navigation", { name: "Alt menü" }).getByRole("link", { name: "Rapor" }).click();
   await expect(page.getByText(/Son ölçümde yapay zekâ cevaplarının %\d+'\p{L}+ önerildiniz/u)).toBeVisible();
   await expect(page.getByText(/Güven puanı \d+\/100/)).toBeVisible();
   await noOverflow(page); await shot(page, "05a-rapor-ozet");
-  await page.getByRole("button", { name: "Sorular" }).click();
-  await expect(page.getByText(/Açık soru: \d+ \/ \d+/)).toBeVisible();
-  await page.getByLabel("Yeni soru").fill("Antalya'da gece açık döner nerede yenir?");
+  await page.getByRole("tab", { name: "Sorular" }).click();
+  await expect(page.getByText(/\d+ \/ \d+ soru ölçülüyor/)).toBeVisible();
+  await page.getByRole("button", { name: "Soru ekle" }).click();
+  await page.getByLabel("Müşterinizin yapay zekâya soracağı soru").fill("Antalya'da gece açık döner nerede yenir?");
   await page.getByRole("button", { name: "Soruyu ekle" }).click();
   await expect(page.getByText("Antalya'da gece açık döner nerede yenir?")).toBeVisible();
-  await expect(page.getByText(/Önerildiniz|Adınız geçti|Geçmediniz/).first()).toBeVisible();
+  await expect(page.getByText(/Önerildiniz|Adınız geçti|Adınız geçmedi/).first()).toBeVisible();
+  await page.getByRole("button", { name: /Antalya'da gece açık döner/ }).click();
+  await page.getByRole("button", { name: "Soruyu sil" }).click();
+  await page.getByRole("button", { name: "Sil", exact: true }).click();
+  await expect(page.getByText("Antalya'da gece açık döner nerede yenir?")).toBeHidden();
   await noOverflow(page); await shot(page, "05b-rapor-sorular");
-  await page.getByRole("button", { name: "Rakipler" }).click();
+  await page.getByRole("tab", { name: "Rakipler" }).click();
   await page.getByPlaceholder("Rakip adı ekleyin").fill("Rakip Kebap");
   await page.getByRole("button", { name: "Ekle" }).click();
   await expect(page.getByText("Rakip Kebap").first()).toBeVisible();
@@ -79,7 +86,7 @@ test("Mobil: kayıt → işletme kurulumu → ölçüm → rakip → bildirimler
 
   await page.getByRole("navigation", { name: "Alt menü" }).getByRole("link", { name: "Bildirimler" }).click();
   await expect(page.getByText("Ölçümleriniz")).toBeVisible();
-  await expect(page.getByText("Sorgunuz tamamlandı. İnceleyebilirsiniz.")).toBeVisible();
+  await expect(page.getByText("Ölçüm bitti", { exact: true })).toBeVisible();
   await shot(page, "06-bildirimler");
 
   await page.getByRole("navigation", { name: "Alt menü" }).getByRole("link", { name: "Hesap" }).click();
@@ -92,7 +99,7 @@ test("Mobil: kayıt → işletme kurulumu → ölçüm → rakip → bildirimler
   await page.getByRole("button", { name: "Şifreyi kaydet" }).click();
   await expect(page.getByText("Şifreniz değiştirildi.")).toBeVisible();
   await shot(page, "07-hesap");
-  await page.getByRole("button", { name: "Hesabımı sil" }).click();
+  await page.getByRole("button", { name: "Hesap ve veriler" }).click();
   await page.getByRole("button", { name: "Hesabımı kalıcı olarak sil" }).click();
   await expect(page.getByRole("link", { name: "Ücretsiz başla" })).toBeVisible(); // silinen hesap hatırlanmaz
   expect(stack.sql(`select count(*) from auth.users where email = 'mobil@ornek.test'`).trim()).toBe("0");
