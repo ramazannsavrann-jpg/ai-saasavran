@@ -78,6 +78,11 @@ test("Mobil: kayıt → işletme kurulumu → ölçüm → rakip → bildirimler
   await page.getByRole("button", { name: "Sil", exact: true }).click();
   await expect(page.getByText("Antalya'da gece açık döner nerede yenir?")).toBeHidden();
   await noOverflow(page); await shot(page, "05b-rapor-sorular");
+  await page.locator(".list button.row").first().click();
+  await expect(page.getByText("Yapay zekâlar ne dedi?")).toBeVisible();
+  await expect(page.getByText(/Son ölçümde (bu soruda önerilmediniz|\d+ cevabın \d+ tanesinde önerildiniz)/)).toBeVisible();
+  await shot(page, "05g-soru-neden");
+  await page.keyboard.press("Escape");
   await page.getByRole("tab", { name: "Rakipler" }).click();
   await page.getByPlaceholder("Rakip adı ekleyin").fill("Rakip Kebap");
   await page.getByRole("button", { name: "Ekle" }).click();

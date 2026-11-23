@@ -7,6 +7,7 @@ import { api, type MeasurementType, type PromptResult } from "../../lib/data";
 import { friendlyError } from "../../lib/supabase";
 import { formatDateTime, lowSample, numLoc, providerLabel, series } from "../../lib/report";
 import { confidenceScore } from "../../../../engine/src/metrics.ts";
+import { lossCards } from "../../../../engine/src/insights.ts";
 import { L } from "../../lib/i18n";
 import { Confirm, Err, Head, Icon, Sheet, Spinner } from "../ui";
 import { useSelectedBrand } from "./Home";
@@ -178,11 +179,66 @@ function Questions({ brandId, workspaceId, lastRunId }: { brandId: string; works
         </form>
       </Sheet>
       <Sheet open={!!menu} onClose={() => setMenu(null)} title={menu?.text}>
+        {menu && lastRunId && <WhyBlock brandId={brandId} runId={lastRunId} promptId={menu.id} />}
         {menu && <button className="btn btn-ghost" onClick={() => toggle(menu.id, !menu.active)}>{menu.active ? L("Ölçmeyi durdur", "Stop measuring") : L("Yeniden ölç", "Measure again")}</button>}
         {menu && <button className="btn btn-danger" onClick={() => setDel(menu.id)}>{L("Soruyu sil", "Delete question")}</button>}
       </Sheet>
       <Confirm open={!!del} danger title={L("Soru silinsin mi?", "Delete this question?")} text={L("Eski ölçümlerdeki sonuçları raporda kalır.", "Its results in past measurements stay in the report.")} action={L("Sil", "Delete")} onYes={() => del && remove(del)} onNo={() => setDel(null)} />
     </>
+  );
+}
+
+/** Neden önerildiniz / önerilmediniz: son ölçümde bu sorunun cevapları ve (canlı aramada) kanıtlar. Kanıt gösterir, kesin neden değildir. */
+function WhyBlock({ brandId, runId, promptId }: { brandId: string; runId: string; promptId: string }) {
+  const sel = useSelectedBrand();
+  const brand = sel.brands.find((x) => x.id === brandId);
+  const all = useLoad(() => api.answers(runId), [runId]);
+  const answers = (all.data ?? []).filter((a) => a.prompt_id === promptId);
+  const ments = useLoad(() => (answers.length ? api.mentionsFor(answers.map((a) => a.id)) : Promise.resolve([])), [answers.map((a) => a.id).join(",")]);
+  const comps = useLoad(() => api.competitors(brandId), [brandId]);
+  const [open, setOpen] = useState<string | null>(null);
+  if (all.loading || ments.loading || comps.loading || !brand) return <Spinner />;
+  if (!answers.length) return <p className="muted small" style={{ margin: 0 }}>{L("Bu soru son ölçümde sorulmadı.", "This question wasn't asked in the last measurement.")}</p>;
+  const brands = [{ id: brand.id, name: brand.name, website: brand.website, isTarget: true }, ...(comps.data ?? []).map((c) => ({ id: c.id, name: c.name, website: c.website, isTarget: false }))];
+  const m = ments.data ?? [];
+  const recIn = answers.filter((a) => m.some((x) => x.response_id === a.id && x.brand_id === brand.id && x.recommended)).length;
+  const card = lossCards(answers, m, brands).find((c) => c.promptId === promptId);
+  const comp = card ? card.sources.filter((x) => x.owner === "competitor") : [];
+  const third = card ? card.sources.filter((x) => x.owner === "third_party") : [];
+  const lines: string[] = [];
+  if (card) {
+    if (card.winners.length) lines.push(L(`Sizin yerinize önerilen: ${card.winners.map((w) => `${w.name} (${card.answers} cevabın ${w.count} tanesinde)`).join(", ")}.`, `Recommended instead: ${card.winners.map((w) => `${w.name} (${w.count}/${card.answers})`).join(", ")}.`));
+    if (card.evidence.includes("absent")) lines.push(L("Bu sorunun hiçbir cevabında adınız geçmedi.", "You weren't named in any answer to this question."));
+    if (card.evidence.includes("mentioned_not_recommended")) lines.push(L(`${card.answers} cevabın ${card.targetMentioned} tanesinde adınız geçti ama önerilmediniz.`, `Named in ${card.targetMentioned} of ${card.answers} answers but not recommended.`));
+    if (card.evidence.includes("competitor_own_site_cited")) lines.push(L(`Cevap rakibin kendi sitesine dayandı: ${comp.map((x) => x.domain).join(", ")}.`, `The answer relied on a rival's own site: ${comp.map((x) => x.domain).join(", ")}.`));
+    if (card.evidence.includes("target_site_not_cited")) lines.push(L("Sizin siteniz kaynak gösterilmedi.", "Your site wasn't cited."));
+    if (card.evidence.includes("target_site_cited_anyway")) lines.push(L(`Siteniz ${card.targetSiteCited} cevapta kaynak gösterildi ama önerilmediniz. Sayfanız bu soruya doğrudan cevap vermiyor olabilir.`, `Your site was cited in ${card.targetSiteCited} answers but you weren't recommended. The page may not answer this question directly.`));
+    if (card.evidence.includes("third_party_sources")) lines.push(L(`Kullanılan diğer siteler: ${third.slice(0, 5).map((x) => x.domain).join(", ")}. Bu sitelerde yer alıp almadığınızı kontrol edin.`, `Other sites used: ${third.slice(0, 5).map((x) => x.domain).join(", ")}. Check whether you're on them.`));
+    if (card.evidence.includes("no_sources")) lines.push(L("Bu cevaplarda kaynak gösterilmedi; neden hakkında kanıt yok.", "No sources were cited; no evidence about the reason."));
+  }
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+      <span style={{ fontWeight: 600 }}>{recIn > 0 ? L(`Son ölçümde ${answers.length} cevabın ${recIn} tanesinde önerildiniz.`, `Recommended in ${recIn} of ${answers.length} answers last time.`) : L("Son ölçümde bu soruda önerilmediniz.", "Not recommended for this question last time.")}</span>
+      {lines.length > 0 && (
+        <div className="card" style={{ display: "flex", flexDirection: "column", gap: 6, background: "var(--surface2)" }}>
+          <span className="small" style={{ fontWeight: 600 }}>{L("Neden önerilmediniz: kanıtlar", "Why not: the evidence")}</span>
+          {lines.map((l) => <span key={l} className="small">{l}</span>)}
+          <span className="muted tiny">{L("Bunlar kanıttır, kesin neden değildir; cevaplar ölçümden ölçüme değişir.", "This is evidence, not a proven cause; answers vary between measurements.")}</span>
+        </div>
+      )}
+      <span className="small" style={{ fontWeight: 600 }}>{L("Yapay zekâlar ne dedi?", "What did the AIs say?")}</span>
+      {answers.slice(0, 6).map((a) => {
+        const rec = m.some((x) => x.response_id === a.id && x.brand_id === brand.id && x.recommended);
+        const long = a.answer_text.length > 280, isOpen = open === a.id;
+        return (
+          <div key={a.id} className="card" style={{ display: "flex", flexDirection: "column", gap: 6, background: "var(--surface2)" }}>
+            <span className="small" style={{ display: "flex", justifyContent: "space-between", gap: 8 }}><b>{providerLabel(a.provider)}</b><span className={`badge ${rec ? "b-rec" : "b-no"}`}>{rec ? L("Önerildiniz", "Recommended") : L("Önerilmediniz", "Not recommended")}</span></span>
+            <span className="small" style={{ whiteSpace: "pre-wrap", lineHeight: 1.5 }}>{long && !isOpen ? a.answer_text.slice(0, 280) + "…" : a.answer_text}</span>
+            {long && <button className="btn btn-text" style={{ alignSelf: "flex-start", padding: 0, minHeight: 36 }} onClick={() => setOpen(isOpen ? null : a.id)}>{isOpen ? L("Kısalt", "Show less") : L("Devamını oku", "Read more")}</button>}
+          </div>
+        );
+      })}
+    </div>
   );
 }
 
