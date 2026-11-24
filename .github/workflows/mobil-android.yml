@@ -1,6 +1,6 @@
 name: Mobil uygulama (Android)
 # Capacitor uygulaması: ekranlar telefonun içinde (web/src/mobile), veriler aisaasavran.com + Supabase.
-# Çıktı: Google Play için .aab ve telefona doğrudan kurulabilen .apk (GitHub sürümü olarak yayınlanır).
+# Çıktı: Google Play için .aab ve telefona doğrudan kurulabilen .apk (GitHub sürümü; main dışından elle çalıştırılınca taslak).
 on:
   push:
     branches: [main]
@@ -71,7 +71,9 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release create "mobil-android-${{ github.run_number }}" "$RUNNER_TEMP"/out/* \
+          # main dışından (deneme dalı) elle çalıştırılınca taslak sürüm: yalnız depo sahibi görür ve indirir
+          DRAFT=""; [ "${{ github.ref_name }}" != "main" ] && DRAFT="--draft"
+          gh release create "mobil-android-${{ github.run_number }}" "$RUNNER_TEMP"/out/* $DRAFT --target "${{ github.sha }}" \
             --title "Mobil uygulama (Android) 1.0.${{ github.run_number }}" \
-            --notes "Telefona kurmak için: .apk dosyası. Google Play'e yüklenecek dosya: .aab." --latest=false
+            --notes "Telefona kurmak için: .apk dosyası. Google Play'e yüklenecek dosya: .aab. Dal: ${{ github.ref_name }}." --latest=false
           echo "### Android 1.0.${{ github.run_number }} hazır" >> "$GITHUB_STEP_SUMMARY"
