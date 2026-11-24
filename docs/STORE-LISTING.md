@@ -25,7 +25,7 @@ Neler yaparsınız
 • Size özel önerileri adım adım uygulayın; yaptıklarınızın sonucunu önce/sonra ölçümüyle görün.
 • Ölçüm bitince bildirim alın.
 
-Ücretsiz pakette Gemini ile ayda 1 ölçüm yapılır. Ücretli paketlerde ChatGPT, Claude ve Perplexity canlı web aramasıyla cevap verir; her hafta otomatik ölçüm yapılır, soru hakkınızla istediğiniz zaman tam ölçüm başlatırsınız.
+Ücretsiz pakette Gemini ile ayda 1 ölçüm yapılır. Ücretli paketlerde ChatGPT, Gemini, Claude ve Perplexity canlı web aramasıyla cevap verir; her hafta otomatik ölçüm yapılır, soru hakkınızla istediğiniz zaman tam ölçüm başlatırsınız.
 
 Sonuçlar yapay zekâların geliştirici servislerinden alınır ve aynı sağlayıcının uygulamasında gördüğünüz cevaptan farklı olabilir. Yapay zekâ cevapları her soruşta değişebilir; her sonucu bir güven puanıyla birlikte gösteririz.
 
@@ -56,7 +56,7 @@ What you can do
 • Follow suggestions step by step and see the before/after result of what you did.
 • Get a notification when a measurement is done.
 
-The free plan measures with Gemini once a month. On paid plans ChatGPT, Claude and Perplexity answer with live web search; a measurement runs automatically every week and you can start a full measurement any time with your question credits.
+The free plan measures with Gemini once a month. On paid plans ChatGPT, Gemini, Claude and Perplexity answer with live web search; a measurement runs automatically every week and you can start a full measurement any time with your question credits.
 
 Results come from the AI providers' developer services and may differ from what you see in the provider's own app. AI answers vary between requests; we show every result with a confidence score.
 
@@ -73,6 +73,17 @@ Privacy: https://aisaasavran.com/privacy/
 - **İçerik derecelendirmesi:** Araç/iş uygulaması; şiddet, kumar, kullanıcılar arası sohbet yok.
 - **Hedef kitle:** 18 yaş ve üzeri (çocuklara yönelik değil).
 - **Haber uygulaması:** Hayır. **Sağlık:** Hayır. **Finans:** Hayır.
+
+### Mağaza ayarları
+- **Uygulama kategorisi:** İş (Business). **Etiketler:** Pazarlama, İş araçları.
+- **İletişim:** e-posta `info@aisaasavran.com`, web sitesi `https://aisaasavran.com`. Telefon boş.
+
+### İçerik derecelendirmesi anketi
+- Kategori: **Diğer tüm uygulama türleri**.
+- Şiddet, cinsellik, küfür, uyuşturucu/alkol/tütün, kumar, korku: **Hayır**.
+- Kullanıcılar birbirleriyle iletişim kurabiliyor / içerik paylaşabiliyor mu: **Hayır** (yalnız kendi ekibi; herkese açık sohbet yok).
+- Kullanıcının konumunu paylaşıyor mu: **Hayır**. Dijital ürün satın alma: **Evet** (abonelik, ek paket).
+- Sınırsız internet erişimi (tarayıcı gibi): **Hayır**.
 
 ### Veri güvenliği (Data safety)
 | Veri | Toplanıyor | Paylaşılıyor | Amaç | Zorunlu |
