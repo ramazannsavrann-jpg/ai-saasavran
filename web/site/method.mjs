@@ -30,9 +30,9 @@ export const METHOD_PAGES = [
 
 <h2>Run model</h2>
 <ul>
-<li>Measurements run automatically once a week.</li>
+<li>Measurements run automatically once a week. On paid plans you can also start a full measurement any time with "Measure now".</li>
 <li>Free plan: Gemini, each question once, without live web search (4 runs a month).</li>
-<li>Paid plans: ChatGPT and Gemini ask each question twice per run, Claude and Perplexity once. ChatGPT, Claude and Perplexity use live web search.</li>
+<li>On paid plans the monthly query quota is split (question credits): 30% goes to a short automatic weekly measurement, 70% to full measurements you start. The short weekly measurement asks every question once to ChatGPT (with live web search) and Gemini. A full measurement has ChatGPT and Gemini ask each question twice, Claude and Perplexity once. ChatGPT, Claude and Perplexity use live web search. One credit is one question asked to one AI once.</li>
 <li>Answers are requested through the official APIs, without a logged-in user, so there is no personal history or personalisation.</li>
 </ul>
 
@@ -81,7 +81,7 @@ export const METHOD_PAGES = [
     faq: [
       ["How does AI SaaSavran calculate recommendation rate?", "Recommendation rate is the share of answers that recommend the brand: it appears in a list without negative wording, or next to a recommendation phrase. Ambiguous plain-text mentions are checked by a small AI classifier."],
       ["Does AI SaaSavran use live web search?", "Yes on paid plans: ChatGPT, Claude and Perplexity answer with live web search and their sources are recorded. The free plan uses Gemini without live search, labelled as model knowledge."],
-      ["How many times is each question asked?", "Once a week on paid plans, once a month on the free plan. On paid plans ChatGPT and Gemini ask each question twice per run, Claude and Perplexity once; on the free plan Gemini asks once."],
+      ["How many times is each question asked?", "On paid plans a short automatic measurement runs every week: each question is asked once to ChatGPT and Gemini. You also start full measurements any time with your question credits: ChatGPT and Gemini ask each question twice, Claude and Perplexity once. 30% of the monthly quota goes to the weekly measurement, 70% to question credits. On the free plan there is one measurement a month and Gemini asks each question once."],
     ],
   },
   {
@@ -104,9 +104,9 @@ export const METHOD_PAGES = [
 
 <h2>Çalıştırma modeli</h2>
 <ul>
-<li>Ölçümler haftada bir otomatik çalışır.</li>
+<li>Ölçümler haftada bir otomatik çalışır. Ücretli paketlerde ayrıca istediğiniz zaman "Şimdi ölç" ile tam ölçüm başlatabilirsiniz.</li>
 <li>Ücretsiz paket: Gemini, her soru bir kez, canlı web araması olmadan (ayda 1 ölçüm).</li>
-<li>Ücretli paketler: her ölçümde ChatGPT ve Gemini her soruyu iki kez, Claude ve Perplexity bir kez sorar. ChatGPT, Claude ve Perplexity canlı web aramasıyla cevap verir.</li>
+<li>Ücretli paketlerde aylık sorgu kotası ikiye ayrılır (soru hakkı): %30'u haftalık otomatik kısa ölçüme, %70'i sizin başlattığınız tam ölçümlere. Haftalık kısa ölçümde tüm sorular ChatGPT (canlı web aramasıyla) ve Gemini'ye birer kez sorulur. Tam ölçümde ChatGPT ve Gemini her soruyu iki kez, Claude ve Perplexity bir kez sorar. ChatGPT, Claude ve Perplexity canlı web aramasıyla cevap verir. 1 soru hakkı, bir sorunun bir yapay zekâya bir kez sorulmasıdır.</li>
 <li>Cevaplar resmî API'ler üzerinden, oturum açmış bir kullanıcı olmadan alınır; kişisel geçmiş veya kişiselleştirme yoktur.</li>
 </ul>
 
@@ -155,7 +155,7 @@ export const METHOD_PAGES = [
     faq: [
       ["AI SaaSavran önerilme oranını nasıl hesaplar?", "Önerilme oranı, markayı öneren cevapların oranıdır: marka olumsuz ifade olmadan bir listede veya bir öneri ifadesinin yanında geçer. Belirsiz düz metin anılmaları küçük bir yapay zekâ sınıflandırıcısıyla kontrol edilir."],
       ["AI SaaSavran canlı web araması kullanıyor mu?", "Ücretli paketlerde evet: ChatGPT, Claude ve Perplexity canlı web aramasıyla cevap verir ve kaynakları kaydedilir. Ücretsiz paket Gemini'yi canlı arama olmadan kullanır ve bu model bilgisi olarak etiketlenir."],
-      ["Her soru kaç kez soruluyor?", "Ücretli paketlerde haftada bir ölçüm yapılır; ücretsiz pakette ayda bir ölçüm yapılır. Ücretli paketlerde her ölçümde ChatGPT ve Gemini her soruyu iki kez, Claude ve Perplexity bir kez sorar; ücretsiz pakette Gemini bir kez sorar."],
+      ["Her soru kaç kez soruluyor?", "Ücretli paketlerde her hafta otomatik kısa ölçüm yapılır: her soru ChatGPT ve Gemini'ye birer kez sorulur. Ayrıca soru hakkınızla istediğiniz zaman tam ölçüm başlatırsınız: ChatGPT ve Gemini her soruyu iki kez, Claude ve Perplexity bir kez sorar. Aylık kotanın %30'u haftalık ölçüme, %70'i soru hakkına ayrılır. Ücretsiz pakette ayda bir ölçüm yapılır ve Gemini her soruyu bir kez sorar."],
     ],
   },
   {

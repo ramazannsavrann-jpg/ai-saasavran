@@ -25,9 +25,11 @@ function WorkspaceView() {
   const ws = current!;
   const type: MeasurementType = ws.kind === "demo_lab" ? "simulated" : "model_knowledge";
   const usage = useLoad(() => api.usage(ws.id), [ws.id]);
+  const quota = useLoad(() => api.quota(ws.id), [ws.id]);
   const brands = useLoad(() => api.brands(ws.id), [ws.id]);
   const own = (brands.data ?? []).filter((b) => !b.is_competitor);
   const u = usage.data;
+  const q = quota.data;
   // Ajans paneli (0067): markalar müşteriye göre gruplanır ve süzülür. Müşteri adı yetki vermez.
   const agency = ws.kind === "agency";
   const clients = [...new Set(own.map((b) => b.client_name?.trim()).filter((c): c is string => !!c))].sort((a, b) => a.localeCompare(b, isEn() ? "en" : "tr"));
@@ -101,8 +103,21 @@ function WorkspaceView() {
       {u && (
         <section className="panel">
           <h2>{L("Bu ayki kullanım", "This month's usage")}</h2>
-          <Meter label={L("Yapay zekâ sorgusu", "AI queries")} used={u.engine_calls} limit={u.engine_call_limit} />
-          {u.engine_call_limit > 0 && u.engine_calls >= u.engine_call_limit * 0.8 && (
+          {q?.hybrid ? (
+            <>
+              <Meter label={L("Soru hakkı (istediğiniz zaman)", "Question credits (any time)")} used={q.manual_used} limit={q.manual_cap} />
+              <Meter label={L("Haftalık otomatik ölçüm", "Weekly automatic measurement")} used={q.weekly_used} limit={q.weekly_cap} warn={false} />
+              <p className="src-sup muted">{L(`Paketinizdeki ${q.total.toLocaleString("tr-TR")} aylık sorgunun %30'u her hafta kendiliğinden yapılan kısa ölçüme, %70'i sizin "Şimdi ölç" ile istediğiniz zaman başlattığınız tam ölçümlere ayrılır. 1 soru hakkı, bir sorunun bir yapay zekâya bir kez sorulmasıdır. Haklar her ay başında yenilenir.`, `Of your plan's ${q.total.toLocaleString("en-US")} monthly queries, 30% go to a short automatic measurement every week and 70% to full measurements you start any time with "Measure now". One credit is one question asked to one AI once. Credits renew at the start of each month.`)}</p>
+              {q.manual_left < q.manual_cap * 0.2 && (
+                <p className="caution">{q.manual_left === 0
+                  ? L("Bu ayki soru hakkınız bitti. Haftalık otomatik ölçüm sürer; hakkınız ay başında yenilenir. ", "This month's question credits are used up. Weekly automatic measurement continues; credits renew next month. ")
+                  : L(`Bu ay ${q.manual_left} soru hakkınız kaldı. `, `${q.manual_left} question credits left this month. `)}
+                  <Link to="/hesap#paket">{L("Paketleri gör", "See plans")}</Link>
+                </p>
+              )}
+            </>
+          ) : <Meter label={L("Yapay zekâ sorgusu", "AI queries")} used={u.engine_calls} limit={u.engine_call_limit} />}
+          {!q?.hybrid && u.engine_call_limit > 0 && u.engine_calls >= u.engine_call_limit * 0.8 && (
             <p className="caution">{u.engine_calls >= u.engine_call_limit
               ? L("Bu ayki sorgu kotanız doldu. Ölçümler ay başında kendiliğinden yeniden başlar; beklemek istemezseniz paketinizi yükseltebilirsiniz. ", "You've used this month's query quota. Measurements resume automatically next month; upgrade if you'd rather not wait. ")
               : (isEn() ? `You've used ${Math.round((100 * u.engine_calls) / u.engine_call_limit)}% of this month's query quota. ` : `Bu ayki sorgu kotanızın %${Math.round((100 * u.engine_calls) / u.engine_call_limit)} kadarını kullandınız. `)}

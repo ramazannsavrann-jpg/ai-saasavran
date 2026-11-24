@@ -144,7 +144,11 @@ export async function processNextRun(deps: WorkerDeps): Promise<WorkerResult | n
     const all = chooseProviders(run.measurement_type, { ...env, SEARCH_COUNTRY: target.country || env.SEARCH_COUNTRY }, brands.map((b) => b.name), `${run.id}`, deps.fetchFn);
     // Canlı aramada tüm etkin motorlar (ChatGPT + Claude + Perplexity). Müşteri paketlerinde Claude ve Perplexity her soruyu 1 kez sorar
     // (paket tavanları buna göre hesaplı: pricing.ts "+ Claude" satırları); Growth Lab'de her motor 2 tekrar.
-    const providers = run.measurement_type === "live_search" ? all : all.slice(0, 1);
+    // Haftalık hafif ölçüm (0072, soru hakkı düzeni): canlı aramada yalnız ChatGPT, her motor 1 kez
+    const light = run.light === true;
+    const providers = run.measurement_type === "live_search"
+      ? (light ? (all.filter((p) => p.config.provider === "openai").length ? all.filter((p) => p.config.provider === "openai") : all.slice(0, 1)) : all)
+      : all.slice(0, 1);
     if (!providers.length) {
       return await finish({ status: "failed", stop: "provider_not_configured", ok: 0, failed: 0 }, undefined,
         run.measurement_type === "live_search" ? "Canlı arama sağlayıcısı etkin değil" : "Gemini anahtarı tanımlı değil");
@@ -165,7 +169,7 @@ export async function processNextRun(deps: WorkerDeps): Promise<WorkerResult | n
     const guard = new BudgetGuard(Number(run.max_cost_usd));
     // "Önerildi mi" LLM kontrolü: ücretli canlı ölçümlerde, OpenAI anahtarıyla ve açıkça etkinleştirildiyse
     const classifyModel = env.OPENAI_MODEL || OPENAI_DEFAULT.model;
-    const repetitions = ws.plan === "free" || run.measurement_type === "simulated" ? 1 : 2;
+    const repetitions = light || ws.plan === "free" || run.measurement_type === "simulated" ? 1 : 2;
     let failed = 0;
     let lastFailKind: ApiErrorClass | undefined;
     let ok = 0;
