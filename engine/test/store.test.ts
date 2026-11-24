@@ -70,3 +70,22 @@ test("subscriptionFields: iptal edilmiş abonelik ve paket değişikliği", () =
   const f = subscriptionFields(sub({ subscriptionState: "SUBSCRIPTION_STATE_CANCELED", linkedPurchaseToken: "eski", lineItems: [{ productId: "altin", expiryTime: "2027-01-01T00:00:00Z", autoRenewingPlan: { autoRenewEnabled: false } }] }));
   assert.deepEqual([f.product, f.state, f.auto, f.linked], ["altin", "SUBSCRIPTION_STATE_CANCELED", false, "eski"]);
 });
+
+test("işçi: abonelikler Google'a yeniden sorulur, bulunamayan token süresi dolmuş sayılır", async () => {
+  const { syncStoreSubscriptions } = await import("../src/store-sync.ts");
+  const applied: Record<string, unknown>[] = [];
+  const db = { rpc: async (fn: string, args: Record<string, unknown>) => {
+    if (fn === "store_subscriptions_due") return { data: [{ purchase_token: "a", workspace_id: WS, product_id: "gumus" }, { purchase_token: "b", workspace_id: WS, product_id: "altin" }], error: null };
+    applied.push(args); return { data: "ok", error: null };
+  } };
+  const fetchFn = async (url: string) => {
+    if (url.includes("oauth2")) return new Response(JSON.stringify({ access_token: "AT" }));
+    if (url.endsWith("/tokens/a")) return new Response(JSON.stringify(sub({ subscriptionState: "SUBSCRIPTION_STATE_CANCELED" })));
+    return new Response("", { status: 410 });
+  };
+  assert.equal(await syncStoreSubscriptions({} as never, undefined), "kapalı");
+  assert.deepEqual(await syncStoreSubscriptions(db as never, SA, fetchFn), { checked: 2, changed: 2 });
+  assert.equal(applied[0].p_state, "SUBSCRIPTION_STATE_CANCELED");
+  assert.equal(applied[1].p_state, "SUBSCRIPTION_STATE_EXPIRED");
+  assert.equal(applied[1].p_product, "altin");
+});

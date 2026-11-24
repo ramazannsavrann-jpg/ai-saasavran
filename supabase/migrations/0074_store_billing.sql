@@ -153,6 +153,18 @@ language sql stable security definer set search_path = public as $$
   select workspace_id from store_subscriptions where purchase_token = p_token;
 $$;
 
+-- İşçi: Google'a yeniden sorulacak abonelikler (etkin olanlar ya da yakın zamanda bitmiş olanlar; 6 saatte bir).
+-- Gerçek zamanlı bildirim (RTDN) kurulmasa da yenileme/iptal/süre dolması böyle yakalanır.
+create or replace function store_subscriptions_due(p_limit int default 50)
+returns table (purchase_token text, workspace_id uuid, product_id text)
+language sql stable security definer set search_path = public as $$
+  select s.purchase_token, s.workspace_id, s.product_id from store_subscriptions s
+   where s.platform = 'google_play' and s.updated_at < now() - interval '6 hours'
+     and (s.active or s.expiry_at > now() - interval '3 days')
+   order by s.updated_at limit p_limit;
+$$;
+revoke all on function store_subscriptions_due(int) from public;
+
 revoke all on function apply_store_subscription(text, text, uuid, uuid, text, text, timestamptz, boolean, text, text) from public;
 revoke all on function grant_quota_pack(text, text, uuid, uuid, text) from public;
 revoke all on function store_token_workspace(text) from public;
@@ -164,7 +176,8 @@ do $$ declare f text; begin
                              'store_token_workspace(text)', 'can_buy_quota_pack(uuid)', 'quota_status(uuid)'] loop
       execute format('revoke all on function %s from anon', f);
     end loop;
-    foreach f in array array['apply_store_subscription(text, text, uuid, uuid, text, text, timestamptz, boolean, text, text)', 'grant_quota_pack(text, text, uuid, uuid, text)', 'store_token_workspace(text)'] loop
+    execute 'revoke all on function store_subscriptions_due(int) from anon';
+    foreach f in array array['apply_store_subscription(text, text, uuid, uuid, text, text, timestamptz, boolean, text, text)', 'grant_quota_pack(text, text, uuid, uuid, text)', 'store_token_workspace(text)', 'store_subscriptions_due(int)'] loop
       execute format('revoke all on function %s from authenticated', f);
       execute format('grant execute on function %s to service_role', f);
     end loop;

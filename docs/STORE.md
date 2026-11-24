@@ -21,11 +21,14 @@ Tek seferlik (tüketilen) ürünler — ek soru paketi, yalnız hakkını bitire
 
 Elmas uygulamada satılmaz (yalnız site, Paddle).
 
-## Sunucu ayarları (Cloudflare Pages ortam değişkenleri)
-- `GOOGLE_PLAY_SERVICE_ACCOUNT`: Google Cloud hizmet hesabının JSON anahtarı. Play Console → Kullanıcılar ve izinler'de bu hesaba
-  "Finansal verileri görüntüleme" ve "Siparişleri ve abonelikleri yönetme" izni verilir.
-- `GOOGLE_PLAY_RTDN_KEY`: rastgele uzun bir değer. Pub/Sub konusunun push aboneliği şu adrese yapılır:
-  `https://aisaasavran.com/api/store/google-rtdn?key=<GOOGLE_PLAY_RTDN_KEY>`; Play Console → Para kazanma ayarları → Gerçek zamanlı geliştirici bildirimleri'ne konu adı yazılır.
+## Ayarlar (GitHub Secrets; CI Cloudflare'e ve işçiye kendisi aktarır)
+- `GOOGLE_SERVICE_ACCOUNT`: Firebase projesindeki hizmet hesabının JSON anahtarı. Tek hesap iki iş görür:
+  telefon bildirimi (FCM) ve Google Play satın alma doğrulaması. Play Console → Kullanıcılar ve izinler'de bu hesabın
+  e-postası davet edilir; izinler: "Finansal verileri, siparişleri ve iptal anketi yanıtlarını görüntüleme" ve
+  "Siparişleri ve abonelikleri yönetme".
+- `GOOGLE_SERVICES_JSON`: Firebase'deki Android uygulamasının `google-services.json` içeriği (bildirimleri derlemede açar).
+- İsteğe bağlı `GOOGLE_PLAY_RTDN_KEY` + Pub/Sub (gerçek zamanlı bildirim). Kurulmazsa işçi etkin abonelikleri 6 saatte
+  bir Google'a sorar (`engine/src/store-sync.ts`); yenileme, iptal ve süre dolması en geç birkaç saat içinde işlenir.
 
 ## Akış
 1. Uygulama fiyatları Google'dan okur (ülkenin parası). Satın alma çalışma alanı kimliğiyle işaretlenir (obfuscatedAccountId).

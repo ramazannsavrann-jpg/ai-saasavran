@@ -7,6 +7,7 @@ import { seedLabs } from "../engine/src/labs.ts";
 import { sendWeeklyDigests, sendWelcomeEmails } from "../engine/src/email.ts";
 import { processDropAlerts } from "../engine/src/alerts.ts";
 import { processRunPushes } from "../engine/src/push.ts";
+import { syncStoreSubscriptions } from "../engine/src/store-sync.ts";
 import { scheduleRecovery, sendRecoveryEmails } from "../engine/src/recovery.ts";
 
 const { SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY } = process.env;
@@ -62,8 +63,11 @@ try { dropAlerts = await processDropAlerts(db, process.env.RESEND_API_KEY); } ca
 // Telefon bildirimi: biten ölçüm için bir kez (FCM hizmet hesabı yoksa kapalı)
 let pushes: unknown;
 try { pushes = await processRunPushes(db, process.env.FCM_SERVICE_ACCOUNT); } catch (e) { pushes = `hata: ${(e as Error).message}`; }
+// Google Play abonelikleri: Google'a yeniden sor (hizmet hesabı yoksa kapalı)
+let storeSync: unknown;
+try { storeSync = await syncStoreSubscriptions(db, process.env.GOOGLE_PLAY_SERVICE_ACCOUNT); } catch (e) { storeSync = `hata: ${(e as Error).message}`; }
 // Telafi ölçümü bitince müşteriye "sonuçlarınız hazır" e-postası (bir kez)
 let recoveryEmails: unknown;
 try { recoveryEmails = await sendRecoveryEmails(db, process.env.RESEND_API_KEY); } catch (e) { recoveryEmails = `hata: ${(e as Error).message}`; }
-console.log(JSON.stringify({ maintenance, recoveryQueued, recoveryEmails, dropAlerts, pushes, perception, truth, conflicts, discovery, briefs, productChecks, shoppingChecks, weeklyScheduled: scheduled, audits, reanalyzed, digests, welcome, processed: results.length, results }, null, 2));
+console.log(JSON.stringify({ maintenance, recoveryQueued, recoveryEmails, dropAlerts, pushes, storeSync, perception, truth, conflicts, discovery, briefs, productChecks, shoppingChecks, weeklyScheduled: scheduled, audits, reanalyzed, digests, welcome, processed: results.length, results }, null, 2));
 if (results.some((r) => r.stop === "worker_error")) process.exit(1);
