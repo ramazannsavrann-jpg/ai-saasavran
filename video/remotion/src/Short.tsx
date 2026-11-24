@@ -102,6 +102,10 @@ export const Short: React.FC<ShortProps> = ({ayar, kel, dil, ad}) => {
           );
         })}
         <Altyazi />
+        {/* İlk kare = kapak: Instagram Reels kapağı otomatik ilk kareden alır (API kapak seçtirmiyor) */}
+        <Sequence from={0} durationInFrames={1} name="Kapak karesi">
+          <Kapak ad={ad} dil={dil} ayar={ayar} kel={kel} />
+        </Sequence>
         <Audio src={staticFile(`${ad}/ses.wav`)} />
       </AbsoluteFill>
     </VeriCtx.Provider>

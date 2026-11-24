@@ -157,7 +157,8 @@ Veri Shorts'ları artık `video/remotion/` ortak şablonuyla çizilir (Python/PI
 - Format: sahneler seslendirmedeki cümle başlarına bağlı (`gruplar` = sahne başına cümle no'ları; sahne sayısı `order` ile aynı); kelime kelime altyazı (y 1205–1375, güvenli alan içinde); vurgular (sayaç, daire, çubuk parlaması, gösterge, kaynak çizgisi) ilgili kelime söylendiği anda; kapak = ilk sahnenin son hâli, altyazısız.
 - `rm` alanları: `kanca` (ust "{n} …", ana, alt, n, deger), `baslik_vurgu` (hook içindeki vurgulanan parça), `kanca_marka`, `canli_motor`, `soru_sayisi`, `motor_vurgu` (motor tablosunda vurgulanan marka), `soru_kelime` (soru kartı no → seslendirmedeki tetik kelime), `kapak_sahne`, isteğe bağlı `kart` (karusel sayfaları, varsayılan s1,s2,s3,shop,net).
 - Ses, müzik, tempo, süre sınırı `video/stil.json`'dan; karışım eski hatla aynı. Süre > azami_sn ise iş durur.
-- İlk örnek: Airfryer TR (ExjvMHyW0q0) + EN. Kontrol: render sonrası kareler gözle, `ad_kontrol.py` TAMAM.
+- Videonun İLK KARESİ kapaktır (24 Kas): Instagram Reels kapağı ilk kareden alınıyor, paylaşım aracı kapak seçtirmiyor. İlk Airfryer Reels'lerinde kapak boş zemin + altyazı çıktı; bu yüzden eklendi.
+- İlk örnek: Airfryer TR (ExjvMHyW0q0) + EN (Eufp0XQzaB8). Kontrol: render sonrası kareler gözle, `ad_kontrol.py` TAMAM.
 
 ## PAYLAŞIM KURALLARI (YouTube + Instagram) — 14 Kasım, HANGİ SOHBETTEN OLURSA OLSUN GEÇERLİ
 ### YouTube (@aisaasavran)
