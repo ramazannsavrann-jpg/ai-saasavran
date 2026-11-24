@@ -99,6 +99,13 @@ export const api = {
   async createWorkspace(name: string, kind: "business" | "agency"): Promise<string> {
     return must(await sb().rpc("create_workspace", { p_name: name, p_kind: kind }));
   },
+  /** Abonelik kaynağı ve durumu (0074: sitede Paddle ya da uygulamada mağaza). */
+  async billingState(ws: string): Promise<{ subscription_status: string | null; billing_source: string; current_period_end: string | null; plan: string }> {
+    return must(await sb().from("workspaces").select("subscription_status,billing_source,current_period_end,plan").eq("id", ws).single());
+  },
+  async canBuyQuotaPack(ws: string): Promise<boolean> {
+    return !!must(await sb().rpc("can_buy_quota_pack", { p_workspace: ws }));
+  },
   /** Soru hakkı (0072): abonede kota %30 haftalık otomatik + %70 istek üzerine. */
   async quota(ws: string): Promise<Quota | null> {
     const rows = must(await sb().rpc("my_quota", { p_workspace: ws })) as Quota[];

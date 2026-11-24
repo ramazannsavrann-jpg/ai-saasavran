@@ -1,0 +1,72 @@
+import { test } from "node:test";
+import assert from "node:assert/strict";
+import { generateKeyPairSync } from "node:crypto";
+// @ts-ignore — düz JS modülü (Cloudflare Pages Functions)
+import { verifyPurchase, subscriptionFields } from "../../functions/api/store/_google.js";
+
+const { privateKey } = generateKeyPairSync("rsa", { modulusLength: 2048 });
+const SA = JSON.stringify({ client_email: "play@p.iam.gserviceaccount.com", private_key: privateKey.export({ type: "pkcs8", format: "pem" }) });
+const WS = "11111111-1111-4111-8111-111111111111", USER = "22222222-2222-4222-8222-222222222222";
+const env = { SUPABASE_URL: "https://db.test", SUPABASE_SERVICE_ROLE_KEY: "srv", GOOGLE_PLAY_SERVICE_ACCOUNT: SA };
+
+function fake(googleSub: unknown, googleProduct: unknown, dbResult: string) {
+  const calls: string[] = [];
+  const fetchFn = async (url: string, init?: RequestInit) => {
+    calls.push(`${init?.method ?? "GET"} ${url}${init?.body && url.includes("/rpc/") ? " " + init.body : ""}`);
+    if (url.includes("oauth2")) return new Response(JSON.stringify({ access_token: "AT" }));
+    if (url.includes("/rpc/")) return new Response(JSON.stringify(dbResult));
+    if (url.includes("subscriptionsv2")) return googleSub ? new Response(JSON.stringify(googleSub)) : new Response("", { status: 404 });
+    if (url.includes(":acknowledge") || url.includes(":consume")) return new Response("{}");
+    if (url.includes("/products/")) return googleProduct ? new Response(JSON.stringify(googleProduct)) : new Response("", { status: 404 });
+    return new Response("", { status: 500 });
+  };
+  return { calls, fetchFn };
+}
+const sub = (over: Record<string, unknown> = {}) => ({
+  subscriptionState: "SUBSCRIPTION_STATE_ACTIVE", latestOrderId: "GPA.1", acknowledgementState: "ACKNOWLEDGEMENT_STATE_PENDING",
+  externalAccountIdentifiers: { obfuscatedExternalAccountId: WS },
+  lineItems: [{ productId: "gumus", expiryTime: "2026-12-24T00:00:00Z", autoRenewingPlan: { autoRenewEnabled: true } }], ...over,
+});
+
+test("abonelik: Google'a sorulur, veritabanına işlenir, sonra onaylanır", async () => {
+  const f = fake(sub(), null, "ok");
+  const r = await verifyPurchase({ env, user: USER, input: { kind: "sub", product: "gumus", token: "tok-abcdefghij", workspace: WS }, fetchFn: f.fetchFn });
+  assert.deepEqual(r, { result: "ok" });
+  assert.ok(f.calls.some((c) => c.includes("apply_store_subscription") && c.includes('"p_state":"SUBSCRIPTION_STATE_ACTIVE"') && c.includes('"p_expiry":"2026-12-24T00:00:00Z"')));
+  assert.ok(f.calls.some((c) => c.includes("subscriptions/gumus/tokens/tok-abcdefghij:acknowledge")));
+});
+
+test("abonelik: başka alan adına alınmış token reddedilir, veritabanına dokunulmaz", async () => {
+  const f = fake(sub({ externalAccountIdentifiers: { obfuscatedExternalAccountId: "33333333-3333-4333-8333-333333333333" } }), null, "ok");
+  const r = await verifyPurchase({ env, user: USER, input: { kind: "sub", product: "gumus", token: "tok-abcdefghij", workspace: WS }, fetchFn: f.fetchFn });
+  assert.equal(r.error, "account_mismatch");
+  assert.ok(!f.calls.some((c) => c.includes("/rpc/")));
+});
+
+test("abonelik: veritabanı reddederse onaylanmaz (Google iade eder)", async () => {
+  const f = fake(sub(), null, "already_subscribed_web");
+  const r = await verifyPurchase({ env, user: USER, input: { kind: "sub", product: "gumus", token: "tok-abcdefghij", workspace: WS }, fetchFn: f.fetchFn });
+  assert.deepEqual(r, { result: "already_subscribed_web" });
+  assert.ok(!f.calls.some((c) => c.includes(":acknowledge")));
+});
+
+test("Elmas ve bilinmeyen ürün uygulamadan alınamaz; mağaza ayarı yoksa 503", async () => {
+  assert.equal((await verifyPurchase({ env, user: USER, input: { kind: "sub", product: "elmas", token: "tok-abcdefghij", workspace: WS } })).error, "bad_product");
+  assert.equal((await verifyPurchase({ env: { ...env, GOOGLE_PLAY_SERVICE_ACCOUNT: "" }, user: USER, input: { kind: "sub", product: "gumus", token: "tok-abcdefghij", workspace: WS } })).status, 503);
+});
+
+test("ek paket: ödenmişse verilir ve tüketilir; ödenmemişse verilmez", async () => {
+  let f = fake(null, { purchaseState: 0, obfuscatedExternalAccountId: WS }, "ok");
+  assert.deepEqual(await verifyPurchase({ env, user: USER, input: { kind: "pack", product: "ek_250", token: "pk-abcdefghij", workspace: WS }, fetchFn: f.fetchFn }), { result: "ok" });
+  assert.ok(f.calls.some((c) => c.includes("products/ek_250/tokens/pk-abcdefghij:consume")));
+  f = fake(null, { purchaseState: 2 }, "ok");
+  assert.equal((await verifyPurchase({ env, user: USER, input: { kind: "pack", product: "ek_250", token: "pk-abcdefghij", workspace: WS }, fetchFn: f.fetchFn })).error, "not_paid");
+  f = fake(null, { purchaseState: 0 }, "quota_not_exhausted");
+  await verifyPurchase({ env, user: USER, input: { kind: "pack", product: "ek_250", token: "pk-abcdefghij", workspace: WS }, fetchFn: f.fetchFn });
+  assert.ok(!f.calls.some((c) => c.includes(":consume")), "verilemeyen paket tüketilmez (iade edilir)");
+});
+
+test("subscriptionFields: iptal edilmiş abonelik ve paket değişikliği", () => {
+  const f = subscriptionFields(sub({ subscriptionState: "SUBSCRIPTION_STATE_CANCELED", linkedPurchaseToken: "eski", lineItems: [{ productId: "altin", expiryTime: "2027-01-01T00:00:00Z", autoRenewingPlan: { autoRenewEnabled: false } }] }));
+  assert.deepEqual([f.product, f.state, f.auto, f.linked], ["altin", "SUBSCRIPTION_STATE_CANCELED", false, "eski"]);
+});

@@ -211,7 +211,7 @@ function Briefs({ brandId, results }: { brandId: string; results: { prompt_id: s
   return (
     <>
       <p className="muted small" style={{ margin: 0 }}>{L("Önerilmediğiniz her soru için sitenize yazılacak sayfanın planı: başlık, bölümler, yazılması gereken bilgiler ve sık sorulan sorular.", "For each question you weren't recommended in, a plan for the page to add to your website: title, sections, facts to include and FAQ.")}</p>
-      {!paid ? <div className="card" style={{ display: "flex", flexDirection: "column", gap: 8 }}><span>{L("İçerik planları ücretli paketlerde açık.", "Content plans are available on paid plans.")}</span><button className="btn btn-text" style={{ alignSelf: "flex-start", padding: 0 }} onClick={() => nav("/hesap")}>{L("Paketinizi görün", "See your plan")} {Icon.chevron}</button></div>
+      {!paid ? <div className="card" style={{ display: "flex", flexDirection: "column", gap: 8 }}><span>{L("İçerik planları ücretli paketlerde açık.", "Content plans are available on paid plans.")}</span><button className="btn btn-text" style={{ alignSelf: "flex-start", padding: 0 }} onClick={() => nav("/paket")}>{L("Paketleri gör", "See plans")} {Icon.chevron}</button></div>
         : lost.length === 0 ? <p className="muted" style={{ margin: 0 }}>{L("Son ölçümde önerilmediğiniz soru yok.", "No questions you weren't recommended in last time.")}</p> : (
         <div className="list">
           {lost.map((r) => {

@@ -79,6 +79,7 @@ export function Account() {
       <div className="card" style={{ display: "flex", flexDirection: "column", gap: 4 }}>
         <span style={{ fontWeight: 700, fontSize: 18 }}>{session?.user.email}</span>
         {current && <span className="muted">{current.name}{u ? ` · ${L("Paket", "Plan")}: ${planTr(u.plan_id, u.plan_name)}` : ""}</span>}
+        {current && (current.kind === "business" || current.kind === "agency") && <button className="btn btn-ghost" style={{ marginTop: 8 }} onClick={() => nav("/paket")}>{L("Paketler ve ödeme", "Plans and payment")}</button>}
       </div>
       {u && (
         <>

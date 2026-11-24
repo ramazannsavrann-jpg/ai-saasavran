@@ -187,6 +187,11 @@ test("Mobil: kayıt → işletme kurulumu → ölçüm → rakip → bildirimler
   await expect(page.getByText("mobil@ornek.test")).toBeVisible();
   await expect(page.getByText("Bu ayki kullanım", { exact: false })).toBeVisible();
   await expect(page.getByLabel("Dil")).toBeVisible();
+  await page.getByRole("button", { name: "Paketler ve ödeme" }).click();
+  await expect(page.getByRole("heading", { name: "Paket", exact: true })).toBeVisible();
+  await expect(page.getByText("Uygulama içi ödeme şu an kullanılamıyor.", { exact: false })).toBeVisible();
+  await noOverflow(page); await shot(page, "10-paket");
+  await page.getByRole("button", { name: "Geri" }).click();
   await page.getByRole("button", { name: "Şifre değiştir" }).click();
   await page.getByLabel("Yeni şifre", { exact: true }).fill("Yeni-Sifre-2026");
   await page.getByLabel("Yeni şifre (tekrar)").fill("Yeni-Sifre-2026");

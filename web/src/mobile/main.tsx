@@ -14,6 +14,7 @@ import { AppProvider, useApp } from "../lib/app";
 import { L } from "../lib/i18n";
 import { Spinner, TabBar, usePullToRefresh } from "./ui";
 import { Advice } from "./screens/Advice";
+import { Plans } from "./screens/Plans";
 import { BrandEdit } from "./screens/BrandEdit";
 import { Products, ProductDetail } from "./screens/Products";
 import { Accuracy, Sources, Traffic } from "./screens/Insights";
@@ -79,6 +80,7 @@ function App() {
         <Route path="/dogruluk" element={<Accuracy />} />
         <Route path="/kaynaklar" element={<Sources />} />
         <Route path="/trafik" element={<Traffic />} />
+        <Route path="/paket" element={<Plans />} />
         <Route path="/bildirimler" element={<Activity />} />
         <Route path="/hesap" element={<Account />} />
       </Route>

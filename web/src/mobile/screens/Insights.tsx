@@ -36,7 +36,7 @@ function PaidOnly({ text }: { text: string }) {
   return (
     <div className="card" style={{ display: "flex", flexDirection: "column", gap: 8 }}>
       <span>{text} {L("Ücretli paketlerde açık.", "Available on paid plans.")}</span>
-      <button className="btn btn-text" style={{ alignSelf: "flex-start", padding: 0 }} onClick={() => nav("/hesap")}>{L("Paketinizi görün", "See your plan")} {Icon.chevron}</button>
+      <button className="btn btn-text" style={{ alignSelf: "flex-start", padding: 0 }} onClick={() => nav("/paket")}>{L("Paketleri gör", "See plans")} {Icon.chevron}</button>
     </div>
   );
 }
