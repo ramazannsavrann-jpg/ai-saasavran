@@ -582,3 +582,4 @@
 - 2026-11-22: Google Shopping eşleşme düzeltmesi (airfryer testinde bulundu): model kodu olan üründe yalnız model kodu aranır; "aparat/kalıp/kağıt" aksesuar sayılır; ikinci el ilanlar (letgo, dolap, "2. el", "yenilenmiş") eşleşmez.
 
 - 2026-11-24: Gemini canlı arama (Google Search dayanağı) eklendi: ayrı ücretli proje "aisaasavran-canli" (önden ödemeli, aylık 5 $ sınır), secret `GEMINI_CANLI_API_KEY`. Varsayılan canlı sıra değişmedi (openai, claude, perplexity); worker elle başlatılırken `live_engines` girdisine `gemini` yazılınca çalışır. Müşteri ölçümleri ve ücretsiz kontrol etkilenmez.
+- 2026-11-24: Gemini canlı arama müşteri ölçümlerinde de açıldı (sahip kararı): varsayılan canlı sıra openai, claude, perplexity, gemini. Maliyet pricing.ts 4 motorlu paket hesabında zaten vardı. Google projesinde aylık 250 TL sınır; dolarsa Gemini çağrıları başarısız olur, ölçüm diğer motorlarla tamamlanır. Site/uygulama metni diğer sohbette güncellenecek.

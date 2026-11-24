@@ -44,7 +44,8 @@ export function buildProviders(env: Record<string, string | undefined>, fetchFn?
 
   // Gemini canlı (ücretli ayrı proje "aisaasavran-canli", önden ödemeli, aylık 5 $ sınırlı; sahip onayı 24 Kasım 2026).
   // Yalnız arama istendiğinde ve ALLOW_PAID_API açıkken; ücretsiz anahtar (site, ücretsiz kontrol, ses) etkilenmez.
-  // Canlı sıraya kendiliğinden girmez: LIVE_ENGINES'e "gemini" eklenince çalışır.
+  // 24 Kasım (sahip kararı): varsayılan canlı sırada (müşteri ölçümleri dahil). Anahtar yoksa ya da Google sınırı dolarsa
+  // Gemini çağrıları başarısız olur, diğer motorlar ölçüme devam eder.
   if (env.GEMINI_CANLI_API_KEY && env.GEMINI_SEARCH !== "false") {
     if (!allowPaid) status.push({ provider: "gemini", enabled: false, reason: "canlı Gemini ücretli; ALLOW_PAID_API kapalı" });
     else {
