@@ -256,6 +256,7 @@ export const SMotorlar: React.FC<P> = ({i}) => {
           const vurgulu = ad === vurguMarka;
           const degerler = row.slice(1) as number[];
           const maks = Math.max(...degerler);
+          const min = Math.min(...degerler);
           return (
             <div
               key={ad}
@@ -273,9 +274,10 @@ export const SMotorlar: React.FC<P> = ({i}) => {
               {degerler.map((d, ci) => {
                 const m = motorlar[ci];
                 let daire: {renk: string; t: number} | null = null;
-                if (vurgulu && (d === 0 || d === maks)) {
+                // Vurgulanan satırda en yüksek (altın) ve en düşük/0 (kırmızı) hücre, motorun adı söylendiği anda daire içine alınır
+                if (vurgulu && (d === min || d === maks) && min < maks) {
                   const t = kelimeAn(v, i, m, -1, rowAn);
-                  if (t >= 0) daire = {renk: d === 0 ? C.red : C.gold, t: an(t)};
+                  if (t >= 0) daire = {renk: d === maks ? C.gold : C.red, t: an(t)};
                 }
                 const sayi = <Sayac deger={d} bas={10 + ri * 5 + ci * 2} frame={frame} />;
                 return (
