@@ -708,7 +708,7 @@ function RunControl({ brand, runs, onChange, paidAllowed, workspaceId }: { brand
             : <>Ücretli deneme bütçesi: {usd(Number(b.spent_usd))} / {usd(Number(b.cap_usd))} kullanıldı. Bir ölçüm yaklaşık {usd(0.019 * 2 * Math.max(runs[0]?.prompts_total ?? 10, 1))} tutar. Tavana gelince kendiliğinden durur.</>}</p>}
           {quota.data?.hybrid && <p className="muted paid-note">{(() => {
             const np = Math.max(runs.find((r) => r.trigger !== "weekly")?.prompts_total ?? runs[0]?.prompts_total ?? 10, 1);
-            return L(`Bu ay ${quota.data.manual_left} soru hakkınız kaldı. Canlı aramalı ölçüm yaklaşık ${np * 4}, aramasız ölçüm ${np * 2} hak kullanır.`, `${quota.data.manual_left} question credits left this month. A live-search measurement uses about ${np * 4}, a no-search one ${np * 2}.`);
+            return L(`Bu ay ${quota.data.manual_left} soru hakkınız kaldı. Canlı aramalı ölçüm yaklaşık ${np * 6}, aramasız ölçüm ${np * 2} hak kullanır.`, `${quota.data.manual_left} question credits left this month. A live-search measurement uses about ${np * 6}, a no-search one ${np * 2}.`);
           })()}</p>}
         </div>
       ) : (
@@ -1047,7 +1047,7 @@ function Report({ brand, type, onBrandChange, paid = false, runs = [] }: { brand
             {!live && type !== "simulated" && (
               <section className="panel" id="kendi-site-payi">
                 <h2>{L("Kendi site payı", "Owned-source share")}</h2>
-                <p className="muted">{L("Veri yok: kaynaklar yalnız canlı internet aramalı ölçümde oluşur (ChatGPT, Claude ve Perplexity, ücretli paketler).", "No data: sources only exist in live web-search measurements (ChatGPT, Claude and Perplexity, paid plans).")}</p>
+                <p className="muted">{L("Veri yok: kaynaklar yalnız canlı internet aramalı ölçümde oluşur (ChatGPT, Gemini, Claude ve Perplexity, ücretli paketler).", "No data: sources only exist in live web-search measurements (ChatGPT, Gemini, Claude and Perplexity, paid plans).")}</p>
               </section>
             )}
             {live && (

@@ -436,7 +436,7 @@ console.log("ok tanımsız paket atanamıyor");
     await db.query(`update runs set status='done', created_at = now() - interval '8 days' where brand_id=$1`, [own.id]);
     await db.query(`select schedule_weekly_runs(50)`);
     assert.equal((await db.query(`select count(*)::int n from runs where brand_id=$1 and status='queued'`, [own.id])).rows[0].n, 0, "haftalık pay dolunca durur");
-    // İstek üzerine canlı ölçüm: 10 soru × 4 = 40 hak; hak yetmezse başlamaz
+    // İstek üzerine canlı ölçüm: 10 soru × 6 = 60 hak (0077: 4 motor canlı); hak yetmezse başlamaz
     const r = (await as(U1, `select request_run('${own.id}', true) id`)).rows[0].id;
     assert.ok(r);
     const mRun = r;
@@ -444,7 +444,7 @@ console.log("ok tanımsız paket atanamıyor");
     await db.query(`insert into cost_ledger (workspace_id, run_id, task, provider, model, cost_usd, billing) select $1, $2, 'query_engine', 'openai', 'm', 0, 'paid' from generate_series(1, 500)`, [A, mRun]);
     q = (await as(U1, `select * from my_quota('${A}')`)).rows[0];
     assert.equal(q.manual_left, 32);
-    await assert.rejects(as(U1, `select request_run('${own.id}', true)`), /Soru hakkınız yetmiyor: bu ölçüm 40 soru hakkı kullanır, bu ay 32/);
+    await assert.rejects(as(U1, `select request_run('${own.id}', true)`), /Soru hakkınız yetmiyor: bu ölçüm 60 soru hakkı kullanır, bu ay 32/);
     // Ücretsiz pakette karma düzen yok
     await db.query(`update workspaces set plan='free', subscription_status=null, paid_live_allowed=false where id=$1`, [A]);
     q = (await as(U1, `select * from my_quota('${A}')`)).rows[0];

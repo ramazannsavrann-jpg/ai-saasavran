@@ -57,8 +57,8 @@ function WorkspaceView() {
         <aside className="notice notice-live" role="note">
           <strong>{L("Bu alanda iki tür ölçüm var", "This workspace has two kinds of measurement")}</strong>
           {isEn()
-            ? <p><b>No search (Gemini, free):</b> what the AI knows without looking at the web. <b>Live search (paid):</b> the answers AI assistants (today ChatGPT, Claude and Perplexity) give after searching the web; closest to what customers actually see.</p>
-            : <p><b>Aramasız (Gemini, ücretsiz):</b> yapay zekânın internete bakmadan bildiği. <b>Canlı arama (ücretli):</b> yapay zekâ asistanlarının (bugün ChatGPT, Claude ve Perplexity) internete bakarak verdiği cevaplar; müşterinin gerçekte gördüğüne en yakın olan budur.</p>}
+            ? <p><b>No search (Gemini, free):</b> what the AI knows without looking at the web. <b>Live search (paid):</b> the answers AI assistants (today ChatGPT, Gemini, Claude and Perplexity) give after searching the web; closest to what customers actually see.</p>
+            : <p><b>Aramasız (Gemini, ücretsiz):</b> yapay zekânın internete bakmadan bildiği. <b>Canlı arama (ücretli):</b> yapay zekâ asistanlarının (bugün ChatGPT, Gemini, Claude ve Perplexity) internete bakarak verdiği cevaplar; müşterinin gerçekte gördüğüne en yakın olan budur.</p>}
         </aside>
       ) : <DataNotice type={type} />}
 

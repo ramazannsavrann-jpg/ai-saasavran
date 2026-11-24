@@ -159,7 +159,7 @@ export function Home() {
   const budgetLeft = budget.data ? Number(budget.data.cap_usd) - Number(budget.data.spent_usd) : 0;
   const willLive = canLive && budgetLeft >= 0.05;
   const activeN = (promptsQ.data ?? []).filter((p) => p.active).length;
-  const need = activeN * (willLive ? 4 : 2);
+  const need = activeN * (willLive ? 6 : 2); // canlı: ChatGPT 2 + Gemini 2 + Claude 1 + Perplexity 1 (0077)
 
   async function start() {
     setBusy("run"); setErr(null); haptic.tap();
