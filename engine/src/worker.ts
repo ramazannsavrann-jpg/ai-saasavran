@@ -141,7 +141,11 @@ export async function processNextRun(deps: WorkerDeps): Promise<WorkerResult | n
 
     const brands: BrandRef[] = [target, ...comps].map((b) => ({ id: b.id, name: b.name, aliases: b.aliases ?? [], domain: domainOf(b.website) }));
     const day = now().toISOString().slice(0, 10);
-    const all = chooseProviders(run.measurement_type, { ...env, SEARCH_COUNTRY: target.country || env.SEARCH_COUNTRY }, brands.map((b) => b.name), `${run.id}`, deps.fetchFn);
+    // Motor sırası: elle verilen LIVE_ENGINES > çalıştırmada kayıtlı engines (ör. yalnız ["gemini"]) > varsayılan.
+    // 24 Kasım: push ile tetiklenen işçi, yalnız Gemini için açılmış çalıştırmayı varsayılan motorlarla almıştı.
+    const runEngines = run.measurement_type === "live_search" && Array.isArray(run.engines) && run.engines.length ? run.engines.join(",") : undefined;
+    const liveEngines = env.LIVE_ENGINES || runEngines;
+    const all = chooseProviders(run.measurement_type, { ...env, LIVE_ENGINES: liveEngines, SEARCH_COUNTRY: target.country || env.SEARCH_COUNTRY }, brands.map((b) => b.name), `${run.id}`, deps.fetchFn);
     // Canlı aramada tüm etkin motorlar (ChatGPT + Claude + Perplexity). Müşteri paketlerinde Claude ve Perplexity her soruyu 1 kez sorar
     // (paket tavanları buna göre hesaplı: pricing.ts "+ Claude" satırları); Growth Lab'de her motor 2 tekrar.
     // Haftalık hafif ölçüm (0072, soru hakkı düzeni): canlı aramada yalnız ChatGPT, her motor 1 kez
