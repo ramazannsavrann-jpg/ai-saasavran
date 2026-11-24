@@ -85,7 +85,7 @@ export class DbUsageGate implements UsageGate {
 }
 
 /** Canlı aramada çalışacak motorlar, sırayla. LIVE_ENGINES ile değiştirilebilir (ör. "openai"). */
-export const DEFAULT_LIVE_ENGINES = "openai,claude,perplexity";
+export const DEFAULT_LIVE_ENGINES = "openai,claude,perplexity,gemini";
 
 /**
  * Ölçüm türüne göre motor listesi. Canlı aramada ücretli arama yapan tüm etkin motorlar

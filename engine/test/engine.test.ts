@@ -1011,11 +1011,13 @@ test("Güven puanı: örneklem + tekrar tutarlılığı; tekrar yoksa düşük, 
   assert.ok(few.reasons.includes("few_repeats"));
 });
 
-test("Gemini canlı: ayrı ücretli anahtar yalnız LIVE_ENGINES'te gemini varken canlı aramaya girer", async () => {
+test("Gemini canlı: ayrı ücretli anahtarla varsayılan canlı sırada, anahtarsız girmez", async () => {
   const { chooseProviders } = await import("../src/worker.ts");
   const env = { ALLOW_PAID_API: "true", GEMINI_API_KEY: "free-x", GEMINI_CANLI_API_KEY: "paid-x", OPENAI_API_KEY: "o", ANTHROPIC_API_KEY: "a" };
-  // Varsayılan canlı sıra değişmez (müşteri ölçümleri etkilenmez)
-  assert.deepEqual(chooseProviders("live_search", env, ["A"], "s").map((p) => p.config.provider), ["openai", "claude"]);
+  // Varsayılan canlı sırada Gemini sonda (24 Kasım: müşteri ölçümlerinde de açık)
+  assert.deepEqual(chooseProviders("live_search", env, ["A"], "s").map((p) => p.config.provider), ["openai", "claude", "gemini"]);
+  // Canlı anahtar yoksa Gemini canlıya girmez (ücretsiz anahtarda arama yok)
+  assert.deepEqual(chooseProviders("live_search", { ...env, GEMINI_CANLI_API_KEY: "" }, ["A"], "s").map((p) => p.config.provider), ["openai", "claude"]);
   // İstenince ücretli, aramalı Gemini çalışır
   const g = chooseProviders("live_search", { ...env, LIVE_ENGINES: "gemini" }, ["A"], "s");
   assert.equal(g.length, 1);
