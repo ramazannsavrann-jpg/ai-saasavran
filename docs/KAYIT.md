@@ -14,3 +14,4 @@ Kodlar: `EN-S-001` (İngilizce Short), `EN-U-001` (İngilizce uzun), `TR-S-001` 
 | MOBIL-001 (Android uygulama: hesap silme + PWA + TWA paketi) | hesap (Opus, bu oturum) | devam | 2026-11-23 |
 | SKILL-001 (Remotion resmi Agent Skills + taste-skill → .claude/skills; 18 repo güvenlik taraması temiz) | hesap (Opus, bu oturum) | bitti | 2026-11-23 |
 | YT-AIRFRYER-V2-TR (Remotion sürümü → ExjvMHyW0q0, 24 Kas 10:05; eski F4tjQdA9cl8 sahibince silindi) | hesap (Opus, bu oturum) | bitti | 2026-11-24 |
+| IG-AIRFRYER-SET (TR DgIFrTLisa_, EN DgIF1KjkQaz, karusel DgIGBsckcHx) + REMOTION-STANDART (ortak şablon) | hesap (Opus, bu oturum) | bitti | 2026-11-24 |
