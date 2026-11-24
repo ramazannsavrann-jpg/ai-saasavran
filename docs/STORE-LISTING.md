@@ -23,13 +23,15 @@ Neler yaparsınız
 • Ürünlerinizin önerilip önerilmediğini ve doğru anlatılıp anlatılmadığını kontrol edin.
 • Yapay zekâların işletmeniz hakkında yanlış söylediklerini (adres, saat, fiyat) yakalayın.
 • Size özel önerileri adım adım uygulayın; yaptıklarınızın sonucunu önce/sonra ölçümüyle görün.
-• Haftalık ölçüm bitince bildirim alın.
+• Ölçüm bitince bildirim alın.
 
 Ücretsiz pakette Gemini ile ayda 1 ölçüm yapılır. Ücretli paketlerde ChatGPT, Claude ve Perplexity canlı web aramasıyla cevap verir; her hafta otomatik ölçüm yapılır, soru hakkınızla istediğiniz zaman tam ölçüm başlatırsınız.
 
-Sonuçlar yapay zekâların geliştirici servislerinden alınır ve aynı sağlayıcının uygulamasında gördüğünüz cevaptan farklı olabilir. Yapay zekâ cevapları her soruşta değişebilir; sonuçları güven aralıklarıyla birlikte gösteririz.
+Sonuçlar yapay zekâların geliştirici servislerinden alınır ve aynı sağlayıcının uygulamasında gördüğünüz cevaptan farklı olabilir. Yapay zekâ cevapları her soruşta değişebilir; her sonucu bir güven puanıyla birlikte gösteririz.
 
-Gizlilik: https://aisaasavran.com/gizlilik
+ChatGPT, Gemini, Claude ve Perplexity sahiplerinin ticari markalarıdır; SaaSavran bağımsızdır ve bu şirketlerle bağlantılı değildir.
+
+Gizlilik: https://aisaasavran.com/privacy/
 ```
 
 ## English (en-US)
@@ -52,11 +54,13 @@ What you can do
 • Check whether your products are recommended and described correctly.
 • Catch wrong facts the AIs state about your business (address, hours, prices).
 • Follow suggestions step by step and see the before/after result of what you did.
-• Get a notification when your weekly measurement is done.
+• Get a notification when a measurement is done.
 
 The free plan measures with Gemini once a month. On paid plans ChatGPT, Claude and Perplexity answer with live web search; a measurement runs automatically every week and you can start a full measurement any time with your question credits.
 
-Results come from the AI providers' developer services and may differ from what you see in the provider's own app. AI answers vary between requests; we show results with their confidence ranges.
+Results come from the AI providers' developer services and may differ from what you see in the provider's own app. AI answers vary between requests; we show every result with a confidence score.
+
+ChatGPT, Gemini, Claude and Perplexity are trademarks of their respective owners; SaaSavran is independent and not affiliated with them.
 
 Privacy: https://aisaasavran.com/privacy/
 ```
@@ -75,11 +79,11 @@ Privacy: https://aisaasavran.com/privacy/
 |---|---|---|---|---|
 | E-posta adresi | Evet | Hayır | Hesap yönetimi, uygulama işlevi | Evet |
 | Ad (Google ile girişte) | Evet | Hayır | Hesap yönetimi | Hayır |
-| Kullanıcı içeriği (marka adları, sorular, web sitesi) | Evet | Hayır* | Uygulama işlevi | Evet |
+| Kullanıcı içeriği (marka adları, sorular, web sitesi) | Evet | Evet* | Uygulama işlevi | Evet |
 | Satın alma geçmişi | Evet | Hayır | Uygulama işlevi (abonelik) | Hayır |
 | Uygulama etkileşimleri / hata kayıtları | Evet | Hayır | Analiz değil; güvenlik ve kota | Evet |
 | Cihaz kimliği (bildirim anahtarı) | Evet | Hayır | Bildirim | Hayır |
-\* Sorular ölçüm için yapay zekâ sağlayıcılarına (Google, OpenAI, Anthropic, Perplexity) gönderilir; bu "hizmet sağlayıcı" kapsamındadır, satış/reklam yoktur.
+\* Sorular ölçüm için yapay zekâ sağlayıcılarına (Google, OpenAI, Anthropic, Perplexity) gönderilir. Ücretsiz paketteki Gemini ölçümünde Google içeriği kendi ürünlerini geliştirmek için kullanabildiğinden (gizlilik metninde yazılı) formda **"Paylaşılıyor: Evet — Uygulama işlevi"** işaretlenir. Satış/reklam yoktur.
 - Veriler aktarım sırasında şifreleniyor: **Evet** (HTTPS).
 - Kullanıcı verilerinin silinmesini isteyebilir: **Evet** (uygulama içinden ve web adresinden).
 

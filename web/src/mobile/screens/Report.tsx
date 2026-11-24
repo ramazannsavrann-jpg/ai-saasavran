@@ -1,7 +1,7 @@
 // Rapor: seçili markanın ayrıntıları. Başlıklar: Özet, Sorular, Rakipler, Ölçümler.
 // Rakamlar sitedeki raporla aynı kaynaktan ve aynı hesapla gelir (web/src/lib/report.ts, engine/src/metrics.ts).
 import { useState, type FormEvent } from "react";
-import { useSearchParams, Navigate } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { useApp, useLoad } from "../../lib/app";
 import { api, type MeasurementType, type PromptResult } from "../../lib/data";
 import { friendlyError } from "../../lib/supabase";
@@ -9,8 +9,8 @@ import { formatDateTime, lowSample, numLoc, providerLabel, series } from "../../
 import { confidenceScore } from "../../../../engine/src/metrics.ts";
 import { lossCards } from "../../../../engine/src/insights.ts";
 import { L } from "../../lib/i18n";
-import { Confirm, Err, Head, Icon, Sheet, Spinner, shownType } from "../ui";
-import { useSelectedBrand } from "./Home";
+import { Confirm, Err, Head, Icon, LoadError, Sheet, Spinner, shownType } from "../ui";
+import { useSelectedBrand, NoBrand } from "./Home";
 import { RivalsBody } from "./Rivals";
 
 const TABS = [
@@ -31,22 +31,24 @@ export function Report() {
   const type = shownType(b, runs.data) as MeasurementType;
   const vis = useLoad(() => (b ? api.visibility(b.id, type) : Promise.resolve([])), [b?.id, type]);
   if (sel.loading) return <Spinner />;
-  if (!b) return <Navigate to="/kurulum" replace />;
+  if (!b) return <NoBrand sel={sel} />;
   const pts = series(vis.data ?? []);
   const last = pts[pts.length - 1];
 
   return (
     <div className="screen">
-      <Head title={L("Rapor", "Report")} right={<span className="muted small">{b.name}</span>} />
+      <Head title={L("Rapor", "Report")} right={<span className="muted small" style={{ whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", maxWidth: "55vw", display: "inline-block" }}>{b.name}</span>} />
       <div className="tabs" role="tablist" aria-label={L("Rapor bölümleri", "Report sections")}>
         {TABS.map((t) => (
           <button key={t.id} role="tab" aria-selected={tab === t.id} onClick={() => setParams({ b: t.id }, { replace: true })}>{L(t.tr, t.en)}</button>
         ))}
       </div>
+      {(runs.error || vis.error) && tab !== "sorular" && tab !== "rakipler" ? <LoadError retry={() => { runs.reload(); vis.reload(); }} /> : <>
       {tab === "ozet" && <Summary brandId={b.id} pts={pts} rows={vis.data ?? []} type={type} />}
       {tab === "sorular" && <Questions brandId={b.id} workspaceId={b.workspace_id} lastRunId={last?.runId ?? null} />}
       {tab === "rakipler" && <RivalsBody />}
       {tab === "olcumler" && <Runs list={runs.data ?? []} />}
+      </>}
     </div>
   );
 }
@@ -76,7 +78,7 @@ function Summary({ pts, rows, type }: { brandId: string; pts: ReturnType<typeof 
           </>
         )}
         {lowSample(last.recommend) && <span className="muted small">{L(`Henüz ${last.recommend.n} cevap var. Soru ekledikçe sonuç netleşir.`, `Only ${last.recommend.n} answers so far. Adding questions makes it clearer.`)}</span>}
-        <span className="muted small">{type === "live_search" ? L("Canlı aramalı ölçüm", "Live search measurement") : L("Aramasız ölçüm (yapay zekânın kendi bilgisi)", "Measurement without search (the AI's own knowledge)")}</span>
+        <span className="muted small">{type === "simulated" ? <b>{L("SİMÜLASYON — gerçek ölçüm değil", "SIMULATION — not a real measurement")}</b> : type === "live_search" ? L("Canlı aramalı ölçüm", "Live search measurement") : L("Aramasız ölçüm (yapay zekânın kendi bilgisi)", "Measurement without search (the AI's own knowledge)")}</span>
       </div>
       {byEngine.length > 0 && (
         <>

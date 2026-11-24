@@ -1,13 +1,12 @@
 // Rakipler: son ölçümde kim ne sıklıkla önerildi + takip edilen rakipleri ekleme/silme.
 import { useState, type FormEvent } from "react";
-import { Navigate } from "react-router-dom";
 import { useApp, useLoad } from "../../lib/app";
 import { api, type MeasurementType } from "../../lib/data";
 import { friendlyError } from "../../lib/supabase";
 import { competitorsInRun, series } from "../../lib/report";
 import { L } from "../../lib/i18n";
 import { Confirm, Err, Spinner, shownType } from "../ui";
-import { useSelectedBrand } from "./Home";
+import { useSelectedBrand, NoBrand } from "./Home";
 import { RivalTraits } from "./Insights";
 
 export function RivalsBody() {
@@ -23,7 +22,7 @@ export function RivalsBody() {
   const [busy, setBusy] = useState(false);
   const [rm, setRm] = useState<{ id: string; name: string } | null>(null);
   if (sel.loading) return <Spinner />;
-  if (!b) return <Navigate to="/kurulum" replace />;
+  if (!b) return <NoBrand sel={sel} />;
 
   const pts = series(vis.data ?? []);
   const last = pts[pts.length - 1];

@@ -1,7 +1,7 @@
 // Öneriler: iyileştirme rehberi (kampanya başlatma), yaptıklarım ve sonuçları (önce/sonra), içerik planları, site kontrolü.
 // Öneriler sitedekiyle aynı kurallardan çıkar (lib/recommend.ts + engine/src/recommendations.ts); yapay zekâ ile üretilmez.
 import { useState, type FormEvent } from "react";
-import { Navigate, useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useApp, useLoad } from "../../lib/app";
 import { api, type Brand, type BrandAction, type MeasurementType, type Run } from "../../lib/data";
 import { friendlyError } from "../../lib/supabase";
@@ -10,8 +10,8 @@ import { useRecommendations } from "../../lib/recommend";
 import { campaignFor, taskProgress } from "../../../../engine/src/campaign.ts";
 import { actionImpact } from "../../../../engine/src/insights.ts";
 import { L, isEn } from "../../lib/i18n";
-import { Confirm, Err, Head, Icon, Sheet, Spinner, haptic, isPaid, shownType } from "../ui";
-import { useSelectedBrand } from "./Home";
+import { Confirm, Err, Head, Icon, LoadError, Sheet, Spinner, haptic, isPaid, shownType } from "../ui";
+import { useSelectedBrand, NoBrand } from "./Home";
 
 /** Telefonun kendi saatine göre bugünün tarihi (toISOString UTC verir; Türkiye'de gece yarısından sonra bir gün geri kalır). */
 const localDay = () => { const d = new Date(); return new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 10); };
@@ -40,7 +40,8 @@ export function Advice() {
   const b = sel.brand;
   const runs = useLoad(() => (b ? api.runs(b.id) : Promise.resolve([] as Run[])), [b?.id]);
   if (sel.loading || runs.loading) return <Spinner />;
-  if (!b) return <Navigate to="/kurulum" replace />;
+  if (!b) return <NoBrand sel={sel} />;
+  if (runs.error) return <LoadError full retry={runs.reload} />;
   const type = shownType(b, runs.data) as MeasurementType;
   return (
     <div className="screen">
@@ -59,6 +60,7 @@ function AdviceBody({ brand, type, runs, tab, goTab }: { brand: Brand; type: Mea
   const camps = useLoad(() => api.actions(brand.id), [brand.id]);
   const [err, setErr] = useState<string | null>(null);
   const [msg, setMsg] = useState<string | null>(null);
+  if (rec.error) return <LoadError retry={() => { rec.prompts.reload(); rec.results.reload(); rec.prevResults.reload(); rec.evidence.reload(); }} />;
   if (rec.loading || !rec.recInput) return <Spinner />;
   const activeRecs = new Set((camps.data ?? []).filter((a) => a.rec_id && a.tasks && taskProgress(a.tasks).done < a.tasks.length).map((a) => a.rec_id!));
 

@@ -10,6 +10,8 @@ interface AppState {
   workspaces: Workspace[];
   current: Workspace | null;
   isAdmin: boolean;
+  /** Çalışma alanları yüklenemedi (bağlantı/sunucu hatası): "hiç alan yok" ile karıştırılmasın */
+  wsError: boolean;
   select: (id: string) => void;
   reload: () => Promise<void>;
 }
@@ -25,9 +27,12 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [workspaces, setWorkspaces] = useState<Workspace[]>([]);
   const [currentId, setCurrentId] = useState<string | null>(readKey());
   const [isAdmin, setIsAdmin] = useState(false);
+  const [wsError, setWsError] = useState(false);
 
   const reload = useCallback(async () => {
-    const ws = await api.workspaces();
+    let ws: Workspace[];
+    try { ws = await api.workspaces(); } catch (e) { setWsError(true); throw e; }
+    setWsError(false);
     setWorkspaces(ws);
     setIsAdmin(await api.isPlatformAdmin().catch(() => false));
   }, []);
@@ -52,7 +57,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const current = workspaces.find((w) => w.id === currentId) ?? customer[0] ?? null;
 
   const select = (id: string) => { setCurrentId(id); writeKey(id); };
-  return <Ctx.Provider value={{ session, loading, workspaces, current, isAdmin, select, reload }}>{children}</Ctx.Provider>;
+  return <Ctx.Provider value={{ session, loading, workspaces, current, isAdmin, wsError, select, reload }}>{children}</Ctx.Provider>;
 }
 
 export function useApp() {
@@ -67,7 +72,7 @@ export function useLoad<T>(fn: () => Promise<T>, deps: unknown[]) {
   const run = useCallback(async () => {
     setState((s) => ({ ...s, loading: true }));
     try { setState({ data: await fn(), loading: false }); }
-    catch (e) { setState({ error: (e as Error).message, loading: false }); }
+    catch (e) { setState({ error: (e as Error)?.message || "error", loading: false }); } // boş mesaj da hata sayılır
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, deps);
   useEffect(() => { run(); }, [run]);

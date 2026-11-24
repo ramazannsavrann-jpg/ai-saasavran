@@ -1,5 +1,5 @@
 // Hesap: paket ve bu ayki kullanım, e-posta/uyarı tercihleri, çıkış, hesap silme.
-// Uygulamada Paddle yok (mağaza kuralı); uygulama içi satın alma (Google Play / App Store) sonraki adımda eklenecek.
+// Uygulamada Paddle yok (mağaza kuralı); ödeme Google Play ile (Paketler ekranı, store.ts).
 import { useEffect, useState, type FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { useApp, useLoad } from "../../lib/app";
@@ -8,6 +8,7 @@ import { sb, friendlyError } from "../../lib/supabase";
 import { L, getLang, switchLang } from "../../lib/i18n";
 import { Err, Head, Icon, Sheet } from "../ui";
 import { disablePush, enablePush, pushState, type PushState } from "../push";
+import { manage } from "../store";
 
 const PLAN_TR: Record<string, [string, string]> = { free: ["Ücretsiz", "Free"], starter: ["Gümüş", "Silver"], altin: ["Altın", "Gold"], pro: ["Platin", "Platinum"], agency: ["Elmas", "Diamond"] };
 const planTr = (id: string, name: string) => (PLAN_TR[id] ? L(PLAN_TR[id][0], PLAN_TR[id][1]) : name);
@@ -20,11 +21,12 @@ export function Account() {
   const [weekly, setWeekly] = useState<boolean | null>(null);
   const [drop, setDrop] = useState(true);
   const [push, setPush] = useState<PushState>("unavailable");
-  useEffect(() => { void pushState().then(setPush); }, []);
+  const [playBlock, setPlayBlock] = useState(false);
+  useEffect(() => { void pushState().then(setPush).catch(() => setPush("unavailable")); }, []);
   async function togglePush(on: boolean) {
     setErr(null);
     try {
-      if (on) { const ok = await enablePush(); setPush(ok ? "on" : await pushState()); if (!ok) setErr(L("Bildirim izni verilmedi. Telefonun Ayarlar > Uygulamalar > SaaSavran > Bildirimler bölümünden açabilirsiniz.", "Notification permission wasn't granted. You can turn it on in your phone's Settings > Apps > SaaSavran > Notifications.")); }
+      if (on) { const ok = await enablePush(); setPush(ok ? "on" : await pushState()); if (!ok) setErr(L("Bildirim izni verilmedi. Telefonun Ayarlar > Uygulamalar > AI SaaSavran > Bildirimler bölümünden açabilirsiniz.", "Notification permission wasn't granted. You can turn it on in your phone's Settings > Apps > AI SaaSavran > Notifications.")); }
       else { await disablePush(); setPush("off"); }
     } catch (e) { setErr(friendlyError(e)); }
   }
@@ -65,6 +67,7 @@ export function Account() {
     const { data, error } = await sb().rpc("delete_my_account");
     setBusy(false);
     if (error) { setErr(friendlyError(error)); return; }
+    if (data === "active_store_subscription") { setErr(L("Yenilenen bir Google Play aboneliğiniz var. Önce Google Play'de iptal edin (aşağıdaki düğme), sonra hesabınızı silebilirsiniz. İptal ettiğiniz abonelik silmeye engel olmaz.", "You have a renewing Google Play subscription. Cancel it in Google Play first (button below), then delete your account. A cancelled subscription doesn't block deletion.")); setPlayBlock(true); return; }
     if (data === "active_subscription") { setErr(L("Aktif bir aboneliğiniz var. Önce aboneliği iptal edin, sonra hesabınızı silebilirsiniz. İptal için info@aisaasavran.com adresine yazın.", "You have an active subscription. Cancel it first, then delete your account. To cancel, email info@aisaasavran.com.")); return; }
     if (data !== "deleted") { setErr(L("Hesap silinemedi. Lütfen info@aisaasavran.com adresine yazın.", "Could not delete the account. Please email info@aisaasavran.com.")); return; }
     await disablePush().catch(() => undefined);
@@ -131,6 +134,7 @@ export function Account() {
       <Sheet open={del} onClose={() => setDel(false)} title={L("Hesabı silmek", "Deleting your account")}>
         <p style={{ margin: 0 }}>{L("Hesabınız, tek başınıza sahip olduğunuz çalışma alanları ve bütün ölçümleri kalıcı olarak silinir. Ekipli alanda sahiplik en eski üyeye geçer. Geri alınamaz.", "Your account, the workspaces you own alone and all their measurements are permanently deleted. In a team workspace, ownership passes to the longest-standing member. This cannot be undone.")}</p>
         <Err msg={err} />
+        {playBlock && <button className="btn btn-ghost" onClick={() => void manage().catch(() => undefined)}>{L("Google Play'de aboneliği yönet", "Manage subscription in Google Play")}</button>}
         <button className="btn btn-danger-solid" disabled={busy} onClick={remove}>{L("Hesabımı kalıcı olarak sil", "Permanently delete my account")}</button>
         <button className="btn btn-ghost" onClick={() => setDel(false)}>{L("Vazgeç", "Cancel")}</button>
       </Sheet>

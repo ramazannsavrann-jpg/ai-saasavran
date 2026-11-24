@@ -44,6 +44,14 @@ test("Mobil: kayıt → işletme kurulumu → ölçüm → rakip → bildirimler
   await page.getByRole("button", { name: "Devam et" }).click();
 
   await expect(page.getByText("Henüz ölçüm yok")).toBeVisible();
+  // Bağlantı/sunucu hatası "marka yok" sayılmaz: kurulum ekranına atmaz, "Tekrar dene" gösterir
+  await page.route("**/rest/v1/brands*", (r) => r.fulfill({ status: 500, body: "{}" }));
+  await page.reload();
+  await expect(page.getByText("Bilgiler yüklenemedi")).toBeVisible({ timeout: 30_000 });
+  expect(page.url()).not.toContain("kurulum");
+  await page.unroute("**/rest/v1/brands*");
+  await page.getByRole("button", { name: "Tekrar dene" }).click();
+  await expect(page.getByText("Henüz ölçüm yok")).toBeVisible();
   await expect(page.getByRole("navigation", { name: "Alt menü" })).toBeVisible();
   await noOverflow(page); await shot(page, "03-ana-sayfa-bos");
   await page.getByRole("button", { name: "İlk ölçümü başlat" }).click();
@@ -189,7 +197,7 @@ test("Mobil: kayıt → işletme kurulumu → ölçüm → rakip → bildirimler
   await expect(page.getByLabel("Dil")).toBeVisible();
   await page.getByRole("button", { name: "Paketler ve ödeme" }).click();
   await expect(page.getByRole("heading", { name: "Paket", exact: true })).toBeVisible();
-  await expect(page.getByText("Uygulama içi ödeme şu an kullanılamıyor.", { exact: false })).toBeVisible();
+  await expect(page.getByText("Paketler şu an yüklenemedi.", { exact: false })).toBeVisible();
   await noOverflow(page); await shot(page, "10-paket");
   await page.getByRole("button", { name: "Geri" }).click();
   await page.getByRole("button", { name: "Şifre değiştir" }).click();

@@ -1,14 +1,14 @@
 // Marka bilgileri: ad, diğer yazılışlar, web sitesi, sektör, ne sattığı, şehir, haftalık ölçüm, doğru bilgi kartı, markayı silme.
 // Sitedeki "Markayı düzenle" formuyla aynı alanları aynı kurallarla yazar.
 import { useState, type FormEvent } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useApp } from "../../lib/app";
 import { api } from "../../lib/data";
 import { friendlyError } from "../../lib/supabase";
 import { SECTORS } from "../../lib/sectors";
 import { L } from "../../lib/i18n";
 import { Confirm, Err, Head, Spinner, goBack, haptic, isPaid } from "../ui";
-import { useSelectedBrand } from "./Home";
+import { useSelectedBrand, NoBrand } from "./Home";
 
 const splitAliases = (v: FormDataEntryValue | null) => String(v || "").split(",").map((x) => x.trim()).filter(Boolean).slice(0, 20);
 
@@ -21,7 +21,7 @@ export function BrandEdit() {
   const [del, setDel] = useState(false);
   const b = sel.brand;
   if (sel.loading) return <div className="app"><Spinner /></div>;
-  if (!b) return <Navigate to="/kurulum" replace />;
+  if (!b) return <NoBrand sel={sel} />;
   const sim = b.data_origin === "simulated";
   const paid = isPaid(current);
 

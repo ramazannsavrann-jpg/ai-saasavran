@@ -6,7 +6,7 @@ import { sb } from "../../lib/supabase";
 import { formatDateTime, providerLabel } from "../../lib/report";
 import { L } from "../../lib/i18n";
 import { Link } from "react-router-dom";
-import { Head, Icon, Spinner, trAbl, trDat } from "../ui";
+import { Head, Icon, LoadError, Spinner, trAbl, trDat } from "../ui";
 import { useSelectedBrand } from "./Home";
 
 interface Drop { provider: string; prev: { k: number; n: number }; now: { k: number; n: number }; lost: number; lost_items?: { prompt: string; instead: string | null }[] }
@@ -19,11 +19,12 @@ export function Activity() {
   const alerts = useLoad(async () => {
     if (!b) return [] as Alert[];
     const { data, error } = await sb().rpc("brand_alerts", { p_brand: b.id, p_limit: 20 });
-    if (error) return [] as Alert[]; // eski sunucuda fonksiyon yoksa ekran yine açılır
+    if (error) { if (error.code === "PGRST202") return [] as Alert[]; throw new Error(error.message); } // fonksiyon yoksa boş; bağlantı hatası boş sayılmaz
     return (data ?? []) as Alert[];
   }, [b?.id]);
   const runs = useLoad(() => (b ? api.runs(b.id) : Promise.resolve([])), [b?.id]);
   if (sel.loading || alerts.loading) return <Spinner />;
+  if (sel.failed || alerts.error || runs.error) return <LoadError full retry={() => { sel.retry(); alerts.reload(); runs.reload(); }} />;
   const list = alerts.data ?? [];
   const done = (runs.data ?? []).filter((r) => r.status === "done" || r.status === "failed").slice(0, 10);
 
