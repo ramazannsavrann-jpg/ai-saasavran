@@ -653,7 +653,7 @@ write("/pricing/", page({ lang: "en", path: "/pricing/", alt: "/tr/fiyatlar/", t
 write("/uygulama-giris/", `<!doctype html><html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><meta name="referrer" content="no-referrer"><title>SaaSavran</title>
 <style>body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;font-family:system-ui,sans-serif;background:#101A17;color:#E8EFEC;text-align:center;padding:24px}a{display:inline-block;margin-top:20px;padding:14px 28px;border-radius:14px;background:#6FD1AE;color:#0B1512;font-weight:700;text-decoration:none}p{color:#9DB0A8;line-height:1.5}</style></head>
 <body><main><h1 style="font-size:22px">Uygulamaya dönülüyor</h1><p id="m">Uygulama açılmazsa düğmeye dokunun.</p><a id="b" href="com.aisaasavran.app://giris">SaaSavran'ı aç</a></main>
-<script>(function(){var q=location.search||"",h=location.hash||"";var u="com.aisaasavran.app://giris"+q+(h&&h.length>1?h:"");document.getElementById("b").href=u;if(!/[?&#](code|error)=/.test(q+h)){document.getElementById("m").textContent="Giriş bilgisi bulunamadı. Uygulamadan yeniden deneyin.";return;}location.replace(u);})();</script></body></html>`);
+<script src="/uygulama-giris/yonlendir.js"></script></body></html>`);
 
 // Hesap silme (Google Play / App Store şartı: uygulama dışından da silme yolu)
 write("/tr/hesap-silme/", page({ lang: "tr", path: "/tr/hesap-silme/", alt: "/delete-account/", title: "Hesabı ve verileri silme | AI SaaSavran", description: "AI SaaSavran hesabınızı ve verilerinizi nasıl silersiniz: sitede veya uygulamada Hesap sayfasından, ya da e-postayla.", body: `<section class="article"><h1>Hesabı ve verileri silme</h1>
