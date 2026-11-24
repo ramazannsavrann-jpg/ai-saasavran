@@ -13,3 +13,4 @@ Kodlar: `EN-S-001` (İngilizce Short), `EN-U-001` (İngilizce uzun), `TR-S-001` 
 | TR-S-AIRFRYER-001 (Airfryer: tüm özellik testi + TR Short; EN Short ve uzun video sonra aynı veriyle) | hesap (Opus, bu oturum) | bitti: YouTube TR F4tjQdA9cl8 (23 Kas 00:05); EN Short, uzun video ve Instagram seti bekliyor | 2026-11-22 |
 | MOBIL-001 (Android uygulama: hesap silme + PWA + TWA paketi) | hesap (Opus, bu oturum) | devam | 2026-11-23 |
 | SKILL-001 (Remotion resmi Agent Skills + taste-skill → .claude/skills; 18 repo güvenlik taraması temiz) | hesap (Opus, bu oturum) | bitti | 2026-11-23 |
+| YT-AIRFRYER-V2-TR (Remotion sürümü, eski F4tjQdA9cl8 sahibince silindi) | hesap (Opus, bu oturum) | devam | 2026-11-24 |
