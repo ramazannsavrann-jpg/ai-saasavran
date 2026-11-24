@@ -42,6 +42,18 @@ export function buildProviders(env: Record<string, string | undefined>, fetchFn?
     }
   }
 
+  // Gemini canlı (ücretli ayrı proje "aisaasavran-canli", önden ödemeli, aylık 5 $ sınırlı; sahip onayı 24 Kasım 2026).
+  // Yalnız arama istendiğinde ve ALLOW_PAID_API açıkken; ücretsiz anahtar (site, ücretsiz kontrol, ses) etkilenmez.
+  // Canlı sıraya kendiliğinden girmez: LIVE_ENGINES'e "gemini" eklenince çalışır.
+  if (env.GEMINI_CANLI_API_KEY && env.GEMINI_SEARCH !== "false") {
+    if (!allowPaid) status.push({ provider: "gemini", enabled: false, reason: "canlı Gemini ücretli; ALLOW_PAID_API kapalı" });
+    else {
+      const cfg = { ...GEMINI_FREE_DEFAULT, billing: "paid" as const, model: env.GEMINI_CANLI_MODEL || GEMINI_FREE_DEFAULT.model, useSearch: true };
+      providers.push(new GeminiProvider(env.GEMINI_CANLI_API_KEY, cfg, fetchFn));
+      status.push({ provider: "gemini", enabled: true, reason: `${cfg.model}, ücretli (canlı proje), Google araması açık` });
+    }
+  }
+
   // OpenAI — her zaman ücretli
   if (!env.OPENAI_API_KEY) status.push({ provider: "openai", enabled: false, reason: "OPENAI_API_KEY yok" });
   else if (!allowPaid) status.push({ provider: "openai", enabled: false, reason: "ücretli; ALLOW_PAID_API kapalı" });

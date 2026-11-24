@@ -580,3 +580,5 @@
 - 2026-11-22: Ajans paneli: markaya müşteri adı (migration 0067, yalnız gruplama, yetki vermez); ajans alanında marka listesi müşteriye göre gruplanır/süzülür; genel bakışta müşteri, güven puanı ve CSV'de müşteri + güven sütunu. Müşteri erişimi: salt okunur paylaşılan rapor bağlantısı. Müşteri kullanıcısının yalnız kendi markasını gördüğü girişli erişim yapılmadı (20+ tablonun RLS kuralı değişir; ayrı iş).
 - 2026-11-22: API/MCP rapor çıktısına güven puanı (migration 0068 brand_report_json "confidence"; summarize() panelle aynı formülle score, level, reasons döner).
 - 2026-11-22: Google Shopping eşleşme düzeltmesi (airfryer testinde bulundu): model kodu olan üründe yalnız model kodu aranır; "aparat/kalıp/kağıt" aksesuar sayılır; ikinci el ilanlar (letgo, dolap, "2. el", "yenilenmiş") eşleşmez.
+
+- 2026-11-24: Gemini canlı arama (Google Search dayanağı) eklendi: ayrı ücretli proje "aisaasavran-canli" (önden ödemeli, aylık 5 $ sınır), secret `GEMINI_CANLI_API_KEY`. Varsayılan canlı sıra değişmedi (openai, claude, perplexity); worker elle başlatılırken `live_engines` girdisine `gemini` yazılınca çalışır. Müşteri ölçümleri ve ücretsiz kontrol etkilenmez.
