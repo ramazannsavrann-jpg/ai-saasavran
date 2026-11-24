@@ -1,5 +1,5 @@
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
-import { API_BASE } from "./env";
+import { API_BASE, IS_NATIVE_APP } from "./env";
 import { L, isEn } from "./i18n";
 
 export interface RuntimeConfig { supabaseUrl: string; supabaseAnonKey: string; environment: string; paddle?: unknown }
@@ -13,7 +13,8 @@ export async function initSupabase(): Promise<RuntimeConfig> {
   config = (await res.json()) as RuntimeConfig;
   if (!config.supabaseUrl || !config.supabaseAnonKey) throw new Error("not_configured");
   client = createClient(config.supabaseUrl, config.supabaseAnonKey, {
-    auth: { persistSession: true, autoRefreshToken: true, storageKey: "saasavran-auth" },
+    // Uygulamada Google girişi sistem tarayıcısında olur, dönüşte kod uygulamaya gelir (PKCE); adres çubuğu okunmaz
+    auth: { persistSession: true, autoRefreshToken: true, storageKey: "saasavran-auth", ...(IS_NATIVE_APP ? { flowType: "pkce" as const, detectSessionInUrl: false } : {}) },
   });
   return config;
 }

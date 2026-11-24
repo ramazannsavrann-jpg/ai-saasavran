@@ -1,16 +1,38 @@
 // Giriş, kayıt ve şifre sıfırlama (banka uygulaması düzeni: kayıtlı kullanıcı adıyla karşılanır).
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { sb, friendlyError } from "../../lib/supabase";
 import { L, getLang } from "../../lib/i18n";
 import { SITE_ORIGIN } from "../../lib/env";
 import { Err, Icon, greeting } from "../ui";
+import { GOOGLE_AVAILABLE, googleSignIn } from "../oauth";
 
 const REMEMBER = "mobil-son-eposta";
 export const rememberEmail = (e: string) => { try { localStorage.setItem(REMEMBER, e); } catch { /* yok say */ } };
 const remembered = () => { try { return localStorage.getItem(REMEMBER) ?? ""; } catch { return ""; } };
 const isEmail = (s: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s);
 const initials = (email: string) => (email.split("@")[0].replace(/[^a-zA-ZçğıöşüÇĞİÖŞÜ]/g, " ").trim().split(/\s+/).map((w) => w[0]).join("").slice(0, 2) || "?").toLocaleUpperCase("tr");
+
+/** "Google ile devam et": yalnız telefonda (uygulamada) görünür. Hata dönüşü olay ile gelir. */
+function GoogleButton() {
+  const [err, setErr] = useState<string | null>(null);
+  const [busy, setBusy] = useState(false);
+  useEffect(() => {
+    const on = (e: Event) => { setBusy(false); setErr(L("Google ile giriş tamamlanamadı. Tekrar deneyin ya da e-postayla devam edin.", "Google sign-in didn't complete. Try again or continue with email.")); void e; };
+    window.addEventListener("oauth-hata", on);
+    return () => window.removeEventListener("oauth-hata", on);
+  }, []);
+  if (!GOOGLE_AVAILABLE) return null;
+  return (
+    <>
+      <button type="button" className="btn btn-ghost" disabled={busy} onClick={async () => { setErr(null); setBusy(true); try { await googleSignIn(); } catch (e) { setBusy(false); setErr(friendlyError(e)); } }}>
+        <svg width="20" height="20" viewBox="0 0 48 48" aria-hidden="true"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z"/><path fill="#FF3D00" d="m6.3 14.7 6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-7.9l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.4-.4-3.5z"/></svg>
+        {busy ? L("Google açılıyor…", "Opening Google…") : L("Google ile devam et", "Continue with Google")}
+      </button>
+      <Err msg={err} />
+    </>
+  );
+}
 
 export function Welcome() {
   const email = remembered();
@@ -34,7 +56,9 @@ export function Welcome() {
           <p className="muted" style={{ margin: 0, lineHeight: 1.45 }}>{L("ChatGPT, Gemini, Claude ve Perplexity'nin cevaplarında işletmenizin önerilip önerilmediğini ölçün. Ücretsiz pakette Gemini ile ayda 1 ölçüm.", "See whether ChatGPT, Gemini, Claude and Perplexity recommend your business. Free plan: 1 measurement a month with Gemini.")}</p>
           <div style={{ marginTop: "auto", width: "100%", display: "flex", flexDirection: "column", gap: 12 }}>
             <Link className="btn btn-primary" to="/kayit">{L("Ücretsiz başla", "Start free")}</Link>
+            <GoogleButton />
             <Link className="btn btn-ghost" to="/giris">{L("Giriş yap", "Sign in")}</Link>
+            {GOOGLE_AVAILABLE && <p className="muted small" style={{ margin: 0 }}>{L("Google ile devam ederek ", "By continuing with Google you accept the ")}<a href={`${SITE_ORIGIN}/kosullar`} target="_blank" rel="noreferrer">{L("Kullanım Koşulları", "Terms")}</a>{L("'nı ve ", " and the ")}<a href={`${SITE_ORIGIN}/gizlilik`} target="_blank" rel="noreferrer">{L("Gizlilik Bildirimi", "Privacy Notice")}</a>{L("'ni kabul etmiş olursunuz.", ".")}</p>}
           </div>
         </>
       )}
@@ -69,6 +93,7 @@ export function Login() {
       <Err msg={err} />
       <button className="btn btn-primary" disabled={busy}>{busy ? L("Giriş yapılıyor…", "Signing in…") : L("Giriş yap", "Sign in")}</button>
       <Link to="/sifre" style={{ textAlign: "center", fontWeight: 600 }}>{L("Şifremi unuttum", "Forgot password")}</Link>
+      <GoogleButton />
       <p className="muted" style={{ textAlign: "center", margin: "auto 0 0" }}>{L("Hesabınız yok mu?", "No account?")} <Link to="/kayit">{L("Ücretsiz hesap açın", "Create a free account")}</Link></p>
     </form>
   );

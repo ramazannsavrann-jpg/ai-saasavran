@@ -24,6 +24,7 @@ import { Report } from "./screens/Report";
 import { Activity } from "./screens/Activity";
 import { Account } from "./screens/Account";
 import { initPush } from "./push";
+import { initOAuthReturn } from "./oauth";
 
 function Private({ children }: { children: ReactNode }) {
   const { session, loading } = useApp();
@@ -46,6 +47,8 @@ function AddBrand() {
 }
 
 function App() {
+  const nav = useNavigate();
+  useEffect(() => { initOAuthReturn((err) => { if (err) window.dispatchEvent(new CustomEvent("oauth-hata", { detail: err })); else nav("/ana", { replace: true }); }); }, [nav]);
   return (
     <Routes>
       <Route path="/" element={<PublicOnly><div className="app"><Welcome /></div></PublicOnly>} />

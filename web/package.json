@@ -10,6 +10,8 @@
     "build:mobile": "vite build -c vite.mobile.config.ts && mv dist-mobile/mobile.html dist-mobile/index.html"
   },
   "dependencies": {
+    "@capacitor/app": "^8.1.2",
+    "@capacitor/browser": "^8.0.5",
     "@capacitor/core": "^8.6.2",
     "@capacitor/haptics": "^8.0.2",
     "@capacitor/push-notifications": "^8.1.3",
