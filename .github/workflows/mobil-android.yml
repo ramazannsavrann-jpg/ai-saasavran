@@ -72,7 +72,8 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           # main dışından (deneme dalı) elle çalıştırılınca taslak sürüm: yalnız depo sahibi görür ve indirir
-          DRAFT=""; [ "${{ github.ref_name }}" != "main" ] && DRAFT="--draft"
+          # Mağazaya çıkana kadar her sürüm taslak: yalnız depo sahibi görür ve indirir
+          DRAFT="--draft"
           gh release create "mobil-android-${{ github.run_number }}" "$RUNNER_TEMP"/out/* $DRAFT --target "${{ github.sha }}" \
             --title "Mobil uygulama (Android) 1.0.${{ github.run_number }}" \
             --notes "Telefona kurmak için: .apk dosyası. Google Play'e yüklenecek dosya: .aab. Dal: ${{ github.ref_name }}." --latest=false
