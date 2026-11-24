@@ -3,8 +3,8 @@ import { Link } from "react-router-dom";
 import { isEn } from "../lib/i18n";
 
 export const CONTACT_EMAIL = "info@aisaasavran.com";
-const UPDATED = "7 Kasım 2026";
-const UPDATED_EN = "7 November 2026";
+const UPDATED = "24 Kasım 2026";
+const UPDATED_EN = "24 November 2026";
 
 function DraftNotice() {
   if (isEn()) return (
@@ -70,6 +70,8 @@ export function Privacy() {
         <li><strong>Cloudflare</strong> (web sitesinin barındırılması, alan adı ve çerezsiz ziyaret sayımı).</li>
         <li><strong>Google</strong> (Gemini yapay zekâ servisi ve Google ile giriş). Ölçüm yaparken yazdığınız sorular Gemini'ye gönderilir. Ücretsiz katmanı kullandığımız için <strong>Google bu içerikleri kendi ürünlerini geliştirmek için kullanabilir</strong>. Bu nedenle sorulara kişisel veri (ad, telefon, adres vb.) yazmayın.</li>
         <li><strong>OpenAI</strong> (ücretli paketlerde ChatGPT ile canlı web aramalı ölçüm).</li>
+        <li><strong>Anthropic</strong> (ücretli paketlerde Claude ile canlı web aramalı ölçüm).</li>
+        <li><strong>Perplexity</strong> (ücretli paketlerde Perplexity ile canlı web aramalı ölçüm).</li>
         <li><strong>Paddle</strong> (ücretli paketlerde ödeme, fatura ve vergi; kart bilginizi biz görmeyiz).</li>
         <li><strong>Resend</strong> (haftalık özet e-postasının gönderimi; hesap sayfanızdan ya da e-postadaki bağlantıyla kapatabilirsiniz).</li>
         <li><strong>GitHub</strong> (ölçümleri çalıştıran otomasyon altyapısı).</li>
@@ -125,7 +127,7 @@ export function Terms() {
       <p>Hizmet "olduğu gibi" sunulur. Ölçüm sonuçlarına dayanarak verdiğiniz iş kararlarından doğan dolaylı zararlardan, yürürlükteki mevzuatın izin verdiği ölçüde sorumlu değiliz.</p>
 
       <h2>Hesabın kapatılması</h2>
-      <p>Hesabınızı istediğiniz zaman kapatabilirsiniz (<a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>). Bu koşulları ağır şekilde ihlal eden hesapları kapatabiliriz.</p>
+      <p>Hesabınızı istediğiniz zaman Hesap sayfasındaki "Hesabı sil" ile ya da <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a> adresine yazarak kapatabilirsiniz (<a href="/tr/hesap-silme/">ayrıntılar</a>). Bu koşulları ağır şekilde ihlal eden hesapları kapatabiliriz.</p>
 
       <h2>Uygulanacak hukuk</h2>
       <p>Bu koşullar Türkiye Cumhuriyeti hukukuna tabidir.</p>
@@ -164,6 +166,8 @@ function PrivacyEn() {
         <li><strong>Cloudflare</strong>: website hosting, domain and cookieless visit counting.</li>
         <li><strong>Google</strong>: the Gemini AI service and Google sign-in. Your questions are sent to Gemini when measuring. Because we use Gemini's free tier, <strong>Google may use this content to improve its products</strong>, so don't put personal data (names, phone numbers, addresses) in your questions.</li>
         <li><strong>OpenAI</strong>: ChatGPT live web-search measurement on paid plans.</li>
+        <li><strong>Anthropic</strong>: Claude live web-search measurement on paid plans.</li>
+        <li><strong>Perplexity</strong>: Perplexity live web-search measurement on paid plans.</li>
         <li><strong>Paddle</strong>: payments, invoicing and tax for paid plans. We never see your card details.</li>
         <li><strong>Resend</strong>: sending the weekly summary email (turn it off from your account page or with one click in the email).</li>
         <li><strong>GitHub</strong>: the automation that runs measurements.</li>
@@ -218,7 +222,7 @@ function TermsEn() {
       <p>The service is provided "as is". To the extent the law allows, we are not liable for indirect losses from business decisions based on measurement results.</p>
 
       <h2>Closing your account</h2>
-      <p>You can close your account at any time by emailing {CONTACT_EMAIL}. We may close accounts that seriously breach these terms.</p>
+      <p>You can close your account at any time with "Delete account" on the Account page or by emailing {CONTACT_EMAIL} (<a href="/delete-account/">details</a>). We may close accounts that seriously breach these terms.</p>
 
       <h2>Governing law</h2>
       <p>These terms are governed by the laws of the Republic of Turkey.</p>

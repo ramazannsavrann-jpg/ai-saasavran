@@ -1,7 +1,7 @@
 // Statik yasal sayfalar (JavaScript'siz okunabilir; ödeme sağlayıcısı incelemesi için). Uygulamadaki Legal.tsx ile aynı içerik.
 const E = "info@aisaasavran.com";
 const mail = `<a href="mailto:${E}">${E}</a>`;
-const UPDATED_EN = "7 November 2026", UPDATED_TR = "7 Kasım 2026";
+const UPDATED_EN = "24 November 2026", UPDATED_TR = "24 Kasım 2026";
 const draftEn = `<p class="small"><b>Draft:</b> written during early access and not yet reviewed by a lawyer. It will be reviewed before paid plans launch.</p>`;
 const draftTr = `<p class="small"><b>Taslak:</b> erken erişim döneminde yazıldı, henüz bir avukat tarafından incelenmedi. Ücretli paketler açılmadan önce incelenecek.</p>`;
 const wrap = (h1, updated, draft, body) => `<section class="article legal"><h1>${h1}</h1><p class="small">${updated}</p>${draft}${body}</section>`;
@@ -24,7 +24,7 @@ export const LEGAL = {
 <h2>Limitation of liability</h2>
 <p>The service is provided "as is". To the extent the law allows, we are not liable for indirect losses from business decisions based on measurement results.</p>
 <h2>Closing your account</h2>
-<p>You can close your account at any time by emailing ${mail}. We may close accounts that seriously breach these terms.</p>
+<p>You can close your account at any time with "Delete account" on the Account page or by emailing ${mail} (<a href="/delete-account/">details</a>). We may close accounts that seriously breach these terms.</p>
 <h2>Governing law</h2>
 <p>These terms are governed by the laws of the Republic of Turkey. Nothing in these terms limits the rights you have as a consumer under the law of your country.</p>`) },
 
@@ -46,6 +46,8 @@ export const LEGAL = {
 <li><b>Cloudflare</b>: hosting, domain, cookieless visit counting.</li>
 <li><b>Google</b>: Gemini AI and Google sign-in. Because we use Gemini's free tier for free-plan measurements, Google may use this content to improve its products, so don't put personal data in your questions.</li>
 <li><b>OpenAI</b>: ChatGPT live web-search measurement.</li>
+<li><b>Anthropic</b>: Claude live web-search measurement on paid plans.</li>
+<li><b>Perplexity</b>: Perplexity live web-search measurement on paid plans.</li>
 <li><b>Paddle</b>: payments, invoicing and tax for paid plans.</li>
 <li><b>Resend</b>: sending the weekly summary email (you can turn it off from your account page or with one click in the email).</li>
 <li><b>GitHub</b>: the automation that runs measurements.</li></ul>
