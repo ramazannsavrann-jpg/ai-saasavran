@@ -128,7 +128,7 @@ export async function processDropAlerts(db: SupabaseClient, apiKey: string | und
       }
     }
     if (drops.length) alerts++;
-    const detail = drops.length ? { drops: drops.map((d) => ({ provider: d.provider, prev: d.prev, now: d.now, z: Math.round(d.z * 100) / 100, lost: d.lost.length })) } : null;
+    const detail = drops.length ? { drops: drops.map((d) => ({ provider: d.provider, prev: d.prev, now: d.now, z: Math.round(d.z * 100) / 100, lost: d.lost.length, lost_items: d.lost.slice(0, 5) })) } : null; // lost_items: mobil Bildirimler ekranı (0070)
     const { error: e3 } = await db.rpc("record_drop_check", { p_run: p.run_id, p_prev: p.prev_run_id, p_brand: p.brand_id, p_alerted: drops.length > 0, p_sent: n, p_detail: detail });
     if (e3) throw new Error(e3.message);
     checked++;

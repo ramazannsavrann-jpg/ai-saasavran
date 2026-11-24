@@ -249,7 +249,7 @@ export const GUIDES = [
 `,
     faq: [
       ["Yapay zekâ görünürlük aracında en önemli özellik nedir?", "Tekrarlanan sorulardan elde edilen motor bazında sonuçlar, her cevabın canlı arama mı model bilgisi mi olduğunun etiketlenmesi ve yapay zekânın gösterdiği kaynaklar."],
-      ["Yapay zekâ görünürlüğü ücretsiz ölçülebilir mi?", "Kısmen. Ücretsiz paketler genelde canlı arama olmadan model bilgisini veya az sayıda soruyu kullanır. AI SaaSavran'ın ücretsiz paketi ayda 1 marka, 15 soru ve 4 ölçüm içerir (Gemini, canlı aramasız)."],
+      ["Yapay zekâ görünürlüğü ücretsiz ölçülebilir mi?", "Kısmen. Ücretsiz paketler genelde canlı arama olmadan model bilgisini veya az sayıda soruyu kullanır. AI SaaSavran'ın ücretsiz paketi 1 marka, 15 soru ve ayda 1 ölçüm içerir (Gemini, canlı aramasız)."],
       ["Farklı yapay zekâ motorları neden farklı sonuç veriyor?", "Farklı arama sağlayıcıları, kaynaklar ve eğitim verileri kullanıyorlar. Kendi ölçümlerimizde aynı marka bir motorda sık, diğerinde hiç önerilmedi."],
     ],
   },

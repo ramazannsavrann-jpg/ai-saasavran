@@ -72,7 +72,9 @@ export function Privacy() {
         <li><strong>OpenAI</strong> (ücretli paketlerde ChatGPT ile canlı web aramalı ölçüm).</li>
         <li><strong>Anthropic</strong> (ücretli paketlerde Claude ile canlı web aramalı ölçüm).</li>
         <li><strong>Perplexity</strong> (ücretli paketlerde Perplexity ile canlı web aramalı ölçüm).</li>
-        <li><strong>Paddle</strong> (ücretli paketlerde ödeme, fatura ve vergi; kart bilginizi biz görmeyiz).</li>
+        <li><strong>Paddle</strong> (sitede ücretli paketlerde ödeme, fatura ve vergi; kart bilginizi biz görmeyiz).</li>
+        <li><strong>Google Play</strong> (mobil uygulamada abonelik ve ek paket ödemesi; ödeme bilginizi biz görmeyiz, yalnız satın almanın geçerli olup olmadığını Google'dan doğrularız).</li>
+        <li><strong>Firebase Cloud Messaging</strong> (mobil uygulamada, izin verirseniz ölçüm bitince telefon bildirimi; telefonunuzun bildirim anahtarını saklarız, bildirimleri kapatınca ya da çıkış yapınca sileriz).</li>
         <li><strong>Resend</strong> (haftalık özet e-postasının gönderimi; hesap sayfanızdan ya da e-postadaki bağlantıyla kapatabilirsiniz).</li>
         <li><strong>GitHub</strong> (ölçümleri çalıştıran otomasyon altyapısı).</li>
       </ul>
@@ -168,7 +170,9 @@ function PrivacyEn() {
         <li><strong>OpenAI</strong>: ChatGPT live web-search measurement on paid plans.</li>
         <li><strong>Anthropic</strong>: Claude live web-search measurement on paid plans.</li>
         <li><strong>Perplexity</strong>: Perplexity live web-search measurement on paid plans.</li>
-        <li><strong>Paddle</strong>: payments, invoicing and tax for paid plans. We never see your card details.</li>
+        <li><strong>Paddle</strong>: payments, invoicing and tax for paid plans on the website. We never see your card details.</li>
+        <li><strong>Google Play</strong>: subscription and extra-pack payments in the mobile app. We never see your payment details; we only verify with Google that the purchase is valid.</li>
+        <li><strong>Firebase Cloud Messaging</strong>: phone notifications in the mobile app when a measurement is done, if you allow them. We store your phone's notification token and delete it when you turn notifications off or sign out.</li>
         <li><strong>Resend</strong>: sending the weekly summary email (turn it off from your account page or with one click in the email).</li>
         <li><strong>GitHub</strong>: the automation that runs measurements.</li>
       </ul>

@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useApp } from "../lib/app";
+import { api } from "../lib/data";
 import { Button, ErrorBox } from "./ui";
 import { L, isEn } from "../lib/i18n";
 import { PLAN_INFO, billingSummary, openCheckout, openPortal, paymentsEnabled, planName, purchasablePlans, PLAN_DATIVE, RECOMMENDED_PLAN, type BillingSummary, type PaidPlan } from "../lib/billing";
@@ -23,7 +24,8 @@ export function BillingPanel() {
   const [notice, setNotice] = useState<string | null>(params.get("paid") ? L("Ödemeniz alındı. Paketiniz birkaç saniye içinde güncellenir.", "Payment received. Your plan updates within a few seconds.") : null);
   const autoOpened = useRef(false);
 
-  const refresh = async () => { if (current) setSum(await billingSummary(current.id)); };
+  const [source, setSource] = useState<string>("paddle");
+  const refresh = async () => { if (current) { setSum(await billingSummary(current.id)); setSource((await api.billingState(current.id).catch(() => null))?.billing_source ?? "paddle"); } };
   useEffect(() => { refresh(); }, [current?.id]);
 
   // Ödeme sonrası: bildirim gelene kadar kısa aralıklarla yenile
@@ -99,7 +101,12 @@ export function BillingPanel() {
       </p>
       {notice && <p className="success-box">{notice}</p>}
       <ErrorBox message={err} />
-      {subscribed ? (
+      {subscribed && source === "google_play" ? (
+        <div className="stack">
+          <p className="muted">{L("Aboneliğiniz mobil uygulamadan, Google Play üzerinden alındı. Paket değiştirmek ya da iptal etmek için uygulamada Hesap → Paketler ve ödeme bölümünü ya da Google Play'deki abonelikler sayfasını kullanın. İptal, ödenmiş dönemin sonunda geçerli olur.", "Your subscription was bought in the mobile app through Google Play. To change or cancel it, use Account → Plans and payment in the app or the subscriptions page in Google Play. Cancellation takes effect at the end of the paid period.")}</p>
+          <a className="btn btn-quiet" href="https://play.google.com/store/account/subscriptions?package=com.aisaasavran.app" target="_blank" rel="noreferrer">{L("Google Play aboneliklerini aç", "Open Google Play subscriptions")}</a>
+        </div>
+      ) : subscribed ? (
         <div className="stack">
           <p className="muted">{L("Paket değiştirmek, kart bilgisini güncellemek, fatura indirmek ya da iptal etmek için abonelik sayfasını açın. İptal, ödenmiş dönemin sonunda geçerli olur.", "Open the subscription page to change plans, update your card, download invoices or cancel. Cancellation takes effect at the end of the paid period.")}</p>
           <Button variant="quiet" busy={busy === "portal"} onClick={manage}>{L("Aboneliği yönet", "Manage subscription")}</Button>
