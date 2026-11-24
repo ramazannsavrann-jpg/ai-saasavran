@@ -375,4 +375,55 @@ console.log("ok tanımsız paket atanamıyor");
   await db.exec(`delete from workspaces where id='${T}'; delete from auth.users where id='${Y}'`);
   console.log("ok 0069: hesap silme — abonelik engeli, ekip devri, tek kişilik alan ve kişisel kayıtlar siliniyor");
 }
+// 0072: soru hakkı (karma ölçüm): abonede kota %30 haftalık hafif ölçüm + %70 istek üzerine
+{
+  const own = (await db.query(`select id from brands where workspace_id=$1 and not is_competitor order by created_at limit 1`, [A])).rows[0];
+  if (own) {
+    const prev = (await db.query(`select kind, plan, subscription_status, paid_live_allowed, status from workspaces where id=$1`, [A])).rows[0];
+    const prevAuto = (await db.query(`select auto_weekly, country from brands where id=$1`, [own.id])).rows[0];
+    await db.query(`update workspaces set kind='business', plan='starter', subscription_status='active', paid_live_allowed=true, status='active' where id=$1`, [A]);
+    await db.query(`update brands set auto_weekly=true, country='TR' where id=$1`, [own.id]);
+    await db.query(`delete from runs where workspace_id=$1`, [A]);
+    await db.query(`delete from cost_ledger where workspace_id=$1`, [A]);
+    await db.query(`update prompts set active=false where brand_id=$1`, [own.id]);
+    for (let i = 0; i < 10; i++) await db.query(`insert into prompts (workspace_id, brand_id, text, intent, active) values ($1, $2, $3, 'purchase', true)`, [A, own.id, `soru hakkı testi ${i}`]);
+    let q = (await as(U1, `select * from my_quota('${A}')`)).rows[0];
+    assert.deepEqual([q.hybrid, q.total, q.weekly_cap, q.manual_cap, q.manual_left], [true, 760, 228, 532, 532], "Gümüş: 760 = 228 haftalık + 532 soru hakkı");
+    assert.equal((await as(U2, `select count(*)::int n from my_quota('${A}')`)).rows[0].n, 0, "üye olmayan göremez");
+    // Haftalık: hafif ölçüm (her soru Gemini 1 + ChatGPT 1 = 20 hak)
+    await db.query(`select schedule_weekly_runs(50)`);
+    const wk = (await db.query(`select measurement_type, light, trigger, prompts_total from runs where brand_id=$1 order by measurement_type`, [own.id])).rows;
+    assert.deepEqual(wk.map((r) => [r.measurement_type, r.light, r.trigger, r.prompts_total]), [["live_search", true, "weekly", 10], ["model_knowledge", true, "weekly", 10]], "haftalık hafif ölçüm, tüm sorular");
+    const wkRun = (await db.query(`select id from runs where brand_id=$1 limit 1`, [own.id])).rows[0].id;
+    // Haftalık harcama soru hakkından düşmez
+    await db.query(`insert into cost_ledger (workspace_id, run_id, task, provider, model, cost_usd, billing) select $1, $2, 'query_engine', 'openai', 'm', 0, 'paid' from generate_series(1, 220)`, [A, wkRun]);
+    q = (await as(U1, `select * from my_quota('${A}')`)).rows[0];
+    assert.deepEqual([q.weekly_used, q.manual_left], [220, 532]);
+    // Haftalık pay doldu: yeni haftalık ölçüm açılmaz (220 + 20 > 228)
+    await db.query(`update runs set status='done', created_at = now() - interval '8 days' where brand_id=$1`, [own.id]);
+    await db.query(`select schedule_weekly_runs(50)`);
+    assert.equal((await db.query(`select count(*)::int n from runs where brand_id=$1 and status='queued'`, [own.id])).rows[0].n, 0, "haftalık pay dolunca durur");
+    // İstek üzerine canlı ölçüm: 10 soru × 4 = 40 hak; hak yetmezse başlamaz
+    const r = (await as(U1, `select request_run('${own.id}', true) id`)).rows[0].id;
+    assert.ok(r);
+    const mRun = r;
+    await db.query(`update runs set status='done' where id=$1`, [mRun]);
+    await db.query(`insert into cost_ledger (workspace_id, run_id, task, provider, model, cost_usd, billing) select $1, $2, 'query_engine', 'openai', 'm', 0, 'paid' from generate_series(1, 500)`, [A, mRun]);
+    q = (await as(U1, `select * from my_quota('${A}')`)).rows[0];
+    assert.equal(q.manual_left, 32);
+    await assert.rejects(as(U1, `select request_run('${own.id}', true)`), /Soru hakkınız yetmiyor: bu ölçüm 40 soru hakkı kullanır, bu ay 32/);
+    // Ücretsiz pakette karma düzen yok
+    await db.query(`update workspaces set plan='free', subscription_status=null, paid_live_allowed=false where id=$1`, [A]);
+    q = (await as(U1, `select * from my_quota('${A}')`)).rows[0];
+    assert.equal(q.hybrid, false);
+    // geri al
+    await db.query(`delete from cost_ledger where workspace_id=$1`, [A]);
+    await db.query(`delete from runs where workspace_id=$1`, [A]);
+    await db.query(`delete from prompts where brand_id=$1 and text like 'soru hakkı testi %'`, [own.id]);
+    await db.query(`update prompts set active=true where brand_id=$1`, [own.id]);
+    await db.query(`update brands set auto_weekly=$2, country=$3 where id=$1`, [own.id, prevAuto.auto_weekly, prevAuto.country]);
+    await db.query(`update workspaces set kind=$2, plan=$3, subscription_status=$4, paid_live_allowed=$5, status=$6 where id=$1`, [A, prev.kind, prev.plan, prev.subscription_status, prev.paid_live_allowed, prev.status]);
+    console.log("ok 0072: soru hakkı: %30 haftalık hafif ölçüm, %70 istek üzerine, hak yetmezse ölçüm başlamaz");
+  }
+}
 console.log("TÜM DB TESTLERİ GEÇTİ");
