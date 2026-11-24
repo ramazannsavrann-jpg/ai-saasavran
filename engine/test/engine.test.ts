@@ -1010,3 +1010,20 @@ test("Güven puanı: örneklem + tekrar tutarlılığı; tekrar yoksa düşük, 
   assert.equal(few.score, Math.round(30 + 20 * 0.22 + 50 * 2 / 5));
   assert.ok(few.reasons.includes("few_repeats"));
 });
+
+test("Gemini canlı: ayrı ücretli anahtar yalnız LIVE_ENGINES'te gemini varken canlı aramaya girer", async () => {
+  const { chooseProviders } = await import("../src/worker.ts");
+  const env = { ALLOW_PAID_API: "true", GEMINI_API_KEY: "free-x", GEMINI_CANLI_API_KEY: "paid-x", OPENAI_API_KEY: "o", ANTHROPIC_API_KEY: "a" };
+  // Varsayılan canlı sıra değişmez (müşteri ölçümleri etkilenmez)
+  assert.deepEqual(chooseProviders("live_search", env, ["A"], "s").map((p) => p.config.provider), ["openai", "claude"]);
+  // İstenince ücretli, aramalı Gemini çalışır
+  const g = chooseProviders("live_search", { ...env, LIVE_ENGINES: "gemini" }, ["A"], "s");
+  assert.equal(g.length, 1);
+  assert.equal(g[0].config.billing, "paid");
+  assert.equal(g[0].config.useSearch, true);
+  // Hafızadan ölçüm hâlâ ücretsiz anahtarla
+  const m = chooseProviders("model_knowledge", env, ["A"], "s");
+  assert.equal(m[0].config.billing, "free");
+  // ALLOW_PAID_API kapalıyken canlı Gemini oluşmaz
+  assert.ok(!buildProviders({ ...env, ALLOW_PAID_API: "false" }).providers.some((p) => p.config.provider === "gemini" && p.config.billing === "paid"));
+});

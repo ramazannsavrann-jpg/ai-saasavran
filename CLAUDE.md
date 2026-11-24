@@ -18,7 +18,7 @@ Güncel durum: `docs/STATUS.md` · Mimari: `docs/ARCHITECTURE.md` · Fiyat: `doc
 
 ## Değişmez kurallar
 - API anahtarları yalnız GitHub Secrets'ta. Sohbete, koda, commit'e asla yazılmaz.
-- `ALLOW_PAID_API=true` olmadan ücretli API çağrılmaz. Google faturalandırması kapalı kalır.
+- `ALLOW_PAID_API=true` olmadan ücretli API çağrılmaz. Google faturalandırması kapalı kalır; tek istisna (24 Kasım, sahip onayı): ayrı "aisaasavran-canli" projesi, önden ödemeli (250 TL yüklendi), aylık 5 $ harcama sınırı, otomatik yükleme kapalı, anahtar `GEMINI_CANLI_API_KEY`. Yalnız `LIVE_ENGINES`'te `gemini` varken (video ölçümleri) canlı aramalı Gemini için kullanılır; site, ücretsiz kontrol ve ses üretimi ücretsiz `GEMINI_API_KEY` ile kalır.
 - Uydurma veri asla gerçek gibi gösterilmez; simüle sonuç yalnız Demo Lab'de, "SİMÜLASYON" etiketiyle.
 - İletişim adresi `info@aisaasavran.com`. Kişisel e-posta kodda/sitede yer almaz.
 - Şirket kurma, ödeme, başvuru: sahibinin onayı olmadan yapılmaz. Kimlik/banka bilgisi istenmez.
