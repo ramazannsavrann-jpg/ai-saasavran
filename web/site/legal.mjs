@@ -2,8 +2,8 @@
 const E = "info@aisaasavran.com";
 const mail = `<a href="mailto:${E}">${E}</a>`;
 const UPDATED_EN = "24 November 2026", UPDATED_TR = "24 Kasım 2026";
-const draftEn = `<p class="small"><b>Draft:</b> written during early access and not yet reviewed by a lawyer. It will be reviewed before paid plans launch.</p>`;
-const draftTr = `<p class="small"><b>Taslak:</b> erken erişim döneminde yazıldı, henüz bir avukat tarafından incelenmedi. Ücretli paketler açılmadan önce incelenecek.</p>`;
+const draftEn = `<p class="small"><b>Draft:</b> written by the founder and not yet reviewed by a lawyer. If anything is unclear, email us and we will answer.</p>`;
+const draftTr = `<p class="small"><b>Taslak:</b> kurucu tarafından yazıldı, henüz bir avukat tarafından incelenmedi. Anlaşılmayan bir yer olursa bize yazın, cevaplarız.</p>`;
 const wrap = (h1, updated, draft, body) => `<section class="article legal"><h1>${h1}</h1><p class="small">${updated}</p>${draft}${body}</section>`;
 
 export const LEGAL = {
@@ -30,7 +30,7 @@ export const LEGAL = {
 
   privacy: { lang: "en", path: "/privacy/", title: "Privacy policy | AI SaaSavran", description: "How AI SaaSavran processes your data.", body: wrap("Privacy policy", `Last updated: ${UPDATED_EN}`, draftEn, `
 <h2>Who we are</h2>
-<p>AI SaaSavran is a web app that measures how visible brands are in AI assistants' answers, operated by an individual founder based in Turkey. Questions and requests: ${mail}</p>
+<p>AI SaaSavran is a web app and mobile app (Android) that measures how visible brands are in AI assistants' answers, operated by an individual founder based in Turkey. Questions and requests: ${mail}</p>
 <h2>What we process</h2>
 <ul><li><b>Account data:</b> your email address and a hashed password; with Google sign-in, the name, email and picture link Google shares.</li>
 <li><b>Workspace content:</b> brand and competitor names, websites, sector, city and the questions you write.</li>

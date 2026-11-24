@@ -499,4 +499,49 @@ console.log("ok tanımsız paket atanamıyor");
   await db.query(`update workspaces set kind=$2, plan=$3, subscription_status=$4, paid_live_allowed=$5, status=$6, billing_source=$7, paddle_subscription_id=$8, current_period_end=$9 where id=$1`, [A, prev.kind, prev.plan, prev.subscription_status, prev.paid_live_allowed, prev.status, prev.billing_source, prev.paddle_subscription_id, prev.current_period_end]);
   console.log("ok 0074: mağaza aboneliği paket açar/kapatır, iptalde dönem sonuna kadar sürer, ek paket yalnız hakkı biten aboneye ve bir kez");
 }
+// 0076: mağaza ödemesi düzeltmeleri: Paddle/Play birbirini düşürmez, çift abonelik reddedilir, paket en yüksek etkin abonelikten
+{
+  const prev = (await db.query(`select kind, plan, subscription_status, paid_live_allowed, status, billing_source, paddle_subscription_id, current_period_end from workspaces where id=$1`, [A])).rows[0];
+  await db.query(`update workspaces set kind='business', plan='free', subscription_status=null, paid_live_allowed=false, paddle_subscription_id=null, billing_source='paddle' where id=$1`, [A]);
+  const exp = new Date(Date.now() + 20 * 864e5).toISOString();
+  const call = (args) => db.query(`select apply_store_subscription($1,$2,$3,$4,$5,$6,$7,$8,$9,$10) r`, args).then((x) => x.rows[0].r);
+  const ws = () => db.query(`select plan, subscription_status, billing_source, paid_live_allowed from workspaces where id=$1`, [A]).then((x) => x.rows[0]);
+  // Bekleyen ödeme pakete dokunmaz
+  assert.equal(await call(["google_play", "t-p", A, U1, "altin", "SUBSCRIPTION_STATE_PENDING", null, true, null, null]), "pending");
+  assert.equal((await ws()).plan, "free", "bekleyen ödeme paket açmaz");
+  assert.equal((await db.query(`select count(*)::int n from store_subscriptions_due(50) where purchase_token='t-p'`)).rows[0].n, 0, "6 saat dolmadan sorulmaz");
+  await db.query(`update store_subscriptions set updated_at = now() - interval '7 hours' where purchase_token='t-p'`);
+  assert.equal((await db.query(`select count(*)::int n from store_subscriptions_due(50) where purchase_token='t-p'`)).rows[0].n, 1, "bekleyen ödeme işçi tarafından yeniden sorulur");
+  // Tamamlandı
+  assert.equal(await call(["google_play", "t-p", A, null, "altin", "SUBSCRIPTION_STATE_ACTIVE", exp, true, "GPA.p", null]), "ok");
+  assert.equal((await ws()).plan, "altin");
+  // İkinci yenilenen abonelik reddedilir (çift ücret olmasın)
+  assert.equal(await call(["google_play", "t-2", A, U1, "platin", "SUBSCRIPTION_STATE_ACTIVE", exp, true, "GPA.2", null]), "already_subscribed_store");
+  // İptal edilmiş (yenilenmeyecek) aboneliğin yanında yenisi alınabilir; paket en yükseği, eski bitince yenisinde kalır
+  assert.equal(await call(["google_play", "t-p", A, null, "altin", "SUBSCRIPTION_STATE_CANCELED", exp, false, null, null]), "ok");
+  assert.equal(await call(["google_play", "t-3", A, U1, "gumus", "SUBSCRIPTION_STATE_ACTIVE", exp, true, "GPA.3", null]), "ok");
+  assert.equal((await ws()).plan, "altin", "iki etkin abonelikte en yükseği");
+  assert.equal(await call(["google_play", "t-p", A, null, "altin", "SUBSCRIPTION_STATE_EXPIRED", exp, false, null, null]), "ok");
+  assert.equal((await ws()).plan, "starter", "biri bitince kalan aboneliğin paketine iner");
+  // CANCELED + süre yok: hata vermez
+  assert.equal(await call(["google_play", "t-4", A, U1, "gumus", "SUBSCRIPTION_STATE_CANCELED", null, false, null, null]), "ok");
+  // Hesap silme: yenilenecek Play aboneliği varken ayrı sonuç
+  const owner = (await db.query(`select user_id from workspace_members where workspace_id=$1 and role='owner' limit 1`, [A])).rows[0].user_id;
+  assert.equal((await as(owner, `select delete_my_account() r`)).rows[0].r, "active_store_subscription", "yenilenecek Play aboneliği varken önce Google Play'de iptal");
+  // Play biter, sonra sitede (Paddle) abone olur: eski Play token'ının bitişi onu düşürmez
+  assert.equal(await call(["google_play", "t-3", A, null, "gumus", "SUBSCRIPTION_STATE_EXPIRED", exp, false, null, null]), "ok");
+  assert.equal((await ws()).plan, "free");
+  assert.equal((await db.query(`select apply_subscription($1,'pro','active','sub_new','ctm_1',$2) r`, [A, exp])).rows[0].r, "ok");
+  assert.equal((await ws()).billing_source, "paddle", "Paddle etkin olunca ödeme kaynağı Paddle");
+  assert.equal(await call(["google_play", "t-3", A, null, "gumus", "SUBSCRIPTION_STATE_EXPIRED", exp, false, null, null]), "ok_not_billing_source");
+  let w = await ws();
+  assert.deepEqual([w.plan, w.subscription_status, w.paid_live_allowed], ["pro", "active", true], "eski Play olayı Paddle abonesini düşürmez");
+  // Tersi: Play ile öderken eski Paddle aboneliğinin iptal olayı onu düşürmez
+  await db.query(`update workspaces set plan='altin', subscription_status='active', billing_source='google_play', paddle_subscription_id='sub_new' where id=$1`, [A]);
+  assert.equal((await db.query(`select apply_subscription($1,'pro','canceled','sub_new','ctm_1',$2) r`, [A, exp])).rows[0].r, "other_billing_source");
+  assert.equal((await ws()).plan, "altin");
+  for (const t of ["store_subscriptions"]) await db.query(`delete from ${t} where workspace_id=$1`, [A]);
+  await db.query(`update workspaces set kind=$2, plan=$3, subscription_status=$4, paid_live_allowed=$5, status=$6, billing_source=$7, paddle_subscription_id=$8, current_period_end=$9 where id=$1`, [A, prev.kind, prev.plan, prev.subscription_status, prev.paid_live_allowed, prev.status, prev.billing_source, prev.paddle_subscription_id, prev.current_period_end]);
+  console.log("ok 0076: Paddle/Play birbirini düşürmez, bekleyen ödeme paket açmaz, çift abonelik reddedilir, paket en yüksek etkin abonelikten");
+}
 console.log("TÜM DB TESTLERİ GEÇTİ");

@@ -125,6 +125,17 @@ export const haptic = {
   done: () => { Haptics.notification({ type: NotificationType.Success }).catch(() => undefined); },
 };
 
+/** Veri yüklenemedi: boş durum gibi gösterilmez; neden ve "Tekrar dene". */
+export function LoadError({ retry, full }: { retry: () => void; full?: boolean }) {
+  return (
+    <div className={full ? "screen" : "card"} style={{ display: "flex", flexDirection: "column", gap: 10, textAlign: "center", justifyContent: "center", ...(full ? { minHeight: "60vh" } : {}) }}>
+      <b>{L("Bilgiler yüklenemedi", "Couldn't load your data")}</b>
+      <span className="muted">{L("İnternet bağlantınızı kontrol edip tekrar deneyin.", "Check your internet connection and try again.")}</span>
+      <button className="btn btn-primary" onClick={retry}>{L("Tekrar dene", "Try again")}</button>
+    </div>
+  );
+}
+
 export function Err({ msg }: { msg?: string | null }) {
   return msg ? <p className="error" role="alert">{msg}</p> : null;
 }

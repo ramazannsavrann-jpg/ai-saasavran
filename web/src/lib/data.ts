@@ -12,7 +12,7 @@ export interface Brand {
   sector: string | null; city: string | null; country: string | null; is_competitor: boolean; owner_brand_id: string | null; data_origin: string;
   auto_weekly: boolean; audit_requested_at: string | null; reanalyze_requested_at: string | null;
   /** Paylaşılan rapor için ilk 3 öneri (0054) */
-  top_actions?: { title: string; action: string }[] | null; top_actions_at?: string | null;
+  top_actions?: { title: string; action: string; id?: string; lang?: string }[] | null; top_actions_at?: string | null;
   fact_card?: string | null; fact_card_updated_at?: string | null; track_key?: string;
   /** Ne satıyor / hangi hizmeti veriyor (0059) */
   offering?: string | null;
@@ -84,7 +84,7 @@ export const INTENT_LABEL: Record<Intent, string> = {
 };
 
 function must<T>(r: { data: T | null; error: { message: string } | null }): T {
-  if (r.error) throw new Error(r.error.message);
+  if (r.error) throw new Error(r.error.message || "request_failed");
   return r.data as T;
 }
 

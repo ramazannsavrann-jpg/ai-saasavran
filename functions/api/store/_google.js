@@ -55,7 +55,21 @@ export async function ackSubscription(at, product, token, fetchFn = fetch) {
   const r = await fetchFn(`${API}/subscriptions/${encodeURIComponent(product)}/tokens/${encodeURIComponent(token)}:acknowledge`, {
     method: "POST", headers: { Authorization: `Bearer ${at}`, "content-type": "application/json" }, body: "{}",
   });
-  if (!r.ok && r.status !== 400) throw new Error(`google_ack_${r.status}`); // 400: zaten onaylı
+  if (r.ok) return;
+  // 400 her zaman "zaten onaylı" demek değil: Google'a yeniden sorulur
+  if (r.status === 400) {
+    const s = await getSubscription(at, token, fetchFn);
+    if (s?.acknowledgementState === "ACKNOWLEDGEMENT_STATE_ACKNOWLEDGED") return;
+  }
+  throw new Error(`google_ack_${r.status}`);
+}
+
+/** Abonelik veritabanına işlendiyse ve etkinse Google'a onaylanır (3 gün içinde onaylanmazsa Google parayı iade eder). */
+export async function ackIfNeeded(at, f, token, result, fetchFn = fetch) {
+  if (result !== "ok" || f.acknowledged) return false;
+  if (!["SUBSCRIPTION_STATE_ACTIVE", "SUBSCRIPTION_STATE_IN_GRACE_PERIOD"].includes(f.state)) return false;
+  await ackSubscription(at, f.product, token, fetchFn);
+  return true;
 }
 
 /** Tek seferlik ürün (ek soru paketi): purchaseState 0 = ödendi. */
@@ -70,7 +84,12 @@ export async function consumeProduct(at, product, token, fetchFn = fetch) {
   const r = await fetchFn(`${API}/products/${encodeURIComponent(product)}/tokens/${encodeURIComponent(token)}:consume`, {
     method: "POST", headers: { Authorization: `Bearer ${at}` },
   });
-  if (!r.ok && r.status !== 400) throw new Error(`google_consume_${r.status}`);
+  if (r.ok) return;
+  if (r.status === 400) {
+    const p = await getProduct(at, product, token, fetchFn);
+    if (p?.consumptionState === 1) return; // zaten tüketilmiş
+  }
+  throw new Error(`google_consume_${r.status}`);
 }
 
 /** Sunucu yetkisiyle veritabanı fonksiyonu. */
@@ -115,8 +134,8 @@ export async function verifyPurchase({ env, user, input, fetchFn = fetch }) {
       p_platform: "google_play", p_token: token, p_workspace: workspace, p_user: user, p_product: f.product, p_state: f.state,
       p_expiry: f.expiry, p_auto: f.auto, p_order: f.order, p_linked: f.linked,
     }, fetchFn);
-    // Onay (3 gün içinde yapılmazsa Google parayı iade eder): yalnız veritabanına işlendiyse
-    if (result === "ok" && !f.acknowledged) await ackSubscription(at, f.product, token, fetchFn);
+    // Onay (3 gün içinde yapılmazsa Google parayı iade eder): yalnız veritabanına işlendiyse ve etkinse
+    await ackIfNeeded(at, f, token, result, fetchFn);
     return { result };
   }
   const p = await getProduct(at, product, token, fetchFn);

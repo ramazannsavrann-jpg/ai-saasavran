@@ -14,7 +14,8 @@ export function initBackButton(nav: NavigateFunction): (() => void) | undefined 
       return;
     }
     const path = location.hash.replace(/^#/, "").split("?")[0] || "/";
-    if (path === "/ana" || path === "/") { void App.minimizeApp(); return; }
+    // İlk kurulum ekranından geri gidilecek yer yok (giriş sayfası tekrar kuruluma yönlendirir): uygulama arka plana
+    if (path === "/ana" || path === "/" || path === "/kurulum") { void App.minimizeApp(); return; }
     if (ROOTS.includes(path)) { nav("/ana"); return; }
     if (START.includes(path)) { nav("/"); return; }
     if (canGoBack) history.back(); else nav("/ana", { replace: true });

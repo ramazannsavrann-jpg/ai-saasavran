@@ -657,21 +657,21 @@ write("/uygulama-giris/", `<!doctype html><html lang="tr"><head><meta charset="u
 
 // Hesap silme (Google Play / App Store şartı: uygulama dışından da silme yolu)
 write("/tr/hesap-silme/", page({ lang: "tr", path: "/tr/hesap-silme/", alt: "/delete-account/", title: "Hesabı ve verileri silme | AI SaaSavran", description: "AI SaaSavran hesabınızı ve verilerinizi nasıl silersiniz: sitede veya uygulamada Hesap sayfasından, ya da e-postayla.", body: `<section class="article"><h1>Hesabı ve verileri silme</h1>
-<p>AI SaaSavran hesabınızı istediğiniz zaman kendiniz silebilirsiniz. Silme işlemi web sitesinde ve mobil uygulamada aynıdır.</p>
+<p>Bu sayfa AI SaaSavran web sitesi ve Google Play'deki <strong>SaaSavran: YZ Görünürlüğü</strong> uygulaması içindir. AI SaaSavran hesabınızı istediğiniz zaman kendiniz silebilirsiniz. Silme işlemi web sitesinde ve mobil uygulamada aynıdır.</p>
 <h2>Kendiniz silin</h2>
 <ol><li><a href="/giris">Giriş yapın</a>.</li><li><a href="/hesap#hesap-sil">Hesap</a> sayfasının en altındaki <strong>Hesabımı sil</strong> düğmesine dokunun.</li><li>Onay için <strong>SİL</strong> yazın ve <strong>Hesabımı kalıcı olarak sil</strong> düğmesine dokunun.</li></ol>
-<p>Aktif ücretli aboneliğiniz varsa önce aynı sayfadaki Ödeme bölümünden aboneliği iptal edin.</p>
+<p>Sitede aldığınız aktif ücretli aboneliğiniz varsa önce aynı sayfadaki Ödeme bölümünden iptal edin. Aboneliği uygulamada (Google Play) aldıysanız Google Play'de iptal edin (Google Play → Profil → Ödemeler ve abonelikler → Abonelikler). İptal ettiğiniz abonelik silmeye engel olmaz.</p>
 <h2>Neler silinir?</h2>
-<ul><li>Giriş bilgileriniz (e-posta, şifre, Google bağlantısı) ve e-posta tercihleriniz hemen silinir.</li><li>Tek başınıza sahip olduğunuz çalışma alanları ve içindeki markalar, sorular, ölçümler ve raporlar hemen silinir.</li><li>Ekip üyeleri olan bir alanda veriler silinmez; sahiplik en eski ekip üyesine geçer.</li><li>Yasal olarak saklamamız gereken ödeme kayıtları (fatura, Paddle işlemleri) yasal süre boyunca saklanır.</li></ul>
+<ul><li>Giriş bilgileriniz (e-posta, şifre, Google bağlantısı) ve e-posta tercihleriniz hemen silinir.</li><li>Tek başınıza sahip olduğunuz çalışma alanları ve içindeki markalar, sorular, ölçümler ve raporlar hemen silinir.</li><li>Ekip üyeleri olan bir alanda veriler silinmez; sahiplik en eski ekip üyesine geçer.</li><li>Yasal olarak saklamamız gereken ödeme kayıtları (fatura, Paddle ve Google Play işlemleri) yasal süre boyunca saklanır.</li></ul>
 <h2>Giriş yapamıyorsanız</h2>
 <p>Kayıtlı e-posta adresinizden <a href="mailto:info@aisaasavran.com?subject=Hesap%20silme">info@aisaasavran.com</a> adresine "Hesap silme" konulu bir e-posta gönderin. Hesabınızı 30 gün içinde sileriz. Ayrıntılar: <a href="/gizlilik">Gizlilik politikası</a>.</p></section>` }));
 write("/delete-account/", page({ lang: "en", path: "/delete-account/", alt: "/tr/hesap-silme/", title: "Delete your account and data | AI SaaSavran", description: "How to delete your AI SaaSavran account and data: from the Account page on the website or in the app, or by email.", body: `<section class="article"><h1>Delete your account and data</h1>
-<p>You can delete your AI SaaSavran account yourself at any time. It works the same on the website and in the mobile app.</p>
+<p>This page covers the AI SaaSavran website and the <strong>SaaSavran: AI Visibility</strong> app on Google Play. You can delete your AI SaaSavran account yourself at any time. It works the same on the website and in the mobile app.</p>
 <h2>Delete it yourself</h2>
 <ol><li><a href="/giris">Sign in</a>.</li><li>On the <a href="/hesap#hesap-sil">Account</a> page, tap <strong>Delete my account</strong> at the bottom.</li><li>Type <strong>DELETE</strong> to confirm and tap <strong>Permanently delete my account</strong>.</li></ol>
-<p>If you have an active paid subscription, cancel it first in the Billing section on the same page.</p>
+<p>If you have an active paid subscription bought on the website, cancel it first in the Billing section on the same page. If you subscribed in the app (Google Play), cancel it in Google Play (Google Play → Profile → Payments &amp; subscriptions → Subscriptions). A cancelled subscription doesn't block deletion.</p>
 <h2>What is deleted?</h2>
-<ul><li>Your sign-in details (email, password, Google link) and email preferences are deleted immediately.</li><li>Workspaces you own alone, with their brands, questions, measurements and reports, are deleted immediately.</li><li>In a workspace with team members, the data stays and ownership passes to the longest-standing member.</li><li>Payment records we must keep by law (invoices, Paddle transactions) are kept for the legal period.</li></ul>
+<ul><li>Your sign-in details (email, password, Google link) and email preferences are deleted immediately.</li><li>Workspaces you own alone, with their brands, questions, measurements and reports, are deleted immediately.</li><li>In a workspace with team members, the data stays and ownership passes to the longest-standing member.</li><li>Payment records we must keep by law (invoices, Paddle and Google Play transactions) are kept for the legal period.</li></ul>
 <h2>If you cannot sign in</h2>
 <p>Email <a href="mailto:info@aisaasavran.com?subject=Account%20deletion">info@aisaasavran.com</a> from your registered address with the subject "Account deletion". We delete the account within 30 days. Details: <a href="/privacy/">Privacy policy</a>.</p></section>` }));
 

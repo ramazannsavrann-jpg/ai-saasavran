@@ -84,8 +84,41 @@ test("işçi: abonelikler Google'a yeniden sorulur, bulunamayan token süresi do
     return new Response("", { status: 410 });
   };
   assert.equal(await syncStoreSubscriptions({} as never, undefined), "kapalı");
-  assert.deepEqual(await syncStoreSubscriptions(db as never, SA, fetchFn), { checked: 2, changed: 2 });
+  assert.deepEqual(await syncStoreSubscriptions(db as never, SA, fetchFn), { checked: 2, changed: 2, failed: 0 });
   assert.equal(applied[0].p_state, "SUBSCRIPTION_STATE_CANCELED");
   assert.equal(applied[1].p_state, "SUBSCRIPTION_STATE_EXPIRED");
   assert.equal(applied[1].p_product, "altin");
+});
+
+test("işçi: uygulamanın onaylayamadığı etkin abonelik işçide onaylanır; bir hata diğerlerini durdurmaz", async () => {
+  const { syncStoreSubscriptions } = await import("../src/store-sync.ts");
+  const calls: string[] = [];
+  const db = { rpc: async (fn: string) => fn === "store_subscriptions_due"
+    ? { data: [{ purchase_token: "x", workspace_id: WS, product_id: "gumus" }, { purchase_token: "y", workspace_id: WS, product_id: "gumus" }], error: null }
+    : { data: "ok", error: null } };
+  const fetchFn = async (url: string, init?: RequestInit) => {
+    calls.push(`${init?.method ?? "GET"} ${url}`);
+    if (url.includes("oauth2")) return new Response(JSON.stringify({ access_token: "AT" }));
+    if (url.endsWith("/tokens/x")) return new Response("", { status: 503 });
+    if (url.endsWith("/tokens/y")) return new Response(JSON.stringify(sub()));
+    if (url.includes(":acknowledge")) return new Response("{}");
+    return new Response("", { status: 500 });
+  };
+  assert.deepEqual(await syncStoreSubscriptions(db as never, SA, fetchFn), { checked: 2, changed: 1, failed: 1 });
+  assert.ok(calls.some((c) => c.includes("subscriptions/gumus/tokens/y:acknowledge")));
+});
+
+test("abonelik: ödemesi bekleyen satın alma onaylanmaz; onay 400 dönerse Google'a yeniden sorulur", async () => {
+  let f = fake(sub({ subscriptionState: "SUBSCRIPTION_STATE_PENDING" }), null, "pending");
+  assert.deepEqual(await verifyPurchase({ env, user: USER, input: { kind: "sub", product: "gumus", token: "tok-abcdefghij", workspace: WS }, fetchFn: f.fetchFn }), { result: "pending" });
+  assert.ok(!f.calls.some((c) => c.includes(":acknowledge")));
+  // 400 ve hâlâ onaysız: hata (sessizce yutulmaz)
+  const fetch400 = async (url: string) => {
+    if (url.includes("oauth2")) return new Response(JSON.stringify({ access_token: "AT" }));
+    if (url.includes("/rpc/")) return new Response(JSON.stringify("ok"));
+    if (url.includes(":acknowledge")) return new Response("{}", { status: 400 });
+    if (url.includes("subscriptionsv2")) return new Response(JSON.stringify(sub()));
+    return new Response("", { status: 500 });
+  };
+  await assert.rejects(() => verifyPurchase({ env, user: USER, input: { kind: "sub", product: "gumus", token: "tok-abcdefghij", workspace: WS }, fetchFn: fetch400 }), /google_ack_400/);
 });

@@ -1,6 +1,6 @@
 // AI SaaSavran mobil uygulaması (Android/iOS, Capacitor). Ekranlar telefonun içinde çalışır;
 // veri katmanı sitedekiyle aynıdır (web/src/lib): aynı hesap, aynı markalar, aynı ölçümler.
-import { StrictMode, useEffect, useState, type ReactNode } from "react";
+import { StrictMode, useEffect, useRef, useState, type ReactNode } from "react";
 import { createRoot } from "react-dom/client";
 import { HashRouter, Navigate, Outlet, Route, Routes, useNavigate } from "react-router-dom";
 import "@fontsource/instrument-sans/400.css";
@@ -40,7 +40,10 @@ function PublicOnly({ children }: { children: ReactNode }) {
 }
 function Tabs() {
   const nav = useNavigate();
-  useEffect(() => { initPush((p) => nav(p)); }, [nav]);
+  // useNavigate her sayfa değişiminde yeni fonksiyon döner: dinleyici bir kez kurulur, güncel nav ref'ten okunur
+  const navRef = useRef(nav);
+  navRef.current = nav;
+  useEffect(() => initPush((p) => navRef.current(p)), []);
   const [gen, setGen] = useState(0);
   const pull = usePullToRefresh(() => setGen((g) => g + 1));
   return (
@@ -60,7 +63,9 @@ function AddBrand() {
 function App() {
   const nav = useNavigate();
   useEffect(() => initBackButton(nav), [nav]);
-  useEffect(() => { initOAuthReturn((err) => { if (err) window.dispatchEvent(new CustomEvent("oauth-hata", { detail: err })); else nav("/ana", { replace: true }); }); }, [nav]);
+  const navRef = useRef(nav);
+  navRef.current = nav;
+  useEffect(() => initOAuthReturn((err) => { if (err) window.dispatchEvent(new CustomEvent("oauth-hata", { detail: err })); else navRef.current("/ana", { replace: true }); }), []);
   return (
     <Routes>
       <Route path="/" element={<PublicOnly><div className="app"><Welcome /></div></PublicOnly>} />

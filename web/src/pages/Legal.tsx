@@ -10,13 +10,13 @@ function DraftNotice() {
   if (isEn()) return (
     <aside className="notice notice-sim" role="note">
       <strong>Draft</strong>
-      <p>This text was written while the product is in early access and has not yet been reviewed by a lawyer. It will be reviewed before paid plans launch.</p>
+      <p>This text was written by the founder and has not yet been reviewed by a lawyer. If anything is unclear, email us and we will answer.</p>
     </aside>
   );
   return (
     <aside className="notice notice-sim" role="note">
       <strong>Taslak metin</strong>
-      <p>Bu metin ürün test aşamasındayken hazırlanmıştır ve henüz bir hukukçu tarafından incelenmemiştir. Ücretli hizmete geçmeden önce KVKK ve ilgili mevzuata göre gözden geçirilecektir.</p>
+      <p>Bu metin kurucu tarafından hazırlanmıştır ve henüz bir hukukçu tarafından incelenmemiştir. Anlaşılmayan bir yer olursa bize yazın, cevaplarız.</p>
     </aside>
   );
 }
@@ -43,7 +43,7 @@ export function Privacy() {
   return (
     <LegalShell title="Gizlilik politikası ve aydınlatma metni">
       <h2>Biz kimiz</h2>
-      <p>AI SaaSavran, markaların yapay zekâ asistanlarının cevaplarında ne kadar görünür olduğunu ölçen bir web uygulamasıdır. Bu metin, 6698 sayılı Kişisel Verilerin Korunması Kanunu (KVKK) kapsamında hangi verileri neden işlediğimizi açıklar. Sorularınız ve talepleriniz için: <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a></p>
+      <p>AI SaaSavran, markaların yapay zekâ asistanlarının cevaplarında ne kadar görünür olduğunu ölçen bir web ve mobil (Android) uygulamasıdır. Bu metin, 6698 sayılı Kişisel Verilerin Korunması Kanunu (KVKK) kapsamında hangi verileri neden işlediğimizi açıklar. Sorularınız ve talepleriniz için: <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a></p>
 
       <h2>Hangi verileri işliyoruz</h2>
       <ul className="plain">

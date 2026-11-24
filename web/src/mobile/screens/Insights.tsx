@@ -1,7 +1,7 @@
 // Ayrıntı ekranları: Bilgi doğruluğu (TruthGuard, çelişkiler, algı, kaynaksız sayılar), Kaynaklar (kaynak etkisi, fırsatlar, yapay zekânın aramaları),
 // Ziyaretçi ve botlar. Hesaplamalar sitedekiyle aynı motor fonksiyonlarından gelir; yeni veri üretilmez.
 import { useState, type ReactNode } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useApp, useLoad } from "../../lib/app";
 import { api, type Brand, type Run } from "../../lib/data";
 import { pct, providerLabel, series, sourceOpportunities } from "../../lib/report";
@@ -12,7 +12,7 @@ import { sourceNetwork } from "../../../../engine/src/network.ts";
 import { sourceMix, statSummary, truthSummary, type SourceType } from "../../../../engine/src/truth.ts";
 import { botSummary, snippet, trafficSummary, workerCode, SOURCE_PROVIDER, type AiSource, type BotKind } from "../../../../engine/src/traffic.ts";
 import { Head, Icon, Spinner, goBack, haptic, isPaid } from "../ui";
-import { useSelectedBrand } from "./Home";
+import { useSelectedBrand, NoBrand } from "./Home";
 
 
 /** Ekran iskeleti: geri düğmesi, başlık, seçili marka. */
@@ -20,7 +20,7 @@ function Frame({ title, children }: { title: string; children: (b: Brand) => Rea
   const nav = useNavigate();
   const sel = useSelectedBrand();
   if (sel.loading) return <Spinner />;
-  if (!sel.brand) return <Navigate to="/kurulum" replace />;
+  if (!sel.brand) return <NoBrand sel={sel} />;
   return (
     <div className="screen">
       <Head title={title} back={() => goBack(nav)} right={<span className="muted small">{sel.brand.name}</span>} />

@@ -28,9 +28,9 @@ export async function googleSignIn(): Promise<void> {
 }
 
 /** Uygulama açılışında bir kez: dönüş adresini dinler. onDone(hata) — hata yoksa oturum açıldı. */
-export function initOAuthReturn(onDone: (err: string | null) => void) {
-  if (!GOOGLE_AVAILABLE) return;
-  void App.addListener("appUrlOpen", async ({ url }) => {
+export function initOAuthReturn(onDone: (err: string | null) => void): (() => void) | undefined {
+  if (!GOOGLE_AVAILABLE) return undefined;
+  const h = App.addListener("appUrlOpen", async ({ url }) => {
     const r = parseOAuthReturn(url);
     if (!r) return;
     await Browser.close().catch(() => undefined);
@@ -38,4 +38,5 @@ export function initOAuthReturn(onDone: (err: string | null) => void) {
     const { error } = await sb().auth.exchangeCodeForSession(r.code);
     onDone(error ? error.message : null);
   });
+  return () => { void h.then((x) => x.remove()).catch(() => undefined); };
 }

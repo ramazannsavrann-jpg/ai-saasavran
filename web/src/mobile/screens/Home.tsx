@@ -6,9 +6,9 @@ import { useApp, useLoad } from "../../lib/app";
 import { api, type Brand, type MeasurementType } from "../../lib/data";
 import { friendlyError } from "../../lib/supabase";
 import { formatDateTime, numLoc, providerLabel, series } from "../../lib/report";
-import { L } from "../../lib/i18n";
+import { L, isEn } from "../../lib/i18n";
 import { SITE_ORIGIN } from "../../lib/env";
-import { Err, Icon, Sheet, Spinner, greeting, haptic, isPaid, shownType } from "../ui";
+import { Err, Icon, LoadError, Sheet, Spinner, greeting, haptic, isPaid, shownType } from "../ui";
 
 const KEY = "mobil-marka";
 const PRELIM = 20; // bundan az cevap: ön sonuç
@@ -76,14 +76,25 @@ export function MoreLinks() {
   );
 }
 
+const RIVAL_RECS = new Set(["source_sites", "shopping_behind", "mentioned_not_recommended", "own_source_low", "rival_traits", "competitor_gap"]);
+
 export function useSelectedBrand() {
-  const { current } = useApp();
+  const { current, wsError, reload } = useApp();
   const brands = useLoad(() => (current ? api.brands(current.id) : Promise.resolve([] as Brand[])), [current?.id]);
   const own = (brands.data ?? []).filter((b) => !b.is_competitor);
   const [id, setId] = useState<string | null>(() => { try { return localStorage.getItem(KEY); } catch { return null; } });
   const brand = own.find((b) => b.id === id) ?? own[0] ?? null;
   const choose = (v: string) => { setId(v); try { localStorage.setItem(KEY, v); } catch { /* yok say */ } };
-  return { brands: own, brand, choose, loading: brands.loading, error: brands.error };
+  // Yükleme hatası "marka yok" sayılmaz: yoksa kullanıcı kurulum ekranına düşüp aynı markayı yeniden ekler
+  const failed = wsError || !!brands.error;
+  const retry = () => { void reload().catch(() => {}); brands.reload(); };
+  return { brands: own, brand, choose, loading: brands.loading, error: brands.error, failed, retry };
+}
+
+/** Seçili marka yokken: yükleme hatasıysa "Tekrar dene", gerçekten marka yoksa kurulum. */
+export function NoBrand({ sel }: { sel: { failed: boolean; retry: () => void } }) {
+  if (sel.failed) return <LoadError full retry={sel.retry} />;
+  return <Navigate to="/kurulum" replace />;
 }
 
 /** Rapor bağlantısını telefonun paylaş menüsüyle paylaşır; menü yoksa panoya kopyalar ve true döner. */
@@ -126,7 +137,8 @@ export function Home() {
   }, [pending?.id]);
 
   if (loading || sel.loading) return <Spinner />;
-  if (!current || !b) return <Navigate to="/kurulum" replace />;
+  if (!current || !b) return <NoBrand sel={sel} />;
+  if (runs.error || vis.error) return <LoadError full retry={() => { runs.reload(); vis.reload(); }} />;
   // İlk yüklemede bekle: ölçümü olan kullanıcı bir an "İlk ölçümü başlat" görmesin
   if (!runs.data || !vis.data) return <Spinner />;
 
@@ -138,7 +150,9 @@ export function Home() {
   const engines = last ? Object.entries((vis.data ?? []).filter((r) => r.run_id === last.runId && r.is_target).reduce<Record<string, { k: number; n: number }>>((acc, r) => {
     const a = acc[r.provider] ?? { k: 0, n: 0 }; a.k += r.recommended; a.n += r.n; acc[r.provider] = a; return acc;
   }, {})).filter(([, v]) => v.n > 0).map(([p, v]) => ({ name: providerLabel(p).replace(/ \(.*\)$/, ""), rate: Math.round((v.k / v.n) * 100) })) : [];
-  const actions = (b.top_actions ?? []).slice(0, 3);
+  // Ana sayfada rakip dili yok (23 Kasım kararı): rakip/kaynak karşılaştırmalı öneriler ve başka dilde yazılmış ya da
+  // kimliksiz (eski) kayıtlar gösterilmez; tamamı Öneriler ekranında.
+  const actions = (b.top_actions ?? []).filter((a) => a.id && !RIVAL_RECS.has(a.id) && a.lang === (isEn() ? "en" : "tr")).slice(0, 3);
   const u = usage.data;
   const q = quota.data;
   // Soru hakkı (0072): "Şimdi ölç" yaklaşık kaç hak kullanır (soru × motor × tekrar; sunucudaki run_call_estimate ile aynı)
@@ -187,7 +201,7 @@ export function Home() {
           <>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 8 }}>
               <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-                <span className="sub">{L("Yapay zekâlar sizi önerdi", "AIs recommended you")}</span>
+                <span className="sub">{sim ? L("SİMÜLASYON · gerçek ölçüm değil", "SIMULATION · not a real measurement") : L("Yapay zekâlar sizi önerdi", "AIs recommended you")}</span>
                 <span className={`big${prelim ? " prelim" : ""}`}>%{rate}</span>
               </div>
               {prelim ? <span className="chip-on">{L("Ön sonuç", "Early result")}</span> : delta !== null && delta !== 0 && (

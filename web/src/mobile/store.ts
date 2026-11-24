@@ -36,7 +36,8 @@ async function verify(kind: "sub" | "pack", product: string, token: string, work
     headers: { "content-type": "application/json", Authorization: `Bearer ${data.session?.access_token ?? ""}` },
     data: { kind, product, token, workspace },
   });
-  const body = (typeof res.data === "string" ? JSON.parse(res.data || "{}") : res.data) as { ok?: boolean; result?: string; error?: string };
+  let body: { ok?: boolean; result?: string; error?: string } = {};
+  try { body = (typeof res.data === "string" ? JSON.parse(res.data || "{}") : res.data) ?? {}; } catch { /* boş/bozuk cevap */ }
   if (res.status >= 400 || !body.ok) throw new Error(body.result ?? body.error ?? `store_${res.status}`);
   return body.result ?? "ok";
 }
@@ -59,12 +60,19 @@ export async function buyPack(product: Product, workspace: string): Promise<stri
   return verify("pack", product.identifier, t.purchaseToken ?? t.transactionId, workspace);
 }
 
-/** Satın almaları geri yükle: telefonda yarım kalan (sunucuya ulaşmamış) satın almaları yeniden doğrular. */
-export async function restore(workspace: string): Promise<number> {
+/**
+ * Satın almaları geri yükle: telefonda yarım kalan (sunucuya ulaşmamış) satın almaları yeniden doğrular.
+ * silent: uygulama açılışında/Paketler ekranında sessizce çalışır, yalnız onaylanmamış olanlara bakar
+ * (onaylanmayan satın almayı Google 3 gün sonra iade eder).
+ */
+export async function restore(workspace: string, silent = false): Promise<number> {
+  if (!STORE_AVAILABLE) return 0;
   let n = 0;
   for (const [type, kind] of [[PURCHASE_TYPE.SUBS, "sub"], [PURCHASE_TYPE.INAPP, "pack"]] as const) {
-    const { purchases } = await NativePurchases.getPurchases({ productType: type });
+    const { purchases } = await NativePurchases.getPurchases({ productType: type, appAccountToken: workspace });
     for (const p of purchases) {
+      if (p.purchaseState !== undefined && p.purchaseState !== "1") continue; // ödemesi bekleyen: tamamlanınca işlenir
+      if (silent && p.isAcknowledged) continue;
       const id = p.productIdentifier, tok = p.purchaseToken ?? p.transactionId;
       if (!id || !tok) continue;
       if (kind === "sub" && !SUBS.some((s) => s.id === id)) continue;
@@ -81,7 +89,11 @@ export const manage = () => NativePurchases.manageSubscriptions();
 export function resultText(code: string, L: (tr: string, en: string) => string): string {
   const m: Record<string, [string, string]> = {
     ok: ["Aboneliğiniz açıldı.", "Your subscription is active."],
-    already_subscribed_web: ["Bu hesabın sitede (aisaasavran.com) aboneliği var. Google ödemeyi birkaç gün içinde iade eder; aboneliğinizi sitede yönetebilirsiniz.", "This account already has a subscription on aisaasavran.com. Google will refund the payment within a few days; manage your subscription on the website."],
+    pack_ok: ["Ek soru hakkınız eklendi.", "Your extra credits were added."],
+    restored: ["Satın almalarınız geri yüklendi.", "Your purchases were restored."],
+    pending: ["Ödemeniz bekleniyor. Ödeme tamamlanınca paketiniz kendiliğinden açılır.", "Your payment is pending. Your plan opens automatically once the payment completes."],
+    already_subscribed_web: ["Bu hesabın başka bir platformda etkin aboneliği var. Google ödemeyi birkaç gün içinde iade eder.", "This account already has an active subscription on another platform. Google will refund the payment within a few days."],
+    already_subscribed_store: ["Bu hesabın Google Play'de etkin aboneliği var. Paket değiştirmek için önce mevcut aboneliği Google Play'de iptal edin. Bu ödeme birkaç gün içinde iade edilir.", "This account already has an active Google Play subscription. To switch plans, cancel the current one in Google Play first. This payment will be refunded within a few days."],
     quota_not_exhausted: ["Ek paket, soru hakkınız bitince alınabilir. Ödeme birkaç gün içinde iade edilir.", "Extra packs can be bought once your credits run out. The payment will be refunded within a few days."],
     not_subscriber: ["Ek paket yalnız abonelere açık. Ödeme birkaç gün içinde iade edilir.", "Extra packs are for subscribers only. The payment will be refunded within a few days."],
     not_member: ["Bu hesapta ödeme yapma yetkiniz yok.", "You don't have permission to pay for this account."],

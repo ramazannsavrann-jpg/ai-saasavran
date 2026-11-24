@@ -1,15 +1,15 @@
 // Ürünler: ürün görünürlüğü ve önerilme oranı, rakip ürün karşılaştırması, ürün bilgi doğruluğu, Google Shopping, nereden satın alınır.
 // Hesaplamalar sitedekiyle aynı motor fonksiyonları (engine/src/insights.ts, shopping.ts); ek ücretli çağrı yapılmaz.
 import { useState, type FormEvent, type ReactNode } from "react";
-import { Navigate, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useApp, useLoad } from "../../lib/app";
 import { api, type Brand, type Product } from "../../lib/data";
 import { friendlyError } from "../../lib/supabase";
 import { MIN_SAMPLE, pct, providerLabel } from "../../lib/report";
 import { L, isEn } from "../../lib/i18n";
 import { compareProducts, productVisibility, rivalReasons, shoppingSources } from "../../../../engine/src/insights.ts";
-import { Confirm, Err, Head, Icon, Sheet, Spinner, goBack, haptic } from "../ui";
-import { useSelectedBrand } from "./Home";
+import { Confirm, Err, Head, Icon, LoadError, Sheet, Spinner, goBack, haptic } from "../ui";
+import { useSelectedBrand, NoBrand } from "./Home";
 
 /** Ürün ekranlarının ortak verisi: ürünler, son ölçümlerin cevapları, rakip markalar. */
 function useProductData(brand: Brand) {
@@ -23,7 +23,9 @@ function useProductData(brand: Brand) {
   const comps = useLoad(() => api.competitors(brand.id), [brand.id]);
   // İlk yüklemede bekle; sonraki yenilemelerde ekran yerinde kalsın (kaydırma kaybolmasın)
   const loading = !products.data || !runs.data || !answers.data || !comps.data;
-  return { products, checks, shop, answers: answers.data ?? [], comps: comps.data ?? [], hasRuns: lastIds.length > 0, loading };
+  const error = !!(products.error || runs.error || answers.error || comps.error);
+  const retry = () => { products.reload(); runs.reload(); answers.reload(); comps.reload(); };
+  return { products, checks, shop, answers: answers.data ?? [], comps: comps.data ?? [], hasRuns: lastIds.length > 0, loading, error, retry };
 }
 
 const Note = ({ children }: { children: ReactNode }) => <p className="muted small" style={{ margin: 0 }}>{children}</p>;
@@ -32,7 +34,7 @@ const Section = ({ title, children }: { title: string; children: ReactNode }) =>
 export function Products() {
   const sel = useSelectedBrand();
   if (sel.loading) return <Spinner />;
-  if (!sel.brand) return <Navigate to="/kurulum" replace />;
+  if (!sel.brand) return <NoBrand sel={sel} />;
   return <ProductList brand={sel.brand} />;
 }
 
@@ -42,6 +44,7 @@ function ProductList({ brand }: { brand: Brand }) {
   const [adding, setAdding] = useState(false);
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
+  if (d.error) return <LoadError full retry={d.retry} />;
   if (d.loading) return <Spinner />;
   const own = (d.products.data ?? []).filter((p) => !p.rival_of);
   async function add(e: FormEvent<HTMLFormElement>) {
@@ -100,7 +103,7 @@ function ProductList({ brand }: { brand: Brand }) {
 export function ProductDetail() {
   const sel = useSelectedBrand();
   if (sel.loading) return <Spinner />;
-  if (!sel.brand) return <Navigate to="/kurulum" replace />;
+  if (!sel.brand) return <NoBrand sel={sel} />;
   return <ProductBody brand={sel.brand} />;
 }
 
@@ -117,6 +120,7 @@ function ProductBody({ brand }: { brand: Brand }) {
   const [queryEdit, setQueryEdit] = useState(false);
   const [rm, setRm] = useState<Product | null>(null);
   const [busy, setBusy] = useState(false);
+  if (d.error) return <LoadError full retry={d.retry} />;
   if (d.loading) return <Spinner />;
   const p = (d.products.data ?? []).find((x) => x.id === id && !x.rival_of);
   if (!p) return <div className="screen"><Head title={L("Ürün", "Product")} back={() => nav("/urunler")} /><p className="muted">{L("Ürün bulunamadı.", "Product not found.")}</p></div>;

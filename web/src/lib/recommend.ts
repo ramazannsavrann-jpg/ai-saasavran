@@ -62,11 +62,13 @@ export function useRecommendations(brand: Brand, type: MeasurementType, runs: Ru
   } satisfies RecInput as RecInput);
   const recs = recInput ? buildRecommendations(recInput).filter((r) => !(sim && r.id === "no_website")) : [];
   // Paylaşılan rapor "en önemli 3 iş"i buradan alır (0054): yalnız değişince yazılır; izin yoksa (izleyici) sessizce geçilir
-  const top3 = JSON.stringify(recs.slice(0, 3).map((r) => ({ title: r.title, action: r.action })));
+  // id ve dil de yazılır: uygulama ana sayfası rakip içeren önerileri ve başka dilde yazılmışları gizler
+  const top3 = JSON.stringify(recs.slice(0, 3).map((r) => ({ title: r.title, action: r.action, id: r.id, lang: isEn() ? "en" : "tr" })));
   useEffect(() => {
     if (loading || sim || !recs.length || top3 === JSON.stringify(brand.top_actions ?? null)) return;
     api.updateBrand(brand.id, { top_actions: JSON.parse(top3), top_actions_at: new Date().toISOString() }).catch(() => {});
   }, [loading, sim, top3, brand.id]);
-  return { audit, prompts, lastRun, results, prevResults, evidence, loading, recInput, recs };
+  const error = !!(prompts.error || results.error || prevResults.error || evidence.error);
+  return { audit, prompts, lastRun, results, prevResults, evidence, loading, error, recInput, recs };
 }
 

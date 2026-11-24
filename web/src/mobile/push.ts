@@ -26,12 +26,14 @@ export async function enablePush(): Promise<boolean> {
   if (p.receive === "prompt" || p.receive === "prompt-with-rationale") p = await PushNotifications.requestPermissions();
   if (p.receive !== "granted") return false;
   await PushNotifications.createChannel({ id: "olcumler", name: getLang() === "en" ? "Measurements" : "Ölçümler", importance: 3 }).catch(() => undefined);
+  // Dinleyiciler her seferinde kaldırılır (birikmesin)
+  const hs: Promise<{ remove: () => Promise<void> }>[] = [];
   const token = await new Promise<string>((resolve, reject) => {
     const t = setTimeout(() => reject(new Error("push_timeout")), 15_000);
-    void PushNotifications.addListener("registration", (x) => { clearTimeout(t); resolve(x.value); });
-    void PushNotifications.addListener("registrationError", (e) => { clearTimeout(t); reject(new Error(e.error)); });
+    hs.push(PushNotifications.addListener("registration", (x) => { clearTimeout(t); resolve(x.value); }));
+    hs.push(PushNotifications.addListener("registrationError", (e) => { clearTimeout(t); reject(new Error(e.error)); }));
     void PushNotifications.register();
-  });
+  }).finally(() => { for (const h of hs) void h.then((x) => x.remove()).catch(() => undefined); });
   const { error } = await sb().rpc("register_push_device", { p_token: token, p_platform: Capacitor.getPlatform() === "ios" ? "ios" : "android", p_lang: getLang() });
   if (error) throw new Error(error.message);
   try { localStorage.setItem(KEY, token); } catch { /* yok say */ }
@@ -45,12 +47,13 @@ export async function disablePush(): Promise<void> {
   if (PUSH_AVAILABLE) await PushNotifications.unregister().catch(() => undefined);
 }
 
-/** Uygulama açılışında: izin önceden verildiyse anahtarı tazeler; bildirime dokununca yönlendirir. */
-export function initPush(go: (path: string) => void) {
-  if (!PUSH_AVAILABLE) return;
-  void PushNotifications.addListener("pushNotificationActionPerformed", (a) => {
+/** Uygulama açılışında (bir kez): izin önceden verildiyse anahtarı tazeler; bildirime dokununca yönlendirir. Dönen: temizlik. */
+export function initPush(go: (path: string) => void): (() => void) | undefined {
+  if (!PUSH_AVAILABLE) return undefined;
+  const h = PushNotifications.addListener("pushNotificationActionPerformed", (a) => {
     const path = String((a.notification.data as { path?: string } | undefined)?.path ?? "/ana");
     go(path.startsWith("/") ? path : "/ana");
   });
-  void pushState().then((s) => { if (s === "on") void enablePush().catch(() => undefined); });
+  void pushState().then((s) => { if (s === "on") void enablePush().catch(() => undefined); }).catch(() => undefined);
+  return () => { void h.then((x) => x.remove()).catch(() => undefined); };
 }
