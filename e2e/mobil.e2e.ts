@@ -61,6 +61,17 @@ test("Mobil: kayıt → işletme kurulumu → ölçüm → rakip → bildirimler
   await expect(page.getByText(/\d+ cevabın \d+'\p{L}+ önerildiniz/u)).toBeVisible();
   await expect(page.getByRole("button", { name: "Şimdi ölç" })).toBeVisible();
   await expect(page.getByText("Sonucunuzu güçlendirin")).toBeVisible();
+  // Aşağı çekip yenileme
+  const touch = (type: string, y: number) => page.evaluate(([type, y]) => {
+    const el = document.querySelector(".screen h1, .screen") as HTMLElement;
+    const t = new Touch({ identifier: 1, target: el, clientX: 200, clientY: Number(y) });
+    el.dispatchEvent(new TouchEvent(String(type), { bubbles: true, touches: type === "touchend" ? [] : [t], changedTouches: [t] }));
+  }, [type, y]);
+  await touch("touchstart", 200); await touch("touchmove", 260); await touch("touchmove", 400);
+  await expect(page.getByText("Bırakın, yenilensin")).toBeVisible();
+  await touch("touchend", 400);
+  await expect(page.getByText("Bırakın, yenilensin")).toBeHidden();
+  await expect(page.getByText("Sonucunuzu güçlendirin")).toBeVisible();
   await page.mouse.wheel(0, 900);
   await noOverflow(page); await shot(page, "04-ana-sayfa-sonuc");
   await page.mouse.wheel(0, -2000);

@@ -1,6 +1,6 @@
 // AI SaaSavran mobil uygulaması (Android/iOS, Capacitor). Ekranlar telefonun içinde çalışır;
 // veri katmanı sitedekiyle aynıdır (web/src/lib): aynı hesap, aynı markalar, aynı ölçümler.
-import { StrictMode, useEffect, type ReactNode } from "react";
+import { StrictMode, useEffect, useState, type ReactNode } from "react";
 import { createRoot } from "react-dom/client";
 import { HashRouter, Navigate, Outlet, Route, Routes, useNavigate } from "react-router-dom";
 import "@fontsource/instrument-sans/400.css";
@@ -12,7 +12,7 @@ import "./styles.css";
 import { initSupabase } from "../lib/supabase";
 import { AppProvider, useApp } from "../lib/app";
 import { L } from "../lib/i18n";
-import { Spinner, TabBar } from "./ui";
+import { Spinner, TabBar, usePullToRefresh } from "./ui";
 import { Advice } from "./screens/Advice";
 import { BrandEdit } from "./screens/BrandEdit";
 import { Products, ProductDetail } from "./screens/Products";
@@ -39,7 +39,16 @@ function PublicOnly({ children }: { children: ReactNode }) {
 function Tabs() {
   const nav = useNavigate();
   useEffect(() => { initPush((p) => nav(p)); }, [nav]);
-  return <div className="app"><Outlet /><TabBar /></div>;
+  const [gen, setGen] = useState(0);
+  const pull = usePullToRefresh(() => setGen((g) => g + 1));
+  return (
+    <div className="app" {...pull.handlers}>
+      <div className="ptr" style={{ height: pull.dist }} aria-hidden={pull.dist === 0}>{pull.dist > 0 && <span className={pull.ready ? "ptr-ready" : ""}>{pull.ready ? L("Bırakın, yenilensin", "Release to refresh") : L("Yenilemek için çekin", "Pull to refresh")}</span>}</div>
+      {/* Aşağı çekince ekran yeniden kurulur, veriler yeniden okunur */}
+      <Outlet key={gen} />
+      <TabBar />
+    </div>
+  );
 }
 function AddBrand() {
   const nav = useNavigate();

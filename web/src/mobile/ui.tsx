@@ -1,5 +1,5 @@
 // Mobil uygulamanın ortak parçaları: ikonlar, alt menü, yükleniyor, hata kutusu.
-import { useEffect, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode, type TouchEvent } from "react";
 import { Haptics, ImpactStyle, NotificationType } from "@capacitor/haptics";
 import { NavLink, useLocation, type NavigateFunction } from "react-router-dom";
 import { L } from "../lib/i18n";
@@ -32,6 +32,33 @@ export function goBack(nav: NavigateFunction) {
 }
 /** Ücretli paket (sitedeki koşul): Growth Lab ya da ücretsiz olmayan paket. */
 export const isPaid = (c: { kind: string; plan: string } | null | undefined) => c?.kind === "growth_lab" || (!!c?.plan && c.plan !== "free");
+
+/** Aşağı çekip yenileme: ekran en üstteyken 70 px'ten fazla çekilip bırakılınca onRefresh. */
+export function usePullToRefresh(onRefresh: () => void) {
+  const [dist, setDist] = useState(0);
+  const st = useRef<{ y: number; el: HTMLElement | null } | null>(null);
+  const LIMIT = 70;
+  return {
+    dist, ready: dist >= LIMIT,
+    handlers: {
+      onTouchStart: (e: TouchEvent) => {
+        const el = (e.target as HTMLElement).closest(".screen") as HTMLElement | null;
+        if ((e.target as HTMLElement).closest(".sheet-back")) { st.current = null; return; }
+        st.current = el && el.scrollTop <= 0 ? { y: e.touches[0].clientY, el } : null;
+      },
+      onTouchMove: (e: TouchEvent) => {
+        if (!st.current) return;
+        const d = e.touches[0].clientY - st.current.y;
+        if (d <= 0 || (st.current.el && st.current.el.scrollTop > 0)) { if (dist) setDist(0); return; }
+        setDist(Math.min(110, Math.round(d * 0.5)));
+      },
+      onTouchEnd: () => {
+        if (dist >= LIMIT) { haptic.tap(); onRefresh(); }
+        setDist(0); st.current = null;
+      },
+    },
+  };
+}
 
 export function TabBar() {
   const { pathname } = useLocation();

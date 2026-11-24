@@ -129,3 +129,6 @@ button.row:active, a.row:active { background: var(--surface2); }
 .stepmark { width: 24px; height: 24px; border-radius: 12px; border: 2px solid var(--line2); flex-shrink: 0; display: grid; place-items: center; font-size: 13px; font-weight: 700; }
 .stepmark.done { background: var(--brand); border-color: var(--brand); color: #fff; }
 button.row:disabled { opacity: 1; }
+.ptr { flex-shrink: 0; overflow: hidden; display: flex; align-items: flex-end; justify-content: center; color: var(--muted); font-size: 13px; transition: height .12s ease-out; }
+.ptr span { padding-bottom: 8px; }
+.ptr .ptr-ready { color: var(--accent); font-weight: 600; }
