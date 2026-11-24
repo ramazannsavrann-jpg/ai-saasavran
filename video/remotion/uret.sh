@@ -3,7 +3,7 @@
 #   bash video/remotion/uret.sh <konu> <dil>            -> cikti/shorts/<ad>.mp4 + cikti/kapak/<ad>.jpg
 #   bash video/remotion/uret.sh <konu> <dil> kart       -> ayrıca cikti/instagram/ig-<konu>-<dil>-1..N.jpg
 # Gerekenler: video/<konu>/<ad>.json (order, gruplar, t, rm…), video/narration-<ad>.txt (okunuş),
-# video/narration-<ad>.yazi.txt (ekran yazımı, kelime sayısı aynı; "_" = önceki kelimeye kat),
+# video/yazi-<ad>.txt (ekran yazımı, kelime sayısı aynı; "_" = önceki kelimeye kat),
 # video/ses-out/ses-<ad>.pcm (seslendirme dalı üretir: önce `bash video/uret.sh hazirla <konu> <dil>` + push).
 set -euo pipefail
 cd "$(git rev-parse --show-toplevel)"
@@ -12,7 +12,7 @@ S=video/stil.json; R=video/remotion; P=$R/public/$ad
 q() { python3 -c "import json,sys;d=json.load(open('$S'))
 for k in sys.argv[1].split('.'): d=d[k]
 print(d)" "$1"; }
-cfg=video/$konu/$ad.json; nar=video/narration-$ad.txt; yazi=video/narration-$ad.yazi.txt; pcm=video/ses-out/ses-$ad.pcm
+cfg=video/$konu/$ad.json; nar=video/narration-$ad.txt; yazi=video/yazi-$ad.txt; pcm=video/ses-out/ses-$ad.pcm
 for f in "$cfg" "$nar" "$pcm"; do [ -f "$f" ] || { echo "HATA: $f yok"; exit 1; }; done
 [ -f "$yazi" ] || yazi=-
 if grep -qs HATA "video/ses-out/$ad-kontrol.txt"; then echo "HATA: ses kontrolü:"; cat "video/ses-out/$ad-kontrol.txt"; exit 1; fi
