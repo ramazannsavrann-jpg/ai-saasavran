@@ -1,12 +1,12 @@
-# Rakip YouTube araştırması — 2026-11-20
+# Rakip YouTube araştırması — 2026-11-24
 
-Son 120 günde yayınlanan 139 video, 12 arama. Kota: ~1203 birim. Sıra: izlenme.
+Son 120 günde yayınlanan 141 video, 12 arama. Kota: ~1203 birim. Sıra: izlenme.
 
 Yalnız açıklamalar (başkalarının altyazıları resmî API ile alınamaz). Bilgiyi kullanmadan önce rakibin resmî sayfasından doğrula.
 
 ## Turn AI search data into an action plan
 
-- Kanal: Peec AI · Tarih: 2026-10-21 · İzlenme: 192,122 · Süre: 0:53
+- Kanal: Peec AI · Tarih: 2026-10-21 · İzlenme: 225,463 · Süre: 0:53
 - https://www.youtube.com/watch?v=mlePSMSgN18
 - Bulunduğu aramalar: Peec AI
 
@@ -23,71 +23,9 @@ Powered by 30 skills and 25+ connections.
 Mere details: https://lnkd.in/dvWAEjxv
 ```
 
-## Generative Engine Optimization GEO Is The New Marketing
-
-- Kanal: P's Corner (Business Life + Strategy Lounge) · Tarih: 2026-08-27 · İzlenme: 171,141 · Süre: 24:13
-- https://www.youtube.com/watch?v=qOfz25qUCFE
-- Bulunduğu aramalar: generative engine optimization tool
-
-```
-Generative Engine Optimization (GEO) Is The NEW Marketing
-
-Is your SEO strategy failing in the age of AI? If you’re still relying on old-school search tactics, you’re missing out on the biggest shift in digital marketing since the invention of the search engine. In this video, I’m breaking down why Generative Engine Optimization (GEO) is the new gold standard for business growth—and how you can master it today.
-
-Artificial Intelligence is changing how customers find answers. Google’s Search Generative Experience (SGE) and other AI-driven tools are prioritizing authority, direct answers, and contextual relevance over traditional keyword stuffing. 
-
-In this video, you will learn:
-✅ What GEO (Generative Engine Optimization) actually is and why it’s replacing traditional SEO.
-✅ The fundamental shift from "ranking for keywords" to "optimizing for AI authority."
-✅ Actionable steps for entrepreneurs and business owners to adapt their content strategy immediately.
-✅ How to future-proof your brand against the rapid rise of AI search.
-
-Stop chasing outdated ranking factors. It’s time to optimize for the engines that your customers are actually using. Watch until the end for my top recommendation on how to start implementing GEO strategies in your business today
-
-🔑 Key Moments & Chapters:
-
-Join this channel to get access to perks:
-https://www.youtube.com/channel/UCL2ViWeOrnFOlT-mHvyGiGA/join
-
-🥳 Subscribe Here - for more Business Education (Tips, tricks, & Hacks). Join the Party with us & subscribe for more content @ www.youtube.com/@PsCorner433
-
-☆ We add fresh Video Content Weekly - Join the Party & Learn With us HERE ☆
-
-Here you'll learn more about Digital Marketing, and Digital Advertisement then you've ever dreamed!  Our channel @PsCorner433 provides valuable insights, strategies, and actionable tips to help Entrepreneurs, Startups, and Established Businesses unlock their full potential through Digital Marketing.
-
-📈 Helpful Links:
-00:00 - Generative Engine Optimization (GEO) Is the New Marketing
-01:59 - Why Your Clicks Are Vanishing
-05:04 - What is Generative Engine Optimization (GEO)?
-07:21 - Google's EEAT Framework
-08:25 - The GEO Playbook
-08:52 - How to Build Machine-Readable Authority
-11:37 - The Answer First Content Structure
-14:46 - The Ultimate GEO Meta-Tactic
-17:38 - Structured Data with Schema Markup
-19:57 - New KPI's that you need to track for GEO
-
-Other YouTube Content (Click Below to See More)
-
-1.) Business Training via Digital Marketing:
-https://youtube.com/playlist?list=PLDm1b8RyRiXO0PGxD3zHrX6VmIoLLivM-&si=fkwpbs59dytT5sVV
-
-2.) Business Training via Digital Advertisement:
-https://www.youtube.com/playlist?list=PLDm1b8RyRiXOETOSNwiw_19UXlVVjVpg0
-
-3.) Business Education 101:
-https://www.youtube.com/playlist?list=PLDm1b8RyRiXPBzqsFvBwE4pkDjf_xWBl2
-
-4.) Social Media Marketing (SMM) @ PMS-U:
-https://www.youtube.com/playlist?list=PLFLytReS6GEs
-
-5.) AI Automation Business Tools:
-https://www.youtube.com/playlist?list=PLDm1b8RyRiXO29M6FrE7AdQyPb05hJ …
-```
-
 ## Learn 80% of AEO in 19 Minutes
 
-- Kanal: Ahrefs · Tarih: 2026-07-29 · İzlenme: 144,015 · Süre: 18:56
+- Kanal: Ahrefs · Tarih: 2026-07-29 · İzlenme: 147,103 · Süre: 18:56
 - https://www.youtube.com/watch?v=58MR03s0ev8
 - Bulunduğu aramalar: generative engine optimization tool
 
@@ -110,7 +48,7 @@ AI traffic is exploding and most competitors still have no AEO strategy. Hit pla
 
 ## Measure, Improve & Report Your AI Visibility with Rankscale AI
 
-- Kanal: Rankscale · Tarih: 2026-09-13 · İzlenme: 62,163 · Süre: 3:21
+- Kanal: Rankscale · Tarih: 2026-09-13 · İzlenme: 62,183 · Süre: 3:21
 - https://www.youtube.com/watch?v=PevRYsRPk7g
 - Bulunduğu aramalar: Rankscale AI
 
@@ -144,174 +82,42 @@ Recorded September 2026. Engine coverage and feature set current as of that date
 #AIVisibility #GenerativeEngineOptimization #RankscaleAI #AISearch #GEO
 ```
 
-## How to dominate SEO & AI Search results in 2026 (Beginner Semrush Tutorial with AI Agent support)
+## The Real AI Opportunity  | The Ultimate Guide to Become Visible in AI
 
-- Kanal: Sonny Sangha · Tarih: 2026-08-06 · İzlenme: 40,741 · Süre: 20:51
-- https://www.youtube.com/watch?v=lZ38LexlJTA
-- Bulunduğu aramalar: Semrush AI visibility toolkit
-
-```
-Thank you to Semrush for partnering with me on this video!
-
-1️⃣ Get started with a FREE 14-day Semrush One trial 👉 https://semrush.sjv.io/c/7365025/3963087/13053
-2️⃣ Join my new AI Community for FREE! 👉 https://www.papareact.com/ztoh-form
-
-Google rankings are no longer the whole game. People now ask ChatGPT, Claude, Perplexity and Google AI for answers—and if your brand is missing from those answers, your competitor may be taking the traffic, attention and money instead.
-
-In this video, I put my own name and brand under the microscope using Semrush One and the new Semrush MCP server. We test my traditional SEO visibility, see whether AI search engines mention or cite the brand, analyze keywords and backlinks, audit the website, identify its biggest discovery gaps, and turn the findings into a prioritized action plan—all through a simple AI conversation.
-
-You’ll learn how to:
-✅ Connect Semrush MCP to an AI assistant such as ChatGPT
-✅ Run an SEO and AI visibility check without being an SEO expert
-✅ Understand keywords, SERP data, backlinks and authority scores
-✅ Audit a website for technical issues and low-value pages
-✅ Discover which searches your website is currently missing
-✅ Compare your visibility with relevant competitors
-✅ Track whether ChatGPT, Gemini, Perplexity and Google AI cite your brand
-✅ Turn Semrush findings into a ranked execution plan your agent can help implement
-
-⏱️ TIMESTAMPS
-00:00 Why SEO Alone Is No Longer Enough
-01:05 Semrush One & MCP Overview
-02:34 Explore the SEO and AI Visibility Toolkits
-03:09 Connect Semrush MCP to ChatGPT
-04:45 How the Semrush MCP Gives AI New Tools
-05:09 Run an SEO and AI Visibility Check
-06:30 Compare AI Research With the Dashboard
-07:21 First Search Visibility Findings
-08:05 My SEO and AI Discovery Scores
-09:26 Fix the Biggest Discoverability Gaps
-10:40 Analyze Backlinks, Site Health and Competitors
-11:50 Create a Semrush Site Audit Project
-12:26 Understand Toolkits, API Units and Usage
-13:34 Review Backlinks and Technical SEO Issues
-15:06 Turn Every Finding Into an Action Plan
-16:21 Track AI Visibility Across Major Platforms
-17:08 Improve Your Discoverability Step by Step
-18:24 Semrush One Pricing and What’s Included
-20:12 Final Takeaways and Next Steps
-
-⸻
-
-⚠️ DISCLAIMER: This video is sponsored by Semrush. All opinions are my own — I only share tools I personally use and believe will help the developer community.
-
-📜 Copyright Disclaimer: This video is made for informational and educational purposes only. Copyright Disclaimer under Section 107 of the Copyright Act 1976 allows “fair use” for educational purposes.
-
-——————
-🎓 Learn to code with AI here: https://www.papareact.com/course
-👥 Join our AI coding community for FREE: https://www.universityofcode.com
-
-Follow me on socials:
-Instagram: https://links.papareact.com/instagram
-LinkedIn: https://links.papareact.com/linkedin
-Twitter: https://links.papareact.com/x
-TikTok: https://links.papareact.com/tiktok
-Threads: https://links.papareact.com/threads
-```
-
-## How to Use Otterly AI (2026) — The Complete Guide to AI Search Visibility
-
-- Kanal: Dan - Smart Tutorials · Tarih: 2026-07-25 · İzlenme: 27,778 · Süre: 7:30
-- https://www.youtube.com/watch?v=n6jYCMQ7ny0
-- Bulunduğu aramalar: Otterly AI
+- Kanal: Silicon Valley Girl · Tarih: 2026-08-04 · İzlenme: 58,152 · Süre: 17:42
+- https://www.youtube.com/watch?v=2NFQ4-6MzuU
+- Bulunduğu aramalar: generative engine optimization tool
 
 ```
-🔥 (Discount Link) Try Otterly AI Now: https://tinyurl.com/ttOtterlyAISearch
+📌Switching from a different ESP? Migrate and in 5 days you could be paying up to 35% less. 
+https://your.omnisend.com/SVGirl
 
-Discover How to Use Otterly AI to monitor your brand across AI-powered search platforms. This video explores zero-click search, AI visibility, brand mentions, competitor tracking, trusted citations, and GEO audits using the dashboard and Claude MCP connector. Learn how to evaluate your website's AI readiness and understand how ChatGPT, Perplexity, Gemini, Copilot, and Google AI Overviews reference your content over time.
+We rebuilt Silicon Valley Girl for GEO. Generative Engine Optimization. Two months ago, if you asked ChatGPT or Perplexity for AI podcast recommendations, we didn't show up at all. Today we're the 5th most visible of the 11 podcast brands we track. Our AI visibility doubled.
+I'll show you the 5 steps in the exact order we did them, so you can run the same system on your business, your podcast, or your website.
 
-⏱️CHAPTERS: 
-0:00 How to Use Otterly AI
-0:49 OtterlyAI Tutorial
-6:27 Final Thoughts
+📩 Get our free 30-day GEO plan in the Future Proof newsletter : 
+https://siliconvalleygirl.beehiiv.com/geo-30-day-plan?utm_source=youtube&utm_medium=description&utm_campaign=futureproof-sub&utm_content=geo-30-day-plan
 
-Note: Some links are affiliate links that help the channel at no cost to you.
-This video was sponsored by Otterly.AI
-#ad #otterly #otterlyai
-```
+Timestamps: 
+0:00 – 5-Step Plan to Become Visible in AI
+3:34 – Step 1
+5:29 – Step 2
+8:56 – Step 3
+11:33 – Step 4
+12:47 – Step 5
+13:14 – Our before/after results
 
-## I Checked My AI Visibility Score With Semrush — Here's What I Found
+Links: 
+X: https://x.com/siliconvalleymm
 
-- Kanal: Yoma James Kukor · Tarih: 2026-11-15 · İzlenme: 13,217 · Süre: 6:09
-- https://www.youtube.com/watch?v=VB1irUSH73w
-- Bulunduğu aramalar: Semrush AI visibility toolkit
+🔗 My Instagram: https://www.instagram.com/siliconvalleygirl/ 
 
-```
-🚀Check Your AI Visibility Score With Semrush: https://semrush.sjv.io/c/7563540/3367878/13053
-
-🌐Visit My Official Website: https://yomajames.com/?ref=youtube
-
-In this video, I'm testing the **Semrush AI Visibility Toolkit** using my own personal brand website.
-
-I'll show you how I examine my AI visibility score, understand what the data measures, identify a specific content weakness, and use Semrush's content optimization tools to make a practical improvement.
-
-Rather than relying on hypothetical examples, I'm using my own website to demonstrate the process.
-
-And importantly, I'm not claiming that one website edit will instantly improve my AI visibility.
-
-I'll explain what I changed, why I changed it, and how I plan to measure the results in a follow-up test.
-
-⏱️ **TIMESTAMPS**
-
-00:00 – Google Rankings vs. AI Visibility: What's the Difference?  
-01:10 – How Semrush Measures AI Visibility, Citations & Sentiment  
-01:43 – Checking My Website's AI Visibility Score  
-02:11 – Finding Website Problems With Semrush Copilot  
-02:59 – Improving My Content With Semrush Content Toolkit  
-04:00 – Why AI Visibility Takes Time & My Follow-Up Test  
-
-🔎 **WHAT YOU'LL LEARN**
-
-✅ What an AI visibility score measures  
-✅ How AI search visibility differs from traditional Google rankings  
-✅ How to check your business's visibility using Semrush  
-✅ How AI brand mentions and citations are tracked  
-✅ What citation frequency means  
-✅ How sentiment analysis works  
-✅ What share of voice tells you about competitors  
-
-🤖 **WHAT IS AI VISIBILITY?**
-
-AI visibility refers to how frequently and prominently a business, brand, or website appears in AI-generated responses to relevant questions.
-
-As more people use AI assistants to research products, services, and businesses, marketers are increasingly interested in understanding whether their brands are being mentioned.
-
-Traditional SEO focuses heavily on visibility in search engine results.
-
-AI visibility adds another measurement: how your business appears in answers generated by AI-powered systems.
-
-These measurements are related, but they are not identical.
-
-📊 **HOW DOES SEMRUSH MEASURE AI VISIBILITY?**
-
-In this demonstration, I explore three important measurements:
-
-**1️⃣ Citation Frequency**
-
-How often a business or website is mentioned or cited in relevant AI-generated responses within the tracked dataset.
-
-**2️⃣ Sentiment**
-
-Whether tracked mentions are categorized as positive, neutral, or negative.
-
-**3️⃣ Share of Voice**
-
-How prominently your brand appears compared with other brands across the relevant tracked queries.
-
-Together, these measurements can help businesses understand their presence in AI-generated answers.
-
-Semrush's visibility score is a platform-specific measurement based on its methodology and tracked data. It is not an official universal score assigned by Google or AI assistants.
-
-✍️ **USING THE SEMRUSH CONTENT TOOLKIT**
-
-Next, I open the page in the Semrush Content Toolkit.
-
-I demonstrate how the tool c …
+📌 Work with me: https://marinamogilko.co/partnerships/
 ```
 
 ## Adaptive traffic model, entity matching in Brand Radar, and more (July–August 2026)
 
-- Kanal: Ahrefs Product Updates · Tarih: 2026-09-28 · İzlenme: 10,564 · Süre: 2:49
+- Kanal: Ahrefs Product Updates · Tarih: 2026-09-28 · İzlenme: 10,579 · Süre: 2:49
 - https://www.youtube.com/watch?v=4y4yf2ivt5w
 - Bulunduğu aramalar: Ahrefs Brand Radar
 
@@ -341,7 +147,7 @@ Explore the latest updates built to sharpen your traffic estimates, measure AI v
 
 ## Profound Alternative: ZeroRank AI Review & Comparison 2026
 
-- Kanal: 🔥 TOP Digital Products 🔥 · Tarih: 2026-09-18 · İzlenme: 8,204 · Süre: 5:12
+- Kanal: 🔥 TOP Digital Products 🔥 · Tarih: 2026-09-18 · İzlenme: 8,208 · Süre: 5:12
 - https://www.youtube.com/watch?v=J_fDLt9cLEg
 - Bulunduğu aramalar: Profound AI visibility
 
@@ -406,7 +212,7 @@ WhatsApp: …
 
 ## How to Dominate Search in 2026 Using Semrush AI Visibility
 
-- Kanal: Consumer Reviews · Tarih: 2026-09-17 · İzlenme: 6,393 · Süre: 10:04
+- Kanal: Consumer Reviews · Tarih: 2026-09-17 · İzlenme: 6,731 · Süre: 10:04
 - https://www.youtube.com/watch?v=D4GUz_vtCns
 - Bulunduğu aramalar: Semrush AI visibility toolkit
 
@@ -454,7 +260,7 @@ The video recommends starting by recording your current visibility score, resear
 
 ## AI Search Optimization can be otterly simple - GEO with OtterlyAI
 
-- Kanal: OtterlyAI · Tarih: 2026-10-26 · İzlenme: 4,294 · Süre: 0:14
+- Kanal: OtterlyAI · Tarih: 2026-10-26 · İzlenme: 5,113 · Süre: 0:14
 - https://www.youtube.com/watch?v=a4KWEzOLLEU
 - Bulunduğu aramalar: Otterly AI
 
@@ -464,7 +270,7 @@ Give OtterlyAI a free try!
 
 ## Does ChatGPT Recommend Your Brand? How to Check Your AI Search Visibility
 
-- Kanal: trendos · Tarih: 2026-07-29 · İzlenme: 3,876 · Süre: 6:09
+- Kanal: trendos · Tarih: 2026-07-29 · İzlenme: 3,886 · Süre: 6:09
 - https://www.youtube.com/watch?v=fHF4ABck1Io
 - Bulunduğu aramalar: AI visibility tool review
 
@@ -496,7 +302,7 @@ Presented by Gintarė Rimolaitytė, CCO @ Trendos
 
 ## Promptwatch Review: Best AI Visibility Tool? Pricing, Features & Alternative
 
-- Kanal: Jay's AI SEO Tips · Tarih: 2026-10-15 · İzlenme: 2,498 · Süre: 23:11
+- Kanal: Jay's AI SEO Tips · Tarih: 2026-10-15 · İzlenme: 2,503 · Süre: 23:11
 - https://www.youtube.com/watch?v=WAqHHGpjLTY
 - Bulunduğu aramalar: AI visibility tool review
 
@@ -562,7 +368,7 @@ RadarKit takes a broader approach in the workflows explored in this video. These
 
 ## 7 Best GEO Tools in 2026: Generative Engine Optimization Tools Rated & Compared
 
-- Kanal: MentionBird · Tarih: 2026-11-04 · İzlenme: 1,786 · Süre: 8:48
+- Kanal: MentionBird · Tarih: 2026-11-04 · İzlenme: 2,216 · Süre: 8:48
 - https://www.youtube.com/watch?v=10_VwMUBrRI
 - Bulunduğu aramalar: generative engine optimization tool
 
@@ -598,47 +404,9 @@ Semrush AI Visibility Toolkit: AI share of voice against competitors, brand sent
 AirOps: Grids workflows for research, content refreshes and publishing, Page360 for Search Console, engagement and conversion data in one v …
 ```
 
-## AI Share of Voice Explained: How to Track Your Brand in AI Models
-
-- Kanal: Semrush · Tarih: 2026-08-28 · İzlenme: 1,695 · Süre: 17:07
-- https://www.youtube.com/watch?v=6Lch6Xg26nQ
-- Bulunduğu aramalar: Semrush AI visibility toolkit
-
-```
-Measure your AI share of voice against your competitors with the Semrush AI Visibility Toolkit: https://social.semrush.com/46opVZQ  
-
-Right now AI tools like ChatGPT and Google AI Mode are recommending brands to your customers, and there's a good chance your competitors show up more often than you do. AI share of voice is how you measure that, and this video explains what this metric is, how to check yours using the Semrush AI Visibility Toolkit, and how to read it across different LLMs. It covers three practical ways to improve it, ordered from least to most effort: closing the topic gaps where competitors appear and you don't, building your presence on third-party sites like YouTube and Reddit, and improving the sentiment towards your brand. Do all three consistently and you'll show up as the answer more often when your audience asks AI for a solution.
-
-📎  Links mentioned
-▶ Start your FREE TRIAL of Semrush: https://social.semrush.com/45UEXX7   
-▶ How to conduct competitor analysis — watch now: https://social.semrush.com/4xskIMB 
-▶ How to build trust and awareness on Reddit — watch now: https://social.semrush.com/4d0QoQL 
-▶ How to get ChatGPT to recommend your brand: https://social.semrush.com/4ycKDI9  
-
-🕒 Chapters
-0:00 What AI share of voice is and how it's calculated (a simple formula)
-1:04 Why tracking share of voice matters
-2:05 How to measure it in the Semrush AI Visibility Toolkit
-4:30 Comparing share of voice by AI platform
-6:24 Tracking share of voice over time
-6:55 Method 1: Close topic gaps with competitors
-9:49 Method 2: Build visibility beyond your website
-12:02 Method 3: Improve your brand sentiment
-16:54 Recap and what to watch next
-
-▶️ Subscribe for more from Semrush
-➖ https://social.semrush.com/3RtdGXK 
-⚡ Start your FREE TRIAL of Semrush
-➖ https://social.semrush.com/3RWb7xr 
-🌱 Grow your career with Semrush Academy
-➖ https://social.semrush.com/43tyReQ 
-📚 Get top marketing insights from our blog
-➖ https://social.semrush.com/4uKMtyJ
-```
-
 ## AI Shopping Agents in 2026: Can ChatGPT Buy From Your Store?
 
-- Kanal: Alex Moreau | AI for Ads & SEO-GEO · Tarih: 2026-11-09 · İzlenme: 1,599 · Süre: 2:25
+- Kanal: Alex Moreau | AI for Ads & SEO-GEO · Tarih: 2026-11-09 · İzlenme: 1,625 · Süre: 2:25
 - https://www.youtube.com/watch?v=ZYg6gcBABvo
 - Bulunduğu aramalar: ChatGPT shopping product recommendations
 
@@ -688,9 +456,9 @@ Keywords: ai shopping agents, agentic commerce 2026, chatgpt shopping, chatgpt i
 
 ## The Biggest AI Visibility Mistakes to Avoid in 2026
 
-- Kanal: Semrush · Tarih: 2026-07-30 · İzlenme: 1,388 · Süre: 11:18
+- Kanal: Semrush · Tarih: 2026-07-30 · İzlenme: 1,395 · Süre: 11:18
 - https://www.youtube.com/watch?v=otWCHeeyHs4
-- Bulunduğu aramalar: Semrush AI visibility toolkit, AI visibility tool review
+- Bulunduğu aramalar: AI visibility tool review
 
 ```
 Find out what you need to do to boost your AI visibility! Learn why AI search engines ignore your brand and how to correct it.
@@ -723,48 +491,9 @@ Many companies struggle with AI search optimization because they misunderstand h
 #SEO #semrush #aivisibility
 ```
 
-## Which Prompts to Track in AI Search? Peec AI Prompt Discovery | Quickstart
-
-- Kanal: Peec AI · Tarih: 2026-08-28 · İzlenme: 1,368 · Süre: 6:52
-- https://www.youtube.com/watch?v=T7RnTPSkhDM
-- Bulunduğu aramalar: Peec AI
-
-```
-Peec AI's Prompt Discovery tool helps you choose which prompts to track in AI search by generating topics and suggested prompts from your brand profile, markets and personas. This Quickstart shows how to set the branded split, weight prompt intent, review suggestions and read the per-prompt metrics, including prompt volume.
-
-Set up your prompts in Peec AI: https://peec.ai/
-
-*Key takeaways:*
-- Prompt Discovery starts from what Peec AI already gathered about your brand: you check the identified products and services and the personas the topics should focus on. (0:21)
-- In the demo the branded versus non-branded split is set to 90 versus 10 percent, and the intent mix is shifted from informational toward commercial and transactional prompts. (1:12)
-- Peec AI calculates the optimal number of prompts from your topics and the combinations of personas, intents, markets and languages, so you do not guess the number. (0:55)
-- Accepted suggestions start running immediately, but results across all tracked models can take up to 50 minutes to appear. (2:09)
-
-*What you'll learn:*
-- Prompt Discovery inputs: brand profile, products, services, personas, markets and languages (0:00)
-- Prompt distribution: how to split branded and non-branded prompts and weight intent (1:12)
-- Reviewing suggestions: how to check coverage per topic, persona, intent or branding (2:09)
-- Per-prompt metrics: how to read web search share, prompt volume, tags and location (3:53)
-
-*Peec AI features covered:*
-- Prompt Discovery: generates topics and suggested prompts from your brand profile, personas and markets
-- Prompts: the active prompt page with visibility, share of voice, sentiment, position, web search, prompt volume, tags and location
-- Tags and tag groups: branded, non-branded, informational, commercial and transactional tags applied automatically, plus your own tags
-
-*Questions this video answers:*
-- What is Peec AI's Prompt Discovery tool? It generates topics and suggested prompts from your brand profile, personas, markets and languages, which you review and accept.
-- How do you split branded and non-branded prompts? In the prompt distribution step you set the share, for example 90 percent non-branded and 10 percent branded in the demo. (1:12)
-- What does the web search metric show? It shows how often the model uses web search for that prompt. At 100 percent it always searches the web, at 0 percent it answers from training knowledge, which is harder for a brand to influence. (4:44)
-- What is prompt volume? It is an estimate of how often a similar question is asked in the industry and among the target customer group you serve. (4:44)
-- Why does the location of a prompt matter? The same prompt gives different results in the US than in Germany, visible in fan-out queries and in the sources used for the answer. (6:20)
-
-*About Peec AI*
-Peec AI helps marketing teams improve brand performance in AI search. More than 3,000 agencies and brands, including global enterprises, rely on Peec  …
-```
-
 ## 7 Best AI Visibility Tools in 2026 (Which Should You Choose?)
 
-- Kanal: Semrush · Tarih: 2026-08-18 · İzlenme: 1,307 · Süre: 5:35
+- Kanal: Semrush · Tarih: 2026-08-18 · İzlenme: 1,345 · Süre: 5:35
 - https://www.youtube.com/watch?v=avg4QT5R65c
 - Bulunduğu aramalar: Profound AI visibility, Semrush AI visibility toolkit, AI visibility tool review
 
@@ -800,7 +529,7 @@ We compared seven AI visibility tools and sorted them by who they're built for: 
 
 ## How to Set Up AI Search Monitoring in Peec AI: Projects, Prompts, Models | Quickstart
 
-- Kanal: Peec AI · Tarih: 2026-08-28 · İzlenme: 1,220 · Süre: 1:59
+- Kanal: Peec AI · Tarih: 2026-08-28 · İzlenme: 1,281 · Süre: 1:59
 - https://www.youtube.com/watch?v=eGrMsMOb-RQ
 - Bulunduğu aramalar: Peec AI
 
@@ -844,7 +573,7 @@ Peec AI helps marketing teams improve brand performance in AI search. More than 
 
 ## How to Rank on Google AI & ChatGPT: 2026 Semrush Guide
 
-- Kanal: David Alex · Tarih: 2026-09-25 · İzlenme: 1,136 · Süre: 8:28
+- Kanal: David Alex · Tarih: 2026-09-25 · İzlenme: 1,219 · Süre: 8:28
 - https://www.youtube.com/watch?v=882Si4IoQ7g
 - Bulunduğu aramalar: Semrush AI visibility toolkit
 
@@ -875,7 +604,7 @@ Affiliate Disclosure: Some links in this description may be affiliate links
 
 ## Best tool to fix brand mentions in AI citations 2026 (ChatGPT, Google AI Overview, Gemini)
 
-- Kanal: CrowdReply | Rank in AI Answers · Tarih: 2026-09-23 · İzlenme: 1,107 · Süre: 1:44
+- Kanal: CrowdReply | Rank in AI Answers · Tarih: 2026-09-23 · İzlenme: 1,112 · Süre: 1:44
 - https://www.youtube.com/watch?v=dayriFJJoEU
 - Bulunduğu aramalar: track brand mentions ChatGPT
 
@@ -914,7 +643,7 @@ Who this is for: SaaS founders, B2B marketers and brands in competitive categori
 
 ## How to Ask Questions About Your AI Visibility Data | Peec AI Agent Quickstart
 
-- Kanal: Peec AI · Tarih: 2026-08-31 · İzlenme: 1,023 · Süre: 5:07
+- Kanal: Peec AI · Tarih: 2026-08-31 · İzlenme: 1,055 · Süre: 5:07
 - https://www.youtube.com/watch?v=WlgntxGA1gI
 - Bulunduğu aramalar: Peec AI
 
@@ -959,9 +688,9 @@ Try the Agent in Peec AI: https://peec.ai/
 
 ## The Best AI Visibility Tools for 2026: A Brutal Comparison
 
-- Kanal: CrowdReply | Rank in AI Answers · Tarih: 2026-09-18 · İzlenme: 972 · Süre: 5:12
+- Kanal: CrowdReply | Rank in AI Answers · Tarih: 2026-09-18 · İzlenme: 987 · Süre: 5:12
 - https://www.youtube.com/watch?v=eXezEK3iil8
-- Bulunduğu aramalar: Scrunch AI visibility, AI visibility tool review
+- Bulunduğu aramalar: AI visibility tool review
 
 ```
 Five AI visibility tools tested on the same brand. Four of them tell you where ChatGPT, Gemini and Perplexity ignore your brand. Only one tells you what to do about it. This is the full comparison with pricing, what each tool is good at, and who each one is actually for.
@@ -1007,44 +736,9 @@ The cheapest of the five. Clean dashboard, simple setup and onboarding. Good at 
 Built for agencies running many brands at once. Large plans, prompt-level tracking across effectively every engine. Powerful and complex, which makes it  …
 ```
 
-## 7 Best Semrush AI Visibility Toolkit Alternatives (2026)
-
-- Kanal: MentionBird · Tarih: 2026-10-21 · İzlenme: 953 · Süre: 10:54
-- https://www.youtube.com/watch?v=agUSJGlPHx8
-- Bulunduğu aramalar: Semrush AI visibility toolkit
-
-```
-The 7 best Semrush AI Visibility Toolkit alternatives in 2026 are MentionBird, Profound, Peec AI, Otterly.AI, Evertune, AirOps and Ahrefs Brand Radar. Here's what each one does well, where it falls short, and who it's for.
-
-Comparing Semrush AI Toolkit alternatives for tracking your brand in ChatGPT, Gemini and other AI assistants (AEO, GEO or LLM visibility tools)? This video shows how they differ.
-
-Every tool on this list had to meet six criteria: (1) a proper AI SEO tool, not a one-off checker; (2) key features on the plan you'd actually buy: frequent prompt tracking, citation data showing the exact sources AI uses, and competitor visibility; (3) clear next steps: which page to publish, which to improve, which site to earn a mention on; (4) detailed reporting with trends, platform and prompt breakdowns, and shareable exports; (5) responsive support from real people; (6) positive reviews on G2, Capterra and in community discussions. (Disclosure: MentionBird is our own tool, rated on the same criteria as the others.)
-
-Best Semrush AI Toolkit alternative by use case:
-• A per-prompt plan for what to fix → MentionBird
-• Benchmark any brand's AI share of voice without writing prompts → Ahrefs Brand Radar
-• Turn visibility gaps into content published to your CMS → AirOps
-
-Best alternative by industry:
-• SaaS, ecommerce or local services → MentionBird (per-prompt advice and country targeting on every plan)
-• Finance, healthcare or other regulated categories → Profound (SSO and SOC 2 on the Enterprise plan)
-• Large enterprise consumer brands → Evertune
-
-Best alternative by team size:
-• Solo marketer or founder on a tight budget → Otterly.AI (4 AI engines included; Gemini is an add-on)
-• In-house team of 2–10 on one brand → Peec AI (unlimited seats)
-• Agency managing several clients → MentionBird (Growth tracks 3 brands, Custom unlimited; MCP on every plan)
-
-🛠️ The 7 tools in this video:
-MentionBird: the AI Ranking Advice agent reads the live AI answer and the sources it cites, checks your existing pages, and gives you specific jobs (create content, update a page, earn a mention from a particular site), ranked by effort and impact. Plus citation breakdowns, the keywords AI uses to answer, and MCP. Starter tracks ChatGPT and Gemini; Growth adds Perplexity and Claude; Custom adds Grok, Copilot, DeepSeek and AI Overviews.
-Profound: built for enterprise teams, with AI Marketer (research, writing and reporting from your brand knowledge), Prompt Volumes, Agent Analytics, and SSO and SOC 2 on Enterprise. A free trial plan, then custom Enterprise pricing.
-Peec AI: an analytics-first dashboard for visibility, position, sentiment, share of voice and cited sources, with unlimited seats on every plan. Self-serve plans track 3 AI models you choose; extra models cost more.
-Otterly.AI: daily tracking on ChatGPT, Google AI Overviews, Perplexity and Microsoft Copilot (Gemini and AI Mode are add-ons), GEO audits that check whether AI crawlers can read your pages, and unl …
-```
-
 ## Profound AI Review 2026: Pricing, Alternatives & Is It Worth $399/mo?
 
-- Kanal: Dan - Ship It · Tarih: 2026-09-12 · İzlenme: 881 · Süre: 6:03
+- Kanal: Dan - Ship It · Tarih: 2026-09-12 · İzlenme: 946 · Süre: 6:03
 - https://www.youtube.com/watch?v=EF1LQoBLhi0
 - Bulunduğu aramalar: Profound AI visibility
 
@@ -1121,7 +815,7 @@ Want a lean, execution-focused platform? Check out RadarKit. Starting at a highl
 
 ## Introducing Profound Ads, now in beta.
 
-- Kanal: Profound · Tarih: 2026-11-05 · İzlenme: 848 · Süre: 1:38
+- Kanal: Profound · Tarih: 2026-11-05 · İzlenme: 877 · Süre: 1:38
 - https://www.youtube.com/watch?v=Ztbo725WI7U
 - Bulunduğu aramalar: Profound AI visibility
 
@@ -1139,38 +833,37 @@ With Profound Ads, you can:
 Register your interest → https://www.tryprofound.com/ads-early-access
 ```
 
-## Ahrefs Brand Radar vs RadarKit for Local AI Visibility: 3 Key Differences
+## Welcome to Zero Click San Francisco - James Cadwallader (CEO & Co-Founder at Profound)
 
-- Kanal: GEO Mastery with Adam · Tarih: 2026-10-16 · İzlenme: 722 · Süre: 3:17
-- https://www.youtube.com/watch?v=SBsvWQfKgnY
-- Bulunduğu aramalar: Ahrefs Brand Radar
+- Kanal: Profound · Tarih: 2026-07-27 · İzlenme: 839 · Süre: 16:23
+- https://www.youtube.com/watch?v=rUAPVn3deHA
+- Bulunduğu aramalar: Profound AI visibility
 
 ```
-What’s up guys, Adam here, your go-to GEO and SEO expert. Welcome back to the channel. Today, we are looking at local AI visibility and putting Ahrefs Brand Radar head-to-head against RadarKit’s Local Radar. If you are trying to get a local business recommended by ChatGPT or Perplexity, traditional map pack tracking will not cut it. In this video, we break down the three key differences between these two platforms and see which one actually wins you local AI citations.
+James Cadwallader (CEO & Co-Founder of Profound) takes the stage at Zero Click San Francisco 2026 to unpack the rapid growth of Profound and discuss how AI is radically shifting the marketing landscape. 
 
-📅 Ready to dominate local AI recommendations on complete autopilot? Book a call directly with our team here: https://radarkit.ai/book-a-call
+From the platform shifts of the past to today's AI-driven evolution, this opening keynote explores what it takes to build a company and scale marketing in the AI era.
 
-1. Modeled Data vs. Real Residential IPs
-Ahrefs Brand Radar leverages a massive pre-collected index of 475 million prompts. It is fantastic for broad, global research, but it relies heavily on modeled data and generic API pings. RadarKit’s Local Radar takes a completely different approach. It runs real UI-based browser checks using residential IPs across 50+ countries. This means RadarKit simulates a genuine user standing in Midtown Manhattan asking ChatGPT for the best local dentist—capturing the exact local lists, map widgets, and competitor ratings that real buyers see.
+Key Timestamps:
+00:00 – How AI search is disrupting the brand storytelling landscape
+01:36 – Welcome to Zero Click SF: Gathering 700 leaders to strategize the AI future
+03:06 – The 20-month journey behind building Profound and raising $155M
+04:17 – Reaching a "pinch me" milestone: Serving 12% of the Fortune 500
+05:30 – Navigating the largest platform shift in marketing history
+06:40 – Consolidating fragmented channels into a single AI conversation
+08:48 – The three pillars of AI marketing: Granular specificity, real-time speed, and high originality
+10:15 – Why old workflows fail when marketing to infinite-bandwidth machines
+11:52 – The rise of Profound Agents: Turning weeks of work into minutes
+13:34 – Deploying 20,000 production agents in just six weeks
+14:13 – The birth of the "Marketing Engineer": Part builder, part marketer
+15:51 – Defining the new discipline and introducing Josh Bliss
 
-2. The Brutal Credit System vs. Flat Pricing
-To use Ahrefs Brand Radar properly, you have to pay $129/month for their base Lite plan, plus $199/month for the AI Visibility Index, plus at least $50/month for custom prompt tracking. Even worse, Ahrefs hits you with a massive credit penalty just to track Claude, charging 8 tracking checks per single update. RadarKit skips the crazy credit multipliers and gatekeeping. Starting at just $29/month for the Lite tier, RadarKit natively includes local tracking across ChatGPT, Gemini, Perplexity, Microsoft Copilot, Claude, Google AI Mode, and Google AI Overviews without charging a premium for specific models.
-
-3. Passive Reporting vs. Autonomous Execution
-Ahrefs is arguably the best passive reporting dashboard on the market. It connects to web analytics and shows you exactly which pages AI bots are reading. But it leaves the actual optimization and link-building entirely up to you. RadarKit is an active execution engine. If Local Radar shows you are losing out to a competitor, RadarKit deploys four autonomous AI agents to fix it. The GEO Writer publishes citation-optimized content directly to your WordPress, the Reddit Agent finds the exact local community threads LLMs are citing, and the Outreach Agent negotiates placements on local blogs through your connected Gmail on complete autopilot.
-
-The Final Verdict
-For local business owners and agencies, RadarKit easily takes the crown. While Ahrefs gives you great global charts for a massive premium, RadarKit gives you hyper-accurate local IP tracking, full multi-engine coverage, and an autonomous execution team starting at just $29/month.
-
-⏱️ Timestamps
-0:00 - Intro: Ahrefs Brand Radar vs RadarKit Local Radar
-0:35 - Difference 1: Modeled Global Data vs Real Residential IPs
-1:18 - Differ …
+Hosted by Profound.
 ```
 
 ## How to Set Up AI Visibility Monitoring in Peec AI: Brand Profile | Quickstart
 
-- Kanal: Peec AI · Tarih: 2026-08-28 · İzlenme: 709 · Süre: 3:04
+- Kanal: Peec AI · Tarih: 2026-08-28 · İzlenme: 741 · Süre: 3:04
 - https://www.youtube.com/watch?v=b64VbDrEt5M
 - Bulunduğu aramalar: Peec AI
 
@@ -1211,9 +904,21 @@ Learn more about Peec AI: https://peec.ai/
 - What happens after I update my brand profile? Saved changes refresh your topic and prompt …
 ```
 
+## CHATGPT SHOPPING Has One Major Blind Spot  @firstpress-povc
+
+- Kanal: Voice of America Podcast · Tarih: 2026-11-22 · İzlenme: 741 · Süre: 0:25
+- https://www.youtube.com/watch?v=K75CBJFwuzU
+- Bulunduğu aramalar: ChatGPT shopping product recommendations
+
+```
+​General AI models can crawl the web for product links, but they still struggle to evaluate shipping policies, return windows, and loyalty perks. Scout CEO Ethan Arpi shares the exact prompt he adds whenever he uses ChatGPT to shop online.
+​Full Episode on First Press by Press on Ventures YT @firstpress-povc 
+​#Ecommerce #ChatGPT #ArtificialIntelligence #OnlineShopping
+```
+
 ## How to Turn AI Search Data Into Action | Peec AI Agent and Actions Webinar
 
-- Kanal: Peec AI · Tarih: 2026-11-04 · İzlenme: 702 · Süre: 59:16
+- Kanal: Peec AI · Tarih: 2026-11-04 · İzlenme: 738 · Süre: 59:16
 - https://www.youtube.com/watch?v=h-MGdZJbBH8
 - Bulunduğu aramalar: Peec AI
 
@@ -1261,9 +966,38 @@ See how Actions and the Peec Agent work in Peec AI: https://peec.ai/product/acti
 30:15 Ho …
 ```
 
+## Ahrefs Brand Radar vs RadarKit for Local AI Visibility: 3 Key Differences
+
+- Kanal: GEO Mastery with Adam · Tarih: 2026-10-16 · İzlenme: 722 · Süre: 3:17
+- https://www.youtube.com/watch?v=SBsvWQfKgnY
+- Bulunduğu aramalar: Ahrefs Brand Radar
+
+```
+What’s up guys, Adam here, your go-to GEO and SEO expert. Welcome back to the channel. Today, we are looking at local AI visibility and putting Ahrefs Brand Radar head-to-head against RadarKit’s Local Radar. If you are trying to get a local business recommended by ChatGPT or Perplexity, traditional map pack tracking will not cut it. In this video, we break down the three key differences between these two platforms and see which one actually wins you local AI citations.
+
+📅 Ready to dominate local AI recommendations on complete autopilot? Book a call directly with our team here: https://radarkit.ai/book-a-call
+
+1. Modeled Data vs. Real Residential IPs
+Ahrefs Brand Radar leverages a massive pre-collected index of 475 million prompts. It is fantastic for broad, global research, but it relies heavily on modeled data and generic API pings. RadarKit’s Local Radar takes a completely different approach. It runs real UI-based browser checks using residential IPs across 50+ countries. This means RadarKit simulates a genuine user standing in Midtown Manhattan asking ChatGPT for the best local dentist—capturing the exact local lists, map widgets, and competitor ratings that real buyers see.
+
+2. The Brutal Credit System vs. Flat Pricing
+To use Ahrefs Brand Radar properly, you have to pay $129/month for their base Lite plan, plus $199/month for the AI Visibility Index, plus at least $50/month for custom prompt tracking. Even worse, Ahrefs hits you with a massive credit penalty just to track Claude, charging 8 tracking checks per single update. RadarKit skips the crazy credit multipliers and gatekeeping. Starting at just $29/month for the Lite tier, RadarKit natively includes local tracking across ChatGPT, Gemini, Perplexity, Microsoft Copilot, Claude, Google AI Mode, and Google AI Overviews without charging a premium for specific models.
+
+3. Passive Reporting vs. Autonomous Execution
+Ahrefs is arguably the best passive reporting dashboard on the market. It connects to web analytics and shows you exactly which pages AI bots are reading. But it leaves the actual optimization and link-building entirely up to you. RadarKit is an active execution engine. If Local Radar shows you are losing out to a competitor, RadarKit deploys four autonomous AI agents to fix it. The GEO Writer publishes citation-optimized content directly to your WordPress, the Reddit Agent finds the exact local community threads LLMs are citing, and the Outreach Agent negotiates placements on local blogs through your connected Gmail on complete autopilot.
+
+The Final Verdict
+For local business owners and agencies, RadarKit easily takes the crown. While Ahrefs gives you great global charts for a massive premium, RadarKit gives you hyper-accurate local IP tracking, full multi-engine coverage, and an autonomous execution team starting at just $29/month.
+
+⏱️ Timestamps
+0:00 - Intro: Ahrefs Brand Radar vs RadarKit Local Radar
+0:35 - Difference 1: Modeled Global Data vs Real Residential IPs
+1:18 - Differ …
+```
+
 ## How to Monitor AI Visibility Across AI Models in Peec AI | Quickstart
 
-- Kanal: Peec AI · Tarih: 2026-08-28 · İzlenme: 675 · Süre: 3:08
+- Kanal: Peec AI · Tarih: 2026-08-28 · İzlenme: 719 · Süre: 3:08
 - https://www.youtube.com/watch?v=nkpMJwm-gT8
 - Bulunduğu aramalar: Peec AI
 
@@ -1304,7 +1038,7 @@ Try Brand Insights in Peec AI: https://peec.ai/
 
 ## Best AI Visibility Tool for Local Business in 2026 | Local AI Search Explained
 
-- Kanal: Jenny AI Search and AEO  · Tarih: 2026-09-04 · İzlenme: 631 · Süre: 4:41
+- Kanal: Jenny AI Search and AEO  · Tarih: 2026-09-04 · İzlenme: 632 · Süre: 4:41
 - https://www.youtube.com/watch?v=I7jNEOvklCM
 - Bulunduğu aramalar: AI visibility tool review
 
@@ -1433,7 +1167,7 @@ Which one deserves your marketing budget? Tap the related video link below to wa
 
 ## Otterly AI Review (2026): The Ultimate AEO Intelligence Platform?
 
-- Kanal: GEO Mastery with Adam · Tarih: 2026-08-11 · İzlenme: 547 · Süre: 3:42
+- Kanal: GEO Mastery with Adam · Tarih: 2026-08-11 · İzlenme: 552 · Süre: 3:42
 - https://www.youtube.com/watch?v=YRgNRz7alug
 - Bulunduğu aramalar: Otterly AI
 
@@ -1512,7 +1246,7 @@ Track global prompts across 50 …
 
 ## Bing’s NEW report maps your AI visibility by topic
 
-- Kanal: Semrush · Tarih: 2026-10-15 · İzlenme: 506 · Süre: 1:39
+- Kanal: Semrush · Tarih: 2026-10-15 · İzlenme: 511 · Süre: 1:39
 - https://www.youtube.com/watch?v=1WPR06-YtCM
 - Bulunduğu aramalar: Semrush AI visibility toolkit
 
@@ -1522,7 +1256,7 @@ Bing Webmaster Tools’ new Topics Portfolio report shows your AI visibility by 
 
 ## New in Peec AI: Brand Perception – See How LLMs Portray Your Brand
 
-- Kanal: Peec AI · Tarih: 2026-09-14 · İzlenme: 466 · Süre: 2:13
+- Kanal: Peec AI · Tarih: 2026-09-14 · İzlenme: 491 · Süre: 2:13
 - https://www.youtube.com/watch?v=3oFuJb9cDUU
 - Bulunduğu aramalar: Peec AI
 
@@ -1566,9 +1300,29 @@ Visibility tells you whether your brand shows up in AI search. Brand perception 
 0:47 What negative objections do LLMs raise ab …
 ```
 
+## Athena HQ VS Profound  Best GEO Platform for AI SEO
+
+- Kanal: GEO Mastery with Adam · Tarih: 2026-07-27 · İzlenme: 487 · Süre: 2:36
+- https://www.youtube.com/watch?v=MLfF6eIOm5o
+- Bulunduğu aramalar: AthenaHQ AI search
+
+```
+Which enterprise AI search tracker actually deserves your marketing budget? 📉 In 2026, Generative Engine Optimization (GEO) is where the highest-intent traffic lives, and choosing the right visibility stack is critical.
+
+In this Short, we're putting enterprise heavyweights Profound and Athena HQ head-to-head—while revealing why RadarKit might be the sleeper hit you actually need:
+
+1️⃣ Profound ($99–$399/mo) – Best for AI prompt search volumes, deep sentiment tracking, and autonomous AEO content creation.
+2️⃣ Athena HQ ($295+/mo) – Enterprise command center covering 9+ AI models, featuring an AI copilot and proactive hallucination detection.
+3️⃣ RadarKit ($29/mo) – The scrappy, budget-friendly alternative with multi-country residential IP scraping and a dedicated Reddit agent.
+
+Tap the related video link below to watch the full 3-minute and 16-second breakdown to find the perfect fit for your workflow! 👇
+
+#Shorts #AISEO #GEO #GenerativeEngineOptimization #Profound #AthenaHQ #RadarKit #ChatGPTSEO #PerplexitySEO #SEO2026 #SearchVisibility #SEOTools
+```
+
 ## How to Track How AI and LLMs Portray Your Brand | Peec AI Brand Perception Webinar
 
-- Kanal: Peec AI · Tarih: 2026-09-25 · İzlenme: 462 · Süre: 53:17
+- Kanal: Peec AI · Tarih: 2026-09-25 · İzlenme: 469 · Süre: 53:17
 - https://www.youtube.com/watch?v=LdS9qM_S2_U
 - Bulunduğu aramalar: Peec AI
 
@@ -1612,50 +1366,74 @@ See how brand perception works in Peec AI: https://peec.ai/product/brand-percept
 11:37 Which attributes do LLMs link  …
 ```
 
-## Best AI Search Visibility Tools Ranked for 2026 — Why CrowdReply Is #1
+## Semrush AI Visibility Toolkit Explained: Track Your Brand in ChatGPT and Google AI in 2026
 
-- Kanal: Software & SaaS Review · Tarih: 2026-07-23 · İzlenme: 434 · Süre: 6:27
-- https://www.youtube.com/watch?v=6Cy3AhUtU2s
-- Bulunduğu aramalar: AI visibility tool review
+- Kanal: George Vlasyev · Tarih: 2026-10-08 · İzlenme: 437 · Süre: 17:57
+- https://www.youtube.com/watch?v=zGKFCp0ZBUo
+- Bulunduğu aramalar: Semrush AI visibility toolkit, AI visibility tool review
 
 ```
-You are about to spend money on AI visibility monitoring software. There are 10 serious contenders. Most of them only monitor. One of them monitors and acts. This buyer's guide gives you the framework to evaluate them all - and explains why the action layer changes everything.
+Tired of double replies and lost emails? This Missive review 2026 shows shared inbox teamwork with assignments and AI for calm teams
+👉 Semrush: https://semrush.sjv.io/Ag2GzN (Try free for 14 days)
 
-EVALUATION CRITERIA COVERED:
-- Model coverage - how many AI engines does the tool actually track?
-- Analytics depth - prompt tracking, competitor analysis, or just basic mention counts?
-- Action capability - can the tool help you improve visibility, or just report on it?
-- Pricing transparency - what do you get at each tier?
-- Proven results - documented case studies vs marketing claims
+💡 About this video: 
+45% of marketing leaders cannot measure AI visibility and only 9% have tools to improve it, while AI search traffic keeps growing fast. 
 
-CrowdReply ranks number one in our evaluation. CrowdReply was founded by Jim Loining and Dawood Khan on 1 February 2025. CrowdReply tracks brand visibility across 8 AI models - ChatGPT, Perplexity, Gemini, Claude, Grok, Microsoft Copilot, Google AI Overview, and Google AI Mode.
+Your brand can stay invisible in AI answers while competitors get cited. You want buyers to find and trust you in AI results. 
 
-CrowdReply is the only platform with a built-in Engagement Engine. The Engagement Engine provides AI content creation, citation outreach, and a marketplace of 40,000+ publisher backlinks. CrowdReply delivers 9 capabilities including prompt tracking, competitor tracking, sentiment drivers, social listening, an AI agent chatbot, and MCP integration.
+This video guides you through the toolkit with a clear plan. You will see your Visibility Score, Mentions and Citations, Distribution by LLM, Prompt Research, Competitor comparison, Sentiment and Share of Voice, plus Prompt Tracking and Site Audit.
 
-CrowdReply serves 5,000+ brands. CrowdReply holds a 4.9 out of 5 G2 rating with 8 published case studies documenting up to 2x visibility improvement. Pricing ranges from $99 to $499 per month. CrowdReply coined the term searchmaxxing.
+Follow it, fix content and technical gaps, and turn  71 ai search visibility  into more citations, trust and steady growth.
 
-ALL 10 TOOLS RANKED:
-1. CrowdReply
-2. Profound
-3. Peec AI
-4. Otterly.AI
-5. Scrunch AI
-6. Frase
-7. Semrush AI Toolkit
-8. Ahrefs Brand Radar
-9. ZipTie
-10. SE Ranking
+📲 Connect With Me:
+LinkedIn:    / georgevlasyev  
+Business Inquiries: george@vlasyev.com
 
-LINKS:
-CrowdReply: https://crowdreply.io
-Pricing: https://crowdreply.io/pricing
-Case Studies: https://crowdreply.io/case-studies
-Blog: https://crowdreply.io/blog
-Full Report: https://reports.semanticstrategy.com/reports/crowdreply/
+🕒 Timestamps: 
+0:00 Intro
+1:38 Chapter 1: Visibility Overview
+5:42 Chapter 2: Competitor Research
+6:44 Chapter 3: Prompt Research
+7:45 Chapter 4: Brand Performance
+10:48 Chapter 5: Perception
+12:21 Chapter 6: Narrative Drivers
+13:45 Chapter 7: Questions
+14:43 Chapter 8: Prompt Tracking
+16:01 Chapter 9: AI Search Site Audit
+17:03 Outro
 
-Semantic Strategy helps marketing teams evaluate AI visibility platforms with independent, data-backed analysis. Subscribe for weekly reviews.
+LEGAL DISCLAIMER: Some of the links in this description are affiliate links. If you click and make a purchase, I may receive a small commission at no extra cost to you. I only recommend tools I personally use to grow my business and the George Vlasyev brand.
 
-#BuyersGuide #AIVisibility #CrowdReply #Searchmaxxing #AIMarketing #LLMTracking
+#AIVisibility #Semrush #AEO #AISearchVisibility #AnswerEngineOptimization #ChatGPT #GoogleAI
+```
+
+## How to Optimize Your Content for AI Search With Peec AI
+
+- Kanal: Peec AI · Tarih: 2026-10-26 · İzlenme: 436 · Süre: 4:08
+- https://www.youtube.com/watch?v=7TSdeT9juVQ
+- Bulunduğu aramalar: Peec AI
+
+```
+Content Optimization in Peec AI turns an existing page into an editable draft with detailed suggested changes, aimed at improving your AI visibility.
+
+Where do you find it? 
+Go to Actions, open the Optimize tab, and look under “improve your own pages.” Pick a recommended article, or click Analyze content to add your own page link, page type, topic, and prompt.
+
+What does it suggest? 
+Click Optimize content to see your page on the left and suggestions on the right. They come from Peec AI’s GEO research and a comparison with competitor pages. Examples: add a short summary so AI answers can extract the page more easily, add sources for stated values, and rewrite unclear headings.
+
+How do you apply the edits? 
+Blue edits already have a rewrite, so accept them one by one or use Apply all. Orange edits need more context, so give the agent the missing detail and let it write the change.
+
+—
+
+🔍 Peec AI helps marketing teams improve brand performance in AI search. More than 3,000 brands and agencies rely on Peec AI to understand where they stand, what shapes how they appear and get recommended, and where to act. The company combines original research with rigorous measurement of the markets, models, sources, competitors, and websites behind AI answers — helping teams separate meaningful signals from noise and make better-informed decisions about what to do next.
+
+Learn more: https://docs.peec.ai/content-optimization
+
+—
+
+#ContentOptimization #AISearch #GEO #AEO #AIvisibility
 ```
 
 ## Otterly AI Review 2026: Features, Pricing, Pros & Cons
@@ -1755,7 +1533,7 @@ The source also notes that Lite is best suited for focused testing, while teams 
 
 ## Best Generative Engine Optimization (GEO) Tool to Dominate AI Search: CitedSpy Review
 
-- Kanal: digiWhisper · Tarih: 2026-09-16 · İzlenme: 416 · Süre: 16:11
+- Kanal: digiWhisper · Tarih: 2026-09-16 · İzlenme: 420 · Süre: 16:11
 - https://www.youtube.com/watch?v=mWxgjcx8OR0
 - Bulunduğu aramalar: generative engine optimization tool
 
@@ -1795,76 +1573,6 @@ https://www.youtube.com/playlist?list=PLBM7oMx1OHx0
 🌐 Try from the Website 👉https://www.citedspy.com/
 
 Stop letting your competitors dominate the AI landscape while you stick to traditional methods. Using the Best Generative Engine Optimization Tool is the only way to ensure your brand stays relevant. I hope this CitedSpy Review gave you the insights needed to start your journey. Refer back to the CitedSpy Tutorial section if you need help with the technical setup. This is definitely the Be …
-```
-
-## Semrush AI Visibility Toolkit Explained: Track Your Brand in ChatGPT and Google AI in 2026
-
-- Kanal: George Vlasyev · Tarih: 2026-10-08 · İzlenme: 413 · Süre: 17:57
-- https://www.youtube.com/watch?v=zGKFCp0ZBUo
-- Bulunduğu aramalar: Semrush AI visibility toolkit, AI visibility tool review
-
-```
-Tired of double replies and lost emails? This Missive review 2026 shows shared inbox teamwork with assignments and AI for calm teams
-👉 Semrush: https://semrush.sjv.io/Ag2GzN (Try free for 14 days)
-
-💡 About this video: 
-45% of marketing leaders cannot measure AI visibility and only 9% have tools to improve it, while AI search traffic keeps growing fast. 
-
-Your brand can stay invisible in AI answers while competitors get cited. You want buyers to find and trust you in AI results. 
-
-This video guides you through the toolkit with a clear plan. You will see your Visibility Score, Mentions and Citations, Distribution by LLM, Prompt Research, Competitor comparison, Sentiment and Share of Voice, plus Prompt Tracking and Site Audit.
-
-Follow it, fix content and technical gaps, and turn  71 ai search visibility  into more citations, trust and steady growth.
-
-📲 Connect With Me:
-LinkedIn:    / georgevlasyev  
-Business Inquiries: george@vlasyev.com
-
-🕒 Timestamps: 
-0:00 Intro
-1:38 Chapter 1: Visibility Overview
-5:42 Chapter 2: Competitor Research
-6:44 Chapter 3: Prompt Research
-7:45 Chapter 4: Brand Performance
-10:48 Chapter 5: Perception
-12:21 Chapter 6: Narrative Drivers
-13:45 Chapter 7: Questions
-14:43 Chapter 8: Prompt Tracking
-16:01 Chapter 9: AI Search Site Audit
-17:03 Outro
-
-LEGAL DISCLAIMER: Some of the links in this description are affiliate links. If you click and make a purchase, I may receive a small commission at no extra cost to you. I only recommend tools I personally use to grow my business and the George Vlasyev brand.
-
-#AIVisibility #Semrush #AEO #AISearchVisibility #AnswerEngineOptimization #ChatGPT #GoogleAI
-```
-
-## How to Optimize Your Content for AI Search With Peec AI
-
-- Kanal: Peec AI · Tarih: 2026-10-26 · İzlenme: 412 · Süre: 4:08
-- https://www.youtube.com/watch?v=7TSdeT9juVQ
-- Bulunduğu aramalar: Peec AI
-
-```
-Content Optimization in Peec AI turns an existing page into an editable draft with detailed suggested changes, aimed at improving your AI visibility.
-
-Where do you find it? 
-Go to Actions, open the Optimize tab, and look under “improve your own pages.” Pick a recommended article, or click Analyze content to add your own page link, page type, topic, and prompt.
-
-What does it suggest? 
-Click Optimize content to see your page on the left and suggestions on the right. They come from Peec AI’s GEO research and a comparison with competitor pages. Examples: add a short summary so AI answers can extract the page more easily, add sources for stated values, and rewrite unclear headings.
-
-How do you apply the edits? 
-Blue edits already have a rewrite, so accept them one by one or use Apply all. Orange edits need more context, so give the agent the missing detail and let it write the change.
-
-—
-
-🔍 Peec AI helps marketing teams improve brand performance in AI search. More than 3,000 brands and agencies rely on Peec AI to understand where they stand, what shapes how they appear and get recommended, and where to act. The company combines original research with rigorous measurement of the markets, models, sources, competitors, and websites behind AI answers — helping teams separate meaningful signals from noise and make better-informed decisions about what to do next.
-
-Learn more: https://docs.peec.ai/content-optimization
-
-—
-
-#ContentOptimization #AISearch #GEO #AEO #AIvisibility
 ```
 
 ## Scrunch AI Review 2026: Features, Pricing, Pros & Cons
@@ -1946,44 +1654,9 @@ Scrunch AI Pros
 Sc …
 ```
 
-## Site Optimization: Your always-on, page-by-page action plan for winning AI search
-
-- Kanal: Scrunch · Tarih: 2026-08-19 · İzlenme: 381 · Süre: 3:37
-- https://www.youtube.com/watch?v=qUqyXK7WiOE
-- Bulunduğu aramalar: Scrunch AI visibility
-
-```
-AI monitoring tools give you a scoreboard, not a game plan.
-
-You can see when and where you're losing. What you can't see is why: whether the problem is technical or editorial, which pages are dragging you down, what to fix first.
-
-We’re solving that with our latest launch: Site Optimization.
-
-It's not another dashboard to interpret, and it’s not another content cannon that floods your site with AI-written filler.
-
-It's something no other technology on the market offers: a prioritized, page-by-page action plan for winning AI search.
-
-All tailored to your website, all powered by an always-on predictive model trained on a massive data corpus of real AI answers and public web content.
-
-No dashboard to reverse-engineer. No infrastructure lift.
-
-Just an impact-ranked roadmap for your web properties and the tools to take action:
-✦ See a domain- and page-level breakdown of how your site performs in AI search.
-✦ Get prioritized recommendations for improving your site's retrievability and citability.
-✦ Take action with a ticket, a CMS update, or edge delivery.
-
-Brands don’t just need visibility into AI search performance. They need a step-by-step plan for how to proceed.
-
-Site Optimization builds the playbook and hands you the tools to run it.
-
-Site Optimization is rolling out to customers in waves, beginning today. It's available to all customers for a limited number of pages, with additional capacity available as an upgrade.
-
-See and solve site issues with Scrunch: Start a free 7-day trial or get a demo at scrunch.com.
-```
-
 ## Free AI Search Bootcamp (Module 1): Fundamentals of AI Search / GEO
 
-- Kanal: Rankscale · Tarih: 2026-09-29 · İzlenme: 367 · Süre: 40:46
+- Kanal: Rankscale · Tarih: 2026-09-29 · İzlenme: 387 · Süre: 40:46
 - https://www.youtube.com/watch?v=SLtGXTpkaU0
 - Bulunduğu aramalar: Rankscale AI
 
@@ -2026,70 +1699,143 @@ Mentioned in this video:
 - Rankscale AI Page Audit (Audit V2) - https://rankscale.ai/dashboard/analysis#audit-v2 …
 ```
 
-## Rankscale vs RadarKit for Local Prompt Tracking: 3 Key Differences
+## Site Optimization: Your always-on, page-by-page action plan for winning AI search
 
-- Kanal: GEO Mastery with Adam · Tarih: 2026-11-17 · İzlenme: 362 · Süre: 3:10
-- https://www.youtube.com/watch?v=6YnLQVo2RnM
-- Bulunduğu aramalar: Rankscale AI
+- Kanal: Scrunch · Tarih: 2026-08-19 · İzlenme: 384 · Süre: 3:37
+- https://www.youtube.com/watch?v=qUqyXK7WiOE
+- Bulunduğu aramalar: Scrunch AI visibility
 
 ```
-What’s up guys, Adam here, your go-to GEO and SEO expert. Welcome back to Geo Tips with Adam. Today, we are putting Rankscale and RadarKit head-to-head for local prompt tracking. If you want to rank your physical business in Answer Engines, you need precise local tracking, but these two platforms take entirely different approaches to AI search optimization. Let's break down the three key differences, and reveal which platform actually comes out on top.
+AI monitoring tools give you a scoreboard, not a game plan.
 
-📅 Stop burning your budget on enterprise credit limits. Book a call to automate your local AI tracking with RadarKit here: https://radarkit.ai/book-a-call
+You can see when and where you're losing. What you can't see is why: whether the problem is technical or editorial, which pages are dragging you down, what to fix first.
 
-Difference #1: The Credit Trap vs. Flat Local Pricing
-Rankscale looks impressive out of the gate with its coverage of 17+ AI engines, but its pricing structure is built to drain your budget. It operates on a strict credit-based system starting at $99/month. If you are scanning local prompts daily across multiple cities and engines, those credits disappear instantly, pushing you into their $385 or $780 tiers. RadarKit strips away the complicated math. Starting at a flat $29/month, RadarKit tracks all 7 major AI engines natively. It gives you predictable, unlimited-feeling multi-engine tracking without worrying about hidden credit traps.
+We’re solving that with our latest launch: Site Optimization.
 
-Difference #2: Technical Audits vs. Pinpoint Local IP Tracking
-Rankscale focuses heavily on technical on-page SEO, giving you page audits with over 94 technical checkpoints to ensure your site is bot-friendly. However, when it comes to local tracking, it lacks hyper-local granularity. RadarKit is built specifically for local visibility. It features a dedicated Local Radar leveraging residential IPs across 50+ locations. This delivers exact city-level tracking, showing you exactly what a customer in a specific neighborhood sees when they ask an AI engine for a local recommendation. Plus, it includes Shopping and Ads Radars to track your entire local footprint.
+It's not another dashboard to interpret, and it’s not another content cannon that floods your site with AI-written filler.
 
-Difference #3: Passive Dashboards vs. Autonomous Execution
-Rankscale is fundamentally an analytics dashboard. It shows you your AI visibility score, tracks your citations, and tells you what to fix, but it leaves the actual optimization entirely up to your team. RadarKit does not just give you a to-do list; it acts as your full organic fulfillment team. When RadarKit spots a local visibility gap, it deploys autonomous AI agents. Its Reddit Agent finds the exact local community threads LLMs pull from, its GEO Writer crafts citation-ready content, and the Outreach Agent pitches and negotiates local directory and blog placements through your connected Gmail on complete autopilot.
+It's something no other technology on the market offers: a prioritized, page-by-page action plan for winning AI search.
 
-The Final Verdict & The True Winner
-Rankscale is a robust, premium dashboard if you have a massive enterprise budget, love digging into 94-point technical site audits, and don't mind managing a credit balance. But if you want to completely dominate local AI recommendations without draining your budget, RadarKit is the undisputed winner. It gives you exact city-level tracking, API an …
+All tailored to your website, all powered by an always-on predictive model trained on a massive data corpus of real AI answers and public web content.
+
+No dashboard to reverse-engineer. No infrastructure lift.
+
+Just an impact-ranked roadmap for your web properties and the tools to take action:
+✦ See a domain- and page-level breakdown of how your site performs in AI search.
+✦ Get prioritized recommendations for improving your site's retrievability and citability.
+✦ Take action with a ticket, a CMS update, or edge delivery.
+
+Brands don’t just need visibility into AI search performance. They need a step-by-step plan for how to proceed.
+
+Site Optimization builds the playbook and hands you the tools to run it.
+
+Site Optimization is rolling out to customers in waves, beginning today. It's available to all customers for a limited number of pages, with additional capacity available as an upgrade.
+
+See and solve site issues with Scrunch: Start a free 7-day trial or get a demo at scrunch.com.
 ```
 
-## How to Find Citation Gaps in AI Search with Peec AI Gap Analysis | Quickstart
+## New in Peec: the redesigned actions and Peec Agent
 
-- Kanal: Peec AI · Tarih: 2026-08-28 · İzlenme: 287 · Süre: 2:07
-- https://www.youtube.com/watch?v=YuROJ-xv1Tk
+- Kanal: Peec AI · Tarih: 2026-10-20 · İzlenme: 331 · Süre: 3:39
+- https://www.youtube.com/watch?v=E42L3otArx4
 - Bulunduğu aramalar: Peec AI
 
 ```
-To find citation gaps in AI search, use gap analysis in Peec AI: it lists the domains and URLs where your competitors are mentioned and you are not, ranked by a gap score. This Quickstart video shows how the gap score works, how to filter to editorial domains and how to drill into a single URL.
+Measuring your AI visibility is one thing. Improving it is another. We redesigned actions and launched Peec Agent so you can do both in one place 👇
 
-Learn more about Peec AI: https://peec.ai/
+Actions gives you a prioritized list of ways to improve your AI visibility, ranked on one five-level impact scale. Every recommendation comes with the evidence behind it: the article being cited, the prompts it appears in, or the page on your site that needs attention.
 
-The video starts after the brand profile, project and tracked prompts are set up, and treats gap analysis as the simplest way to identify opportunities to improve visibility. The table of domains, hosts or URLs reads as a list of opportunities for your brand. (0:00)
+Recommendations fall into three categories:
 
-*Key takeaways:*
-- Gap analysis looks at domains and URLs where your competitors are mentioned but your brand is not. (0:00)
-- The gap score combines how often a domain or URL is retrieved with how many competitors are mentioned, so it helps you prioritize. (0:33)
-- Many of the top opportunities are competitor domains, which the presenter describes as places where you cannot do much. (1:02)
-- Filtering to editorial domains surfaces more actionable opportunities, and the filter stays active when you switch to the URLs tab. (0:50)
-- A URL detail view shows which AI models use the source, and in the demo one article is heavily favored by GPT. (1:18)
-- The URL detail also lists the prompts that use the source and the brands already mentioned there.
-- You can open the chats where a source is used and see which of them do not mention your brand. (1:34)
+1️⃣ Technical fixes – let AI crawlers reach your site and fix how AI reads it (blocked bots, sitemaps, llms.txt, schema, missing H1s)
+2️⃣ On-page improvements – optimize existing pages and get content briefs for new ones, with structure, headlines, proof points, and metadata
+3️⃣ Off-page improvements – get mentioned in roundups, reviews, and forums AI keeps citing, and correct inaccurate claims about your brand
 
-*What you'll learn:*
-- Gap analysis: what the table of domains, hosts and URLs shows and why it works as a list of opportunities (0:00)
-- Gap score: how retrieval frequency and competitor mentions decide the ranking (0:33)
-- Filtering: narrowing the list to editorial domains and moving to the URLs tab (0:50)
-- URL detail: reading model usage, prompts, mentioned brands and chats for a single source (1:18)
+One click hands any action to Peec Agent. It already has the context, works through the next steps with you, and asks questions along the way, so you stay in control of what gets published.
 
-*Peec AI features covered:*
-- Gap analysis: lists domains, hosts and URLs where competitors are mentioned and you are not, ranked by gap score
-- Domains and URLs tabs: switch between domain level and specific pages while a domain type filter persists
-- URL detail page: shows usage by AI model, the prompts that use the source and the brands mentioned
-- Actions: gives more specific recommendations after the gap analysis
+Much of this work sits outside SEO. With 20+ MCP connectors, the agent can take it into the tools your team already uses: a Linear ticket for Engineering, a brief for your content team, or outreach prepared in your email tools. Any change it wants to make needs your approval first.
 
-*Questions this video answers:*
-- What is gap analysis and what does it show you? It lists domains and URLs where competitors are mentioned but your brand is not, as a list of opportunities. (0:00)
-- How is the gap score calculated? It looks at how often a domain or URL is retrieved and how many competitors are mentioned there. (0:33)
-- How do you filter gap analysis to actionable opportunities? Filter to editorial domains, then open the URLs tab, where the filter stays active. (0:50)
-- How do you tell which AI model favors a specific source? Open the URL detail, which shows how different models use the source. In the demo, GPT favors it heavily. (1:18)
-- How do you find the chats where com …
+In this video, Niklas walks through the new actions page and one content brief, from recommendation to execution.
+
+📖 Read the full announcement → [blog URL]
+
+—
+About Peec AI: Peec AI helps marketing teams and agencies monitor, analyze, and improve how their brands appear across AI-powered answer engines like ChatGPT, Perplexity, Claude, Gemini, and Google AI Mode.
+
+Learn more about AI search visibility and GEO at peec.ai.
+—
+#PeecAI #AISearch #GEO #AEO #GenerativeEngineOptimization #AIvisibility #PeecAgent #DigitalMarketing
+```
+
+## Your AI Marketer in Profound
+
+- Kanal: Profound · Tarih: 2026-10-31 · İzlenme: 313 · Süre: 1:31
+- https://www.youtube.com/watch?v=g2DegOzEs74
+- Bulunduğu aramalar: Profound AI visibility
+
+```
+Marketing teams now cover more surfaces than any team can staff: product pages, documentation, review sites, earned media, social, and paid. Aim, Profound's AI Marketer, works alongside your team to find the work that matters and help get it done.
+
+
+What Aim gives marketing leaders:
+- The work worth doing. Aim monitors your AI search data and business context, then suggests Projects and tasks, such as refreshing a declining page, drafting a head-to-head comparison, or pitching a top-cited publication.
+- Explanations for what moved. Ask why visibility, citation share, or sentiment changed, and Aim analyzes the drivers.
+- Plans that turn into work. Once a plan is finalized, Aim builds a ready-to-run Agent to complete the task. Your team stays in control and approves agent-generated content before it is published.
+- Coverage beyond AEO. Aim is built for the whole marketing org, including earned media opportunities, content refreshes, competitive analysis, and paid ads performance.
+- A starting point that is your business. Context Manager gives Aim your positioning, priorities, and how your team works.
+
+Meet Aim: https://www.tryprofound.com/features/aim
+Get a demo: https://www.tryprofound.com/contact-sales
+
+#AIMarketing #AIAgents #Profound
+```
+
+## The line he adds to every ChatGPT shopping prompt @firstpress-povc  #shorts
+
+- Kanal: Offscreen · Tarih: 2026-11-17 · İzlenme: 308 · Süre: 0:16
+- https://www.youtube.com/watch?v=Q8Z5AdfSfJM
+- Bulunduğu aramalar: ChatGPT shopping product recommendations
+
+```
+When Ethan Arpi asks ChatGPT for product recommendations, he adds one line: make sure it's not a drop shipper from China. The reason: AI can't yet judge loyalty programs, shipping or return policies. Ethan is founder & CEO of Scout.
+
+Full Episode on First Press by Press on Ventures YT: @firstpress-povc 
+
+#shorts #chatgpt #ai #ecommerce #shopping
+```
+
+## Scrunch in SitecoreAI: Observe, optimize, and ship in one place
+
+- Kanal: Scrunch · Tarih: 2026-10-01 · İzlenme: 286 · Süre: 1:01
+- https://www.youtube.com/watch?v=IJ0rgpaEbIs
+- Bulunduğu aramalar: Scrunch AI visibility
+
+```
+Every AI visibility tool promises action now, not just analysis. Most just hand you copy-paste homework.
+
+Scrunch already solves part of the friction. We help you turn actionable recommendations into optimized content, and automatically deliver it to AI agents at the edge without changing the human-facing site.
+
+Now, together with Sitecore, we’re taking the next step: A published page in your CMS.
+
+Our new integration puts Scrunch’s AI observability and optimization features right in SitecoreAI. That means you can take action right in your website’s system of record.
+
+Data-backed content updates, drafted with a click. All built around your site’s schema, design system, permissions, teaming, and approvals.
+
+To be clear: Scrunch is a standalone platform. We help you track and grow your presence in AI answers whatever your stack. But if you're a SitecoreAI customer, this integration brings your AI visibility findings and fixes to the same screen.
+
+Here’s what it looks like:
+✦ Auto-surface meaningful changes in your AI visibility data, then act on them with a click.
+✦ Apply data-backed recommendations straight in the CMS, no copy-paste round trips.
+✦ Flag AI visibility issues when building or editing pages, then draft the fix on the spot.
+✦ Re-score content weekly and apply new recommendations to compound the payoff.
+
+Every change is staged for your team's approval before it goes live. Your permissions, your workflows, your call.
+
+A win-win for *all* the teams behind your website: marketing, design, legal, security, and beyond.
+
+The integration is available to all SitecoreAI customers with a Scrunch subscription. Individual feature access depends on your Scrunch plan.
+
+See the fix and ship the fix with Scrunch in Sitecore: Get a demo at sitecore.com.
 ```
 
 ## Ahrefs Brand Radar vs RadarKit Best Local AI SEO Tool in 2026 🏆🤖
@@ -2124,66 +1870,52 @@ For local business owners and agencies, RadarKit easily takes the crown. While A
 Tap the related video …
 ```
 
-## Scrunch in SitecoreAI: Observe, optimize, and ship in one place
+## FREE AI Visibility Checker: Can ChatGPT See Your Website?
 
-- Kanal: Scrunch · Tarih: 2026-10-01 · İzlenme: 279 · Süre: 1:01
-- https://www.youtube.com/watch?v=IJ0rgpaEbIs
-- Bulunduğu aramalar: Scrunch AI visibility
-
-```
-Every AI visibility tool promises action now, not just analysis. Most just hand you copy-paste homework.
-
-Scrunch already solves part of the friction. We help you turn actionable recommendations into optimized content, and automatically deliver it to AI agents at the edge without changing the human-facing site.
-
-Now, together with Sitecore, we’re taking the next step: A published page in your CMS.
-
-Our new integration puts Scrunch’s AI observability and optimization features right in SitecoreAI. That means you can take action right in your website’s system of record.
-
-Data-backed content updates, drafted with a click. All built around your site’s schema, design system, permissions, teaming, and approvals.
-
-To be clear: Scrunch is a standalone platform. We help you track and grow your presence in AI answers whatever your stack. But if you're a SitecoreAI customer, this integration brings your AI visibility findings and fixes to the same screen.
-
-Here’s what it looks like:
-✦ Auto-surface meaningful changes in your AI visibility data, then act on them with a click.
-✦ Apply data-backed recommendations straight in the CMS, no copy-paste round trips.
-✦ Flag AI visibility issues when building or editing pages, then draft the fix on the spot.
-✦ Re-score content weekly and apply new recommendations to compound the payoff.
-
-Every change is staged for your team's approval before it goes live. Your permissions, your workflows, your call.
-
-A win-win for *all* the teams behind your website: marketing, design, legal, security, and beyond.
-
-The integration is available to all SitecoreAI customers with a Scrunch subscription. Individual feature access depends on your Scrunch plan.
-
-See the fix and ship the fix with Scrunch in Sitecore: Get a demo at sitecore.com.
-```
-
-## Your AI Marketer in Profound
-
-- Kanal: Profound · Tarih: 2026-10-31 · İzlenme: 276 · Süre: 1:31
-- https://www.youtube.com/watch?v=g2DegOzEs74
-- Bulunduğu aramalar: Profound AI visibility
+- Kanal: SearchLogistics · Tarih: 2026-10-27 · İzlenme: 272 · Süre: 3:26
+- https://www.youtube.com/watch?v=_1E_olQUkfY
+- Bulunduğu aramalar: AI visibility tool review
 
 ```
-Marketing teams now cover more surfaces than any team can staff: product pages, documentation, review sites, earned media, social, and paid. Aim, Profound's AI Marketer, works alongside your team to find the work that matters and help get it done.
+📩 RUN THE FREE AI VISIBILITY CHECK - https://linksthatrank.com/ai-visibility-checker/
 
+Your website could be blocking ChatGPT, Claude, Perplexity and even Google right now, and it would still look perfectly normal to you. 
 
-What Aim gives marketing leaders:
-- The work worth doing. Aim monitors your AI search data and business context, then suggests Projects and tasks, such as refreshing a declining page, drafting a head-to-head comparison, or pitching a top-cited publication.
-- Explanations for what moved. Ask why visibility, citation share, or sentiment changed, and Aim analyzes the drivers.
-- Plans that turn into work. Once a plan is finalized, Aim builds a ready-to-run Agent to complete the task. Your team stays in control and approves agent-generated content before it is published.
-- Coverage beyond AEO. Aim is built for the whole marketing org, including earned media opportunities, content refreshes, competitive analysis, and paid ads performance.
-- A starting point that is your business. Context Manager gives Aim your positioning, priorities, and how your team works.
+My new free AI Visibility Checker shows you in about 15 seconds what's blocking them and then tells you exactly how to fix it.
 
-Meet Aim: https://www.tryprofound.com/features/aim
-Get a demo: https://www.tryprofound.com/contact-sales
+Here's exactly what you'll learn:
 
-#AIMarketing #AIAgents #Profound
+✅ How to check if AI can see your website in about 15 seconds, free
+✅ What you lose when Perplexity, Claude or ChatGPT can't get in
+✅ How to get it fixed without being technical
+✅ How to get free alerts the moment an AI tool gets locked out
+
+📩 RUN THE FREE AI VISIBILITY CHECK - https://linksthatrank.com/ai-visibility-checker/
+
+🔗 DONE-FOR-YOU LINK PACKAGES - https://linksthatrank.com/
+
+⚡ AI VISIBILITY PACKAGE - https://linksthatrank.com/?goal=ai-visibility
+
+🎞️ VIDEO CHAPTERS
+00:00 - Check if AI Can See Your Site In 15 Seconds
+00:50 - Get It Fixed Without Being Technical
+01:48 - You Might Be Blocking ChatGPT Without Knowing It 
+02:46 - Wrapping Up
+
+⚙️ RESOURCES
+Backlink Blacklist  - https://linksthatrank.com/backlink-blacklist/
+Goal-Based Packages - https://linksthatrank.com/ 
+Listicles - https://linksthatrank.com/listicles/ 
+Branded Reviews - https://linksthatrank.com/reviews/
+
+⚠️ SUBSCRIBE - https://www.youtube.com/@SearchLogisticsHQ
+
+#linkbuilding #aivisibility #aisearch #linksthatrank #freeseotool
 ```
 
 ## Is AI Ignoring Your LinkedIn Content? Here's How to Check | Otterly.AI
 
-- Kanal: Michelle J Raymond | B2B Growth Co · Tarih: 2026-07-30 · İzlenme: 268 · Süre: 8:31
+- Kanal: Michelle J Raymond | B2B Growth Co · Tarih: 2026-07-30 · İzlenme: 270 · Süre: 8:31
 - https://www.youtube.com/watch?v=TAIKnl7Gegs
 - Bulunduğu aramalar: Otterly AI
 
@@ -2236,7 +1968,7 @@ B2B Growth. No Hacks.
 
 ## How to Choose an AI Search Visibility Platform | Peec AI for Agencies
 
-- Kanal: Peec AI · Tarih: 2026-11-09 · İzlenme: 251 · Süre: 5:58
+- Kanal: Peec AI · Tarih: 2026-11-09 · İzlenme: 269 · Süre: 5:58
 - https://www.youtube.com/watch?v=O9yjISAyJJ0
 - Bulunduğu aramalar: Peec AI
 
@@ -2284,9 +2016,37 @@ What support do agencies get? A dedicated AI search strategist, regular check-in
 0:12 The team a …
 ```
 
+## Peec AI Hits $20M ARR in Under Two Years
+
+- Kanal: Peec AI · Tarih: 2026-11-02 · İzlenme: 267 · Süre: 1:06
+- https://www.youtube.com/watch?v=isvzKrObj6M
+- Bulunduğu aramalar: Peec AI
+
+```
+Peec AI passed $20 million in ARR less than two years after launch, and doubled it in the last six months. 
+
+What changed in the product? In the last six months Peec AI launched Brand Perception, which shows how AI describes your brand and which sources shape those answers. It also launched AI Shopping, Actions, and the Peec Agent, which helps you improve your pages without leaving Peec AI and connects to 25+ tools through MCP.
+
+Who uses Peec AI? More than 4,000 teams in 80+ countries, including brand, comms, content and ecommerce teams, in-house and at agencies. Customers include Siemens, Hugo Boss, Sky, Mindshare and Seer Interactive. Together they run 100M+ LLM chats and analyze 80M+ web pages a month.
+
+Why does this matter? AI now shapes how a brand is seen, so everyone has a stake in what AI says. AI search visibility is becoming part of the job for brand, comms, content and ecommerce teams alike.
+
+
+—
+
+🔍 Peec AI helps marketing teams improve brand performance in AI search. More than 4,000 brands and agencies rely on Peec AI to understand where they stand, what shapes how they appear and get recommended, and where to act. The company combines original research with rigorous measurement of the markets, models, sources, competitors, and websites behind AI answers, helping teams separate meaningful signals from noise and make better-informed decisions about what to do next.
+
+Learn more: https://peec.ai/
+or start a free trial or book a demo: https://peec.ai/
+
+—
+
+#PeecAI #AISearch #GEO #AEO #AIVisibility #BrandPerception #AIShopping #ARR
+```
+
 ## 5 Top AthenaHQ Alternatives for Local Business Owners
 
-- Kanal: GEO Mastery with Adam · Tarih: 2026-11-13 · İzlenme: 248 · Süre: 2:36
+- Kanal: GEO Mastery with Adam · Tarih: 2026-11-13 · İzlenme: 251 · Süre: 2:36
 - https://www.youtube.com/watch?v=8-JD3YVni00
 - Bulunduğu aramalar: AthenaHQ AI search
 
@@ -2320,33 +2080,29 @@ A surgical tool for tracking local competitors. Its standout feature is Source C
 If you manage a massive franchise of local businesses, this is your enterprise alternative. Profound replaces AthenaHQ's citation engine with a credit-based AI Marketer. …
 ```
 
-## AthenaHQ vs RadarKit for Local AEO: 3 Key Differences
+## Rankscale AI Review 2026
 
-- Kanal: GEO Mastery with Adam · Tarih: 2026-11-13 · İzlenme: 232 · Süre: 3:10
-- https://www.youtube.com/watch?v=HFBvrKdli1E
-- Bulunduğu aramalar: AthenaHQ AI search
+- Kanal: Jenny AI Search and AEO  · Tarih: 2026-09-24 · İzlenme: 241 · Süre: 2:41
+- https://www.youtube.com/watch?v=tyZ0Qo5-fXs
+- Bulunduğu aramalar: Rankscale AI
 
 ```
-What’s up guys, Adam here, your go-to GEO and SEO expert. Welcome back to Geo Tips with Adam. Today, we are putting AthenaHQ and RadarKit head-to-head for AI search visibility. If you want your brand recommended by Answer Engines, you need precise tracking and execution. Both of these platforms promise to get you there, but they have completely different pricing architectures and execution models. Let's break down the three key differences, and reveal which platform actually comes out on top.
+Is Rankscale AI worth it in 2026? In this short review, I break down Rankscale AI’s key features, pricing, AI engine coverage, pros and cons, and compare it with RadarKit.
 
-📅 Stop burning your budget on AI tracking credits. Book a call to automate your GEO execution with RadarKit here: https://radarkit.ai/book-a-call
+Rankscale AI supports 17+ AI engines, including ChatGPT, Perplexity, Gemini, Claude, Google AI Overviews, Google AI Mode, Copilot, DeepSeek, Grok, and Mistral.
 
-Difference #1: Flat Pricing vs. The Credit Math Trap
-AthenaHQ draws you in with a free tier, but the moment you need real tracking, you are slammed with a $295/month Starter plan. Worse, it uses a strict credit system where one credit equals one AI response. If you track 50 prompts across 6 models every single day, your bill will skyrocket because you are constantly doing arithmetic to avoid overages. RadarKit strips away the complicated math. Starting at a flat $29/month, you get predictable, multi-engine tracking across all major platforms—including ChatGPT, Perplexity, Claude, Copilot, and Gemini—without worrying about hidden credit traps.
+I also cover its credit-based pricing and who Rankscale AI may be suitable for.
 
-Difference #2: Paywalled APIs vs. Native Integration
-If you want to connect your AI visibility data to external tools, AthenaHQ treats API access as an optional, undisclosed paid add-on that you have to buy on top of your $295 base subscription. RadarKit takes the opposite approach. It includes full API and MCP access natively. This means you can pipe live visibility data straight into your own custom reporting dashboards, Claude, or Cursor without getting squeezed by an aggressive enterprise sales team.
+Watch the full video for the complete Rankscale AI review and RadarKit comparison.
 
-Difference #3: On-Page Recommendations vs. Autonomous Off-Page Execution
-AthenaHQ is a highly capable analytics command center, giving you an Advanced Content Optimization Agent for your on-page strategy. But AI search engines do not just read your website; they rely on third-party consensus. RadarKit actually builds that off-page consensus. While AthenaHQ gives you recommendations, RadarKit deploys autonomous AI agents. Its Reddit Agent finds the exact community threads LLMs are citing, and its Outreach Agent pitches and negotiates local directory and blog placements through your connected Gmail on complete autopilot. Plus, RadarKit includes a dedicated Local Radar leveraging residential IPs across 50+ locations to deliver hyper-accurate city-level tracking.
+rankscale ai review, rankscale ai, rankscale review 2026, rankscale ai pricing, rankscale ai features, rankscale ai pros and cons, rankscale ai review 2026, ai visibility tools, ai visibility tracking, ai search visibility, ai seo tools, AEO tools, answer engine optimization, GEO tools, generative engine optimization, RadarKit, RadarKit AI, AI SEO, SEO tools 2026, AI rank tracker
 
-The Final Verdict & The True Winner
-AthenaHQ is a robust, premium dashboard if you have a massive enterprise budget and only need on-page content recommendations. But if you want to completely dominate AI search recommendations without draining your budget on credit limits and API add-ons, RadarKit is the undisputed winner. It tracks at the exact neighborhood level and actively executes the outreach you need to rank. …
+#RankscaleAI #Rankscale #AIVisibility #AEO #GEO #AISEO #SEOTools #RadarKit #AIVisibilityTracking #Shorts
 ```
 
 ## 5 Best Scrunch AI Alternatives for Local Businesses
 
-- Kanal: GEO Mastery with Adam · Tarih: 2026-11-11 · İzlenme: 232 · Süre: 3:27
+- Kanal: GEO Mastery with Adam · Tarih: 2026-11-11 · İzlenme: 235 · Süre: 3:27
 - https://www.youtube.com/watch?v=ocTCF3w_ChA
 - Bulunduğu aramalar: Scrunch AI visibility
 
@@ -2373,6 +2129,96 @@ Starting at $95/month, this is fantastic if you want to aggressively target the 
 
 5. Otterly AI: Technical Audits for Small Businesses
 At just $29/month, this is the perfect budget-friendly entry point for a solo local business owner. It monitors your core AI visibi …
+```
+
+## AthenaHQ vs RadarKit for Local AEO: 3 Key Differences
+
+- Kanal: GEO Mastery with Adam · Tarih: 2026-11-13 · İzlenme: 234 · Süre: 3:10
+- https://www.youtube.com/watch?v=HFBvrKdli1E
+- Bulunduğu aramalar: AthenaHQ AI search
+
+```
+What’s up guys, Adam here, your go-to GEO and SEO expert. Welcome back to Geo Tips with Adam. Today, we are putting AthenaHQ and RadarKit head-to-head for AI search visibility. If you want your brand recommended by Answer Engines, you need precise tracking and execution. Both of these platforms promise to get you there, but they have completely different pricing architectures and execution models. Let's break down the three key differences, and reveal which platform actually comes out on top.
+
+📅 Stop burning your budget on AI tracking credits. Book a call to automate your GEO execution with RadarKit here: https://radarkit.ai/book-a-call
+
+Difference #1: Flat Pricing vs. The Credit Math Trap
+AthenaHQ draws you in with a free tier, but the moment you need real tracking, you are slammed with a $295/month Starter plan. Worse, it uses a strict credit system where one credit equals one AI response. If you track 50 prompts across 6 models every single day, your bill will skyrocket because you are constantly doing arithmetic to avoid overages. RadarKit strips away the complicated math. Starting at a flat $29/month, you get predictable, multi-engine tracking across all major platforms—including ChatGPT, Perplexity, Claude, Copilot, and Gemini—without worrying about hidden credit traps.
+
+Difference #2: Paywalled APIs vs. Native Integration
+If you want to connect your AI visibility data to external tools, AthenaHQ treats API access as an optional, undisclosed paid add-on that you have to buy on top of your $295 base subscription. RadarKit takes the opposite approach. It includes full API and MCP access natively. This means you can pipe live visibility data straight into your own custom reporting dashboards, Claude, or Cursor without getting squeezed by an aggressive enterprise sales team.
+
+Difference #3: On-Page Recommendations vs. Autonomous Off-Page Execution
+AthenaHQ is a highly capable analytics command center, giving you an Advanced Content Optimization Agent for your on-page strategy. But AI search engines do not just read your website; they rely on third-party consensus. RadarKit actually builds that off-page consensus. While AthenaHQ gives you recommendations, RadarKit deploys autonomous AI agents. Its Reddit Agent finds the exact community threads LLMs are citing, and its Outreach Agent pitches and negotiates local directory and blog placements through your connected Gmail on complete autopilot. Plus, RadarKit includes a dedicated Local Radar leveraging residential IPs across 50+ locations to deliver hyper-accurate city-level tracking.
+
+The Final Verdict & The True Winner
+AthenaHQ is a robust, premium dashboard if you have a massive enterprise budget and only need on-page content recommendations. But if you want to completely dominate AI search recommendations without draining your budget on credit limits and API add-ons, RadarKit is the undisputed winner. It tracks at the exact neighborhood level and actively executes the outreach you need to rank. …
+```
+
+## 5 Best AthenaHQ Alternatives for Local Businesses
+
+- Kanal: GEO Mastery with Adam · Tarih: 2026-11-13 · İzlenme: 232 · Süre: 3:35
+- https://www.youtube.com/watch?v=1Rt30T_Wt5s
+- Bulunduğu aramalar: AthenaHQ AI search
+
+```
+Welcome back to Geo Tips. I am Adam. AthenaHQ is an incredibly powerful platform with its Citation Engine, but dropping nearly $300 a month on their base plan just to hit strict usage credit limits is a massive roadblock. If you run a local bakery, a boutique fitness studio, or a neighborhood plumbing company, you need tools that actually drive local foot traffic without draining your operational budget. Here are the five best AthenaHQ alternatives built specifically for local businesses.
+
+📅 Stop draining your operational budget on expensive usage limits. Book a call to automate your local AI search rankings with RadarKit here: https://radarkit.ai/book-a-call
+
+1. RadarKit: The Best Overall Local Business GEO Winner
+Starting at just $29/month, RadarKit is the ultimate all-in-one powerhouse for local shops. It bypasses expensive credit limits to deliver hyper-accurate AI visibility tracking across ChatGPT, Gemini, and Perplexity using real residential IPs across 50+ locations.
+
+Deep Radars: Features query fan-out intelligence to show how AI models process local searches, plus built-in Shopping and Ads Radars to expose exactly which products the AI is pushing to nearby customers.
+
+Agent Mode Execution: Uses a GEO Writer and autonomous outreach agents to actively build your local citations on autopilot.
+
+MCP & API Access: Natively included on every tier to seamlessly connect with Claude and Cursor.
+
+2. Otterly: Budget-Friendly Semantic Audits
+Starting at $29/month, this is the perfect budget substitute. While AthenaHQ charges extra for API access on their base tier, Otterly keeps things incredibly accessible for solo marketers. It tracks your core local brand mentions and runs automated page-level GEO audits, flagging the exact technical errors if messy structured data is keeping AI bots from finding your store hours or phone number.
+
+3. Promptwatch: Local AI Crawler Log Tracing
+Starting at $95/month, this tool bridges the gap between tracking and actual local visits. It provides precise city-level tracking right out of the box. Its strongest feature is the AI Crawler URL Inspector, which traces crawler logs directly to your referral traffic—giving you concrete proof of how generative search translates into real people visiting your local website.
+
+4. Peec AI: Competitor Source Dissection
+Starting at $95/month, this is a surgical tool for tracking local competitors. Its standout feature is Source Classification. When a rival coffee shop or mechanic outranks you in an AI answer, Peec AI instantly dissects the generative response to reveal the exact local directory, news article, or community forum the AI cited, giving you the exact targets you need to steal that local recommendation.
+
+5. Profound: Enterprise AI Marketer for Franchises
+If you manage a massive franchise of local businesses, this is your enterprise alternative. Profound replaces AthenaHQ's citation engine with a credit-based AI Marketer. This superintelligent agent researches, writes, an …
+```
+
+## GetMentions AI Review: The AI Visibility Tool That Helps You Get Cited
+
+- Kanal: SaaS Verdicts · Tarih: 2026-10-06 · İzlenme: 232 · Süre: 7:42
+- https://www.youtube.com/watch?v=GuJiGwFWIjA
+- Bulunduğu aramalar: AI visibility tool review
+
+```
+AI search is changing how people discover brands. But knowing where your brand appears in AI answers is only the first step.
+
+In this video, we take a look at GetMentions AI, an AI visibility platform that helps brands track how they appear across AI search engines and, more importantly, identify opportunities to get their brand mentioned on the sources influencing those AI answers.
+
+With GetMentions AI, you can:
+
+• Track your brand visibility across AI search
+• Monitor brand and competitor citations
+• Find citation and mention gaps
+• Discover websites, articles, review sites and other sources where your brand could be mentioned
+• Take action on identified opportunities directly through the platform
+• Track opportunities from discovery to actual placement
+
+Instead of simply showing you where your brand is missing, GetMentions AI helps you take the next step and work toward getting those mentions.
+
+Try GetMentions AI:
+https://www.getmentions.ai/
+
+Check Pricing & Plans:
+https://www.getmentions.ai/pricing
+
+Learn more about AI visibility and how brands can improve their presence in AI-generated answers with GetMentions AI.
+
+#GetMentionsAI #AIVisibility #AISearch #GEO #AEO #ChatGPT #DigitalMarketing
 ```
 
 ## AthenaHQ vs RadarKit: 3 Local AEO Differences That Matter
@@ -2409,42 +2255,9 @@ AthenaHQ is a robust, premium dashboard if you have a massive enterprise budget 
 Connect with Adam: …
 ```
 
-## 5 Best AthenaHQ Alternatives for Local Businesses
-
-- Kanal: GEO Mastery with Adam · Tarih: 2026-11-13 · İzlenme: 230 · Süre: 3:35
-- https://www.youtube.com/watch?v=1Rt30T_Wt5s
-- Bulunduğu aramalar: AthenaHQ AI search
-
-```
-Welcome back to Geo Tips. I am Adam. AthenaHQ is an incredibly powerful platform with its Citation Engine, but dropping nearly $300 a month on their base plan just to hit strict usage credit limits is a massive roadblock. If you run a local bakery, a boutique fitness studio, or a neighborhood plumbing company, you need tools that actually drive local foot traffic without draining your operational budget. Here are the five best AthenaHQ alternatives built specifically for local businesses.
-
-📅 Stop draining your operational budget on expensive usage limits. Book a call to automate your local AI search rankings with RadarKit here: https://radarkit.ai/book-a-call
-
-1. RadarKit: The Best Overall Local Business GEO Winner
-Starting at just $29/month, RadarKit is the ultimate all-in-one powerhouse for local shops. It bypasses expensive credit limits to deliver hyper-accurate AI visibility tracking across ChatGPT, Gemini, and Perplexity using real residential IPs across 50+ locations.
-
-Deep Radars: Features query fan-out intelligence to show how AI models process local searches, plus built-in Shopping and Ads Radars to expose exactly which products the AI is pushing to nearby customers.
-
-Agent Mode Execution: Uses a GEO Writer and autonomous outreach agents to actively build your local citations on autopilot.
-
-MCP & API Access: Natively included on every tier to seamlessly connect with Claude and Cursor.
-
-2. Otterly: Budget-Friendly Semantic Audits
-Starting at $29/month, this is the perfect budget substitute. While AthenaHQ charges extra for API access on their base tier, Otterly keeps things incredibly accessible for solo marketers. It tracks your core local brand mentions and runs automated page-level GEO audits, flagging the exact technical errors if messy structured data is keeping AI bots from finding your store hours or phone number.
-
-3. Promptwatch: Local AI Crawler Log Tracing
-Starting at $95/month, this tool bridges the gap between tracking and actual local visits. It provides precise city-level tracking right out of the box. Its strongest feature is the AI Crawler URL Inspector, which traces crawler logs directly to your referral traffic—giving you concrete proof of how generative search translates into real people visiting your local website.
-
-4. Peec AI: Competitor Source Dissection
-Starting at $95/month, this is a surgical tool for tracking local competitors. Its standout feature is Source Classification. When a rival coffee shop or mechanic outranks you in an AI answer, Peec AI instantly dissects the generative response to reveal the exact local directory, news article, or community forum the AI cited, giving you the exact targets you need to steal that local recommendation.
-
-5. Profound: Enterprise AI Marketer for Franchises
-If you manage a massive franchise of local businesses, this is your enterprise alternative. Profound replaces AthenaHQ's citation engine with a credit-based AI Marketer. This superintelligent agent researches, writes, an …
-```
-
 ## How AI Search Engines Describe Your Brand (and How to Fix the Gaps) | OtterlyAI Brand Profiling
 
-- Kanal: OtterlyAI · Tarih: 2026-10-21 · İzlenme: 228 · Süre: 4:07
+- Kanal: OtterlyAI · Tarih: 2026-10-21 · İzlenme: 230 · Süre: 4:07
 - https://www.youtube.com/watch?v=AsJ-WVx-7dw
 - Bulunduğu aramalar: Otterly AI
 
@@ -2479,7 +2292,7 @@ Questions? Email hello@otterly.ai or use the live chat on our website.
 
 ## 5 Best AI Visibility Tools for Home Service Businesses
 
-- Kanal: GEO Mastery with Adam · Tarih: 2026-10-29 · İzlenme: 217 · Süre: 4:00
+- Kanal: GEO Mastery with Adam · Tarih: 2026-10-29 · İzlenme: 226 · Süre: 4:00
 - https://www.youtube.com/watch?v=HyFhcZ1Xg7U
 - Bulunduğu aramalar: AI visibility tool review
 
@@ -2510,87 +2323,130 @@ Starting at $95/month, this is perfect for home service marketing agencies diggi
 At just $29/month, this is a super lightweight option for independent owner- …
 ```
 
-## 5 Best GetAirefs Alternatives for AI Search in 2026! 🏆🤖
+## Best AI Search Visibility Tool Tutorial For 2026 | Semrush SEO + AI Search Toolkit
 
-- Kanal: GEO Mastery with Adam · Tarih: 2026-08-11 · İzlenme: 192 · Süre: 2:36
-- https://www.youtube.com/watch?v=iU415pxjrog
-- Bulunduğu aramalar: AthenaHQ AI search
-
-```
-5 Best GetAirefs Alternatives for AI Search in 2026! 🏆🤖
-
-Are you using GetAirefs for AI visibility tracking but feeling limited by its basic prompt monitoring? To build real authority in AI search today, you need advanced execution tools, local data, and the ability to capture citations—not just count them.
-
-In this video, I break down the top five GetAirefs alternatives to help you level up your Generative Engine Optimization (GEO) strategy and dominate AI search platforms like ChatGPT, Perplexity, and Google AI Overviews!
-
-🏆 Top 5 GetAirefs Alternatives Breakdown:
-
-🎯 1. RadarKit ($29/mo) – Overall Winner
-RadarKit is the most feature-packed platform available for actionable AI search execution. It monitors your AI Share of Voice across ChatGPT, Perplexity, Gemini, Copilot, and AI Overviews. It uses Local Radar for residential IPs across 50+ locations, tracks query fanouts, and syncs AI traffic analytics. Best of all, it features 6 dedicated AI agents (Plan, Content, GEO Writer, Outreach, Reddit, Chat) to handle strategy, page updates, and publisher outreach on autopilot. 
-
-🏢 2. Profound ($99/mo) – Best for Enterprise Teams
-Engineered for large teams treating AI search as a primary revenue channel. It features deep Agent Analytics to track crawler activity on your server logs and Maps Prompt Demand so your PR teams can target high-intent questions before competitors.
-
-🔍 3. Promptwatch ($95/mo) – Best for Citation Intelligence
-A powerhouse for understanding exactly why AI models trust specific content. It links prompt rankings directly to AI crawler logs and auto-generates AEO articles based on the specific citation gaps it uncovers between you and your competitors.
-
-📈 4. OtterlyAI ($29/mo) – Best for Freelancers & Growing Teams
-A budget-friendly option that goes beyond basic tracking. It features built-in AI Prompt Research to discover what users are asking, and a GEO Audit Tool that evaluates your specific URLs against ranking factors to hand you a prioritized action list.
-
-🧠 5. AthenaHQ ($295/mo) – Best for Executive Reporting
-Built for commercial brands requiring high-level GEO reporting. It tracks visibility across 9 different LLMs and uses an advanced Machine Learning engine to predict your exact citation probability, delivering clear on-page and off-page optimization tasks.
-
-💡 Final Verdict: Why RadarKit Wins
-While Profound, Promptwatch, OtterlyAI, and AthenaHQ bring fantastic specialized analytics, RadarKit is the undisputed overall winner. It is the only platform that seamlessly combines multi-engine monitoring, local residential IP tracking, deep traffic analytics, and a full suite of autonomous AI execution agents to actually do the work for you.
-
-Tap the related video link below to watch the full breakdown! 👇
-
-For collaborations and Enquiries email me on geowithadam@mailo.com
-
-#GetAirefs #RadarKit #Profound #Promptwatch #OtterlyAI #AthenaHQ #GEO #AEO #AISEO #GenerativeEngineOptimization #ChatGPTSEO
-```
-
-## Profound vs Athena HQ: Best GEO Platform for AI SEO?
-
-- Kanal: GEO Mastery with Adam · Tarih: 2026-07-24 · İzlenme: 175 · Süre: 3:17
-- https://www.youtube.com/watch?v=TvSUcWuDaMI
-- Bulunduğu aramalar: Profound AI visibility
+- Kanal: Tutorials by Manizha & Ryan · Tarih: 2026-10-31 · İzlenme: 198 · Süre: 13:41
+- https://www.youtube.com/watch?v=88uh0cnHuDI
+- Bulunduğu aramalar: Semrush AI visibility toolkit
 
 ```
-In this 3-minute and 16-second breakdown, we are putting two of the biggest heavyweights in the Generative Engine Optimization space—Profound and Athena HQ—head to head, while also revealing why RadarKit might be the sleeper hit you actually need. If you are serious about your AI SEO strategy, choosing the right visibility platform is a massive decision that dictates how well you capture traffic from major LLMs. We cover everything from enterprise brand integrity to prompt search volumes, helping you decide which tool deserves a spot in your workflow.
+Get Started With Semrush: https://semrush.sjv.io/c/6688059/3367878/13053
 
-Profound: Deep Analytics and Autonomous Content Agents
-Profound stands out for users who need deep tracking on brand sentiment and source citations across major LLMs. By utilizing their Answer Engine Insights and AI Prompt Volumes, you can conduct keyword research specifically tailored for AI, showing exactly what millions of users are asking answer engines. Furthermore, Profound's Agent Analytics tracks how AI bots crawl your site, and their autonomous agents generate AEO-optimized content at scale. Their Starter plan sits at 99 dollars a month for ChatGPT tracking, scaling up to a 399 dollar Growth plan that covers three engines and provides 400 agent credits.
+Thanks Semrush for partnering with me on this video!
 
-Athena HQ: Enterprise Command Center and Brand Integrity
-Athena HQ provides an enterprise-grade solution focused heavily on broad cross-platform monitoring across more than eight different models, including Gemini, Claude, and ChatGPT. With the Ask Athena agentic AI copilot trained directly on your live GEO data, you get instant strategic answers and prescriptive on-page and off-page fixes to win crucial citations. Athena HQ also actively catches factual errors with its Hallucination Detection before they spread. While they offer a 300-credit free tier, their core Starter plan runs 295 dollars a month, unlocking visibility across nine models with 3,600 credits for high-volume execution.
+If this tutorial helped you out please like & commenting down below if this works! 
 
-RadarKit: The Ultimate Budget-Friendly GEO Alternative
-If the enterprise-heavy tools fall outside your current budget, RadarKit is a fantastic, execution-focused alternative starting at just 29 dollars a month. RadarKit utilizes residential IPs from over 50 countries to provide highly accurate local AI tracking, ensuring you see exactly what users see in different regions. It also includes a dedicated Reddit agent to uncover community discussions you might be missing out on, making it the perfect scrappy growth tool for solo SEOs, freelancers, and agile teams looking to dominate AI search visibility without breaking the bank.
+Subscribe for more daily videos! See you in the next video!
 
-The Final Verdict on AI Search Visibility
+🤗 SUBSCRIBE FOR NEW VIDEOS EVERY WEEK
 
-Your final choice depends entirely on your current scale and primary focus. If your main goal is understanding prompt search volume and scaling AEO content creation with custom agents, Profound is an incredible fit. If you need an enterprise-grade command center with a powerful interactive AI copilot and proactive brand integrity tools, Athena HQ takes the crown. However, if you are looking  …
+WHO ARE WE: We’re Manizha & Ryan, two content creation experts. We create easy-to-follow tutorials around dropshipping, e-commerce, digital marketing and much more!
+
+#tutorials by #Manizha_Lopez #itsryanvandonkelaar 
+
+-----
+Some links above are affiliate links, we might earn a small commission if you use them.
 ```
 
-## Agentic Commerce Test: ChatGPT Cited Walmart 13 Times, Amazon Got 1 Card
+## Scrunch AI vs RadarKit for Local Business Tracking 3 Key Differences
 
-- Kanal: RankControl · Tarih: 2026-11-17 · İzlenme: 161 · Süre: 0:30
-- https://www.youtube.com/watch?v=_kKJHMTF8AY
-- Bulunduğu aramalar: ChatGPT shopping product recommendations
+- Kanal: GEO Mastery with Adam · Tarih: 2026-11-11 · İzlenme: 193 · Süre: 3:16
+- https://www.youtube.com/watch?v=9dt0VdqvLOE
+- Bulunduğu aramalar: Scrunch AI visibility
 
 ```
-On October 19, 2026 we asked ChatGPT and Google AI Mode 16 shopping related questions and tracked where the answers pointed shoppers.
+What’s up guys, Adam here, your go-to GEO and SEO expert. Welcome back to Geo Tips with Adam. Today, we are putting Scrunch AI and RadarKit head-to-head for local business tracking. If you run a physical business, getting recommended by ChatGPT or Perplexity is critical, but these two platforms take entirely different approaches to AI search optimization. Let's break down the three key differences, and reveal which platform actually comes out on top.
 
-ChatGPT cited Walmart 13 times. Plus it showed one Amazon product card (robots.txt prevents OpenAI search crawler from seeing Amazon). 14 of 27 ChatGPT product cards led to large retailers.
+📅 Tired of enterprise limits and ready to dominate your local AI search rankings on complete autopilot? Book a call directly with our team here: https://radarkit.ai/book-a-call
 
-Google AI Mode would link product names to product listings on Google Shopping. 71 links, in 12 of 16 answers.
-RankControl, an AI SEO and AEO platform | https://rctrl.com | https://medium.com/@thesearchshift/what-is-agentic-commerce-we-ran-16-shopping-questions-to-find-out-c996bce45779
+Difference #1: Engine Coverage & Location Granularity
+Scrunch AI is a solid platform, but its engine coverage is heavily gated. Its base plan only supports four LLMs—ChatGPT, Perplexity, Google AI Overviews, and Copilot. If you want to track Claude, Gemini, or Grok, you are forced into a custom Enterprise tier. RadarKit gives you everything out of the gate. It tracks all seven major AI engines natively. Instead of broad global tracking, RadarKit uses a dedicated Local Radar leveraging residential IPs across fifty-plus locations. This delivers hyper-accurate city-level tracking, showing you exactly what a customer in a specific neighborhood sees when they ask AI for a local recommendation.
+
+Difference #2: Pricing Limits & Enterprise Paywalls
+Scrunch AI is priced strictly for enterprise budgets. Their Core plan costs $250 a month, and it severely limits you to just 125 unique prompts and a single brand workspace. If you want API access, you have to talk to their sales team for a custom Enterprise contract. RadarKit strips away the massive enterprise fees. Starting at a flat $29 a month, you get full multi-engine AI tracking, complete with Shopping and Ads Radars. Plus, RadarKit gives you full API and MCP access natively on its standard plans, letting you pipe live client visibility data straight into your own custom reporting dashboards, Claude, or Cursor without missing a beat.
+
+Difference #3: Site Audits vs. Autonomous Off-Page Execution
+Scrunch AI focuses heavily on its Agent Experience Platform and site audits. It wants to make sure AI agents can crawl and read your website easily. However, AI engines do not recommend local businesses based on website code alone; they rely heavily on third-party consensus and local citations. RadarKit actively builds that off-page authority. When it spots a local visibility gap, it deploys a Reddit Agent to find the exact local community threads that LLMs pull from. Simultaneously, its GEO Writer crafts citation-ready content, and the Outreach Agent pitches and negotiates local directory and blog placements through your connected Gmail on complete autopilot.
+
+The Final Verdict & The True Winner
+Scrunch AI is an innovative enterprise tool if you have a massive budget, only need to track one brand, and want to optimize how bots crawl your domain. But if your goal is to actually win local AI  …
+```
+
+## Semrush AI SEO Toolkit Review - Is it worth it?
+
+- Kanal: Jay's AI SEO Tips · Tarih: 2026-10-20 · İzlenme: 171 · Süre: 18:10
+- https://www.youtube.com/watch?v=lyF79HvV_7s
+- Bulunduğu aramalar: Semrush AI visibility toolkit
+
+```
+👉 Try 7 Day free trial: https://semrush.sjv.io/c/7400566/3367878/13053
+
+Thanks Semrush for partnering with me on this video!
+
+If you want to understand where your brand appears in AI answers, this Semrush AI SEO Toolkit review takes you through the main reports using a real website. I show how to read the data, find gaps against competitors and turn those findings into content ideas.
+
+You will see the difference between a brand mention and a website citation, why both matter, and how to check the full AI response behind each result.
+
+⏱️ TIMESTAMPS
+
+00:00 Semrush AI SEO Toolkit review: Introduction
+00:16 What the AI Visibility Toolkit does
+00:31 Adding a domain
+00:47 AI visibility overview and key metrics
+01:24 Visibility by AI model
+01:54 Brand mentions, cited pages and countries
+02:27 Topics and sources overview
+03:22 Prompt research: Mentions vs citations
+04:25 Finding topics and prompts to target
+05:12 Cited sources and third-party content
+06:29 Source opportunities and YouTube content
+07:36 Finding your most cited pages
+08:15 Competitor research and visibility gaps
+09:49 Prompt Research walkthrough
+11:22 Brand Performance setup
+11:54 Brand sentiment and share of voice
+13:08 Brand perception, strengths and weak points
+13:51 Narrative drivers and key source websites
+14:49 Questions and content opportunities
+16:01 Site Audit and technical SEO issues
+16:41 Tracking your own prompts
+17:22 Sources behind tracked AI answers
+17:53 Semrush partnership and free trial
+
+WHAT YOU WILL LEARN
+
+• How to check your brand’s AI visibility score
+• How visibility differs across AI models and countries
+• How to find brand mentions and website citations
+• How to open and review the full AI answers
+• How to compare your brand with competitors
+• How to find prompts where competitors appear without you
+• How to spot websites and videos cited in AI answers
+• How to review brand sentiment and perception
+• How to find content ideas from questions and topics
+• How to track your own prompts over time
+• How to find site issues through the Site Audit report
+
+BRAND MENTIONS VS CITATIONS
+
+A website can be cited in an AI answer without the brand being named in the main response. A brand can also be mentioned without a direct link to its website.
+
+In the demo, I show examples of both. This helps you look beyond citation counts and check whether AI tools are actually including your brand when people ask about products or services like yours.
+
+COMPETITOR RESEARCH AND PROMPT GAPS
+
+The competitor research section shows how brands compare across topics and prompts. I walk through shared prompts and missing prompts so you can see where your brand appears alongside competitors and where it is absent.
+
+I also explore the Prompt Research tool to find related topics, review AI responses and see which brands and sources appear in those answers. These reports can help shape a more focused content plan.
+
+CITED SOURCES AND CONTENT OPPORTUNITIES
+
+Which websites appear in the answers you want y …
 ```
 
 ## Content Generation: Find and fill your AI visibility gaps with a click
 
-- Kanal: Scrunch · Tarih: 2026-11-04 · İzlenme: 149 · Süre: 1:41
+- Kanal: Scrunch · Tarih: 2026-11-04 · İzlenme: 158 · Süre: 1:41
 - https://www.youtube.com/watch?v=R-onmWSiFdA
 - Bulunduğu aramalar: Scrunch AI visibility
 
@@ -2626,9 +2482,54 @@ Don’t just create more content. Create content worth citing.
 Give AI the content its looking for with Scrunch: Start a free 7-day trial or get a demo at scrunch.com.
 ```
 
+## How to Get Products Recommended by Sparky, Alexa for Shopping and ChatGPT
+
+- Kanal: Azoma · Tarih: 2026-10-28 · İzlenme: 147 · Süre: 28:02
+- https://www.youtube.com/watch?v=zq6DlBlaOA8
+- Bulunduğu aramalar: ChatGPT shopping product recommendations
+
+```
+Azoma helps brands get their products recommended and bought by AI shopping agents such as Alexa for Shopping, ChatGPT, Google Gemini and Walmart Sparky. Completeness of structured product data is the first gate; missing attributes drop a product before ranking begins.
+
+In this session, Nancy Morgan (Founding Head of Customer Success at Azoma) walks through the current state of play in agentic commerce and introduces the 5Cs, the framework leading consumer brands use to stay visible, trusted and selected when AI agents shape what customers buy.
+
+Timestamps:
+00:00 How brands get recommended by AI shopping agents
+
+03:17 Why brand real estate is shrinking on AI answers
+
+05:26 How Cosmo and query fan-out change product discovery
+
+08:13 Why AI-referred traffic converts higher for brands
+
+10:07 The three types of AI shopping agents
+
+11:06 How ChatGPT is building agentic shopping
+
+14:17 How Gemini and AI Overviews are growing
+
+16:50 How Alexa for Shopping (formerly Rufus) works
+
+19:46 How Walmart Sparky is changing search
+
+20:42 How Meta Muse connects to retailer agents
+
+22:44 How to apply the 5Cs of Agentic Commerce OptimisationThe 5Cs of Agentic Commerce Optimisation (ACO)Completeness
+
+Fully structured product data and attributes are required for an agent to read a product at all. On Amazon this means the backend attributes in flat files; on Walmart it is the equivalent feed; on Google it is the Merchant Center attributes. A missing field removes the product from the candidate set. Azoma audits product data the way Sparky, Alexa for Shopping and ChatGPT actually read it.Context
+
+Answer the real questions customers ask AI agents, in the shape and phrasing they use. Cosmo (the LLM behind Alexa for Shopping) has 15 relation types that supply context. Customers now give far longer prompts than classic search. Azoma surfaces the questions shoppers actually ask so product content matches them.Citations
+
+Appear in the sources AI agents actually use. The average ChatGPT commerce prompt fans out to roughly 10 sub-queries and cites about 15 sources. Source mix differs by agent: Alexa for Shopping leans heavily on affiliate and retailer pages, while ChatGPT draws more from earned media and UGC. Azoma tracks these citation patterns so brands can show up where the agents look.Correctness
+
+Make sure the right results surface when people ask AI about your category and brand. Contradictory facts across sites are resolved toward the most consistent version. Azoma monitors what agents say, flags hallucinations, and helps brands correct them at the source (as with the bleached tea-bag case).Customer Acquisition
+
+Ensure the work drives real revenue. Clearing the earlier gates is what makes recommendation and sales possible. Azoma connects visibility and accuracy improvements to the KPIs that matter, including revenue and conversion, for enterprise CPG brands.Essential viewing for ecommerce leaders, brand teams, digital shelf managers and anyone preparing for a world wher …
+```
+
 ## Semrush AI Visibility Toolkit Review 2026! 🏆🤖
 
-- Kanal: GEO Mastery with Adam · Tarih: 2026-09-11 · İzlenme: 138 · Süre: 2:36
+- Kanal: GEO Mastery with Adam · Tarih: 2026-09-11 · İzlenme: 139 · Süre: 2:36
 - https://www.youtube.com/watch?v=CCubmZJvozg
 - Bulunduğu aramalar: Semrush AI visibility toolkit
 
@@ -2673,51 +2574,6 @@ For collaborations and enquiries: geowithadam@mailo.com
 3:25 - RadarKit: The Scalabl …
 ```
 
-## How to Get Products Recommended by Sparky, Alexa for Shopping and ChatGPT
-
-- Kanal: Azoma · Tarih: 2026-10-28 · İzlenme: 137 · Süre: 28:02
-- https://www.youtube.com/watch?v=zq6DlBlaOA8
-- Bulunduğu aramalar: ChatGPT shopping product recommendations
-
-```
-Azoma helps brands get their products recommended and bought by AI shopping agents such as Alexa for Shopping, ChatGPT, Google Gemini and Walmart Sparky. Completeness of structured product data is the first gate; missing attributes drop a product before ranking begins.
-
-In this session, Nancy Morgan (Founding Head of Customer Success at Azoma) walks through the current state of play in agentic commerce and introduces the 5Cs, the framework leading consumer brands use to stay visible, trusted and selected when AI agents shape what customers buy.
-
-Timestamps:
-00:00 How brands get recommended by AI shopping agents
-
-03:17 Why brand real estate is shrinking on AI answers
-
-05:26 How Cosmo and query fan-out change product discovery
-
-08:13 Why AI-referred traffic converts higher for brands
-
-10:07 The three types of AI shopping agents
-
-11:06 How ChatGPT is building agentic shopping
-
-14:17 How Gemini and AI Overviews are growing
-
-16:50 How Alexa for Shopping (formerly Rufus) works
-
-19:46 How Walmart Sparky is changing search
-
-20:42 How Meta Muse connects to retailer agents
-
-22:44 How to apply the 5Cs of Agentic Commerce OptimisationThe 5Cs of Agentic Commerce Optimisation (ACO)Completeness
-
-Fully structured product data and attributes are required for an agent to read a product at all. On Amazon this means the backend attributes in flat files; on Walmart it is the equivalent feed; on Google it is the Merchant Center attributes. A missing field removes the product from the candidate set. Azoma audits product data the way Sparky, Alexa for Shopping and ChatGPT actually read it.Context
-
-Answer the real questions customers ask AI agents, in the shape and phrasing they use. Cosmo (the LLM behind Alexa for Shopping) has 15 relation types that supply context. Customers now give far longer prompts than classic search. Azoma surfaces the questions shoppers actually ask so product content matches them.Citations
-
-Appear in the sources AI agents actually use. The average ChatGPT commerce prompt fans out to roughly 10 sub-queries and cites about 15 sources. Source mix differs by agent: Alexa for Shopping leans heavily on affiliate and retailer pages, while ChatGPT draws more from earned media and UGC. Azoma tracks these citation patterns so brands can show up where the agents look.Correctness
-
-Make sure the right results surface when people ask AI about your category and brand. Contradictory facts across sites are resolved toward the most consistent version. Azoma monitors what agents say, flags hallucinations, and helps brands correct them at the source (as with the bleached tea-bag case).Customer Acquisition
-
-Ensure the work drives real revenue. Clearing the earlier gates is what makes recommendation and sales possible. Azoma connects visibility and accuracy improvements to the KPIs that matter, including revenue and conversion, for enterprise CPG brands.Essential viewing for ecommerce leaders, brand teams, digital shelf managers and anyone preparing for a world wher …
-```
-
 ## Scrunch AI Review 2026 Features, Pricing, Pros and Cons
 
 - Kanal: Jenny AI Search and AEO  · Tarih: 2026-09-16 · İzlenme: 136 · Süre: 2:41
@@ -2740,7 +2596,7 @@ Scrunch AI review, Scrunch AI Review 2026, Scrunch AI, Scrunch AI pricing, Scrun
 
 ## Scrunch AI Alternatives | Competitors to Scrunch.com
 
-- Kanal: James Dooley · Tarih: 2026-10-27 · İzlenme: 132 · Süre: 12:38
+- Kanal: James Dooley · Tarih: 2026-10-27 · İzlenme: 133 · Süre: 12:38
 - https://www.youtube.com/watch?v=2UmaTBAozpM
 - Bulunduğu aramalar: Scrunch AI visibility
 
@@ -2775,7 +2631,7 @@ AI Search Optimisation,
 
 ## Otterly.AI Review 2026: Pricing, Alternatives & Is It Worth $29/mo?
 
-- Kanal: Dan - Ship It · Tarih: 2026-09-12 · İzlenme: 127 · Süre: 4:39
+- Kanal: Dan - Ship It · Tarih: 2026-09-12 · İzlenme: 129 · Süre: 4:39
 - https://www.youtube.com/watch?v=T9syizU-3g0
 - Bulunduğu aramalar: Otterly AI
 
@@ -2808,9 +2664,44 @@ X(Twitter) → https://x.com/danshipit
 #OtterlyAI #OtterlyAIReview #OtterlyAIPricing #OtterlyAlternatives #AIVisibility #AIVisibilityTools #AEOTools #GEOTools #GenerativeEngineOptimization #AISEO #AISearchOptimization #AnswerEngineOptimization
 ```
 
+## Using Reddit to Increase AI Visibility, Authority & Brand Sentiment (Rankscale x Textbroker)
+
+- Kanal: Rankscale · Tarih: 2026-07-27 · İzlenme: 125 · Süre: 1:00:44
+- https://www.youtube.com/watch?v=wiDMt6ZjEYU
+- Bulunduğu aramalar: Rankscale AI
+
+```
+Why has Reddit become one of the most influential sources for AI search engines and LLM citations? 
+
+In this hands-on masterclass session of the Rankscale AI Summer Camp ☀️, Katarina de Almeida (Senior Consultant at Textbroker), Cody Christensen (CEO at Textbroker), and Giuseppe Colucci (Chief Growth Officer at Textbroker) join Jules de Bruin (Founder's Associate & GEO Instructor at Rankscale) to show you how to leverage Reddit to build brand authority, manage sentiment, and capture AI search visibility.
+
+Inside this session, we dive into analysis from over 30,000 AI citations to reveal how Reddit serves as a high-signal source for ChatGPT, Perplexity, and other engines. We break down the mechanics of authority gaps, explaining how community validation directly shapes brand sentiment in AI responses. 
+
+We also share actionable, sustainable strategies for Reddit engagement, covering everything from finding niche subreddits to executing value-add posts, hosting AMAs, and running a four-step Reddit audit.
+
+👉 Learn more and follow the full webinar series here: https://rankscale.ai/webinar
+
+00:00: Intro + Agenda 
+07:29: AI Visibility and Authority gaps: The 3 pillars of AI search 
+14:54: How to establish topical authority on Reddit 
+16:19: What doesn’t work 
+26:51: Our 4-step approach 
+46:34: Case Study: Closing the authority gap 
+49:21: Questions
+
+Follow us on LinkedIn:
+
+* Follow Rankscale on LinkedIn: https://www.linkedin.com/company/rankscale-ai/
+* Follow Textbroker on LinkedIn: https://www.linkedin.com/company/textbroker-international/
+
+If you want to stay ahead of the AI search curve, make sure to like, subscribe, and hit the bell for more sessions! 🔔
+
+#AISearch #SEO #Reddit #Rankscale #Textbroker #GEO #GenerativeEngineOptimization #BrandSentiment
+```
+
 ## Semrush AI Visibility vs Ahrefs Brand Radar vs RadarKit: Best AI Search Platform in 2026?
 
-- Kanal: GEO Mastery with Adam · Tarih: 2026-09-11 · İzlenme: 119 · Süre: 3:04
+- Kanal: GEO Mastery with Adam · Tarih: 2026-09-11 · İzlenme: 122 · Süre: 3:04
 - https://www.youtube.com/watch?v=M3y-9rYHgRg
 - Bulunduğu aramalar: Ahrefs Brand Radar
 
@@ -2842,9 +2733,33 @@ For collaborations and enquiries email me on geowithadam@mailo.com
 #Semrush #Ahrefs #RadarKit #GenerativeEngineOptimization #AEO #AISEO #ChatGPTSEO #TechStack2026
 ```
 
+## How to improve your brand's visibility in AI | Sitecore, Scrunch, and Americaneagle.com
+
+- Kanal: Sitecore · Tarih: 2026-09-25 · İzlenme: 121 · Süre: 13:04
+- https://www.youtube.com/watch?v=pklentNObI8
+- Bulunduğu aramalar: Scrunch AI visibility
+
+```
+Chris Purcell, Product Marketing at Sitecore and Scrunch, sits down with Chris Andrew, CEO of Scrunch, alongside Rick Bauer and Maggie Burke from Americaneagle.com. The conversation starts with a head start: Americaneagle.com had been running Scrunch on their own website for 
+over a year before Sitecore made the acquisition. That firsthand experience shapes everything that follows.
+
+Maggie and Rick walk through how Americaneagle.com moved from spotting a visibility gap to acting on it. They extended Accessibility Owl, their existing Sitecore Marketplace app focused on accessibility and findability, to pull in Scrunch data directly, giving clients a single place to see the gap and fix it. Chris Andrew explains why that matters: AI search visibility without the ability to fix the underlying content is only half the answer. Together, the three close the loop.
+
+The conversation also looks at how AI search is changing who's in the room. Marketers, CIOs, and CTOs are now part of the same decision, where it once sat with technical teams alone. Chris Andrew makes the case that SEO practitioners have been marketing to machines for 20 years. The scale of the challenge is new. The discipline isn't.
+
+The closing advice from all three: get started. Every organization knows it needs to do something about AI search. The gap between teams already working on it and those waiting for certainty is growing. With Sitecore, Scrunch, and Americaneagle.com, the tools and implementation expertise to take that first step are already there.
+
+00:00 Introducing Sitecore, Scrunch, and Americaneagle.com 
+00:47 Why Americaneagle.com chose Scrunch 
+03:17 Acting on AI search insights 
+05:14 Closing the loop on AI search 
+12:16 Aligning content and technology for AI search 
+12:36 Getting started with AI search
+```
+
 ## From Audit to Action: How AI Search Feeds Into Your Go-to-Market Framework (Rankscale x ScratchMM)
 
-- Kanal: Rankscale · Tarih: 2026-08-18 · İzlenme: 118 · Süre: 43:02
+- Kanal: Rankscale · Tarih: 2026-08-18 · İzlenme: 119 · Süre: 43:02
 - https://www.youtube.com/watch?v=aEOPfQNj-yI
 - Bulunduğu aramalar: Rankscale AI
 
@@ -2879,33 +2794,9 @@ If you want to stay ahead of the AI search curve, make sure to like, subscribe, 
 #AISearch #SEO #Rankscale #ScratchMM #GEO
 ```
 
-## How to improve your brand's visibility in AI | Sitecore, Scrunch, and Americaneagle.com
-
-- Kanal: Sitecore · Tarih: 2026-09-25 · İzlenme: 115 · Süre: 13:04
-- https://www.youtube.com/watch?v=pklentNObI8
-- Bulunduğu aramalar: Scrunch AI visibility
-
-```
-Chris Purcell, Product Marketing at Sitecore and Scrunch, sits down with Chris Andrew, CEO of Scrunch, alongside Rick Bauer and Maggie Burke from Americaneagle.com. The conversation starts with a head start: Americaneagle.com had been running Scrunch on their own website for 
-over a year before Sitecore made the acquisition. That firsthand experience shapes everything that follows.
-
-Maggie and Rick walk through how Americaneagle.com moved from spotting a visibility gap to acting on it. They extended Accessibility Owl, their existing Sitecore Marketplace app focused on accessibility and findability, to pull in Scrunch data directly, giving clients a single place to see the gap and fix it. Chris Andrew explains why that matters: AI search visibility without the ability to fix the underlying content is only half the answer. Together, the three close the loop.
-
-The conversation also looks at how AI search is changing who's in the room. Marketers, CIOs, and CTOs are now part of the same decision, where it once sat with technical teams alone. Chris Andrew makes the case that SEO practitioners have been marketing to machines for 20 years. The scale of the challenge is new. The discipline isn't.
-
-The closing advice from all three: get started. Every organization knows it needs to do something about AI search. The gap between teams already working on it and those waiting for certainty is growing. With Sitecore, Scrunch, and Americaneagle.com, the tools and implementation expertise to take that first step are already there.
-
-00:00 Introducing Sitecore, Scrunch, and Americaneagle.com 
-00:47 Why Americaneagle.com chose Scrunch 
-03:17 Acting on AI search insights 
-05:14 Closing the loop on AI search 
-12:16 Aligning content and technology for AI search 
-12:36 Getting started with AI search
-```
-
 ## How to Get ChatGPT to Recommend Your Products | Prepare Your Store for AI Shopping
 
-- Kanal: Spectrum BPO · Tarih: 2026-11-05 · İzlenme: 114 · Süre: 11:12
+- Kanal: Spectrum BPO · Tarih: 2026-11-05 · İzlenme: 117 · Süre: 11:12
 - https://www.youtube.com/watch?v=4RkgM3XQttU
 - Bulunduğu aramalar: ChatGPT shopping product recommendations
 
@@ -2941,7 +2832,7 @@ Website: [www.spectrumbpo.com](https://www.spectrumbpo.com)
 
 ## How a Local SEO Agency Uses AI Visibility Tracking to Retain Clients | Sam Sarsten, Thencan Designs
 
-- Kanal: OtterlyAI · Tarih: 2026-10-26 · İzlenme: 108 · Süre: 5:36
+- Kanal: OtterlyAI · Tarih: 2026-10-26 · İzlenme: 116 · Süre: 5:36
 - https://www.youtube.com/watch?v=c3w70ocpMf4
 - Bulunduğu aramalar: Otterly AI
 
@@ -2964,24 +2855,9 @@ Track your brand’s visibility across ChatGPT, Google AI Overviews, Gemini, Per
 #LocalSEO #GEO #AISearch #GenerativeEngineOptimization #ChatGPT #OtterlyAI #SEOAgency
 ```
 
-## When ChatGPT recommends a shop, the shop may be talking
-
-- Kanal: Diff Weekly · Tarih: 2026-11-11 · İzlenme: 98 · Süre: 1:07
-- https://www.youtube.com/watch?v=LNi6Q-4_-PY
-- Bulunduğu aramalar: ChatGPT shopping product recommendations
-
-```
-OpenAI launched Businesses in ChatGPT in beta. Companies can claim a profile, feed ChatGPT their products, prices and stock, and run a Business Agent that people can chat with from inside an answer. This Short covers what that means for shoppers and how to tell ChatGPT's answer from the seller's.
-
-Source:
-OpenAI, "Introducing Businesses in ChatGPT" (2026-11-10): https://openai.com/index/introducing-businesses-chatgpt/
-
-#ChatGPT #OpenAI #AIshopping
-```
-
 ## Profound vs Otterly AI (2026): Which AI Search Tool Wins?
 
-- Kanal: GEO Mastery with Adam · Tarih: 2026-08-31 · İzlenme: 95 · Süre: 4:04
+- Kanal: GEO Mastery with Adam · Tarih: 2026-08-31 · İzlenme: 99 · Süre: 4:04
 - https://www.youtube.com/watch?v=0zQQdsx-yek
 - Bulunduğu aramalar: Otterly AI
 
@@ -3021,9 +2897,136 @@ The Verdict: Profound is an absolute titan for large enterprise teams that need 
 If you want a tool that monitors exactly what your buyers actually see on their scre …
 ```
 
+## How to Track Brand Mentions in ChatGPT and 6 More AIs, Step 2: Add Your Questions
+
+- Kanal: Cituna | AI Visibility · Tarih: 2026-10-01 · İzlenme: 98 · Süre: 0:15
+- https://www.youtube.com/watch?v=Xwnu7QE5Mx0
+- Bulunduğu aramalar: track brand mentions ChatGPT
+
+```
+How to track brand mentions in ChatGPT and 6 more AIs, step 2: add the questions your customers actually ask, and Cituna asks every AI those questions every day.
+The 7 AIs: ChatGPT, Perplexity, Gemini, Claude, Grok, Google AI Overviews and Google AI Mode.
+
+Step 2 of 8. Add the questions your customers actually ask, or tap a suggestion. Cituna asks all 7 AIs those questions for you, every day.
+
+cituna.com
+
+More: https://cituna.com/guides/track-prompts-and-competitors
+
+#AIVisibility #ChatGPT #AISearch #Cituna
+```
+
+## 5 Best Semrush AI Toolkit Alternatives 2026 | Real AI Visibility Data
+
+- Kanal: GEO | with George · Tarih: 2026-09-07 · İzlenme: 93 · Süre: 3:44
+- https://www.youtube.com/watch?v=qMYlMd-gL-U
+- Bulunduğu aramalar: Semrush AI visibility toolkit
+
+```
+5 Best Semrush AI Toolkit Alternatives 2026 | Real AI Visibility Data
+
+Short answer: the best Semrush AI Visibility Toolkit alternatives in 2026 are Finseo, Profound, Scrunch AI, Otterly.ai and Rankscale AI. Finseo is the top pick overall.
+
+⏱️ VIDEO TIMESTAMPS / CHAPTERS:
+0:00 Why AI Search Changes Everything
+0:29 1. Finseo: Best Overall Semrush AI Alternative
+1:40 2. Profound: Best for Enterprise Teams
+2:03 3. Scrunch AI: Best for Technical Teams
+2:30 4. Otterly.ai: Best Lightweight Monitor
+2:55 5. Rankscale AI: Best Quick Audit
+3:19 Verdict: Which Tool Should You Pick?
+
+🛠️ MORE ON EACH TOOL:
+
+1️⃣ Finseo: Best Overall Semrush AI Alternative
+🔗 https://finseo.ai
+Because it removes the engine ceiling entirely. Prompts run daily against fifteen answer engines, including ChatGPT, Claude, Perplexity, Gemini, Google AI Mode, Google AI Overviews, Grok, Copilot, DeepSeek and Mistral, across more than forty countries.
+
+2️⃣ Profound: Best for Enterprise Teams
+🔗 https://tryprofound.com
+Profound is the pick once you are at enterprise scale. Profound's Answer Engine Insights show where visibility drops off, Agent Analytics reveals what AI crawlers actually do on your site, and prompt volumes tell you which conversations are worth winning. The depth is real.
+
+3️⃣ Scrunch AI: Best for Technical Teams
+🔗 https://scrunchai.com
+For teams that want raw data rather than a dashboard. Scrunch AI benchmarks visibility by competitor, persona, topic and geography, and its data API pipes citation data straight into your own systems. The Agent Experience Platform serves machine readable pages so crawlers read you correctly.
+
+4️⃣ Otterly.ai: Best Lightweight Monitor
+🔗 https://otterly.ai
+Otterly.ai is the lightweight option. Otterly.ai monitors your prompts across ChatGPT, Perplexity and Google AI Overviews, tracks brand mentions and the links that come with them, and gets a small team reporting within an afternoon.
+
+5️⃣ Rankscale AI: Best Quick Audit
+🔗 https://rankscale.ai
+Best when you need an answer this week. Rankscale AI scores your AI visibility, benchmarks you against named competitors and runs an audit that points at the pages holding you back.
+
+💡 WHAT IS GENERATIVE ENGINE OPTIMIZATION (GEO)?
+Generative Engine Optimization is what SEO becomes once answers replace blue links: getting your brand named and cited inside ChatGPT, Claude, Perplexity, Gemini and Google AI Overviews. Answer Engine Optimization (AEO) is the same job seen from the other side, being the answer rather than a link under it. Either way, a channel nobody tracks is a channel nobody can manage.
+
+❓ FREQUENTLY ASKED QUESTIONS
+
+What is the best Semrush AI Visibility Toolkit alternative in 2026?
+Finseo is the best Semrush AI Visibility Toolkit alternative in 2026 (Best Overall Semrush AI Alternative). Because it removes the engine ceiling entirely. Prompts run daily against fifteen answer engines, including ChatGPT, Claude, Perplexity, Gemini, Google AI Mode, Google AI Overviews, Grok, Copilot, DeepSeek a …
+```
+
+## Semrush AI Visibility Toolkit Review 2026 | Features, Pricing, Best For
+
+- Kanal: GEO Mastery with Adam · Tarih: 2026-09-11 · İzlenme: 82 · Süre: 4:04
+- https://www.youtube.com/watch?v=w_TDjIiUCOs
+- Bulunduğu aramalar: Semrush AI visibility toolkit
+
+```
+I am Adam, your GEO and SEO expert. Today we take a deep dive into the Semrush AI Visibility Toolkit, a new reporting layer designed specifically for Generative Engine Optimization that gives you hard data on how often your brand gets recommended across ChatGPT, Gemini, and Google AI Overviews.
+
+Semrush AI Visibility Toolkit: 5 Core Features
+
+Visibility Overview: Calculates a proprietary AI Visibility Score by comparing your brand mentions against top competitors, providing a daily snapshot of total mentions, citations, and the specific pages driving those recommendations.
+
+Prompt Research: Acts as keyword research for AI, allowing you to discover specific prompts, evaluate AI search volume, assess difficulty, understand user intent, and see which brands the AI currently favors.
+
+Prompt Tracking: Operates like traditional rank tracking to monitor your visibility for high-value prompts day by day, complete with alerts for visibility drops or competitor overtakes.
+
+Brand Performance: Measures exact Share of Voice across AI platforms and runs Sentiment Analysis to determine if AI engines are describing your business positively, neutrally, or negatively.
+
+AI Search Site Audit: Checks your domain for technical issues blocking AI crawlers, such as misconfigured robots files or missing LLM text files, ensuring your content is fully accessible to models.
+
+Semrush Pricing & Target Audience
+
+The toolkit costs $99/month per domain as a standalone product (which includes 25 tracked prompts and 1 user). If bundled with traditional SEO features, the Semrush One plan starts at $199/month. It is built specifically for in-house teams and marketers who already use Semrush as their central SEO platform and want high-level measurement in their current dashboard.
+
+The Agency Alternative: RadarKit
+
+For an all-in-one alternative offering deeper intelligence and scalable execution, RadarKit starts at $29/mo (Lite), $79/mo (Growth), and $139/mo (Pro). It acts as an end-to-end GEO powerhouse delivering:
+
+Full visibility tracking and competitor benchmarking.
+
+Inline citation analysis and Query Fanouts to uncover exact sub-prompts AI models run behind the scenes.
+
+Dedicated Shopping and Ads Radar.
+
+Hyper-local tracking across 50+ regions using residential IPs.
+
+LLM referral traffic tracking and live MCP integration.
+
+Autonomous AI agents ready to put content, outreach, and Reddit campaigns on complete autopilot.
+
+⏱️ Timestamps
+0:00 - Intro: Semrush AI Visibility Toolkit
+0:35 - Feature 1: Visibility Overview
+1:05 - Feature 2: Prompt Research
+1:35 - Feature 3: Prompt Tracking
+2:00 - Feature 4: Brand Performance & Sentiment
+2:25 - Feature 5: AI Search Site Audit
+2:55 - Pricing Structure & Target Audience
+3:25 - RadarKit: The Scalable Agency Alternative
+
+#️⃣ YouTube Hashtags
+#Semrush #RadarKit #GenerativeEngineOptimization #AEO #AISEO #ChatGPTSEO #SearchVisibility #TechStack2026
+
+For collaborations and enquiries email me on geowithadam@mailo.com
+```
+
 ## Ahrefs Brand Radar Review 2026: AI Visibility, Pricing & Best Agency Alternative
 
-- Kanal: GEO Mastery with Adam · Tarih: 2026-09-14 · İzlenme: 71 · Süre: 3:55
+- Kanal: GEO Mastery with Adam · Tarih: 2026-09-14 · İzlenme: 73 · Süre: 3:55
 - https://www.youtube.com/watch?v=3WUZ_qi6Wbg
 - Bulunduğu aramalar: Ahrefs Brand Radar
 
@@ -3078,184 +3081,44 @@ Autonomous AI agents that execute content creation, client outreach, and Reddit 
 3:22 - RadarKit: T …
 ```
 
-## 5 Best AI Visibility Tools 2026
+## Check Your AI Visibility 7+, Not Once | Daily GEO Insights
 
-- Kanal: GEO | with George · Tarih: 2026-08-15 · İzlenme: 66 · Süre: 3:41
-- https://www.youtube.com/watch?v=JkkUsWVfNHs
-- Bulunduğu aramalar: AI visibility tool review
-
-```
-The 5 Best AI Visibility Tools in 2026 | The best tools are 1. Finseo, 2. Profound, 3. Scrunch, 4. Searchable, 5. AirOps. Traditional SEO is only half the battle in 2026. If you aren't optimizing for generative engines and tracking your brand's visibility in ChatGPT, Perplexity, and Google AI Overviews, you are flying blind. In this video, I break down the 5 Best AI Visibility and AI Search Tracking Tools to help you dominate Answer Engine Optimization (AEO) and Generative Engine Optimization (GEO).
-
-⏱️ VIDEO TIMESTAMPS / CHAPTERS:
-0:00 - Why Traditional SEO is Dead (Welcome to GEO in 2026)
-0:24 - 1. Finseo: Best Overall AI Visibility, GEO & AI Search Attribution
-1:23 - 2. Profound: Best Enterprise Answer Engine Insights
-1:52 - 3. Scrunch AI: Best Technical & Enterprise AI Monitoring
-2:22 - 4. Searchable: Best for Marketing Teams & Agencies
-2:51 - 5. AirOps: Best for Turning Insights into Content
-3:23 - Outro: Subscribe for More GEO & AI SEO Tips!
-
-🛠️ TOOLS MENTIONED IN THIS VIDEO:
-
-1️⃣ Finseo — Best Overall AI Visibility & GEO Platform
-My clear winner and the most complete AI visibility platform I've tested. Sends prompts daily to every major model — ChatGPT, Claude, Perplexity, Gemini, Grok, Copilot, DeepSeek and Google AI Mode — across 50+ countries, tracking Share of Voice, Citation Share and the exact sources AI engines trust. Query Fan-Out Analysis reveals the hidden sub-queries LLMs explore in the background, and Gap Analysis shows precisely where competitors get cited and you don't. The game-changer: Finseo is the FIRST provider with true AI Search Attribution, tying AI mentions to actual traffic and revenue. It turns everything into automatic tasks so you always know what to do next, while the agentic analysis connects every data point — rankings, sources, sentiment, Search Console — into one clear picture. Plus white-label reports and 200+ integrations.
-
-2️⃣ Profound — Best Enterprise Answer Engine Insights
-A strong pick for enterprise teams. Answer Engine Insights show exactly where your visibility drops, Agent Analytics reveals what AI crawlers do on your site, and real prompt volumes tell you which conversations are worth winning. Expect enterprise pricing and onboarding.
-
-3️⃣ Scrunch AI — Best Technical & Enterprise AI Monitoring
-The most technical platform on the list. Benchmarks visibility by competitor, persona, topic and geography, pipes raw citation data into your own systems via a data API, and its Agent Experience Platform serves machine-readable versions of your pages so AI agents parse your site perfectly.
-
-4️⃣ Searchable — Best for Marketing Teams & Agencies
-A solid choice for marketing teams and agencies. Tracks mentions and citations across ChatGPT, Claude, Perplexity, Google AI Overviews and Copilot — then turns the data into tailored recommendations, AI-citation-optimized content briefs and technical crawlability fixes at a friendly price point.
-
-5️⃣ AirOps — Best for Turning Insights into Content
-The best pick if your …
-```
-
-## Free AI Search Bootcamp (Module 7): Reporting AI Visibility & ROI
-
-- Kanal: Rankscale · Tarih: 2026-10-01 · İzlenme: 57 · Süre: 32:13
-- https://www.youtube.com/watch?v=Cik3GEEdS5g
+- Kanal: Rankscale · Tarih: 2026-10-11 · İzlenme: 65 · Süre: 0:45
+- https://www.youtube.com/watch?v=IsCziaOn5cY
 - Bulunduğu aramalar: Rankscale AI
 
 ```
-Prove what your AI search work is worth: four attribution paths, a report for each audience, and custom dashboards your board will actually read.
+Learn how AI search decides which brands to recommend, and how to show up in it.
 
-Earn the AI Search Strategist badge: complete this module's assignment and submit it here: https://tally.so/r/KYqvj7
+This clip is from our free AI Search Bootcamp. Watch the full Module 1: https://rankscale.ai/webinar
 
-This is Module 7 of the free AI Search Bootcamp by Rankscale AI. It covers reporting for Generative Engine Optimization (GEO), both the outcome and the input behind it, so the people who fund the work keep funding it. You will learn the four ways to prove value: AI referral click-throughs, branded search lift, direct traffic lift and self-reported attribution. In Rankscale AI's own data, five times as many customers say they found the company through ChatGPT, Perplexity, Claude or Google AI Overviews as show up in AI referral tracking. The module then shows how to tailor reports for the board or client, the marketing lead and the practitioner, how to build custom dashboards in Rankscale AI, and how to connect the data to Looker Studio (Data Studio).
+Track your brand in AI search with Rankscale. Start your 7-day free trial: https://rankscale.ai/pricing
 
-What this video covers:
-- The four attribution paths, and connecting Google Search Console and GA4 in the Traffic tab
-- Why each audience gets a different report: board or client monthly, marketing lead biweekly, practitioner weekly
-- Four rules for every report, and three stories depending on whether you are invisible, growing or defending a top-three position
-- Why a number needs context: 12% visibility means nothing until you compare it to a peer median
-- Four dashboards to build: funnel health, niche dominance, engine gap and scenario proof on long-tail prompts
-- Building a custom dashboard step by step, with widgets filtered by topic and tag, and sharing it as a link
-- Reporting your inputs with the Recommendations tab, so the board sees what was done
-- Connecting Rankscale AI to Looker Studio with your API key and brand ID
-- A full walkthrough of the Rankscale AI platform at the end
-
-Chapters:
-0:00 What this module covers and the dashboard assignment
-1:44 Four ways to prove the value of AI search work
-4:27 One report per audience: board, marketing lead, practitioner
-6:38 Four rules for every report, and three stories to tell
-9:40 Four dashboards: funnel, niche, engine gap, scenario proof
-11:13 Building a custom dashboard in Rankscale AI
-15:16 Assignment: a dashboard for each funnel phase
-17:32 Reporting your inputs with the Recommendations tab
-17:57 Connecting Rankscale AI to Looker Studio
-20:03 Your assignment and the one-sentence board ask
-23:20 Recap and congratulations
-24:06 Full walkthrough of the Rankscale AI platform
-
-Mentioned in this video:
-- Custom Dashboards, Traffic and Recommendations in Rankscale AI - https://rankscale.ai/dashboard
-- Google Analytics 4 - https://analytics.google.com
-- Google Search Console - https://search.google.com/search-console
-- Looker Studio (Data Studio) - https://lookerstudio.google.com
-- Rankscale AI integration docs (API, MCP, Data Studio connector)
-
-To earn the AI Search Strategist badge, cond …
+Follow for daily GEO insights.
 ```
 
-## AI Search Isn't Rocket Science // Rankscale Vlog 1 - Agentic Web Week Munich
+## How Scrunch helps improve your visibility in AI search
 
-- Kanal: Rankscale · Tarih: 2026-11-03 · İzlenme: 54 · Süre: 3:40
-- https://www.youtube.com/watch?v=UPlBzTXnisg
-- Bulunduğu aramalar: Rankscale AI
-
-```
-Your buyers ask ChatGPT and Perplexity now. How do you show up?
-
-We went to Agentic Web Week 2026 in Munich, where Jules, Chief of Staff at Rankscale AI, gave a talk on AI search visibility to a room of developers and product teams. This vlog follows the trip from Vienna to the talk and into the hallway interviews afterwards. In his recap, Jules boils Generative Engine Optimization (GEO) down to three takeaways: track the right prompts, make every page follow an on-page checklist with a clear H1 and H2 structure, and track negative prompts about your brand to find the sources that spread false information about you. Attendees add what surprised them, from metrics they had never considered to the point that AI visibility is not "one and done".
-
-What this video covers:
-- Jules's three takeaways for AI search visibility: prompt tracking, an on-page content checklist and negative-prompt monitoring for off-page sources
-- Frank Puscher, Editor-in-Chief of MEEDIA, on how his own searching moved from Google to ChatGPT, and an enquiry for a charity website that came in through a ChatGPT recommendation
-- Sebastian, organiser of Agentic Web Week, on why AI search belongs at a conference for web and AI engineers
-- Attendees on the talk: content matters more than SEO structure alone, three strong pages beat 15 AI-generated posts, and you have to revisit it every couple of months
-- Why answer engine optimization is a habit, not a one-off project
-
-Chapters:
-0:00 Two days in Munich for one talk on AI search
-0:09 Vienna: why winning AI search is not rocket science
-0:29 Arriving in Munich the night before the talk
-0:57 Talk day: interviewing attendees
-1:08 Frank Puscher (MEEDIA): from Google to ChatGPT
-1:36 The organiser on AI search at an engineering conference
-1:51 Recap: three takeaways for AI search visibility
-2:17 Day 2: what attendees thought of the talk
-2:42 Content quality over AI-generated volume
-3:05 The handshake
-
-Mentioned in this video:
-- Agentic Web Week 2026, Munich (iJS Munich, International PHP Conference and webinale in one week, 26 to 30 October 2026)
-- MEEDIA: https://meedia.de
-
-Recorded in Vienna and Munich, October 2026.
-
-Rankscale AI shows how your brand appears in AI answers, prompt by prompt, across 20 AI engines on every plan. Start your free trial: https://rankscale.ai/pricing?utm_source=youtube&utm_medium=social&utm_campaign=2026-11-vlog-01-munich&utm_content=description
-
-#AISearch #GEO #RankscaleAI
-```
-
-## What the Metrics in Your AI Visibility Dashboard Actually Mean (Dashboard Tab)
-
-- Kanal: Rankscale · Tarih: 2026-08-25 · İzlenme: 54 · Süre: 3:28
-- https://www.youtube.com/watch?v=D9NhcfxQ-gY
-- Bulunduğu aramalar: Rankscale AI
+- Kanal: XCentium - Elevate Your Digital Experience · Tarih: 2026-08-12 · İzlenme: 64 · Süre: 0:39
+- https://www.youtube.com/watch?v=n-dpAARySjY
+- Bulunduğu aramalar: Scrunch AI visibility
 
 ```
-Visibility score, share of voice, share of citations, sentiment: what each metric means and how to read them together.
+How does Scrunch help organizations understand their performance in AI search? 
 
-A walkthrough of the AI visibility dashboard in Rankscale AI, explaining what every metric on it measures and how to filter down to the prompts you care about. This video covers how the visibility score is built, the difference between mentions and citations, why sentiment matters as much as presence, how competitors are detected automatically, the difference between share of voice and share of citations, and how tag drill down differs from filters. If you are reporting Generative Engine Optimization (GEO) results to clients or leadership, this is the vocabulary the report is written in.
+This video explains how Scrunch provides visibility into AI search performance and helps prioritize how to optimize a website to improve performance in AI answers over time. 
 
-What this video covers:
-- Visibility score: a combination of your position in the AI response and how often you were detected in one
-- Mentions: the number of times your brand or product appeared in an AI response
-- Citations: the number of URLs from your own site that were used to back up those mentions
-- Sentiment score: whether a response speaks positively, neutrally or negatively about you, and why being recommended and being warned against are not the same outcome
-- Share of voice: the percentage of all brand mentions across AI responses that were yours
-- Share of citations: your share of the citations used to support those mentions
-- Topic performance and AI engine performance: how you are doing per topic and per engine
-- Competitor detection, which happens automatically from the AI responses with no manual list to maintain
-- Pinning events to the dashboard, so a website change or a press mention can be lined up against the visibility score that followed
-- Tag drill down versus filters: drill down requires every selected tag, filters match any one of them
-- Sharing a dashboard with clients or leadership by selecting tabs and creating a link
-- Monthly usage and runway in the top right
+It also discusses implementing Scrunch across a website, including developing an understanding of the organization’s brand and messaging. The video describes XCentium’s service model as a Sitecore Platinum Partner for supporting organizations in getting value from their investment in Scrunch.  
 
-Chapters:
-0:00 What the visibility score is made of
-0:10 Mentions and citations, and the difference between them
-0:28 Sentiment score and why it matters as much as presence
-0:55 Pinning events to see what moved your score
-1:17 Automatic competitor detection
-1:28 Topic performance and AI engine performance
-1:39 Share of voice and share of citations
-2:08 Tag drill down versus filters
-2:48 Sharing your dashboard with clients or leadership
-3:21 Monthly usage and runway
+👉 Explore XCentium’s Scrunch offerings: https://www.xcentium.com/platforms/sitecore/scrunch 
+👉 Read our perspective, Winning brand visibility in the age of AI: https://lp.xcentium.com/winning-brand-visibility-in-the-age-of-ai  
 
-Interface shown as of August 2026.
-
-Related setup videos:
-- Setting up Prompts in the Search Terms Tab: https://youtu.be/UBIWN39L45M
-- Organising Prompts into Topics: https://youtu.be/Sz5zMTBJVBM
-- Configuring Brand Settings: https://youtu.be/k49AAkzBdwA
-- Finding which pages AI Engines cite: https://youtu.be/u1f3TWGJPts
-- Analysing Sources of AI responses: https://youtu.be/GxHs70aQ0vg
-- Seeing which Brands AI Engines name alongside yours: https://youtu.be/OK24FYfqLQU
-- Reading and Leveraging Sentiment Keywords: https://youtu.be/6AV92pbATk0
-- Tracking Shopping Results, Ads and Competitors: https: …
+#Scrunch #AISearch #AIAnswers #AIVisibility #Sitecore
 ```
 
 ## Profound vs Promptwatch: The Ultimate AI Visibility Platform Showdown!
 
-- Kanal: GEO Mastery with Adam · Tarih: 2026-07-27 · İzlenme: 52 · Süre: 3:23
+- Kanal: GEO Mastery with Adam · Tarih: 2026-07-27 · İzlenme: 54 · Süre: 3:23
 - https://www.youtube.com/watch?v=yBOxG3LLS-M
 - Bulunduğu aramalar: Profound AI visibility
 
@@ -3308,6 +3171,43 @@ If those enterprise tools are too heavy, check out RadarKit. Starting at just $2
 Make sure to hit that LIKE button, drop your questions abo …
 ```
 
+## Blocking AI Data Training Scraper Bots with Otterly AI Analytics
+
+- Kanal: TM Blast · Tarih: 2026-08-18 · İzlenme: 54 · Süre: 3:31
+- https://www.youtube.com/watch?v=dINCfiPYUy0
+- Bulunduğu aramalar: Otterly AI
+
+```
+Otterly.AI has a new feature called Agent Analytics. In there, you can see what agents are hitting your website, and what pages those agents are going to. Impressively, you can then see the breakdown of the type of agent that hits your website, and you can see which are used for AI Data Training purposes. For TM Blast, I don't have a Facebook account, so I have no need to have Meta (Facebook) crawl my website so much to train their AI models on. In this video, I share how to filter what agents are hitting your website, and I also share my own robots.txt file and what I'm disallowing and why.
+
+Timestamps
+0:00 Agent Analytics in Otterly.AI Explained
+0:30 Meta Is Crawling My Site Too Much
+0:50 I Don't Want Meta to Train My Models in the Robots.txt File
+1:16 Otterly.AI Agents Model Shows all AI Training Models
+2:42 Why I'm Recording this Video
+
+https://tmblast.com/services/company-for-geo-seo-services/
+
+#Otterly.AI #AgentAnalytics #GEOSEO #AEOSEO
+```
+
+## Branded vs Non-Branded AI Visibility: Report Both | Daily GEO Insights
+
+- Kanal: Rankscale · Tarih: 2026-10-10 · İzlenme: 54 · Süre: 0:37
+- https://www.youtube.com/watch?v=3WrWR0xtY34
+- Bulunduğu aramalar: Rankscale AI
+
+```
+Learn how AI search decides which brands to recommend, and how to show up in it.
+
+This clip is from our free AI Search Bootcamp. Watch the full Module 1: https://rankscale.ai/webinar
+
+Track your brand in AI search with Rankscale. Start your 7-day free trial: https://rankscale.ai/pricing
+
+Follow for daily GEO insights.
+```
+
 ## Scrunch demo: Understand your AI search visibility and find opportunities to improve
 
 - Kanal: XCentium - Elevate Your Digital Experience · Tarih: 2026-08-12 · İzlenme: 52 · Süre: 9:45
@@ -3333,9 +3233,100 @@ https://www.xcentium.com/services/assessments/scrunch-ai-search-discovery-worksh
 https://www.xcentium.com/services/assessments/scrunch-launch-program
 ```
 
+## Semrush AI Visibility Tutorial 2026 - How to Track AI Citations (Full Guide)
+
+- Kanal: Toolysto · Tarih: 2026-11-06 · İzlenme: 49 · Süre: 17:01
+- https://www.youtube.com/watch?v=THK2v7SqvXs
+- Bulunduğu aramalar: Semrush AI visibility toolkit
+
+```
+Semrush AI Visibility Tutorial 2026 - How to Track AI Citations (Full Guide)
+
+👉Try Semrush here: https://toolysto.com/semrush
+
+Semrush's AI Visibility Toolkit shows you exactly how often ChatGPT, Google AI Overviews and Gemini mention your brand — and which pages they cite as sources. 
+
+In this tutorial I walk through the whole dashboard on a real domain, step by step.If you want to know whether AI search is sending you traffic or ignoring you completely, this is the tool that answers it. 
+
+I'll show you how to read the AI Visibility Score, track mentions and citations over time, see which pages AI platforms actually pull from, and break your brand visibility down by country.
+
+👉Timestamps:
+00:00 – What the AI Visibility Toolkit does
+00:35 – Why AI citations matter for traffic
+01:16 – Visibility Overview dashboard
+05:34 – The three core metrics: Mentions, Citations, Cited Pages
+07:39 – Reading the performance graph over 1M / 3M / 6M / all time
+08:18 – Distribution by LLM: ChatGPT vs AI Overview vs Gemini
+09:56 – Mentions by country
+10:56 – What's Next: topics, competitor strategy, prompt research
+13:58 – Optimizing your domain for AI (Listing Management)
+15:01 – Free vs paid: what you actually need
+
+Disclaimer:
+
+The description of this video may contain affiliate links, which means that if you buy one of the products that we recommend, we’ll receive a small commission without any additional cost for you. This helps support the channel and allows us to continue making videos like this. 
+
+Thank you for the support!
+#semrush  #aivisibility  #aiseo
+```
+
+## Check Your AI Visibility 7+, Not Once | Daily GEO Insights
+
+- Kanal: Rankscale · Tarih: 2026-10-08 · İzlenme: 48 · Süre: 0:45
+- https://www.youtube.com/watch?v=CRumczhiC7E
+- Bulunduğu aramalar: Rankscale AI
+
+```
+Learn how AI search decides which brands to recommend, and how to show up in it.
+
+This clip is from our free AI Search Bootcamp. Watch the full Module 1: https://rankscale.ai/webinar
+
+Track your brand in AI search with Rankscale. Start your 7-day free trial: https://rankscale.ai/pricing
+
+Follow for daily GEO insights.
+```
+
+## How to Scale GEO (Generative Engine Optimization) with AI Agents
+
+- Kanal: Evertune  · Tarih: 2026-11-18 · İzlenme: 48 · Süre: 29:33
+- https://www.youtube.com/watch?v=rlolJujJUe4
+- Bulunduğu aramalar: generative engine optimization tool
+
+```
+Learn how to use AI agents to scale your GEO (generative engine optimization) strategy, from spotting what changed in your AI search visibility to turning those gaps into finished content.
+
+In this Evertune masterclass, Evan Hanson (Senior AI Success Manager) and Matthew Mastando (Product Manager) run three live demos showing how marketing teams use agents to stop digging through AI visibility data and start making decisions with it. The session is hosted by Marcela Romano, SVP of Marketing at Evertune.
+
+What's covered:
+• Using GEO Manager to ask an agent what changed in your AI visibility, which of your own pages get cited most, which publishers and authors your PR team should go after, and which models and topics drove the movement
+• Using Content Studio to go from a visibility gap to a content strategy, a brief and a full draft, shaped by your brand guidelines and what the agent remembers about how your team works
+• Using the Evertune MCP to bring your GEO data into ChatGPT or Claude, pull real AI responses about your brand, combine it with your CRM, analytics and ads data, and build custom dashboards from a single prompt
+
+Chapters
+0:00 Intro
+1:59 How GEO is moving from visibility tools to agents
+4:43 Inside the Evertune platform
+6:13 Finding your most-cited owned pages with GEO Manager
+10:12 Finding earned media opportunities for your PR team
+11:45 Explaining month-over-month visibility changes
+14:45 Turning a visibility gap into a content strategy with Content Studio
+19:24 Building a content brief
+21:52 Using Evertune data in ChatGPT and Claude with the MCP
+24:18 Seeing what AI says about your brand
+25:25 Building a custom dashboard from one prompt
+26:21 What's next for Evertune agents
+26:55 Q&A on building a prompt set
+
+Want to see how AI talks about your brand? Request your own AI visibility report at https://evertune.ai/get-started
+
+Evertune is the AI marketing platform for the whole marketing team. Every other tool shows you the data. Evertune shows you what to do with it.
+
+#GEO #AISearch #AIAgents
+```
+
 ## AI Visibility Overview
 
-- Kanal: Amplitude · Tarih: 2026-09-16 · İzlenme: 42 · Süre: 7:47
+- Kanal: Amplitude · Tarih: 2026-09-16 · İzlenme: 44 · Süre: 7:47
 - https://www.youtube.com/watch?v=I8TEXd4xr_Q
 - Bulunduğu aramalar: AI visibility tool review
 
@@ -3376,10 +3367,10 @@ Amplitude is a digital analytics platform that helps product, engineering, and d
 #Amplitude #AmplitudeAcademy #AIVisibility #AISearch #ProductAnalytics
 ```
 
-## Is AI Blocked From Your Client's Site? Check Your AI Search Visibility through Rankscale
+## Branded vs Non-Branded AI Visibility: Report Both | Daily GEO Insights
 
-- Kanal: Rankscale · Tarih: 2026-10-09 · İzlenme: 31 · Süre: 0:33
-- https://www.youtube.com/watch?v=mPLXiexmMts
+- Kanal: Rankscale · Tarih: 2026-10-11 · İzlenme: 43 · Süre: 0:37
+- https://www.youtube.com/watch?v=lbQ6Gsme5Jk
 - Bulunduğu aramalar: Rankscale AI
 
 ```
@@ -3390,6 +3381,95 @@ This clip is from our free AI Search Bootcamp. Watch the full Module 1: https://
 Track your brand in AI search with Rankscale. Start your 7-day free trial: https://rankscale.ai/pricing
 
 Follow for daily GEO insights.
+```
+
+## How to Find and Fix Website Crawl Errors Using Semrush in 2026 - Semrush SEO Toolkit
+
+- Kanal: Toolysto · Tarih: 2026-11-07 · İzlenme: 41 · Süre: 12:13
+- https://www.youtube.com/watch?v=S6-EKZlDCRM
+- Bulunduğu aramalar: Semrush AI visibility toolkit
+
+```
+How to Find and Fix Website Crawl Errors Using Semrush in 2026 - Semrush SEO Toolkit
+
+👉 Try Semrush here: https://toolysto.com/semrush
+
+Search engines can't rank pages they can't crawl. In this tutorial I open Semrush's Site Audit, find the real crawl errors on a live website, and fix them step by step — no theory, just the dashboard.
+
+You'll see a site with a health score of 85%, 50 errors and 140 warnings, and I'll walk through exactly what each one means and how to resolve it. We'll cover the SEO dashboard overview, how to read your organic traffic and authority score, how to run your first Site Audit, how to read the Issues section, and how to use the Crawled Pages report to inspect individual URLs.
+
+Timestamps:
+0:00 – Why crawl errors quietly kill your rankings
+0:28 – Search engines can't rank what they can't access
+0:52 – What this tutorial covers
+1:11 – Inside the Semrush SEO dashboard
+1:43 – Setting up your website project
+2:43 – Overview metrics: organic traffic, authority score, AI visibility
+3:18 – Errors and warnings at a glance
+3:44 – Switching between Semrush, Search Console and Analytics data
+4:12 – Site health score: 50 errors, 140 warnings
+5:04 – Site Audit tool: what it actually scans
+5:37 – Running your first audit
+6:17 – The Issues section explained
+6:31 – Real errors: nofollow attributes and missing H1s
+7:03 – Crawled Pages: inspecting individual URLs
+7:29 – Filtering titles and descriptions
+7:49 – Statistics and Compare Crawls
+8:09 – Progress tab and JS Impact
+9:08 – Position Tracking after your fixes
+10:04 – Using "How to fix" recommendations
+10:26 – Free plan vs premium: what's locked
+10:57 – Conclusion
+
+Disclaimer:
+
+The description of this video may contain affiliate links, which means that if you buy one of the products that we recommend, we’ll receive a small commission without any additional cost for you. This helps support the channel and allows us to continue making videos like this. 
+Thank you for the support!
+#semrush  #technicalseo  #seoaudit  #Semrushtutorial
+```
+
+## What Does ChatGPT Say About Your Brand? How to See Every AI Answer (2026)
+
+- Kanal: Surfaced · Tarih: 2026-11-11 · İzlenme: 40 · Süre: 4:21
+- https://www.youtube.com/watch?v=mdj-iL21ruo
+- Bulunduğu aramalar: track brand mentions ChatGPT
+
+```
+What does ChatGPT say about your brand? The quickest way to find out is to ask AI the questions your customers ask, many times and on every platform, and then read the answers word for word. In this walkthrough, Joe Misik van der Ven, co-founder of Surfaced, shows how to do that in Surfaced with real data from The Party Quiz, a quiz-night app his team runs.
+
+What Joe shows
+- The short answer: ask the questions your customers ask, on every AI platform, many times, and read the answers.
+- Where your brand shows up: the Home page's weekly snapshot and how often each AI platform names you.
+- The questions Surfaced asks for you: prompts, each tied to a market and a language, asked every day on every plan.
+- Adding your own question: type it like a customer, pick the country and language, keep most prompts unbranded.
+- Reading the real answers: visibility per platform for one question, and every AI answer word for word with your brand highlighted.
+- Who gets named instead: the "Also mentioned" brands under each answer and the competitor landscape for the question.
+- Recap: track questions, read answers, count mentions.
+
+Chapters
+0:00 The short answer
+0:37 Where your brand shows up
+1:17 The questions Surfaced asks for you
+2:05 Adding your own question
+2:36 Reading the real answers
+3:33 Who gets named instead
+3:59 Recap
+
+Numbers in this video
+Every number is shown on screen. Source: Surfaced dashboard, The Party Quiz workspace (thepartyquiz.com), captured on 5 November 2026.
+- Home page, week of 30 October to 5 November 2026: 305 AI responses to 9 prompts on 5 AI platforms. The Party Quiz was named in 14.8% of them (45 of 305).
+- Per platform that week: ChatGPT 46.0% (29 of 63 responses), Google AI Overviews 11.3% (8 of 71), Google AI Mode 7.9% (5 of 63), Gemini 3.2% (2 of 63), Microsoft Copilot 2.2% (1 of 45).
+- Prompts page: 9 tracked prompts, asked from the Netherlands and the United States, in English; 144 answers per prompt over the past 90 days (one prompt has 143).
+- "Quiz platforms that use phones as buzzers" (asked from the Netherlands, in English), past 90 days: named in 24.3% of 144 responses (35 mentions). Per platform: ChatGPT 83%, Google AI Mode 14%, Google AI Overviews 13%, Microsoft Copilot 11%, Gemini 0%.
+- Same prompt: ChatGPT's answer from the 5 November run did not mention The Party Quiz; its 4 November answer named it at position 2.
+- Competitor landscape for that prompt: 76 brands; The Party Quiz ranks 9th; QuizXpress 78.5%, Quizado 44.4%, BuzzIn.live 43.1%.
+These are measurements for one brand and a small set of tracked questions. They describe what these AI platforms answered for these prompts in this period, not how AI treats every brand.
+
+Who this is for
+Marketers, SEO and content leads, and founders who want to know whether AI assistants recommend their brand, and who want to see the evidence behind the answer instead of a single score.
+
+About Surfaced
+Surfaced (getsurfaced.ai) tracks how AI platforms answer the questions your  …
 ```
 
 ## Ahrefs Brand Radar vs Profound vs Cituna: Which AI Visibility Tool Is Better?
@@ -3423,6 +3503,104 @@ Prices and plans, from each company's own page (read October 1, 2026):
 Try Cituna free for 3 days: https://cituna.com
 
 #AIVisibility #ChatGPT #SEO
+```
+
+## Otterly AI Alternatives: Does ChatGPT Cite Your Article?
+
+- Kanal: Xtrusio · Tarih: 2026-11-13 · İzlenme: 28 · Süre: 1:33
+- https://www.youtube.com/watch?v=VPZtGcdPjBU
+- Bulunduğu aramalar: Otterly AI
+
+```
+Otterly AI alternatives and AI visibility tracking: how to check if ChatGPT cites your article, or only your homepage.
+
+Blog post: https://xtrusio.com/blog/otterly-ai-alternatives-better-reporting
+See how Xtrusio works: https://xtrusio.com
+
+In this video:
+- Why "our brand appeared" and "our article was cited" are different results
+- How to open a ChatGPT answer, check its source links, and match one to your guide
+- How Xtrusio keeps one question and one article connected and checks again later
+- How to report honestly when your article was not cited
+- Why a citation does not prove a visit or a sale
+- One test to ask any AI visibility tool vendor for: show it on one of your own pages
+
+The screens use example data (yourbrand.com, sample dates). They are not a real result.
+
+#AIVisibility #AICitations #Xtrusio
+```
+
+## Profound AI Review: What the Visibility Score Tells You
+
+- Kanal: Xtrusio · Tarih: 2026-10-15 · İzlenme: 27 · Süre: 1:33
+- https://www.youtube.com/watch?v=8SCm4cUkTjc
+- Bulunduğu aramalar: Profound AI visibility
+
+```
+What is Profound AI, and does a higher AI visibility score mean your website is getting cited?
+
+Profound is an AI search visibility platform that helps brands research buyer questions, monitor AI-generated answers, analyze citations, study crawler activity, and manage connected content workflows.
+
+But tracking AI visibility and proving that a specific page gets cited are different measurements.
+
+In this video, Xtrusio explains how Profound works and what businesses should check before choosing an AI visibility platform.
+
+**What you'll learn:**
+- What Profound AI is and how it works
+- Profound's four main workflow layers
+- Prompt Volumes and AI search demand
+- Answer Engine Insights for mentions and citations
+- Agent Analytics, Pages and crawler activity
+- Profound Agents and connected content workflows
+- Why AI visibility scores don't automatically prove citation success
+- How AI visibility tool pricing compares
+- A practical four-step test for AI citation tracking
+- Why the same buyer question should be tested again after publishing content
+
+**The four-step AI visibility test:**
+
+1. Questions: Which buyer questions are you targeting?
+2. Answers: What do AI engines currently say?
+3. Page: Which exact URL are you trying to improve?
+4. Cited: Does a later AI answer cite that URL?
+
+The key takeaway: Don't judge success from a visibility score alone. Keep the original question, AI answer and exact cited URL together.
+
+No tool can guarantee citations because AI engines decide which sources to use.
+
+**Read the full Xtrusio guide:**
+xtrusio.com/blog/what-is-profound-ai-content-visibility
+
+Follow Xtrusio for AI Search, LLM SEO, GEO, AEO, AI visibility tools and citation tracking guides.
+
+#ProfoundAI #AIVisibility #AISearch #LLMSEO #GEO
+```
+
+## Ahrefs Brand Radar vs SE Visible: Which Is Better? (2026)
+
+- Kanal: Agents Unpacked · Tarih: 2026-11-15 · İzlenme: 27 · Süre: 1:01
+- https://www.youtube.com/watch?v=5kv7YrPW4tU
+- Bulunduğu aramalar: Ahrefs Brand Radar
+
+```
+Ahrefs Brand Radar or SE Visible by SE Ranking? It depends on three things: the engines covered, position, and your starting point. Ahrefs Brand Radar fits teams that want a ready-made view. SE Visible fits teams that want average position on their own prompts.
+
+Facts from each vendor's own public pages, checked 5 to 9 November 2026.
+
+Narration:
+Ahrefs Brand Radar versus SE Visible by SE Ranking: which is better for AI visibility tracking? It depends on three things.
+
+Engines. Ahrefs Brand Radar covers ChatGPT, Perplexity, Gemini, AI Overviews and AI Mode, plus Claude on custom prompts. SE Visible is an AI visibility platform. It covers ChatGPT, Gemini, Google AI Mode and AI Overviews. It doesn't track Perplexity, Claude or Grok yet.
+
+Position. Ahrefs' pages don't state an average position. SE Visible reports yours in AI answers.
+
+Starting point. Ahrefs has a ready-made index with no setup, plus custom prompts. SE Visible starts from prompts it suggests or you add.
+
+Ahrefs Brand Radar fits teams that want a ready-made view. Wrong if your brand has little search volume: Ahrefs says coverage may be limited. SE Visible fits teams that want average position on their own prompts. Wrong if you need Perplexity.
+
+So, a ready-made view, or your own prompts?
+
+Subscribe for straight answers before you pay.
 ```
 
 ## Ahrefs Brand Radar Review 2026: Features, Pricing and the Best Alternative
@@ -3459,6 +3637,108 @@ Brand Radar facts from ahrefs.com/brand-radar, ahrefs.com/pricing and the Brand 
 Try Cituna free for 3 days: https://cituna.com
 
 #AIVisibility #ChatGPT #SEO
+```
+
+## Best Otterly AI Alternatives in 2026: Track My Visibility vs Peec AI vs Omnia
+
+- Kanal: Track My Visibility · Tarih: 2026-11-20 · İzlenme: 26 · Süre: 6:00
+- https://www.youtube.com/watch?v=0eVhefqnkZw
+- Bulunduğu aramalar: Otterly AI
+
+```
+Otterly AI is a solid tool. It has 4.7 stars on G2 and it's easy to use. But the $29 Lite plan only covers 15 prompts, you can't add more, and API and MCP access only start on the $189/month Standard plan. That's a big jump, especially for small agencies.
+
+So we compared three Otterly AI alternatives on price, prompts and features: Track My Visibility (our own tool, so we've stuck to the numbers), Peec AI and Omnia.
+
+Here's how they stacked up when we recorded this:
+
+Track My Visibility: $89/month, or $74/month billed yearly, for 50 prompts a day, 2 websites, 3 countries, and 5 team members. MCP is included on every paid plan, and the Opportunities section tells you what to fix next.
+
+Peec AI: $95/month (about $81 yearly) for 50 prompts with unlimited users. Starter covers 1 project and 1 country, and API access starts on Pro.
+
+Omnia: €79/month for 25 prompts, with unlimited brands and MCP and API access from the first plan. There's a 14-day free trial, no card needed.
+
+Key moments
+
+0:00 Why look for an Otterly AI alternative?
+0:16 Heads-up: TMV lifetime deal on AppSumo
+0:33 Otterly AI pricing and limits
+1:05 What Otterly AI reviewers say
+1:30 Alternative 1: Track My Visibility
+2:14 How TMV tracking works
+2:28 The Opportunities section
+2:43 TMV pricing vs Otterly AI
+3:05 AppSumo deal and 60-day money-back guarantee
+3:36 The $5 7-day trial
+3:55 Alternative 2: Peec AI
+4:16 What Peec AI reviewers say
+4:36 Alternative 3: Omnia
+5:01 Which one should you choose?
+5:30 Where to start
+5:45 Wrapping up
+
+If you're watching this in December 2026 or January 2027, Track My Visibility is on AppSumo as a lifetime deal starting at $69. The $359 tier gives you 120 prompts for a single payment, and there's a 60-day money-back guarantee.
+
+If the deal has ended, you can try Track My Visibility for 7 days for $5 (15 prompts on 1 AI platform). We'll let you know before the trial ends, so nothing moves to the Discover plan without you knowing. 
+
+Track My Visibility: https://trackmyvisibility.com/pricing 
+Otterly AI: https://otterly.ai/pricing
+Peec AI: https://peec.ai/pricing
+Omnia: https://useomnia.com/pricing
+
+Prices in this space change often, so check each pricing page before you sign up.
+
+Which tool are you moving away from, and why? Let us know in the comments.
+
+Subscribe for practical SEO, AEO, and AI search visibility updates: https://youtube.com/@TrackMyVisibility
+
+For more information on how to use Track My Visibility, contact our experts: https://trackmyvisibility.com/contact
+
+And remember to follow us on our other social media channels:
+
+LinkedIn: https://www.linkedin.com/company/track-my-visibility/
+Instagram: https://www.instagram.com/trackmyvisibility/
+X: https://x.com/trackvisibility
+Facebook: https://www.facebook.com/trackmyvisibility
+TikTok: https://www.tiktok.com/@trackmyvisibility
+
+#OtterlyAI #AIVisibility #GEO
+```
+
+## 5 Places to Find Real AI Search Prompts for Client Visibility
+
+- Kanal: Rankscale · Tarih: 2026-10-17 · İzlenme: 26 · Süre: 0:47
+- https://www.youtube.com/watch?v=V22LRABMt_o
+- Bulunduğu aramalar: Rankscale AI
+
+```
+Where your client's real prompts come from: sales calls, support tickets, review sites and competitor FAQs.
+
+Built for agencies and in-house GEO and SEO teams who report AI search visibility to clients.
+
+Want to know more about AI search, want to get started, or want more insights? Watch our free AI Search Bootcamp, a full series of eight videos where Jules explains everything: https://rankscale.ai/webinar
+
+Track your brand in AI search with Rankscale. Start your 7-day free trial: https://rankscale.ai/pricing
+
+Follow for daily GEO insights.
+```
+
+## One Audit Shows if AI Can Reach Your Client's Site: AI Visibility
+
+- Kanal: Rankscale · Tarih: 2026-10-15 · İzlenme: 26 · Süre: 0:33
+- https://www.youtube.com/watch?v=HNUGb0pIFGo
+- Bulunduğu aramalar: Rankscale AI
+
+```
+How to check whether AI crawlers can reach your pages.
+
+Built for agencies and in-house GEO and SEO teams who report AI search visibility to clients.
+
+This clip is from our free AI Search Bootcamp. Watch the full Module 1: https://rankscale.ai/webinar
+
+Track your brand in AI search with Rankscale. Start your 7-day free trial: https://rankscale.ai/pricing
+
+Follow for daily GEO insights.
 ```
 
 ## Best AI Tools for Generative Engine Optimization
@@ -3535,102 +3815,36 @@ What are the top Peec AI alternatives right now?
 The top Peec AI alternatives in 2026 are Finseo, Profound,  …
 ```
 
-## Profound AI Review: What the Visibility Score Tells You
+## AI Shopping: How to Get Your Products Found on Google & ChatGPT | Ecommerce SEO Guide
 
-- Kanal: Xtrusio · Tarih: 2026-10-15 · İzlenme: 25 · Süre: 1:33
-- https://www.youtube.com/watch?v=8SCm4cUkTjc
-- Bulunduğu aramalar: Profound AI visibility
-
-```
-What is Profound AI, and does a higher AI visibility score mean your website is getting cited?
-
-Profound is an AI search visibility platform that helps brands research buyer questions, monitor AI-generated answers, analyze citations, study crawler activity, and manage connected content workflows.
-
-But tracking AI visibility and proving that a specific page gets cited are different measurements.
-
-In this video, Xtrusio explains how Profound works and what businesses should check before choosing an AI visibility platform.
-
-**What you'll learn:**
-- What Profound AI is and how it works
-- Profound's four main workflow layers
-- Prompt Volumes and AI search demand
-- Answer Engine Insights for mentions and citations
-- Agent Analytics, Pages and crawler activity
-- Profound Agents and connected content workflows
-- Why AI visibility scores don't automatically prove citation success
-- How AI visibility tool pricing compares
-- A practical four-step test for AI citation tracking
-- Why the same buyer question should be tested again after publishing content
-
-**The four-step AI visibility test:**
-
-1. Questions: Which buyer questions are you targeting?
-2. Answers: What do AI engines currently say?
-3. Page: Which exact URL are you trying to improve?
-4. Cited: Does a later AI answer cite that URL?
-
-The key takeaway: Don't judge success from a visibility score alone. Keep the original question, AI answer and exact cited URL together.
-
-No tool can guarantee citations because AI engines decide which sources to use.
-
-**Read the full Xtrusio guide:**
-xtrusio.com/blog/what-is-profound-ai-content-visibility
-
-Follow Xtrusio for AI Search, LLM SEO, GEO, AEO, AI visibility tools and citation tracking guides.
-
-#ProfoundAI #AIVisibility #AISearch #LLMSEO #GEO
-```
-
-## Otterly AI Alternatives: Does ChatGPT Cite Your Article?
-
-- Kanal: Xtrusio · Tarih: 2026-11-13 · İzlenme: 25 · Süre: 1:33
-- https://www.youtube.com/watch?v=VPZtGcdPjBU
-- Bulunduğu aramalar: Otterly AI
+- Kanal: SlideScope® - Digital Marketing & Data Analysis · Tarih: 2026-11-04 · İzlenme: 26 · Süre: 11:55
+- https://www.youtube.com/watch?v=aT0UgS1lngE
+- Bulunduğu aramalar: ChatGPT shopping product recommendations
 
 ```
-Otterly AI alternatives and AI visibility tracking: how to check if ChatGPT cites your article, or only your homepage.
+AI is changing the way people discover and shop for products. Customers are no longer relying only on traditional Google searches. They are increasingly using ChatGPT, Google AI and other AI-powered platforms to find product recommendations, compare options and make purchasing decisions.
 
-Blog post: https://xtrusio.com/blog/otterly-ai-alternatives-better-reporting
-See how Xtrusio works: https://xtrusio.com
+So, how can ecommerce businesses make sure their products get discovered in this new AI-driven shopping landscape?
 
-In this video:
-- Why "our brand appeared" and "our article was cited" are different results
-- How to open a ChatGPT answer, check its source links, and match one to your guide
-- How Xtrusio keeps one question and one article connected and checks again later
-- How to report honestly when your article was not cited
-- Why a citation does not prove a visit or a sale
-- One test to ask any AI visibility tool vendor for: show it on one of your own pages
+In this presentation, we explore 10 practical strategies to improve your product visibility across search engines and AI-powered shopping experiences.
 
-The screens use example data (yourbrand.com, sample dates). They are not a real result.
+What You'll Learn:
+- How AI Shopping is transforming product discovery.
+- Making product information accessible to AI crawlers.
+- Writing customer-focused product descriptions.
+- Using genuine customer reviews effectively.
+- Optimising Google Merchant Center product feeds.
+- Implementing Product Schema and Structured Data.
+- Preparing for Google AI and ChatGPT product discovery.
+- Measuring AI Shopping visibility.
+- Experimenting with product optimisation strategies.
+- Building a continuous AI Shopping SEO strategy.
+Whether you run an online store, manage ecommerce marketing or work in SEO, these strategies will help you prepare for the evolving world of AI-powered product discovery.
 
-#AIVisibility #AICitations #Xtrusio
-```
+Presented by: डिजिटलमार्केटिंग.com
+Powered by: SlideScope.com
 
-## Ahrefs Brand Radar vs SE Visible: Which Is Better? (2026)
-
-- Kanal: Agents Unpacked · Tarih: 2026-11-15 · İzlenme: 25 · Süre: 1:01
-- https://www.youtube.com/watch?v=5kv7YrPW4tU
-- Bulunduğu aramalar: Ahrefs Brand Radar
-
-```
-Ahrefs Brand Radar or SE Visible by SE Ranking? It depends on three things: the engines covered, position, and your starting point. Ahrefs Brand Radar fits teams that want a ready-made view. SE Visible fits teams that want average position on their own prompts.
-
-Facts from each vendor's own public pages, checked 5 to 9 November 2026.
-
-Narration:
-Ahrefs Brand Radar versus SE Visible by SE Ranking: which is better for AI visibility tracking? It depends on three things.
-
-Engines. Ahrefs Brand Radar covers ChatGPT, Perplexity, Gemini, AI Overviews and AI Mode, plus Claude on custom prompts. SE Visible is an AI visibility platform. It covers ChatGPT, Gemini, Google AI Mode and AI Overviews. It doesn't track Perplexity, Claude or Grok yet.
-
-Position. Ahrefs' pages don't state an average position. SE Visible reports yours in AI answers.
-
-Starting point. Ahrefs has a ready-made index with no setup, plus custom prompts. SE Visible starts from prompts it suggests or you add.
-
-Ahrefs Brand Radar fits teams that want a ready-made view. Wrong if your brand has little search volume: Ahrefs says coverage may be limited. SE Visible fits teams that want average position on their own prompts. Wrong if you need Perplexity.
-
-So, a ready-made view, or your own prompts?
-
-Subscribe for straight answers before you pay.
+#AIShopping #EcommerceSEO #AIMarketing
 ```
 
 ## Top 5 Best Profound Alternatives 2026 | Generative Engine Optimization (GEO)
@@ -3718,38 +3932,6 @@ Topics: how to get ai brand mentions, get recommended by chatgpt, ai brand menti
 The numbers look great, but they don’t tell the whole story. Here’s what I look at instead. 👀
 ```
 
-## AI Shopping: How to Get Your Products Found on Google & ChatGPT | Ecommerce SEO Guide
-
-- Kanal: SlideScope® - Digital Marketing & Data Analysis · Tarih: 2026-11-04 · İzlenme: 23 · Süre: 11:55
-- https://www.youtube.com/watch?v=aT0UgS1lngE
-- Bulunduğu aramalar: ChatGPT shopping product recommendations
-
-```
-AI is changing the way people discover and shop for products. Customers are no longer relying only on traditional Google searches. They are increasingly using ChatGPT, Google AI and other AI-powered platforms to find product recommendations, compare options and make purchasing decisions.
-
-So, how can ecommerce businesses make sure their products get discovered in this new AI-driven shopping landscape?
-
-In this presentation, we explore 10 practical strategies to improve your product visibility across search engines and AI-powered shopping experiences.
-
-What You'll Learn:
-- How AI Shopping is transforming product discovery.
-- Making product information accessible to AI crawlers.
-- Writing customer-focused product descriptions.
-- Using genuine customer reviews effectively.
-- Optimising Google Merchant Center product feeds.
-- Implementing Product Schema and Structured Data.
-- Preparing for Google AI and ChatGPT product discovery.
-- Measuring AI Shopping visibility.
-- Experimenting with product optimisation strategies.
-- Building a continuous AI Shopping SEO strategy.
-Whether you run an online store, manage ecommerce marketing or work in SEO, these strategies will help you prepare for the evolving world of AI-powered product discovery.
-
-Presented by: डिजिटलमार्केटिंग.com
-Powered by: SlideScope.com
-
-#AIShopping #EcommerceSEO #AIMarketing
-```
-
 ## How to Track Brand Mentions in ChatGPT (AI Search Monitoring)
 
 - Kanal: Arvow's AI SEO Tips · Tarih: 2026-10-01 · İzlenme: 22 · Süre: 2:36
@@ -3774,52 +3956,45 @@ Chapters:
 AI-generated voiceover. ChatGPT answers can vary; one result is not a ranking guarantee.
 ```
 
-## How Scrunch helps you understand your brand's visibility in AI answers
+## AI Visibility Trackers Compared: Engines, Prompts and Price (2026)
 
-- Kanal: XCentium - Elevate Your Digital Experience · Tarih: 2026-08-06 · İzlenme: 20 · Süre: 2:34
-- https://www.youtube.com/watch?v=xnoWEL5OxJE
+- Kanal: Cituna | AI Visibility · Tarih: 2026-10-01 · İzlenme: 21 · Süre: 2:54
+- https://www.youtube.com/watch?v=xVaPLNJKv9Y
 - Bulunduğu aramalar: Scrunch AI visibility
 
 ```
-More people are using AI answer engines like ChatGPT, Perplexity, Gemini, and Claude instead of traditional search, changing how customers discover brands online.
- 
-In this video, you'll learn how Scrunch, now part of the Sitecore platform, helps organizations understand how their brand appears in AI-generated answers, monitor their visibility, and deliver AI-friendly website content for AI crawlers and agents.
- 
-You'll also see what to expect from a personalized Scrunch demo using your own website to understand where your brand stands in AI answers today.
- 
-Want to see how your brand appears in AI-generated answers? Request a personalized Scrunch demo using your own website and discover where you stand today.
- 
-👉 Learn more about XCentium's Scrunch capabilities: https://www.xcentium.com/platforms/sitecore/scrunch
-```
+AI visibility trackers compared on the three things that decide what you get: which AI engines each entry plan covers, how many prompts (buyer questions) it tracks and how often, and how it charges: flat, add-on engines, per platform, per domain, credits or sales-led. Covers Cituna, Otterly.ai, Peec AI, Promptwatch, the Semrush AI Toolkit, Rankscale, LLMrefs, Trakkr, Ahrefs Brand Radar, Scrunch, AthenaHQ and Profound.
 
-## Rankscale vs RadarKit: 3 Key Differences in Local Prompt Tracking
+Disclosure: we make Cituna, one of the tools in this video. Every competitor fact comes from that company's own page, read October 1, 2026.
 
-- Kanal: GEO Mastery with Adam · Tarih: 2026-11-17 · İzlenme: 19 · Süre: 2:36
-- https://www.youtube.com/watch?v=3C5_YZXB8eU
-- Bulunduğu aramalar: Rankscale AI
+The full written version: https://cituna.com/learn/ai-visibility-tool-pricing
 
-```
-What’s up guys, Adam here, your go-to GEO and SEO expert! Welcome back to Geo Tips with Adam. If you want to rank your physical business in Answer Engines, you need precise local tracking. Today, we are putting Rankscale and RadarKit head-to-head for local prompt tracking. 
+Chapters
+0:00 Intro
+0:28 Same price, different deals
+0:55 1. Engines: which AIs you get
+1:18 2. Prompts: how many questions, how often
+1:39 3. Price: six ways trackers charge
+2:05 Entry prices side by side
+2:19 How to compare trackers
 
-While both platforms promise to boost your AI search optimization, they take entirely different approaches when it comes to pricing structure, location granularity, and actual execution. Let's break down the three key differences and reveal which platform actually comes out on top!
+Prices and plans, from each company's own page (read October 1, 2026):
+- Cituna: https://cituna.com/pricing
+- Otterly.ai: https://otterly.ai/pricing
+- Peec AI: https://peec.ai/pricing
+- Promptwatch: https://promptwatch.com/pricing
+- Semrush AI Toolkit: https://www.semrush.com/pricing/ai/
+- Rankscale: https://rankscale.ai/pricing
+- LLMrefs: https://llmrefs.com/pricing
+- Trakkr: https://trakkr.ai/pricing
+- Ahrefs Brand Radar: https://ahrefs.com/brand-radar
+- Scrunch: https://scrunch.com/pricing
+- AthenaHQ: https://athenahq.ai/plans
+- Profound: https://www.tryprofound.com/pricing
 
-📅 Stop burning your budget on enterprise credit limits. Book a call to automate your local AI tracking with RadarKit here: https://radarkit.ai/book-a-call
+Try Cituna free for 3 days: https://cituna.com
 
----
-
-🔍 THE 3 KEY DIFFERENCES:
-
-1. The Credit Trap vs. Flat Local Pricing
-Rankscale looks impressive out of the gate with its coverage of 17+ AI engines, but its pricing structure is built to drain your budget. It operates on a strict credit-based system starting at $99/month. If you are scanning local prompts daily across multiple cities and engines, those credits disappear instantly, pushing you into their $385 or $780 tiers. RadarKit strips away the complicated math. Starting at a flat $29/month, RadarKit tracks all 7 major AI engines natively. It gives you predictable, unlimited-feeling multi-engine tracking without worrying about hidden credit traps.
-
-2. Technical Audits vs. Pinpoint Local IP Tracking
-Rankscale focuses heavily on technical on-page SEO, giving you page audits with over 94 technical checkpoints to ensure your site is bot-friendly. However, when it comes to local tracking, it lacks hyper-local granularity. RadarKit is built specifically for local visibility. It features a dedicated Local Radar leveraging residential IPs across 50+ locations. This delivers exact city-level tracking, showing you exactly what a customer in a specific neighborhood sees when they ask an AI engine for a local recommendation. Plus, it includes Shopping and Ads Radars to track your entire local footprint.
-
-3. Passive Dashboards vs. Autonomous Execution
-Rankscale is fundamentally an analytics dashboard. It shows you your AI visibility score, tracks your citations, and tells you what to fix, but it leaves the actual optimization entirely up to your team. RadarKit does not just give you a to-do list; it acts as your full organic fulfillment team. When RadarKit spots a local visibility gap, it deploys autonomous AI agents. Its Reddit Agent finds the exact local community threads LLMs pull from, its GEO Writer crafts citation-ready content, and the Outreach Agent pitches and negotiates local directory and blog placements through your connected Gmail on complete autopilot.
-
-🏆 THE VERDICT
-Rankscale is a robust, premium dashboard if you have a massive enterprise budget, love digging into 94-point technical site audits, and don't mind managing a credit balance. But if you want to completely dominate local AI recommendations without draining your budget, RadarK …
+#AIVisibility #ChatGPT #SEO
 ```
 
 ## SYNTRA Review – Does This AI Visibility Tool Actually Work?
@@ -3846,67 +4021,9 @@ In this review I walk you through exactly how SYNTRA works, what is inside the d
 DISCLAIMER: This video contains affiliate links which means I may earn a small commission if you purchase through my link at no extra cost to you. I only review tools that I genuinely think can help my audience.
 ```
 
-## Best AI Visibility and LLM Monitoring Platforms: AI Consensus
-
-- Kanal: AI Marketing Consensus Index · Tarih: 2026-10-01 · İzlenme: 17 · Süre: 5:47
-- https://www.youtube.com/watch?v=xdLL9Jy2-rs
-- Bulunduğu aramalar: AthenaHQ AI search
-
-```
-𝐁𝐞𝐬𝐭 𝐀𝐈 𝐕𝐢𝐬𝐢𝐛𝐢𝐥𝐢𝐭𝐲 𝐚𝐧𝐝 𝐋𝐋𝐌 𝐌𝐨𝐧𝐢𝐭𝐨𝐫𝐢𝐧𝐠 𝐏𝐥𝐚𝐭𝐟𝐨𝐫𝐦𝐬: 𝐀𝐈 𝐂𝐨𝐧𝐬𝐞𝐧𝐬𝐮𝐬
-
-Full research, rankings, and methodology:
-https://aimarketingconsensusindex.com/ai-visibility-llm-monitoring/ai-visibility-platforms
-
-This consensus ranking compares AI visibility and LLM monitoring platforms for companies tracking brand appearance across ChatGPT, Gemini, Claude, Perplexity, Grok, DeepSeek, and Kimi. In the 2026-09-19 study, Profound led the field, named by 5 of 7 AI platforms, a 71.4% share, with an average listed position of 1.2 and four first-place placements. The study evaluated 38 unique names, but only 9 met the rule of at least 2 platform mentions.
-
-KEY FINDINGS
-● Profound ranked #1: 5 platform mentions, 71.4% share, 1.20 average position, best position 1
-● Semrush, OtterlyAI, and Ahrefs tied on mentions with 4 each, or 57.1% of platform responses
-● Peec AI ranked #5 with 3 mentions, 42.9% share, and a 3.67 average listed position
-● Viali ranked #6 but had the second-best average position at 2.50, despite only 2 platform mentions
-● Scrunch ranked #7 with 2 mentions, but still earned a best position of 1 from one platform
-● AthenaHQ and BrandPeek each had 2 mentions, 28.6% share, with average positions of 4.00 and 5.00
-● Consensus concentrated at the top: no entity below rank #4 was named by more than 3 AI platforms
-● 9 Entities qualified out of 38 unique names, so 29 did not meet the two-mention threshold
-● No platform in the index had verified coverage of all 7 named AI systems on a low-cost self-serve plan
-
-QUESTIONS THIS RESEARCH ANSWERS
-
-Which platform had the strongest cross-platform consensus?
-Profound. It was named by 5 of 7 platforms, placed first by 4, and had the best average listed position at 1.2.
-
-Which alternatives stood out for different buyer needs?
-Semrush was the strongest fit for SEO-led teams, OtterlyAI for low-cost prompt monitoring, Ahrefs for broad search-backed prompt discovery, and Peec AI for citation-gap and source analysis.
-
-How concentrated is this market?
-Very concentrated at the top. Profound led with 5 mentions, while Semrush, OtterlyAI, and Ahrefs followed with 4 each. No entity ranked below #4 received more than 3 mentions.
-
-What should buyers verify before choosing?
-Engine coverage by plan, pricing unit, unresolved domain or identity issues for some vendors, and whether cited claims are company-owned or independently verified.
-
-Competitive analysis
-The market split into 3 groups: dedicated AI visibility platforms, SEO suites with AI visibility modules, and enterprise infrastructure combining answer monitoring with technical crawler analytics. Coverage was the biggest disputed specification. Examples: Profound Starter is ChatGPT-only, Semrush documentation did not verify Claude, Grok, DeepSeek, or Kimi, OtterlyAI base plans cover 4 engines, and Peec AI self-serve plans track 3 selected models.
-
-METHODOLOGY
-This index used one standardized prompt, sent once to 7 AI platforms: openai, anthropic, deepseek, grok, perplexity, kimi,  …
-```
-
-## What Is GEO Generative Engine Optimization - explained simply
-
-- Kanal: RunTruffle · Tarih: 2026-09-13 · İzlenme: 17 · Süre: 0:55
-- https://www.youtube.com/watch?v=q2w0MTSeBko
-- Bulunduğu aramalar: generative engine optimization tool
-
-```
-More and more buyers are asking AI tools instead of Google when they search for solutions, which means if your brand isn't visible in ChatGPT, Claude, Gemini, Perplexity, or Grok, you're invisible at the exact moment someone is deciding who to buy from. Understanding GEO gives you a real edge: you get to shape the story these AI tools tell about you, instead of leaving it to chance or letting competitors fill that gap first. That's why learning GEO, actively working on it, and having a tool to monitor it isn't optional anymore — it's becoming as essential as SEO was for the Google era, except most companies haven't caught up yet, which is exactly the opportunity. 
-
-Generative Engine Optimization (GEO) is the practice of optimizing your visibility inside these AI tools, built on four pillars: technical setup, strong on-site content, demonstrated expertise, and, which is very important (!!!) - offsite mentions and recommendations on Reddit, forums, and topic-specific websites and magazines. To get started, you first need to know where you stand today: monitor your current visibility with an AI tool like runtruffle.com (which lets you build buyer personas, generate the exact prompts your potential customers would type into an LLM, and then tells you what content to publish and where to publish it — all backed by a free trial so you can see it for yourself. Try for free now: https://runtruffle.com/
-```
-
 ## How ChatGPT Recommends Brands & Products: What Decides the Picks? | How AI Works Ep. 5
 
-- Kanal: Opttab · Tarih: 2026-11-03 · İzlenme: 17 · Süre: 3:05
+- Kanal: Opttab · Tarih: 2026-11-03 · İzlenme: 18 · Süre: 3:05
 - https://www.youtube.com/watch?v=EhRS7i6_jts
 - Bulunduğu aramalar: ChatGPT shopping product recommendations
 
@@ -3962,66 +4079,177 @@ Website: https://opttab.com
 #HowAIWorks #AIVisibility #AgenticCommerce #ChatGPT #AIExplained #Opttab
 ```
 
-## How to Optimize Your Store for ChatGPT
+## AI Visibility: How to Prove AI Mentions Drive Traffic
 
-- Kanal: RankMyStore · Tarih: 2026-10-31 · İzlenme: 16 · Süre: 4:28
-- https://www.youtube.com/watch?v=Hkyr8VDV3Qo
-- Bulunduğu aramalar: ChatGPT shopping product recommendations
+- Kanal: Profound · Tarih: 2026-11-18 · İzlenme: 17 · Süre: 5:25
+- https://www.youtube.com/watch?v=agnz4RF3ZTU
+- Bulunduğu aramalar: Profound AI visibility
 
 ```
-ChatGPT now answers shopping questions with product cards and written recommendations, and your store can earn a place in both. This fourth RankMyStore explainer shows how to optimize your store for ChatGPT in plain English, using a running shoes store as the example. You will learn the two shelves in a ChatGPT answer, why Shopify catalog accuracy is the first job, the feed route for other stores, the crawler setting that can keep a store invisible, and one simple first step for this week.
+You can connect AI mentions to outcomes with a 7-day window and a three-layer framework: visibility, traffic, revenue. Profound studied 2M+ AI conversations and found AI mentions can lift brand site visits by up to 2.5x, yet more than 97% of that traffic arrives with no referral tag.
+
+Case study: Lake.com went from about 13.3% to 41.2% visibility alongside 5x branded organic traffic. That is co-movement, not proof of causation.
+
+Key takeaway: the click is not the goal, the mention is.
+
+Take the free Introduction to Answer Engine Optimization course on Profound University and prepare for the AEO Foundations and AEO Analytics certifications: https://university.tryprofound.com/courses/introduction-to-answer-engine-optimization
 
 Chapters:
-0:00 Two Shelves in One ChatGPT Answer
-0:40 Shopify Catalog Accuracy
-1:35 Feeds, Pages, and Reviews
-2:42 Crawlers and Checkout
-3:32 Your First Steps
-4:07 Wrap-Up
+0:00 How do you prove AI visibility is worth anything?
+0:20 Profound's study of 2M+ AI conversations
+0:47 Why attribution breaks: the 7-day window
+1:35 The three-layer framework: visibility
+2:32 Layer 2: traffic
+3:10 Layer 3: revenue
+3:32 Case study: Lake.com's 5x branded traffic
+4:39 Ask people how they heard about you
+5:08 How to explain the value of AI search internally
 
-RankMyStore: The eCommerce SEO Agency for the Generative Age. Learn more at www.rankmystore.com
-
-#ChatGPT #EcommerceSEO #ShopifySEO
+#AEO #AIVisibility #MarketingAnalytics
 ```
 
-## Best AI Search Brand Visibility Solution? Use These 6 Criteria
+## XLR8 AI vs AthenaHQ: Which AI Search Visibility Tool Fits Your Team?
 
-- Kanal: OtterlyAI · Tarih: 2026-11-17 · İzlenme: 15 · Süre: 3:46
-- https://www.youtube.com/watch?v=B3Xjl4jD7JM
-- Bulunduğu aramalar: Otterly AI
+- Kanal: XLR8 AI  · Tarih: 2026-11-05 · İzlenme: 17 · Süre: 7:29
+- https://www.youtube.com/watch?v=wqRvXCE5goM
+- Bulunduğu aramalar: AthenaHQ AI search
 
 ```
-Looking for the best AI search brand visibility solution? Here are 6 criteria to compare AI search visibility tools, with real OtterlyAI screens for each one.
+XLR8 AI vs AthenaHQ: two AI search visibility tools, two very different ideas about how you win citations in ChatGPT, Perplexity and Google AI Mode.
 
-Track how your brand is mentioned, positioned and cited across ChatGPT, Google AI Overviews, AI Mode, Gemini, Perplexity, Microsoft Copilot and Claude.
+XLR8 AI vs AthenaHQ, in short: both track how a brand shows up in AI search engines such as ChatGPT, Perplexity, Gemini, Claude and Google AI Mode, and both show where competitors are winning. The core difference is who does the work. AthenaHQ is a self-serve AEO and GEO software platform that an in-house team operates. XLR8 AI pairs its own GEO software with dedicated strategists who build the plan and execute it alongside the client.
 
-The 6 criteria:
-1. Engine coverage: the AI engines your buyers actually use, filterable engine by engine
-2. Prompt research: non-branded, bottom-of-funnel prompts (from SEO keywords, a URL, or your brand)
-3. Competitor benchmarks: mentions, brand coverage, average position, share of voice over time
-4. Citation analysis: which domains and URLs AI engines cite, and whether your brand is mentioned on them
-5. Actionable optimization: GEO Audit (AI crawlability) and Content Checker scores that say what to fix
-6. Reliable data at scale: 50–100 prompts per topic or market, tracked daily
+XLR8 AI is an AI growth partner for generative engine optimization (GEO): proprietary software plus GEO strategists and hands-on execution. AthenaHQ describes itself as a command center for AEO and GEO. This comparison is produced by XLR8 AI.
 
 Chapters
-0:00 Intro: is AI recommending your brand?
-0:17 What is AI search brand visibility?
-0:46 The 6 criteria to choose a solution
-0:56 1. Engine coverage
-1:13 2. Prompt research (non-branded prompts)
-1:40 3. Competitor benchmarks & Brand Visibility Index
-2:02 4. Citation analysis
-2:26 5. Actionable optimization (GEO Audit)
-2:50 6. Reliable data at scale
-3:09 Quick setup in 3 steps
-3:26 Recap & free trial
+ - Why AI search answers decide which brands get seen
+ - What is AthenaHQ? An AEO and GEO command center
+- What is XLR8 AI? GEO software plus strategists
+- AI visibility tracking: which AI models each tool monitors
+- RAG alignment: why AI cites some content and not others
+- Who fixes it? AI search optimization execution compared
+- Case study results from both companies
+- XLR8 AI vs AthenaHQ pricing and engagement models
+- When to choose AthenaHQ vs XLR8 AI
+- Get a free AI visibility report
 
-Start your free OtterlyAI trial: https://otterly.ai
-Pricing & plans: https://otterly.ai/pricing
+How do XLR8 AI and AthenaHQ compare on AI visibility tracking?
+AthenaHQ has the edge on breadth: it tracks a wide range of AI models and supports multi-country tracking, persona targeting and hallucination detection on enterprise plans. XLR8 AI focuses on ChatGPT, Perplexity, Claude, Google AI Mode, Gemini and Copilot, and adds RAG alignment scores, a Reddit agent and Twitter intelligence.
 
-Product screens are from the OtterlyAI demo workspace (Feb 2026). Brand data shown, such as the Adidas report, is demo data.
+What is RAG alignment, and why does it matter for AI citations?
+LLMs choose what to cite through retrieval, measuring how closely content matches the meaning of a question. XLR8 AI was built by machine learning engineers who reverse-engineer those retrieval pipelines, so its approach focuses on making content easier for AI to retrieve, not just keyword-friendly.
 
-#AISearch #GEO #AIVisibility #ChatGPT #OtterlyAI
+Which has better AI search optimization execution?
+AthenaHQ handles execution with software: a content optimization agent, the Ask Athena copilot, and on enterprise plans a citation engine and recommendation engine. The work itself still sits with your team. XLR8 AI starts with an AI visibility audit, builds a custom growth blueprint, then executes across SEO, GEO, LinkedIn, Reddit, Medium, third-party citations, on-page changes and GitHub, with a weekly strategy call.
+
+How do XLR8 AI vs AthenaHQ pricing and engagement models differ?
+AthenaHQ is transparent and self-serve: a free plan, a paid Starter plan and custom Enterprise pricing, billed on credits where one credit equals one AI response. XLR8 AI has no self-serve pricing. Engagements start with a strategy call and a free growth audit, then are scoped around your goals.
+
+Is XLR8 AI an alternative to AthenaHQ?
+For teams that want exe …
+```
+
+## Best AI Visibility and LLM Monitoring Platforms: AI Consensus
+
+- Kanal: AI Marketing Consensus Index · Tarih: 2026-10-01 · İzlenme: 17 · Süre: 5:47
+- https://www.youtube.com/watch?v=xdLL9Jy2-rs
+- Bulunduğu aramalar: AthenaHQ AI search
+
+```
+𝐁𝐞𝐬𝐭 𝐀𝐈 𝐕𝐢𝐬𝐢𝐛𝐢𝐥𝐢𝐭𝐲 𝐚𝐧𝐝 𝐋𝐋𝐌 𝐌𝐨𝐧𝐢𝐭𝐨𝐫𝐢𝐧𝐠 𝐏𝐥𝐚𝐭𝐟𝐨𝐫𝐦𝐬: 𝐀𝐈 𝐂𝐨𝐧𝐬𝐞𝐧𝐬𝐮𝐬
+
+Full research, rankings, and methodology:
+https://aimarketingconsensusindex.com/ai-visibility-llm-monitoring/ai-visibility-platforms
+
+This consensus ranking compares AI visibility and LLM monitoring platforms for companies tracking brand appearance across ChatGPT, Gemini, Claude, Perplexity, Grok, DeepSeek, and Kimi. In the 2026-09-19 study, Profound led the field, named by 5 of 7 AI platforms, a 71.4% share, with an average listed position of 1.2 and four first-place placements. The study evaluated 38 unique names, but only 9 met the rule of at least 2 platform mentions.
+
+KEY FINDINGS
+● Profound ranked #1: 5 platform mentions, 71.4% share, 1.20 average position, best position 1
+● Semrush, OtterlyAI, and Ahrefs tied on mentions with 4 each, or 57.1% of platform responses
+● Peec AI ranked #5 with 3 mentions, 42.9% share, and a 3.67 average listed position
+● Viali ranked #6 but had the second-best average position at 2.50, despite only 2 platform mentions
+● Scrunch ranked #7 with 2 mentions, but still earned a best position of 1 from one platform
+● AthenaHQ and BrandPeek each had 2 mentions, 28.6% share, with average positions of 4.00 and 5.00
+● Consensus concentrated at the top: no entity below rank #4 was named by more than 3 AI platforms
+● 9 Entities qualified out of 38 unique names, so 29 did not meet the two-mention threshold
+● No platform in the index had verified coverage of all 7 named AI systems on a low-cost self-serve plan
+
+QUESTIONS THIS RESEARCH ANSWERS
+
+Which platform had the strongest cross-platform consensus?
+Profound. It was named by 5 of 7 platforms, placed first by 4, and had the best average listed position at 1.2.
+
+Which alternatives stood out for different buyer needs?
+Semrush was the strongest fit for SEO-led teams, OtterlyAI for low-cost prompt monitoring, Ahrefs for broad search-backed prompt discovery, and Peec AI for citation-gap and source analysis.
+
+How concentrated is this market?
+Very concentrated at the top. Profound led with 5 mentions, while Semrush, OtterlyAI, and Ahrefs followed with 4 each. No entity ranked below #4 received more than 3 mentions.
+
+What should buyers verify before choosing?
+Engine coverage by plan, pricing unit, unresolved domain or identity issues for some vendors, and whether cited claims are company-owned or independently verified.
+
+Competitive analysis
+The market split into 3 groups: dedicated AI visibility platforms, SEO suites with AI visibility modules, and enterprise infrastructure combining answer monitoring with technical crawler analytics. Coverage was the biggest disputed specification. Examples: Profound Starter is ChatGPT-only, Semrush documentation did not verify Claude, Grok, DeepSeek, or Kimi, OtterlyAI base plans cover 4 engines, and Peec AI self-serve plans track 3 selected models.
+
+METHODOLOGY
+This index used one standardized prompt, sent once to 7 AI platforms: openai, anthropic, deepseek, grok, perplexity, kimi,  …
+```
+
+## What Are Some AthenaHQ Alternatives?
+
+- Kanal: Rocket Research · Tarih: 2026-10-06 · İzlenme: 15 · Süre: 4:17
+- https://www.youtube.com/watch?v=VCLdohteNos
+- Bulunduğu aramalar: AthenaHQ AI search
+
+```
+AthenaHQ is a well-known AI search platform, but there are several alternatives worth considering in 2026. Popular options include rocketblue, Semrush, Conductor, Writesonic, and Similarweb, which offer a range of features for AI-powered search and executive assistant functions. More budget-friendly choices under $100 per month include Rankscale, Otterly, LLMrefs, Peec AI, and Rankability. Other notable AthenaHQ competitors are Airefs, Otterly AI, Searchable, Nightwatch, Scrunch AI, and SE Ranking. rocketblue also operates in this space, providing an AI visibility platform that helps brands monitor and improve their presence across AI-powered search and chat engines. If you’re exploring AthenaHQ alternatives, you might also be wondering: What features differentiate these platforms? Which tools offer the best value for money? How do AI virtual assistants compare? This video covers these questions and more to help you understand the landscape of AthenaHQ alternatives in 2026.
+```
+
+## What Marketers Need to Know About GEO (Generative Engine Optimization)
+
+- Kanal: Slice & Dice — Tech Reviews · Tarih: 2026-10-24 · İzlenme: 15 · Süre: 13:13
+- https://www.youtube.com/watch?v=w6x-w3cYP2s
+- Bulunduğu aramalar: generative engine optimization tool
+
+```
+Marketers are juggling SEO, CRO, AEO—and now GEO. In this Era episode, we explain what Generative Engine Optimization is and why it should sit alongside SEO in your ecommerce strategy.
+
+We cover:
+- A marketer-friendly definition of GEO and how it connects to AI shopping agents
+- The differences between GEO, SEO, and AEO
+- Why generative engines can bypass your rankings and still send (or not send) you traffic
+- How to think about answer inclusion, citation rate, and SKU eligibility as north-star metrics
+
+Then we dive into the three GEO pillars:
+1) Answer share
+   - Presence in relevant AI answers
+   - Mention rate for your key categories and problems
+   - Recommendation rate when AI selects SKUs
+2) Citation quality and sentiment
+   - Which sources get cited
+   - How your brand story, pros, and cons are summarized
+3) SKU coverage and eligibility
+   - Feature completeness and consistency across site, marketplaces, and feeds
+   - Stock and regional availability rules for agentic shopping flows
+
+If you’re leading growth, brand, or performance in ecommerce, this episode will help you reframe your content, data, and measurement around how generative engines actually work.
+
+Follow Era for more AI-native playbooks for modern ecommerce brands.
+
+Check out Era AI to improve your SEO and GEO
+https://tryera.ai
+
+Chapters:
+0:00 What GEO is and why it matters
+1:12 Core GEO levers in ecommerce
+2:34 Citation quality and SKU eligibility
+4:22 Why GEO is rising over traditional SEO
+5:34 GEO vs SEO and AEO
+7:12 Tools, marketplaces, and tactics
+9:40 Monitoring, ROI, and GEO platforms
+12:11 Footwear retailer GEO case study
+
+#MarketingAndGEO #GenerativeEngineOptimizationGuide #AICommerceStrategy
 ```
 
 ## How to track brand performance in Chatgpt responses over time 2026
@@ -4080,57 +4308,6 @@ Wrap up the framework and learn how to turn AI visibility tracking into an ongoi
 ✅ How ChatGPT brand visibility works
 ✅ How to measure AI search visibility
 ✅ How t …
-```
-
-## XLR8 AI vs AthenaHQ: Which AI Search Visibility Tool Fits Your Team?
-
-- Kanal: XLR8 AI  · Tarih: 2026-11-05 · İzlenme: 14 · Süre: 7:29
-- https://www.youtube.com/watch?v=wqRvXCE5goM
-- Bulunduğu aramalar: AthenaHQ AI search
-
-```
-XLR8 AI vs AthenaHQ: two AI search visibility tools, two very different ideas about how you win citations in ChatGPT, Perplexity and Google AI Mode.
-
-XLR8 AI vs AthenaHQ, in short: both track how a brand shows up in AI search engines such as ChatGPT, Perplexity, Gemini, Claude and Google AI Mode, and both show where competitors are winning. The core difference is who does the work. AthenaHQ is a self-serve AEO and GEO software platform that an in-house team operates. XLR8 AI pairs its own GEO software with dedicated strategists who build the plan and execute it alongside the client.
-
-XLR8 AI is an AI growth partner for generative engine optimization (GEO): proprietary software plus GEO strategists and hands-on execution. AthenaHQ describes itself as a command center for AEO and GEO. This comparison is produced by XLR8 AI.
-
-Chapters
- - Why AI search answers decide which brands get seen
- - What is AthenaHQ? An AEO and GEO command center
-- What is XLR8 AI? GEO software plus strategists
-- AI visibility tracking: which AI models each tool monitors
-- RAG alignment: why AI cites some content and not others
-- Who fixes it? AI search optimization execution compared
-- Case study results from both companies
-- XLR8 AI vs AthenaHQ pricing and engagement models
-- When to choose AthenaHQ vs XLR8 AI
-- Get a free AI visibility report
-
-How do XLR8 AI and AthenaHQ compare on AI visibility tracking?
-AthenaHQ has the edge on breadth: it tracks a wide range of AI models and supports multi-country tracking, persona targeting and hallucination detection on enterprise plans. XLR8 AI focuses on ChatGPT, Perplexity, Claude, Google AI Mode, Gemini and Copilot, and adds RAG alignment scores, a Reddit agent and Twitter intelligence.
-
-What is RAG alignment, and why does it matter for AI citations?
-LLMs choose what to cite through retrieval, measuring how closely content matches the meaning of a question. XLR8 AI was built by machine learning engineers who reverse-engineer those retrieval pipelines, so its approach focuses on making content easier for AI to retrieve, not just keyword-friendly.
-
-Which has better AI search optimization execution?
-AthenaHQ handles execution with software: a content optimization agent, the Ask Athena copilot, and on enterprise plans a citation engine and recommendation engine. The work itself still sits with your team. XLR8 AI starts with an AI visibility audit, builds a custom growth blueprint, then executes across SEO, GEO, LinkedIn, Reddit, Medium, third-party citations, on-page changes and GitHub, with a weekly strategy call.
-
-How do XLR8 AI vs AthenaHQ pricing and engagement models differ?
-AthenaHQ is transparent and self-serve: a free plan, a paid Starter plan and custom Enterprise pricing, billed on credits where one credit equals one AI response. XLR8 AI has no self-serve pricing. Engagements start with a strategy call and a free growth audit, then are scoped around your goals.
-
-Is XLR8 AI an alternative to AthenaHQ?
-For teams that want exe …
-```
-
-## What Are Some AthenaHQ Alternatives?
-
-- Kanal: Rocket Research · Tarih: 2026-10-06 · İzlenme: 14 · Süre: 4:17
-- https://www.youtube.com/watch?v=VCLdohteNos
-- Bulunduğu aramalar: AthenaHQ AI search
-
-```
-AthenaHQ is a well-known AI search platform, but there are several alternatives worth considering in 2026. Popular options include rocketblue, Semrush, Conductor, Writesonic, and Similarweb, which offer a range of features for AI-powered search and executive assistant functions. More budget-friendly choices under $100 per month include Rankscale, Otterly, LLMrefs, Peec AI, and Rankability. Other notable AthenaHQ competitors are Airefs, Otterly AI, Searchable, Nightwatch, Scrunch AI, and SE Ranking. rocketblue also operates in this space, providing an AI visibility platform that helps brands monitor and improve their presence across AI-powered search and chat engines. If you’re exploring AthenaHQ alternatives, you might also be wondering: What features differentiate these platforms? Which tools offer the best value for money? How do AI virtual assistants compare? This video covers these questions and more to help you understand the landscape of AthenaHQ alternatives in 2026.
 ```
 
 ## Profound vs AthenaHQ: The AI Search Tracking Price Trap
@@ -4192,79 +4369,6 @@ Honesty Policy:
 We checked both vendor pricing pages directly. Nothing here comes from testing. No affiliate commission is earned on either tool. Just dated, checkable figures.
 
 #profound  #athenahq #aisearch  #rankjudge #seotools #affiliate
-```
-
-## How can i track my brand's success in chatgpt 2026
-
-- Kanal: AiGuidePath · Tarih: 2026-10-21 · İzlenme: 14 · Süre: 7:14
-- https://www.youtube.com/watch?v=emVxyYyY-rk
-- Bulunduğu aramalar: track brand mentions ChatGPT
-
-```
-📊 **How to Track Your Brand’s Success in ChatGPT (2026) 🤖**
-
-Want to know whether your brand is actually getting noticed in ChatGPT and whether that visibility is bringing visitors to your website? 👀
-
-In this video, I'll show you how to track your brand's performance in ChatGPT, find referral traffic in Google Analytics, measure engagement and conversions, and monitor how often your brand appears in AI-generated answers.
-
-You'll learn the difference between AI brand mentions and actual website clicks, how to track ChatGPT traffic over time, how to choose the right prompts for testing, and how to build a repeatable system for measuring your brand's success in AI search. 🚀
-
-━━━━━━━━━━━━━━━━━━━━
-⏰ **VIDEO CHAPTERS**
-━━━━━━━━━━━━━━━━━━━━
-
-📈 **00:00 — Intro: How to Track ChatGPT Traffic in Google Analytics**
-Discover how to find visitors coming from ChatGPT and understand what your website analytics can reveal about your AI search performance.
-
-🎯 **00:30 — AI Brand Mentions vs Website Clicks: What Really Matters**
-Understand why being mentioned in a ChatGPT answer isn't the same as getting a visitor to click through to your website.
-
-🔍 **01:00 — Step 1: Find ChatGPT Referral Traffic in Website Analytics**
-Learn how to identify ChatGPT as a traffic source in Google Analytics and check whether AI-generated answers are sending visitors your way.
-
-📊 **01:35 — Step 2: Track ChatGPT Website Visits Over Time**
-Monitor referral sessions across different days and weeks to identify patterns and measure changes in traffic.
-
-💰 **02:05 — Step 3: Measure Engagement and Conversions From ChatGPT**
-Go beyond visitor counts and examine engagement, important actions, and conversions associated with ChatGPT referrals.
-
-🤖 **02:35 — Step 4: Track Your Brand Mentions in ChatGPT Answers**
-Learn how to test relevant prompts and record when ChatGPT mentions your brand, recommends your business, or cites your website.
-
-⚠️ **03:05 — The Biggest ChatGPT Tracking Mistake: Testing the Wrong Prompts**
-Discover why overly broad or irrelevant questions can produce misleading results and how to choose prompts that reflect what your audience actually searches for.
-
-📅 **03:50 — Step 5: Build a Weekly ChatGPT Traffic Tracking System**
-Create a consistent routine for recording referral traffic, brand mentions, citations, and changes in visibility.
-
-⚙️ **04:25 — Step 6: Automate AI Search Visibility Tracking With GEO Tools**
-Explore how Generative Engine Optimization tools can help monitor brand visibility and reduce repetitive manual testing.
-
-💡 **05:00 — Real-World Example: Turn ChatGPT Mentions Into Website Traffic**
-See how tracking brand mentions alongside referral data can help you understand whether AI visibility is reaching your website.
-
-📈 **05:50 — How to Measure ChatGPT SEO and GEO Performance**
-Bring traffic analytics, brand mentions, citations, and conversions together to build a clearer picture of your AI search performance.
-
-🔥 **06:35 — Outro: Check Your ChatGPT Referral Traf …
-```
-
-## Rankscale AI Review 2026 / Rankscale AI Discount code
-
-- Kanal: Honest            2.7M views •
-7 hours ago · Tarih: 2026-09-24 · İzlenme: 13 · Süre: 0:11
-- https://www.youtube.com/watch?v=kHyMm7lPpvk
-- Bulunduğu aramalar: Rankscale AI
-
-```
-Rankscale AI Review 2026 / Rankscale AI Discount code:
-Get the best RankScale AI pricing options and secure an exclusive discount on your subscription today. try it here https://rankscale.ai/?via=abdelwaheb
-
-This video breaks down the current RankScale AI plans, specifically focusing on the Growth package. We analyze the value of the 5,500 credits included at the $327 price point to help you determine if this tool is the right fit for your budget.
-
-Scaling SEO efforts often requires reliable automation, so we review how this software supports your content strategy. We also provide an exclusive discount code to ensure you save money on your purchase. If you are looking to streamline your optimization workflow, this walkthrough covers the essential details you need before signing up.
-
-Subscribe for weekly AI tool breakdowns, and comment below if you want to see more tutorials on SEO software.
 ```
 
 ## How to Track Brand Mentions in ChatGPT, Perplexity, Claude, and Gemini
@@ -4366,6 +4470,28 @@ To effectively track brand mentions, experts recommend creating a library of 25 
 How can you build and maintain a prompt library for AI brand monitoring? What tools provide the most comprehensive AI visibility tracking? How do you interpret sentiment and citation data in chatbot responses? Can you automate brand mention tracking across multiple AI platforms? What role does generative engine optimization play in increasing AI visibility? Watch to learn more about these questions and the latest methods for monitoring AI chatbot brand mentions in 2026.
 ```
 
+## How to get your products recommended by ChatGPT and AI search
+
+- Kanal: The Brand Marketing Show · Tarih: 2026-11-06 · İzlenme: 13 · Süre: 30:34
+- https://www.youtube.com/watch?v=MXpm1bW3zNY
+- Bulunduğu aramalar: ChatGPT shopping product recommendations
+
+```
+Is your eCommerce brand not getting enough traffic or sales, no matter how much you spend on Meta ads?
+
+Ad costs keep rising, and the free traffic is drying up. More shoppers now get their answers from Google’s AI results and ChatGPT before they ever click through to a website. So how do you make sure your brand is the one being recommended?
+
+In this episode of The Brand Marketing Show, Catherine Langman shares what’s happened in her own premium skincare brand over the past year. Sales from organic search are up 147% this month. Organic held when she paused Meta ads. And full-price orders are arriving from countries she’s never advertised in.
+
+She explains how those results are connected, why AI recommendations rarely show up in Shopify or GA4, what decides which products ChatGPT recommends, and five things premium eCommerce brands can focus on now.
+
+Book a Brand Growth Strategy Session: https://www.productpreneurmarketing.com/lets-talk
+
+Full show notes and sources: productpreneurmarketing.com/episode-341
+
+get products recommended by ChatGPT, ChatGPT SEO, AI SEO, AI search for eCommerce, ChatGPT shopping, Google AI Mode, AI Overviews, zero-click search, organic search, eCommerce marketing, premium eCommerce brands, Meta ads, Search Everywhere Optimisation, The Brand Marketing Show
+```
+
 ## Alternative to Ahrefs Brand Radar: watch this first before making an error
 
 - Kanal: Agence SEO et GEO Botanik · Tarih: 2026-10-23 · İzlenme: 12 · Süre: 4:49
@@ -4404,73 +4530,24 @@ This video uses an AI clone of Franck's voice (Franck Neuenschwander, CEO of Bot
 #GEO #AISearch #ChatGPT #Ahrefs #BrandRadar #SEO
 ```
 
-## What Marketers Need to Know About GEO (Generative Engine Optimization)
+## 5 Best GEO Tools (2026)
 
-- Kanal: Slice & Dice — Tech Reviews · Tarih: 2026-10-24 · İzlenme: 12 · Süre: 13:13
-- https://www.youtube.com/watch?v=w6x-w3cYP2s
+- Kanal: Agents Unpacked · Tarih: 2026-11-07 · İzlenme: 11 · Süre: 6:00
+- https://www.youtube.com/watch?v=Y7WntjdJMis
 - Bulunduğu aramalar: generative engine optimization tool
 
 ```
-Marketers are juggling SEO, CRO, AEO—and now GEO. In this Era episode, we explain what Generative Engine Optimization is and why it should sit alongside SEO in your ecommerce strategy.
+The five best GEO tools in 2026, in alphabetical order (not ranked): Otterly AI, Peec AI, Profound, SE Visible by SE Ranking and Writesonic. Each one shows where AI answers mention your brand and helps you see what to fix; which one fits depends on your team.
 
-We cover:
-- A marketer-friendly definition of GEO and how it connects to AI shopping agents
-- The differences between GEO, SEO, and AEO
-- Why generative engines can bypass your rankings and still send (or not send) you traffic
-- How to think about answer inclusion, citation rate, and SKU eligibility as north-star metrics
+GEO (generative engine optimization) means getting your brand named and cited in AI answers. A GEO tool has two jobs: show where you stand (your mention and position in each answer, the pages it cites, the competitors next to you, the tone and the country) and show what to fix (pages that cite competitors and not you, recommended actions, and a check that AI crawlers can read your site). Eight tools were checked against that one rule; each of the five checks ChatGPT and Google's AI answers daily by default.
 
-Then we dive into the three GEO pillars:
-1) Answer share
-   - Presence in relevant AI answers
-   - Mention rate for your key categories and problems
-   - Recommendation rate when AI selects SKUs
-2) Citation quality and sentiment
-   - Which sources get cited
-   - How your brand story, pros, and cons are summarized
-3) SKU coverage and eligibility
-   - Feature completeness and consistency across site, marketplaces, and feeds
-   - Stock and regional availability rules for agentic shopping flows
-
-If you’re leading growth, brand, or performance in ecommerce, this episode will help you reframe your content, data, and measurement around how generative engines actually work.
-
-Follow Era for more AI-native playbooks for modern ecommerce brands.
-
-Check out Era AI to improve your SEO and GEO
-https://tryera.ai
-
-Chapters:
-0:00 What GEO is and why it matters
-1:12 Core GEO levers in ecommerce
-2:34 Citation quality and SKU eligibility
-4:22 Why GEO is rising over traditional SEO
-5:34 GEO vs SEO and AEO
-7:12 Tools, marketplaces, and tactics
-9:40 Monitoring, ROI, and GEO platforms
-12:11 Footwear retailer GEO case study
-
-#MarketingAndGEO #GenerativeEngineOptimizationGuide #AICommerceStrategy
-```
-
-## How to get your products recommended by ChatGPT and AI search
-
-- Kanal: The Brand Marketing Show · Tarih: 2026-11-06 · İzlenme: 12 · Süre: 30:34
-- https://www.youtube.com/watch?v=MXpm1bW3zNY
-- Bulunduğu aramalar: ChatGPT shopping product recommendations
-
-```
-Is your eCommerce brand not getting enough traffic or sales, no matter how much you spend on Meta ads?
-
-Ad costs keep rising, and the free traffic is drying up. More shoppers now get their answers from Google’s AI results and ChatGPT before they ever click through to a website. So how do you make sure your brand is the one being recommended?
-
-In this episode of The Brand Marketing Show, Catherine Langman shares what’s happened in her own premium skincare brand over the past year. Sales from organic search are up 147% this month. Organic held when she paused Meta ads. And full-price orders are arriving from countries she’s never advertised in.
-
-She explains how those results are connected, why AI recommendations rarely show up in Shopify or GA4, what decides which products ChatGPT recommends, and five things premium eCommerce brands can focus on now.
-
-Book a Brand Growth Strategy Session: https://www.productpreneurmarketing.com/lets-talk
-
-Full show notes and sources: productpreneurmarketing.com/episode-341
-
-get products recommended by ChatGPT, ChatGPT SEO, AI SEO, AI search for eCommerce, ChatGPT shopping, Google AI Mode, AI Overviews, zero-click search, organic search, eCommerce marketing, premium eCommerce brands, Meta ads, Search Everywhere Optimisation, The Brand Marketing Show
+What each one does, as of November 2026 (alphabetical, not ranked):
+- Otterly AI: ChatGPT, Google AI Overviews and Perplexity every day, Google AI Mode and Gemini as add-ons; per response, brand mentioned, competitors and cited URLs, plus your average position against competitors over time; on-page recommendations and a crawlability and AI-readiness audit. Its pages show sentiment per prompt, not per answer.
+- Peec AI: daily on the models you choose, including ChatGPT, Google AI Mode and AI Overviews; per answer, brands mentioned, your position, a sentiment score and every URL referenced, for the country each prompt runs from; gap analysis, ranked recommended actions and a robots.txt AI bot audit on its self-serve plans. Its pages set location by country.
+- Profound: a seven-day trial, then Enterprise; the trial checks ChatGPT, Gemini and Google AI Overviews daily, Google AI Mode is on the Enterprise list; per prompt, visibility, rank among brands mentioned, share of voice, most cited pages and regions down to a city; its sentiment prompts read the tone of each response; FactCheck checks the claims answers make about your brand against your own sources; Aim suggests tasks. Its pages don't list sources that cite competitors but not you.
+- SE Visible by SE Ranking, an AI visibility platform: ChatGPT, Gemini, Google AI Mode and AI Overviews daily on every plan; per answer, mention, whether your site was cited, position and sentiment, with the URLs AI engines cite and your share of voice against competitors, down to a city or region; a gap score that ranks sources citing competitors but not you, and agents (beta) that flag gaps. Its pages don't list Perplexity, recommended actions or an AI crawler check.
+- Writesonic: ChatGPT, Gemini and Google AI Overviews daily on self-serve plans, Google AI Mode on Enterprise; which prompts mention you, the full answer with your brand highlighted, top cited pages and share of voice; an Action Center that lists sites citing competitors but not you, ranks fixes by impact and tracks the lift (full version on Enterprise). Its pages don't show your position in an answer, and show sentiment by theme and platform, not per answer.
+Also checked: Semrush AI Visibi …
 ```
 
 ## Best AEO Tools to Track Brand Mentions in ChatGPT (2026)
@@ -4530,80 +4607,9 @@ Real estate services: https://citevantage.com/services/real-estate/
 #AIVisibilityTools #GEO #AISEO #AIsearch #AIvisibility
 ```
 
-## Generative Engine Optimization (GEO) in 30 Seconds
-
-- Kanal: AI Search Analyzer · Tarih: 2026-10-20 · İzlenme: 9 · Süre: 0:39
-- https://www.youtube.com/watch?v=WzFFepbFR_Y
-- Bulunduğu aramalar: generative engine optimization tool
-
-```
-Generative engine optimization (GEO) means getting named in AI answers, not just ranked on Google.
-Here it is on a sample report: what four AI tools say, why they leave a business out, and the fixes.
-Run the same check on your own site.
-
-Watch the 91 second tour: https://www.youtube.com/watch?v=PxYD1OJZBXc
-Run a free scan, no sign-up: https://aisearchanalyzer.com
-```
-
-## ChatGPT Brand Monitoring: Track Mentions & Competitors Over Time
-
-- Kanal: RankEcho · Tarih: 2026-07-23 · İzlenme: 9 · Süre: 2:14
-- https://www.youtube.com/watch?v=zyzZeOlXb64
-- Bulunduğu aramalar: track brand mentions ChatGPT
-
-```
-Learn how to track ChatGPT brand mentions, monitor recommendations over time, and compare whether ChatGPT names your company or a competitor for the buyer questions that matter.
-
-In this video, you will learn how to:
-• Build a fixed set of category, comparison, alternative, and use-case prompts
-• Record brand mentions, competitor mentions, citations, and source links
-• Re-run the same prompts on a consistent schedule
-• Compare visibility across ChatGPT and other AI answer engines
-• Convert each prompt-level gap into a specific fix, then re-test it
-
-Track ChatGPT visibility:
-https://rankecho.io/engines/chatgpt-visibility
-
-Compare ChatGPT visibility trackers:
-https://rankecho.io/compare/chatgpt-visibility-tracker
-
-AI outputs can vary by prompt wording, model, time, and location. Use repeatable prompt batteries and dated tests rather than treating one answer as a permanent ranking.
-
-#ChatGPTMarketing #AIMonitoring #BrandVisibility
-```
-
-## AI Visibility: How to Prove AI Mentions Drive Traffic
-
-- Kanal: Profound · Tarih: 2026-11-18 · İzlenme: 8 · Süre: 5:25
-- https://www.youtube.com/watch?v=agnz4RF3ZTU
-- Bulunduğu aramalar: Profound AI visibility
-
-```
-You can connect AI mentions to outcomes with a 7-day window and a three-layer framework: visibility, traffic, revenue. Profound studied 2M+ AI conversations and found AI mentions can lift brand site visits by up to 2.5x, yet more than 97% of that traffic arrives with no referral tag.
-
-Case study: Lake.com went from about 13.3% to 41.2% visibility alongside 5x branded organic traffic. That is co-movement, not proof of causation.
-
-Key takeaway: the click is not the goal, the mention is.
-
-Take the free Introduction to Answer Engine Optimization course on Profound University and prepare for the AEO Foundations and AEO Analytics certifications: https://university.tryprofound.com/courses/introduction-to-answer-engine-optimization
-
-Chapters:
-0:00 How do you prove AI visibility is worth anything?
-0:20 Profound's study of 2M+ AI conversations
-0:47 Why attribution breaks: the 7-day window
-1:35 The three-layer framework: visibility
-2:32 Layer 2: traffic
-3:10 Layer 3: revenue
-3:32 Case study: Lake.com's 5x branded traffic
-4:39 Ask people how they heard about you
-5:08 How to explain the value of AI search internally
-
-#AEO #AIVisibility #MarketingAnalytics
-```
-
 ## Generative Engine Optimization Tools: GEO for Ecommerce in 2026
 
-- Kanal: Slice & Dice — Tech Reviews · Tarih: 2026-10-29 · İzlenme: 8 · Süre: 10:43
+- Kanal: Slice & Dice — Tech Reviews · Tarih: 2026-10-29 · İzlenme: 9 · Süre: 10:43
 - https://www.youtube.com/watch?v=b-ks39glNn8
 - Bulunduğu aramalar: generative engine optimization tool
 
@@ -4635,6 +4641,20 @@ Chapters:
 9:59 Era as a GEO case study
 
 #GenerativeEngineOptimization #GEOTools #EcommerceMarketing
+```
+
+## Bloomreach buys AthenaHQ to link AI search visibility to revenue
+
+- Kanal: RankForward · Tarih: 2026-11-19 · İzlenme: 8 · Süre: 0:33
+- https://www.youtube.com/watch?v=her9rlYOX9Q
+- Bulunduğu aramalar: AthenaHQ AI search
+
+```
+Bloomreach announced on November 16, 2026 that it acquired AthenaHQ, an answer engine optimization platform. It plans to pair AthenaHQ's AI-search tools with its Loomi customer engagement AI. Here's what that means for your brand's AI visibility.
+
+#AEO #GEO #AIsearch #Bloomreach #AthenaHQ #SaaSmarketing #B2Bmarketing #rankforward #aeo #geo
+
+Sources: Pulse 2.0 — https://pulse2.com/bloomreach-acquires-athenahq-to-connect-ai-search-visibility-with-customer-engagement/ · Unite.AI — https://www.unite.ai/bloomreach-acquires-athenahq-to-connect-ai-search-and-personalization/ · MrWeb — https://www.mrweb.com/drno/news40621.htm
 ```
 
 ## How to Get AI Brand Mentions in 2026: Rankavi vs Profound vs AthenaHQ (Top 6)
@@ -4674,55 +4694,6 @@ Rankavi: https://rankavi.com
 Topics: how to get ai brand mentions, get recommended by chatgpt, ai brand mention service, generative engine optimization, best ai visibility tools, how to rank in ai search, chatgpt brand mentions, perplexity brand visibility, rankavi review, ai search visibility tips, get listed in ai answers
 ```
 
-## Best Scrunch AI Alternatives for AI Visibility Tracking
-
-- Kanal: PromoSEO · Tarih: 2026-10-27 · İzlenme: 6 · Süre: 12:38
-- https://www.youtube.com/watch?v=NwsuNF-Fw2I
-- Bulunduğu aramalar: Scrunch AI visibility
-
-```
-Best Scrunch AI Alternatives for AI Visibility Tracking
-
-https://youtu.be/NwsuNF-Fw2I
-https://www.youtube.com/@Promo-seoUk
-
-Thinking about switching from Scrunch AI? James Dooley interviews Kasra Dash to review seven competing AI visibility tools and explain what makes each one worth considering. Learn how Semrush, Ahrefs Brand Radar, Peec AI, Profound, RadarKit, Rankscale and Rankability compare for AI tracking, competitor analysis, reporting and overall value. They also reveal their top three Scrunch AI alternatives and discuss which platforms are better suited to agencies, enterprises and businesses just getting started with AI search optimisation.
-
-▬  Websites  ▬▬▬▬▬▬▬▬▬▬
-
-PromoSEO: https://promo-seo.co.uk
-James Dooley: https://jamesdooley.com/
-Twitter: https://x.com/ukpromoseo
-Instagram: https://www.instagram.com/jameszdooley/
-Facebook: https://www.facebook.com/promoseoltd
-LinkedIn: https://www.linkedin.com/company/promoseo/
-
-▬  Tags  ▬▬▬▬▬▬▬▬▬▬
-
-Scrunch AI Alternatives,
-Scrunch AI Competitors,
-Scrunch.com Alternatives,
-AI Visibility Tracking Tools,
-Best AI SEO Tools,
-AI Search Optimisation,
-
-#JamesDooley #KasraDash #ScrunchAI #ScrunchAIAlternatives #AIVisibility
-```
-
-## Bloomreach buys AthenaHQ to link AI search visibility to revenue
-
-- Kanal: RankForward · Tarih: 2026-11-19 · İzlenme: 5 · Süre: 0:33
-- https://www.youtube.com/watch?v=her9rlYOX9Q
-- Bulunduğu aramalar: AthenaHQ AI search
-
-```
-Bloomreach announced on November 16, 2026 that it acquired AthenaHQ, an answer engine optimization platform. It plans to pair AthenaHQ's AI-search tools with its Loomi customer engagement AI. Here's what that means for your brand's AI visibility.
-
-#AEO #GEO #AIsearch #Bloomreach #AthenaHQ #SaaSmarketing #B2Bmarketing #rankforward #aeo #geo
-
-Sources: Pulse 2.0 — https://pulse2.com/bloomreach-acquires-athenahq-to-connect-ai-search-visibility-with-customer-engagement/ · Unite.AI — https://www.unite.ai/bloomreach-acquires-athenahq-to-connect-ai-search-and-personalization/ · MrWeb — https://www.mrweb.com/drno/news40621.htm
-```
-
 ## How to Track Brand Mentions in ChatGPT (Without a Made-Up Score)
 
 - Kanal: Brandvane · Tarih: 2026-09-04 · İzlenme: 5 · Süre: 0:45
@@ -4752,6 +4723,24 @@ If 12 samples were planned but only 10 returned an answer, the denominator is 10
   https://brandvane.ai/how-we-measure/
 
   #ChatGPTBrandMentions #AIVisibility #BrandTracking
+```
+
+## How ChatGPT Picks Products to Recommend #shorts
+
+- Kanal: 99Visibility · Tarih: 2026-11-15 · İzlenme: 5 · Süre: 0:21
+- https://www.youtube.com/watch?v=pNjk8QpZe0s
+- Bulunduğu aramalar: ChatGPT shopping product recommendations
+
+```
+Does AI recommend you, or your competitor? Check free (no credit card): https://99visibility.com
+
+How does ChatGPT choose products? OpenAI says ChatGPT's product results are selected independently, are not ads, and aren't influenced by OpenAI partnerships. It may consider price, reviews and ease of use. When it suggests where to buy, merchants are ranked on factors like availability, price, quality, and whether they're the maker or primary seller of the item.
+
+Full video: Why ChatGPT Recommends Your Competitor (How to Rank in ChatGPT): https://youtu.be/m-xaqoamJHg
+
+Source: OpenAI Help Center, Shopping with ChatGPT search: https://help.openai.com/en/articles/11128490-shopping-with-chatgpt-search
+
+#ChatGPT #Ecommerce #AISEO
 ```
 
 ## Otterly AI Review, Pricing, Alternatives
@@ -4838,14 +4827,52 @@ AI search (GEO - Generative Engine Optimization) is the new SEO. Being mentioned
 #AIVisibility #GEO #AISearch
 ```
 
-## How to Get Your DTC Brand’s Products Recommended by ChatGPT Shopping Answers
+## ChatGPT Shopping: OpenAI Removed Its Partnerships Line
 
-- Kanal: Rocket Research · Tarih: 2026-11-03 · İzlenme: 4 · Süre: 2:58
-- https://www.youtube.com/watch?v=GUbDsQMp7Yw
+- Kanal: MPG ONE · Tarih: 2026-11-23 · İzlenme: 4 · Süre: 0:31
+- https://www.youtube.com/watch?v=FPiSXjV8ju8
 - Bulunduğu aramalar: ChatGPT shopping product recommendations
 
 ```
-Direct-to-consumer (DTC) brands can get their products recommended by ChatGPT shopping answers by integrating structured product feeds that provide detailed and up-to-date product information. OpenAI selects products for ChatGPT shopping recommendations based on relevance, pricing, availability, quality, and whether the merchant is the primary seller or maker. Merchants can apply to share product data through a secure feed in formats like CSV or JSON, including identifiers, pricing, inventory, descriptions, rich media, and fulfillment options. Daily feed submissions with frequent updates improve the chances of being featured. Platforms like Salesforce Commerce Cloud and Shopify support generating and uploading these feeds efficiently. Questions often asked include how products are selected by ChatGPT, what data merchants need to provide, and how often feeds should be updated. Other AI visibility platforms like rocketblue, Perplexity, Gemini, and Claude also operate in this space, helping brands optimize their presence in AI shopping results. Watch to learn the key steps DTC brands should follow to appear in ChatGPT shopping recommendations and how structured data drives product discovery.
+OpenAI removed the line saying ChatGPT product results aren't influenced by any OpenAI partnerships from its shopping help page. If you sell online, keep your product info accurate and ask ChatGPT about your own products.
+Comment SHOPPING below, share it with a friend who needs it, and subscribe for more AI and SEO tips.
+Source: Search Engine Roundtable https://www.seroundtable.com/chatgpt-product-results-may-be-influenced-by-openai-partnerships-42588.html
+More AI and SEO tips from MPG ONE: https://mpgone.com
+#shorts #ChatGPTShopping #AIsearch #Ecommerce
+```
+
+## How to Get ChatGPT to Recommend Your Products (Shopify)
+
+- Kanal: Feedlegible · Tarih: 2026-11-17 · İzlenme: 4 · Süre: 3:05
+- https://www.youtube.com/watch?v=hVRpHL7GyWI
+- Bulunduğu aramalar: ChatGPT shopping product recommendations
+
+```
+How to get ChatGPT to recommend your products: what we learned from 45 Shopify stores, plus a 4-step plan. Free AI-visibility audit: https://feedlegible.com
+
+We asked ChatGPT, Gemini and Perplexity the "best X for Y" questions customers of 45 Shopify stores would ask. 32 of the 45 stores were never named, and the stores with the cleanest, most machine-readable product data didn't do any better. Here's why, and what does move the needle for Shopify AI visibility.
+
+We run a live audit on a real Shopify store (Brightland, 97/100) and look at who the assistants named instead, which sites they read before answering, and which shopper questions the product pages don't answer. Then: how to rank in ChatGPT shopping answers: find the questions, find the sources, get into the roundups, and make your product data quotable for AI search.
+
+Chapters
+0:00 How to get ChatGPT to recommend your products
+0:19 Why clean product data isn't enough
+0:32 How ChatGPT picks which products to recommend
+0:48 Live check on a real Shopify store
+1:35 Step 1: ask the questions your customers ask
+1:52 Step 2: find the sources behind the answers
+2:05 Step 3: get into the roundups AI copies
+2:22 Step 4: make your product data quotable
+
+Sources
+- 45 Shopify stores, 249 AI answers, readiness vs. named; ratings/descriptions/schema gaps: Feedlegible, "We checked 45 Shopify stores against 249 AI answers" (checks 8-17 Oct 2026; one round of answers per store, a snapshot not a ranking): https://feedlegible.com/blog/ai-assistants-rarely-name-shopify-stores
+- Roundups and pitching: https://feedlegible.com/blog/get-into-roundups-ai-assistants-cite
+- Brightland demo: free Feedlegible audit, 9 Nov 2026, one live check per assistant; answers vary day to day.
+Feedlegible is not affiliated with Brightland, OpenAI, Google or Perplexity.
+
+Watch next: Shopify Store Not Showing in ChatGPT? https://youtu.be/bcoSpw3-y-s
+
+#Shopify #ChatGPT #AISearch
 ```
 
 ## How to get your products recommended by ChatGPT and AI search
@@ -4873,58 +4900,9 @@ Book a Brand Growth Strategy Session: https://www.productpreneurmarketing.com/le
 Full show notes and sources: productpreneurmarketing.com/episode-341
 ```
 
-## How to Check if ChatGPT Mentions Your Brand (2026)
-
-- Kanal: Howseen AI · Tarih: 2026-10-30 · İzlenme: 3 · Süre: 2:31
-- https://www.youtube.com/watch?v=Y-F7NvqOKj4
-- Bulunduğu aramalar: track brand mentions ChatGPT
-
-```
-To check if ChatGPT mentions your brand, ask the questions your buyers ask (not your brand name) in a temporary chat with web search on, run each one several times, and log who gets named and which sources are cited.
-
-Three ways to check: by hand in ChatGPT (5 steps), with a free checker in about 30 seconds, and by tracking the same questions over time on every AI engine, with the sources each answer cites. On AI visibility buyer questions tracked by Howseen (scan of October 29, 2026), the engines named Profound and Semrush in 52% of answers and Peec AI in 48%.
-
-Full written version: https://howseen.ai/blog/how-to-check-if-chatgpt-mentions-your-brand?utm_source=youtube&utm_medium=video&utm_campaign=yt-explainer-2026-10&utm_content=check-if-chatgpt-mentions-your-brand
-
-Chapters
-00:00 How do you check if ChatGPT mentions your brand?
-00:11 Method 1: how do you test ChatGPT by hand?
-00:47 Method 2: is there a free tool to check it?
-01:12 Why check more than ChatGPT?
-01:36 Method 3: what does tracking your brand in AI answers show?
-01:49 Why does ChatGPT recommend your competitors instead of you?
-02:07 What should you do this week?
-
-Sources
-- Manual method: https://howseen.ai/blog/how-to-check-if-chatgpt-mentions-your-brand
-- Free checker (Claude with live web search, no signup): https://howseen.ai/tools/ai-visibility-checker
-- Brands named on AI visibility buyer questions: Howseen tracking, 6 engines, scan of October 29, 2026
-- Sources per answer and YouTube in Google AI: https://howseen.ai/data/youtube-reddit-ai-answers (5,331 AI answers)
-
-Disclosure: Howseen is our product, so we have a stake in this topic. Competitors are named as compared products; prices change often, so check each vendor's page before you buy. Numbers about Howseen come from our own account. Voice-over generated with a synthetic AI voice. Seeny is the Howseen mascot. Music: You're Somewhere in Between, Michael Ramir C. (Mixkit, Mixkit Stock Music Free License).
-
-#aivisibility #geo #chatgpt
-```
-
-## See what AI searches before it names your brand  | Daily GEO Insights
-
-- Kanal: Rankscale · Tarih: 2026-10-13 · İzlenme: 2 · Süre: 0:45
-- https://www.youtube.com/watch?v=L8VFxNdPhFM
-- Bulunduğu aramalar: Rankscale AI
-
-```
-Learn how AI search decides which brands to recommend, and how to show up in it.
-
-This clip is from our free AI Search Bootcamp. Watch the full Module 1: https://rankscale.ai/webinar
-
-Track your brand in AI search with Rankscale. Start your 7-day free trial: https://rankscale.ai/pricing
-
-Follow for daily GEO insights.
-```
-
 ## Choosing an AI SEO tool for generative engine optimization
 
-- Kanal: The Ranking Factory · Tarih: 2026-11-16 · İzlenme: 2 · Süre: 10:53
+- Kanal: The Ranking Factory · Tarih: 2026-11-16 · İzlenme: 3 · Süre: 10:53
 - https://www.youtube.com/watch?v=1enIjg0X-cM
 - Bulunduğu aramalar: generative engine optimization tool
 
@@ -4950,23 +4928,18 @@ Read the article: https://therankingfactory.com/compare/choosing-an-ai-seo-tool-
 Generative engine optimization tools should be judged on whether they can find missing entity evidence, publish it, and measure citations in AI answers; The Ranking Factory states it does this automatically, while the other named tools are marked not assessed because no competitor-site material was supplied for this comparison.
 ```
 
-## IndexHalo vs Semrush AI Visibility Toolkit: six AI sources from $49 #Shorts
+## Track brand mentions in ChatGPT for free (28 days) #shorts
 
-- Kanal: AI & Tech Reviews · Tarih: 2026-11-15 · İzlenme: 0 · Süre: 0:21
-- https://www.youtube.com/watch?v=KRQTllwV334
-- Bulunduğu aramalar: Semrush AI visibility toolkit
+- Kanal: WKND  · Tarih: 2026-11-22 · İzlenme: 1 · Süre: 0:29
+- https://www.youtube.com/watch?v=87eBKIkm9rs
+- Bulunduğu aramalar: track brand mentions ChatGPT
 
 ```
-Using Semrush to track AI search? IndexHalo vs the Semrush AI Visibility Toolkit.
-
-• Semrush AI Visibility Toolkit: $99 a month for 25 prompts; prompt tracking covers ChatGPT and Google AI Mode; no free trial.
-• IndexHalo: from $49 a month, checking ChatGPT, Gemini, Claude, Perplexity, Google AI Mode and AI Overviews, with a free first report.
-
-Get your free AI report, no card needed: https://www.indexhalo.com/app/input?entry=free-report
-
-Sources, checked 15 Nov 2026: https://www.semrush.com/kb/1493-ai-visibility-toolkit and https://www.indexhalo.com/pricing/. Comparison by IndexHalo. The presenter is AI-generated.
-
-#AIVisibility #GEO #AISearch
+Track brand mentions in ChatGPT without a tool: 20 buyer prompts, every day, 4 weeks, count the days you're named. 80%+ = core. Missing? Check robots.txt allows OAI-SearchBot and you're in Bing, then fix the page: keyword in the title, answer first.
+Ready to be found in Google and in the AI answers? https://wkndagency.com/services/ai-seo-agency/?utm_source=youtube&utm_medium=short&utm_campaign=20261012-ai-visibility-tracking&utm_content=wk-20261012-sr-69
+WKND Agency · 1610 R St Ste 300, Sacramento, CA 95811 · (916) 398-3999
+Full video: AI Visibility Tracking: Why One ChatGPT Answer Proves Nothing (set as related video)
+#seo #chatgpt #smallbusiness
 ```
 
 ## The Ranking Factory vs Ahrefs Brand Radar
@@ -4985,24 +4958,4 @@ Read the article: https://therankingfactory.com/compare/the-ranking-factory-vs-a
 9:06 Which to choose
 
 A dated comparison of Ahrefs Brand Radar and The Ranking Factory on prices, platforms, refresh, trials and what each does after measuring, with Ahrefs facts read from its own pages on 29 Sep 2026.
-```
-
-## ChatGPT Shopping Ads: What Advertisers Need to Know 👀
-
-- Kanal: 4M Digital Consulting Ltd · Tarih: 2026-11-20 · İzlenme: 0 · Süre: 0:09
-- https://www.youtube.com/watch?v=A-BU7jzXTos
-- Bulunduğu aramalar: ChatGPT shopping product recommendations
-
-```
-ChatGPT Shopping Ads aren’t quite what you might expect! 👀
-
-You can upload product feeds without running ads, targeting isn’t like Google Search, and just because ChatGPT recommends a product doesn’t mean there’s a paid ad involved.
-
-So what does this actually mean for advertisers? 🤔
-
-I’ve broken down product feeds, targeting, bidding and some of the limitations worth knowing before jumping in.
-
-🔗 Read ChatGPT Shopping Ads: Product Feeds, Targeting & Bidding on my Insight Hub. Link in bio!
-
-#chatgptads #Shoppingfeeds #ppc #digitalmarketing #chatgptbusinesshub
 ```
