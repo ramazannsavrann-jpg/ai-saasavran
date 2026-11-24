@@ -150,6 +150,15 @@ Derslerde marka gerçek adıyla anılabilir; tam sıralama tablolarında da ger�
 - Durum güncellemesi (14 Kasım akşam): Kasım Fırsatları / Black Friday AI Picks 6 kategori TR+EN TAMAM ve planlandı: 14 robot süpürge, 15 kahve (18:00), 16 spor ayakkabı, 17 parfüm, 18 gaming laptop, 19 TV (TR 19:00, EN 23:00). Parfüm/laptop/TV ölçümleri Growth Lab 2 (fd1b32d1) içinde. Ayarlar video/kasim/*.json.
 
 
+## REMOTION STANDARDI (24 Kasım, sahibin kararı — bundan sonraki TÜM veri Shorts'ları)
+Veri Shorts'ları artık `video/remotion/` ortak şablonuyla çizilir (Python/PIL `make.py` yalnız eski videolar için durur).
+- Tek komut: `bash video/remotion/uret.sh <konu> <dil> [kart]` → `cikti/shorts/<ad>.mp4`, `cikti/kapak/<ad>.jpg`, `kart` ile `cikti/instagram/ig-<ad>-1..5.jpg` (Instagram karuseli, 1080x1350).
+- Gerekenler: `video/<konu>/<ad>.json` (aynı ayar biçimi: order, gruplar, t, brands, engines…, ek olarak `rm` bölümü), `video/narration-<ad>.txt` (okunuş), `video/narration-<ad>.yazi.txt` (ekrandaki yazım; kelime sayısı aynı, fazla okunuş kelimesi `_`), seslendirme dalının ürettiği `video/ses-out/ses-<ad>.pcm`.
+- Format: sahneler seslendirmedeki cümle başlarına bağlı (`gruplar` = sahne başına cümle no'ları; sahne sayısı `order` ile aynı); kelime kelime altyazı (y 1205–1375, güvenli alan içinde); vurgular (sayaç, daire, çubuk parlaması, gösterge, kaynak çizgisi) ilgili kelime söylendiği anda; kapak = ilk sahnenin son hâli, altyazısız.
+- `rm` alanları: `kanca` (ust "{n} …", ana, alt, n, deger), `baslik_vurgu` (hook içindeki vurgulanan parça), `kanca_marka`, `canli_motor`, `soru_sayisi`, `motor_vurgu` (motor tablosunda vurgulanan marka), `soru_kelime` (soru kartı no → seslendirmedeki tetik kelime), `kapak_sahne`, isteğe bağlı `kart` (karusel sayfaları, varsayılan s1,s2,s3,shop,net).
+- Ses, müzik, tempo, süre sınırı `video/stil.json`'dan; karışım eski hatla aynı. Süre > azami_sn ise iş durur.
+- İlk örnek: Airfryer TR (ExjvMHyW0q0) + EN. Kontrol: render sonrası kareler gözle, `ad_kontrol.py` TAMAM.
+
 ## PAYLAŞIM KURALLARI (YouTube + Instagram) — 14 Kasım, HANGİ SOHBETTEN OLURSA OLSUN GEÇERLİ
 ### YouTube (@aisaasavran)
 - Veri/ölçüm Shorts: herkese açık. Eğitim videoları: GİZLİ (private).

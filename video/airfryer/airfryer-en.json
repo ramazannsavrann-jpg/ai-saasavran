@@ -1,0 +1,494 @@
+{
+ "out": "on_sicak",
+ "lang": "tr",
+ "order": [
+  "s1",
+  "names",
+  "s2",
+  "s3",
+  "s4",
+  "boxes",
+  "shop",
+  "net",
+  "s8"
+ ],
+ "n": 22,
+ "n2": 66,
+ "names": "Markalar: Arzum, Cosori, Fakir, Karaca, Ninja, Philips, Tefal, Xiaomi",
+ "names_list": [
+  "Arzum",
+  "Cosori",
+  "Fakir",
+  "Karaca",
+  "Ninja",
+  "Philips",
+  "Tefal",
+  "Xiaomi"
+ ],
+ "footer": "ChatGPT, Claude, Perplexity: live web search (Turkey) · Gemini: model knowledge · Nov 22, 2026",
+ "brands": [
+  [
+   "Philips",
+   56
+  ],
+  [
+   "Xiaomi",
+   37
+  ],
+  [
+   "Ninja",
+   21
+  ],
+  [
+   "Karaca",
+   18
+  ],
+  [
+   "Tefal",
+   17
+  ],
+  [
+   "Arzum",
+   12
+  ],
+  [
+   "Cosori",
+   10
+  ],
+  [
+   "Fakir",
+   0
+  ]
+ ],
+ "engines": [
+  [
+   "ChatGPT",
+   "/22"
+  ],
+  [
+   "Claude",
+   "/22"
+  ],
+  [
+   "Perplexity",
+   "/22"
+  ],
+  [
+   "Gemini",
+   "/30"
+  ]
+ ],
+ "gemini_label": "From memory",
+ "eng_rows": [
+  [
+   "Philips",
+   17,
+   18,
+   17,
+   27
+  ],
+  [
+   "Cosori",
+   0,
+   10,
+   0,
+   21
+  ],
+  [
+   "Karaca",
+   5,
+   5,
+   6,
+   19
+  ],
+  [
+   "Arzum",
+   0,
+   9,
+   2,
+   5
+  ]
+ ],
+ "eng_hl": [
+  "Cosori"
+ ],
+ "questions": [
+  [
+   "Best value for money?",
+   [
+    [
+     "Xiaomi",
+     "4/6",
+     true
+    ],
+    [
+     "Philips",
+     "3/6",
+     false
+    ]
+   ]
+  ],
+  [
+   "Air fryer with a window?",
+   [
+    [
+     "Xiaomi",
+     "5/6",
+     true
+    ],
+    [
+     "Philips",
+     "2/6",
+     false
+    ]
+   ]
+  ],
+  [
+   "Local or foreign brand?",
+   [
+    [
+     "Karaca",
+     "4/6",
+     true
+    ],
+    [
+     "Arzum",
+     "4/6",
+     true
+    ]
+   ]
+  ],
+  [
+   "Best warranty and service?",
+   [
+    [
+     "Philips",
+     "6/6",
+     false
+    ],
+    [
+     "Tefal",
+     "3/6",
+     false
+    ]
+   ]
+  ]
+ ],
+ "net": {
+  "left": [
+   [
+    "havafritozu.com",
+    12
+   ],
+   [
+    "oneriburada.com",
+    11
+   ],
+   [
+    "philips.com.tr",
+    10
+   ],
+   [
+    "enrehber.com",
+    10
+   ],
+   [
+    "eniyilerden.com",
+    9
+   ],
+   [
+    "mi.com",
+    6
+   ]
+  ],
+  "right": [
+   "Philips",
+   "Xiaomi",
+   "Ninja",
+   "Tefal",
+   "Karaca"
+  ],
+  "links": [
+   [
+    0,
+    0,
+    12
+   ],
+   [
+    0,
+    1,
+    8
+   ],
+   [
+    0,
+    2,
+    6
+   ],
+   [
+    0,
+    3,
+    4
+   ],
+   [
+    0,
+    4,
+    3
+   ],
+   [
+    1,
+    0,
+    9
+   ],
+   [
+    1,
+    1,
+    9
+   ],
+   [
+    1,
+    2,
+    7
+   ],
+   [
+    1,
+    3,
+    5
+   ],
+   [
+    1,
+    4,
+    3
+   ],
+   [
+    2,
+    0,
+    10
+   ],
+   [
+    2,
+    1,
+    4
+   ],
+   [
+    2,
+    2,
+    1
+   ],
+   [
+    2,
+    3,
+    2
+   ],
+   [
+    2,
+    4,
+    3
+   ],
+   [
+    3,
+    0,
+    7
+   ],
+   [
+    3,
+    1,
+    7
+   ],
+   [
+    3,
+    2,
+    5
+   ],
+   [
+    3,
+    3,
+    7
+   ],
+   [
+    3,
+    4,
+    4
+   ],
+   [
+    4,
+    0,
+    6
+   ],
+   [
+    4,
+    1,
+    6
+   ],
+   [
+    4,
+    2,
+    5
+   ],
+   [
+    4,
+    3,
+    6
+   ],
+   [
+    4,
+    4,
+    4
+   ],
+   [
+    5,
+    0,
+    4
+   ],
+   [
+    5,
+    1,
+    6
+   ],
+   [
+    5,
+    3,
+    1
+   ],
+   [
+    5,
+    4,
+    1
+   ]
+  ]
+ },
+ "sources": [],
+ "t": {
+  "hook": "AI's air fryer pick for Turkey's November sales",
+  "badge": "Where's the local brand?",
+  "hook2": "Turkey data · 8 brands · 11 buyer questions",
+  "note": "These are the AI's answers.",
+  "names_title": "Brands we tracked",
+  "names_sub": "Alphabetical",
+  "tag_brands": "Brands mentioned",
+  "who": "Who got named?",
+  "who_sub": "ChatGPT + Claude + Perplexity, 66 live-search answers (Turkey)",
+  "tag_eng": "AI vs AI",
+  "eng": "ChatGPT and Perplexity never named Cosori",
+  "eng_sub": "Answers that recommended the brand",
+  "eng_note": "Gemini answers from memory, 30 answers. The others: 22 live-search answers each.",
+  "tag_q": "By question",
+  "byq": "Change the question, the winner changes",
+  "byq_sub": "Recommended in 6 live-search answers · orange = winner changed",
+  "tag_shop": "Google Shopping (Turkey)",
+  "tag_net": "Source network",
+  "net": "Where does AI look?",
+  "net_sub": "Line width = answers citing the site and naming the brand",
+  "net_note": "Most cited: havafritozu.com, 12 answers. philips.com.tr in 10.",
+  "cta": "What does AI say about your brand?",
+  "cta2": "Track it weekly on ChatGPT, Gemini, Claude and Perplexity.",
+  "free": "Free check, no sign-up",
+  "disc": "AI answers from Nov 22, 2026 (Turkey, questions in Turkish). 66 live-search answers (ChatGPT, Claude, Perplexity; 11 questions × 2) and 30 Gemini answers (15 questions × 2, from memory). Small sample, not representative of the whole market. Not advice. Names belong to their owners.",
+  "tag_box": "Consistency score",
+  "box": "Does AI change its mind?",
+  "shop": "AI vs Google Shopping",
+  "shop_sub": "Search: \"airfryer\" · first listing per brand",
+  "shop_col_ai": "AI rank",
+  "shop_col_shop": "Shopping",
+  "shop_note": "Fakir is 10th on Shopping; AI never named it. Ninja isn't in the top 20."
+ },
+ "gruplar": "0,1,2|3|4,5,6|7|8,9|10,11,12|13,14|15,16|17,18",
+ "dur": {
+  "p1": 6,
+  "p2": 6,
+  "p3": 6,
+  "p4": 6,
+  "p5": 6,
+  "p6": 6,
+  "p7": 6,
+  "p8": 6,
+  "p9": 6
+ },
+ "boxes": [
+  {
+   "title": "We asked each question twice (11 questions)",
+   "lines": [
+    [
+     "Claude: never changed",
+     "good"
+    ],
+    [
+     "ChatGPT: changed on 3",
+     "bad"
+    ],
+    [
+     "Perplexity: changed on 3",
+     "bad"
+    ]
+   ]
+  },
+  {
+   "title": "Consistency score (66 live answers)",
+   "lines": [
+    [
+     "84 / 100 · High",
+     "gold"
+    ]
+   ]
+  }
+ ],
+ "shop": {
+  "rows": [
+   [
+    "Philips",
+    "1.",
+    "2.",
+    false
+   ],
+   [
+    "Xiaomi",
+    "2.",
+    "1.",
+    false
+   ],
+   [
+    "Ninja",
+    "3.",
+    "—",
+    false
+   ],
+   [
+    "Karaca",
+    "4.",
+    "13.",
+    false
+   ],
+   [
+    "Arzum",
+    "6.",
+    "17.",
+    false
+   ],
+   [
+    "Fakir",
+    "—",
+    "10.",
+    true
+   ]
+  ]
+ },
+ "tema": "sicak",
+ "rm": {
+  "kanca": {
+   "ust": "In {n} AI answers,",
+   "ana": "local brand Fakir",
+   "alt": "came up how many times?",
+   "n": 66,
+   "deger": 0
+  },
+  "canli_motor": 3,
+  "soru_sayisi": 11,
+  "motor_vurgu": "Cosori",
+  "soru_kelime": {
+   "1": "window",
+   "3": "warranty"
+  },
+  "kapak_sahne": 0,
+  "baslik_vurgu": "air fryer pick",
+  "kanca_marka": "Fakir"
+ }
+}
