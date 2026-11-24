@@ -124,17 +124,17 @@ const PLAN_ROWS = (en) => [
       ? ["1 brand, 15 questions, 3 competitors", "1 measurement a month (automatic)", "Gemini, model knowledge (no live search)", "Website check and recommendations"]
       : ["1 marka, 15 soru, 3 rakip", "Ayda 1 ölçüm (otomatik)", "Gemini, model bilgisi (canlı arama yok)", "Web sitesi kontrolü ve öneriler"], live: true },
   { name: en ? "Silver" : "Gümüş", id: "starter", price: "$130", per: en ? "/month" : "/ay", items: en
-      ? ["1 brand, 25 questions, 5 competitors", "ChatGPT, Claude and Perplexity with live web search + Gemini", "Every week: ChatGPT and Gemini ask each question twice, Claude and Perplexity once", "Which websites the AI cited", "Products: AI accuracy check and weekly Google Shopping position", "Shareable report link and PDF"]
-      : ["1 marka, 25 soru, 5 rakip", "ChatGPT, Claude ve Perplexity canlı web araması + Gemini", "Her hafta: ChatGPT ve Gemini her soruyu 2 kez, Claude ve Perplexity 1 kez sorar", "Yapay zekânın baktığı kaynak siteler", "Ürünler: yapay zekâ doğruluk kontrolü ve haftalık Google Shopping sırası", "Paylaşılabilir rapor bağlantısı ve PDF"] },
+      ? ["1 brand, 25 questions, 5 competitors", "ChatGPT, Claude and Perplexity with live web search + Gemini", "760 queries a month: 30% for a short automatic weekly measurement, 70% as question credits for full measurements any time", "Which websites the AI cited", "Products: AI accuracy check and weekly Google Shopping position", "Shareable report link and PDF"]
+      : ["1 marka, 25 soru, 5 rakip", "ChatGPT, Claude ve Perplexity canlı web araması + Gemini", "Ayda 760 sorgu: %30'u her hafta otomatik kısa ölçüm, %70'i istediğiniz zaman tam ölçüm için soru hakkı", "Yapay zekânın baktığı kaynak siteler", "Ürünler: yapay zekâ doğruluk kontrolü ve haftalık Google Shopping sırası", "Paylaşılabilir rapor bağlantısı ve PDF"] },
   { name: en ? "Gold" : "Altın", id: "altin", price: "$250", per: en ? "/month" : "/ay", items: en
-      ? ["3 brands, 30 questions each", "6 competitors per brand", "ChatGPT, Claude and Perplexity with live web search + Gemini", "Single user", "Everything in Silver", "For small businesses with several brands"]
-      : ["3 marka, her biri 30 soru", "Marka başına 6 rakip", "ChatGPT, Claude ve Perplexity canlı web araması + Gemini", "Tek kullanıcı", "Gümüş'teki her şey", "Birden fazla markası olan küçük işletmeler için"] },
+      ? ["3 brands, 30 questions each", "6 competitors per brand", "2,520 queries a month (30% weekly automatic, 70% question credits)", "ChatGPT, Claude and Perplexity with live web search + Gemini", "Single user", "Everything in Silver", "For small businesses with several brands"]
+      : ["3 marka, her biri 30 soru", "Marka başına 6 rakip", "Ayda 2.520 sorgu (%30 haftalık otomatik, %70 soru hakkı)", "ChatGPT, Claude ve Perplexity canlı web araması + Gemini", "Tek kullanıcı", "Gümüş'teki her şey", "Birden fazla markası olan küçük işletmeler için"] },
   { name: en ? "Platinum" : "Platin", id: "pro", price: "$400", per: en ? "/month" : "/ay", items: en
-      ? ["5 brands, 30 questions each", "8 competitors per brand", "Team of 3", "API and MCP access for AI agents", "Everything in Gold", "For multi-location businesses and freelancers"]
-      : ["5 marka, her biri 30 soru", "Marka başına 8 rakip", "3 kişilik ekip", "Yapay zekâ ajanları için API ve MCP erişimi", "Altın'daki her şey", "Çok şubeli işletmeler ve serbest çalışanlar için"] },
+      ? ["5 brands, 30 questions each", "8 competitors per brand", "4,200 queries a month (30% weekly automatic, 70% question credits)", "Team of 3", "API and MCP access for AI agents", "Everything in Gold", "For multi-location businesses and freelancers"]
+      : ["5 marka, her biri 30 soru", "Marka başına 8 rakip", "Ayda 4.200 sorgu (%30 haftalık otomatik, %70 soru hakkı)", "3 kişilik ekip", "Yapay zekâ ajanları için API ve MCP erişimi", "Altın'daki her şey", "Çok şubeli işletmeler ve serbest çalışanlar için"] },
   { name: en ? "Diamond" : "Elmas", id: "agency", price: "$1500", per: en ? "/month" : "/ay", items: en
-      ? ["15 brands, 30 questions each", "10 competitors per brand", "15 team members", "Everything in Platinum", "For agencies managing client brands"]
-      : ["15 marka, her biri 30 soru", "Marka başına 10 rakip", "15 kişilik ekip", "Platin'deki her şey", "Müşteri markalarını yöneten ajanslar için"] },
+      ? ["15 brands, 30 questions each", "10 competitors per brand", "12,600 queries a month (30% weekly automatic, 70% question credits)", "15 team members", "Everything in Platinum", "For agencies managing client brands"]
+      : ["15 marka, her biri 30 soru", "Marka başına 10 rakip", "Ayda 12.600 sorgu (%30 haftalık otomatik, %70 soru hakkı)", "15 kişilik ekip", "Platin'deki her şey", "Müşteri markalarını yöneten ajanslar için"] },
 ];
 const plansHtml = (en) => `
 <section class="plans" id="${en ? "pricing" : "fiyatlar"}">

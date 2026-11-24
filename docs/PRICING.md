@@ -38,6 +38,8 @@ Bu tablo `npm run pricing` ile fiyat kartlarından üretilir (fiyatlar 2026-11-0
 
 **Fiyat kararı bekliyor (kullanıcı):** ChatGPT analizinin önerisi "Starter 29 $: 1 marka, 20 soru, ChatGPT + Gemini, haftalık" bu hesapla tipik ~6,5 $, kötü durumda ~11,8 $ maliyet (%77 / %59 brüt marj).
 
+**Soru hakkı (24 Kasım):** Paket kotaları değişmedi (Gümüş 760, Altın 2.520, Platin 4.200, Elmas 12.600 sorgu/ay); yalnız kullanımı bölündü: %30 haftalık otomatik kısa ölçüm, %70 müşterinin istediği zaman başlattığı tam ölçüm. Maliyet üst sınırı aynı kalır.
+
 ## Yorum
 
 - **Eski Starter (50 soru, 3 tekrar, 3 motor) 29 $'a sürdürülemez:** kötü durumda zarar eder.

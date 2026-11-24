@@ -682,6 +682,7 @@ function RunControl({ brand, runs, onChange, paidAllowed, workspaceId }: { brand
   const [busy, setBusy] = useState<"free" | "live" | null>(null);
   const [err, setErr] = useState<string | null>(null);
   const budget = useLoad(() => (paidAllowed ? api.paidBudget(workspaceId) : Promise.resolve(null)), [paidAllowed, workspaceId, runs.length]);
+  const quota = useLoad(() => api.quota(workspaceId), [workspaceId, runs.length]);
   const pending = runs.find((r) => r.status === "queued" || r.status === "running");
   async function start(live: boolean) {
     setBusy(live ? "live" : "free"); setErr(null);
@@ -705,6 +706,10 @@ function RunControl({ brand, runs, onChange, paidAllowed, workspaceId }: { brand
           {b && <p className="muted paid-note">{isEn()
             ? <>Paid trial budget: {usd(Number(b.spent_usd))} of {usd(Number(b.cap_usd))} used. One measurement costs about {usd(0.019 * 2 * Math.max(runs[0]?.prompts_total ?? 10, 1))}. It stops automatically at the cap.</>
             : <>Ücretli deneme bütçesi: {usd(Number(b.spent_usd))} / {usd(Number(b.cap_usd))} kullanıldı. Bir ölçüm yaklaşık {usd(0.019 * 2 * Math.max(runs[0]?.prompts_total ?? 10, 1))} tutar. Tavana gelince kendiliğinden durur.</>}</p>}
+          {quota.data?.hybrid && <p className="muted paid-note">{(() => {
+            const np = Math.max(runs.find((r) => r.trigger !== "weekly")?.prompts_total ?? runs[0]?.prompts_total ?? 10, 1);
+            return L(`Bu ay ${quota.data.manual_left} soru hakkınız kaldı. Canlı aramalı ölçüm yaklaşık ${np * 4}, aramasız ölçüm ${np * 2} hak kullanır.`, `${quota.data.manual_left} question credits left this month. A live-search measurement uses about ${np * 4}, a no-search one ${np * 2}.`);
+          })()}</p>}
         </div>
       ) : (
         <Button busy={busy === "free"} onClick={() => start(false)}>{L("Ölçüm başlat", "Start measurement")}</Button>

@@ -30,6 +30,7 @@ export interface Run {
   /** Yöntem kaydı (0051); eski ölçümlerde null */
   method_version?: string | null; prompt_set_hash?: string | null; engines?: string[] | null;
 }
+export interface Quota { hybrid: boolean; total: number; weekly_cap: number; weekly_used: number; manual_cap: number; manual_used: number; manual_left: number }
 export interface Usage {
   plan_id: string; plan_name: string; status: "active" | "paused"; paused_reason: string | null;
   engine_calls: number; engine_call_limit: number; free_calls: number; paid_cost_usd: number; paid_cap_usd: number;
@@ -97,6 +98,11 @@ export const api = {
   },
   async createWorkspace(name: string, kind: "business" | "agency"): Promise<string> {
     return must(await sb().rpc("create_workspace", { p_name: name, p_kind: kind }));
+  },
+  /** Soru hakkı (0072): abonede kota %30 haftalık otomatik + %70 istek üzerine. */
+  async quota(ws: string): Promise<Quota | null> {
+    const rows = must(await sb().rpc("my_quota", { p_workspace: ws })) as Quota[];
+    return rows[0] ?? null;
   },
   async usage(ws: string): Promise<Usage | null> {
     const rows = must(await sb().rpc("workspace_usage", { p_workspace: ws })) as Usage[];
