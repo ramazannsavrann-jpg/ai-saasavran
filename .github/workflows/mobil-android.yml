@@ -4,7 +4,7 @@ name: Mobil uygulama (Android)
 on:
   push:
     branches: [main]
-    paths: ["web/src/mobile/**", "web/src/lib/**", "web/android/**", "web/capacitor.config.json", "web/vite.mobile.config.ts", "web/mobile.html", "scripts/android/**", ".github/workflows/mobil-android.yml"]
+    paths: ["web/src/mobile/**", "web/android/**", "web/capacitor.config.json", "scripts/android/**"]
   workflow_dispatch:
 permissions:
   contents: write
