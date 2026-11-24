@@ -48,7 +48,9 @@ export const LEGAL = {
 <li><b>OpenAI</b>: ChatGPT live web-search measurement.</li>
 <li><b>Anthropic</b>: Claude live web-search measurement on paid plans.</li>
 <li><b>Perplexity</b>: Perplexity live web-search measurement on paid plans.</li>
-<li><b>Paddle</b>: payments, invoicing and tax for paid plans.</li>
+<li><b>Paddle</b>: payments, invoicing and tax for paid plans on the website.</li>
+<li><b>Google Play</b>: subscription and extra-pack payments in the mobile app. We never see your payment details; we only verify with Google that the purchase is valid.</li>
+<li><b>Firebase Cloud Messaging</b>: phone notifications in the mobile app when a measurement is done, if you allow them. We store your phone's notification token and delete it when you turn notifications off or sign out.</li>
 <li><b>Resend</b>: sending the weekly summary email (you can turn it off from your account page or with one click in the email).</li>
 <li><b>GitHub</b>: the automation that runs measurements.</li></ul>
 <p>We don't sell your data or share it for advertising.</p>
