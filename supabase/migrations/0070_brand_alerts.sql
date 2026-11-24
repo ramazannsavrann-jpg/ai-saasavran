@@ -16,3 +16,8 @@ begin
 end $$;
 revoke all on function brand_alerts(uuid, int) from public;
 grant execute on function brand_alerts(uuid, int) to authenticated;
+do $$ begin
+  if exists (select 1 from pg_roles where rolname = 'anon') then
+    revoke all on function brand_alerts(uuid, int) from anon;
+  end if;
+end $$;

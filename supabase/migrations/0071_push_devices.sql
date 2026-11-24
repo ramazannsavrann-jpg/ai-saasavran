@@ -77,6 +77,14 @@ revoke all on function register_push_device(text, text, text) from public;
 revoke all on function unregister_push_device(text) from public;
 grant execute on function register_push_device(text, text, text) to authenticated;
 grant execute on function unregister_push_device(text) to authenticated;
+-- Supabase yeni fonksiyonlarda anon'a varsayılan izin verir; ziyaretçi hiçbirini çağıramasın (security-audit.mjs)
+do $$ declare f text; begin
+  if exists (select 1 from pg_roles where rolname = 'anon') then
+    foreach f in array array['pending_run_pushes(int)', 'record_run_push(uuid, int)', 'drop_push_device(text)', 'register_push_device(text, text, text)', 'unregister_push_device(text)'] loop
+      execute format('revoke all on function %s from anon', f);
+    end loop;
+  end if;
+end $$;
 do $$ begin
   if exists (select 1 from pg_roles where rolname = 'service_role') then
     grant execute on function pending_run_pushes(int) to service_role;
