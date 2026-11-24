@@ -1,16 +1,16 @@
 {
-  "date": "2026-11-22",
+  "date": "2026-11-24",
   "mode": "light",
   "costUsd": 0,
   "capUsd": 0.4,
-  "pages": 256,
+  "pages": 255,
   "pagesWithIssues": 2,
   "auditPassed": 13,
   "auditTotal": 13,
   "indexnow": {
-    "sent": 0,
-    "status": 0,
-    "note": "değişen sayfa yok"
+    "sent": 255,
+    "status": 200,
+    "note": "kabul edildi"
   },
   "engines": {},
   "engineStatus": {},
