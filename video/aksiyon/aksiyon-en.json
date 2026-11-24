@@ -6,10 +6,11 @@
   "s2",
   "s3",
   "s4",
+  "shop",
   "net",
   "s8"
  ],
- "gruplar": "0,1,2|3|4,5,6|7|8,9|10,11|12,13",
+ "gruplar": "0,1,2|3|4,5,6|7|8,9|10,11|12,13|14,15",
  "names_list": [
   "Akaso",
   "DJI",
@@ -255,7 +256,13 @@
   "cta": "What does AI say about your brand?",
   "cta2": "Track it weekly on ChatGPT, Gemini, Claude and Perplexity.",
   "free": "Free check, no sign-up",
-  "disc": "AI answers from Nov 24, 2026 (US, questions in English). ChatGPT, Claude, Perplexity and Gemini answered 8 questions twice each with live web search (64 answers). Small sample, not representative of the whole market. Not advice. Names belong to their owners."
+  "disc": "AI answers from Nov 24, 2026 (US, questions in English). ChatGPT, Claude, Perplexity and Gemini answered 8 questions twice each with live web search (64 answers). Small sample, not representative of the whole market. Not advice. Names belong to their owners.",
+  "tag_shop": "Google Shopping (US)",
+  "shop": "AI vs Google Shopping",
+  "shop_sub": "Search: \"action camera\" · first listing per brand",
+  "shop_col_ai": "AI rank",
+  "shop_col_shop": "Shopping",
+  "shop_note": "16 of the top 20 listings are Insta360. Akaso isn't in the top 20."
  },
  "gemini_label": "live search",
  "footer": "ChatGPT, Claude, Perplexity, Gemini: live web search (US) · Nov 24, 2026",
@@ -343,8 +350,36 @@
    "s1",
    "s2",
    "s3",
-   "s4",
+   "shop",
    "net"
+  ]
+ },
+ "shop": {
+  "rows": [
+   [
+    "DJI",
+    "1.",
+    "12.",
+    true
+   ],
+   [
+    "Insta360",
+    "2.",
+    "2.",
+    false
+   ],
+   [
+    "GoPro",
+    "3.",
+    "1.",
+    false
+   ],
+   [
+    "Akaso",
+    "4.",
+    "—",
+    false
+   ]
   ]
  }
 }

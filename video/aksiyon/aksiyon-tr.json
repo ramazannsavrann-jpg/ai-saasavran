@@ -6,10 +6,11 @@
   "s2",
   "s3",
   "s4",
+  "shop",
   "net",
   "s8"
  ],
- "gruplar": "0,1,2|3|4,5,6|7|8,9|10,11|12,13",
+ "gruplar": "0,1,2|3|4,5,6|7|8,9|10,11|12,13|14,15",
  "names_list": [
   "Akaso",
   "DJI",
@@ -255,7 +256,13 @@
   "cta": "Yapay zekâ markanız için ne diyor?",
   "cta2": "ChatGPT, Gemini, Claude ve Perplexity'de her hafta takip edin.",
   "free": "Ücretsiz kontrol, kayıt gerekmez",
-  "disc": "24 Kasım 2026 yapay zekâ cevapları (ABD, İngilizce sorular). ChatGPT, Claude, Perplexity ve Gemini canlı web aramasıyla 8 soruyu ikişer kez cevapladı (64 cevap). Küçük örneklem, tüm pazarı temsil etmez. Tavsiye değildir. Adlar sahiplerine aittir."
+  "disc": "24 Kasım 2026 yapay zekâ cevapları (ABD, İngilizce sorular). ChatGPT, Claude, Perplexity ve Gemini canlı web aramasıyla 8 soruyu ikişer kez cevapladı (64 cevap). Küçük örneklem, tüm pazarı temsil etmez. Tavsiye değildir. Adlar sahiplerine aittir.",
+  "tag_shop": "Google Shopping (ABD)",
+  "shop": "Yapay zekâ ile Google Shopping",
+  "shop_sub": "Arama: \"action camera\" · markanın ilk ilanı",
+  "shop_col_ai": "Yapay zekâ",
+  "shop_col_shop": "Shopping",
+  "shop_note": "İlk 20 ilanın 16'sı Insta360'ın. Akaso ilk 20'de yok."
  },
  "gemini_label": "canlı arama",
  "footer": "ChatGPT, Claude, Perplexity, Gemini: canlı web araması (ABD) · 24 Kasım 2026",
@@ -343,8 +350,36 @@
    "s1",
    "s2",
    "s3",
-   "s4",
+   "shop",
    "net"
+  ]
+ },
+ "shop": {
+  "rows": [
+   [
+    "DJI",
+    "1.",
+    "12.",
+    true
+   ],
+   [
+    "Insta360",
+    "2.",
+    "2.",
+    false
+   ],
+   [
+    "GoPro",
+    "3.",
+    "1.",
+    false
+   ],
+   [
+    "Akaso",
+    "4.",
+    "—",
+    false
+   ]
   ]
  }
 }
