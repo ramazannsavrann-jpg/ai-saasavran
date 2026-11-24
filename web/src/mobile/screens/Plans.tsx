@@ -95,7 +95,7 @@ export function Plans() {
             return (
               <article key={s.id} className="card" style={{ display: "flex", flexDirection: "column", gap: 6 }}>
                 <span style={{ display: "flex", justifyContent: "space-between", gap: 8 }}><b style={{ fontSize: 18 }}>{L(s.tr, s.en)}</b><b>{pr ? `${pr.priceString} ${L("/ ay", "/ mo")}` : "–"}</b></span>
-                <span className="muted small">{L(`${s.brands} marka, marka başına ${s.prompts} soru. ChatGPT, Claude, Perplexity (canlı arama) ve Gemini. Ayda ${s.calls.toLocaleString("tr-TR")} sorgu: %30 haftalık otomatik ölçüm, %70 soru hakkı.`, `${s.brands} brand(s), ${s.prompts} questions each. ChatGPT, Claude, Perplexity (live search) and Gemini. ${s.calls.toLocaleString("en-US")} queries a month: 30% weekly automatic, 70% question credits.`)}</span>
+                <span className="muted small">{L(`${s.brands} marka, marka başına ${s.prompts} soru. ChatGPT, Gemini, Claude ve Perplexity, canlı web aramasıyla. Ayda ${s.calls.toLocaleString("tr-TR")} sorgu: %30 haftalık otomatik ölçüm, %70 soru hakkı.`, `${s.brands} brand(s), ${s.prompts} questions each. ChatGPT, Gemini, Claude and Perplexity, with live web search. ${s.calls.toLocaleString("en-US")} queries a month: 30% weekly automatic, 70% question credits.`)}</span>
                 {mine ? <span className="badge b-rec" style={{ alignSelf: "flex-start" }}>{L("Şu anki paketiniz", "Your current plan")}</span>
                   : lockedByStore ? null
                   : <button className="btn btn-primary" disabled={!pr || !!busy} onClick={() => pr && run(s.id, () => buySubscription(pr, current.id))}>{busy === s.id ? L("Bekleyin…", "Wait…") : L("Abone ol", "Subscribe")}</button>}

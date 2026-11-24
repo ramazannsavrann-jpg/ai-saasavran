@@ -191,7 +191,7 @@ export function Sources() {
 function SourcesBody({ brand }: { brand: Brand }) {
   const live = useLastLive(brand);
   if (live.loading) return <Spinner />;
-  if (!live.last || live.answers.length === 0) return <p className="card" style={{ margin: 0 }}>{L("Kaynaklar, yapay zekâların internette arama yaparak cevap verdiği ölçümlerden çıkar (ChatGPT, Claude, Perplexity). Ücretsiz pakette Gemini aramasız ölçtüğü için bu bölüm boş kalır.", "Sources come from measurements where the AIs search the web (ChatGPT, Claude, Perplexity). The free plan measures Gemini without search, so this section stays empty.")}</p>;
+  if (!live.last || live.answers.length === 0) return <p className="card" style={{ margin: 0 }}>{L("Kaynaklar, yapay zekâların internette arama yaparak cevap verdiği ölçümlerden çıkar (ChatGPT, Gemini, Claude, Perplexity; ücretli paketler). Ücretsiz pakette Gemini aramasız ölçtüğü için bu bölüm boş kalır.", "Sources come from measurements where the AIs search the web (ChatGPT, Gemini, Claude, Perplexity; paid plans). The free plan measures Gemini without search, so this section stays empty.")}</p>;
   const net = sourceNetwork(live.answers, live.ments, live.brands, 10);
   const opps = sourceOpportunities(live.answers, live.ments, brand.id, live.brands.map((b) => host(b.website)).filter(Boolean)).filter((o) => !o.own).slice(0, 8);
   const mix = sourceMix(live.answers, live.ments, live.brands);

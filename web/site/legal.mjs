@@ -44,7 +44,7 @@ export const LEGAL = {
 <h2>Who we share it with</h2>
 <ul><li><b>Supabase</b>: database and sign-in (Frankfurt, Germany).</li>
 <li><b>Cloudflare</b>: hosting, domain, cookieless visit counting.</li>
-<li><b>Google</b>: Gemini AI and Google sign-in. Because we use Gemini's free tier for free-plan measurements, Google may use this content to improve its products, so don't put personal data in your questions.</li>
+<li><b>Google</b>: Gemini AI and Google sign-in. Because we use Gemini's free tier for free-plan measurements and the free check, Google may use this content to improve its products. Live-search Gemini measurements on paid plans use Gemini's paid API under Google's paid-service terms. Don't put personal data in your questions.</li>
 <li><b>OpenAI</b>: ChatGPT live web-search measurement.</li>
 <li><b>Anthropic</b>: Claude live web-search measurement on paid plans.</li>
 <li><b>Perplexity</b>: Perplexity live web-search measurement on paid plans.</li>

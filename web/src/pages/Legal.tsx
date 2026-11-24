@@ -68,7 +68,7 @@ export function Privacy() {
       <ul className="plain">
         <li><strong>Supabase</strong> (veritabanı ve giriş sistemi; sunucu: Frankfurt, Almanya).</li>
         <li><strong>Cloudflare</strong> (web sitesinin barındırılması, alan adı ve çerezsiz ziyaret sayımı).</li>
-        <li><strong>Google</strong> (Gemini yapay zekâ servisi ve Google ile giriş). Ölçüm yaparken yazdığınız sorular Gemini'ye gönderilir. Ücretsiz katmanı kullandığımız için <strong>Google bu içerikleri kendi ürünlerini geliştirmek için kullanabilir</strong>. Bu nedenle sorulara kişisel veri (ad, telefon, adres vb.) yazmayın.</li>
+        <li><strong>Google</strong> (Gemini yapay zekâ servisi ve Google ile giriş). Ölçüm yaparken yazdığınız sorular Gemini'ye gönderilir. Ücretsiz pakette ve ücretsiz kontrolde Gemini'nin ücretsiz katmanını kullandığımız için <strong>Google bu içerikleri kendi ürünlerini geliştirmek için kullanabilir</strong>. Ücretli paketlerdeki canlı aramalı Gemini ölçümleri Gemini'nin ücretli API'siyle yapılır ve Google'ın ücretli hizmet koşulları geçerlidir. Her durumda sorulara kişisel veri (ad, telefon, adres vb.) yazmayın.</li>
         <li><strong>OpenAI</strong> (ücretli paketlerde ChatGPT ile canlı web aramalı ölçüm).</li>
         <li><strong>Anthropic</strong> (ücretli paketlerde Claude ile canlı web aramalı ölçüm).</li>
         <li><strong>Perplexity</strong> (ücretli paketlerde Perplexity ile canlı web aramalı ölçüm).</li>
@@ -166,7 +166,7 @@ function PrivacyEn() {
       <ul className="plain">
         <li><strong>Supabase</strong>: database and sign-in (servers in Frankfurt, Germany).</li>
         <li><strong>Cloudflare</strong>: website hosting, domain and cookieless visit counting.</li>
-        <li><strong>Google</strong>: the Gemini AI service and Google sign-in. Your questions are sent to Gemini when measuring. Because we use Gemini's free tier, <strong>Google may use this content to improve its products</strong>, so don't put personal data (names, phone numbers, addresses) in your questions.</li>
+        <li><strong>Google</strong>: the Gemini AI service and Google sign-in. Your questions are sent to Gemini when measuring. The free plan and the free check use Gemini's free tier, so <strong>Google may use this content to improve its products</strong>. Live-search Gemini measurements on paid plans use Gemini's paid API under Google's paid-service terms. In all cases, don't put personal data (names, phone numbers, addresses) in your questions.</li>
         <li><strong>OpenAI</strong>: ChatGPT live web-search measurement on paid plans.</li>
         <li><strong>Anthropic</strong>: Claude live web-search measurement on paid plans.</li>
         <li><strong>Perplexity</strong>: Perplexity live web-search measurement on paid plans.</li>

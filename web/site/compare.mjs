@@ -31,7 +31,7 @@ export const COMPARE_TR = [
 
 <h2>Araçlar tek tek</h2>
 <h3>AI SaaSavran</h3>
-<p>Türkiye merkezli, 2026'da erken erişimle açıldı. Ücretsiz paket: 1 marka, 15 soru, ayda 1 ölçüm; Gemini ile, canlı web araması olmadan (model bilgisi) ve bu raporda açıkça yazar. Gümüş (130 $/ay): 25 soru, 5 rakip, ChatGPT, Claude ve Perplexity canlı web aramasıyla + Gemini, haftalık otomatik ölçüm, yapay zekânın baktığı kaynak siteler, ürünlerde doğruluk kontrolü ve Google Shopping sırası. Platin 400 $ (5 marka, API ve MCP), Elmas 1500 $ (15 marka, ajanslar için). Sorular Türkçe veya İngilizce, Türkiye'den veya başka ülkeden sorulabilir. Sınırlar: Ölçüm haftalıktır, günlük değil. Google AI Overviews, AI Mode ve Microsoft Copilot henüz ölçülmüyor.</p>
+<p>Türkiye merkezli, 2026'da erken erişimle açıldı. Ücretsiz paket: 1 marka, 15 soru, ayda 1 ölçüm; Gemini ile, canlı web araması olmadan (model bilgisi) ve bu raporda açıkça yazar. Gümüş (130 $/ay): 25 soru, 5 rakip, ChatGPT, Gemini, Claude ve Perplexity canlı web aramasıyla, haftalık otomatik ölçüm, yapay zekânın baktığı kaynak siteler, ürünlerde doğruluk kontrolü ve Google Shopping sırası. Platin 400 $ (5 marka, API ve MCP), Elmas 1500 $ (15 marka, ajanslar için). Sorular Türkçe veya İngilizce, Türkiye'den veya başka ülkeden sorulabilir. Sınırlar: Ölçüm haftalıktır, günlük değil. Google AI Overviews, AI Mode ve Microsoft Copilot henüz ölçülmüyor.</p>
 <h3>Peec AI</h3>
 <p>Berlin merkezli. Marka paketlerinde seçilen yapay zekâ modellerinde günlük takip yapar; ek modeller ek ücretlidir. Ajans paketleri resmî sayfada aylık 245 $'dan başlıyor ve ChatGPT, Perplexity, Google AI Overviews, AI Mode, Gemini gibi modelleri kapsıyor; en büyük ajans paketine Claude gibi API modelleri ekleniyor. Marka paketi fiyatları: peec.ai/pricing. Birçok ülke ve dilde takip isteyen ekipler ve ajanslar için güçlü bir seçenek.</p>
 <h3>Otterly.AI</h3>
@@ -72,7 +72,7 @@ export const COMPARE_TR = [
 <h2>Ne zaman AI SaaSavran mantıklı?</h2>
 <ul>
 <li><b>Müşterileriniz Türkiye'de ve Türkçe soruyorsa.</b> Yapay zekâ cevabı sorunun diline ve sorulduğu ülkeye göre değişir. Türkçe sorular ve Türkiye konumu ayarlanır.</li>
-<li><b>Claude da önemliyse.</b> Ücretli paketlerde ChatGPT, Claude ve Perplexity canlı web aramasıyla ölçülür ve her motor ayrı raporlanır.</li>
+<li><b>Claude da önemliyse.</b> Ücretli paketlerde ChatGPT, Gemini, Claude ve Perplexity canlı web aramasıyla ölçülür ve her motor ayrı raporlanır.</li>
 <li><b>Bütçeniz küçükse.</b> Ücretsiz paket (1 marka, 15 soru, ayda 1 ölçüm) ve Gümüş 130 $/ay. Ajanslar için Elmas 1500 $/ay ile 15 marka.</li>
 <li><b>Ürün satıyorsanız.</b> Yapay zekânın ürününüz hakkında söylediği fiyat ve özellikler resmî bilgilerle karşılaştırılır; haftalık Google Shopping sırası gösterilir.</li>
 <li><b>"Neden rakip?" sorusuna kanıt istiyorsanız.</b> Kaybettiğiniz sorular, yerinize önerilen rakip ve yapay zekânın baktığı kaynak siteler raporda yer alır.</li>
@@ -93,11 +93,11 @@ export const COMPARE_TR = [
 <li><a href="/tr/kontrol/">Ücretsiz kontrol</a> ile üye olmadan işletmenizin Gemini'de geçip geçmediğine bakın.</li>
 <li>Ücretsiz hesap açın, markanızı ve 3 rakibinizi ekleyin; sektörünüze hazır Türkçe soru şablonlarından seçin.</li>
 <li>İlk ölçümü başlatın; rapor motor bazında, anılma, önerilme ve kaynak ayrımıyla gelir.</li>
-<li>Canlı aramalı ChatGPT, Claude ve Perplexity için Gümüş pakete geçin. 14 gün içinde iptal ederseniz ücret iade edilir.</li>
+<li>Canlı aramalı ChatGPT, Gemini, Claude ve Perplexity için Gümüş pakete geçin. 14 gün içinde iptal ederseniz ücret iade edilir.</li>
 </ol>
 `,
     faq: [
-      ["Peec AI'nin Türkçe alternatifi var mı?", "Evet. AI SaaSavran Türkçe arayüz ve raporlarla, Türkçe soruları Türkiye'den canlı web aramasıyla ChatGPT, Claude ve Perplexity'de ölçer; ücretsiz paketle başlanır, ücretli paketler aylık 130 $'dan başlar."],
+      ["Peec AI'nin Türkçe alternatifi var mı?", "Evet. AI SaaSavran Türkçe arayüz ve raporlarla, Türkçe soruları Türkiye'den canlı web aramasıyla ChatGPT, Gemini, Claude ve Perplexity'de ölçer; ücretsiz paketle başlanır, ücretli paketler aylık 130 $'dan başlar."],
       ["AI SaaSavran ile Peec AI arasındaki fark nedir?", "AI SaaSavran Türkiye merkezlidir, Türkçe sorulara ve Türkiye'den canlı aramaya odaklanır, ücretsiz paketi vardır ve haftalık ölçer. Peec AI Berlin merkezlidir, günlük takip yapar ve çok ülkeli takipte güçlüdür."],
       ["Otterly.AI yerine ne kullanılabilir?", "Türkçe sorular, Claude ölçümü ve ürün bilgisi doğruluğu kontrolü önemliyse AI SaaSavran. Google AI Overviews ve Copilot takibi önemliyse Otterly.AI daha uygundur."],
     ],
@@ -124,7 +124,7 @@ export const COMPARE_TR = [
 <table class="mtable"><thead><tr><th></th><th>AI SaaSavran</th><th>AthenaHQ</th></tr></thead><tbody>
 <tr><td>Ücretsiz paket</td><td>1 marka, 15 soru, ayda 1 ölçüm (Gemini, canlı aramasız)</td><td>300 kredi, 5 motor</td></tr>
 <tr><td>İlk ücretli paket</td><td>Gümüş, 130 $/ay</td><td>Starter, 295 $/ay</td></tr>
-<tr><td>Motorlar (ücretli)</td><td>ChatGPT, Claude, Perplexity (canlı arama) + Gemini</td><td>11 model (Google AI Overviews, AI Mode, Copilot dahil)</td></tr>
+<tr><td>Motorlar (ücretli)</td><td>ChatGPT, Gemini, Claude, Perplexity (canlı arama)</td><td>11 model (Google AI Overviews, AI Mode, Copilot dahil)</td></tr>
 <tr><td>Ölçüm sıklığı</td><td>Haftalık</td><td>Resmî sayfada yazmıyor</td></tr>
 <tr><td>Türkçe arayüz ve rapor</td><td>Var</td><td>Resmî sayfada yazmıyor</td></tr>
 <tr><td>Ajans paketi</td><td>Elmas 1500 $/ay, 15 marka</td><td>Enterprise, teklifle</td></tr>
@@ -133,7 +133,7 @@ export const COMPARE_TR = [
 <h2>Ne zaman AI SaaSavran mantıklı?</h2>
 <ul>
 <li><b>Müşterileriniz Türkiye'de ve Türkçe soruyorsa.</b> Sorular Türkçe ve Türkiye konumundan sorulur; arayüz, rapor ve e-postalar Türkçedir.</li>
-<li><b>Bütçeniz küçükse.</b> Ücretsiz başlanır; canlı aramalı ChatGPT, Claude ve Perplexity 130 $/ay.</li>
+<li><b>Bütçeniz küçükse.</b> Ücretsiz başlanır; canlı aramalı ChatGPT, Gemini, Claude ve Perplexity 130 $/ay.</li>
 <li><b>Ürün satıyorsanız.</b> Yapay zekânın ürününüz hakkında söylediği fiyat ve özellikler resmî bilgilerle karşılaştırılır.</li>
 <li><b>"Neden rakip?" sorusuna kanıt istiyorsanız.</b> Kaybettiğiniz sorular, yerinize önerilen rakip ve yapay zekânın baktığı kaynak siteler raporda yer alır.</li>
 </ul>
@@ -149,12 +149,12 @@ export const COMPARE_TR = [
 <ol>
 <li><a href="/tr/kontrol/">Ücretsiz kontrol</a> ile üye olmadan işletmenizin Gemini'de geçip geçmediğine bakın.</li>
 <li>Ücretsiz hesap açın, markanızı ve 3 rakibinizi ekleyin; sektörünüze hazır Türkçe soru şablonlarından seçin.</li>
-<li>Canlı aramalı ChatGPT, Claude ve Perplexity için Gümüş pakete geçin. 14 gün içinde iptal ederseniz ücret iade edilir.</li>
+<li>Canlı aramalı ChatGPT, Gemini, Claude ve Perplexity için Gümüş pakete geçin. 14 gün içinde iptal ederseniz ücret iade edilir.</li>
 </ol>
 <p>Diğer araçlarla karşılaştırma: <a href="/rehber/yapay-zeka-gorunurluk-araclari/">yapay zekâ görünürlük araçları</a>.</p>
 `,
     faq: [
-      ["AthenaHQ'nun Türkçe alternatifi var mı?", "Evet. AI SaaSavran Türkçe arayüz ve raporlarla, Türkçe soruları Türkiye'den canlı web aramasıyla ChatGPT, Claude ve Perplexity'de ölçer. Ücretsiz paketle başlanır, ücretli paket aylık 130 $'dır."],
+      ["AthenaHQ'nun Türkçe alternatifi var mı?", "Evet. AI SaaSavran Türkçe arayüz ve raporlarla, Türkçe soruları Türkiye'den canlı web aramasıyla ChatGPT, Gemini, Claude ve Perplexity'de ölçer. Ücretsiz paketle başlanır, ücretli paket aylık 130 $'dır."],
       ["AthenaHQ ne kadar?", "Resmî fiyat sayfasına göre (21 Kasım 2026) ücretsiz Essential paketi var; Starter aylık 295 $ ve ayda 3.600 kredi içerir (1 kredi = 1 yapay zekâ cevabı). Kurumsal paket teklifle fiyatlanır."],
       ["AthenaHQ'yu kim satın aldı?", "Bloomreach, 16 Kasım 2026'da AthenaHQ'yu satın aldığını duyurdu."],
       ["AI SaaSavran ile AthenaHQ arasındaki fark nedir?", "AI SaaSavran Türkiye merkezlidir, Türkçe sorulara ve küçük bütçeye odaklanır ve haftalık ölçer. AthenaHQ daha çok motoru (11 model) takip eder ve içerik ajanları sunar; ücretli paketi 295 $'dan başlar."],
@@ -188,7 +188,7 @@ export const COMPARE_TR = [
 </tbody></table>
 
 <h3>AI SaaSavran</h3>
-<p>Türkiye merkezli. Ücretsiz paketle başlanır. Gümüş (130 $/ay): 25 soru, 5 rakip, ChatGPT, Claude ve Perplexity canlı web aramasıyla + Gemini, haftalık otomatik ölçüm, yapay zekânın baktığı kaynak siteler ve ürünlerde doğruluk kontrolü. Sorular Türkçe veya İngilizce, Türkiye'den veya başka ülkeden sorulur. Ajanslar için Elmas (1500 $/ay, 15 marka). Sınırlar: ölçüm haftalıktır; Google AI Overviews, AI Mode ve Copilot henüz ölçülmüyor.</p>
+<p>Türkiye merkezli. Ücretsiz paketle başlanır. Gümüş (130 $/ay): 25 soru, 5 rakip, ChatGPT, Gemini, Claude ve Perplexity canlı web aramasıyla, haftalık otomatik ölçüm, yapay zekânın baktığı kaynak siteler ve ürünlerde doğruluk kontrolü. Sorular Türkçe veya İngilizce, Türkiye'den veya başka ülkeden sorulur. Ajanslar için Elmas (1500 $/ay, 15 marka). Sınırlar: ölçüm haftalıktır; Google AI Overviews, AI Mode ve Copilot henüz ölçülmüyor.</p>
 <h3>Otterly.AI</h3>
 <p>En düşük başlangıç fiyatı: Lite aylık €29, 16 prompt; Google AI Overviews, ChatGPT, Perplexity ve Microsoft Copilot dahil. Gemini ve Google AI Mode ek ücretli. Google AI Overviews ve Copilot takibi önemliyse uygun.</p>
 <h3>Semrush AI Visibility Toolkit</h3>
@@ -211,10 +211,10 @@ export const COMPARE_TR = [
 <p>Ayrıntılı kontrol listesi: <a href="/rehber/yapay-zeka-gorunurluk-araci-secimi/">GEO aracı nasıl seçilir?</a> · Üye olmadan deneyin: <a href="/tr/kontrol/">ücretsiz kontrol</a>.</p>
 `,
     faq: [
-      ["Profound'un uygun fiyatlı alternatifleri neler?", "AI SaaSavran (ücretsiz paket, canlı aramalı ChatGPT, Claude ve Perplexity 130 $/ay), Otterly.AI (€29/ay'dan), Semrush AI Visibility Toolkit (fiyat doğrulanamadı), AthenaHQ (ücretsiz paket, Starter 295 $/ay) ve Peec AI (ajans paketleri 245 $/ay'dan). Fiyatlar 18–22 Kasım 2026'da resmî sayfalardan kontrol edildi."],
+      ["Profound'un uygun fiyatlı alternatifleri neler?", "AI SaaSavran (ücretsiz paket, canlı aramalı ChatGPT, Gemini, Claude ve Perplexity 130 $/ay), Otterly.AI (€29/ay'dan), Semrush AI Visibility Toolkit (fiyat doğrulanamadı), AthenaHQ (ücretsiz paket, Starter 295 $/ay) ve Peec AI (ajans paketleri 245 $/ay'dan). Fiyatlar 18–22 Kasım 2026'da resmî sayfalardan kontrol edildi."],
       ["Profound ne kadar?", "Resmî fiyat sayfasına göre (22 Kasım 2026) Profound yalnız teklifle fiyatlanan Enterprise paketi sunuyor. 399 $ ve 499 $'lık Starter ve Growth paketleri Eylül 2026'da yeni abonelere kapatıldı."],
       ["Profound'un ücretsiz alternatifi var mı?", "Evet. AI SaaSavran'ın ücretsiz paketi 1 marka, 15 soru ve ayda 1 ölçüm içerir (Gemini, canlı aramasız). AthenaHQ'nun ücretsiz Essential paketi 300 kredi içerir."],
-      ["Profound'un Türkçe alternatifi var mı?", "AI SaaSavran Türkçe arayüz ve raporlarla, Türkçe soruları Türkiye'den canlı web aramasıyla ChatGPT, Claude ve Perplexity'de ölçer."],
+      ["Profound'un Türkçe alternatifi var mı?", "AI SaaSavran Türkçe arayüz ve raporlarla, Türkçe soruları Türkiye'den canlı web aramasıyla ChatGPT, Gemini, Claude ve Perplexity'de ölçer."],
     ],
   },
 ];
@@ -271,14 +271,14 @@ export const COMPARE_EN = [
     tr: "peec-ai-alternatifi",
     title: "A Peec AI, Otterly.AI and Profound alternative for Turkish and English questions: AI SaaSavran",
     short: "Peec AI alternative",
-    description: "An alternative to Peec AI, Otterly.AI and Profound: a free plan, live-search ChatGPT, Claude and Perplexity from $130 a month, and questions in Turkish or English.",
+    description: "An alternative to Peec AI, Otterly.AI and Profound: a free plan, live-search ChatGPT, Gemini, Claude and Perplexity from $130 a month, and questions in Turkish or English.",
     body: `
-<p class="lede">Short answer: if you want to measure your brand in ChatGPT, Claude, Perplexity and Gemini on a small budget, or need questions asked <b>in Turkish from Turkey</b>, AI SaaSavran is an alternative to Peec AI, Otterly.AI and Profound. You can start on a free plan; live-search ChatGPT, Claude and Perplexity start at $130 a month.</p>
+<p class="lede">Short answer: if you want to measure your brand in ChatGPT, Claude, Perplexity and Gemini on a small budget, or need questions asked <b>in Turkish from Turkey</b>, AI SaaSavran is an alternative to Peec AI, Otterly.AI and Profound. You can start on a free plan; live-search ChatGPT, Gemini, Claude and Perplexity start at $130 a month.</p>
 
 <h2>When AI SaaSavran makes sense</h2>
 <ul>
 <li><b>Your customers are in Turkey, or you sell into Turkey.</b> AI answers change with the language and country of the question. Turkish questions and a Turkish search location are built in, alongside English and other countries.</li>
-<li><b>Claude matters to you.</b> Paid plans measure ChatGPT, Claude and Perplexity with live web search and report each engine separately.</li>
+<li><b>Claude matters to you.</b> Paid plans measure ChatGPT, Gemini, Claude and Perplexity with live web search and report each engine separately.</li>
 <li><b>Small budget.</b> Free plan (1 brand, 15 questions, 1 measurement a month) and Silver at $130 a month. Agencies: Diamond at $1500 a month for 15 brands.</li>
 <li><b>You sell products.</b> What the AI says about your product's price and specifications is checked against official data, with weekly Google Shopping position.</li>
 <li><b>You need evidence for "why the competitor?".</b> Reports show the questions you lose, the competitor named instead and the sources the AI relied on.</li>
@@ -299,11 +299,11 @@ export const COMPARE_EN = [
 <li>Run the <a href="/check/">free check</a> without signing up to see whether Gemini mentions your business.</li>
 <li>Create a free account, add your brand and 3 competitors, and pick ready-made questions for your sector.</li>
 <li>Run the first measurement; the report comes per engine, with mentions, recommendations and sources separated.</li>
-<li>Upgrade to Silver for live-search ChatGPT, Claude and Perplexity. Cancel within 14 days for a refund.</li>
+<li>Upgrade to Silver for live-search ChatGPT, Gemini, Claude and Perplexity. Cancel within 14 days for a refund.</li>
 </ol>
 `,
     faq: [
-      ["What is a cheaper alternative to Peec AI?", "AI SaaSavran has a free plan, and its paid plans with live-search ChatGPT, Claude and Perplexity start at $130 a month. Otterly.AI's Lite plan is €29 a month and covers Google AI Overviews, ChatGPT, Perplexity and Copilot."],
+      ["What is a cheaper alternative to Peec AI?", "AI SaaSavran has a free plan, and its paid plans with live-search ChatGPT, Gemini, Claude and Perplexity start at $130 a month. Otterly.AI's Lite plan is €29 a month and covers Google AI Overviews, ChatGPT, Perplexity and Copilot."],
       ["How is AI SaaSavran different from Peec AI?", "AI SaaSavran is based in Turkey, supports Turkish and English questions asked from Turkey or other countries, has a free plan and measures weekly. Peec AI is based in Berlin, tracks daily and is strong at multi-country tracking."],
       ["Does AI SaaSavran track Claude?", "Yes. Paid plans measure Claude with live web search, alongside ChatGPT and Perplexity, and report each engine separately."],
     ],
@@ -315,7 +315,7 @@ export const COMPARE_EN = [
     short: "AthenaHQ alternative",
     description: "AthenaHQ vs AI SaaSavran: engines, price, free plan, Turkish and English questions, and who each fits. Competitor facts from AthenaHQ's official pages only.",
     body: `
-<p class="lede">Short answer: <b>AthenaHQ</b> is an AI visibility (AEO/GEO) platform that tracks many AI engines (11 models) and offers content optimization agents; its paid plan starts at $295 a month on its official pricing page. If you want to measure your brand on a smaller budget, or need questions asked <b>in Turkish from Turkey</b>, <b>AI SaaSavran</b> is an alternative: start on a free plan, and live-search ChatGPT, Claude and Perplexity cost $130 a month.</p>
+<p class="lede">Short answer: <b>AthenaHQ</b> is an AI visibility (AEO/GEO) platform that tracks many AI engines (11 models) and offers content optimization agents; its paid plan starts at $295 a month on its official pricing page. If you want to measure your brand on a smaller budget, or need questions asked <b>in Turkish from Turkey</b>, <b>AI SaaSavran</b> is an alternative: start on a free plan, and live-search ChatGPT, Gemini, Claude and Perplexity cost $130 a month.</p>
 <p>We are a competitor, so we only repeat what AthenaHQ's own pricing page and public company news say (checked 21 November 2026). Prices change; check athenahq.ai/plans before buying.</p>
 
 <h2>What is known about AthenaHQ</h2>
@@ -338,7 +338,7 @@ export const COMPARE_EN = [
 
 <h2>When AI SaaSavran makes sense</h2>
 <ul>
-<li><b>Small budget.</b> Start free; live-search ChatGPT, Claude and Perplexity at $130 a month.</li>
+<li><b>Small budget.</b> Start free; live-search ChatGPT, Gemini, Claude and Perplexity at $130 a month.</li>
 <li><b>Customers ask in Turkish, or in a specific country.</b> Questions can be asked in Turkish or English from Turkey or another country.</li>
 <li><b>You sell products.</b> What the AI says about your product's price and specifications is checked against official data.</li>
 <li><b>You need evidence for "why the competitor?".</b> Reports show the questions you lose, the competitor named instead and the sources the AI relied on.</li>
@@ -355,12 +355,12 @@ export const COMPARE_EN = [
 <ol>
 <li>Run the <a href="/check/">free check</a> without signing up to see whether Gemini mentions your business.</li>
 <li>Create a free account, add your brand and 3 competitors, and pick ready-made questions for your sector.</li>
-<li>Upgrade to Silver for live-search ChatGPT, Claude and Perplexity. Cancel within 14 days for a refund.</li>
+<li>Upgrade to Silver for live-search ChatGPT, Gemini, Claude and Perplexity. Cancel within 14 days for a refund.</li>
 </ol>
 <p>All tools compared: <a href="/guides/ai-visibility-tools-compared/">AI visibility tools compared</a>.</p>
 `,
     faq: [
-      ["What is a cheaper alternative to AthenaHQ?", "AI SaaSavran has a free plan, and its paid plan with live-search ChatGPT, Claude and Perplexity is $130 a month. AthenaHQ's Starter plan is $295 a month on its official pricing page."],
+      ["What is a cheaper alternative to AthenaHQ?", "AI SaaSavran has a free plan, and its paid plan with live-search ChatGPT, Gemini, Claude and Perplexity is $130 a month. AthenaHQ's Starter plan is $295 a month on its official pricing page."],
       ["How much does AthenaHQ cost?", "Per its official pricing page (21 November 2026): a free Essential plan; Starter at $295 a month with 3,600 credits (1 credit = 1 AI response); Enterprise is custom-priced."],
       ["Who acquired AthenaHQ?", "Bloomreach announced on 16 November 2026 that it acquired AthenaHQ."],
       ["How is AI SaaSavran different from AthenaHQ?", "AI SaaSavran focuses on small budgets and on questions in Turkish or English from your customers' country, and measures weekly. AthenaHQ tracks more engines (11 models) and offers content agents; its paid plan starts at $295 a month."],
@@ -373,7 +373,7 @@ export const COMPARE_EN = [
     short: "Profound alternatives",
     description: "Affordable Profound alternatives: AI SaaSavran, Otterly.AI, Peec AI, AthenaHQ and Semrush. Prices from official pages, with the date checked.",
     body: `
-<p class="lede">Short answer: in September 2026 <b>Profound</b> retired its self-serve Starter and Growth plans ($399 and $499) for new subscribers; its official pricing page now lists only a custom-priced Enterprise plan. More affordable alternatives: <b>AI SaaSavran</b>, with a free plan and live-search ChatGPT, Claude and Perplexity at $130 a month; <b>Otterly.AI</b> from €29 a month; <b>AthenaHQ</b>, with a free plan and a $295 Starter plan; <b>Semrush AI Visibility Toolkit</b> at a price we could not verify; and <b>Peec AI</b>, whose agency plans start at $245 a month.</p>
+<p class="lede">Short answer: in September 2026 <b>Profound</b> retired its self-serve Starter and Growth plans ($399 and $499) for new subscribers; its official pricing page now lists only a custom-priced Enterprise plan. More affordable alternatives: <b>AI SaaSavran</b>, with a free plan and live-search ChatGPT, Gemini, Claude and Perplexity at $130 a month; <b>Otterly.AI</b> from €29 a month; <b>AthenaHQ</b>, with a free plan and a $295 Starter plan; <b>Semrush AI Visibility Toolkit</b> at a price we could not verify; and <b>Peec AI</b>, whose agency plans start at $245 a month.</p>
 <p>We are a competitor, so we only repeat what each tool's official pages say, with the date we checked them. Prices change; check each tool's own page before buying.</p>
 
 <h2>What is known about Profound (tryprofound.com/pricing, 22 November 2026)</h2>
@@ -395,7 +395,7 @@ export const COMPARE_EN = [
 </tbody></table>
 
 <h3>AI SaaSavran</h3>
-<p>Based in Turkey. Start on a free plan. Silver ($130/month): 25 questions, 5 competitors, live-search ChatGPT, Claude and Perplexity plus Gemini, weekly automatic measurement, the sources the AI relied on, and product fact checks. Questions in Turkish or English, asked from Turkey or another country. Diamond ($1500/month, 15 brands) for agencies. Limits: measurement is weekly; Google AI Overviews, AI Mode and Copilot are not measured yet.</p>
+<p>Based in Turkey. Start on a free plan. Silver ($130/month): 25 questions, 5 competitors, live-search ChatGPT, Gemini, Claude and Perplexity, weekly automatic measurement, the sources the AI relied on, and product fact checks. Questions in Turkish or English, asked from Turkey or another country. Diamond ($1500/month, 15 brands) for agencies. Limits: measurement is weekly; Google AI Overviews, AI Mode and Copilot are not measured yet.</p>
 <h3>Otterly.AI</h3>
 <p>The lowest entry price: Lite at €29 a month, 16 prompts, covering Google AI Overviews, ChatGPT, Perplexity and Microsoft Copilot. Gemini and Google AI Mode cost extra. A good fit if Google AI Overviews and Copilot matter most.</p>
 <h3>Semrush AI Visibility Toolkit</h3>
@@ -418,7 +418,7 @@ export const COMPARE_EN = [
 <p>Detailed checklist: <a href="/guides/choose-ai-visibility-tool/">how to choose an AI visibility tool</a> · Try it without signing up: <a href="/check/">free check</a>.</p>
 `,
     faq: [
-      ["What are affordable alternatives to Profound?", "AI SaaSavran (free plan; live-search ChatGPT, Claude and Perplexity at $130/month), Otterly.AI (from €29/month), Semrush AI Visibility Toolkit (price not verified), AthenaHQ (free plan; Starter $295/month) and Peec AI (agency plans from $245/month). Prices checked on official pages on 18–22 November 2026."],
+      ["What are affordable alternatives to Profound?", "AI SaaSavran (free plan; live-search ChatGPT, Gemini, Claude and Perplexity at $130/month), Otterly.AI (from €29/month), Semrush AI Visibility Toolkit (price not verified), AthenaHQ (free plan; Starter $295/month) and Peec AI (agency plans from $245/month). Prices checked on official pages on 18–22 November 2026."],
       ["How much does Profound cost?", "Per its official pricing page (22 November 2026), Profound offers only a custom-priced Enterprise plan. The $399 Starter and $499 Growth plans were retired for new subscriptions in September 2026."],
       ["Is there a free alternative to Profound?", "Yes. AI SaaSavran's free plan includes 1 brand, 15 questions and 1 measurement a month (Gemini, no live search). AthenaHQ's free Essential plan includes 300 credits."],
       ["Does Profound still have a Starter plan?", "No. Per Profound's pricing FAQ, the Starter and Growth plans for brands were retired in September 2026; new customers are offered Enterprise plans with custom pricing."],

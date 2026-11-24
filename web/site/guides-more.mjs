@@ -11,7 +11,7 @@ export const EXTRA_TR = {
 <h2>İki farklı yapay zekâ cevabı: canlı arama ve model bilgisi</h2>
 <p>GEO'yu anlamanın anahtarı, yapay zekânın cevabı nereden ürettiğini bilmektir:</p>
 <ul>
-<li><b>Canlı web araması:</b> ChatGPT, Claude ve Perplexity soruyu cevaplarken internette arar, birkaç sayfa okur ve bunları kaynak olarak gösterebilir. Bu cevaplar bugünkü interneti yansıtır; sitenizde ve sizden bahseden sitelerde yaptığınız değişiklik haftalar içinde görülebilir.</li>
+<li><b>Canlı web araması:</b> ChatGPT, Gemini, Claude ve Perplexity soruyu cevaplarken internette arar, birkaç sayfa okur ve bunları kaynak olarak gösterebilir. Bu cevaplar bugünkü interneti yansıtır; sitenizde ve sizden bahseden sitelerde yaptığınız değişiklik haftalar içinde görülebilir.</li>
 <li><b>Model bilgisi:</b> Asistan internete bakmadan, eğitildiği verideki bilgiyle cevap verir. Bu bilgi aylar öncesine aittir ve ancak yeni bir model eğitildiğinde değişir.</li>
 </ul>
 <p>Aynı soruda iki cevap farklı çıkabilir. Kendi ölçümümüzde "Türkiye'de en iyi mobil bankacılık uygulaması hangisi?" sorusunda ChatGPT canlı aramayla iki cevabın ikisinde de İş Bankası'nı önerdi; Gemini model bilgisiyle beş bankayı birden saydı. Bu yüzden ölçümde ikisi ayrı tutulmalıdır.</p>
@@ -54,7 +54,7 @@ export const EXTRA_TR = {
 <li>"Lara'da deniz manzaralı, fiyatı makul bir restoran hangisi?"</li>
 <li>"Konyaaltı'nda güvenilir bir oto servis var mı?"</li>
 </ul>
-<p>AI SaaSavran'da her soru için ülke ve dil seçilir; ücretli paketlerde ChatGPT, Claude ve Perplexity Türkiye'den canlı aramayla sorar. Rakip olarak aynı ilçedeki 3–5 işletmeyi ekleyin.</p>
+<p>AI SaaSavran'da her soru için ülke ve dil seçilir; ücretli paketlerde ChatGPT, Gemini, Claude ve Perplexity Türkiye'den canlı aramayla sorar. Rakip olarak aynı ilçedeki 3–5 işletmeyi ekleyin.</p>
 
 <h2>30 günlük plan</h2>
 <ol>
@@ -121,7 +121,7 @@ export const EXTRA_EN = {
 
 <h2>Two kinds of AI answer: live search and model knowledge</h2>
 <ul>
-<li><b>Live web search:</b> ChatGPT, Claude and Perplexity search the web, read a few pages and can cite them. These answers reflect today's web; changes to your site and to sites that mention you can show within weeks.</li>
+<li><b>Live web search:</b> ChatGPT, Gemini, Claude and Perplexity search the web, read a few pages and can cite them. These answers reflect today's web; changes to your site and to sites that mention you can show within weeks.</li>
 <li><b>Model knowledge:</b> the assistant answers from its training data without looking anything up. That knowledge is months old and only changes with a new model.</li>
 </ul>
 <p>The two can differ for the same question. In our measurement of "which is the best mobile banking app in Turkey?", ChatGPT with live search recommended İş Bankası in both answers, while Gemini from model knowledge listed five banks at once. Keep them apart when you measure.</p>
@@ -412,7 +412,7 @@ export const NEW_TR = [
 </ul>
 
 <h2>AI SaaSavran bunu nasıl yapıyor?</h2>
-<p>AI SaaSavran, Antalya'da kurulmuş bir yapay zekâ görünürlüğü aracıdır. Her soru için dil ve ülke seçilir; ücretli paketlerde ChatGPT, Claude ve Perplexity Türkçe soruları Türkiye'den canlı web aramasıyla cevaplar, gösterilen kaynaklar kaydedilir ve motorlar ayrı raporlanır. Ücretsiz paket Gemini'yi canlı arama olmadan kullanır. Ölçüm yöntemi <a href="/tr/metodoloji/">metodoloji</a> sayfasında, paketler <a href="/tr/fiyatlar/">fiyatlar</a> sayfasında. Kendi markamızın ölçüm sonucunu da, anılmadığımız dönemler dahil, ana sayfada açıkça gösteriyoruz.</p>
+<p>AI SaaSavran, Antalya'da kurulmuş bir yapay zekâ görünürlüğü aracıdır. Her soru için dil ve ülke seçilir; ücretli paketlerde ChatGPT, Gemini, Claude ve Perplexity Türkçe soruları Türkiye'den canlı web aramasıyla cevaplar, gösterilen kaynaklar kaydedilir ve motorlar ayrı raporlanır. Ücretsiz paket Gemini'yi canlı arama olmadan kullanır. Ölçüm yöntemi <a href="/tr/metodoloji/">metodoloji</a> sayfasında, paketler <a href="/tr/fiyatlar/">fiyatlar</a> sayfasında. Kendi markamızın ölçüm sonucunu da, anılmadığımız dönemler dahil, ana sayfada açıkça gösteriyoruz.</p>
 `,
     faq: [
       ["Türkiye'de yapay zekâ görünürlüğü analizi nedir?", "Türkiye'deki müşterilerin Türkçe soracağı soruları ChatGPT, Claude, Perplexity ve Gemini'ye Türkiye'den sorup markanızın kaç cevapta anıldığını, önerildiğini, kaçıncı sırada çıktığını ve hangi kaynakların gösterildiğini ölçmektir."],
@@ -622,7 +622,7 @@ export const NEW_EN = [
 </ul>
 
 <h2>How AI SaaSavran does it</h2>
-<p>AI SaaSavran is an AI visibility tool founded in Antalya, Turkey. Language and country are chosen per question; on paid plans ChatGPT, Claude and Perplexity answer Turkish questions from Turkey with live web search, cited sources are saved and engines are reported separately. The free plan uses Gemini without live search. The method is on the <a href="/methodology/">methodology</a> page and plans on the <a href="/#pricing">pricing</a> section. We also show our own brand's measurement on the home page, including when we are not mentioned.</p>
+<p>AI SaaSavran is an AI visibility tool founded in Antalya, Turkey. Language and country are chosen per question; on paid plans ChatGPT, Gemini, Claude and Perplexity answer Turkish questions from Turkey with live web search, cited sources are saved and engines are reported separately. The free plan uses Gemini without live search. The method is on the <a href="/methodology/">methodology</a> page and plans on the <a href="/#pricing">pricing</a> section. We also show our own brand's measurement on the home page, including when we are not mentioned.</p>
 `,
     faq: [
       ["What is an AI visibility analysis for Turkey?", "Asking ChatGPT, Claude, Perplexity and Gemini the questions customers in Turkey would ask in Turkish, from Turkey, and measuring in how many answers your brand is mentioned, recommended, in what position and which sources are cited."],

@@ -7,8 +7,8 @@ import { L, isEn } from "../lib/i18n";
 import { PLAN_INFO, billingSummary, openCheckout, openPortal, paymentsEnabled, planName, purchasablePlans, PLAN_DATIVE, RECOMMENDED_PLAN, type BillingSummary, type PaidPlan } from "../lib/billing";
 
 const FEATURES: Record<PaidPlan, () => string> = {
-  starter: () => L("1 marka, 25 soru, 5 rakip. ChatGPT, Claude ve Perplexity canlı web araması + Gemini. Ayda 760 sorgu: %30 haftalık otomatik ölçüm, %70 istediğiniz zaman soru hakkı.", "1 brand, 25 questions, 5 competitors. ChatGPT, Claude and Perplexity with live web search + Gemini. 760 queries a month: 30% weekly automatic, 70% question credits any time."),
-  altin: () => L("3 marka, her biri 30 soru, marka başına 6 rakip. ChatGPT, Claude ve Perplexity canlı web araması + Gemini. Ayda 2.520 sorgu: %30 haftalık otomatik, %70 soru hakkı. Önerilen paket.", "3 brands, 30 questions each, 6 competitors per brand. ChatGPT, Claude and Perplexity with live web search + Gemini. 2,520 queries a month: 30% weekly automatic, 70% question credits. Recommended plan."),
+  starter: () => L("1 marka, 25 soru, 5 rakip. ChatGPT, Gemini, Claude ve Perplexity canlı web aramasıyla. Ayda 760 sorgu: %30 haftalık otomatik ölçüm, %70 istediğiniz zaman soru hakkı.", "1 brand, 25 questions, 5 competitors. ChatGPT, Gemini, Claude and Perplexity with live web search. 760 queries a month: 30% weekly automatic, 70% question credits any time."),
+  altin: () => L("3 marka, her biri 30 soru, marka başına 6 rakip. ChatGPT, Gemini, Claude ve Perplexity canlı web aramasıyla. Ayda 2.520 sorgu: %30 haftalık otomatik, %70 soru hakkı. Önerilen paket.", "3 brands, 30 questions each, 6 competitors per brand. ChatGPT, Gemini, Claude and Perplexity with live web search. 2,520 queries a month: 30% weekly automatic, 70% question credits. Recommended plan."),
   pro: () => L("5 marka, her biri 30 soru, marka başına 8 rakip.", "5 brands, 30 questions each, 8 competitors per brand."),
   agency: () => L("15 marka, her biri 30 soru, marka başına 10 rakip. Ajanslar için.", "15 brands, 30 questions each, 10 competitors per brand. For agencies."),
 };
