@@ -235,7 +235,7 @@
   ]
  },
  "t": {
-  "hook": "Black Friday: Yapay zekâ hangi aksiyon kamerasını öneriyor?",
+  "hook": "Black Friday'de yapay zekâ hangi aksiyon kamerasını öneriyor?",
   "hook2": "ABD verisi · 4 marka · 8 alıcı sorusu",
   "names_title": "Takip ettiğimiz markalar",
   "tag_brands": "Anılan markalar",
@@ -329,7 +329,7 @@
    "n": 64,
    "deger": 13
   },
-  "baslik_vurgu": "hangi aksiyon kamerasını",
+  "baslik_vurgu": "aksiyon kamerasını",
   "kanca_marka": "GoPro",
   "canli_motor": 4,
   "soru_sayisi": 8,

@@ -506,7 +506,7 @@ export const SKaynak: React.FC<P> = ({i}) => {
             textAnchor="end"
             fontFamily={FONT}
             fontWeight={j === 0 ? 800 : 700}
-            fontSize={j === 0 ? 31 + 3 * enCok : 28}
+            fontSize={Math.min(j === 0 ? 31 + 3 * enCok : 28, Math.floor(300 / (0.56 * String(ad).length + 1.2)))}
             fill={j === 0 && enCok > 0 ? C.orange : C.ink}
             opacity={ac(frame, 4 + j * 2, 8)}
           >
