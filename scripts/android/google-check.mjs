@@ -17,7 +17,8 @@ async function token(j, scope) {
   const u = `${b64({ alg: "RS256", typ: "JWT" })}.${b64({ iss: j.client_email, scope, aud: "https://oauth2.googleapis.com/token", iat, exp: iat + 600 })}`;
   const sig = createSign("RSA-SHA256").update(u).sign(j.private_key).toString("base64url");
   const r = await fetch("https://oauth2.googleapis.com/token", { method: "POST", headers: { "content-type": "application/x-www-form-urlencoded" }, body: new URLSearchParams({ grant_type: "urn:ietf:params:oauth:grant-type:jwt-bearer", assertion: `${u}.${sig}` }) });
-  return r.ok;
+  if (!r.ok) return null;
+  return (await r.json()).access_token ?? null;
 }
 if (!sa) out.push("GOOGLE_SERVICE_ACCOUNT: YOK");
 else {
@@ -27,7 +28,18 @@ else {
     else {
       out.push(`GOOGLE_SERVICE_ACCOUNT: tamam (proje: ${j.project_id})`);
       out.push(`  FCM erişimi: ${(await token(j, "https://www.googleapis.com/auth/firebase.messaging")) ? "tamam" : "HATA"}`);
-      out.push(`  Google Play erişim anahtarı: ${(await token(j, "https://www.googleapis.com/auth/androidpublisher")) ? "alınabiliyor (Play Console izni ayrıca verilecek)" : "HATA"}`);
+      const at = await token(j, "https://www.googleapis.com/auth/androidpublisher");
+      out.push(`  Google Play erişim anahtarı: ${at ? "alınabiliyor" : "HATA"}`);
+      if (at) {
+        // Play Console izni: uygulamanın abonelik ve tek seferlik ürünlerini okuyabiliyor mu (yalnız okuma)
+        const PKG = "com.aisaasavran.app";
+        const get = (u) => fetch(`https://androidpublisher.googleapis.com/androidpublisher/v3/applications/${PKG}/${u}`, { headers: { Authorization: `Bearer ${at}` } });
+        const s = await get("subscriptions");
+        if (s.ok) { const d = await s.json(); out.push(`  Play Console izni: tamam · abonelikler: ${(d.subscriptions ?? []).map((x) => `${x.productId}(${(x.basePlans ?? []).map((b) => `${b.basePlanId}:${b.state}`).join(",")})`).join(" ") || "yok"}`); }
+        else out.push(`  Play Console izni: HENÜZ YOK (HTTP ${s.status}; davetten sonra 24 saate kadar sürebilir)`);
+        const o = await get("oneTimeProducts");
+        if (o.ok) { const d = await o.json(); out.push(`  Tek seferlik ürünler: ${(d.oneTimeProducts ?? []).map((x) => x.productId).join(" ") || "yok"}`); }
+      }
     }
   } catch { out.push("GOOGLE_SERVICE_ACCOUNT: HATA (geçerli JSON değil; dosyanın tamamı yapıştırılmamış olabilir)"); }
 }
