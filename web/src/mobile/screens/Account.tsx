@@ -16,6 +16,7 @@ export function Account() {
   const { session, current } = useApp();
   const nav = useNavigate();
   const usage = useLoad(() => (current ? api.usage(current.id) : Promise.resolve(null)), [current?.id]);
+  const quota = useLoad(() => (current ? api.quota(current.id) : Promise.resolve(null)), [current?.id]);
   const [weekly, setWeekly] = useState<boolean | null>(null);
   const [drop, setDrop] = useState(true);
   const [push, setPush] = useState<PushState>("unavailable");
@@ -83,8 +84,19 @@ export function Account() {
         <>
           <h2 className="label">{L("Bu ayki kullanım", "This month")}</h2>
           <div className="card" style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            <div style={{ display: "flex", justifyContent: "space-between" }}><span>{L("Sorulan soru", "Questions asked")}</span><span style={{ fontWeight: 700 }}>{u.engine_calls.toLocaleString("tr-TR")} / {u.engine_call_limit.toLocaleString("tr-TR")}</span></div>
-            <div className="meter"><i style={{ width: `${Math.min(100, Math.round((u.engine_calls / Math.max(1, u.engine_call_limit)) * 100))}%`, background: "var(--accent)" }} /></div>
+            {quota.data?.hybrid ? (() => { const q = quota.data!; const row = (label: string, used: number, cap: number) => (
+              <>
+                <div style={{ display: "flex", justifyContent: "space-between" }}><span>{label}</span><span style={{ fontWeight: 700 }}>{used.toLocaleString("tr-TR")} / {cap.toLocaleString("tr-TR")}</span></div>
+                <div className="meter"><i style={{ width: `${Math.min(100, Math.round((used / Math.max(1, cap)) * 100))}%`, background: "var(--accent)" }} /></div>
+              </>);
+              return <>
+                {row(L("Soru hakkı (istediğiniz zaman)", "Question credits (any time)"), q.manual_used, q.manual_cap)}
+                {row(L("Haftalık otomatik ölçüm", "Weekly automatic measurement"), q.weekly_used, q.weekly_cap)}
+                <span className="muted small">{L("1 soru hakkı, bir sorunun bir yapay zekâya bir kez sorulmasıdır. Haklar her ay başında yenilenir.", "One credit is one question asked to one AI once. Credits renew at the start of each month.")}</span>
+              </>; })() : <>
+              <div style={{ display: "flex", justifyContent: "space-between" }}><span>{L("Yapay zekâ cevabı", "AI answers")}</span><span style={{ fontWeight: 700 }}>{u.engine_calls.toLocaleString("tr-TR")} / {u.engine_call_limit.toLocaleString("tr-TR")}</span></div>
+              <div className="meter"><i style={{ width: `${Math.min(100, Math.round((u.engine_calls / Math.max(1, u.engine_call_limit)) * 100))}%`, background: "var(--accent)" }} /></div>
+            </>}
             <span className="muted small">{L(`${u.brand_limit} marka · marka başına ${u.prompt_limit} soru · ${u.competitor_limit} rakip`, `${u.brand_limit} brands · ${u.prompt_limit} questions per brand · ${u.competitor_limit} competitors`)}</span>
           </div>
         </>

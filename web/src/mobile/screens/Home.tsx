@@ -103,6 +103,7 @@ export function Home() {
   const b = sel.brand;
   const runs = useLoad(() => (b ? api.runs(b.id) : Promise.resolve([])), [b?.id]);
   const usage = useLoad(() => (current ? api.usage(current.id) : Promise.resolve(null)), [current?.id]);
+  const promptsQ = useLoad(() => (b ? api.prompts(b.id) : Promise.resolve([])), [b?.id]);
   const runList = runs.data ?? [];
   const type = shownType(b, runList) as MeasurementType;
   const lastDone = runList.find((r) => r.status === "done")?.id ?? "";
@@ -110,6 +111,7 @@ export function Home() {
   const vis = useLoad(() => (b ? api.visibility(b.id, type) : Promise.resolve([])), [b?.id, type, lastDone]);
   const sim = b?.data_origin === "simulated";
   const canLive = !!current?.paid_live_allowed && !sim;
+  const quota = useLoad(() => (current ? api.quota(current.id) : Promise.resolve(null)), [current?.id, lastDone]);
   const budget = useLoad(() => (canLive && current ? api.paidBudget(current.id) : Promise.resolve(null)), [canLive, current?.id, lastDone]);
   const [busy, setBusy] = useState<string | null>(null);
   const [err, setErr] = useState<string | null>(null);
@@ -138,12 +140,22 @@ export function Home() {
   }, {})).filter(([, v]) => v.n > 0).map(([p, v]) => ({ name: providerLabel(p).replace(/ \(.*\)$/, ""), rate: Math.round((v.k / v.n) * 100) })) : [];
   const actions = (b.top_actions ?? []).slice(0, 3);
   const u = usage.data;
+  const q = quota.data;
+  // Soru hakkı (0072): "Şimdi ölç" yaklaşık kaç hak kullanır (soru × motor × tekrar; sunucudaki run_call_estimate ile aynı)
+  const budgetLeft = budget.data ? Number(budget.data.cap_usd) - Number(budget.data.spent_usd) : 0;
+  const willLive = canLive && budgetLeft >= 0.05;
+  const activeN = (promptsQ.data ?? []).filter((p) => p.active).length;
+  const need = activeN * (willLive ? 4 : 2);
 
   async function start() {
     setBusy("run"); setErr(null); haptic.tap();
     // Canlı (ücretli) ölçüm yalnız izin ve bütçe varsa; yoksa aramasız ölçüm (sitedeki kural)
-    const left = budget.data ? Number(budget.data.cap_usd) - Number(budget.data.spent_usd) : 0;
-    try { await api.requestRun(b!.id, canLive && left >= 0.05); runs.reload(); usage.reload(); }
+    if (q?.hybrid && need > q.manual_left) {
+      setBusy(null);
+      setErr(L(`Soru hakkınız yetmiyor: bu ölçüm ${need} hak kullanır, bu ay ${q.manual_left} hakkınız kaldı. Hakkınız yeni ay başında yenilenir; haftalık otomatik ölçüm sürer.`, `Not enough question credits: this measurement uses ${need}, you have ${q.manual_left} left this month. Credits renew next month; the weekly automatic measurement continues.`));
+      return;
+    }
+    try { await api.requestRun(b!.id, willLive); runs.reload(); usage.reload(); quota.reload(); }
     catch (e) { setErr(friendlyError(e)); } finally { setBusy(null); }
   }
   async function share() {
@@ -199,7 +211,9 @@ export function Home() {
       {rate !== null && (pending
         ? <p className="ok" role="status">{pending.status === "queued" ? L("Ölçüm sırada.", "Measurement queued.") : L("Ölçüm sürüyor.", "Measurement running.")} {formatDateTime(pending.created_at)}. {L("Bitince bu ekran yenilenir.", "This screen refreshes when it's done.")}</p>
         : !sim && startBtn(false))}
-      {u && <span className="muted small" style={{ marginTop: -8 }}>{L(`Bu ay ${u.engine_calls.toLocaleString("tr-TR")} / ${u.engine_call_limit.toLocaleString("tr-TR")} yapay zekâ cevabı kullanıldı.`, `${u.engine_calls.toLocaleString("en-US")} / ${u.engine_call_limit.toLocaleString("en-US")} AI answers used this month.`)}</span>}
+      {q?.hybrid
+        ? <span className="muted small" style={{ marginTop: -8 }}>{L(`Bu ay ${q.manual_left.toLocaleString("tr-TR")} soru hakkınız kaldı.`, `${q.manual_left.toLocaleString("en-US")} question credits left this month.`)}{!sim && activeN > 0 && L(` "Şimdi ölç" yaklaşık ${need} hak kullanır.`, ` "Measure now" uses about ${need}.`)}</span>
+        : u && <span className="muted small" style={{ marginTop: -8 }}>{L(`Bu ay ${u.engine_calls.toLocaleString("tr-TR")} / ${u.engine_call_limit.toLocaleString("tr-TR")} yapay zekâ cevabı kullanıldı.`, `${u.engine_calls.toLocaleString("en-US")} / ${u.engine_call_limit.toLocaleString("en-US")} AI answers used this month.`)}</span>}
       <Err msg={err} />
       {note && <p className="ok" role="status">{note}</p>}
 
