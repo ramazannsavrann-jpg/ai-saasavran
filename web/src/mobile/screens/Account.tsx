@@ -14,7 +14,9 @@ const PLAN_TR: Record<string, [string, string]> = { free: ["Ücretsiz", "Free"],
 const planTr = (id: string, name: string) => (PLAN_TR[id] ? L(PLAN_TR[id][0], PLAN_TR[id][1]) : name);
 
 export function Account() {
-  const { session, current } = useApp();
+  const { session, current, workspaces, select } = useApp();
+  // Birden çok işletmesi olan (ajans, şube) hesap uygulamada alan değiştirebilsin; Demo Lab gösterilmez
+  const spaces = workspaces.filter((w) => w.kind !== "demo_lab");
   const nav = useNavigate();
   const usage = useLoad(() => (current ? api.usage(current.id) : Promise.resolve(null)), [current?.id]);
   const quota = useLoad(() => (current ? api.quota(current.id) : Promise.resolve(null)), [current?.id]);
@@ -84,6 +86,20 @@ export function Account() {
         {current && <span className="muted">{current.name}{u ? ` · ${L("Paket", "Plan")}: ${planTr(u.plan_id, u.plan_name)}` : ""}</span>}
         {current && (current.kind === "business" || current.kind === "agency") && <button className="btn btn-ghost" style={{ marginTop: 8 }} onClick={() => nav("/paket")}>{L("Paketler ve ödeme", "Plans and payment")}</button>}
       </div>
+      {spaces.length > 1 && (
+        <>
+          <h2 className="label">{L("İşletme alanı", "Workspace")}</h2>
+          <div className="list">
+            {spaces.map((w) => (
+              <button key={w.id} className="row" style={{ textAlign: "left" }} aria-pressed={w.id === current?.id}
+                onClick={() => { if (w.id !== current?.id) { select(w.id); try { localStorage.removeItem("mobil-marka"); } catch { /* yok say */ } nav("/ana"); } }}>
+                <span style={{ fontWeight: w.id === current?.id ? 700 : 400, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{w.name}</span>
+                {w.id === current?.id ? <span className="badge b-rec">{L("Seçili", "Selected")}</span> : Icon.chevron}
+              </button>
+            ))}
+          </div>
+        </>
+      )}
       {u && (
         <>
           <h2 className="label">{L("Bu ayki kullanım", "This month")}</h2>
