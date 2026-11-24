@@ -6,6 +6,8 @@ import { Browser } from "@capacitor/browser";
 import { sb } from "../lib/supabase";
 
 export const OAUTH_REDIRECT = "com.aisaasavran.app://giris";
+/** Supabase'in döndüğü adres: sitedeki küçük sayfa kodu uygulamaya iletir (site adresi zaten izinli, ayar değişikliği gerekmez). */
+export const OAUTH_BRIDGE = "https://aisaasavran.com/uygulama-giris/";
 export const GOOGLE_AVAILABLE = Capacitor.isNativePlatform();
 
 /** Dönüş adresinden kodu ya da hatayı çıkarır. Başka bir adresse null. */
@@ -19,7 +21,7 @@ export function parseOAuthReturn(url: string): { code?: string; error?: string }
 }
 
 export async function googleSignIn(): Promise<void> {
-  const { data, error } = await sb().auth.signInWithOAuth({ provider: "google", options: { redirectTo: OAUTH_REDIRECT, skipBrowserRedirect: true } });
+  const { data, error } = await sb().auth.signInWithOAuth({ provider: "google", options: { redirectTo: OAUTH_BRIDGE, skipBrowserRedirect: true } });
   if (error) throw error;
   if (!data.url) throw new Error("oauth_no_url");
   await Browser.open({ url: data.url, presentationStyle: "popover" });
