@@ -37,7 +37,7 @@ Sahibi yalnız Android telefon kullanıyor: her adımı tek tek, kopyala-yapış
   - Growth Lab'den çıkarıldı.
 - Dahili test:
   - 1.0.5 (versionCode 5) yüklendi.
-  - Test kullanıcı listesi "Ben" (sahibin Gmail adresi).
+  - Test kullanıcı listesi "Ben".
   - Sahibin telefonunda Play'den kurulu. Google ile giriş çalışıyor.
 - Satıcı (ödeme) profili açıldı (bireysel). Hesap grubu cevaplandı: başka hesap yok.
 - Ürünler oluşturuldu ve etkin:
@@ -60,7 +60,7 @@ Sahibi yalnız Android telefon kullanıyor: her adımı tek tek, kopyala-yapış
    - Mesaj "API has not been used / disabled" ise: Google Cloud'da `ai-saasavran` projesi için **Google Play Android Developer API** etkinleştirilmeli. Bu bir ayar değişikliği, sahibin onayıyla yapılır. Link:
      `https://console.cloud.google.com/apis/library/androidpublisher.googleapis.com?project=ai-saasavran`
    - Mesaj "permission" ise: Play Console → Kullanıcılar ve izinler → hizmet hesabı → izinler ve uygulama erişimi kontrol edilir. Bazen 24–36 saat bekleme gerekir.
-2. **Lisans testi:** Play Console → Ayarlar → Lisans testi'ne sahibin Gmail adresi (`ramazannsavrann@gmail.com`) eklendi mi, sor ya da ekran görüntüsünden kontrol et.
+2. **Lisans testi:** Play Console → Ayarlar → Lisans testi'ne sahibin Gmail adresi eklendi mi, sor ya da ekran görüntüsünden kontrol et.
 3. **Satın alma denemesi** (1. ve 2. madde bittikten sonra):
    - Uygulamada Hesap → Paketler ve ödeme'de fiyatlar görünmeli.
    - Lisans testçisiyle Gümüş satın alınır. Sonra Supabase'de `store_subscriptions` tablosunda satır oluşmalı ve alanın planı `starter` olmalı.
