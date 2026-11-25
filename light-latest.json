@@ -1,16 +1,16 @@
 {
-  "date": "2026-11-24",
+  "date": "2026-11-25",
   "mode": "light",
   "costUsd": 0,
   "capUsd": 0.4,
-  "pages": 255,
-  "pagesWithIssues": 3,
+  "pages": 257,
+  "pagesWithIssues": 5,
   "auditPassed": 13,
   "auditTotal": 13,
   "indexnow": {
-    "sent": 0,
-    "status": 0,
-    "note": "değişen sayfa yok"
+    "sent": 8,
+    "status": 200,
+    "note": "kabul edildi"
   },
   "engines": {},
   "engineStatus": {},
@@ -18,7 +18,9 @@
   "topSources": [],
   "forClaude": [
     "Sayfa /guides/peec-ai-alternative/: açıklama uzun (171)",
+    "Sayfa /blog/which-private-hospital-does-ai-recommend-in-turkey/: açıklama uzun (231)",
     "Sayfa /blog/we-asked-ai-about-our-own-brand/: açıklama uzun (203)",
+    "Sayfa /tr/blog/yapay-zeka-hangi-ozel-hastaneyi-oneriyor/: açıklama uzun (199)",
     "Sayfa /tr/blog/kendi-markamizi-yapay-zekaya-sorduk/: açıklama uzun (203)"
   ],
   "forUser": [],
@@ -30,9 +32,21 @@
       ]
     },
     {
+      "url": "https://aisaasavran.com/blog/which-private-hospital-does-ai-recommend-in-turkey/",
+      "issues": [
+        "açıklama uzun (231)"
+      ]
+    },
+    {
       "url": "https://aisaasavran.com/blog/we-asked-ai-about-our-own-brand/",
       "issues": [
         "açıklama uzun (203)"
+      ]
+    },
+    {
+      "url": "https://aisaasavran.com/tr/blog/yapay-zeka-hangi-ozel-hastaneyi-oneriyor/",
+      "issues": [
+        "açıklama uzun (199)"
       ]
     },
     {
