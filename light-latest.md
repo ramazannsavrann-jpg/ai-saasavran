@@ -3,7 +3,7 @@
 Mod: **ücretsiz kontrol** · Harcanan: **0 $** (tavan 0.4 $)
 
 ## Otomatik yapılanlar
-- IndexNow (Bing + Yandex): 8 sayfa bildirildi — kabul edildi
+- IndexNow (Bing + Yandex): 0 sayfa bildirildi — değişen sayfa yok
 - 257 sayfa kontrol edildi, 5 sayfada sorun var
 - Site denetimi: 13/13 kontrol geçti
 
