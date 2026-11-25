@@ -1,7 +1,7 @@
 // Blog: haftada bir yazı. Kaynak: YouTube videoları için yaptığımız GERÇEK ölçümler (seslendirme dalı → video/sablon/*.json).
 // Kurallar (kullanıcı kararları, 12–13 Kasım 2026):
-//  - Sonuçlarda markalar harfle (Marka A/B…, Model 1/2…), harfler rastgele; ölçülen markaların gerçek adları yazının sonunda
-//    alfabetik liste olarak verilir, hangi harfin hangi marka olduğu söylenmez.
+//  - 18 Kasım kararından sonra yazılar gerçek marka adlarıyla (realNames: true). Eski yazılarda markalar harfle (Marka A/B…),
+//    harfler rastgele; ölçülen markaların gerçek adları yazının sonunda alfabetik liste olarak verilir.
 //  - "Bunlar yapay zekânın cevaplarıdır" notu, tarih, örneklem, "tüm pazarı temsil etmez".
 //  - Uydurma sayı yok: her rakam ölçüm dosyasından gelir. AI SaaSavran'ın rakibi olan araçların adı geçmez.
 // Her yazı Türkçe + İngilizce çift olarak eklenir (pair alanı aynı).
@@ -166,6 +166,104 @@ export const POSTS = [
       ["Does AI SaaSavran get recommended by ChatGPT, Claude or Perplexity?", "In the 18 November 2026 measurement, we were recommended in none of 42 answers. It is one measurement; we will measure again in two weeks."],
       ["Why were you not recommended?", "This measurement does not show the reason. We will review the sites the AI cited and the questions we lost."],
       ["Does this result show the quality of the product?", "No. AI answers vary, and 42 answers is a small sample."],
+    ],
+  },
+  {
+    pair: "ozel-hastane-2026-11",
+    lang: "tr",
+    slug: "yapay-zeka-hangi-ozel-hastaneyi-oneriyor",
+    date: "2026-11-25",
+    realNames: true,
+    title: "Yapay zekâ Türkiye'de hangi özel hastaneyi öneriyor? 46 cevabın sonucu",
+    short: "Yapay zekâ hangi özel hastaneyi öneriyor?",
+    description: "14 Kasım 2026'da 8 özel hastane sorusunu ChatGPT, Claude ve Gemini'ye sorduk. Canlı aramalı 30 cevapta Acıbadem 22, Memorial 17, Medical Park 14 cevapta önerildi; motorlar arasında büyük farklar var.",
+    cover: "/og.png",
+    names: "Acıbadem, Florence Nightingale, Liv Hospital, Medical Park, Medicana, Medipol, Memorial",
+    body: `
+<p class="lede">Türkiye'de hastane seçmeden önce artık birçok kişi yapay zekâya soruyor; yurt dışından gelen hastalar da öyle. 14 Kasım 2026'da bir hastanın soracağı 8 soruyu ChatGPT, Claude ve Gemini'ye Türkçe sorduk ve yedi özel hastane grubunun kaç cevapta önerildiğini saydık. Kısa cevap: <b>canlı web aramalı 30 cevabın 22'sinde Acıbadem önerildi; ama ikinci ve üçüncü sıra, hangi yapay zekâya sorduğunuza göre değişiyor.</b></p>
+
+<h2>Nasıl ölçtük?</h2>
+<p>"Türkiye'de en iyi özel hastane hangisi?", "İstanbul'da en iyi özel hastane hangisi?", "Antalya'da hangi özel hastaneyi önerirsin?", "Yabancı hastalar için…", "Fiyat performans açısından…", "Kanser tedavisi için…", "Kalp ameliyatı için…" ve "Doğum için…" diye 8 soru sorduk. Her motor her soruyu iki kez cevapladı. ChatGPT ve Claude canlı web aramasıyla cevap verdi: Claude 16, ChatGPT 14 cevap (doğum sorusunda ChatGPT cevabı kayıtlı değil), toplam 30. Gemini ücretsiz katmanda internete bakmadan, yalnız kendi bilgisiyle 16 cevap verdi. Toplam 46 cevap. Perplexity bu ölçümde yoktu.</p>
+
+<h2>1. Canlı aramada sıralama</h2>
+<table><thead><tr><th>Hastane</th><th>Önerildiği cevap (30 canlı cevapta)</th><th>Oran</th></tr></thead><tbody>
+<tr><td>Acıbadem</td><td><b>22</b></td><td>%73</td></tr><tr><td>Memorial</td><td>17</td><td>%57</td></tr><tr><td>Medical Park</td><td>14</td><td>%47</td></tr><tr><td>Medipol</td><td>12</td><td>%40</td></tr><tr><td>Florence Nightingale</td><td>8</td><td>%27</td></tr><tr><td>Liv Hospital</td><td>7</td><td>%23</td></tr><tr><td>Medicana</td><td>4</td><td>%13</td></tr>
+</tbody></table>
+<p>Acıbadem ile Memorial arasında 5 cevaplık (yaklaşık 17 puan) fark var. Medical Park ile Medipol (2 cevap) ve Florence Nightingale ile Liv Hospital (1 cevap) ise başa baş; bu kadar küçük farklar başka bir günde yer değiştirebilir.</p>
+
+<h2>2. Motorlar aynı hastaneleri önermiyor</h2>
+<table><thead><tr><th>Hastane</th><th>Claude (/16)</th><th>ChatGPT (/14)</th><th>Gemini, aramasız (/16)</th></tr></thead><tbody>
+<tr><td>Acıbadem</td><td>13</td><td>9</td><td>14</td></tr><tr><td>Memorial</td><td>9</td><td>8</td><td>15</td></tr><tr><td>Medical Park</td><td>11</td><td><b>3</b></td><td>11</td></tr><tr><td>Medipol</td><td>8</td><td>4</td><td>4</td></tr><tr><td>Florence Nightingale</td><td>5</td><td>3</td><td>5</td></tr><tr><td>Liv Hospital</td><td>7</td><td><b>0</b></td><td>9</td></tr><tr><td>Medicana</td><td>4</td><td><b>0</b></td><td>10</td></tr>
+</tbody></table>
+<p>En büyük fark Medical Park'ta: Claude 16 cevabın 11'inde önerdi, ChatGPT 14 cevabın yalnız 3'ünde. Liv Hospital ve Medicana ChatGPT'nin 14 cevabının hiçbirinde önerilmedi; Gemini ise kendi bilgisiyle Medicana'yı 16 cevabın 10'unda, Memorial'ı 15'inde önerdi. Yani "yapay zekâda görünürlük" tek bir sayı değil; hastanın hangi motoru kullandığına bağlı.</p>
+
+<h2>3. İlk önerilen her zaman en çok önerilen değil</h2>
+<p>Canlı aramalı 30 cevapta ilk sırada en sık Medical Park önerildi (8 cevap), Acıbadem 6 cevapta ilk sıradaydı. Fiyat performans sorusunda Medical Park, ChatGPT ve Claude'un 4 cevabının dördünde de ilk öneriydi. Kurucumuzun şehri Antalya'da ise canlı cevaplarda yalnız iki ad çıktı: Medical Park ve Memorial, ikisi de 4 cevabın 3'ünde; başa baş.</p>
+
+<h2>4. Soru değişince sıra değişiyor</h2>
+<ul>
+<li><b>Kalp ameliyatı:</b> Florence Nightingale canlı 4 cevabın 3'ünde önerildi; genel sıralamada beşinci.</li>
+<li><b>Fiyat performans:</b> Medical Park 4 cevabın 4'ünde; Memorial yalnız 1'inde.</li>
+<li><b>Kanser tedavisi:</b> ChatGPT'nin 2 cevabında yalnız Memorial ve Acıbadem birer kez önerildi.</li>
+</ul>
+<p>Bir hastane için önemli olan genel sıra değil, kendi hastalarının sorduğu soru. Sorulara tek tek bakmak için <a href="/tr/olcumler/">ölçümler</a> sayfasına, örneğin <a href="/tr/olcumler/antalyada-hangi-ozel-hastaneyi-onerirsin/">Antalya sorusu</a> ve <a href="/tr/olcumler/kalp-ameliyati-icin-en-iyi-ozel-hastane-hangisi/">kalp ameliyatı sorusu</a> sayfalarına bakabilirsiniz. Sektörlerin genel tablosu <a href="/tr/yapay-zeka-gorunurluk-endeksi/">Görünürlük Endeksi</a>'nde.</p>
+
+<h2>Hastane ve klinikler için ne anlama geliyor?</h2>
+<p>Bu ölçüm, yapay zekânın neden bir hastaneyi seçtiğini söylemiyor; yalnız o gün ne cevap verdiğini gösteriyor. Ama bir şey açık: aynı soruda Claude'un önerdiği bir hastane ChatGPT'de hiç geçmeyebiliyor. Bir sağlık kuruluşu için ilk adım, hastalarının sorduğu soruları (şehir, bölüm, yabancı hasta, fiyat) yazıp her motorda nerede anıldığını görmek. Kendi kurumunuzun durumunu <a href="/tr/kontrol/">ücretsiz kontrol</a> ile birkaç dakikada görebilirsiniz; düzenli takip ve motor karşılaştırması için ücretli paketler var.</p>
+<p><b>Önemli:</b> Bu yazı tıbbi tavsiye değildir ve hastanelerin kalitesini ölçmez. Yalnız yapay zekâ cevaplarında kimin önerildiğini sayar. Tedavi ve hastane kararı için doktorunuza danışın.</p>`,
+    faq: [
+      ["Yapay zekâ Türkiye'de en çok hangi özel hastaneyi öneriyor?", "14 Kasım 2026 ölçümünde ChatGPT ve Claude'un canlı aramalı 30 cevabının 22'sinde Acıbadem önerildi. Onu Memorial (17) ve Medical Park (14) izledi. Sonuç soruya ve motora göre değişiyor."],
+      ["ChatGPT ve Claude aynı hastaneleri mi öneriyor?", "Hayır. Medical Park Claude'un 16 cevabının 11'inde, ChatGPT'nin 14 cevabının 3'ünde önerildi. Liv Hospital ve Medicana ChatGPT'de hiç önerilmedi."],
+      ["Bu sonuçlar hastanelerin kalitesini gösterir mi?", "Hayır. Bu, 8 soru ve 46 cevaplık küçük bir örneklemde yapay zekânın o gün verdiği cevaplardır. Tıbbi tavsiye değildir."],
+    ],
+  },
+  {
+    pair: "ozel-hastane-2026-11",
+    lang: "en",
+    slug: "which-private-hospital-does-ai-recommend-in-turkey",
+    date: "2026-11-25",
+    realNames: true,
+    title: "Which private hospital in Turkey does AI recommend? Results from 46 answers",
+    short: "Which private hospital does AI recommend?",
+    description: "On 14 November 2026 we asked ChatGPT, Claude and Gemini 8 questions about private hospitals in Turkey. In 30 live-search answers, Acıbadem was recommended in 22, Memorial in 17 and Medical Park in 14, with big gaps between engines.",
+    cover: "/og.png",
+    names: "Acıbadem, Florence Nightingale, Liv Hospital, Medical Park, Medicana, Medipol, Memorial",
+    body: `
+<p class="lede">More patients in Turkey, including those travelling from abroad, now ask an AI assistant before choosing a hospital. On 14 November 2026 we asked ChatGPT, Claude and Gemini 8 questions a patient would ask, in Turkish, and counted how often seven private hospital groups were recommended. Short answer: <b>Acıbadem was recommended in 22 of 30 live-search answers, but second and third place depend on which assistant you ask.</b></p>
+
+<h2>How we measured</h2>
+<p>We asked 8 questions: the best private hospital in Turkey, in Istanbul, and in Antalya; for foreign patients; for value for money; for cancer treatment; for heart surgery; and for giving birth. Each engine answered each question twice. ChatGPT and Claude answered with live web search: Claude 16 answers, ChatGPT 14 (no ChatGPT answer was recorded for the birth question), 30 in total. Gemini, on the free tier, answered 16 times from model knowledge without web search. That is 46 answers overall. Perplexity was not part of this measurement.</p>
+
+<h2>1. The live-search ranking</h2>
+<table><thead><tr><th>Hospital</th><th>Recommended in (of 30 live answers)</th><th>Share</th></tr></thead><tbody>
+<tr><td>Acıbadem</td><td><b>22</b></td><td>73%</td></tr><tr><td>Memorial</td><td>17</td><td>57%</td></tr><tr><td>Medical Park</td><td>14</td><td>47%</td></tr><tr><td>Medipol</td><td>12</td><td>40%</td></tr><tr><td>Florence Nightingale</td><td>8</td><td>27%</td></tr><tr><td>Liv Hospital</td><td>7</td><td>23%</td></tr><tr><td>Medicana</td><td>4</td><td>13%</td></tr>
+</tbody></table>
+<p>Acıbadem leads Memorial by 5 answers (about 17 points). Medical Park and Medipol (2 answers apart) and Florence Nightingale and Liv Hospital (1 answer apart) are neck and neck; gaps that small can flip on another day.</p>
+
+<h2>2. The engines disagree</h2>
+<table><thead><tr><th>Hospital</th><th>Claude (/16)</th><th>ChatGPT (/14)</th><th>Gemini, no search (/16)</th></tr></thead><tbody>
+<tr><td>Acıbadem</td><td>13</td><td>9</td><td>14</td></tr><tr><td>Memorial</td><td>9</td><td>8</td><td>15</td></tr><tr><td>Medical Park</td><td>11</td><td><b>3</b></td><td>11</td></tr><tr><td>Medipol</td><td>8</td><td>4</td><td>4</td></tr><tr><td>Florence Nightingale</td><td>5</td><td>3</td><td>5</td></tr><tr><td>Liv Hospital</td><td>7</td><td><b>0</b></td><td>9</td></tr><tr><td>Medicana</td><td>4</td><td><b>0</b></td><td>10</td></tr>
+</tbody></table>
+<p>The biggest gap is Medical Park: Claude recommended it in 11 of 16 answers, ChatGPT in only 3 of 14. Liv Hospital and Medicana were not recommended in any of ChatGPT's 14 answers, while Gemini, from model knowledge, recommended Medicana in 10 of 16 and Memorial in 15. "AI visibility" is not one number; it depends on which assistant the patient uses.</p>
+
+<h2>3. The first pick is not always the most recommended</h2>
+<p>Across the 30 live answers, Medical Park was the first recommendation most often (8 answers); Acıbadem came first in 6. On the value-for-money question, Medical Park was the first pick in all 4 ChatGPT and Claude answers. In Antalya, our founder's city, only two names appeared in the live answers: Medical Park and Memorial, each in 3 of 4, neck and neck.</p>
+
+<h2>4. Change the question, change the order</h2>
+<ul>
+<li><b>Heart surgery:</b> Florence Nightingale was recommended in 3 of 4 live answers, although it is fifth overall.</li>
+<li><b>Value for money:</b> Medical Park 4 of 4; Memorial only 1 of 4.</li>
+<li><b>Cancer treatment:</b> in ChatGPT's 2 answers, only Memorial and Acıbadem were recommended, once each.</li>
+</ul>
+<p>For a hospital, what matters is not the overall order but the question its own patients ask. You can browse every question on our <a href="/measurements/">measurements</a> page, including the <a href="/tr/olcumler/antalyada-hangi-ozel-hastaneyi-onerirsin/">Antalya question</a> (in Turkish). The cross-sector picture is in the <a href="/ai-visibility-index/">AI Visibility Index</a>.</p>
+
+<h2>What it means for hospitals and clinics</h2>
+<p>This measurement does not tell us why an assistant picks a hospital; it only shows what it answered that day. One thing is clear, though: a hospital Claude recommends may not appear in ChatGPT at all for the same question. For a healthcare provider, the first step is to write down the questions patients actually ask (city, department, international patients, price) and see where it appears in each engine. You can see where your own organisation stands in a few minutes with the <a href="/check/">free check</a>; paid plans add regular tracking and engine comparison.</p>
+<p><b>Important:</b> this post is not medical advice and does not measure hospital quality. It only counts who is recommended in AI answers. Talk to your doctor before choosing a treatment or hospital.</p>`,
+    faq: [
+      ["Which private hospital in Turkey does AI recommend most?", "In our 14 November 2026 measurement, Acıbadem was recommended in 22 of 30 live-search answers from ChatGPT and Claude, followed by Memorial (17) and Medical Park (14). Results vary by question and engine."],
+      ["Do ChatGPT and Claude recommend the same hospitals?", "No. Medical Park was recommended in 11 of 16 Claude answers and 3 of 14 ChatGPT answers. Liv Hospital and Medicana were never recommended by ChatGPT."],
+      ["Do these results show hospital quality?", "No. They are the AI's answers on one day in a small sample of 8 questions and 46 answers. This is not medical advice."],
     ],
   },
 ];

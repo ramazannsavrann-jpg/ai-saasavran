@@ -1,6 +1,8 @@
 # Gerçek durum raporu
 
-**Son güncelleme:** 2026-11-24 · Play Store öncesi inceleme düzeltmeleri
+**Son güncelleme:** 2026-11-25 · Haftalık blog yazısı (özel hastaneler)
+
+> **25 Kasım (haftalık blog):** Yeni yazı TR `/tr/blog/yapay-zeka-hangi-ozel-hastaneyi-oneriyor/` + EN `/blog/which-private-hospital-does-ai-recommend-in-turkey/`: 14 Kasım 2026 Growth Lab ölçümü, 8 özel hastane sorusu, 46 cevap (Claude 16 + ChatGPT 14 canlı arama, Gemini 16 aramasız), gerçek adlarla. Blog notu artık gerçek adlı yazılarda (`realNames: true`) "harfler rastgele" demiyor; blog giriş metni de buna göre. Kendi ölçüm kutusu değişmedi (son kendi ölçüm 18 Kasım).
 
 > **24 Kasım (Gemini canlı arama metinleri, #180 sonrası):** Site, panel, uygulama, e-posta ve mağaza metinleri "ücretli paketlerde ChatGPT, Gemini, Claude ve Perplexity canlı web aramasıyla" olarak güncellendi (ürün anlatımı; geçmiş ölçüm yazıları ve Görünürlük Endeksi verisi değişmedi). Gizlilik: ücretsiz paket/ücretsiz kontrol Gemini ücretsiz katmanı, ücretli paketlerde canlı Gemini ücretli API. Metodoloji: haftalık kısa ölçüm yalnız ChatGPT (kodla aynı; eski metin "ChatGPT ve Gemini" diyordu). **0077:** canlı tam ölçümün soru hakkı tahmini 4 → 6/soru (ChatGPT 2 + Gemini 2 + Claude 1 + Perplexity 1); panel ve uygulamadaki "yaklaşık X hak" aynı. Google Play inceleme hesabı açıldı (`inceleme@aisaasavran.com`, Growth Lab alanında yalnız görüntüleyici; şifre yalnız Play Console'da).
 > **24 Kasım (Play Store öncesi bağımsız inceleme, 3 ajan: ödeme/güvenlik, Play kuralları, ekranlar):** Düzeltilenler:
