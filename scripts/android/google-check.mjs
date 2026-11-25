@@ -36,7 +36,7 @@ else {
         const get = (u) => fetch(`https://androidpublisher.googleapis.com/androidpublisher/v3/applications/${PKG}/${u}`, { headers: { Authorization: `Bearer ${at}` } });
         const s = await get("subscriptions");
         if (s.ok) { const d = await s.json(); out.push(`  Play Console izni: tamam · abonelikler: ${(d.subscriptions ?? []).map((x) => `${x.productId}(${(x.basePlans ?? []).map((b) => `${b.basePlanId}:${b.state}`).join(",")})`).join(" ") || "yok"}`); }
-        else out.push(`  Play Console izni: HENÜZ YOK (HTTP ${s.status}; davetten sonra 24 saate kadar sürebilir)`);
+        else { const e = await s.json().catch(() => ({})); out.push(`  Play Console izni: HENÜZ YOK (HTTP ${s.status}: ${String(e?.error?.message ?? "").slice(0, 300)})`); }
         const o = await get("oneTimeProducts");
         if (o.ok) { const d = await o.json(); out.push(`  Tek seferlik ürünler: ${(d.oneTimeProducts ?? []).map((x) => x.productId).join(" ") || "yok"}`); }
       }
