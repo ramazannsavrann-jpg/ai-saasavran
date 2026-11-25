@@ -56,10 +56,9 @@ Sahibi yalnız Android telefon kullanıyor: her adımı tek tek, kopyala-yapış
 
 ## Açık işler (sırayla)
 
-1. **Play API izni henüz geçmedi.** "Google ayar kontrolü" iş akışı (`google-ayar-kontrol.yml`) 25 Kasım 11:00'de hâlâ HTTP 403 veriyordu. Önce iş akışını çalıştır; çıktı artık hata mesajını da yazıyor.
-   - Mesaj "API has not been used / disabled" ise: Google Cloud'da `ai-saasavran` projesi için **Google Play Android Developer API** etkinleştirilmeli. Bu bir ayar değişikliği, sahibin onayıyla yapılır. Link:
-     `https://console.cloud.google.com/apis/library/androidpublisher.googleapis.com?project=ai-saasavran`
-   - Mesaj "permission" ise: Play Console → Kullanıcılar ve izinler → hizmet hesabı → izinler ve uygulama erişimi kontrol edilir. Bazen 24–36 saat bekleme gerekir.
+1. **Play API kapalı (bulundu, 25 Kasım 11:30).** Kontrolün çıktısı: "Google Play Android Developer API has not been used in project 116306409430 or it is disabled". İzinler doğru; eksik olan, Google Cloud'da API'nin açılması. API ücretsiz, faturalandırma gerektirmez. Sahibin açması gerekiyor, link:
+   `https://console.developers.google.com/apis/api/androidpublisher.googleapis.com/overview?project=116306409430`
+   ("Etkinleştir" / "Enable"). Açıldıktan sonra `google-ayar-kontrol.yml`'yi tekrar çalıştır; "Play Console izni: tamam" ve ürün listesi görünmeli.
 2. **Lisans testi:** Play Console → Ayarlar → Lisans testi'ne sahibin Gmail adresi eklendi mi, sor ya da ekran görüntüsünden kontrol et.
 3. **Satın alma denemesi** (1. ve 2. madde bittikten sonra):
    - Uygulamada Hesap → Paketler ve ödeme'de fiyatlar görünmeli.
