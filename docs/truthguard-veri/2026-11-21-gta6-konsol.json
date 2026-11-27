@@ -1,0 +1,23 @@
+{
+ "_not": "Kategori ölçümleri için TruthGuard veri seti (elle etiketlendi, 21 Kasım 2026). Amaç: marka kartı yerine 'konu bilgi kartı' ile doğruluk kontrolünü geliştirmek. Ölçüm: brand 20dbf6f8 (GTA 6 Console Study), runs 24db345e (canlı arama) + e5309bdb (Gemini model bilgisi).",
+ "konu": "GTA 6 için konsol (ABD)",
+ "bilgi_karti": [
+  {"id": "cikis", "gercek": "GTA 6, 19 Kasım 2026'da PS5 ve Xbox Series X|S için çıktı.", "kaynak": "Rockstar basın bülteni; maketecheasier.com/gta-6-release-date-price-preload"},
+  {"id": "pc", "gercek": "PC sürümü açıklanmadı; Switch 2 sürümü yok.", "kaynak": "notebookcheck.net; dlcompare.com"},
+  {"id": "fiyat", "gercek": "Standard 79,99 $, Ultimate 99,99 $.", "kaynak": "switchbladegaming.com/best-games/black-friday-gaming-deals-2026"},
+  {"id": "online", "gercek": "Çıkışta tek oyunculu; çevrim içi mod resmî olarak duyurulmadı (Bloomberg: 2027 bekleniyor, doğrulanmış değil).", "kaynak": "pcgamer.com; allthings.how; beebom.com"},
+  {"id": "fps", "gercek": "Tüm konsollarda 30 fps hedefi; PS5 Pro 1440p + PSSR ile 4K'ya yakın, en kararlı sürüm; Series S en zayıf.", "kaynak": "Digital Foundry (tweaktown.com, techpowerup.com, gtaboom.com)"},
+  {"id": "switch2_bf", "gercek": "Switch 2 + Mario Kart World paketi 22 Kas–5 Ara 499,99 $ (normalde 549,99 $).", "kaynak": "maketecheasier.com; siliconera.com"}
+ ],
+ "sonuclar": {
+  "canli_arama": {"cevap": 48, "oyun_cikmadi_dedi": 0, "pc_var_dedi": 0, "not": "Üç motor da çıkış tarihini, platformları ve PC olmadığını doğru verdi. Çevrim içi mod: 6/6 cevap 'doğrulanmadı' dedi (doğru); Claude bir cevapta Bloomberg'in 2027 beklentisini 'expected' diye aktardı (rapor, resmî değil)."},
+  "gemini_model_bilgisi": {"cevap": 16, "oyun_cikmadi_dedi": 10, "eski_tarih_fall_2025": 8, "not": "Model bilgisi eski: GTA 6'yı çıkmamış sanıyor ve ertelenmiş 'Fall 2025' tarihini veriyor."},
+  "baglam_hatasi": {"not": "Black Friday ve yılbaşı sorularında 12 canlı cevabın 8'inde ilk öneri Switch 2 (GTA 6 çalışmaz). Soru GTA'yı anmadığı için bu bir doğruluk hatası değil; ama aynı sohbette GTA için konsol arayan kullanıcıya yanlış yönlendirme riski."}
+ },
+ "dogrulanamayan_iddialar": [
+  "Perplexity: yenilenmiş Xbox Series S yaklaşık 399,99 $",
+  "Claude: Best Buy yenilenmiş Series X 1TB 700 $ (800 $ yerine)",
+  "Perplexity: Xbox Series S 512GB yaklaşık 499,99 $ (Walmart listesinde 499,99 $ görüldü)"
+ ],
+ "gelistirme_notu": "Mevcut TruthGuard yalnız marka bilgi kartıyla ve markanın anıldığı cevaplarda çalışıyor; kategori videolarında marka yok. Öneri: ölçüme 'konu bilgi kartı' (doğrulanmış gerçekler + kaynak) eklemek, her cevabı bu kartla karşılaştırmak (doğru/yanlış/eski bilgi/doğrulanamaz), sonuçları videoda ve raporda göstermek."
+}
