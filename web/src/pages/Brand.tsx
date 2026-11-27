@@ -1456,7 +1456,7 @@ function AiTrafficPanel({ brand, paid, vis }: { brand: Brand; paid: boolean; vis
               <VisVsTraffic vis={vis} rows={rows.data ?? []} today={today} />
               <h3>{L("Gelinen sayfalar", "Landing pages")}</h3>
               <ol className="domains">{s.topPages.map((p) => <li key={p.path}><span className="src-url">{p.path}</span><span className="num">{p.visits}</span></li>)}</ol>
-              <p className="src-sup muted">{L("Önerilme oranı yükselirken ziyaretçi de artıyorsa görünürlüğünüz gerçek trafiğe dönüşüyor demektir. Bazı uygulamalar kaynak bilgisi göndermez; gerçek sayı bundan biraz yüksek olabilir.", "If visits grow as your recommendation rate rises, visibility is turning into real traffic. Some apps don't send referral data, so the real number may be a bit higher.")}</p>
+              <p className="src-sup muted">{L("Önerilme oranı yükselirken ziyaretçi de artıyorsa görünürlüğünüz gerçek trafiğe dönüşüyor demektir. Yapay zekâ uygulamalarının çoğu ziyaretçinin nereden geldiğini göndermez; gerçek sayı burada görünenden belirgin şekilde yüksek olabilir.", "If visits grow as your recommendation rate rises, visibility is turning into real traffic. Most AI apps don't send referral data, so the real number can be well above what you see here.")}</p>
             </>
           )}
         </>

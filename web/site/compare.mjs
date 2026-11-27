@@ -1,6 +1,6 @@
 // Rakip karşılaştırma rehberleri (18 Kasım, sahip kararı: gerçek adlarla).
 // Kurallar: rakip bilgisi yalnız kendi resmî sayfalarından (18 Kasım 2026'da kontrol edildi) veya kamuya açık şirket bilgisinden;
-// AthenaHQ bilgileri athenahq.ai/plans sayfasından 21 Kasım 2026'da kontrol edildi; Profound bilgileri tryprofound.com/pricing sayfasından 22 Kasım 2026'da (sayfanın SSS'si 16 Kasım 2026 güncel); Bloomreach satın alması (16 Kasım 2026) CMSWire haberinden.
+// AthenaHQ bilgileri athenahq.ai/plans sayfasından 21 Kasım 2026'da kontrol edildi; Profound bilgileri tryprofound.com/pricing sayfasından 22 Kasım 2026'da (sayfanın SSS'si 16 Kasım 2026 güncel); Bloomreach satın alması (16 Kasım 2026) CMSWire haberinden; Otterly.AI fiyatları otterly.ai/pricing sayfasından 27 Kasım 2026'da yeniden kontrol edildi (sayfa gövdesindeki tablo esas alındı).
 // doğrulanamayan fiyat yazılmaz, "resmî sayfada" denir. Kötüleme yok. Kendi ölçümümüz (42 cevapta 0) dürüstçe yazılır.
 // Fiyatlar sık değişir: bu dosyayı en geç 3 ayda bir kontrol et (sonraki kontrol: Şubat 2027).
 
@@ -35,7 +35,7 @@ export const COMPARE_TR = [
 <h3>Peec AI</h3>
 <p>Berlin merkezli. Marka paketlerinde seçilen yapay zekâ modellerinde günlük takip yapar; ek modeller ek ücretlidir. Ajans paketleri resmî sayfada aylık 245 $'dan başlıyor ve ChatGPT, Perplexity, Google AI Overviews, AI Mode, Gemini gibi modelleri kapsıyor; en büyük ajans paketine Claude gibi API modelleri ekleniyor. Marka paketi fiyatları: peec.ai/pricing. Birçok ülke ve dilde takip isteyen ekipler ve ajanslar için güçlü bir seçenek.</p>
 <h3>Otterly.AI</h3>
-<p>Avusturya merkezli, 2024'te kuruldu. Resmî fiyat sayfasında en küçük paket Lite: aylık €29, 16 prompt; Google AI Overviews, ChatGPT, Perplexity ve Microsoft Copilot dahil. Gemini ve Google AI Mode ek ücretle ekleniyor. Standard 189 $ (100 soru), Premium 489 $ (400 soru). Ücretsiz deneme var. Düşük bütçeyle Google AI Overviews ve Copilot takibi isteyenler için uygun.</p>
+<p>Avusturya merkezli, 2024'te kuruldu. Resmî fiyat sayfasında en küçük paket Lite: aylık €29, 16 prompt; Google AI Overviews, ChatGPT, Perplexity ve Microsoft Copilot dahil. Gemini ve Google AI Mode ek ücretle ekleniyor. Standard aylık €189 (120 prompt), Premium aylık €489 (403 prompt) (27 Kasım 2026 kontrolü). Ücretsiz deneme var. Düşük bütçeyle Google AI Overviews ve Copilot takibi isteyenler için uygun.</p>
 <h3>Profound</h3>
 <p>New York merkezli, kurumsal odaklı. Resmî sayfaya göre 7 günlük ücretsiz deneme (ChatGPT, Gemini, Google AI Overviews; 50 soru) ve teklifle fiyatlanan kurumsal paket (10'a kadar motor) var; self-servis Starter ve Growth paketleri Eylül 2026'dan beri yeni aboneliğe kapalı. İçerik üreten yapay zekâ ajanları da sunuyor. Büyük bütçeli kurumsal ekipler için.</p>
 <h3>AthenaHQ</h3>
@@ -181,7 +181,7 @@ export const COMPARE_TR = [
 <h2>Uygun fiyatlı alternatifler</h2>
 <table class="mtable"><thead><tr><th>Araç</th><th>Ücretsiz</th><th>İlk ücretli paket</th><th>Kontrol</th></tr></thead><tbody>
 <tr><td>AI SaaSavran</td><td>Var (1 marka, 15 soru, Gemini)</td><td>Gümüş, 130 $/ay</td><td>Kendi fiyatımız</td></tr>
-<tr><td>Otterly.AI</td><td>Ücretsiz deneme</td><td>Lite, €29/ay</td><td>18 Kasım 2026</td></tr>
+<tr><td>Otterly.AI</td><td>Ücretsiz deneme</td><td>Lite, €29/ay</td><td>27 Kasım 2026</td></tr>
 <tr><td>Semrush AI Visibility Toolkit</td><td>Deneme yok</td><td>Fiyat doğrulanamadı</td><td>18 Kasım 2026</td></tr>
 <tr><td>AthenaHQ</td><td>Var (Essential, 300 kredi)</td><td>Starter, 295 $/ay</td><td>21 Kasım 2026</td></tr>
 <tr><td>Peec AI</td><td>Resmî sayfaya bakın</td><td>Ajans paketleri 245 $/ay'dan</td><td>18 Kasım 2026</td></tr>
@@ -241,7 +241,7 @@ export const COMPARE_EN = [
 <h3>Peec AI</h3>
 <p>Based in Berlin. Brand plans track selected AI models daily, with extra models for an extra fee. Agency plans start at $245 a month on the official page and cover models such as ChatGPT, Perplexity, Google AI Overviews, AI Mode and Gemini; the largest agency plan adds API models such as Claude. Brand plan prices: peec.ai/pricing. A strong choice for teams and agencies tracking many countries and languages.</p>
 <h3>Otterly.AI</h3>
-<p>Based in Austria, founded in 2024. Its official pricing page lists Lite at €29 a month with 16 prompts, covering Google AI Overviews, ChatGPT, Perplexity and Microsoft Copilot; Gemini and Google AI Mode are paid add-ons. Standard is $189 (100 prompts) and Premium $489 (400 prompts). Free trial available. A good fit for low-budget tracking of Google AI Overviews and Copilot.</p>
+<p>Based in Austria, founded in 2024. Its official pricing page lists Lite at €29 a month with 16 prompts, covering Google AI Overviews, ChatGPT, Perplexity and Microsoft Copilot; Gemini and Google AI Mode are paid add-ons. Standard is €189 a month (120 prompts) and Premium €489 a month (403 prompts) (checked 27 November 2026). Free trial available. A good fit for low-budget tracking of Google AI Overviews and Copilot.</p>
 <h3>Profound</h3>
 <p>Based in New York, enterprise-focused. Its official page lists a 7-day free trial (ChatGPT, Gemini, Google AI Overviews; 50 prompts) and a custom-priced Enterprise plan (up to 10 engines); the self-serve Starter and Growth plans closed to new subscriptions in September 2026. It also offers AI agents for content work. Built for well-funded enterprise teams.</p>
 <h3>AthenaHQ</h3>
@@ -388,7 +388,7 @@ export const COMPARE_EN = [
 <h2>Affordable alternatives</h2>
 <table class="mtable"><thead><tr><th>Tool</th><th>Free</th><th>First paid plan</th><th>Checked</th></tr></thead><tbody>
 <tr><td>AI SaaSavran</td><td>Yes (1 brand, 15 questions, Gemini)</td><td>Silver, $130/month</td><td>Our own pricing</td></tr>
-<tr><td>Otterly.AI</td><td>Free trial</td><td>Lite, €29/month</td><td>18 November 2026</td></tr>
+<tr><td>Otterly.AI</td><td>Free trial</td><td>Lite, €29/month</td><td>27 November 2026</td></tr>
 <tr><td>Semrush AI Visibility Toolkit</td><td>No trial</td><td>Price not verified</td><td>18 November 2026</td></tr>
 <tr><td>AthenaHQ</td><td>Yes (Essential, 300 credits)</td><td>Starter, $295/month</td><td>21 November 2026</td></tr>
 <tr><td>Peec AI</td><td>See official page</td><td>Agency plans from $245/month</td><td>18 November 2026</td></tr>
