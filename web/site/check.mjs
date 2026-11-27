@@ -4,12 +4,12 @@ export function checkHtml(en) {
     h: "Free AI visibility check", lede: "We ask Gemini 5 questions a customer might ask about your category and show whether your business comes up. No signup.",
     brand: "Business name", brandPh: "e.g. Smile Dental", cat: "What you do", catPh: "e.g. dentist, CRM software, coffee shop",
     city: "City or country (optional)", cityPh: "e.g. Austin, Texas", web: "Website (optional)", webPh: "e.g. smiledental.com",
-    go: "Run the free check", note: "2 free checks per person per month. Uses Gemini's model knowledge without live web search; ChatGPT with live search is in paid plans. Don't enter personal data.",
+    go: "Run the free check", note: "2 free checks per person per month. Uses Gemini's model knowledge without live web search; ChatGPT with live search is in paid plans. The free Gemini check is not available from the European Economic Area, Switzerland or the UK. Don't enter personal data.",
   } : {
     h: "Ücretsiz yapay zekâ görünürlük kontrolü", lede: "Müşterinizin sektörünüzle ilgili sorabileceği 5 soruyu Gemini'ye soruyoruz ve işletmenizin cevaplarda geçip geçmediğini gösteriyoruz. Üyelik gerekmez.",
     brand: "İşletme adı", brandPh: "ör. Gülüş Diş Kliniği", cat: "Ne iş yapıyorsunuz?", catPh: "ör. diş kliniği, muhasebe yazılımı, kafe",
     city: "Şehir veya ülke (isteğe bağlı)", cityPh: "ör. Antalya", web: "Web sitesi (isteğe bağlı)", webPh: "ör. gulusdis.com",
-    go: "Ücretsiz kontrolü başlat", note: "Kişi başına ayda 2 ücretsiz kontrol. Gemini'nin model bilgisi kullanılır, canlı web araması yoktur; ChatGPT canlı arama ücretli paketlerde. Kişisel bilgi girmeyin.",
+    go: "Ücretsiz kontrolü başlat", note: "Kişi başına ayda 2 ücretsiz kontrol. Gemini'nin model bilgisi kullanılır, canlı web araması yoktur; ChatGPT canlı arama ücretli paketlerde. Ücretsiz Gemini kontrolü Avrupa Ekonomik Alanı, İsviçre ve Birleşik Krallık'tan kullanılamaz. Kişisel bilgi girmeyin.",
   };
   return `
 <section class="article check">
@@ -32,14 +32,14 @@ ${en ? CHECK_INFO_EN : CHECK_INFO_TR}`;
 // Sorular functions/api/_check-lib.js buildQuestions() ile aynı olmalı.
 export const CHECK_FAQ_TR = [
   ["Ücretsiz kontrol ne kadar sürer?", "Genellikle bir dakikadan kısa. Gemini'ye 5 soru aynı anda sorulur ve sonuç bu sayfada gösterilir."],
-  ["Neden yalnız Gemini?", "Ücretsiz kontrol maliyeti düşük tutmak için Gemini'nin ücretsiz katmanını kullanır. ChatGPT, Claude ve Perplexity'yi canlı web aramasıyla ölçmek ücretli paketlerde."],
+  ["Neden yalnız Gemini?", "Ücretsiz kontrol maliyeti düşük tutmak için Gemini'nin ücretsiz katmanını kullanır. ChatGPT, Gemini, Claude ve Perplexity'yi canlı web aramasıyla ölçmek ücretli paketlerde."],
   ["Sonuç neden ChatGPT'de gördüğümden farklı?", "Motorlar aynı soruya farklı markalar önerebilir; ayrıca bu kontrol internete bakmadan (model bilgisiyle) yapılır. Canlı arama yapan ChatGPT bugünkü internete göre farklı cevap verebilir."],
   ["Verdiğim bilgiler saklanıyor mu?", "Girdiğiniz işletme adı, sektör ve şehir ile sonuç sayıları (kaç soruda anıldınız, önerildiniz) kaydedilir. IP adresiniz açık hâliyle saklanmaz; yalnız ayda 2 kontrol sınırı için geri çevrilemez bir özeti (karma) tutulur. Kişisel bilgi girmeyin. Ayrıntı: gizlilik politikası."],
   ["Kaç kez kontrol yapabilirim?", "Kişi başına ayda 2 ücretsiz kontrol. Düzenli ve daha fazla soruyla ölçüm için ücretsiz hesap açabilirsiniz: 15 soru, ayda 4 otomatik ölçüm."],
 ];
 export const CHECK_FAQ_EN = [
   ["How long does the free check take?", "Usually under a minute. Gemini is asked 5 questions at once and the result appears on this page."],
-  ["Why only Gemini?", "The free check uses Gemini's free tier to keep it free. Measuring ChatGPT, Claude and Perplexity with live web search is part of the paid plans."],
+  ["Why only Gemini?", "The free check uses Gemini's free tier to keep it free. Measuring ChatGPT, Gemini, Claude and Perplexity with live web search is part of the paid plans."],
   ["Why is the result different from what I see in ChatGPT?", "Engines can recommend different brands for the same question, and this check uses model knowledge without web search. ChatGPT with live search can answer differently based on today's web."],
   ["Is what I enter stored?", "The business name, category and city you enter and the result counts (how many answers mentioned or recommended you) are stored. Your IP address is not stored in plain form; only a one-way hash is kept to enforce the limit of 2 checks a month. Don't enter personal data. See the privacy policy."],
   ["How many checks can I run?", "Two free checks per person per month. For regular measurement with more questions, open a free account: 15 questions and 4 automatic measurements a month."],

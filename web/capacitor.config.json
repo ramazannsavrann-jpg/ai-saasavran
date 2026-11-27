@@ -1,0 +1,17 @@
+{
+  "appId": "com.aisaasavran.app",
+  "appName": "AI SaaSavran",
+  "webDir": "dist-mobile",
+  "android": {
+    "allowMixedContent": false,
+    "backgroundColor": "#12231F"
+  },
+  "plugins": {
+    "CapacitorHttp": {
+      "enabled": true
+    },
+    "NativePurchases": {
+      "autoFinishTransactions": false
+    }
+  }
+}

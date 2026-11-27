@@ -5,6 +5,7 @@ import { CompareBars, TrendChart } from "../components/Chart";
 import { Empty, Loading } from "../components/ui";
 import type { MeasurementType, VisRow } from "../lib/data";
 import { L, isEn } from "../lib/i18n";
+import { ConfidenceCard } from "../components/Confidence";
 import { lowSample, competitorsInRun, formatDate, formatDateTime, numLoc, pct, providerLabel, rangeText, series } from "../lib/report";
 
 interface Shared {
@@ -16,6 +17,8 @@ interface Shared {
   sources: { domain: string; count: number }[];
   /** Sahibin rapor ekranında hesaplanan ilk 3 öneri (0054) */
   actions?: { items: { title: string; action: string }[]; at: string | null } | null;
+  /** Güven puanı girdileri (0066), ölçüm türünün son ölçümü için */
+  confidence?: Partial<Record<MeasurementType, { provider: string; answers: number; prompts: number; repeat_groups: number; consistent_groups: number }[]>>;
 }
 
 const TYPE_TEXT: Record<string, () => string> = {
@@ -64,6 +67,7 @@ export function SharedReport() {
               <div><dt>{L("Anılma", "Mentioned")}</dt><dd className="num">{pct(last.mention.value)}<span className="muted dd-note">{L("aralık", "range")} {rangeText(last.mention)}</span></dd></div>
               <div><dt>{L("Önerilerdeki payı", "Share of recommendations")}</dt><dd className="num">{pct(last.share)}</dd></div>
             </dl>
+            {(data.confidence?.[t] ?? []).length > 0 && <ConfidenceCard rows={data.confidence![t]!} />}
             {lowSample(last.recommend) && <p className="caution">{L("Örneklem küçük; oranlar kesin değildir, aralığa bakın.", "Small sample; rates are not precise, look at the range.")}</p>}
             {pts.length > 1 && <TrendChart points={pts} type={t} metric="recommend" />}
             <h3>{L("Rakiplerle karşılaştırma (son ölçüm)", "Compared with competitors (latest)")}</h3>

@@ -6,6 +6,7 @@ import { friendlyError } from "../lib/supabase";
 import { PAUSE_TEXT } from "../lib/messages";
 import { downloadCsv } from "../lib/csv";
 import { portfolioRows, type PortfolioStatus } from "../../../engine/src/portfolio.ts";
+import { confidenceScore, type Confidence } from "../../../engine/src/metrics.ts";
 import { formatDateTime, lowSample, numLoc, rangeText, series, pct, usd } from "../lib/report";
 import { SECTORS, starterQuestions } from "../lib/sectors";
 import { L, isEn } from "../lib/i18n";
@@ -24,9 +25,20 @@ function WorkspaceView() {
   const ws = current!;
   const type: MeasurementType = ws.kind === "demo_lab" ? "simulated" : "model_knowledge";
   const usage = useLoad(() => api.usage(ws.id), [ws.id]);
+  const quota = useLoad(() => api.quota(ws.id), [ws.id]);
   const brands = useLoad(() => api.brands(ws.id), [ws.id]);
   const own = (brands.data ?? []).filter((b) => !b.is_competitor);
   const u = usage.data;
+  const q = quota.data;
+  // Ajans paneli (0067): markalar müşteriye göre gruplanır ve süzülür. Müşteri adı yetki vermez.
+  const agency = ws.kind === "agency";
+  const clients = [...new Set(own.map((b) => b.client_name?.trim()).filter((c): c is string => !!c))].sort((a, b) => a.localeCompare(b, isEn() ? "en" : "tr"));
+  const [client, setClient] = useState<string>("");
+  const NONE = "__none__";
+  const shown = !agency || !client ? own : own.filter((b) => (client === NONE ? !b.client_name?.trim() : b.client_name?.trim() === client));
+  const grouped = agency && clients.length > 0 && !client
+    ? [...clients.map((c) => ({ name: c, items: own.filter((b) => b.client_name?.trim() === c) })), { name: null as string | null, items: own.filter((b) => !b.client_name?.trim()) }].filter((g) => g.items.length > 0)
+    : null;
 
   return (
     <div className="stack">
@@ -45,8 +57,8 @@ function WorkspaceView() {
         <aside className="notice notice-live" role="note">
           <strong>{L("Bu alanda iki tür ölçüm var", "This workspace has two kinds of measurement")}</strong>
           {isEn()
-            ? <p><b>No search (Gemini, free):</b> what the AI knows without looking at the web. <b>Live search (paid):</b> the answers AI assistants (today ChatGPT, Claude and Perplexity) give after searching the web; closest to what customers actually see.</p>
-            : <p><b>Aramasız (Gemini, ücretsiz):</b> yapay zekânın internete bakmadan bildiği. <b>Canlı arama (ücretli):</b> yapay zekâ asistanlarının (bugün ChatGPT, Claude ve Perplexity) internete bakarak verdiği cevaplar; müşterinin gerçekte gördüğüne en yakın olan budur.</p>}
+            ? <p><b>No search (Gemini, free):</b> what the AI knows without looking at the web. <b>Live search (paid):</b> the answers AI assistants (today ChatGPT, Gemini, Claude and Perplexity) give after searching the web; closest to what customers actually see.</p>
+            : <p><b>Aramasız (Gemini, ücretsiz):</b> yapay zekânın internete bakmadan bildiği. <b>Canlı arama (ücretli):</b> yapay zekâ asistanlarının (bugün ChatGPT, Gemini, Claude ve Perplexity) internete bakarak verdiği cevaplar; müşterinin gerçekte gördüğüne en yakın olan budur.</p>}
         </aside>
       ) : <DataNotice type={type} />}
 
@@ -61,19 +73,51 @@ function WorkspaceView() {
             <Link className="btn btn-primary" to="/marka/yeni">{L("İlk markayı ekle", "Add your first brand")}</Link>
           </Empty>
         ) : (
-          <ul className="brand-list">{own.map((b) => <BrandRow key={b.id} brand={b} type={type} live={ws.paid_live_allowed} />)}</ul>
+          <>
+            {agency && clients.length > 0 && (
+              <Select label={L("Müşteri", "Client")} name="client" value={client} onChange={(e) => setClient(e.currentTarget.value)}>
+                <option value="">{isEn() ? `All clients (${clients.length})` : `Tüm müşteriler (${clients.length})`}</option>
+                {clients.map((c) => <option key={c} value={c}>{c}</option>)}
+                {own.some((b) => !b.client_name?.trim()) && <option value={NONE}>{L("Müşterisi seçilmemiş", "No client set")}</option>}
+              </Select>
+            )}
+            {grouped
+              ? grouped.map((g) => (
+                <div key={g.name ?? NONE} className="client-group">
+                  <h3 className="client-head">{g.name ?? L("Müşterisi seçilmemiş", "No client set")} <span className="muted">{isEn() ? `${g.items.length} brand(s)` : `${g.items.length} marka`}</span></h3>
+                  <ul className="brand-list">{g.items.map((b) => <BrandRow key={b.id} brand={b} type={type} live={ws.paid_live_allowed} />)}</ul>
+                </div>
+              ))
+              : <ul className="brand-list">{shown.map((b) => <BrandRow key={b.id} brand={b} type={type} live={ws.paid_live_allowed} />)}</ul>}
+            {agency && clients.length === 0 && own.length >= 2 && (
+              <p className="src-sup muted">{L("İpucu: marka ayarlarından her markaya müşteri adı yazarsanız markalar burada müşteriye göre gruplanır.", "Tip: set a client name in each brand's settings to group brands by client here.")}</p>
+            )}
+          </>
         )}
       </section>
 
-      {own.length >= 2 && <Portfolio brands={own} type={type} live={ws.paid_live_allowed} wsName={ws.name} />}
+      {shown.length >= 2 && <Portfolio brands={shown} type={type} live={ws.paid_live_allowed} wsName={client && client !== NONE ? `${ws.name}-${client}` : ws.name} showClient={agency && clients.length > 0} />}
 
       {countryGroups(own).map((g) => <CountryCompare key={g.name} name={g.name} brands={g.brands} type={type} live={ws.paid_live_allowed} />)}
 
       {u && (
         <section className="panel">
           <h2>{L("Bu ayki kullanım", "This month's usage")}</h2>
-          <Meter label={L("Yapay zekâ sorgusu", "AI queries")} used={u.engine_calls} limit={u.engine_call_limit} />
-          {u.engine_call_limit > 0 && u.engine_calls >= u.engine_call_limit * 0.8 && (
+          {q?.hybrid ? (
+            <>
+              <Meter label={L("Soru hakkı (istediğiniz zaman)", "Question credits (any time)")} used={q.manual_used} limit={q.manual_cap} />
+              <Meter label={L("Haftalık otomatik ölçüm", "Weekly automatic measurement")} used={q.weekly_used} limit={q.weekly_cap} warn={false} />
+              <p className="src-sup muted">{L(`Paketinizdeki ${q.total.toLocaleString("tr-TR")} aylık sorgunun %30'u her hafta kendiliğinden yapılan kısa ölçüme, %70'i sizin "Şimdi ölç" ile istediğiniz zaman başlattığınız tam ölçümlere ayrılır. 1 soru hakkı, bir sorunun bir yapay zekâya bir kez sorulmasıdır. Haklar her ay başında yenilenir.`, `Of your plan's ${q.total.toLocaleString("en-US")} monthly queries, 30% go to a short automatic measurement every week and 70% to full measurements you start any time with "Measure now". One credit is one question asked to one AI once. Credits renew at the start of each month.`)}</p>
+              {q.manual_left < q.manual_cap * 0.2 && (
+                <p className="caution">{q.manual_left === 0
+                  ? L("Bu ayki soru hakkınız bitti. Haftalık otomatik ölçüm sürer; hakkınız ay başında yenilenir. ", "This month's question credits are used up. Weekly automatic measurement continues; credits renew next month. ")
+                  : L(`Bu ay ${q.manual_left} soru hakkınız kaldı. `, `${q.manual_left} question credits left this month. `)}
+                  <Link to="/hesap#paket">{L("Paketleri gör", "See plans")}</Link>
+                </p>
+              )}
+            </>
+          ) : <Meter label={L("Yapay zekâ sorgusu", "AI queries")} used={u.engine_calls} limit={u.engine_call_limit} />}
+          {!q?.hybrid && u.engine_call_limit > 0 && u.engine_calls >= u.engine_call_limit * 0.8 && (
             <p className="caution">{u.engine_calls >= u.engine_call_limit
               ? L("Bu ayki sorgu kotanız doldu. Ölçümler ay başında kendiliğinden yeniden başlar; beklemek istemezseniz paketinizi yükseltebilirsiniz. ", "You've used this month's query quota. Measurements resume automatically next month; upgrade if you'd rather not wait. ")
               : (isEn() ? `You've used ${Math.round((100 * u.engine_calls) / u.engine_call_limit)}% of this month's query quota. ` : `Bu ayki sorgu kotanızın %${Math.round((100 * u.engine_calls) / u.engine_call_limit)} kadarını kullandınız. `)}
@@ -98,20 +142,28 @@ const STATUS_TEXT: Record<PortfolioStatus, () => string> = {
 };
 
 /** Genel bakış (2+ marka): her markanın son önerilme oranı ve bir önceki ölçüme göre değişimi; anlamlı düşüş en üstte. */
-function Portfolio({ brands, type, live, wsName }: { brands: Brand[]; type: MeasurementType; live: boolean; wsName: string }) {
+function Portfolio({ brands, type, live, wsName, showClient = false }: { brands: Brand[]; type: MeasurementType; live: boolean; wsName: string; showClient?: boolean }) {
   const data = useLoad(() => Promise.all(brands.map(async (b) => {
     const lv = live ? series(await api.visibility(b.id, "live_search")) : [];
     const pts = lv.length ? lv : series(await api.visibility(b.id, type));
-    return { id: b.id, name: b.name, live: lv.length > 0, points: pts.map((p) => ({ at: p.at, recommend: p.recommend })) };
+    const lastRun = pts[pts.length - 1]?.runId;
+    // Güven puanı (0066): son ölçümün örneklem ve tekrar tutarlılığı; okunamazsa boş geçilir
+    let conf: Confidence | null = null;
+    if (lastRun && type !== "simulated") { try { conf = confidenceScore(await api.runConfidence(lastRun)); } catch { conf = null; } }
+    return { id: b.id, name: b.name, client: b.client_name?.trim() || null, live: lv.length > 0, conf, points: pts.map((p) => ({ at: p.at, recommend: p.recommend })) };
   })), [brands.map((b) => b.id).join(","), type, live]);
   const items = data.data ?? [];
   const rows = portfolioRows(items);
   const liveOf = (id: string) => items.find((i) => i.id === id)?.live ?? false;
+  const confOf = (id: string) => items.find((i) => i.id === id)?.conf ?? null;
+  const clientOf = (id: string) => items.find((i) => i.id === id)?.client ?? null;
+  const CONF_LEVEL = { high: () => L("yüksek", "high"), medium: () => L("orta", "medium"), low: () => L("düşük", "low") };
+  const confText = (id: string) => { const c = confOf(id); return c ? `${L("güven", "confidence")} ${c.score}/100 (${CONF_LEVEL[c.level]()})` : ""; };
   const dropped = rows.filter((r) => r.status === "dropped");
   const sign = (n: number) => (n > 0 ? `+${n}` : String(n));
   function exportCsv() {
-    const head = [L("Marka", "Brand"), L("Ölçüm türü", "Type"), L("Son ölçüm", "Latest"), L("Cevap sayısı", "Answers"), L("Önerildi", "Recommended"), L("Önerilme %", "Recommended %"), L("Önceki %", "Previous %"), L("Değişim (puan)", "Change (points)"), L("Durum", "Status")];
-    const body = rows.map((r) => [r.name, liveOf(r.id) ? "live_search" : "model_knowledge", r.last?.at ?? "", r.last?.recommend.n ?? "", r.last?.recommend.k ?? "", r.last ? Math.round(r.last.recommend.value * 100) : "", r.prev ? Math.round(r.prev.recommend.value * 100) : "", r.deltaPp ?? "", STATUS_TEXT[r.status]()]);
+    const head = [L("Marka", "Brand"), ...(showClient ? [L("Müşteri", "Client")] : []), L("Ölçüm türü", "Type"), L("Son ölçüm", "Latest"), L("Cevap sayısı", "Answers"), L("Önerildi", "Recommended"), L("Önerilme %", "Recommended %"), L("Önceki %", "Previous %"), L("Değişim (puan)", "Change (points)"), L("Durum", "Status"), L("Güven puanı", "Confidence score")];
+    const body = rows.map((r) => [r.name, ...(showClient ? [clientOf(r.id) ?? ""] : []), liveOf(r.id) ? "live_search" : "model_knowledge", r.last?.at ?? "", r.last?.recommend.n ?? "", r.last?.recommend.k ?? "", r.last ? Math.round(r.last.recommend.value * 100) : "", r.prev ? Math.round(r.prev.recommend.value * 100) : "", r.deltaPp ?? "", STATUS_TEXT[r.status](), confOf(r.id)?.score ?? ""]);
     downloadCsv(`${wsName.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "markalar"}-genel-bakis.csv`, [head, ...body], isEn() ? "," : ";");
   }
   return (
@@ -131,8 +183,8 @@ function Portfolio({ brands, type, live, wsName }: { brands: Brand[]; type: Meas
             {rows.map((r) => (
               <li key={r.id}>
                 <Link to={`/marka/${r.id}`} className="brand-row">
-                  <span className="brand-row-name">{r.name}</span>
-                  <span className="brand-row-meta">{STATUS_TEXT[r.status]()}{r.deltaPp !== null && r.status !== "few_samples" ? ` (${sign(r.deltaPp)} ${L("puan", "pts")})` : ""}</span>
+                  <span className="brand-row-name">{r.name}{showClient && clientOf(r.id) ? <span className="muted"> · {clientOf(r.id)}</span> : null}</span>
+                  <span className="brand-row-meta">{STATUS_TEXT[r.status]()}{r.deltaPp !== null && r.status !== "few_samples" ? ` (${sign(r.deltaPp)} ${L("puan", "pts")})` : ""}{confOf(r.id) ? `, ${confText(r.id)}` : ""}</span>
                   <span className="brand-row-result">{r.last
                     ? (isEn() ? `Recommended in ${r.last.recommend.k} of ${r.last.recommend.n} answers (${pct(r.last.recommend.value)}), ${liveOf(r.id) ? "live search" : "no search"}, ${formatDateTime(r.last.at)}`
                               : `${r.last.recommend.n} cevabın ${numLoc(r.last.recommend.k)} önerildi (${pct(r.last.recommend.value)}), ${liveOf(r.id) ? "canlı aramalı" : "aramasız"}, ${formatDateTime(r.last.at)}`)
@@ -281,6 +333,7 @@ export function NewBrand() {
         city: String(f.get("city") || "").trim() || null,
         country: /^[A-Za-z]{2}$/.test(String(f.get("country") || "").trim()) ? String(f.get("country")).trim().toUpperCase() : null,
         aliases: String(f.get("aliases") || "").split(",").map((s) => s.trim()).filter(Boolean),
+        ...(f.has("client_name") && String(f.get("client_name") || "").trim() ? { client_name: String(f.get("client_name")).trim().slice(0, 80) } : {}),
         ...(demo ? { data_origin: "simulated" } : {}),
       });
       // 19 Kasım: tek soruyla başlayan marka kalmasın; ilk 5 soru otomatik eklenir (kullanıcı silebilir), Google keşfi bir kez sıraya girer.
@@ -299,6 +352,7 @@ export function NewBrand() {
     <form className="stack narrow" onSubmit={submit} noValidate>
       <header className="page-head"><h1>{L("Marka ekleyin", "Add a brand")}</h1><p className="muted">{L("Yapay zekâ cevaplarında arayacağımız markayı tanımlayın.", "Define the brand we'll look for in AI answers.")}</p></header>
       <Field label={L("Marka adı", "Brand name")} name="name" required maxLength={120} placeholder={demo ? L("Hayali bir ad", "A fictional name") : L("Örn. Ali Usta Döner", "e.g. Joe's Pizza")} />
+      {current?.kind === "agency" && <Field label={L("Müşteri (ajans)", "Client (agency)")} name="client_name" defaultValue={""} maxLength={80} placeholder={L("Örn. Akdeniz Otel Grubu", "e.g. Harbor Hotels")} hint={L("Aynı müşterinin markalarını gruplamak için. Erişim vermez; müşteriye rapor bağlantısı gönderin.", "Groups a client's brands. It grants no access; send the client a report link.")} />}
       <Field label={L("Diğer yazılışlar", "Other spellings")} name="aliases" hint={L("Virgülle ayırın. Örn. Ali Usta, AliUsta", "Comma-separated, e.g. Joes Pizza, Joe's")} />
       <Field label={L("Web sitesi", "Website")} name="website" type="url" inputMode="url" placeholder={L("ornek.com", "example.com")} hint={L("İçerik üreticisiyseniz kanal adresinizi yazın: youtube.com/@kanaliniz", "Content creator? Enter your channel: youtube.com/@yourchannel")} />
       <Select label={L("Sektör", "Sector")} name="sector" defaultValue="">

@@ -159,26 +159,15 @@ function sentences(line: string): string[] {
  *  bu durumda "önerildi" yalnız açık öneri cümlesiyle sayılır (liste/başlık satırı yetmez). 19 Kasım pilot bulgusu. */
 export function analyzeResponse(resp: AIResponse, brands: BrandRef[], opts: { question?: string | null } = {}): BrandHit[] {
   const lines = resp.answerText.split(/\n+/);
-  // İlk kelime iki ayrı markada aynıysa ("Marka A" / "Marka B", "Samsung Galaxy" / "Samsung Pay") tek başına ilk kelime hiçbirine sayılmaz
-  const firstOf = (n: string) => n.trim().split(/\s+/)[0].toLocaleLowerCase("tr-TR");
-  const firstCount = new Map<string, number>();
-  for (const b of brands) if (b.name.trim().includes(" ")) firstCount.set(firstOf(b.name), (firstCount.get(firstOf(b.name)) ?? 0) + 1);
-  // Başka bir markanın tek kelimelik adı/takma adı bu markanın ilk kelimesiyle aynıysa ilk kelime tek başına bu markaya sayılmaz
-  const singleOwner = new Map<string, Set<string>>();
-  for (const b of brands) for (const n of [b.name, ...b.aliases]) if (!n.trim().includes(" ")) {
-    const k = n.trim().toLocaleLowerCase("tr-TR"); singleOwner.set(k, (singleOwner.get(k) ?? new Set()).add(b.id));
-  }
-  const otherOwns = (word: string, id: string) => [...(singleOwner.get(word) ?? [])].some((x) => x !== id);
 
   const hits = brands.map((b): BrandHit => {
     const caps = commonWordCaps(b.name);
     const aliasCaps = countableAliases(b.aliases).map(commonWordCaps).filter((x): x is RegExp => !!x);
     const needles = [...(caps ? [] : [b.name]), ...countableAliases(b.aliases).filter((a) => !commonWordCaps(a))].map(normalize).filter((n) => n.length >= 2);
-    const fw = firstOf(b.name);
-    const first = b.exactOnly || (firstCount.get(fw) ?? 0) > 1 || otherOwns(fw, b.id) ? null : firstWordPattern(b.name);
+    // Peec yöntemi: yalnız tam ad ve tanımlı takma adlar sayılır; çok kelimeli adın ilk kelimesi tek başına marka sayılmaz ("Seattle", "Garanti" gibi)
     const containsBrand = (text: string) => {
       const t = normalize(text);
-      return needles.some((n) => hasName(t, n)) || (!!first && first.test(text)) || (!!caps && caps.test(text)) || aliasCaps.some((r) => r.test(text));
+      return needles.some((n) => hasName(t, n)) || (!!caps && caps.test(text)) || aliasCaps.some((r) => r.test(text));
     };
     // Markanın geçtiği cümle parçası olumsuz mu? (aynı satırdaki başka markanın olumsuzluğu bulaşmaz)
     const clauseNegative = (line: string) => clauses(line).some((c) => containsBrand(c) && isNegative(normalize(c))) ||
@@ -247,8 +236,7 @@ function rankInItems(items: Array<[string, number]>, b: BrandRef): number | null
   const caps = commonWordCaps(b.name);
   const aliasCaps = countableAliases(b.aliases).map(commonWordCaps).filter((x): x is RegExp => !!x);
   const n = [...(caps ? [] : [b.name]), ...countableAliases(b.aliases).filter((a) => !commonWordCaps(a))].map(normalize).filter((x) => x.length >= 2);
-  const fw = firstWordPattern(b.name);
-  const i = items.findIndex(([line]) => n.some((x) => hasName(normalize(line), x)) || (!!fw && fw.test(line)) || (!!caps && caps.test(line)) || aliasCaps.some((r) => r.test(line)));
+  const i = items.findIndex(([line]) => n.some((x) => hasName(normalize(line), x)) || (!!caps && caps.test(line)) || aliasCaps.some((r) => r.test(line)));
   return i >= 0 ? items[i][1] : null;
 }
 /** Cevaptaki liste sırası: LLM bir markayı sonradan "önerildi" yaptığında sırası da hesaplansın (18 Kasım denetimi). */
@@ -442,4 +430,39 @@ export function relatedBrand(texts: string[], name: string, brands: { name: stri
   let best: string | null = null, max = 0;
   for (const [k, v] of hits) if (v > max) { best = k; max = v; }
   return best;
+}
+
+// ---- Güven puanı (Confidence Score), 22 Kasım 2026 ----
+// Sonucun ne kadar sağlam olduğunu 0–100 arası tek sayıyla anlatır. İki bileşen, ikisi de ölçüm verisinden:
+//  1) Örneklem (en çok 50): farklı soru × motor sayısı (20'de dolar, 30 puan) + cevap sayısı (100'de dolar, 20 puan)
+//  2) Tekrar tutarlılığı (en çok 50): aynı soru aynı motora birden çok kez sorulduğunda "önerildi / önerilmedi"
+//     sonucunun aynı çıktığı grupların oranı. En az 5 tekrar grubu yoksa puan orantılı azalır; hiç tekrar yoksa 0.
+// Seviye: 70+ yüksek, 40–69 orta, altı düşük. Uydurma ağırlık yok; formül bu dosyada ve testte sabit.
+export interface ConfidenceInput { provider?: string; answers: number; prompts: number; repeat_groups: number; consistent_groups: number }
+export interface Confidence {
+  score: number; level: "high" | "medium" | "low";
+  answers: number; clusters: number; repeatGroups: number; consistency: number | null;
+  /** Puanı düşüren nedenler: few_questions, few_answers, no_repeats, few_repeats, inconsistent */
+  reasons: ("few_questions" | "few_answers" | "no_repeats" | "few_repeats" | "inconsistent")[];
+}
+export const CONF_FULL_CLUSTERS = 20;
+export const CONF_FULL_ANSWERS = 100;
+export const CONF_MIN_REPEAT_GROUPS = 5;
+export function confidenceScore(rows: ConfidenceInput[]): Confidence | null {
+  const answers = rows.reduce((a, r) => a + r.answers, 0);
+  if (!answers) return null;
+  const clusters = rows.reduce((a, r) => a + r.prompts, 0);
+  const repeatGroups = rows.reduce((a, r) => a + r.repeat_groups, 0);
+  const consistent = rows.reduce((a, r) => a + r.consistent_groups, 0);
+  const consistency = repeatGroups ? consistent / repeatGroups : null;
+  const sample = 30 * Math.min(clusters / CONF_FULL_CLUSTERS, 1) + 20 * Math.min(answers / CONF_FULL_ANSWERS, 1);
+  const repeat = consistency == null ? 0 : 50 * consistency * Math.min(repeatGroups / CONF_MIN_REPEAT_GROUPS, 1);
+  const score = Math.round(sample + repeat);
+  const reasons: Confidence["reasons"] = [];
+  if (clusters < CONF_FULL_CLUSTERS) reasons.push("few_questions");
+  if (answers < CONF_FULL_ANSWERS / 2) reasons.push("few_answers");
+  if (!repeatGroups) reasons.push("no_repeats");
+  else if (repeatGroups < CONF_MIN_REPEAT_GROUPS) reasons.push("few_repeats");
+  if (consistency != null && consistency < 0.8) reasons.push("inconsistent");
+  return { score, level: score >= 70 ? "high" : score >= 40 ? "medium" : "low", answers, clusters, repeatGroups, consistency, reasons };
 }

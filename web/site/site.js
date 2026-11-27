@@ -36,8 +36,10 @@
     zero: "Bu sorularda yapay zekâ işletmenizi hiç anmadı. Yeni ya da yerel markalarda bu sık görülür; neyin değiştirilebileceğini düzenli ölçümle görürsünüz.",
     others: "Cevaplarda en çok geçen diğer adlar:", q: "Soru", yes: "Anıldı", rec: "Önerildi", no: "Geçmedi", na: "Cevap alınamadı", miss: function (k) { return k + " soruya yapay zekâdan cevap alınamadı; bunlar sonuca katılmadı. Biraz sonra tekrar deneyebilirsiniz."; },
     engine: "Gemini, model bilgisi (canlı web araması yok). Tek seferlik kontrol; yapay zekâ cevapları sorudan soruya değişir.",
+    tag: "Ücretsiz AI Model Bilgisi Kontrolü", tagNote: "Bu sonuç Gemini'nin model bilgisine dayanır; canlı web araması yapılmadı, bugünkü web görünürlüğünüzü göstermez.",
     next: "Her hafta otomatik ölçmek, rakiplerle karşılaştırmak ve ChatGPT'nin canlı aramasını görmek için", cta: "ücretsiz hesap açın",
   } : {
+    tag: "Free AI Model Knowledge Check", tagNote: "This result is based on Gemini's model knowledge; no live web search was run, so it does not show your current web visibility.",
     busy: "Asking Gemini 5 questions… (20–30 seconds)", input: "Enter your business name and what you do.",
     person_limit: "You've used your 2 free checks this month. Create a free account for regular measurement.",
     daily_limit: "Today's free check capacity is used up. Try again tomorrow or create a free account.",
@@ -91,7 +93,7 @@
       .then(function (x) {
         btn.disabled = false;
         if (!x.ok) { out.innerHTML = '<p class="check-msg">' + (T[x.j && x.j.error] || T.err) + "</p>"; return; }
-        var j = x.j, h = '<div class="check-sum"><p>' + T.sum(j.mentioned, j.recommended, j.total, esc(body.brand)) + "</p>";
+        var j = x.j, h = '<p class="check-tag"><strong>' + T.tag + "</strong>. " + T.tagNote + "</p>" + '<div class="check-sum"><p>' + T.sum(j.mentioned, j.recommended, j.total, esc(body.brand)) + "</p>";
         var miss = j.questions.filter(function (q) { return !q.ok; }).length;
         if (miss) h += "<p>" + T.miss(miss) + "</p>";
         if (!j.mentioned && j.total) h += "<p>" + T.zero + "</p>";

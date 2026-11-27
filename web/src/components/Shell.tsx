@@ -10,7 +10,7 @@ export function Shell() {
   const nav = useNavigate();
   const customer = workspaces.filter((w) => w.kind !== "demo_lab");
   const inDemo = current?.kind === "demo_lab";
-  const paid = !!current && ["starter", "pro", "agency"].includes(current.plan) && (current.kind === "business" || current.kind === "agency");
+  const paid = !!current && ["starter", "altin", "pro", "agency"].includes(current.plan) && (current.kind === "business" || current.kind === "agency");
 
   return (
     <div className={`shell ${inDemo ? "shell-demo" : ""}`}>
@@ -67,7 +67,7 @@ export function LangSwitch() {
   const l = getLang();
   return (
     <button type="button" className="lang-switch" onClick={() => switchLang(l === "en" ? "tr" : "en")} lang={l === "en" ? "tr" : "en"}
-      aria-label={l === "en" ? "Türkçeye geç" : "Switch to English"}>
+      aria-label={l === "en" ? "Switch to Turkish" : "Switch to English"}>
       {l === "en" ? "TR" : "EN"}
     </button>
   );

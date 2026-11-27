@@ -457,8 +457,8 @@ test("rules_v2: düz paragrafta yalnızca anılan marka öneri sayılmaz", () =>
   assert.equal(h[0].recommended, false);
 });
 
-test("Marka adının ilk kelimesi tek başına geçince yakalanır (Garanti Bonus); yaygın kelime ve küçük harf yakalanmaz", () => {
-  const brands = [{ id: "g", name: "Garanti BBVA", aliases: [] }, { id: "u", name: "Usta Eller Oto", aliases: [] }];
+test("Kısaltma yalnız açıkça tanımlı takma adla sayılır (Peec yöntemi); tanımsız ilk kelime sayılmaz; yaygın kelime ve küçük harf yakalanmaz", () => {
+  const brands = [{ id: "g", name: "Garanti BBVA", aliases: ["Garanti"] }, { id: "u", name: "Usta Eller Oto", aliases: [] }];
   const r = (t: string) => Object.fromEntries(analyzeResponse({ promptId: "p", provider: "x", answerText: t, citedUrls: [] }, brands).map((h) => [h.brandId, h]));
   assert.equal(r("Kampanyalar için Garanti Bonus, Yapı Kredi World gibi kartları karşılaştırın.").g.mentioned, true);
   assert.equal(r("Garanti'nin mobil uygulaması hızlıdır.").g.mentioned, true);
@@ -516,9 +516,10 @@ test("Takip edilmeyen adlar: RAM, GB, GPU, 16GB, 120Hz gibi teknik terimler mark
   for (const bad of ["RAM", "GPU", "CPU", "SSD", "OLED", "16GB", "16GB RAM", "120Hz", "1TB", "32GB", "USB-C"]) assert.ok(!names.includes(bad), `${bad} çıkmamalı: ${names.join("|")}`);
 });
 
-test("Güncel paketler (Plus/Pro/Business): tipik %55+ kâr; tavan + komisyon fiyatın altında; kötü durum API'si tavana sığar", () => {
-  for (const name of ["Plus", "Pro", "Business"]) {
-    const plan = PLANS.findLast((p) => p.name.startsWith(name + " ("))!;
+test("Güncel paketler (Gümüş/Altın/Platin/Elmas): tipik %55+ kâr; tavan + komisyon fiyatın altında; kötü durum API'si tavana sığar", () => {
+  for (const name of ["Gümüş", "Altın", "Platin", "Elmas"]) {
+    const plan = PLANS.findLast((p) => p.name.startsWith(name + " "))!;
+    assert.ok(plan, name);
     const cap = PAID_CAPS[name];
     assert.ok(planCost(plan, SCENARIOS[0]).grossMarginPct > 55, name);
     assert.ok(cap + plan.priceUsd * SCENARIOS[1].paymentFeeRate + SCENARIOS[1].paymentFeeFixedUsd < plan.priceUsd, name);
@@ -836,9 +837,11 @@ test("Ad eşleşmesi: ortak ilk kelime ('Marka A' / 'Marka B') ve ürün adları
   // ürün: "Kuzey" markasının adı geçince "Kuzey Model X" ürünü anılmış sayılmaz
   const prod = analyzeResponse(r("Kuzey markasının başka modelleri de var."), [{ id: "p", name: "Kuzey Model X", aliases: ["Model X"], exactOnly: true }]);
   assert.equal(prod[0].mentioned, false);
-  // tek marka için ilk kelime eşleşmesi korunur (Garanti Bonus → Garanti BBVA)
+  // ilk kelime artık tek başına sayılmaz; yalnız tanımlı takma ad ("Garanti") ile sayılır
   const g = analyzeResponse(r("Garanti uygulaması çok iyi."), [{ id: "g", name: "Garanti BBVA", aliases: [] }]);
-  assert.equal(g[0].mentioned, true);
+  assert.equal(g[0].mentioned, false, "takma ad tanımlanmadan ilk kelime sayılmaz");
+  const g2 = analyzeResponse(r("Garanti uygulaması çok iyi."), [{ id: "g", name: "Garanti BBVA", aliases: ["Garanti"] }]);
+  assert.equal(g2[0].mentioned, true);
 });
 
 test("Alt marka ipucu: 'Mars Athletic … premium version of MACFit' → MACFit; ilgisiz ad → yok", async () => {
@@ -926,7 +929,7 @@ test("Soru bazında güven aralığı: tekrarlar bağımsız sayılmaz; başa ba
 test("Marka tespiti (18 Kasım): kısa BÜYÜK harfli ilk kelime, üst şirket takma adı, yaygın kelime adlar", async () => {
   const { analyzeResponse, listRank } = await import("../src/metrics.ts");
   const brands = [
-    { id: "one", name: "ONE Condoms", aliases: [] },
+    { id: "one", name: "ONE Condoms", aliases: ["ONE"] },
     { id: "skyn", name: "SKYN", aliases: ["parent:LifeStyles"] },
     { id: "ring", name: "Ring", aliases: [] },
   ];
@@ -981,4 +984,48 @@ test("Markalı soru (19 Kasım pilot): marka soruda geçiyorsa başlık/liste ö
   const list = "Kumluca'da zirai ürün satan yerler:\n1. **Gemici Ziraat**: geniş ürün yelpazesi\n2. Teknik Tarım";
   const r3 = analyzeResponse({ promptId: "p", provider: "gemini", answerText: list, citedUrls: [] }, b, { question: "Kumluca'da zirai ürün nereden alınır?" })[0];
   assert.equal(r3.recommended, true);
+});
+
+test("Güven puanı: örneklem + tekrar tutarlılığı; tekrar yoksa düşük, tutarsızlık puanı düşürür", async () => {
+  const { confidenceScore } = await import("../src/metrics.ts");
+  assert.equal(confidenceScore([]), null);
+  // Gümüş benzeri: 25 soru × 4 motor, ChatGPT ve Gemini 2 tekrar, hepsi tutarlı → 100
+  const full = confidenceScore([
+    { answers: 50, prompts: 25, repeat_groups: 25, consistent_groups: 25 },
+    { answers: 50, prompts: 25, repeat_groups: 25, consistent_groups: 25 },
+    { answers: 25, prompts: 25, repeat_groups: 0, consistent_groups: 0 },
+    { answers: 25, prompts: 25, repeat_groups: 0, consistent_groups: 0 },
+  ])!;
+  assert.deepEqual([full.score, full.level, full.reasons], [100, "high", []]);
+  // Free benzeri: 15 soru, tek motor, tekrar yok → 30*15/20 + 20*15/100 = 22.5 + 3 = 25.5 → 26, düşük
+  const free = confidenceScore([{ answers: 15, prompts: 15, repeat_groups: 0, consistent_groups: 0 }])!;
+  assert.deepEqual([free.score, free.level, free.consistency], [26, "low", null]);
+  assert.deepEqual(free.reasons, ["few_questions", "few_answers", "no_repeats"]);
+  // Tekrarların yarısı tutarsız: tutarlılık bileşeni yarıya iner ve neden yazılır
+  const half = confidenceScore([{ answers: 100, prompts: 50, repeat_groups: 50, consistent_groups: 25 }])!;
+  assert.equal(half.score, 75);
+  assert.ok(half.reasons.includes("inconsistent"));
+  // Az tekrar grubu (2 < 5): tutarlılık puanı orantılı
+  const few = confidenceScore([{ answers: 22, prompts: 20, repeat_groups: 2, consistent_groups: 2 }])!;
+  assert.equal(few.score, Math.round(30 + 20 * 0.22 + 50 * 2 / 5));
+  assert.ok(few.reasons.includes("few_repeats"));
+});
+
+test("Gemini canlı: ayrı ücretli anahtarla varsayılan canlı sırada, anahtarsız girmez", async () => {
+  const { chooseProviders } = await import("../src/worker.ts");
+  const env = { ALLOW_PAID_API: "true", GEMINI_API_KEY: "free-x", GEMINI_CANLI_API_KEY: "paid-x", OPENAI_API_KEY: "o", ANTHROPIC_API_KEY: "a" };
+  // Varsayılan canlı sırada Gemini sonda (24 Kasım: müşteri ölçümlerinde de açık)
+  assert.deepEqual(chooseProviders("live_search", env, ["A"], "s").map((p) => p.config.provider), ["openai", "claude", "gemini"]);
+  // Canlı anahtar yoksa Gemini canlıya girmez (ücretsiz anahtarda arama yok)
+  assert.deepEqual(chooseProviders("live_search", { ...env, GEMINI_CANLI_API_KEY: "" }, ["A"], "s").map((p) => p.config.provider), ["openai", "claude"]);
+  // İstenince ücretli, aramalı Gemini çalışır
+  const g = chooseProviders("live_search", { ...env, LIVE_ENGINES: "gemini" }, ["A"], "s");
+  assert.equal(g.length, 1);
+  assert.equal(g[0].config.billing, "paid");
+  assert.equal(g[0].config.useSearch, true);
+  // Hafızadan ölçüm hâlâ ücretsiz anahtarla
+  const m = chooseProviders("model_knowledge", env, ["A"], "s");
+  assert.equal(m[0].config.billing, "free");
+  // ALLOW_PAID_API kapalıyken canlı Gemini oluşmaz
+  assert.ok(!buildProviders({ ...env, ALLOW_PAID_API: "false" }).providers.some((p) => p.config.provider === "gemini" && p.config.billing === "paid"));
 });

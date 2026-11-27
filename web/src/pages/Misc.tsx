@@ -20,8 +20,8 @@ const STATUS: { area: string; items: [Level, string, string][] }[] = [
       ["works", L("Şifre sıfırlama ve e-posta doğrulama", "Password reset and email confirmation"), L("Kendi alan adımızdan (report@aisaasavran.com) gönderilir.", "Sent from our own domain (report@aisaasavran.com).")],
       ["works", L("Müşteri verisi izolasyonu", "Customer data isolation"), L("Veritabanı satır güvenliğiyle; her sürümde otomatik test ediliyor.", "Enforced by database row-level security; tested on every release.")],
       ["works", L("Paket limitleri ve aylık kota", "Plan limits and monthly quota"), L("Limit aşılınca ölçüm durur.", "Measurements stop when a limit is reached.")],
-      ["works", L("Ekip üyesi davet etme", "Team invitations"), L("Pro'da 3, Business'ta 15 kişi; roller (sahip, editör, izleyici).", "3 seats on Pro, 15 on Business; roles (owner, editor, viewer).")],
-      ["works", L("API ve MCP erişimi", "API and MCP access"), L("Pro ve Business'ta; raporları kendi sisteminize veya yapay zekâ ajanınıza bağlama.", "On Pro and Business; connect reports to your own system or AI agent.")],
+      ["works", L("Ekip üyesi davet etme", "Team invitations"), L("Platin'de 3, Elmas'ta 15 kişi; roller (sahip, editör, izleyici).", "3 seats on Platinum, 15 on Diamond; roles (owner, editor, viewer).")],
+      ["works", L("API ve MCP erişimi", "API and MCP access"), L("Platin ve Elmas'ta; raporları kendi sisteminize veya yapay zekâ ajanınıza bağlama.", "On Platinum and Diamond; connect reports to your own system or AI agent.")],
       ["works", L("Günlük otomatik test ve haftalık yedek", "Daily automated test and weekly backup"), L("Her sabah canlı sitede müşteri akışı denenir; veritabanı her hafta gizli depoya yedeklenir.", "Every morning the customer flow is tested on the live site; the database is backed up weekly to a private repository.")],
       ["works", L("Ödeme ve paket yükseltme", "Payments and upgrades"), L("Paddle üzerinden aylık abonelik; ödeme sonrası paket otomatik açılır, iptal Paddle sayfasından.", "Monthly subscriptions via Paddle; the plan opens automatically after payment, cancel from the Paddle page.")],
         ["works", L("Haftalık e-posta özeti", "Weekly email summary"), L("Pazartesi sabahı, o hafta ölçüm yapıldıysa; hesap sayfasından kapatılabilir.", "Monday mornings when there were measurements; can be turned off from the account page.")],
@@ -31,7 +31,9 @@ const STATUS: { area: string; items: [Level, string, string][] }[] = [
     area: L("Ölçüm", "Measurement"),
     items: [
       ["works", L("Gemini aramasız ölçüm (model bilgisi)", "Gemini without search (model knowledge)"), L("Ücretsiz katmanda çalışıyor; ayrı veri türü olarak gösterilir.", "Runs on the free tier; shown as its own data type.")],
-      ["works", L("ChatGPT, Claude ve Perplexity ile canlı web aramalı ölçüm", "ChatGPT, Claude and Perplexity live web-search measurement"), L("Ücretli paketlerde (Plus, Pro, Business), paket başına aylık harcama tavanıyla.", "On paid plans (Plus, Pro, Business), with a monthly spending cap per plan.")],
+      ["works", L("ChatGPT, Gemini, Claude ve Perplexity ile canlı web aramalı ölçüm", "ChatGPT, Gemini, Claude and Perplexity live web-search measurement"), L("Ücretli paketlerde (Gümüş, Altın, Platin, Elmas), paket başına aylık harcama tavanıyla.", "On paid plans (Silver, Gold, Platinum, Diamond), with a monthly spending cap per plan.")],
+      ["works", L("Ajans paneli: müşteriye göre gruplama", "Agency panel: grouping by client"), L("Ajans alanında markalara müşteri adı verilir; liste ve genel bakış müşteriye göre süzülür, CSV'ye müşteri sütunu eklenir. Müşteri erişimi: salt okunur rapor bağlantısı.", "In agency workspaces brands get a client name; the list and overview filter by client and the CSV gets a client column. Client access: read-only report link.")],
+      ["works", L("Güven puanı", "Confidence score"), L("Her raporda 0–100: örneklem büyüklüğü ve tekrar sorulan sorularda sonucun aynı kalma oranı; puanı düşüren nedenler yazılır.", "In every report, 0–100: sample size and how often the result stays the same when a question is asked again; reasons that lower it are listed.")],
       ["works", L("Ülke karşılaştırması ve ölçüm sıklığı", "Country comparison and measurement frequency"), L("Aynı sorular farklı ülkelerde; marka başına ölçüm aralığı ayarlanabilir.", "The same questions across countries; measurement interval per brand.")],
             ["works", L("Otomatik ölçüm işleme ve haftalık ölçüm", "Automatic processing and weekly runs"), L("Ölçümler saatlik işlenir; her marka haftada bir otomatik ölçülür.", "Measurements are processed hourly; each brand is measured weekly.")],
       ["partial", L("Önerilme tespiti", "Recommendation detection"), L("Kural tabanlı; ürün adları ve yazılışlar marka ile eşleştirilir.", "Rule-based; product names and spellings are matched to brands.")],
@@ -84,7 +86,7 @@ export function ProductStatus() {
 }
 
 export function Account() {
-  const { session } = useApp();
+  const { session, current } = useApp();
   const nav = useNavigate();
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState<string | null>(null);
@@ -111,9 +113,8 @@ export function Account() {
   return (
     <div className="stack narrow">
       <header className="page-head"><h1>{L("Hesap", "Account")}</h1><p className="muted">{session?.user.email}</p></header>
-      <BillingPanel />
-      <TeamPanel />
-      <ApiPanel />
+      {/* Çalışma alanı olmayan kullanıcıda bu paneller açılmaz (önceden sayfa çöküyordu) */}
+      {current && <><BillingPanel /><TeamPanel /><ApiPanel /></>}
       <EmailPrefs />
       {recovery && <p className="caution" role="alert">{L("Şifre sıfırlama bağlantısıyla giriş yaptınız. Lütfen aşağıdan yeni şifrenizi belirleyin.", "You signed in with a password reset link. Please set your new password below.")}</p>}
       <form className="panel stack" onSubmit={changePassword} noValidate id="yeni-sifre">
@@ -127,12 +128,49 @@ export function Account() {
         <h2>{L("Dil", "Language")}</h2>
         <p className="muted">{L("Arayüz dili: Türkçe.", "Interface language: English.")} <LangSwitch /></p>
       </section>
-      <section className="panel">
-        <h2>{L("Verileriniz", "Your data")}</h2>
-        <p className="muted">{L("Hesabınızın ve verilerinizin silinmesini istemek için kayıtlı e-postanızdan şu adrese yazın:", "To delete your account and data, email us from your registered address:")} info@aisaasavran.com. <Link to="/gizlilik">{L("Gizlilik politikası", "Privacy policy")}</Link> · <Link to="/kosullar">{L("Kullanım koşulları", "Terms of use")}</Link></p>
-      </section>
+      <DeleteAccount />
       <Button variant="quiet" onClick={async () => { await sb().auth.signOut(); nav("/giris"); }}>{L("Çıkış yap", "Sign out")}</Button>
     </div>
+  );
+}
+
+function DeleteAccount() {
+  const nav = useNavigate();
+  const word = L("SİL", "DELETE");
+  const [open, setOpen] = useState(false);
+  const [typed, setTyped] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [err, setErr] = useState<string | null>(null);
+  useEffect(() => { if (location.hash === "#hesap-sil") { setOpen(true); document.getElementById("hesap-sil")?.scrollIntoView({ block: "center" }); } }, []);
+  async function remove() {
+    setBusy(true); setErr(null);
+    const { data, error } = await sb().rpc("delete_my_account");
+    if (error) { setBusy(false); setErr(friendlyError(error)); return; }
+    if (data === "active_subscription") {
+      setBusy(false);
+      setErr(L("Aktif bir aboneliğiniz var. Önce yukarıdaki Ödeme bölümünden aboneliği iptal edin, sonra hesabınızı silebilirsiniz.", "You have an active subscription. Cancel it first in the Billing section above, then you can delete your account."));
+      return;
+    }
+    if (data !== "deleted") { setBusy(false); setErr(L("Hesap silinemedi. Lütfen info@aisaasavran.com adresine yazın.", "The account could not be deleted. Please email info@aisaasavran.com.")); return; }
+    await sb().auth.signOut().catch(() => undefined);
+    try { sessionStorage.setItem("deleted", "1"); } catch { /* yok say */ }
+    nav("/giris");
+  }
+  return (
+    <section className="panel stack" id="hesap-sil">
+      <h2>{L("Verileriniz ve hesabı silme", "Your data and account deletion")}</h2>
+      <p className="muted">{L("Hesabınızı silerseniz giriş bilgileriniz, tek başınıza sahip olduğunuz çalışma alanları ve içindeki markalar, sorular, ölçümler ve raporlar kalıcı olarak silinir. Ekip üyeleri olan bir alanda sahiplik en eski ekip üyesine geçer. Bu işlem geri alınamaz.", "Deleting your account permanently removes your sign-in, the workspaces you own alone and their brands, questions, measurements and reports. In a workspace with team members, ownership passes to the longest-standing member. This cannot be undone.")} <Link to="/gizlilik">{L("Gizlilik politikası", "Privacy policy")}</Link> · <Link to="/kosullar">{L("Kullanım koşulları", "Terms of use")}</Link></p>
+      {!open ? (
+        <Button variant="danger" onClick={() => setOpen(true)}>{L("Hesabımı sil", "Delete my account")}</Button>
+      ) : (
+        <div className="stack">
+          <Field label={L(`Onaylamak için ${word} yazın`, `Type ${word} to confirm`)} name="confirm-delete" value={typed} onChange={(e) => setTyped(e.target.value)} autoComplete="off" />
+          <ErrorBox message={err} />
+          <Button variant="danger" busy={busy} disabled={typed.trim().toLocaleUpperCase(isEn() ? "en" : "tr") !== word} onClick={remove}>{L("Hesabımı kalıcı olarak sil", "Permanently delete my account")}</Button>
+          <Button variant="quiet" onClick={() => { setOpen(false); setTyped(""); setErr(null); }}>{L("Vazgeç", "Cancel")}</Button>
+        </div>
+      )}
+    </section>
   );
 }
 
@@ -159,7 +197,7 @@ export function DemoLab() {
   );
 }
 
-const PLAN_NAMES: Record<string, string> = { free: "Free", starter: "Plus", pro: "Pro", agency: "Business" };
+const PLAN_NAMES: Record<string, string> = { free: "Free", starter: "Gümüş", altin: "Altın", pro: "Platin", agency: "Elmas" };
 
 /** Yönetici: müşteri çalışma alanları ve ücretsiz paket verme. */
 export function AdminCustomers() {

@@ -7,6 +7,7 @@
 import type { Intent } from "./data";
 import { isEn } from "./i18n";
 import { QUESTION_POOL } from "./question-pool";
+import { EXTRA_POOL } from "./sector-pool-extra";
 
 export interface SectorDef {
   label: string;           // veritabanında saklanan değer (eski kayıtlarla uyumlu)
@@ -641,6 +642,13 @@ export const SECTOR_DEFS_EN: SectorDef[] = [
   ] },
   { label: "Other", local: false, competitors: [], questions: [] },
 ];
+
+// Genişletilmiş soru havuzu (22 Kasım): ek sorular mevcut sorulardan sonra eklenir, aynı metin iki kez girmez.
+for (const def of [...SECTOR_DEFS, ...SECTOR_DEFS_EN]) {
+  const extra = EXTRA_POOL[def.label];
+  if (!extra) continue;
+  for (const q of extra) if (!def.questions.some((x) => x.text === q.text)) def.questions.push(q);
+}
 
 /** Seçim listesi arayüz diline göre; kayıtlı eski değerler iki listede de aranır. */
 /** Seçim listesi alfabetik (19 Kasım); "Diğer" türü genel seçenekler en sonda. */

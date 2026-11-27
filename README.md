@@ -2,7 +2,7 @@
 
 **AI SaaSavran** ([aisaasavran.com](https://aisaasavran.com)) measures how often brands and products are mentioned, recommended
 and cited in ChatGPT, Claude, Perplexity and Gemini answers, compares them with competitors and says what to do next.
-Built in Turkey (2026), for businesses, agencies and creators. Plans: Free, Plus $60, Pro $300, Business $876 a month
+Built in Turkey (2026), for businesses, agencies and creators. Plans: Free, Silver $130, Gold $250, Platinum $400, Diamond $1500 a month
 (14-day money-back). Not affiliated with Savran AI (savran.ai).
 
 **AI SaaSavran** ([aisaasavran.com](https://aisaasavran.com)), markaların ve ürünlerin ChatGPT, Claude, Perplexity ve Gemini

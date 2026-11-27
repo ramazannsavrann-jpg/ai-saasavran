@@ -1,6 +1,6 @@
 # Paket maliyet hesabı
 
-Bu tablo `npm run pricing` ile fiyat kartlarından üretilir (fiyatlar 2026-11-07'de kontrol edildi; OpenAI değerleri gerçek ölçümden). Tablo 18 Kasım 2026 denetiminde `npm run pricing` çıktısıyla yenilendi. Her CI çalışmasında yeniden hesaplanır.
+Bu tablo `npm run pricing` ile fiyat kartlarından üretilir (fiyatlar 2026-11-07'de kontrol edildi; OpenAI değerleri gerçek ölçümden). Tablo 22 Kasım 2026’da güncel paketlerle (kalın satırlar) ve 18 Kasım 2026 denetiminde `npm run pricing` çıktısıyla yenilendi. Her CI çalışmasında yeniden hesaplanır.
 
 ## Sonuç
 
@@ -23,6 +23,10 @@ Bu tablo `npm run pricing` ile fiyat kartlarından üretilir (fiyatlar 2026-11-0
 | Plus + Claude (1 marka, 25 soru) | $20.00 | 542 | $9.84 / %51 | $16.71 / %16 |
 | Pro + Claude (5 marka, 30 soru) | $99.00 | 3250 | $48.71 / %51 | $83.21 / %16 |
 | Business + Claude (15 marka, 30 soru) | $249.00 | 9750 | $140.24 / %44 | $241.23 / %3 |
+| **Gümüş 130 $ (1 marka, 25 soru, 4 motor)** | $130.00 | 650 | $15.84 / %88 | $23.94 / %82 |
+| **Altın 250 $ (3 marka, 30 soru, 4 motor)** | $250.00 | 2340 | $41.29 / %83 | $66.90 / %73 |
+| **Platin 400 $ (5 marka, 30 soru, 4 motor)** | $400.00 | 3900 | $66.82 / %83 | $108.66 / %73 |
+| **Elmas 1500 $ (15 marka, 30 soru, 4 motor)** | $1500.00 | 11700 | $211.96 / %86 | $334.98 / %78 |
 
 Çağrı başı API maliyeti:
 - Tipik: gemini $0.0018, openai $0.0191, claude $0.0191, perplexity $0.0047
@@ -33,6 +37,8 @@ Bu tablo `npm run pricing` ile fiyat kartlarından üretilir (fiyatlar 2026-11-0
 **Gerçek ölçüm (7 Kasım 2026):** ChatGPT (gpt-6-luna + web araması) ile 30 canlı cevap toplam 0,58 $ tuttu: cevap başına ortalama **0,0194 $** (ort. 17.400 girdi / 670 çıktı token, ~1,7 arama). İlk tahmin 0,012 $ idi; arama içeriği token sayısı beklenenden yüksek çıktı. Tablo bu gerçek değerle yeniden hesaplandı.
 
 **Fiyat kararı bekliyor (kullanıcı):** ChatGPT analizinin önerisi "Starter 29 $: 1 marka, 20 soru, ChatGPT + Gemini, haftalık" bu hesapla tipik ~6,5 $, kötü durumda ~11,8 $ maliyet (%77 / %59 brüt marj).
+
+**Soru hakkı (24 Kasım):** Paket kotaları değişmedi (Gümüş 760, Altın 2.520, Platin 4.200, Elmas 12.600 sorgu/ay); yalnız kullanımı bölündü: %30 haftalık otomatik kısa ölçüm, %70 müşterinin istediği zaman başlattığı tam ölçüm. Maliyet üst sınırı aynı kalır.
 
 ## Yorum
 
@@ -56,8 +62,8 @@ Bu tablo `npm run pricing` ile fiyat kartlarından üretilir (fiyatlar 2026-11-0
 
 ## Güncel fiyatlar (12 Kasım 2026, migration 0019)
 
-**Plus 60 $ · Pro 300 $ · Business 876 $** (aylık; 21 Kasım 2026, maliyet×5, Paddle komisyonu dahil). Site ve `engine/src/pricing.ts` bu fiyatları kullanır.
-Limitler ve aylık ücretli harcama tavanları değişmedi (Plus 9 $, Pro 50 $, Business 150 $). Aşağıdaki
+**Gümüş 130 $ · Altın 250 $ · Platin 400 $ · Elmas 1500 $** (aylık; 22 Kasım 2026 sahip onayı, migration 0062 ve 0063). Free: ayda 1 ölçüm (Gemini, aramasız). Önceki 60 / 300 / 876 $ ve Free 4 ölçüm yerine geçti. **Paddle (canlı, 22 Kasım 2026):** dört paketin ürün ve aylık fiyatı Paddle canlı ortamında oluşturuldu (`scripts/paddle-setup.mjs`, CI); site bu fiyat kimlikleriyle satış yapıyor. Sahip kararı: ödemeler canlı kalır.
+Ücretli harcama tavanları (aylık, sahip onayı 22 Kasım 2026): Gümüş 45 $, Altın 100 $, Platin 250 $, Elmas 750 $. Altın paketi (migration 0063): 3 marka, marka başı 30 soru, 6 rakip, aylık 2.520 çağrı (0065; ihtiyaç 2.340 + %8 pay), ChatGPT + Claude + Perplexity + Gemini. Kota ve tavan birlikte harcamayı sınırlar. Aşağıdaki
 7 Kasım tablosundaki 20 / 99 / 249 $ fiyatları **eskidir**; yalnız geçmiş kayıt olarak duruyor.
 
 ## Eski karar (7 Kasım 2026): ChatGPT tarzı paketler
@@ -67,7 +73,7 @@ Kurucunun isteğiyle paket yapısı ChatGPT'ye benzetildi: Free / Plus / Pro / B
 
 | Paket | Fiyat/ay | Marka × soru | Rakip | Aylık cevap kotası | Motorlar | Ücretli tavan | ChatGPT maliyeti (tipik / kötü) | Tipik brüt kâr |
 |---|---|---|---|---|---|---|---|---|
-| Free | 0 $ | 1 × 15 (haftada 1 tekrar), **ayda en fazla 4 ölçüm** (migration 0008) | 3 | 100 | Gemini aramasız (ücretsiz katman) | 0 $ | 0 $ | — |
+| Free | 0 $ | 1 × 15 (haftada 1 tekrar), **ayda 1 ölçüm** (migration 0062; önce 4, 0008) | 3 | 100 | Gemini aramasız (ücretsiz katman) | 0 $ | 0 $ | — |
 | Plus | 20 $ | 1 × 25 (haftada 2 tekrar) | 5 | 520 | ChatGPT canlı + Gemini | 9 $ | 4,1 $ / 5,5 $ | %65 |
 | Pro | 99 $ | 5 × 30 | 8 | 3.000 | ChatGPT canlı + Gemini | 50 $ | 24,8 $ / 33,2 $ | %65 |
 | Business | 249 $ | 15 × 30 | 10 | 9.000 | ChatGPT canlı + Gemini | 150 $ | 74,4 $ / 99,5 $ | %60 |
