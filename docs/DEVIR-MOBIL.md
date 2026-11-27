@@ -54,6 +54,15 @@ Sahibi yalnız Android telefon kullanıyor: her adımı tek tek, kopyala-yapış
   - Finansal verileri görüntüleme
   - Siparişleri ve abonelikleri yönetme
 
+## 27 Kasım güncellemesi (diğer hesap)
+- Play API açıldı; `google-ayar-kontrol.yml`: "Play Console izni: tamam", 3 abonelik + 3 tek seferlik ürün görünüyor.
+- Lisans testi: "Ben" listesi, RESPOND_NORMALLY (kayıtlı).
+- 1.0.6 (versionCode 6) dahili teste yüklendi, telefonda güncellendi.
+- Satın alma denemesi BAŞARILI: "Deneme" alanında Altın, `store_subscriptions` satırı aktif, alan planı `altin`, billing_source `google_play`.
+- Bulunan hata: Hesap → Paketler'de fiyatlar bazen yüklenmiyordu (fiyat yükleme ile sessiz geri yükleme aynı anda başlıyordu). Düzeltme 1.0.7'de: Google işlemleri sırayla, 3 deneme, "Tekrar dene" düğmesi.
+- Play Console doğrudan linkler: geliştirici `5791632814804133447`, uygulama `4974474551224946811`. Örnek: `https://play.google.com/console/u/0/developers/5791632814804133447/app/4974474551224946811/tracks/internal-testing`
+- Önerilen: hizmet hesabına "Test kanallarına sürüm yayınlama" izni → .aab dahili teste otomatik yüklenir.
+
 ## Açık işler (sırayla)
 
 1. **Play API kapalı (bulundu, 25 Kasım 11:30).** Kontrolün çıktısı: "Google Play Android Developer API has not been used in project 116306409430 or it is disabled". İzinler doğru; eksik olan, Google Cloud'da API'nin açılması. API ücretsiz, faturalandırma gerektirmez. Sahibin açması gerekiyor, link:

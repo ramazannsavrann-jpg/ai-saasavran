@@ -15,8 +15,28 @@ export const PACKS = [{ id: "ek_250", credits: 250 }, { id: "ek_500", credits: 5
 
 export interface StorePrices { subs: Record<string, Product>; packs: Record<string, Product> }
 
+// Google Play işlemleri sırayla çalışır: Paketler ekranında fiyat yükleme ile sessiz geri yükleme
+// aynı anda başlayınca bağlantı çakışıp fiyatlar boş dönüyordu (27 Kasım, Hesap → Paketler).
+let queue: Promise<unknown> = Promise.resolve();
+function serial<T>(f: () => Promise<T>): Promise<T> {
+  const run = queue.then(f, f);
+  queue = run.catch(() => undefined);
+  return run;
+}
+const wait = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+/** Fiyatları yükler; geçici hata ya da boş cevapta 2 kez daha dener. */
 export async function loadPrices(): Promise<StorePrices | null> {
   if (!STORE_AVAILABLE) return null;
+  for (let i = 0; i < 3; i++) {
+    const r = await serial(loadPricesOnce).catch(() => null);
+    if (r && Object.keys(r.subs).length > 0) return r;
+    if (i < 2) await wait(1500);
+  }
+  return null;
+}
+
+async function loadPricesOnce(): Promise<StorePrices | null> {
   const ok = await NativePurchases.isBillingSupported().then((x) => x.isBillingSupported).catch(() => false);
   if (!ok) return null;
   const [s, p] = await Promise.all([
@@ -67,6 +87,10 @@ export async function buyPack(product: Product, workspace: string): Promise<stri
  */
 export async function restore(workspace: string, silent = false): Promise<number> {
   if (!STORE_AVAILABLE) return 0;
+  return serial(() => restoreOnce(workspace, silent));
+}
+
+async function restoreOnce(workspace: string, silent: boolean): Promise<number> {
   let n = 0;
   for (const [type, kind] of [[PURCHASE_TYPE.SUBS, "sub"], [PURCHASE_TYPE.INAPP, "pack"]] as const) {
     const { purchases } = await NativePurchases.getPurchases({ productType: type, appAccountToken: workspace });
