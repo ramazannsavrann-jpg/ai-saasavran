@@ -61,7 +61,8 @@ Sahibi yalnız Android telefon kullanıyor: her adımı tek tek, kopyala-yapış
 - Satın alma denemesi BAŞARILI: "Deneme" alanında Altın, `store_subscriptions` satırı aktif, alan planı `altin`, billing_source `google_play`.
 - Bulunan hata: Hesap → Paketler'de fiyatlar bazen yüklenmiyordu (fiyat yükleme ile sessiz geri yükleme aynı anda başlıyordu). Düzeltme 1.0.7'de: Google işlemleri sırayla, 3 deneme, "Tekrar dene" düğmesi.
 - Play Console doğrudan linkler: geliştirici `5791632814804133447`, uygulama `4974474551224946811`. Örnek: `https://play.google.com/console/u/0/developers/5791632814804133447/app/4974474551224946811/tracks/internal-testing`
-- Önerilen: hizmet hesabına "Test kanallarına sürüm yayınlama" izni → .aab dahili teste otomatik yüklenir.
+- Otomatik Play yüklemesi (27 Kas): `mobil-android.yml` main'de her sürümü dahili teste yükler (`scripts/android/play-upload.mjs`); eldeki sürümü tekrar yüklemek için `play-yukle.yml`. Üretim kanalına yüklemez.
+- Gerekli izin: hizmet hesabına "Test kanallarına sürüm yayınlama" izni → .aab dahili teste otomatik yüklenir.
 
 ## Açık işler (sırayla)
 

@@ -67,6 +67,14 @@ jobs:
           cp app/build/outputs/bundle/release/*.aab "$RUNNER_TEMP/out/AI-SaaSavran-${{ github.run_number }}.aab"
           cp app/build/outputs/apk/release/*.apk "$RUNNER_TEMP/out/AI-SaaSavran-${{ github.run_number }}.apk"
           rm -f "$RUNNER_TEMP/upload.keystore" "$RUNNER_TEMP/signing.env"
+      - name: Google Play dahili teste yükle (main)
+        # Hizmet hesabının "Test kanallarına sürüm yayınlama" izni gerekir; izin yoksa sürüm yine GitHub'a çıkar
+        if: github.ref == 'refs/heads/main'
+        continue-on-error: true
+        env:
+          GOOGLE_SERVICE_ACCOUNT: ${{ secrets.GOOGLE_SERVICE_ACCOUNT }}
+          RELEASE_NOTES_TR: "Hata düzeltmeleri ve iyileştirmeler."
+        run: node scripts/android/play-upload.mjs "$RUNNER_TEMP/out/AI-SaaSavran-${{ github.run_number }}.aab" internal
       - name: Sürüm yayınla (telefondan indirilebilir)
         env:
           GH_TOKEN: ${{ github.token }}
