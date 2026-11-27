@@ -1,0 +1,414 @@
+{
+ "name": "uzun4-soru",
+ "lang": "tr",
+ "voice": "Charon",
+ "atempo": 1.06,
+ "music_vol": 0.22,
+ "footer": "Bunlar yapay zekânın cevaplarıdır · 19–22 Kasım 2026 · Canlı arama: ChatGPT, Claude, Perplexity · Gemini hafızadan · Örneklem sınırlı",
+ "scenes": [
+  {
+   "type": "stats",
+   "tag": "Yapay zekâ araştırması",
+   "title": "Soruyu değiştir, kazanan değişsin",
+   "sub": "Aynı kategori, farklı soru: yapay zekânın önerdiği marka değişiyor",
+   "items": [
+    [
+     "6/6",
+     "Arçelik · “Servisi ve yedek parçası en kolay bulunan marka?”",
+     "acc"
+    ],
+    [
+     "0/6",
+     "Arçelik · “Telefondan kontrol edilen akıllı makine?”",
+     "red"
+    ],
+    [
+     "6",
+     "farklı kazanan · 12 çamaşır makinesi sorusunda",
+     "gold"
+    ]
+   ],
+   "say": "Yapay zekâya hangi çamaşır makinesini almalıyım diye sorduğunuzda tek bir doğru cevap yok. Soruyu nasıl kurduğunuz, kazananı değiştiriyor. Servisi ve yedek parçası en kolay bulunan marka sorulunca, Arçelik altı cevabın altısında önerildi. Telefondan kontrol edilen akıllı makine sorulunca, altı cevabın hiçbirinde. On iki soruda tam altı farklı marka birinci oldu. Ölçümler Kasım ayında yapıldı. Bu videoda bunun çamaşır makinesinde ve akıllı yüzükte nasıl olduğuna, yapay zekânın hangi sitelere baktığına ve markanızın hangi soruda kaybettiğini nasıl görebileceğinize bakıyoruz."
+  },
+  {
+   "type": "table",
+   "tag": "Çamaşır makinesi · Türkiye",
+   "title": "Soru başına kazanan",
+   "cols": [
+    "Soru (özet)",
+    "En çok önerilen",
+    "Arçelik"
+   ],
+   "widths": [
+    800,
+    620,
+    320
+   ],
+   "rows": [
+    [
+     "Servis ve yedek parça kolaylığı",
+     "Arçelik + Beko · 6/6",
+     "6/6"
+    ],
+    [
+     "Uzun ömür, az arıza",
+     "Bosch + Siemens · 5/6",
+     "1/6"
+    ],
+    [
+     "Fiyat performans",
+     "Beko · 5/6",
+     "1/6"
+    ],
+    [
+     "Sessiz çalışma",
+     "Bosch · 6/6",
+     "1/6"
+    ],
+    [
+     "Telefondan kontrol (akıllı)",
+     "LG · 6/6",
+     "0/6"
+    ],
+    [
+     "Yerli mi yabancı mı?",
+     "Vestel · 5/6",
+     "4/6"
+    ]
+   ],
+   "note": "Her soru 6 cevap (3 yapay zekâ × 2), örneklem sınırlı. Gemini (hafızadan, 20 cevap): Bosch 18, Arçelik 16, Beko 16.",
+   "say": "Yöntem şöyle. Türkiye'den on iki gerçek alıcı sorusu sorduk; sorularda marka adı yok. Çet Ci Pi Ti, Claude ve Perplexity internette canlı arama yaparak her soruya ikişer kez cevap verdi; yani her soru için altı cevap. Gemini'ye ayrıca, aramasız, hafızasıyla sorduk. Sonuç: servis sorulunca Arçelik ve Beko. Uzun ömür ve az arıza sorulunca Boş ve Simens. Fiyat performansta Beko. Sessizlikte Boş. Telefondan kontrol edilen akıllı makinede El Ci. Yerli mi yabancı mı diye sorunca da Vestel öne çıktı. Her soruda altı cevap var, örneklem sınırlıdır; ama tablo net: kazanan, sorunun içindeki birkaç kelimeyle değişiyor."
+  },
+  {
+   "type": "bars",
+   "tag": "Örnek 1",
+   "title": "Aynı marka, farklı sonuç",
+   "sub": "Arçelik'i öneren cevap sayısı (soru başına 6 canlı cevap)",
+   "max": 6,
+   "labelw": 620,
+   "rows": [
+    [
+     "Servis ve yedek parça",
+     6,
+     "acc",
+     "6/6"
+    ],
+    [
+     "Yerli mi yabancı mı?",
+     4,
+     "acc",
+     "4/6"
+    ],
+    [
+     "Kurutmalı makine",
+     3,
+     "gold",
+     "3/6"
+    ],
+    [
+     "Fiyat performans",
+     1,
+     "red",
+     "1/6"
+    ],
+    [
+     "Uzun ömür, az arıza",
+     1,
+     "red",
+     "1/6"
+    ],
+    [
+     "Sessiz çalışma",
+     1,
+     "red",
+     "1/6"
+    ],
+    [
+     "Telefondan kontrol",
+     0,
+     "red",
+     "0/6"
+    ]
+   ],
+   "note": "Toplam 72 canlı cevap: Bosch 43 · Beko 32 · LG 28 · Arçelik 26",
+   "say": "Şimdi tek bir markaya yakından bakalım. Arçelik, servis sorusunda altı cevabın altısında önerildi; yerli mi yabancı mı sorusunda dördünde. Ama uzun ömür, sessizlik ve fiyat performans sorulunca yalnızca birer kez; telefondan kontrol edilen akıllı makinede hiç. Kurutmalı makine sorusunda üç. Toplamda yetmiş iki cevabın yirmi altısında önerildi; Boş kırk üç, Beko otuz iki cevapla önde. Yorumumuz şu: yapay zekâ Arçelik'i yaygın servis ağıyla eşleştiriyor olabilir; sessizlik ya da akıllı özellik sorulunca başka markalara yöneliyor. Bu bir gözlem; nedenini kesin olarak bilmiyoruz."
+  },
+  {
+   "type": "bars",
+   "tag": "Örnek 2",
+   "title": "Akıllı yüzükte de aynısı",
+   "sub": "Oura'yı öneren cevap sayısı, Türkiye (soru başına 6 canlı cevap)",
+   "max": 6,
+   "labelw": 820,
+   "rows": [
+    [
+     "Uyku takibi",
+     6,
+     "acc",
+     "6/6"
+    ],
+    [
+     "Türkiye'de en iyi yüzük",
+     6,
+     "acc",
+     "6/6"
+    ],
+    [
+     "Hediye",
+     6,
+     "acc",
+     "6/6"
+    ],
+    [
+     "Pil ömrü · 1.: Ultrahuman 5/6",
+     2,
+     "red",
+     "2/6"
+    ],
+    [
+     "Bütçe dostu · 1.: RingConn 3/6",
+     2,
+     "red",
+     "2/6"
+    ],
+    [
+     "Aboneliksiz · 1.: RingConn 6/6",
+     1,
+     "red",
+     "1/6"
+    ]
+   ],
+   "note": "ABD'de aynı sorular İngilizce: abonelik ve pil sorularında Oura 0/6.",
+   "say": "Bu yalnız çamaşır makinesine özgü değil. Akıllı yüzükte, Türkiye'den sorduğumuz sorularda Oura; uyku takibi, hediye ve Türkiye'de en iyi yüzük sorularında altı cevabın altısında önerildi. Ama soruya aylık abonelik ücreti olmayan ifadesi girince Oura yalnızca bir kez önerildi; aynı soruda Rink Kon altıda altı. Pil ömrü sorulunca Oura iki, Ultra Hyumın beş. Amerika'da aynı soruları İngilizce sorduğumuzda da tablo benzerdi: abonelik ve pil sorularında Oura altı cevabın hiçbirinde önerilmedi. Yani müşteri hangi özelliği soruyorsa, yapay zekâ o özellikte öne çıkan markayı öneriyor gibi görünüyor; markanın genel ünü o kelimenin önüne geçmiyor."
+  },
+  {
+   "type": "net",
+   "tag": "Kaynaklar",
+   "title": "Yapay zekâ nereye bakıyor?",
+   "sub": "Çamaşır makinesi · çizgi = o siteyi kaynak gösterip markayı anan cevap sayısı",
+   "left": [
+    [
+     "eniyilerden.com",
+     15
+    ],
+    [
+     "indirimist.com",
+     12
+    ],
+    [
+     "bosch-home.com.tr",
+     10
+    ],
+    [
+     "samsung.com",
+     7
+    ],
+    [
+     "iyioneri.tr",
+     7
+    ],
+    [
+     "tuketicidergisi.com.tr",
+     6
+    ]
+   ],
+   "right": [
+    "Bosch",
+    "Beko",
+    "LG",
+    "Arçelik",
+    "Samsung"
+   ],
+   "links": [
+    [
+     0,
+     0,
+     12
+    ],
+    [
+     0,
+     1,
+     11
+    ],
+    [
+     0,
+     2,
+     9
+    ],
+    [
+     0,
+     3,
+     7
+    ],
+    [
+     0,
+     4,
+     12
+    ],
+    [
+     1,
+     0,
+     11
+    ],
+    [
+     1,
+     1,
+     9
+    ],
+    [
+     1,
+     2,
+     7
+    ],
+    [
+     1,
+     3,
+     5
+    ],
+    [
+     1,
+     4,
+     9
+    ],
+    [
+     2,
+     0,
+     10
+    ],
+    [
+     2,
+     1,
+     2
+    ],
+    [
+     2,
+     2,
+     4
+    ],
+    [
+     2,
+     3,
+     4
+    ],
+    [
+     2,
+     4,
+     3
+    ],
+    [
+     3,
+     0,
+     6
+    ],
+    [
+     3,
+     1,
+     2
+    ],
+    [
+     3,
+     2,
+     4
+    ],
+    [
+     3,
+     3,
+     4
+    ],
+    [
+     3,
+     4,
+     7
+    ],
+    [
+     4,
+     0,
+     5
+    ],
+    [
+     4,
+     1,
+     4
+    ],
+    [
+     4,
+     2,
+     4
+    ],
+    [
+     4,
+     3,
+     1
+    ],
+    [
+     4,
+     4,
+     6
+    ],
+    [
+     5,
+     0,
+     5
+    ],
+    [
+     5,
+     1,
+     3
+    ],
+    [
+     5,
+     2,
+     4
+    ],
+    [
+     5,
+     3,
+     1
+    ],
+    [
+     5,
+     4,
+     4
+    ]
+   ],
+   "note": "Markanın kendi sitesi kaynak olarak (72 cevap): bosch-home.com.tr 10 · arcelik.com.tr 4 · beko.com.tr 1",
+   "say": "Peki yapay zekâ bu cevapları verirken nereye bakıyor? En çok kaynak gösterilen siteler, en iyiler listesi yayınlayan Türk siteleri: eniyilerden ve indirimist. Üçüncü sırada dikkat çekici bir site var: Boş'un kendi Türkiye sitesi, yetmiş iki cevabın onunda kaynak gösterildi. Arçelik'in sitesi dört, Beko'nun sitesi bir cevapta. Listede bir tüketici dergisi ve marka siteleri de var; yapay zekâ birkaç sitenin listesini birleştirip cevabını kuruyor gibi görünüyor. Markanın kendi sayfasının kaynak olması önerilmeyi garanti etmez; ama yapay zekânın okuyabildiği, soruya doğrudan cevap veren bir sayfanın işe yarayabileceğini düşündürüyor."
+  },
+  {
+   "type": "cond",
+   "tag": "Özellik: Koşullu Görünürlük Haritası",
+   "title": "Hangi koşulda görünüyorsunuz?",
+   "sub": "Gerçek örnek: Arçelik, çamaşır makinesi ölçümü (22 Kasım, 72 canlı cevap)",
+   "panel": "Hangi koşulda görünüyorsunuz",
+   "panel_sub": "Müşterinin ne yaptığına göre önerilme oranı. 20 cevabın altındaki gruplar işaretlidir; onlardan sonuç çıkarmayın.",
+   "note": "Uygulamada marka panelinde · son 4 ölçümün toplamı · sorulara etiket eklenirse etiketlere göre de gösterilir",
+   "rows": [
+    {
+     "label": "Karşılaştırıyor",
+     "pct": "%61",
+     "detail": "18 cevabın 11 tanesinde önerildiniz, aralık %39–%80; en çok önerilen rakip: Beko.",
+     "low": "Örneklem küçük: bu grupta daha fazla soru ekleyin."
+    },
+    {
+     "label": "Satın almaya hazırlanıyor",
+     "pct": "%28",
+     "detail": "54 cevabın 15 tanesinde önerildiniz, aralık %18–%41; en çok önerilen rakip: Bosch."
+    }
+   ],
+   "say": "Kendi markanız için bunu nasıl görürsünüz? Panelimizdeki Koşullu Görünürlük Haritası, sorularınızı müşterinin ne yaptığına göre gruplar: karşılaştırıyor, satın almaya hazırlanıyor, bilgi arıyor gibi. Her grupta önerilme oranını, güven aralığını ve o grupta en çok önerilen rakibi gösterir. Gerçek örnek: Arçelik ölçümünde, karşılaştırma sorularında on sekiz cevabın on birinde önerildi; en çok önerilen rakip Beko. Satın almaya hazırlanan müşterinin sorularında ise elli dört cevabın yalnızca on beşinde; orada en çok önerilen rakip Boş. Yirmi cevabın altındaki gruplar işaretlenir; küçük örneklemden sonuç çıkarmayın diye. Sorularınıza ucuz, premium ya da ülke gibi kendi etiketlerinizi ekleyip aynı karşılaştırmayı etiketlere göre de görebilirsiniz."
+  },
+  {
+   "type": "cta2",
+   "tag": "Ne yapmalı?",
+   "title": "Markanız hangi soruda kayboluyor?",
+   "free": "Ücretsiz kontrol edin",
+   "sub": "Bağımsız ölçüm · Tüm pazarı temsil etmez · Hiçbir markayla iş birliğimiz yoktur",
+   "points": [
+    "Tek soruyla ölçmeyin: servis, fiyat, özellik gibi farklı niyetleri ayrı ayrı sorun.",
+    "Kaybettiğiniz soruda kimin kazandığını ve yapay zekânın hangi siteye baktığını bulun.",
+    "O soruya doğrudan cevap veren bir sayfa hazırlayın; birkaç hafta sonra yeniden ölçün."
+   ],
+   "say": "Peki ne yapmalı? Bir: markanızı tek bir soruyla ölçmeyin; müşterinin servis, fiyat, özellik gibi farklı niyetlerini ayrı ayrı sorun. İki: kaybettiğiniz soruda kim kazanıyor ve yapay zekâ hangi siteye bakıyor, onu bulun. Üç: o soruya doğrudan cevap veren bir sayfa hazırlayın ve birkaç hafta sonra yeniden ölçün. Yapay zekâ markanızı hangi soruda öneriyor, hangisinde yerinize başkasını? Ücretsiz kontrol edin."
+  }
+ ]
+}

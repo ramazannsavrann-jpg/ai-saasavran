@@ -137,6 +137,34 @@ def s_cta(sc, t):
     s2 = sc.get("free", ""); f2 = font("SemiBold", 40); d.text(((W - d.textlength(s2, font=f2)) / 2, y + 180), s2, font=f2, fill=mix(ACC, a))
     if sc.get("disc"): text(d, sc["disc"], font("Medium", 26), X0, H - 170, mix(MUTED, ease((t - 1.0) / 0.5)), XR - X0)
     return im
+def s_cta2(sc, t):
+    """Ne yapmalı + kapanış (27 Kasım): numaralı maddeler, altta site kutusu (seste site adı yok)."""
+    im, d, y = base(sc, t)
+    for i, pt in enumerate(sc.get("points", [])):
+        a = ease((t - 0.4 - i * 0.6) / 0.5)
+        d.ellipse([X0, y + 2, X0 + 50, y + 52], fill=mix(GREEN, a)); f = font("Bold", 30); s = str(i + 1)
+        d.text((X0 + 25 - d.textlength(s, font=f) / 2, y + 9), s, font=f, fill=mix(INK, a))
+        y = text(d, pt, font("SemiBold", 34), X0 + 76, y + 4, mix(INK, a), XR - X0 - 90, 1.22) + 22
+    a = ease((t - 2.4) / 0.5); bw = 760; bx = (W - bw) / 2; by = max(y + 10, H - 330)
+    d.rounded_rectangle([bx, by, bx + bw, by + 110], radius=26, fill=mix(GREEN, a)); f = font("ExtraBold", 60); s = "aisaasavran.com"
+    d.text(((W - d.textlength(s, font=f)) / 2, by + 22), s, font=f, fill=mix((255, 255, 255), a))
+    s2 = sc.get("free", ""); f2 = font("SemiBold", 34); d.text(((W - d.textlength(s2, font=f2)) / 2, by + 124), s2, font=f2, fill=mix(ACC, a))
+    return im
+def s_cond(sc, t):
+    """Koşullu Görünürlük Haritası (uygulamadaki #kosul-haritasi paneli): grup, oran, açıklama, küçük örneklem notu."""
+    im, d, y = base(sc, t); a0 = ease((t - 0.3) / 0.5)
+    d.rounded_rectangle([X0, y, XR, H - 110], radius=24, fill=mix(CARD, a0))
+    yy = y + 26; d.text((X0 + 40, yy), sc["panel"], font=font("Bold", 38), fill=mix(INK, a0)); yy += 54
+    yy = text(d, sc["panel_sub"], font("Medium", 26), X0 + 40, yy, mix(MUTED, a0), XR - X0 - 80) + 18
+    for i, r in enumerate(sc["rows"]):
+        a = ease((t - 0.9 - i * 0.8) / 0.5)
+        d.line([(X0 + 40, yy), (XR - 40, yy)], fill=mix(BAR_BG, a), width=2); yy += 20
+        d.text((X0 + 40, yy), r["label"], font=font("Bold", 40), fill=mix(INK, a)); rtext(d, XR - 40, yy - 4, r["pct"], font("ExtraBold", 50), mix(GOLD if i == 0 else ACC, a)); yy += 62
+        yy = text(d, r["detail"], font("Medium", 30), X0 + 40, yy, mix(MUTED, a), XR - X0 - 80, 1.25) + 6
+        if r.get("low"): yy = text(d, r["low"], font("SemiBold", 28), X0 + 40, yy, mix(RED, a), XR - X0 - 80) + 6
+        yy += 16
+    if sc.get("note"): text(d, sc["note"], font("Medium", 26), X0 + 40, H - 160, mix(MUTED, ease((t - 2.6) / 0.5)), XR - X0 - 80)
+    return im
 def s_loss(sc, t):
     """Kayıp Nedeni Kartı (uygulamadaki LossCardView düzeni): soru, hedef sonucu, kanıt satırları, alt not."""
     im, d, y = base(sc, t); x1 = XR; a0 = ease((t - 0.3) / 0.5)
@@ -149,7 +177,7 @@ def s_loss(sc, t):
         yy = text(d, ln[0], font("Medium", 31), X0 + 76, yy, mix(INK, a), x1 - X0 - 120, 1.25) + 12
     if sc.get("note"): text(d, sc["note"], font("Medium", 26), X0 + 40, H - 170, mix(MUTED, ease((t - 2.6) / 0.5)), x1 - X0 - 80)
     return im
-FN = {"title": s_title, "stats": s_stats, "bars": s_bars, "table": s_table, "net": s_net, "boxes": s_boxes, "cta": s_cta, "loss": s_loss}
+FN = {"title": s_title, "stats": s_stats, "bars": s_bars, "table": s_table, "net": s_net, "boxes": s_boxes, "cta": s_cta, "loss": s_loss, "cta2": s_cta2, "cond": s_cond}
 
 def audio(i):
     for ext in ("pcm", "mp3"):
