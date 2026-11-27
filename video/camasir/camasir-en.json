@@ -1,0 +1,409 @@
+{
+ "tema": "sicak",
+ "order": [
+  "s1",
+  "names",
+  "s2",
+  "s3",
+  "s4",
+  "shop",
+  "net",
+  "s8"
+ ],
+ "gruplar": "0,1,2|3|4,5,6|7|8,9|10,11|12,13|14,15",
+ "names_list": [
+  "Arçelik",
+  "Beko",
+  "Bosch",
+  "LG",
+  "Samsung",
+  "Siemens",
+  "Vestel"
+ ],
+ "brands": [
+  [
+   "Bosch",
+   54
+  ],
+  [
+   "LG",
+   34
+  ],
+  [
+   "Beko",
+   33
+  ],
+  [
+   "Samsung",
+   33
+  ],
+  [
+   "Arçelik",
+   30
+  ],
+  [
+   "Siemens",
+   25
+  ],
+  [
+   "Vestel",
+   18
+  ]
+ ],
+ "engines": [
+  [
+   "ChatGPT"
+  ],
+  [
+   "Claude"
+  ],
+  [
+   "Perplexity"
+  ],
+  [
+   "Gemini"
+  ]
+ ],
+ "eng_rows": [
+  [
+   "Bosch",
+   15,
+   20,
+   19,
+   20
+  ],
+  [
+   "Arçelik",
+   11,
+   12,
+   7,
+   16
+  ],
+  [
+   "Beko",
+   6,
+   18,
+   9,
+   16
+  ],
+  [
+   "Vestel",
+   1,
+   15,
+   2,
+   5
+  ]
+ ],
+ "net": {
+  "left": [
+   [
+    "eniyilerden.com",
+    15
+   ],
+   [
+    "indirimist.com",
+    12
+   ],
+   [
+    "bosch-home.com.tr",
+    10
+   ],
+   [
+    "samsung.com",
+    7
+   ],
+   [
+    "iyioneri.tr",
+    7
+   ],
+   [
+    "tuketicidergisi.com.tr",
+    6
+   ]
+  ],
+  "right": [
+   "Bosch",
+   "Beko",
+   "Arçelik",
+   "Vestel"
+  ],
+  "links": [
+   [
+    0,
+    0,
+    12
+   ],
+   [
+    0,
+    1,
+    11
+   ],
+   [
+    0,
+    2,
+    7
+   ],
+   [
+    0,
+    3,
+    9
+   ],
+   [
+    1,
+    0,
+    11
+   ],
+   [
+    1,
+    1,
+    9
+   ],
+   [
+    1,
+    2,
+    5
+   ],
+   [
+    1,
+    3,
+    9
+   ],
+   [
+    2,
+    0,
+    10
+   ],
+   [
+    2,
+    1,
+    2
+   ],
+   [
+    2,
+    2,
+    4
+   ],
+   [
+    2,
+    3,
+    1
+   ],
+   [
+    3,
+    0,
+    6
+   ],
+   [
+    3,
+    1,
+    2
+   ],
+   [
+    3,
+    2,
+    4
+   ],
+   [
+    3,
+    3,
+    2
+   ],
+   [
+    4,
+    0,
+    5
+   ],
+   [
+    4,
+    1,
+    4
+   ],
+   [
+    4,
+    2,
+    1
+   ],
+   [
+    4,
+    3,
+    5
+   ],
+   [
+    5,
+    0,
+    5
+   ],
+   [
+    5,
+    1,
+    3
+   ],
+   [
+    5,
+    2,
+    1
+   ],
+   [
+    5,
+    3,
+    4
+   ]
+  ]
+ },
+ "t": {
+  "hook": "Which washing machine does AI pick in Turkey?",
+  "hook2": "Turkey data · 7 brands · 12 buyer questions",
+  "names_title": "Brands we tracked",
+  "tag_brands": "Brands mentioned",
+  "who": "Who got named?",
+  "who_sub": "ChatGPT + Claude + Perplexity, 72 live-search answers (Turkey)",
+  "tag_eng": "AI vs AI",
+  "eng": "The AIs disagree on Vestel",
+  "eng_sub": "Answers naming the brand · live: 24 each · Gemini from memory: 20",
+  "tag_q": "By question",
+  "byq": "Change the question, the winner changes",
+  "byq_sub": "Answers naming the brand (6 per question) · orange = winner changed",
+  "tag_net": "Source network",
+  "net": "Where does AI look?",
+  "net_sub": "Line width = answers citing the site and naming the brand",
+  "net_note": "bosch-home.com.tr cited in 10 answers; arcelik.com.tr 4, beko.com.tr 1.",
+  "cta": "What does AI say about your brand?",
+  "cta2": "Track it weekly on ChatGPT, Gemini, Claude and Perplexity.",
+  "free": "Free check, no sign-up",
+  "disc": "AI answers from Nov 19–22, 2026 (Turkey, questions in Turkish). 72 live-search answers (ChatGPT, Claude, Perplexity; 12 questions × 2) and 20 Gemini answers from memory. Google Shopping: Nov 27, 2026, Turkey. Small sample, not representative of the whole market. Not advice. Names belong to their owners.",
+  "tag_shop": "Google Shopping (Turkey)",
+  "shop": "AI vs Google Shopping",
+  "shop_sub": "Search: \"çamaşır makinesi\" (washing machine) · first listing per brand",
+  "shop_col_ai": "AI rank",
+  "shop_col_shop": "Shopping",
+  "shop_note": "The top 20 also includes untracked brands: Profilo, Grundig, Electrolux.",
+  "eng_note": "Every question was asked twice to each AI.",
+  "names_sub": "Alphabetical",
+  "note": "These are the AI's answers."
+ },
+ "gemini_label": "From memory",
+ "footer": "ChatGPT, Claude, Perplexity: live web search (Turkey) · Gemini: from memory · Nov 22, 2026",
+ "questions": [
+  [
+   "Easiest service and spare parts?",
+   [
+    [
+     "Arçelik",
+     "6/6",
+     true
+    ],
+    [
+     "Beko",
+     "6/6",
+     true
+    ]
+   ]
+  ],
+  [
+   "Smart, app-controlled machine?",
+   [
+    [
+     "LG",
+     "6/6",
+     true
+    ],
+    [
+     "Arçelik",
+     "1/6",
+     false
+    ]
+   ]
+  ],
+  [
+   "Quietest machine?",
+   [
+    [
+     "Bosch",
+     "6/6",
+     false
+    ],
+    [
+     "Beko",
+     "2/6",
+     false
+    ]
+   ]
+  ],
+  [
+   "Long-lasting, fewest breakdowns?",
+   [
+    [
+     "Bosch",
+     "6/6",
+     false
+    ],
+    [
+     "Siemens",
+     "5/6",
+     true
+    ]
+   ]
+  ]
+ ],
+ "rm": {
+  "kanca": {
+   "ust": "In {n} ChatGPT answers,",
+   "ana": "Vestel came up",
+   "alt": "how many times?",
+   "n": 24,
+   "deger": 1
+  },
+  "baslik_vurgu": "washing machine",
+  "kanca_marka": "Vestel",
+  "canli_motor": 3,
+  "soru_sayisi": 12,
+  "motor_vurgu": "Vestel",
+  "soru_kelime": {
+   "0": "service",
+   "1": "app"
+  },
+  "kapak_sahne": 0,
+  "kart": [
+   "s1",
+   "s2",
+   "s3",
+   "shop",
+   "net"
+  ],
+  "toplam": 72
+ },
+ "shop": {
+  "rows": [
+   [
+    "Bosch",
+    "1.",
+    "1.",
+    false
+   ],
+   [
+    "LG",
+    "2.",
+    "15.",
+    false
+   ],
+   [
+    "Beko",
+    "3.",
+    "8.",
+    false
+   ],
+   [
+    "Arçelik",
+    "5.",
+    "20.",
+    true
+   ],
+   [
+    "Vestel",
+    "7.",
+    "—",
+    true
+   ]
+  ]
+ }
+}
