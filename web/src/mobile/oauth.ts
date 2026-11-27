@@ -27,16 +27,31 @@ export async function googleSignIn(): Promise<void> {
   await Browser.open({ url: data.url, presentationStyle: "popover" });
 }
 
-/** Uygulama açılışında bir kez: dönüş adresini dinler. onDone(hata) — hata yoksa oturum açıldı. */
+/** Uygulama açılışında bir kez: dönüş adresini dinler. onDone(hata) — hata yoksa oturum açıldı.
+ *  Uygulama Google'dan dönerken kapalıydıysa (telefon belleği boşaltmışsa) adres "appUrlOpen" ile değil açılış adresi
+ *  (getLaunchUrl) olarak gelir; ikisi de aynı işleyiciden geçer, aynı kod iki kez işlenmez. */
 export function initOAuthReturn(onDone: (err: string | null) => void): (() => void) | undefined {
   if (!GOOGLE_AVAILABLE) return undefined;
-  const h = App.addListener("appUrlOpen", async ({ url }) => {
+  let alive = true;
+  const handle = async (url: string | undefined) => {
+    if (!url || !alive) return;
     const r = parseOAuthReturn(url);
     if (!r) return;
+    const key = r.code ?? r.error ?? url;
+    if (handled.has(key) || lastHandled() === key) return;
+    handled.add(key); saveHandled(key);
     await Browser.close().catch(() => undefined);
     if (r.error || !r.code) { onDone(r.error ?? "oauth_no_code"); return; }
     const { error } = await sb().auth.exchangeCodeForSession(r.code);
     onDone(error ? error.message : null);
-  });
-  return () => { void h.then((x) => x.remove()).catch(() => undefined); };
+  };
+  const h = App.addListener("appUrlOpen", ({ url }) => { void handle(url); });
+  void App.getLaunchUrl().then((x) => handle(x?.url)).catch(() => undefined);
+  return () => { alive = false; void h.then((x) => x.remove()).catch(() => undefined); };
 }
+/** İşlenmiş dönüş kodları: açılış adresi ve appUrlOpen aynı kodu getirebilir; StrictMode etkiyi iki kez kurar. */
+const handled = new Set<string>();
+// Uygulama sayfası yeniden yüklenirse açılış adresi yine aynı kodu verir: son işlenen kod saklanır
+const LAST = "oauth-son-kod";
+const lastHandled = () => { try { return localStorage.getItem(LAST); } catch { return null; } };
+const saveHandled = (k: string) => { try { localStorage.setItem(LAST, k); } catch { /* yok say */ } };

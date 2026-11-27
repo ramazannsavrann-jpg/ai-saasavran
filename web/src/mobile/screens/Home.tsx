@@ -1,6 +1,6 @@
 // Ana sayfa: seçili markanın önerilme oranı (yapay zekâlara göre), önceki ölçüme göre değişim, bu haftanın işleri ve "Şimdi ölç".
 // Rakip bilgisi yok (23 Kasım kararı). Az cevaba dayanan sonuç "ön sonuç" olarak küçük gösterilir; uydurma rakam yok.
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { useApp, useLoad } from "../../lib/app";
 import { api, type Brand, type MeasurementType } from "../../lib/data";
@@ -97,14 +97,21 @@ export function NoBrand({ sel }: { sel: { failed: boolean; retry: () => void } }
   return <Navigate to="/kurulum" replace />;
 }
 
-/** Rapor bağlantısını telefonun paylaş menüsüyle paylaşır; menü yoksa panoya kopyalar ve true döner. */
-export async function shareReport(brand: Brand): Promise<boolean> {
+/** Rapor bağlantısını telefonun paylaş menüsüyle paylaşır. Menü yoksa panoya kopyalar; "kopyalandı" yalnız
+ *  kopyalama gerçekten başarılıysa döner, olmazsa adres elle kopyalansın diye "manual" döner. */
+export async function shareReport(brand: Brand): Promise<{ kind: "shared" | "copied" | "manual"; url: string }> {
   const token = await api.createReportShare(brand.id, 30);
   const url = `${SITE_ORIGIN}/rapor/${token}`;
   const text = L(`${brand.name} yapay zekâ görünürlük raporu`, `${brand.name} AI visibility report`);
-  if (navigator.share) { await navigator.share({ title: text, text, url }).catch(() => undefined); return false; }
-  await navigator.clipboard?.writeText(url).catch(() => undefined);
-  return true;
+  if (navigator.share) {
+    try { await navigator.share({ title: text, text, url }); return { kind: "shared", url }; }
+    catch (e) { if ((e as Error)?.name === "AbortError") return { kind: "shared", url }; } // vazgeçti: mesaj yok
+  }
+  try {
+    if (!navigator.clipboard?.writeText) throw new Error("no_clipboard");
+    await navigator.clipboard.writeText(url);
+    return { kind: "copied", url };
+  } catch { return { kind: "manual", url }; }
 }
 
 export function Home() {
@@ -112,23 +119,34 @@ export function Home() {
   const nav = useNavigate();
   const sel = useSelectedBrand();
   const b = sel.brand;
-  const runs = useLoad(() => (b ? api.runs(b.id) : Promise.resolve([])), [b?.id]);
+  // keepOnError: ölçüm beklerken 15 sn'lik yoklamada geçici bir hata ekranı silmez, yoklama sürer
+  const runs = useLoad(() => (b ? api.runs(b.id) : Promise.resolve([])), [b?.id], { keepOnError: true });
+  const runsReady = !!runs.data;
   const usage = useLoad(() => (current ? api.usage(current.id) : Promise.resolve(null)), [current?.id]);
   const promptsQ = useLoad(() => (b ? api.prompts(b.id) : Promise.resolve([])), [b?.id]);
   const runList = runs.data ?? [];
   const type = shownType(b, runList) as MeasurementType;
   const lastDone = runList.find((r) => r.status === "done")?.id ?? "";
-  // Ölçüm bitince (durumu değişince) sonuç yeniden okunur
-  const vis = useLoad(() => (b ? api.visibility(b.id, type) : Promise.resolve([])), [b?.id, type, lastDone]);
+  // Ölçüm bitince (durumu değişince) sonuç yeniden okunur. Tür ölçümlerden çıktığı için ölçümler gelmeden okunmaz:
+  // yoksa ücretli kullanıcıda bir an yanlış türün boş sonucu ("Henüz ölçüm yok") görünürdü
+  const vis = useLoad(() => (b ? api.visibility(b.id, type) : Promise.resolve([])), [b?.id, type], { skip: !runsReady, keepOnError: true });
   const sim = b?.data_origin === "simulated";
   const canLive = !!current?.paid_live_allowed && !sim;
-  const quota = useLoad(() => (current ? api.quota(current.id) : Promise.resolve(null)), [current?.id, lastDone]);
-  const budget = useLoad(() => (canLive && current ? api.paidBudget(current.id) : Promise.resolve(null)), [canLive, current?.id, lastDone]);
+  const quota = useLoad(() => (current ? api.quota(current.id) : Promise.resolve(null)), [current?.id], { skip: !runsReady });
+  const budget = useLoad(() => (canLive && current ? api.paidBudget(current.id) : Promise.resolve(null)), [canLive, current?.id], { skip: !runsReady });
   const [busy, setBusy] = useState<string | null>(null);
   const [err, setErr] = useState<string | null>(null);
   const [note, setNote] = useState<string | null>(null);
   const [picker, setPicker] = useState(false);
   const pending = runList.find((r) => r.status === "queued" || r.status === "running");
+  // Yeni ölçüm bitince sonuç, hak ve bütçe yeniden okunur; ekrandaki veri yenisi gelene kadar kalır (iskelet yanıp sönmez)
+  const prevDone = useRef<string | undefined>(undefined);
+  useEffect(() => {
+    if (!runsReady) { prevDone.current = undefined; return; }
+    if (prevDone.current !== undefined && prevDone.current !== lastDone) { vis.reload(); quota.reload(); budget.reload(); }
+    prevDone.current = lastDone;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [runsReady, lastDone]);
   useEffect(() => {
     if (!pending) return;
     const t = setInterval(() => runs.reload(), 15_000);
@@ -138,9 +156,11 @@ export function Home() {
 
   if (loading || sel.loading) return <Spinner />;
   if (!current || !b) return <NoBrand sel={sel} />;
-  if (runs.error || vis.error) return <LoadError full retry={() => { runs.reload(); vis.reload(); }} />;
+  // Tam ekran hata yalnız elde hiç veri yokken; yenilemede hata olursa son veri kalır, altta küçük not çıkar
+  if ((runs.error && !runs.data) || (vis.error && !vis.data)) return <LoadError full retry={() => { runs.reload(); vis.reload(); }} />;
   // İlk yüklemede bekle: ölçümü olan kullanıcı bir an "İlk ölçümü başlat" görmesin
   if (!runs.data || !vis.data) return <Spinner />;
+  const staleNote = !!(runs.error || vis.error);
 
   const pts = series(vis.data ?? []);
   const last = pts[pts.length - 1], prev = pts[pts.length - 2];
@@ -174,7 +194,11 @@ export function Home() {
   }
   async function share() {
     setBusy("share"); setErr(null); setNote(null);
-    try { if (await shareReport(b!)) setNote(L("Rapor bağlantısı kopyalandı.", "Report link copied.")); }
+    try {
+      const r = await shareReport(b!);
+      if (r.kind === "copied") setNote(L("Rapor bağlantısı kopyalandı.", "Report link copied."));
+      else if (r.kind === "manual") setNote(L(`Bağlantı kopyalanamadı. Bu adresi elle kopyalayın: ${r.url}`, `Couldn't copy the link. Copy this address yourself: ${r.url}`));
+    }
     catch (e) { setErr(friendlyError(e)); } finally { setBusy(null); }
   }
   const startBtn = (onHero: boolean) => (
@@ -229,7 +253,13 @@ export function Home() {
         ? <span className="muted small" style={{ marginTop: -8 }}>{L(`Bu ay ${q.manual_left.toLocaleString("tr-TR")} soru hakkınız kaldı.`, `${q.manual_left.toLocaleString("en-US")} question credits left this month.`)}{!sim && activeN > 0 && L(` "Şimdi ölç" yaklaşık ${need} hak kullanır.`, ` "Measure now" uses about ${need}.`)}</span>
         : u && <span className="muted small" style={{ marginTop: -8 }}>{L(`Bu ay ${u.engine_calls.toLocaleString("tr-TR")} / ${u.engine_call_limit.toLocaleString("tr-TR")} yapay zekâ cevabı kullanıldı.`, `${u.engine_calls.toLocaleString("en-US")} / ${u.engine_call_limit.toLocaleString("en-US")} AI answers used this month.`)}</span>}
       <Err msg={err} />
-      {note && <p className="ok" role="status">{note}</p>}
+      {staleNote && (
+        <span className="muted small" role="status">
+          {L("Son bilgiler alınamadı, ekranda önceki hâli var.", "Couldn't get the latest data; you're seeing the previous view.")}{" "}
+          {pending ? L("Biraz sonra yeniden denenecek.", "It will try again shortly.") : <button className="btn btn-text" style={{ padding: 0, minHeight: 32, fontSize: "inherit" }} onClick={() => { runs.reload(); vis.reload(); }}>{L("Tekrar dene", "Try again")}</button>}
+        </span>
+      )}
+      {note && <p className="ok" role="status" style={{ overflowWrap: "anywhere" }}>{note}</p>}
 
       {rate !== null && (
         <>

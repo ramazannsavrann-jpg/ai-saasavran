@@ -5,6 +5,7 @@ import { sb, friendlyError } from "../../lib/supabase";
 import { L, getLang } from "../../lib/i18n";
 import { SITE_ORIGIN } from "../../lib/env";
 import { Err, Icon, greeting } from "../ui";
+import { Browser } from "@capacitor/browser";
 import { GOOGLE_AVAILABLE, googleSignIn } from "../oauth";
 
 const REMEMBER = "mobil-son-eposta";
@@ -20,7 +21,12 @@ function GoogleButton() {
   useEffect(() => {
     const on = (e: Event) => { setBusy(false); setErr(L("Google ile giriş tamamlanamadı. Tekrar deneyin ya da e-postayla devam edin.", "Google sign-in didn't complete. Try again or continue with email.")); void e; };
     window.addEventListener("oauth-hata", on);
-    return () => window.removeEventListener("oauth-hata", on);
+    // Kullanıcı Google sayfasını giriş yapmadan kapatırsa düğme "Google açılıyor…"da takılı kalmasın
+    const fin = GOOGLE_AVAILABLE ? Browser.addListener("browserFinished", () => setBusy(false)) : null;
+    return () => {
+      window.removeEventListener("oauth-hata", on);
+      void fin?.then((h) => h.remove()).catch(() => undefined);
+    };
   }, []);
   if (!GOOGLE_AVAILABLE) return null;
   return (

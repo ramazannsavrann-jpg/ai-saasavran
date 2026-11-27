@@ -29,9 +29,13 @@ export function Report() {
   const b = sel.brand;
   const runs = useLoad(() => (b ? api.runs(b.id) : Promise.resolve([])), [b?.id]);
   const type = shownType(b, runs.data) as MeasurementType;
-  const vis = useLoad(() => (b ? api.visibility(b.id, type) : Promise.resolve([])), [b?.id, type]);
+  // Tür ölçümlerden çıkar: ölçümler gelmeden sonuç okunmaz (yanlış türün boş sonucu "Henüz ölçüm yok" gösterirdi)
+  const vis = useLoad(() => (b ? api.visibility(b.id, type) : Promise.resolve([])), [b?.id, type], { skip: !runs.data });
   if (sel.loading) return <Spinner />;
   if (!b) return <NoBrand sel={sel} />;
+  const failed = !!(runs.error || vis.error);
+  // Veri gelene kadar iskelet: "Henüz ölçüm yok" bir an bile görünmesin
+  const waiting = !failed && (!runs.data || !vis.data);
   const pts = series(vis.data ?? []);
   const last = pts[pts.length - 1];
 
@@ -43,7 +47,7 @@ export function Report() {
           <button key={t.id} role="tab" aria-selected={tab === t.id} onClick={() => setParams({ b: t.id }, { replace: true })}>{L(t.tr, t.en)}</button>
         ))}
       </div>
-      {(runs.error || vis.error) && tab !== "sorular" && tab !== "rakipler" ? <LoadError retry={() => { runs.reload(); vis.reload(); }} /> : <>
+      {failed && tab !== "sorular" && tab !== "rakipler" ? <LoadError retry={() => { runs.reload(); vis.reload(); }} /> : waiting && tab !== "rakipler" ? <Spinner /> : <>
       {tab === "ozet" && <Summary brandId={b.id} pts={pts} rows={vis.data ?? []} type={type} />}
       {tab === "sorular" && <Questions brandId={b.id} workspaceId={b.workspace_id} lastRunId={last?.runId ?? null} />}
       {tab === "rakipler" && <RivalsBody />}
@@ -123,8 +127,9 @@ function Questions({ brandId, workspaceId, lastRunId }: { brandId: string; works
   const [adding, setAdding] = useState(false);
   const [menu, setMenu] = useState<{ id: string; text: string; active: boolean } | null>(null);
   const [del, setDel] = useState<string | null>(null);
-  if (prompts.loading) return <Spinner />;
-  const list = prompts.data ?? [];
+  if (prompts.error || results.error || usage.error) return <LoadError retry={() => { prompts.reload(); results.reload(); usage.reload(); }} />;
+  if (!prompts.data) return <Spinner />;
+  const list = prompts.data;
   const active = list.filter((p) => p.active).length;
   const limit = usage.data?.prompt_limit ?? 0;
   const byPrompt = new Map((results.data ?? []).map((r) => [r.prompt_id, r]));
@@ -201,7 +206,9 @@ function WhyBlock({ brandId, runId, promptId }: { brandId: string; runId: string
   const ments = useLoad(() => (answers.length ? api.mentionsFor(answers.map((a) => a.id)) : Promise.resolve([])), [answers.map((a) => a.id).join(",")]);
   const comps = useLoad(() => api.competitors(brandId), [brandId]);
   const [open, setOpen] = useState<string | null>(null);
-  if (all.loading || ments.loading || comps.loading || !brand) return <Spinner />;
+  if (all.error || ments.error || comps.error || sel.failed) return <LoadError retry={() => { sel.retry(); all.reload(); ments.reload(); comps.reload(); }} />;
+  if (sel.loading || !all.data || !ments.data || !comps.data) return <Spinner />;
+  if (!brand) return <LoadError retry={sel.retry} />;
   if (!answers.length) return <p className="muted small" style={{ margin: 0 }}>{L("Bu soru son ölçümde sorulmadı.", "This question wasn't asked in the last measurement.")}</p>;
   const brands = [{ id: brand.id, name: brand.name, website: brand.website, isTarget: true }, ...(comps.data ?? []).map((c) => ({ id: c.id, name: c.name, website: c.website, isTarget: false }))];
   const m = ments.data ?? [];

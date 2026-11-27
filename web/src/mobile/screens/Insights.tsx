@@ -11,7 +11,7 @@ import { fanoutQueries, perceptionSummary, rivalTraits } from "../../../../engin
 import { sourceNetwork } from "../../../../engine/src/network.ts";
 import { sourceMix, statSummary, truthSummary, type SourceType } from "../../../../engine/src/truth.ts";
 import { botSummary, snippet, trafficSummary, workerCode, SOURCE_PROVIDER, type AiSource, type BotKind } from "../../../../engine/src/traffic.ts";
-import { Head, Icon, Spinner, goBack, haptic, isPaid } from "../ui";
+import { Head, Icon, LoadError, Spinner, goBack, haptic, isPaid } from "../ui";
 import { useSelectedBrand, NoBrand } from "./Home";
 
 
@@ -53,8 +53,10 @@ function useLastLive(brand: Brand) {
   const comps = useLoad(() => api.competitors(brand.id), [brand.id]);
   const brands = [{ id: brand.id, name: brand.name, website: brand.website, isTarget: true },
     ...(comps.data ?? []).map((c) => ({ id: c.id, name: c.name, website: c.website, isTarget: false }))];
-  const loading = runs.loading || answers.loading || ments.loading || comps.loading;
-  return { last, answers: answers.data ?? [], ments: ments.data ?? [], brands, loading };
+  const error = !!(runs.error || answers.error || ments.error || comps.error);
+  const loading = !error && (!runs.data || !answers.data || !ments.data || !comps.data);
+  const retry = () => { runs.reload(); answers.reload(); ments.reload(); comps.reload(); };
+  return { last, answers: answers.data ?? [], ments: ments.data ?? [], brands, loading, error, retry };
 }
 
 const TRAIT: Record<string, [string, string]> = {
@@ -79,7 +81,8 @@ function AccuracyBody({ brand }: { brand: Brand }) {
   const confl = useLoad(() => (paid ? api.engineConflicts(brand.id) : Promise.resolve([])), [brand.id, paid]);
   const live = useLastLive(brand);
   const [open, setOpen] = useState<string | null>(null);
-  if (checks.loading || confl.loading || live.loading) return <Spinner />;
+  if (checks.error || confl.error || live.error) return <LoadError retry={() => { checks.reload(); confl.reload(); live.retry(); }} />;
+  if (!checks.data || !confl.data || live.loading) return <Spinner />;
   const s = truthSummary(checks.data ?? []);
   const total = s.correct + s.wrong + s.unverifiable;
   const okConfl = (confl.data ?? []).filter((c) => !c.failed);
@@ -190,6 +193,7 @@ export function Sources() {
 }
 function SourcesBody({ brand }: { brand: Brand }) {
   const live = useLastLive(brand);
+  if (live.error) return <LoadError retry={live.retry} />;
   if (live.loading) return <Spinner />;
   if (!live.last || live.answers.length === 0) return <p className="card" style={{ margin: 0 }}>{L("Kaynaklar, yapay zekâların internette arama yaparak cevap verdiği ölçümlerden çıkar (ChatGPT, Gemini, Claude, Perplexity; ücretli paketler). Ücretsiz pakette Gemini aramasız ölçtüğü için bu bölüm boş kalır.", "Sources come from measurements where the AIs search the web (ChatGPT, Gemini, Claude, Perplexity; paid plans). The free plan measures Gemini without search, so this section stays empty.")}</p>;
   const net = sourceNetwork(live.answers, live.ments, live.brands, 10);
@@ -239,6 +243,7 @@ function SourcesBody({ brand }: { brand: Brand }) {
 // ── Rakibi öne çıkaran özellikler (Rakipler sekmesinde kullanılır) ───────────
 export function RivalTraits({ brand }: { brand: Brand }) {
   const live = useLastLive(brand);
+  if (live.error) return <LoadError retry={live.retry} />;
   if (live.loading || !live.answers.length) return null;
   const rows = rivalTraits(live.answers, live.ments, brand.id, live.brands.filter((b) => !b.isTarget).map((b) => b.id));
   if (!rows.length) return null;
@@ -275,7 +280,8 @@ function TrafficBody({ brand }: { brand: Brand }) {
   const bots = useLoad(() => api.aiBots(brand.id), [brand.id]);
   const vis = useLoad(() => api.visibility(brand.id, "live_search"), [brand.id]);
   const [copied, setCopied] = useState<string | null>(null);
-  if (visits.loading || bots.loading || vis.loading) return <Spinner />;
+  if (visits.error || bots.error || vis.error) return <LoadError retry={() => { visits.reload(); bots.reload(); vis.reload(); }} />;
+  if (!visits.data || !bots.data || !vis.data) return <Spinner />;
   const today = new Date(Date.now() + 3 * 3600_000).toISOString().slice(0, 10);
   const t = trafficSummary(visits.data ?? [], today);
   const bs = botSummary(bots.data ?? [], today);

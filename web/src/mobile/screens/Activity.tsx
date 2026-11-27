@@ -23,8 +23,9 @@ export function Activity() {
     return (data ?? []) as Alert[];
   }, [b?.id]);
   const runs = useLoad(() => (b ? api.runs(b.id) : Promise.resolve([])), [b?.id]);
-  if (sel.loading || alerts.loading) return <Spinner />;
   if (sel.failed || alerts.error || runs.error) return <LoadError full retry={() => { sel.retry(); alerts.reload(); runs.reload(); }} />;
+  // İki liste de gelene kadar iskelet: ölçüm geçmişi gelmeden "Henüz ölçüm yok" görünmesin
+  if (sel.loading || !alerts.data || !runs.data) return <Spinner />;
   const list = alerts.data ?? [];
   const done = (runs.data ?? []).filter((r) => r.status === "done" || r.status === "failed").slice(0, 10);
 

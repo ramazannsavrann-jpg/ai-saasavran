@@ -6,12 +6,12 @@ import { useApp, useLoad } from "../../lib/app";
 import { api } from "../../lib/data";
 import { sb, friendlyError } from "../../lib/supabase";
 import { L, getLang, switchLang } from "../../lib/i18n";
-import { Err, Head, Icon, Sheet } from "../ui";
+import { Err, Head, Icon, LoadError, Sheet } from "../ui";
 import { disablePush, enablePush, pushState, type PushState } from "../push";
 import { manage } from "../store";
 
-const PLAN_TR: Record<string, [string, string]> = { free: ["Ücretsiz", "Free"], starter: ["Gümüş", "Silver"], altin: ["Altın", "Gold"], pro: ["Platin", "Platinum"], agency: ["Elmas", "Diamond"] };
-const planTr = (id: string, name: string) => (PLAN_TR[id] ? L(PLAN_TR[id][0], PLAN_TR[id][1]) : name);
+const PLAN_TR: Record<string, [string, string]> = { free: ["Ücretsiz", "Free"], starter: ["Gümüş", "Silver"], altin: ["Altın", "Gold"], pro: ["Platin", "Platinum"], agency: ["Ajans paketi", "Agency plan"] }; // Elmas adı yalnız sitede (uygulamada geçmez)
+const planTr = (id: string, name: string) => (PLAN_TR[id] ? L(PLAN_TR[id][0], PLAN_TR[id][1]) : /elmas|diamond/i.test(name) ? L("Ajans paketi", "Agency plan") : name);
 
 export function Account() {
   const { session, current, workspaces, select } = useApp();
@@ -24,13 +24,15 @@ export function Account() {
   const [drop, setDrop] = useState(true);
   const [push, setPush] = useState<PushState>("unavailable");
   const [playBlock, setPlayBlock] = useState(false);
+  const [pushBusy, setPushBusy] = useState(false);
   useEffect(() => { void pushState().then(setPush).catch(() => setPush("unavailable")); }, []);
   async function togglePush(on: boolean) {
-    setErr(null);
+    if (pushBusy) return; // çift dokunuşta iki kez kayıt olmasın
+    setErr(null); setPushBusy(true);
     try {
       if (on) { const ok = await enablePush(); setPush(ok ? "on" : await pushState()); if (!ok) setErr(L("Bildirim izni verilmedi. Telefonun Ayarlar > Uygulamalar > AI SaaSavran > Bildirimler bölümünden açabilirsiniz.", "Notification permission wasn't granted. You can turn it on in your phone's Settings > Apps > AI SaaSavran > Notifications.")); }
       else { await disablePush(); setPush("off"); }
-    } catch (e) { setErr(friendlyError(e)); }
+    } catch (e) { setErr(friendlyError(e)); } finally { setPushBusy(false); }
   }
   const [err, setErr] = useState<string | null>(null);
   const [del, setDel] = useState(false);
@@ -48,22 +50,31 @@ export function Account() {
     if (error) { setErr(friendlyError(error)); return; }
     setPwOpen(false); setPwMsg(L("Şifreniz değiştirildi.", "Your password was changed."));
   }
-  useEffect(() => {
-    (async () => {
-      try {
-        const { data } = await sb().rpc("my_email_prefs");
-        setWeekly((data as { weekly: boolean }[] | null)?.[0]?.weekly ?? true);
-        const d = await sb().rpc("my_drop_alerts");
-        if (typeof d.data === "boolean") setDrop(d.data);
-      } catch { setWeekly(true); }
-    })();
-  }, []);
+  // E-posta tercihleri: okunamazsa anahtarlar "açık" diye gösterilmez (rpc hata fırlatmaz, error döner); hata ve "Tekrar dene"
+  const prefs = useLoad(async () => {
+    const w = await sb().rpc("my_email_prefs");
+    if (w.error) throw new Error(w.error.message || "prefs");
+    const d = await sb().rpc("my_drop_alerts");
+    if (d.error) throw new Error(d.error.message || "prefs");
+    return { weekly: (w.data as { weekly: boolean }[] | null)?.[0]?.weekly ?? true, drop: typeof d.data === "boolean" ? d.data : true };
+  }, [session?.user.id]);
+  useEffect(() => { if (prefs.data) { setWeekly(prefs.data.weekly); setDrop(prefs.data.drop); } }, [prefs.data]);
   async function setPref(kind: "weekly" | "drop", v: boolean) {
     setErr(null);
     const { error } = kind === "weekly" ? await sb().rpc("set_email_prefs", { p_weekly: v, p_lang: getLang() }) : await sb().rpc("set_drop_alerts", { p_on: v });
     if (error) setErr(friendlyError(error)); else if (kind === "weekly") setWeekly(v); else setDrop(v);
   }
-  async function signOut() { await disablePush().catch(() => undefined); await sb().auth.signOut(); nav("/", { replace: true }); }
+  const [outBusy, setOutBusy] = useState(false);
+  async function signOut() {
+    setErr(null); setOutBusy(true);
+    await disablePush().catch(() => undefined);
+    // Çevrimdışıyken sunucuya ulaşılamaz: oturum yine de bu telefondan silinir
+    let r = await sb().auth.signOut().catch((e: Error) => ({ error: e }));
+    if (r.error) r = await sb().auth.signOut({ scope: "local" }).catch((e: Error) => ({ error: e }));
+    setOutBusy(false);
+    if (r.error) { setErr(friendlyError(r.error)); return; }
+    nav("/", { replace: true });
+  }
   async function remove() {
     setBusy(true); setErr(null);
     const { data, error } = await sb().rpc("delete_my_account");
@@ -123,10 +134,11 @@ export function Account() {
       )}
       <h2 className="label">{L("Bildirimler", "Notifications")}</h2>
       <div className="list">
-        {push !== "unavailable" && <label className="row">{L("Ölçüm bitince telefona bildirim", "Phone notification when a measurement is done")}<input type="checkbox" role="switch" className="switch" checked={push === "on"} onChange={(e) => togglePush(e.target.checked)} /></label>}
-        <label className="row">{L("Sonucum belirgin değişince e-posta gönder", "Email me when my result changes clearly")}<input type="checkbox" role="switch" className="switch" checked={drop} onChange={(e) => setPref("drop", e.target.checked)} /></label>
-        {weekly !== null && <label className="row">{L("Haftalık özet e-postası", "Weekly summary email")}<input type="checkbox" role="switch" className="switch" checked={weekly} onChange={(e) => setPref("weekly", e.target.checked)} /></label>}
+        {push !== "unavailable" && <label className="row">{L("Ölçüm bitince telefona bildirim", "Phone notification when a measurement is done")}<input type="checkbox" role="switch" className="switch" checked={push === "on"} disabled={pushBusy} aria-busy={pushBusy} onChange={(e) => togglePush(e.target.checked)} /></label>}
+        {prefs.data && <label className="row">{L("Sonucum belirgin değişince e-posta gönder", "Email me when my result changes clearly")}<input type="checkbox" role="switch" className="switch" checked={drop} onChange={(e) => setPref("drop", e.target.checked)} /></label>}
+        {prefs.data && weekly !== null && <label className="row">{L("Haftalık özet e-postası", "Weekly summary email")}<input type="checkbox" role="switch" className="switch" checked={weekly} onChange={(e) => setPref("weekly", e.target.checked)} /></label>}
       </div>
+      {prefs.error && <LoadError retry={prefs.reload} />}
       <h2 className="label">{L("Ayarlar", "Settings")}</h2>
       <div className="list">
         <label className="row">{L("Dil", "Language")}
@@ -145,7 +157,7 @@ export function Account() {
       </div>
       {pwMsg && <p className="ok" role="status">{pwMsg}</p>}
       <Err msg={err} />
-      <button className="btn btn-ghost" onClick={signOut}>{L("Çıkış yap", "Sign out")}</button>
+      <button className="btn btn-ghost" onClick={signOut} disabled={outBusy}>{outBusy ? L("Çıkış yapılıyor…", "Signing out…") : L("Çıkış yap", "Sign out")}</button>
       <button className="btn btn-text" style={{ alignSelf: "center", color: "var(--muted)" }} onClick={() => setDel(true)}>{L("Hesap ve veriler", "Account and data")}</button>
       <Sheet open={del} onClose={() => setDel(false)} title={L("Hesabı silmek", "Deleting your account")}>
         <p style={{ margin: 0 }}>{L("Hesabınız, tek başınıza sahip olduğunuz çalışma alanları ve bütün ölçümleri kalıcı olarak silinir. Ekipli alanda sahiplik en eski üyeye geçer. Geri alınamaz.", "Your account, the workspaces you own alone and all their measurements are permanently deleted. In a team workspace, ownership passes to the longest-standing member. This cannot be undone.")}</p>
