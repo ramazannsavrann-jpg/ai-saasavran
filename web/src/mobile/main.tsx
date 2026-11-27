@@ -98,7 +98,7 @@ function Offline({ retry }: { retry: () => void }) {
   return (
     <div className="app"><div className="screen" style={{ justifyContent: "center", textAlign: "center" }}>
       <h1 style={{ fontSize: 24 }}>{L("Bağlantı kurulamadı", "Couldn't connect")}</h1>
-      <p className="muted">{L("İnternet bağlantınızı kontrol edip tekrar deneyin.", "Check your internet connection and try again.")}</p>
+      <p className="muted">{L("Uygulama sunucuya ulaşamadı. İnternetinizin açık olduğundan emin olup tekrar deneyin.", "The app couldn't reach the server. Make sure you're online and try again.")}</p>
       <button className="btn btn-primary" onClick={retry}>{L("Tekrar dene", "Try again")}</button>
     </div></div>
   );

@@ -76,15 +76,44 @@ export function useApp() {
   return c;
 }
 
-/** Basit veri yükleme kancası: yükleniyor / hata / veri + yeniden yükle. */
-export function useLoad<T>(fn: () => Promise<T>, deps: unknown[]) {
-  const [state, setState] = useState<{ data?: T; error?: string; loading: boolean }>({ loading: true });
+const sameDeps = (a: readonly unknown[] | undefined, b: readonly unknown[]) => !!a && a.length === b.length && a.every((x, i) => Object.is(x, b[i]));
+
+export interface LoadOptions {
+  /** true iken fn çağrılmaz; veri yok, "yükleniyor" sayılır (ör. bağlı olduğu veri henüz gelmedi). */
+  skip?: boolean;
+  /** Yeniden yüklemede (aynı deps) hata olursa eski veri silinmez; hata ayrıca bildirilir (ör. ölçüm beklerken yoklama). */
+  keepOnError?: boolean;
+}
+
+/** Basit veri yükleme kancası: yükleniyor / hata / veri + yeniden yükle.
+ *  - Yalnız en son isteğin cevabı uygulanır (eski, geç gelen cevap yenisinin üstüne yazmaz).
+ *  - deps değişince eski veri hemen gizlenir (başka markanın/türün verisi bir an bile gösterilmez).
+ *  - reload() aynı deps'te eski veriyi yenisi gelene kadar gösterir. */
+export function useLoad<T>(fn: () => Promise<T>, deps: unknown[], opts: LoadOptions = {}) {
+  const skip = !!opts.skip;
+  const allDeps = [...deps, skip];
+  const [state, setState] = useState<{ data?: T; error?: string; loading: boolean; deps?: unknown[] }>({ loading: true });
+  const reqId = useRef(0);
+  const keepRef = useRef(!!opts.keepOnError);
+  keepRef.current = !!opts.keepOnError;
   const run = useCallback(async () => {
-    setState((s) => ({ ...s, loading: true }));
-    try { setState({ data: await fn(), loading: false }); }
-    catch (e) { setState({ error: (e as Error)?.message || "error", loading: false }); } // boş mesaj da hata sayılır
+    const id = ++reqId.current;
+    const key = allDeps;
+    if (skip) { setState({ loading: true, deps: key }); return; }
+    // Aynı deps'te yeniden yükleme: eski veri kalır; deps değiştiyse veri temizlenir
+    setState((s) => (sameDeps(s.deps, key) ? { ...s, loading: true } : { loading: true, deps: key }));
+    try {
+      const data = await fn();
+      if (id === reqId.current) setState({ data, loading: false, deps: key });
+    } catch (e) {
+      if (id !== reqId.current) return;
+      const error = (e as Error)?.message || "error"; // boş mesaj da hata sayılır
+      setState((s) => (keepRef.current && sameDeps(s.deps, key) && s.data !== undefined ? { data: s.data, error, loading: false, deps: key } : { error, loading: false, deps: key }));
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, deps);
-  useEffect(() => { run(); }, [run]);
-  return { ...state, reload: run };
+  }, allDeps);
+  useEffect(() => { void run(); return () => { reqId.current++; }; }, [run]); // ayrılınca/deps değişince bekleyen cevap yok sayılır
+  // deps bu çizimde değiştiyse (etki henüz çalışmadı) eski veriyi gösterme
+  if (!sameDeps(state.deps, allDeps)) return { data: undefined as T | undefined, error: undefined as string | undefined, loading: true, reload: run };
+  return { data: state.data, error: state.error, loading: state.loading, reload: run };
 }

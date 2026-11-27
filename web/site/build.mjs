@@ -650,9 +650,10 @@ write("/pricing/", page({ lang: "en", path: "/pricing/", alt: "/tr/fiyatlar/", t
 // Mobil uygulamada Google ile girişten dönüş (24 Kasım). Google girişi telefonun tarayıcısında olur; Supabase buraya
 // ?code=… ile döner (site adresi zaten izinli). Sayfa kodu uygulamaya iletir: com.aisaasavran.app://giris?code=…
 // Kod tek başına işe yaramaz; oturuma çevirmek için uygulamanın sakladığı doğrulayıcı (PKCE) gerekir. Arama motorlarına kapalı.
+// Metin iki dilli; yonlendir.js telefonun diline göre (tr değilse İngilizce) tek dile indirir.
 write("/uygulama-giris/", `<!doctype html><html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><meta name="referrer" content="no-referrer"><title>SaaSavran</title>
 <style>body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;font-family:system-ui,sans-serif;background:#101A17;color:#E8EFEC;text-align:center;padding:24px}a{display:inline-block;margin-top:20px;padding:14px 28px;border-radius:14px;background:#6FD1AE;color:#0B1512;font-weight:700;text-decoration:none}p{color:#9DB0A8;line-height:1.5}</style></head>
-<body><main><h1 style="font-size:22px">Uygulamaya dönülüyor</h1><p id="m">Uygulama açılmazsa düğmeye dokunun.</p><a id="b" href="com.aisaasavran.app://giris">SaaSavran'ı aç</a></main>
+<body><main><h1 id="t" style="font-size:22px">Uygulamaya dönülüyor · Returning to the app</h1><p id="m">Uygulama açılmazsa düğmeye dokunun. · If the app doesn't open, tap the button.</p><a id="b" href="com.aisaasavran.app://giris">SaaSavran'ı aç · Open SaaSavran</a></main>
 <script src="/uygulama-giris/yonlendir.js"></script></body></html>`);
 
 // Hesap silme (Google Play / App Store şartı: uygulama dışından da silme yolu)
