@@ -13,3 +13,5 @@ web/public/downloads/
 # GEO Otopilot çalışma klasörleri (veri geo-veri dalında)
 geo-data/
 geo-detail/
+web/dist-mobile/
+web/dist-mobile-test/

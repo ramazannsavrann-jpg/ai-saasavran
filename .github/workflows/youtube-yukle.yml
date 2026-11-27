@@ -1,0 +1,33 @@
+name: youtube-yukle
+on:
+  push:
+    branches: [main]
+    paths: ["yt/yukle/**.json"]
+  workflow_dispatch:
+    inputs:
+      is:
+        description: "İş dosyası (ör. yt/yukle/gozluk-en.json)"
+        required: false
+        default: ""
+concurrency: youtube-yukle
+jobs:
+  yukle:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - name: YouTube'a yükle ve zamanla
+        env:
+          YT_CLIENT_ID: ${{ secrets.YT_CLIENT_ID }}
+          YT_CLIENT_SECRET: ${{ secrets.YT_CLIENT_SECRET }}
+          YT_REFRESH_TOKEN: ${{ secrets.YT_REFRESH_TOKEN }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          IS: ${{ inputs.is }}
+        run: |
+          # Elle: verilen iş dosyası. Push: bu commit'te eklenen iş dosyaları (yalnız yeni eklenenler).
+          if [ -n "$IS" ]; then LISTE="$IS"; else LISTE=$(git diff --name-only --diff-filter=A HEAD~1 HEAD -- 'yt/yukle/*.json'); fi
+          [ -z "$LISTE" ] && { echo "Yüklenecek iş yok"; exit 0; }
+          for f in $LISTE; do echo "== $f"; python3 yt/yt_yukle.py "$f"; done

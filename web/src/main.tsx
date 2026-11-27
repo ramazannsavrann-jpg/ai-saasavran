@@ -101,3 +101,8 @@ initSupabase().then(
   () => root.render(<StrictMode><BrowserRouter><AppProvider><App /></AppProvider></BrowserRouter></StrictMode>),
   () => root.render(<NotConfigured />),
 );
+
+// PWA / Android uygulaması: service worker (önbelleksiz; yalnız çevrimdışı ekranı ve bildirimler için)
+if (import.meta.env.PROD && "serviceWorker" in navigator) {
+  addEventListener("load", () => { navigator.serviceWorker.register("/sw.js").catch(() => undefined); });
+}

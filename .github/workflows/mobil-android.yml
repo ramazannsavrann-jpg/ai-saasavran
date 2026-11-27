@@ -1,0 +1,88 @@
+name: Mobil uygulama (Android)
+# Capacitor uygulaması: ekranlar telefonun içinde (web/src/mobile), veriler aisaasavran.com + Supabase.
+# Çıktı: Google Play için .aab ve telefona doğrudan kurulabilen .apk (GitHub sürümü; main dışından elle çalıştırılınca taslak).
+on:
+  push:
+    branches: [main]
+    paths: ["web/src/mobile/**", "web/android/**", "web/capacitor.config.json"]
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: mobil-android
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+      - run: npm ci
+      - run: npm ci --prefix web
+      - name: Ekranları derle ve Android projesine kopyala
+        working-directory: web
+        env:
+          GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
+        run: |
+          # Telefon bildirimleri yalnız Firebase ayarı (GOOGLE_SERVICES_JSON) varsa açılır
+          if [ -n "$GOOGLE_SERVICES_JSON" ]; then
+            printf '%s' "$GOOGLE_SERVICES_JSON" > android/app/google-services.json
+            export VITE_PUSH=1
+            echo "Bildirimler: açık"
+          else
+            echo "Bildirimler: kapalı (GOOGLE_SERVICES_JSON yok)"
+          fi
+          npm run build:mobile
+          npx cap sync android
+      - name: Sürüm numarası
+        working-directory: web/android/app
+        run: |
+          sed -i "s/versionCode [0-9]*/versionCode ${{ github.run_number }}/; s/versionName \"[^\"]*\"/versionName \"1.0.${{ github.run_number }}\"/" build.gradle
+          grep -n "versionCode\|versionName" build.gradle
+      - name: İmza anahtarı (gizli depodan)
+        id: key
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: node scripts/android/keystore.mjs "$RUNNER_TEMP/upload.keystore" "$RUNNER_TEMP/signing.env"
+      - name: Derle ve imzala (.aab + .apk)
+        working-directory: web/android
+        run: |
+          set -a; . "$RUNNER_TEMP/signing.env"; set +a
+          chmod +x gradlew
+          ./gradlew --no-daemon bundleRelease assembleRelease \
+            -Pandroid.injected.signing.store.file="$RUNNER_TEMP/upload.keystore" \
+            -Pandroid.injected.signing.store.password="$KS_PASS" \
+            -Pandroid.injected.signing.key.alias="$KEY_ALIAS" \
+            -Pandroid.injected.signing.key.password="$KEY_PASS"
+          mkdir -p "$RUNNER_TEMP/out"
+          cp app/build/outputs/bundle/release/*.aab "$RUNNER_TEMP/out/AI-SaaSavran-${{ github.run_number }}.aab"
+          cp app/build/outputs/apk/release/*.apk "$RUNNER_TEMP/out/AI-SaaSavran-${{ github.run_number }}.apk"
+          rm -f "$RUNNER_TEMP/upload.keystore" "$RUNNER_TEMP/signing.env"
+      - name: Google Play dahili teste yükle (main)
+        # Hizmet hesabının "Test kanallarına sürüm yayınlama" izni gerekir; izin yoksa sürüm yine GitHub'a çıkar
+        if: github.ref == 'refs/heads/main'
+        continue-on-error: true
+        env:
+          GOOGLE_SERVICE_ACCOUNT: ${{ secrets.GOOGLE_SERVICE_ACCOUNT }}
+          RELEASE_NOTES_TR: "Hata düzeltmeleri ve iyileştirmeler."
+        run: node scripts/android/play-upload.mjs "$RUNNER_TEMP/out/AI-SaaSavran-${{ github.run_number }}.aab" internal
+      - name: Sürüm yayınla (telefondan indirilebilir)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # main dışından (deneme dalı) elle çalıştırılınca taslak sürüm: yalnız depo sahibi görür ve indirir
+          # Mağazaya çıkana kadar her sürüm taslak: yalnız depo sahibi görür ve indirir
+          DRAFT="--draft"
+          gh release create "mobil-android-${{ github.run_number }}" "$RUNNER_TEMP"/out/* $DRAFT --target "${{ github.sha }}" \
+            --title "Mobil uygulama (Android) 1.0.${{ github.run_number }}" \
+            --notes "Telefona kurmak için: .apk dosyası. Google Play'e yüklenecek dosya: .aab. Dal: ${{ github.ref_name }}." --latest=false
+          echo "### Android 1.0.${{ github.run_number }} hazır" >> "$GITHUB_STEP_SUMMARY"

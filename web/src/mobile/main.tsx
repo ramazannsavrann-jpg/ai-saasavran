@@ -1,0 +1,115 @@
+// AI SaaSavran mobil uygulaması (Android/iOS, Capacitor). Ekranlar telefonun içinde çalışır;
+// veri katmanı sitedekiyle aynıdır (web/src/lib): aynı hesap, aynı markalar, aynı ölçümler.
+import { StrictMode, useEffect, useRef, useState, type ReactNode } from "react";
+import { createRoot } from "react-dom/client";
+import { HashRouter, Navigate, Outlet, Route, Routes, useNavigate } from "react-router-dom";
+import "@fontsource/instrument-sans/400.css";
+import "@fontsource/instrument-sans/500.css";
+import "@fontsource/instrument-sans/600.css";
+import "@fontsource/bricolage-grotesque/600.css";
+import "@fontsource/bricolage-grotesque/700.css";
+import "./styles.css";
+import { initSupabase } from "../lib/supabase";
+import { AppProvider, useApp } from "../lib/app";
+import { L } from "../lib/i18n";
+import { Spinner, TabBar, usePullToRefresh } from "./ui";
+import { Advice } from "./screens/Advice";
+import { Plans } from "./screens/Plans";
+import { BrandEdit } from "./screens/BrandEdit";
+import { Products, ProductDetail } from "./screens/Products";
+import { Accuracy, Sources, Traffic } from "./screens/Insights";
+import { Forgot, Login, Signup, Welcome } from "./screens/Auth";
+import { BrandForm, Setup } from "./screens/Setup";
+import { Home } from "./screens/Home";
+import { Report } from "./screens/Report";
+import { Activity } from "./screens/Activity";
+import { Account } from "./screens/Account";
+import { initPush } from "./push";
+import { initOAuthReturn } from "./oauth";
+import { initBackButton } from "./back";
+
+function Private({ children }: { children: ReactNode }) {
+  const { session, loading } = useApp();
+  if (loading) return <Spinner />;
+  return session ? <>{children}</> : <Navigate to="/" replace />;
+}
+function PublicOnly({ children }: { children: ReactNode }) {
+  const { session, loading } = useApp();
+  if (loading) return <Spinner />;
+  return session ? <Navigate to="/ana" replace /> : <>{children}</>;
+}
+function Tabs() {
+  const nav = useNavigate();
+  // useNavigate her sayfa değişiminde yeni fonksiyon döner: dinleyici bir kez kurulur, güncel nav ref'ten okunur
+  const navRef = useRef(nav);
+  navRef.current = nav;
+  useEffect(() => initPush((p) => navRef.current(p)), []);
+  const [gen, setGen] = useState(0);
+  const pull = usePullToRefresh(() => setGen((g) => g + 1));
+  return (
+    <div className="app" {...pull.handlers}>
+      <div className="ptr" style={{ height: pull.dist }} aria-hidden={pull.dist === 0}>{pull.dist > 0 && <span className={pull.ready ? "ptr-ready" : ""}>{pull.ready ? L("Bırakın, yenilensin", "Release to refresh") : L("Yenilemek için çekin", "Pull to refresh")}</span>}</div>
+      {/* Aşağı çekince ekran yeniden kurulur, veriler yeniden okunur */}
+      <Outlet key={gen} />
+      <TabBar />
+    </div>
+  );
+}
+function AddBrand() {
+  const nav = useNavigate();
+  return <BrandForm title={L("Marka ekleyin", "Add a brand")} onDone={(id) => { try { localStorage.setItem("mobil-marka", id); } catch { /* yok say */ } nav("/ana", { replace: true }); }} />;
+}
+
+function App() {
+  const nav = useNavigate();
+  useEffect(() => initBackButton(nav), [nav]);
+  const navRef = useRef(nav);
+  navRef.current = nav;
+  useEffect(() => initOAuthReturn((err) => { if (err) window.dispatchEvent(new CustomEvent("oauth-hata", { detail: err })); else navRef.current("/ana", { replace: true }); }), []);
+  return (
+    <Routes>
+      <Route path="/" element={<PublicOnly><div className="app"><Welcome /></div></PublicOnly>} />
+      <Route path="/giris" element={<PublicOnly><div className="app"><Login /></div></PublicOnly>} />
+      <Route path="/kayit" element={<PublicOnly><div className="app"><Signup /></div></PublicOnly>} />
+      <Route path="/sifre" element={<div className="app"><Forgot /></div>} />
+      <Route path="/kurulum" element={<Private><div className="app"><Setup /></div></Private>} />
+      <Route path="/marka-duzenle" element={<Private><div className="app"><BrandEdit /></div></Private>} />
+      <Route path="/marka-ekle" element={<Private><div className="app"><AddBrand /></div></Private>} />
+      <Route element={<Private><Tabs /></Private>}>
+        <Route path="/ana" element={<Home />} />
+        <Route path="/rapor" element={<Report />} />
+        <Route path="/rakipler" element={<Navigate to="/rapor?b=rakipler" replace />} />
+        <Route path="/oneriler" element={<Advice />} />
+        <Route path="/urunler" element={<Products />} />
+        <Route path="/urunler/:id" element={<ProductDetail />} />
+        <Route path="/dogruluk" element={<Accuracy />} />
+        <Route path="/kaynaklar" element={<Sources />} />
+        <Route path="/trafik" element={<Traffic />} />
+        <Route path="/paket" element={<Plans />} />
+        <Route path="/bildirimler" element={<Activity />} />
+        <Route path="/hesap" element={<Account />} />
+      </Route>
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
+  );
+}
+
+function Offline({ retry }: { retry: () => void }) {
+  return (
+    <div className="app"><div className="screen" style={{ justifyContent: "center", textAlign: "center" }}>
+      <h1 style={{ fontSize: 24 }}>{L("Bağlantı kurulamadı", "Couldn't connect")}</h1>
+      <p className="muted">{L("Uygulama sunucuya ulaşamadı. İnternetinizin açık olduğundan emin olup tekrar deneyin.", "The app couldn't reach the server. Make sure you're online and try again.")}</p>
+      <button className="btn btn-primary" onClick={retry}>{L("Tekrar dene", "Try again")}</button>
+    </div></div>
+  );
+}
+
+const root = createRoot(document.getElementById("root")!);
+function boot() {
+  root.render(<Spinner />);
+  initSupabase().then(
+    () => root.render(<StrictMode><HashRouter><AppProvider><App /></AppProvider></HashRouter></StrictMode>),
+    () => root.render(<Offline retry={boot} />),
+  );
+}
+boot();

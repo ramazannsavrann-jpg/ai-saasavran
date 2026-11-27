@@ -97,3 +97,16 @@ test("Shopping: 'e-book / e-kitap okuyucu' ürünün kendisidir; kılavuz kitab�
   assert.equal(titleMatches("Amazon Kindle Paperwhite user guide book", k), false);
   assert.equal(titleMatches("Amazon Kindle Paperwhite kitap kılıfı", k), false);
 });
+
+test("Shopping eşleşmesi (22 Kasım gerçek ilanlar): model kodu yeterli; aksesuar ve ikinci el ürün sayılmaz", () => {
+  const xl = { name: "Philips 3000 Serisi Airfryer XL HD9257/80", brand: "Philips" };
+  const l = { name: "Philips 3000 Serisi Airfryer L HD9252/90", brand: "Philips" };
+  assert.equal(titleMatches("Popüler Philips Airfryer 3000 Serisi Hd9257/80 XL 5.6 L Fritöz Buhar Izgarası ve Yağ Önleyici Aparat", xl, "Teknosa"), false, "aksesuar (aparat)");
+  assert.equal(titleMatches("Philips Airfryer HD9252/90 Essential Fritöz", l, "Trendyol"), true, "seri adı yazmasa da model kodu yeterli");
+  assert.equal(titleMatches("Philips HD9252/90 Airfryer 4.1 L", l, "letgo"), false, "ikinci el pazar yeri");
+  assert.equal(titleMatches("Philips Airfryer HD9252/90 2. El Temiz", l, "Hepsiburada"), false, "ikinci el ilan");
+  assert.equal(titleMatches("Philips Airfryer HD9252/90 Yenilenmiş", l, "Amazon"), false, "yenilenmiş");
+  assert.equal(titleMatches("Philips Airfryer HD9270/90 XL", l, "Trendyol"), false, "başka model kodu");
+  assert.equal(titleMatches("Airfryer Silikon Pişirme Kalıbı HD9252 Uyumlu", l), false, "kalıp aksesuarı");
+  assert.equal(titleMatches("Airfryer Pişirme Kağıdı 100 Adet", { name: "Airfryer Pişirme Kağıdı" }), true, "ürünün kendisi kağıtsa eşleşir");
+});

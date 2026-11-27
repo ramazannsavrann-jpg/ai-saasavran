@@ -1,4 +1,5 @@
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
+import { API_BASE, IS_NATIVE_APP } from "./env";
 import { L, isEn } from "./i18n";
 
 export interface RuntimeConfig { supabaseUrl: string; supabaseAnonKey: string; environment: string; paddle?: unknown }
@@ -6,13 +7,40 @@ export interface RuntimeConfig { supabaseUrl: string; supabaseAnonKey: string; e
 let client: SupabaseClient | null = null;
 let config: RuntimeConfig | null = null;
 
-/** Yapılandırma derleme anında değil, çalışma anında /config.json'dan okunur. */
+const CONFIG_CACHE = "saasavran-config";
+const CONFIG_TIMEOUT_MS = 8000;
+const validConfig = (c: unknown): c is RuntimeConfig => !!c && typeof c === "object" && !!(c as RuntimeConfig).supabaseUrl && !!(c as RuntimeConfig).supabaseAnonKey;
+function cachedConfig(): RuntimeConfig | null {
+  try { const c = JSON.parse(localStorage.getItem(CONFIG_CACHE) ?? "null"); return validConfig(c) ? c : null; } catch { return null; }
+}
+
+/** /config.json'u en fazla 8 sn bekler; cevap hatalıysa ya da eksikse hata verir. */
+async function fetchConfig(): Promise<RuntimeConfig> {
+  const ctl = new AbortController();
+  const t = setTimeout(() => ctl.abort(), CONFIG_TIMEOUT_MS);
+  try {
+    const res = await fetch(`${API_BASE}/config.json`, { cache: "no-store", signal: ctl.signal });
+    if (!res.ok) throw new Error(`config_http_${res.status}`);
+    const c = await res.json();
+    if (!validConfig(c)) throw new Error("not_configured");
+    return c;
+  } finally { clearTimeout(t); }
+}
+
+/** Yapılandırma derleme anında değil, çalışma anında /config.json'dan okunur.
+ *  Son iyi yapılandırma saklanır: bağlantı zayıfken ya da sunucu cevap vermezken uygulama onunla açılır. */
 export async function initSupabase(): Promise<RuntimeConfig> {
-  const res = await fetch("/config.json", { cache: "no-store" });
-  config = (await res.json()) as RuntimeConfig;
-  if (!config.supabaseUrl || !config.supabaseAnonKey) throw new Error("not_configured");
+  try {
+    config = await fetchConfig();
+    try { localStorage.setItem(CONFIG_CACHE, JSON.stringify(config)); } catch { /* özel pencere / dolu */ }
+  } catch (e) {
+    const c = cachedConfig();
+    if (!c) throw e;
+    config = c;
+  }
   client = createClient(config.supabaseUrl, config.supabaseAnonKey, {
-    auth: { persistSession: true, autoRefreshToken: true, storageKey: "saasavran-auth" },
+    // Uygulamada Google girişi sistem tarayıcısında olur, dönüşte kod uygulamaya gelir (PKCE); adres çubuğu okunmaz
+    auth: { persistSession: true, autoRefreshToken: true, storageKey: "saasavran-auth", ...(IS_NATIVE_APP ? { flowType: "pkce" as const, detectSessionInUrl: false } : {}) },
   });
   return config;
 }

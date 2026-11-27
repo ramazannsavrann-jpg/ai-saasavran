@@ -1,0 +1,36 @@
+name: Mobil uygulama derleme kontrolü (iOS)
+# Dalda yapılan değişiklikte iOS uygulamasının simülatör için derlenip derlenmediğine bakar. İmzasız; App Store'a yüklemez.
+# Apple geliştirici hesabı açılınca imzalı derleme ayrı iş akışıyla eklenecek.
+on:
+  push:
+    branches-ignore: [main]
+    paths: ["web/src/mobile/**", "web/src/lib/**", "web/ios/**", "web/capacitor.config.json", "web/vite.mobile.config.ts", "web/mobile.html", "web/package.json", ".github/workflows/mobil-ios-kontrol.yml"]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: mobil-ios-kontrol-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: macos-15
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm ci --prefix web
+      - name: Ekranları derle ve iOS projesine kopyala
+        working-directory: web
+        run: |
+          npm run build:mobile
+          npx cap sync ios
+      - name: iOS simülatör derlemesi (imzasız)
+        working-directory: web/ios/App
+        run: |
+          xcodebuild -project App.xcodeproj -scheme App -configuration Debug \
+            -sdk iphonesimulator -destination 'generic/platform=iOS Simulator' \
+            CODE_SIGNING_ALLOWED=NO build | tail -40
+          test "${PIPESTATUS[0]}" -eq 0

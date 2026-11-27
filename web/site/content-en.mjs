@@ -130,7 +130,7 @@ export const GUIDES_EN = [
 `,
     faq: [
       ["Does AI visibility matter for a small business?", "Yes. Assistants usually suggest only a few businesses per question; not being on the list means never being seen by that customer."],
-      ["Can I pay to appear in AI recommendations?", "No. Recommendations in AI answers are not ads; they come from web information and model knowledge. Accurate, consistent information matters most."],
+      ["Can I pay to appear in AI recommendations?", "Not in the answer itself. ChatGPT now sells ads in some countries, but OpenAI says ads appear below the answer, separate and clearly labeled, and do not influence the brands ChatGPT recommends. Recommendations in the answer come from web information and model knowledge, so accurate, consistent information matters most. AI SaaSavran measures the organic recommendations in the answer, not ads."],
     ],
   },
   {
@@ -227,11 +227,11 @@ export const GUIDES_EN = [
 <p>Live-search queries cost money for every tool. Check what the free plan really includes, how many questions and measurements you get, whether agencies can manage several brands, and whether usage limits stop before surprise costs.</p>
 
 <h2>Where AI SaaSavran fits</h2>
-<p>AI SaaSavran asks your customers' questions in Turkish or English and reports each engine separately. The free plan uses Gemini without live web search and labels it clearly; paid plans add ChatGPT, Claude and Perplexity with live web search and the sites they cited. Reports separate mention, recommendation and citation, show competitor comparisons and source shares, and include product accuracy checks. Plans are Free, Plus $29, Pro $149 and Business $449 a month. We are in early access.</p>
+<p>AI SaaSavran asks your customers' questions in Turkish or English and reports each engine separately. The free plan uses Gemini without live web search and labels it clearly; paid plans add live web search for Gemini plus ChatGPT, Claude and Perplexity with live web search and the sites they cited. Reports separate mention, recommendation and citation, show competitor comparisons and source shares, and include product accuracy checks. Plans are Free, Silver $130, Gold $250, Platinum $400 and Diamond $1500 a month. We are in early access.</p>
 `,
     faq: [
       ["What is the most important feature of an AI visibility tool?", "Per-engine results built from repeated questions, with each answer labelled as live web search or model knowledge, plus the sources the AI cited."],
-      ["Can I measure AI visibility for free?", "Partly. Free plans usually use model knowledge without live search or a small number of questions. AI SaaSavran's free plan includes 1 brand, 15 questions and 4 measurements a month on Gemini without live search."],
+      ["Can I measure AI visibility for free?", "Partly. Free plans usually use model knowledge without live search or a small number of questions. AI SaaSavran's free plan includes 1 brand, 15 questions and 1 measurement a month on Gemini without live search."],
       ["Why do different AI engines give different results?", "They use different search providers, sources and training data. In our measurements the same brand was recommended often by one engine and never by another."],
     ],
   },
@@ -266,14 +266,14 @@ export const GUIDES_EN = [
 <p>When you publish content or list the brand in a directory, note the date. If later measurements move, you can tell the client what changed after which action. If nothing moves, say so honestly; changes in AI answers can take weeks.</p>
 
 <h2>8. Use a measurement to win a new client</h2>
-<p>Before a pitch, measure the prospect the same way: add the prospect as one of your brands, write five or six questions its customers would ask, run a measurement and share the read-only report link. A concrete finding ("your competitor was recommended in 9 of 12 answers, you in none, and these three sites were the sources") is a stronger opening than a general GEO presentation. On the Business plan the shared report shows your agency's name and logo. If you don't win the client, remove the brand to free the slot.</p>
+<p>Before a pitch, measure the prospect the same way: add the prospect as one of your brands, write five or six questions its customers would ask, run a measurement and share the read-only report link. A concrete finding ("your competitor was recommended in 9 of 12 answers, you in none, and these three sites were the sources") is a stronger opening than a general GEO presentation. On the Diamond plan the shared report shows your agency's name and logo. If you don't win the client, remove the brand to free the slot.</p>
 <h2>What AI SaaSavran offers agencies</h2>
-<p>In AI SaaSavran you can open your workspace as an "Agency" and add client brands one by one. The Pro plan covers 5 brands and a team of 3; the Business plan covers 15 brands and a team of 15. Each brand gets its own questions, competitors, weekly automatic measurement, an email alert on a significant drop, per-engine reports, cited sources, PDF and CSV (Excel) export and a shareable report link. On Business, the report link and PDF carry your own agency name, logo and colour. On Pro and Business, results can also flow into your own dashboards through the API and MCP. You can start by trying one brand on the free plan.</p>
+<p>In AI SaaSavran you can open your workspace as an "Agency" and add client brands one by one. Give each brand a client name and the dashboard groups and filters brands by client; the overview shows each brand's latest recommendation rate, change and confidence score side by side. The Platinum plan covers 5 brands and a team of 3; the Diamond plan covers 15 brands and a team of 15. Each brand gets its own questions, competitors, weekly automatic measurement, an email alert on a significant drop, per-engine reports, cited sources, PDF and CSV (Excel) export and a shareable report link. On Diamond, the report link and PDF carry your own agency name, logo and colour. On Platinum and Diamond, results can also flow into your own dashboards through the API and MCP. You can start by trying one brand on the free plan.</p>
 `,
     faq: [
-      ["How many client brands can an agency track in one account?", "In AI SaaSavran the Pro plan includes 5 brands and the Business plan 15. Each brand has its own questions, competitor list and report."],
+      ["How many client brands can an agency track in one account?", "In AI SaaSavran the Platinum plan includes 5 brands and the Diamond plan 15. Each brand has its own questions, competitor list and report."],
       ["How do I send a report to a client?", "Share a read-only report link that needs no login, or download the report as a PDF."],
-      ["Can teammates work on the same brands?", "Yes. Pro gives access to 3 people and Business to 15, each with their own login, so nobody shares a password."],
+      ["Can teammates work on the same brands?", "Yes. Platinum gives access to 3 people and Diamond to 15, each with their own login, so nobody shares a password."],
     ],
   },
 ];
@@ -284,9 +284,9 @@ GUIDES_EN.push(...NEW_EN);
 export const HOME_FAQ_EN = [
   ["Is AI SaaSavran the same as Savran AI?", "No. AI SaaSavran (aisaasavran.com) is software that measures how visible brands are in ChatGPT, Gemini, Claude and Perplexity answers. Savran AI (savran.ai) is a separate company and product; there is no connection between us. Our name is written AI SaaSavran (SaaS + Savran)."],
   ["Does AI SaaSavran have a guarantee?", "Paid plans come with a 14-day money-back guarantee: cancel within the first 14 days and you are refunded. We don't guarantee results: AI SaaSavran measures how visible you are in AI answers and recommends what to do; nobody can guarantee that an AI will recommend you. Details: aisaasavran.com/refund/."],
-  ["Is AI SaaSavran related to other companies with a similar name?", "No. AI SaaSavran is the AI visibility measurement tool at aisaasavran.com. It is an independent product with its own plans (Free, Plus $29, Pro $149, Business $449 a month) and is not affiliated with similarly named companies or services. If an AI assistant describes different plans or a different business under our name, it is describing someone else."],
+  ["Is AI SaaSavran related to other companies with a similar name?", "No. AI SaaSavran is the AI visibility measurement tool at aisaasavran.com. It is an independent product with its own plans (Free, Silver $130, Gold $250, Platinum $400, Diamond $1500 a month) and is not affiliated with similarly named companies or services. If an AI assistant describes different plans or a different business under our name, it is describing someone else."],
   ["What does AI SaaSavran do?", "It asks ChatGPT, Gemini, Claude and Perplexity the questions your customers would ask, and measures whether your brand is mentioned, recommended or cited as a source, compared with your competitors."],
-  ["Is it free?", "The free plan includes 1 brand, 15 questions and 4 measurements a month. Paid plans are Plus $29, Pro $149 and Business $449 a month, billed monthly and cancellable anytime. Free-plan measurements use Gemini without live web search, and reports say so clearly."],
-  ["Which AI assistants are measured?", "Free plan: Gemini without live web search (not available in the EEA, Switzerland and the UK). Paid plans add ChatGPT, Claude and Perplexity with live web search, including the sites they cited. Reports show each engine separately."],
+  ["Is it free?", "The free plan includes 1 brand, 15 questions and 1 measurement a month. Paid plans are Silver $130, Gold $250, Platinum $400 and Diamond $1500 a month, billed monthly and cancellable anytime. Free-plan measurements use Gemini without live web search, and reports say so clearly."],
+  ["Which AI assistants are measured?", "Free plan: Gemini without live web search (not available in the EEA, Switzerland and the UK). Paid plans measure Gemini, ChatGPT, Claude and Perplexity with live web search, including the sites they cited. Reports show each engine separately."],
   ["Is the product ready?", "We are in early access: the product works, but it is new and run by a small team. We list exactly what works and what doesn't on this page."],
 ];

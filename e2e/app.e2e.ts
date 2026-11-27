@@ -18,6 +18,8 @@ test.describe.configure({ mode: "serial" });
 test.beforeAll(async () => {
   mkdirSync(SHOTS, { recursive: true });
   stack = await startStack({ quiet: true });
+  // Test düzeneği: Free ayda 4 ölçüm (gerçek limit 1, migration 0062). Entegrasyon testiyle aynı.
+  stack.sql("update plans set monthly_runs = 4 where id = 'free';");
 });
 test.afterAll(async () => { await stack?.stop(); });
 
@@ -346,7 +348,7 @@ test("İngilizce arayüz: tarayıcı dili İngilizceyse giriş ve gizlilik İngi
   await expect(page.getByRole("heading", { name: "Privacy policy", level: 1 })).toBeVisible();
   await expect(page.getByText("Google may use this content to improve its products")).toBeVisible();
   await page.goto("/giris");
-  await page.getByRole("button", { name: "Türkçeye geç" }).click();
+  await page.getByRole("button", { name: "Switch to Turkish" }).click();
   await expect(page.getByRole("button", { name: "Giriş yap", exact: true })).toBeVisible();
   await ctx.close();
 });
@@ -362,6 +364,30 @@ test("İzolasyon arayüzde: ikinci müşteri ilk müşterinin markasını görem
   const other = stack.sql(`select id from brands where name = 'Lezzet Durağı Döner'`);
   await page.goto(`/marka/${other}`);
   await expect(page.getByText("Marka bulunamadı veya bu markayı görme yetkiniz yok")).toBeVisible();
+});
+
+test("Hesap silme: kullanıcı Hesap sayfasından hesabını siler, tekrar giriş yapamaz", async ({ page }) => {
+  await page.goto("/kayit");
+  await page.getByLabel("E-posta").fill("silinecek@ornek.test");
+  await page.getByLabel("Şifre").fill("Guclu-Sifre-2026");
+  await page.getByRole("checkbox").check();
+  await page.getByRole("button", { name: "Hesap oluştur" }).click();
+  await expect(page.getByRole("heading", { name: "Çalışma alanı oluşturun" })).toBeVisible();
+  await page.goto("/hesap");
+  await page.getByRole("button", { name: "Hesabımı sil" }).click();
+  const final = page.getByRole("button", { name: "Hesabımı kalıcı olarak sil" });
+  await expect(final).toBeDisabled();
+  await page.getByLabel("Onaylamak için SİL yazın").fill("sil");
+  await expect(final).toBeEnabled();
+  await noHorizontalScroll(page);
+  await shot(page, "13-hesap-silme");
+  await final.click();
+  await expect(page.getByText("Hesabınız ve verileriniz silindi.")).toBeVisible();
+  expect(stack.sql(`select count(*) from auth.users where email = 'silinecek@ornek.test'`).trim()).toBe("0");
+  await page.getByLabel("E-posta").fill("silinecek@ornek.test");
+  await page.getByLabel("Şifre").fill("Guclu-Sifre-2026");
+  await page.getByRole("button", { name: "Giriş yap" }).click();
+  await expect(page.getByRole("alert")).toBeVisible();
 });
 
 test("Demo Lab: simülasyon açıkça etiketli ve müşteriden ayrı", async ({ page }) => {

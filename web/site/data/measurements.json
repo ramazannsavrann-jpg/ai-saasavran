@@ -1,6 +1,2658 @@
 {
- "updated": "2026-11-18",
+ "updated": "2026-11-23",
  "items": [
+  {
+   "slug": "which-smartphone-would-you-recommend-for-taking-videos-for-social-medi",
+   "question": "Which smartphone would you recommend for taking videos for social media?",
+   "lang": "en",
+   "country": "US",
+   "at": "2026-11-20T10:22:40.336193+00:00",
+   "answers": 6,
+   "engines": [
+    {
+     "provider": "claude",
+     "measurement_type": "live_search",
+     "answers": 2,
+     "at": "2026-11-13T10:46:51.404438+00:00",
+     "brands": [
+      {
+       "name": "Apple",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 1
+      },
+      {
+       "name": "Google",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 1
+      },
+      {
+       "name": "Samsung",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      }
+     ]
+    },
+    {
+     "provider": "openai",
+     "measurement_type": "live_search",
+     "answers": 2,
+     "at": "2026-11-13T10:21:41.049703+00:00",
+     "brands": [
+      {
+       "name": "Apple",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 2
+      },
+      {
+       "name": "Samsung",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      }
+     ]
+    },
+    {
+     "provider": "gemini",
+     "measurement_type": "model_knowledge",
+     "answers": 2,
+     "at": "2026-11-20T10:22:40.336193+00:00",
+     "brands": [
+      {
+       "name": "Apple",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 2
+      },
+      {
+       "name": "Google",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "Samsung",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "what-is-the-best-phone-for-gaming",
+   "question": "What is the best phone for gaming?",
+   "lang": "en",
+   "country": "US",
+   "at": "2026-11-20T10:22:32.191815+00:00",
+   "answers": 6,
+   "engines": [
+    {
+     "provider": "claude",
+     "measurement_type": "live_search",
+     "answers": 2,
+     "at": "2026-11-13T10:46:33.231005+00:00",
+     "brands": [
+      {
+       "name": "Apple",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "OnePlus",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "Samsung",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "Xiaomi",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      }
+     ]
+    },
+    {
+     "provider": "openai",
+     "measurement_type": "live_search",
+     "answers": 2,
+     "at": "2026-11-13T10:21:20.755263+00:00",
+     "brands": [
+      {
+       "name": "Samsung",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "Apple",
+       "recommended": 1,
+       "mentioned": 1,
+       "first": 0
+      }
+     ]
+    },
+    {
+     "provider": "gemini",
+     "measurement_type": "model_knowledge",
+     "answers": 2,
+     "at": "2026-11-20T10:22:32.191815+00:00",
+     "brands": [
+      {
+       "name": "Apple",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "OnePlus",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "Samsung",
+       "recommended": 1,
+       "mentioned": 1,
+       "first": 0
+      },
+      {
+       "name": "Xiaomi",
+       "recommended": 1,
+       "mentioned": 1,
+       "first": 0
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "which-phone-brand-is-the-most-reliable-and-gets-the-longest-software-u",
+   "question": "Which phone brand is the most reliable and gets the longest software updates?",
+   "lang": "en",
+   "country": "US",
+   "at": "2026-11-20T10:22:22.85418+00:00",
+   "answers": 6,
+   "engines": [
+    {
+     "provider": "claude",
+     "measurement_type": "live_search",
+     "answers": 2,
+     "at": "2026-11-13T10:46:13.852135+00:00",
+     "brands": [
+      {
+       "name": "Apple",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 1
+      },
+      {
+       "name": "Google",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 1
+      },
+      {
+       "name": "Samsung",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 1
+      },
+      {
+       "name": "Xiaomi",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "OnePlus",
+       "recommended": 0,
+       "mentioned": 1,
+       "first": 0
+      }
+     ]
+    },
+    {
+     "provider": "openai",
+     "measurement_type": "live_search",
+     "answers": 2,
+     "at": "2026-11-13T10:20:59.691916+00:00",
+     "brands": [
+      {
+       "name": "Apple",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 2
+      },
+      {
+       "name": "Google",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "Samsung",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      }
+     ]
+    },
+    {
+     "provider": "gemini",
+     "measurement_type": "model_knowledge",
+     "answers": 2,
+     "at": "2026-11-20T10:22:22.85418+00:00",
+     "brands": [
+      {
+       "name": "Apple",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 2
+      },
+      {
+       "name": "Google",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 1
+      },
+      {
+       "name": "Samsung",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 1
+      },
+      {
+       "name": "OnePlus",
+       "recommended": 1,
+       "mentioned": 1,
+       "first": 0
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "what-phone-should-i-buy-for-a-student-on-a-budget",
+   "question": "What phone should I buy for a student on a budget?",
+   "lang": "en",
+   "country": "US",
+   "at": "2026-11-20T10:22:15.155312+00:00",
+   "answers": 6,
+   "engines": [
+    {
+     "provider": "claude",
+     "measurement_type": "live_search",
+     "answers": 2,
+     "at": "2026-11-13T10:45:51.744232+00:00",
+     "brands": [
+      {
+       "name": "Apple",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "Google",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 1
+      },
+      {
+       "name": "OnePlus",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "Samsung",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 1
+      },
+      {
+       "name": "Xiaomi",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      }
+     ]
+    },
+    {
+     "provider": "openai",
+     "measurement_type": "live_search",
+     "answers": 2,
+     "at": "2026-11-13T10:20:35.548652+00:00",
+     "brands": [
+      {
+       "name": "Google",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 2
+      },
+      {
+       "name": "Apple",
+       "recommended": 1,
+       "mentioned": 2,
+       "first": 0
+      }
+     ]
+    },
+    {
+     "provider": "gemini",
+     "measurement_type": "model_knowledge",
+     "answers": 2,
+     "at": "2026-11-20T10:22:15.155312+00:00",
+     "brands": [
+      {
+       "name": "Apple",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 1
+      },
+      {
+       "name": "Google",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 1
+      },
+      {
+       "name": "Samsung",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "which-smartphone-has-the-longest-battery-life",
+   "question": "Which smartphone has the longest battery life?",
+   "lang": "en",
+   "country": "US",
+   "at": "2026-11-20T10:22:04.618702+00:00",
+   "answers": 6,
+   "engines": [
+    {
+     "provider": "claude",
+     "measurement_type": "live_search",
+     "answers": 2,
+     "at": "2026-11-13T10:45:30.73549+00:00",
+     "brands": [
+      {
+       "name": "Apple",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 1
+      },
+      {
+       "name": "OnePlus",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "Google",
+       "recommended": 0,
+       "mentioned": 1,
+       "first": 0
+      }
+     ]
+    },
+    {
+     "provider": "openai",
+     "measurement_type": "live_search",
+     "answers": 2,
+     "at": "2026-11-13T10:20:13.861814+00:00",
+     "brands": [
+      {
+       "name": "Apple",
+       "recommended": 1,
+       "mentioned": 1,
+       "first": 1
+      },
+      {
+       "name": "OnePlus",
+       "recommended": 1,
+       "mentioned": 1,
+       "first": 1
+      },
+      {
+       "name": "Google",
+       "recommended": 0,
+       "mentioned": 1,
+       "first": 0
+      }
+     ]
+    },
+    {
+     "provider": "gemini",
+     "measurement_type": "model_knowledge",
+     "answers": 2,
+     "at": "2026-11-20T10:22:04.618702+00:00",
+     "brands": [
+      {
+       "name": "Apple",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 1
+      },
+      {
+       "name": "OnePlus",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "Samsung",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "Google",
+       "recommended": 1,
+       "mentioned": 1,
+       "first": 0
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "what-is-the-best-value-for-money-smartphone",
+   "question": "What is the best value-for-money smartphone?",
+   "lang": "en",
+   "country": "US",
+   "at": "2026-11-20T10:21:57.715627+00:00",
+   "answers": 6,
+   "engines": [
+    {
+     "provider": "claude",
+     "measurement_type": "live_search",
+     "answers": 2,
+     "at": "2026-11-13T10:45:09.486261+00:00",
+     "brands": [
+      {
+       "name": "Google",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 2
+      },
+      {
+       "name": "Samsung",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "Xiaomi",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "OnePlus",
+       "recommended": 1,
+       "mentioned": 1,
+       "first": 0
+      }
+     ]
+    },
+    {
+     "provider": "openai",
+     "measurement_type": "live_search",
+     "answers": 2,
+     "at": "2026-11-13T10:19:49.492699+00:00",
+     "brands": [
+      {
+       "name": "Google",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 2
+      },
+      {
+       "name": "Apple",
+       "recommended": 1,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "Samsung",
+       "recommended": 1,
+       "mentioned": 1,
+       "first": 0
+      }
+     ]
+    },
+    {
+     "provider": "gemini",
+     "measurement_type": "model_knowledge",
+     "answers": 2,
+     "at": "2026-11-20T10:21:57.715627+00:00",
+     "brands": [
+      {
+       "name": "Apple",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "Google",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 1
+      },
+      {
+       "name": "OnePlus",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "Samsung",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "Xiaomi",
+       "recommended": 1,
+       "mentioned": 1,
+       "first": 0
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "which-phone-has-the-best-camera",
+   "question": "Which phone has the best camera?",
+   "lang": "en",
+   "country": "US",
+   "at": "2026-11-20T10:21:49.299126+00:00",
+   "answers": 6,
+   "engines": [
+    {
+     "provider": "claude",
+     "measurement_type": "live_search",
+     "answers": 2,
+     "at": "2026-11-13T10:44:50.989492+00:00",
+     "brands": [
+      {
+       "name": "Apple",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "Google",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "Samsung",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 1
+      },
+      {
+       "name": "Xiaomi",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      }
+     ]
+    },
+    {
+     "provider": "openai",
+     "measurement_type": "live_search",
+     "answers": 2,
+     "at": "2026-11-13T10:19:16.996906+00:00",
+     "brands": [
+      {
+       "name": "Apple",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 1
+      },
+      {
+       "name": "Samsung",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 2
+      }
+     ]
+    },
+    {
+     "provider": "gemini",
+     "measurement_type": "model_knowledge",
+     "answers": 2,
+     "at": "2026-11-20T10:21:49.299126+00:00",
+     "brands": [
+      {
+       "name": "Apple",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "Google",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "Samsung",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 2
+      },
+      {
+       "name": "Xiaomi",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "what-is-the-best-smartphone-to-buy-right-now",
+   "question": "What is the best smartphone to buy right now?",
+   "lang": "en",
+   "country": "US",
+   "at": "2026-11-20T10:21:40.655976+00:00",
+   "answers": 6,
+   "engines": [
+    {
+     "provider": "claude",
+     "measurement_type": "live_search",
+     "answers": 2,
+     "at": "2026-11-13T10:44:32.916839+00:00",
+     "brands": [
+      {
+       "name": "Apple",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "Google",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "Samsung",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 1
+      }
+     ]
+    },
+    {
+     "provider": "openai",
+     "measurement_type": "live_search",
+     "answers": 2,
+     "at": "2026-11-13T10:18:56.842513+00:00",
+     "brands": [
+      {
+       "name": "Apple",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 1
+      },
+      {
+       "name": "Samsung",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 1
+      },
+      {
+       "name": "Google",
+       "recommended": 1,
+       "mentioned": 2,
+       "first": 0
+      }
+     ]
+    },
+    {
+     "provider": "gemini",
+     "measurement_type": "model_knowledge",
+     "answers": 2,
+     "at": "2026-11-20T10:21:40.655976+00:00",
+     "brands": [
+      {
+       "name": "Apple",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "Google",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "OnePlus",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "Samsung",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "sosyal-medya-icin-video-cekmeye-en-uygun-telefon-hangisi",
+   "question": "Sosyal medya için video çekmeye en uygun telefon hangisi?",
+   "lang": "tr",
+   "country": null,
+   "at": "2026-11-20T07:41:43.288031+00:00",
+   "answers": 6,
+   "engines": [
+    {
+     "provider": "claude",
+     "measurement_type": "live_search",
+     "answers": 2,
+     "at": "2026-11-13T10:43:14.024045+00:00",
+     "brands": [
+      {
+       "name": "Apple",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 2
+      },
+      {
+       "name": "Huawei",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "Oppo",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "Samsung",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "Xiaomi",
+       "recommended": 1,
+       "mentioned": 2,
+       "first": 0
+      }
+     ]
+    },
+    {
+     "provider": "openai",
+     "measurement_type": "live_search",
+     "answers": 2,
+     "at": "2026-11-13T10:40:05.033772+00:00",
+     "brands": [
+      {
+       "name": "Apple",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 2
+      },
+      {
+       "name": "Samsung",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      }
+     ]
+    },
+    {
+     "provider": "gemini",
+     "measurement_type": "model_knowledge",
+     "answers": 2,
+     "at": "2026-11-20T07:41:43.288031+00:00",
+     "brands": [
+      {
+       "name": "Apple",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 1
+      },
+      {
+       "name": "Samsung",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "oyun-icin-en-iyi-telefon-hangisi",
+   "question": "Oyun için en iyi telefon hangisi?",
+   "lang": "tr",
+   "country": null,
+   "at": "2026-11-20T07:41:32.88473+00:00",
+   "answers": 6,
+   "engines": [
+    {
+     "provider": "claude",
+     "measurement_type": "live_search",
+     "answers": 2,
+     "at": "2026-11-13T10:42:49.191339+00:00",
+     "brands": [
+      {
+       "name": "Apple",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "Samsung",
+       "recommended": 1,
+       "mentioned": 1,
+       "first": 0
+      },
+      {
+       "name": "Xiaomi",
+       "recommended": 0,
+       "mentioned": 2,
+       "first": 0
+      }
+     ]
+    },
+    {
+     "provider": "openai",
+     "measurement_type": "live_search",
+     "answers": 2,
+     "at": "2026-11-13T10:39:32.708937+00:00",
+     "brands": [
+      {
+       "name": "Samsung",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "Apple",
+       "recommended": 1,
+       "mentioned": 1,
+       "first": 0
+      }
+     ]
+    },
+    {
+     "provider": "gemini",
+     "measurement_type": "model_knowledge",
+     "answers": 2,
+     "at": "2026-11-20T07:41:32.88473+00:00",
+     "brands": [
+      {
+       "name": "Apple",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "Samsung",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "Xiaomi",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "en-guvenilir-ve-en-uzun-guncelleme-alan-telefon-markasi-hangisi",
+   "question": "En güvenilir ve en uzun güncelleme alan telefon markası hangisi?",
+   "lang": "tr",
+   "country": null,
+   "at": "2026-11-20T07:41:22.205927+00:00",
+   "answers": 4,
+   "engines": [
+    {
+     "provider": "claude",
+     "measurement_type": "live_search",
+     "answers": 2,
+     "at": "2026-11-13T10:42:25.842386+00:00",
+     "brands": [
+      {
+       "name": "Apple",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "Samsung",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 2
+      },
+      {
+       "name": "Xiaomi",
+       "recommended": 1,
+       "mentioned": 2,
+       "first": 0
+      }
+     ]
+    },
+    {
+     "provider": "gemini",
+     "measurement_type": "model_knowledge",
+     "answers": 2,
+     "at": "2026-11-20T07:41:22.205927+00:00",
+     "brands": [
+      {
+       "name": "Apple",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 1
+      },
+      {
+       "name": "Oppo",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "Samsung",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "Xiaomi",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "su-an-alinabilecek-en-iyi-akilli-telefon-hangisi",
+   "question": "Şu an alınabilecek en iyi akıllı telefon hangisi?",
+   "lang": "tr",
+   "country": null,
+   "at": "2026-11-20T07:41:12.397117+00:00",
+   "answers": 6,
+   "engines": [
+    {
+     "provider": "claude",
+     "measurement_type": "live_search",
+     "answers": 2,
+     "at": "2026-11-13T10:42:00.318317+00:00",
+     "brands": [
+      {
+       "name": "Apple",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "Samsung",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "Xiaomi",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      }
+     ]
+    },
+    {
+     "provider": "openai",
+     "measurement_type": "live_search",
+     "answers": 2,
+     "at": "2026-11-13T10:38:55.102597+00:00",
+     "brands": [
+      {
+       "name": "Apple",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 1
+      },
+      {
+       "name": "Samsung",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 1
+      }
+     ]
+    },
+    {
+     "provider": "gemini",
+     "measurement_type": "model_knowledge",
+     "answers": 2,
+     "at": "2026-11-20T07:41:12.397117+00:00",
+     "brands": [
+      {
+       "name": "Apple",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "Samsung",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "Xiaomi",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "pil-omru-en-uzun-telefon-markasi-hangisi",
+   "question": "Pil ömrü en uzun telefon markası hangisi?",
+   "lang": "tr",
+   "country": null,
+   "at": "2026-11-20T07:41:02.632075+00:00",
+   "answers": 6,
+   "engines": [
+    {
+     "provider": "claude",
+     "measurement_type": "live_search",
+     "answers": 2,
+     "at": "2026-11-13T10:41:38.024918+00:00",
+     "brands": [
+      {
+       "name": "Apple",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 2
+      },
+      {
+       "name": "Oppo",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "Xiaomi",
+       "recommended": 1,
+       "mentioned": 1,
+       "first": 0
+      }
+     ]
+    },
+    {
+     "provider": "openai",
+     "measurement_type": "live_search",
+     "answers": 2,
+     "at": "2026-11-13T10:38:31.038896+00:00",
+     "brands": [
+      {
+       "name": "Apple",
+       "recommended": 1,
+       "mentioned": 1,
+       "first": 1
+      },
+      {
+       "name": "Xiaomi",
+       "recommended": 1,
+       "mentioned": 1,
+       "first": 0
+      }
+     ]
+    },
+    {
+     "provider": "gemini",
+     "measurement_type": "model_knowledge",
+     "answers": 2,
+     "at": "2026-11-20T07:41:02.632075+00:00",
+     "brands": [
+      {
+       "name": "Apple",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "Samsung",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "Xiaomi",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 1
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "ogrenci-icin-hangi-telefonu-almaliyim",
+   "question": "Öğrenci için hangi telefonu almalıyım?",
+   "lang": "tr",
+   "country": null,
+   "at": "2026-11-20T07:40:53.097536+00:00",
+   "answers": 6,
+   "engines": [
+    {
+     "provider": "claude",
+     "measurement_type": "live_search",
+     "answers": 2,
+     "at": "2026-11-13T10:41:17.910083+00:00",
+     "brands": [
+      {
+       "name": "Apple",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "Samsung",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 1
+      },
+      {
+       "name": "Xiaomi",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      }
+     ]
+    },
+    {
+     "provider": "openai",
+     "measurement_type": "live_search",
+     "answers": 2,
+     "at": "2026-11-13T10:38:14.429614+00:00",
+     "brands": [
+      {
+       "name": "Samsung",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "Xiaomi",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 2
+      }
+     ]
+    },
+    {
+     "provider": "gemini",
+     "measurement_type": "model_knowledge",
+     "answers": 2,
+     "at": "2026-11-20T07:40:53.097536+00:00",
+     "brands": [
+      {
+       "name": "Apple",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "Samsung",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "Xiaomi",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "kamerasi-en-iyi-telefon-hangisi",
+   "question": "Kamerası en iyi telefon hangisi?",
+   "lang": "tr",
+   "country": null,
+   "at": "2026-11-20T07:40:41.395433+00:00",
+   "answers": 6,
+   "engines": [
+    {
+     "provider": "claude",
+     "measurement_type": "live_search",
+     "answers": 2,
+     "at": "2026-11-13T10:40:52.140132+00:00",
+     "brands": [
+      {
+       "name": "Apple",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 2
+      },
+      {
+       "name": "Huawei",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 1
+      },
+      {
+       "name": "Samsung",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "Xiaomi",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "Oppo",
+       "recommended": 1,
+       "mentioned": 2,
+       "first": 0
+      }
+     ]
+    },
+    {
+     "provider": "openai",
+     "measurement_type": "live_search",
+     "answers": 2,
+     "at": "2026-11-13T10:37:54.012933+00:00",
+     "brands": [
+      {
+       "name": "Apple",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 1
+      },
+      {
+       "name": "Oppo",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "Samsung",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 1
+      }
+     ]
+    },
+    {
+     "provider": "gemini",
+     "measurement_type": "model_knowledge",
+     "answers": 2,
+     "at": "2026-11-20T07:40:41.395433+00:00",
+     "brands": [
+      {
+       "name": "Apple",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 2
+      },
+      {
+       "name": "Samsung",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "Xiaomi",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "fiyat-performans-olarak-en-iyi-akilli-telefon-hangisi",
+   "question": "Fiyat performans olarak en iyi akıllı telefon hangisi?",
+   "lang": "tr",
+   "country": null,
+   "at": "2026-11-20T07:40:32.935088+00:00",
+   "answers": 6,
+   "engines": [
+    {
+     "provider": "claude",
+     "measurement_type": "live_search",
+     "answers": 2,
+     "at": "2026-11-13T10:40:25.344367+00:00",
+     "brands": [
+      {
+       "name": "Samsung",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "Xiaomi",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 2
+      }
+     ]
+    },
+    {
+     "provider": "openai",
+     "measurement_type": "live_search",
+     "answers": 2,
+     "at": "2026-11-13T10:37:35.423976+00:00",
+     "brands": [
+      {
+       "name": "Xiaomi",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 2
+      },
+      {
+       "name": "Samsung",
+       "recommended": 1,
+       "mentioned": 1,
+       "first": 0
+      }
+     ]
+    },
+    {
+     "provider": "gemini",
+     "measurement_type": "model_knowledge",
+     "answers": 2,
+     "at": "2026-11-20T07:40:32.935088+00:00",
+     "brands": [
+      {
+       "name": "Samsung",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "Xiaomi",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "Apple",
+       "recommended": 1,
+       "mentioned": 1,
+       "first": 0
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "20-bin-tl-civarinda-alinabilecek-en-iyi-kulak-ustu-kulaklik-hangisi",
+   "question": "20 bin TL civarında alınabilecek en iyi kulak üstü kulaklık hangisi?",
+   "lang": "tr",
+   "country": "TR",
+   "at": "2026-11-19T15:15:47.198791+00:00",
+   "answers": 6,
+   "engines": [
+    {
+     "provider": "claude",
+     "measurement_type": "live_search",
+     "answers": 2,
+     "at": "2026-11-12T14:16:09.526781+00:00",
+     "brands": [
+      {
+       "name": "JBL",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "Sennheiser",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "Sony",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 2
+      },
+      {
+       "name": "Bose",
+       "recommended": 1,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "Apple",
+       "recommended": 1,
+       "mentioned": 1,
+       "first": 0
+      }
+     ]
+    },
+    {
+     "provider": "openai",
+     "measurement_type": "live_search",
+     "answers": 2,
+     "at": "2026-11-12T14:14:24.548088+00:00",
+     "brands": [
+      {
+       "name": "Bose",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "Sennheiser",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 1
+      },
+      {
+       "name": "Sony",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 1
+      }
+     ]
+    },
+    {
+     "provider": "gemini",
+     "measurement_type": "model_knowledge",
+     "answers": 2,
+     "at": "2026-11-19T15:15:47.198791+00:00",
+     "brands": [
+      {
+       "name": "Apple",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "Bose",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "Sennheiser",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 1
+      },
+      {
+       "name": "Sony",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 1
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "ucakta-ve-yolculukta-kullanmak-icin-hangi-kulak-ustu-kulakligi-onerirs",
+   "question": "Uçakta ve yolculukta kullanmak için hangi kulak üstü kulaklığı önerirsin?",
+   "lang": "tr",
+   "country": "TR",
+   "at": "2026-11-19T15:13:15.550848+00:00",
+   "answers": 6,
+   "engines": [
+    {
+     "provider": "claude",
+     "measurement_type": "live_search",
+     "answers": 2,
+     "at": "2026-11-12T14:15:43.611419+00:00",
+     "brands": [
+      {
+       "name": "Apple",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "Bose",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "JBL",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "Sennheiser",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "Sony",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 2
+      }
+     ]
+    },
+    {
+     "provider": "openai",
+     "measurement_type": "live_search",
+     "answers": 2,
+     "at": "2026-11-12T14:13:54.265373+00:00",
+     "brands": [
+      {
+       "name": "Bose",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 2
+      },
+      {
+       "name": "Sony",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 1
+      }
+     ]
+    },
+    {
+     "provider": "gemini",
+     "measurement_type": "model_knowledge",
+     "answers": 2,
+     "at": "2026-11-19T15:13:15.550848+00:00",
+     "brands": [
+      {
+       "name": "Bose",
+       "recommended": 1,
+       "mentioned": 2,
+       "first": 1
+      },
+      {
+       "name": "Sony",
+       "recommended": 1,
+       "mentioned": 2,
+       "first": 1
+      },
+      {
+       "name": "Apple",
+       "recommended": 1,
+       "mentioned": 1,
+       "first": 0
+      },
+      {
+       "name": "Sennheiser",
+       "recommended": 1,
+       "mentioned": 1,
+       "first": 0
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "bagaj-hakki-en-iyi-havayolu-hangisi",
+   "question": "Bagaj hakkı en iyi havayolu hangisi?",
+   "lang": "tr",
+   "country": null,
+   "at": "2026-11-19T08:57:04.715763+00:00",
+   "answers": 6,
+   "engines": [
+    {
+     "provider": "claude",
+     "measurement_type": "live_search",
+     "answers": 2,
+     "at": "2026-11-12T08:53:41.860935+00:00",
+     "brands": [
+      {
+       "name": "Türk Hava Yolları",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 2
+      },
+      {
+       "name": "AJet",
+       "recommended": 0,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "Pegasus",
+       "recommended": 0,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "SunExpress",
+       "recommended": 0,
+       "mentioned": 1,
+       "first": 0
+      }
+     ]
+    },
+    {
+     "provider": "openai",
+     "measurement_type": "live_search",
+     "answers": 2,
+     "at": "2026-11-12T08:52:11.417754+00:00",
+     "brands": [
+      {
+       "name": "Türk Hava Yolları",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 2
+      },
+      {
+       "name": "SunExpress",
+       "recommended": 1,
+       "mentioned": 1,
+       "first": 0
+      },
+      {
+       "name": "Pegasus",
+       "recommended": 0,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "AJet",
+       "recommended": 0,
+       "mentioned": 1,
+       "first": 0
+      }
+     ]
+    },
+    {
+     "provider": "gemini",
+     "measurement_type": "model_knowledge",
+     "answers": 2,
+     "at": "2026-11-19T08:57:04.715763+00:00",
+     "brands": [
+      {
+       "name": "AJet",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "Pegasus",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "Türk Hava Yolları",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "ucuz-ucak-bileti-icin-hangi-havayolunu-onerirsin",
+   "question": "Ucuz uçak bileti için hangi havayolunu önerirsin?",
+   "lang": "tr",
+   "country": null,
+   "at": "2026-11-19T08:56:54.846983+00:00",
+   "answers": 6,
+   "engines": [
+    {
+     "provider": "claude",
+     "measurement_type": "live_search",
+     "answers": 2,
+     "at": "2026-11-12T08:53:12.749778+00:00",
+     "brands": [
+      {
+       "name": "Pegasus",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "AJet",
+       "recommended": 1,
+       "mentioned": 1,
+       "first": 0
+      },
+      {
+       "name": "SunExpress",
+       "recommended": 1,
+       "mentioned": 1,
+       "first": 0
+      }
+     ]
+    },
+    {
+     "provider": "openai",
+     "measurement_type": "live_search",
+     "answers": 2,
+     "at": "2026-11-12T08:51:48.594906+00:00",
+     "brands": [
+      {
+       "name": "AJet",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "Pegasus",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "SunExpress",
+       "recommended": 1,
+       "mentioned": 1,
+       "first": 0
+      }
+     ]
+    },
+    {
+     "provider": "gemini",
+     "measurement_type": "model_knowledge",
+     "answers": 2,
+     "at": "2026-11-19T08:56:54.846983+00:00",
+     "brands": [
+      {
+       "name": "AJet",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "Pegasus",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "SunExpress",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "Türk Hava Yolları",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "yurt-ici-ucuslarda-en-iyi-havayolu-hangisi",
+   "question": "Yurt içi uçuşlarda en iyi havayolu hangisi?",
+   "lang": "tr",
+   "country": null,
+   "at": "2026-11-19T08:56:45.333734+00:00",
+   "answers": 6,
+   "engines": [
+    {
+     "provider": "claude",
+     "measurement_type": "live_search",
+     "answers": 2,
+     "at": "2026-11-12T08:52:48.874208+00:00",
+     "brands": [
+      {
+       "name": "Pegasus",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 2
+      },
+      {
+       "name": "Türk Hava Yolları",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 1
+      }
+     ]
+    },
+    {
+     "provider": "openai",
+     "measurement_type": "live_search",
+     "answers": 2,
+     "at": "2026-11-12T08:51:33.338593+00:00",
+     "brands": [
+      {
+       "name": "AJet",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "Pegasus",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "Türk Hava Yolları",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 2
+      }
+     ]
+    },
+    {
+     "provider": "gemini",
+     "measurement_type": "model_knowledge",
+     "answers": 2,
+     "at": "2026-11-19T08:56:45.333734+00:00",
+     "brands": [
+      {
+       "name": "AJet",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "Pegasus",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "Türk Hava Yolları",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 2
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "iade-sureci-en-kolay-e-ticaret-sitesi-hangisi",
+   "question": "İade süreci en kolay e-ticaret sitesi hangisi?",
+   "lang": "tr",
+   "country": null,
+   "at": "2026-11-19T08:56:33.19367+00:00",
+   "answers": 6,
+   "engines": [
+    {
+     "provider": "claude",
+     "measurement_type": "live_search",
+     "answers": 2,
+     "at": "2026-11-12T08:50:18.584704+00:00",
+     "brands": [
+      {
+       "name": "Amazon",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 2
+      },
+      {
+       "name": "Trendyol",
+       "recommended": 1,
+       "mentioned": 2,
+       "first": 1
+      },
+      {
+       "name": "Hepsiburada",
+       "recommended": 0,
+       "mentioned": 1,
+       "first": 0
+      }
+     ]
+    },
+    {
+     "provider": "openai",
+     "measurement_type": "live_search",
+     "answers": 2,
+     "at": "2026-11-12T08:48:50.082588+00:00",
+     "brands": [
+      {
+       "name": "Amazon",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 2
+      },
+      {
+       "name": "Trendyol",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      }
+     ]
+    },
+    {
+     "provider": "gemini",
+     "measurement_type": "model_knowledge",
+     "answers": 2,
+     "at": "2026-11-19T08:56:33.19367+00:00",
+     "brands": [
+      {
+       "name": "Amazon",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 1
+      },
+      {
+       "name": "Hepsiburada",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "Trendyol",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 1
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "kargosu-en-hizli-alisveris-sitesi-hangisi",
+   "question": "Kargosu en hızlı alışveriş sitesi hangisi?",
+   "lang": "tr",
+   "country": null,
+   "at": "2026-11-19T08:56:22.253577+00:00",
+   "answers": 6,
+   "engines": [
+    {
+     "provider": "claude",
+     "measurement_type": "live_search",
+     "answers": 2,
+     "at": "2026-11-12T08:49:52.737212+00:00",
+     "brands": [
+      {
+       "name": "Amazon",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 2
+      },
+      {
+       "name": "Hepsiburada",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "Trendyol",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 2
+      }
+     ]
+    },
+    {
+     "provider": "openai",
+     "measurement_type": "live_search",
+     "answers": 2,
+     "at": "2026-11-12T08:48:31.436609+00:00",
+     "brands": [
+      {
+       "name": "Amazon",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 2
+      },
+      {
+       "name": "Trendyol",
+       "recommended": 1,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "Hepsiburada",
+       "recommended": 1,
+       "mentioned": 1,
+       "first": 1
+      }
+     ]
+    },
+    {
+     "provider": "gemini",
+     "measurement_type": "model_knowledge",
+     "answers": 2,
+     "at": "2026-11-19T08:56:22.253577+00:00",
+     "brands": [
+      {
+       "name": "Amazon",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "Hepsiburada",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 1
+      },
+      {
+       "name": "Trendyol",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "n11",
+       "recommended": 1,
+       "mentioned": 1,
+       "first": 0
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "internetten-elektronik-almak-icin-hangi-siteyi-onerirsin",
+   "question": "İnternetten elektronik almak için hangi siteyi önerirsin?",
+   "lang": "tr",
+   "country": null,
+   "at": "2026-11-19T08:56:12.543151+00:00",
+   "answers": 6,
+   "engines": [
+    {
+     "provider": "claude",
+     "measurement_type": "live_search",
+     "answers": 2,
+     "at": "2026-11-12T08:49:32.0643+00:00",
+     "brands": [
+      {
+       "name": "Hepsiburada",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 1
+      },
+      {
+       "name": "Trendyol",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 1
+      },
+      {
+       "name": "Amazon",
+       "recommended": 1,
+       "mentioned": 2,
+       "first": 0
+      }
+     ]
+    },
+    {
+     "provider": "openai",
+     "measurement_type": "live_search",
+     "answers": 2,
+     "at": "2026-11-12T08:48:11.845052+00:00",
+     "brands": [
+      {
+       "name": "Amazon",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "Hepsiburada",
+       "recommended": 1,
+       "mentioned": 1,
+       "first": 0
+      }
+     ]
+    },
+    {
+     "provider": "gemini",
+     "measurement_type": "model_knowledge",
+     "answers": 2,
+     "at": "2026-11-19T08:56:12.543151+00:00",
+     "brands": [
+      {
+       "name": "Hepsiburada",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 1
+      },
+      {
+       "name": "n11",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 1
+      },
+      {
+       "name": "Trendyol",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 1
+      },
+      {
+       "name": "Amazon",
+       "recommended": 1,
+       "mentioned": 1,
+       "first": 1
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "turkiyede-en-guvenilir-online-alisveris-sitesi-hangisi",
+   "question": "Türkiye'de en güvenilir online alışveriş sitesi hangisi?",
+   "lang": "tr",
+   "country": null,
+   "at": "2026-11-19T08:56:02.27779+00:00",
+   "answers": 6,
+   "engines": [
+    {
+     "provider": "claude",
+     "measurement_type": "live_search",
+     "answers": 2,
+     "at": "2026-11-12T08:49:11.971626+00:00",
+     "brands": [
+      {
+       "name": "Amazon",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 2
+      },
+      {
+       "name": "Hepsiburada",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "n11",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "Trendyol",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      }
+     ]
+    },
+    {
+     "provider": "openai",
+     "measurement_type": "live_search",
+     "answers": 2,
+     "at": "2026-11-12T08:47:55.265477+00:00",
+     "brands": [
+      {
+       "name": "Amazon",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 2
+      },
+      {
+       "name": "Hepsiburada",
+       "recommended": 1,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "Trendyol",
+       "recommended": 1,
+       "mentioned": 2,
+       "first": 0
+      }
+     ]
+    },
+    {
+     "provider": "gemini",
+     "measurement_type": "model_knowledge",
+     "answers": 2,
+     "at": "2026-11-19T08:56:02.27779+00:00",
+     "brands": [
+      {
+       "name": "Amazon",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "Hepsiburada",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 1
+      },
+      {
+       "name": "Trendyol",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 1
+      },
+      {
+       "name": "n11",
+       "recommended": 1,
+       "mentioned": 1,
+       "first": 1
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "turkiyede-en-guvenilir-bankalar-hangileri",
+   "question": "Türkiye'de en güvenilir bankalar hangileri?",
+   "lang": "tr",
+   "country": null,
+   "at": "2026-11-19T08:55:52.123161+00:00",
+   "answers": 4,
+   "engines": [
+    {
+     "provider": "openai",
+     "measurement_type": "live_search",
+     "answers": 2,
+     "at": "2026-11-06T21:56:55.027013+00:00",
+     "brands": [
+      {
+       "name": "Akbank",
+       "recommended": 0,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "Garanti BBVA",
+       "recommended": 0,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "İş Bankası",
+       "recommended": 0,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "Yapı Kredi",
+       "recommended": 0,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "Ziraat Bankası",
+       "recommended": 0,
+       "mentioned": 2,
+       "first": 0
+      }
+     ]
+    },
+    {
+     "provider": "gemini",
+     "measurement_type": "model_knowledge",
+     "answers": 2,
+     "at": "2026-11-19T08:55:52.123161+00:00",
+     "brands": [
+      {
+       "name": "Akbank",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "Garanti BBVA",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "İş Bankası",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "Yapı Kredi",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "Ziraat Bankası",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "yeni-hesap-acmak-icin-en-avantajli-banka-hangisi",
+   "question": "Yeni hesap açmak için en avantajlı banka hangisi?",
+   "lang": "tr",
+   "country": null,
+   "at": "2026-11-19T08:55:40.448484+00:00",
+   "answers": 4,
+   "engines": [
+    {
+     "provider": "openai",
+     "measurement_type": "live_search",
+     "answers": 2,
+     "at": "2026-11-06T21:56:37.913561+00:00",
+     "brands": [
+      {
+       "name": "Enpara.com",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 2
+      },
+      {
+       "name": "Akbank",
+       "recommended": 1,
+       "mentioned": 1,
+       "first": 0
+      }
+     ]
+    },
+    {
+     "provider": "gemini",
+     "measurement_type": "model_knowledge",
+     "answers": 2,
+     "at": "2026-11-19T08:55:40.448484+00:00",
+     "brands": [
+      {
+       "name": "Akbank",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 1
+      },
+      {
+       "name": "Enpara.com",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "Garanti BBVA",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 1
+      },
+      {
+       "name": "İş Bankası",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 1
+      },
+      {
+       "name": "Yapı Kredi",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 1
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "turkiyede-musteri-hizmetleri-en-iyi-banka-hangisi",
+   "question": "Türkiye'de müşteri hizmetleri en iyi banka hangisi?",
+   "lang": "tr",
+   "country": null,
+   "at": "2026-11-19T08:55:27.125616+00:00",
+   "answers": 4,
+   "engines": [
+    {
+     "provider": "openai",
+     "measurement_type": "live_search",
+     "answers": 2,
+     "at": "2026-11-06T21:56:14.225947+00:00",
+     "brands": [
+      {
+       "name": "İş Bankası",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 2
+      },
+      {
+       "name": "Ziraat Bankası",
+       "recommended": 1,
+       "mentioned": 1,
+       "first": 0
+      }
+     ]
+    },
+    {
+     "provider": "gemini",
+     "measurement_type": "model_knowledge",
+     "answers": 2,
+     "at": "2026-11-19T08:55:27.125616+00:00",
+     "brands": [
+      {
+       "name": "Enpara.com",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 2
+      },
+      {
+       "name": "Garanti BBVA",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "İş Bankası",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "Yapı Kredi",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "kredi-karti-almak-icin-hangi-bankayi-onerirsin",
+   "question": "Kredi kartı almak için hangi bankayı önerirsin?",
+   "lang": "tr",
+   "country": null,
+   "at": "2026-11-19T08:55:16.354416+00:00",
+   "answers": 4,
+   "engines": [
+    {
+     "provider": "openai",
+     "measurement_type": "live_search",
+     "answers": 2,
+     "at": "2026-11-06T21:55:51.503466+00:00",
+     "brands": [
+      {
+       "name": "Akbank",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 2
+      },
+      {
+       "name": "Enpara.com",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 1
+      },
+      {
+       "name": "İş Bankası",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 2
+      },
+      {
+       "name": "Garanti BBVA",
+       "recommended": 1,
+       "mentioned": 1,
+       "first": 1
+      },
+      {
+       "name": "Yapı Kredi",
+       "recommended": 1,
+       "mentioned": 1,
+       "first": 1
+      }
+     ]
+    },
+    {
+     "provider": "gemini",
+     "measurement_type": "model_knowledge",
+     "answers": 2,
+     "at": "2026-11-19T08:55:16.354416+00:00",
+     "brands": [
+      {
+       "name": "Akbank",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "Enpara.com",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 1
+      },
+      {
+       "name": "Garanti BBVA",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "İş Bankası",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "Yapı Kredi",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "turkiyede-en-iyi-mobil-bankacilik-uygulamasi-hangisi",
+   "question": "Türkiye'de en iyi mobil bankacılık uygulaması hangisi?",
+   "lang": "tr",
+   "country": null,
+   "at": "2026-11-19T08:55:03.073581+00:00",
+   "answers": 4,
+   "engines": [
+    {
+     "provider": "openai",
+     "measurement_type": "live_search",
+     "answers": 2,
+     "at": "2026-11-06T21:55:30.20013+00:00",
+     "brands": [
+      {
+       "name": "İş Bankası",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 2
+      },
+      {
+       "name": "Enpara.com",
+       "recommended": 1,
+       "mentioned": 1,
+       "first": 0
+      },
+      {
+       "name": "Garanti BBVA",
+       "recommended": 1,
+       "mentioned": 1,
+       "first": 0
+      },
+      {
+       "name": "Yapı Kredi",
+       "recommended": 1,
+       "mentioned": 1,
+       "first": 0
+      }
+     ]
+    },
+    {
+     "provider": "gemini",
+     "measurement_type": "model_knowledge",
+     "answers": 2,
+     "at": "2026-11-19T08:55:03.073581+00:00",
+     "brands": [
+      {
+       "name": "Akbank",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "Enpara.com",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "Garanti BBVA",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 2
+      },
+      {
+       "name": "İş Bankası",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "Yapı Kredi",
+       "recommended": 1,
+       "mentioned": 1,
+       "first": 0
+      }
+     ]
+    }
+   ]
+  },
   {
    "slug": "yapay-zeka-arama-sonuclarinda-rakipleri-geride-birakmak-icin-hangi-yaz",
    "question": "Yapay zekâ arama sonuçlarında rakipleri geride bırakmak için hangi yazılıma abone olmalıyım?",
@@ -121,13 +2773,13 @@
        "name": "Ahrefs",
        "recommended": 2,
        "mentioned": 2,
-       "first": 0
+       "first": 1
       },
       {
        "name": "Semrush",
        "recommended": 2,
        "mentioned": 2,
-       "first": 0
+       "first": 1
       },
       {
        "name": "Peec AI",
@@ -421,7 +3073,7 @@
        "name": "Semrush",
        "recommended": 2,
        "mentioned": 2,
-       "first": 0
+       "first": 1
       },
       {
        "name": "Ahrefs",
@@ -571,19 +3223,19 @@
        "name": "Ahrefs",
        "recommended": 2,
        "mentioned": 2,
-       "first": 0
+       "first": 1
       },
       {
        "name": "Semrush",
        "recommended": 2,
        "mentioned": 2,
-       "first": 0
+       "first": 1
       },
       {
        "name": "Profound",
        "recommended": 1,
        "mentioned": 1,
-       "first": 0
+       "first": 1
       }
      ]
     }
@@ -931,7 +3583,7 @@
        "name": "Google Nest",
        "recommended": 1,
        "mentioned": 1,
-       "first": 0
+       "first": 1
       },
       {
        "name": "Ring",
@@ -1087,7 +3739,7 @@
        "name": "Eufy",
        "recommended": 2,
        "mentioned": 2,
-       "first": 0
+       "first": 1
       },
       {
        "name": "Ring",
@@ -4443,13 +7095,13 @@
      "brands": [
       {
        "name": "Hisense",
-       "recommended": 1,
+       "recommended": 2,
        "mentioned": 2,
        "first": 0
       },
       {
        "name": "TCL",
-       "recommended": 1,
+       "recommended": 2,
        "mentioned": 2,
        "first": 0
       }
@@ -4951,31 +7603,31 @@
        "name": "Hisense",
        "recommended": 2,
        "mentioned": 2,
-       "first": 0
+       "first": 1
       },
       {
        "name": "LG",
        "recommended": 2,
        "mentioned": 2,
-       "first": 0
+       "first": 2
       },
       {
        "name": "Samsung",
        "recommended": 2,
        "mentioned": 2,
-       "first": 0
+       "first": 2
       },
       {
        "name": "Sony",
        "recommended": 2,
        "mentioned": 2,
-       "first": 0
+       "first": 1
       },
       {
        "name": "TCL",
        "recommended": 2,
        "mentioned": 2,
-       "first": 0
+       "first": 2
       }
      ]
     }
@@ -5241,21 +7893,21 @@
      "brands": [
       {
        "name": "LG",
-       "recommended": 2,
+       "recommended": 1,
        "mentioned": 2,
-       "first": 0
+       "first": 1
       },
       {
        "name": "Samsung",
-       "recommended": 2,
+       "recommended": 1,
        "mentioned": 2,
        "first": 0
       },
       {
        "name": "Sony",
-       "recommended": 2,
+       "recommended": 1,
        "mentioned": 2,
-       "first": 0
+       "first": 1
       }
      ]
     }
@@ -5349,7 +8001,7 @@
        "name": "Vestel",
        "recommended": 2,
        "mentioned": 2,
-       "first": 0
+       "first": 1
       },
       {
        "name": "LG",
@@ -6497,7 +9149,7 @@
        "name": "ASUS",
        "recommended": 2,
        "mentioned": 2,
-       "first": 0
+       "first": 1
       },
       {
        "name": "HP",
@@ -6792,14 +9444,14 @@
        "first": 1
       },
       {
-       "name": "HP",
+       "name": "ASUS",
        "recommended": 1,
        "mentioned": 1,
        "first": 0
       },
       {
-       "name": "ASUS",
-       "recommended": 0,
+       "name": "HP",
+       "recommended": 1,
        "mentioned": 1,
        "first": 0
       },
@@ -8367,7 +11019,7 @@
       },
       {
        "name": "Memorial",
-       "recommended": 1,
+       "recommended": 2,
        "mentioned": 2,
        "first": 0
       }
@@ -8914,20 +11566,20 @@
        "first": 0
       },
       {
-       "name": "Cosmedica",
+       "name": "Vera Clinic",
        "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
+       "name": "Cosmedica",
+       "recommended": 1,
        "mentioned": 2,
        "first": 0
       },
       {
        "name": "Smile Hair Clinic",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Vera Clinic",
-       "recommended": 2,
+       "recommended": 1,
        "mentioned": 2,
        "first": 0
       },
@@ -9677,7 +12329,7 @@
        "name": "Tom Ford",
        "recommended": 2,
        "mentioned": 2,
-       "first": 0
+       "first": 1
       },
       {
        "name": "Chanel",
@@ -10095,7 +12747,7 @@
        "name": "Armani",
        "recommended": 2,
        "mentioned": 2,
-       "first": 0
+       "first": 2
       },
       {
        "name": "Chanel",
@@ -10793,7 +13445,7 @@
        "name": "Adidas",
        "recommended": 2,
        "mentioned": 2,
-       "first": 0
+       "first": 2
       },
       {
        "name": "Asics",
@@ -10805,13 +13457,13 @@
        "name": "Nike",
        "recommended": 2,
        "mentioned": 2,
-       "first": 0
+       "first": 2
       },
       {
        "name": "Puma",
        "recommended": 2,
        "mentioned": 2,
-       "first": 0
+       "first": 1
       },
       {
        "name": "Skechers",
@@ -11017,7 +13669,7 @@
        "name": "Puma",
        "recommended": 1,
        "mentioned": 1,
-       "first": 0
+       "first": 1
       }
      ]
     }
@@ -11105,19 +13757,19 @@
        "name": "Adidas",
        "recommended": 2,
        "mentioned": 2,
-       "first": 0
+       "first": 1
       },
       {
        "name": "Hoka",
        "recommended": 2,
        "mentioned": 2,
-       "first": 0
+       "first": 2
       },
       {
        "name": "New Balance",
        "recommended": 2,
        "mentioned": 2,
-       "first": 0
+       "first": 1
       },
       {
        "name": "Nike",
@@ -11341,7 +13993,7 @@
        "name": "Adidas",
        "recommended": 2,
        "mentioned": 2,
-       "first": 0
+       "first": 2
       },
       {
        "name": "Hoka",
@@ -11353,13 +14005,13 @@
        "name": "New Balance",
        "recommended": 2,
        "mentioned": 2,
-       "first": 0
+       "first": 1
       },
       {
        "name": "Nike",
        "recommended": 2,
        "mentioned": 2,
-       "first": 0
+       "first": 2
       },
       {
        "name": "Puma",
@@ -11551,7 +14203,7 @@
        "name": "Nike",
        "recommended": 2,
        "mentioned": 2,
-       "first": 0
+       "first": 1
       },
       {
        "name": "Adidas",
@@ -11633,7 +14285,7 @@
        "name": "Adidas",
        "recommended": 1,
        "mentioned": 1,
-       "first": 0
+       "first": 1
       },
       {
        "name": "Asics",
@@ -11651,7 +14303,7 @@
        "name": "New Balance",
        "recommended": 1,
        "mentioned": 1,
-       "first": 0
+       "first": 1
       },
       {
        "name": "Nike",
@@ -11793,7 +14445,7 @@
        "name": "Nike",
        "recommended": 2,
        "mentioned": 2,
-       "first": 0
+       "first": 1
       },
       {
        "name": "Asics",
@@ -11893,7 +14545,7 @@
        "name": "Asics",
        "recommended": 2,
        "mentioned": 2,
-       "first": 0
+       "first": 1
       },
       {
        "name": "Hoka",
@@ -11911,7 +14563,7 @@
        "name": "Skechers",
        "recommended": 2,
        "mentioned": 2,
-       "first": 0
+       "first": 1
       },
       {
        "name": "New Balance",
@@ -11967,7 +14619,7 @@
        "name": "Adidas",
        "recommended": 2,
        "mentioned": 2,
-       "first": 0
+       "first": 1
       },
       {
        "name": "Nike",
@@ -11979,7 +14631,7 @@
        "name": "Puma",
        "recommended": 2,
        "mentioned": 2,
-       "first": 0
+       "first": 1
       },
       {
        "name": "Skechers",
@@ -12191,13 +14843,13 @@
        "name": "Asics",
        "recommended": 2,
        "mentioned": 2,
-       "first": 0
+       "first": 1
       },
       {
        "name": "Hoka",
        "recommended": 2,
        "mentioned": 2,
-       "first": 0
+       "first": 1
       },
       {
        "name": "New Balance",
@@ -12865,13 +15517,13 @@
        "name": "Jura",
        "recommended": 1,
        "mentioned": 1,
-       "first": 0
+       "first": 1
       },
       {
        "name": "Philips",
        "recommended": 1,
        "mentioned": 1,
-       "first": 0
+       "first": 1
       }
      ]
     }
@@ -12927,7 +15579,7 @@
        "name": "De'Longhi",
        "recommended": 2,
        "mentioned": 2,
-       "first": 0
+       "first": 1
       },
       {
        "name": "Fakir",
@@ -12939,7 +15591,7 @@
        "name": "Philips",
        "recommended": 1,
        "mentioned": 1,
-       "first": 0
+       "first": 1
       }
      ]
     }
@@ -13097,13 +15749,13 @@
        "name": "De'Longhi",
        "recommended": 2,
        "mentioned": 2,
-       "first": 0
+       "first": 1
       },
       {
        "name": "Philips",
        "recommended": 2,
        "mentioned": 2,
-       "first": 0
+       "first": 1
       },
       {
        "name": "Nespresso",
@@ -13165,7 +15817,7 @@
        "name": "Philips",
        "recommended": 2,
        "mentioned": 2,
-       "first": 0
+       "first": 1
       },
       {
        "name": "Arzum",
@@ -13471,9 +16123,9 @@
       },
       {
        "name": "Roborock",
-       "recommended": 1,
+       "recommended": 2,
        "mentioned": 2,
-       "first": 1
+       "first": 2
       },
       {
        "name": "Ecovacs",
@@ -13552,12 +16204,6 @@
      "at": "2026-11-14T11:32:45.478553+00:00",
      "brands": [
       {
-       "name": "iRobot",
-       "recommended": 1,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
        "name": "Roborock",
        "recommended": 1,
        "mentioned": 2,
@@ -13567,6 +16213,12 @@
        "name": "Dreame",
        "recommended": 1,
        "mentioned": 1,
+       "first": 0
+      },
+      {
+       "name": "iRobot",
+       "recommended": 0,
+       "mentioned": 2,
        "first": 0
       }
      ]
@@ -13716,16 +16368,16 @@
      "at": "2026-11-14T11:32:24.991181+00:00",
      "brands": [
       {
+       "name": "iRobot",
+       "recommended": 2,
+       "mentioned": 2,
+       "first": 0
+      },
+      {
        "name": "Roborock",
        "recommended": 2,
        "mentioned": 2,
        "first": 2
-      },
-      {
-       "name": "iRobot",
-       "recommended": 1,
-       "mentioned": 2,
-       "first": 0
       },
       {
        "name": "Dreame",
@@ -13853,19 +16505,19 @@
      "brands": [
       {
        "name": "Xiaomi",
-       "recommended": 1,
+       "recommended": 2,
        "mentioned": 2,
        "first": 0
       },
       {
-       "name": "Roborock",
+       "name": "Dreame",
        "recommended": 1,
        "mentioned": 1,
        "first": 0
       },
       {
-       "name": "Dreame",
-       "recommended": 0,
+       "name": "Roborock",
+       "recommended": 1,
        "mentioned": 1,
        "first": 0
       }
@@ -13949,19 +16601,19 @@
        "name": "Dreame",
        "recommended": 2,
        "mentioned": 2,
-       "first": 0
+       "first": 1
       },
       {
        "name": "Ecovacs",
        "recommended": 2,
        "mentioned": 2,
-       "first": 0
+       "first": 1
       },
       {
        "name": "Roborock",
        "recommended": 2,
        "mentioned": 2,
-       "first": 0
+       "first": 1
       }
      ]
     }
@@ -14217,74 +16869,24 @@
      "brands": [
       {
        "name": "Dreame",
-       "recommended": 2,
+       "recommended": 1,
        "mentioned": 2,
        "first": 0
       },
       {
        "name": "Roborock",
-       "recommended": 2,
+       "recommended": 1,
        "mentioned": 2,
        "first": 0
       },
       {
        "name": "Xiaomi",
-       "recommended": 2,
+       "recommended": 1,
        "mentioned": 2,
        "first": 0
       },
       {
        "name": "Ecovacs",
-       "recommended": 1,
-       "mentioned": 1,
-       "first": 0
-      }
-     ]
-    }
-   ]
-  },
-  {
-   "slug": "which-youtube-channel-gives-short-to-the-point-tech-news",
-   "question": "Which YouTube channel gives short, to-the-point tech news?",
-   "lang": "en",
-   "country": "US",
-   "at": "2026-11-13T11:28:05.072535+00:00",
-   "answers": 4,
-   "engines": [
-    {
-     "provider": "claude",
-     "measurement_type": "live_search",
-     "answers": 2,
-     "at": "2026-11-13T11:26:33.73761+00:00",
-     "brands": [
-      {
-       "name": "Linus Tech Tips",
-       "recommended": 0,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Marques Brownlee",
-       "recommended": 0,
-       "mentioned": 1,
-       "first": 0
-      }
-     ]
-    },
-    {
-     "provider": "gemini",
-     "measurement_type": "model_knowledge",
-     "answers": 2,
-     "at": "2026-11-13T11:28:05.072535+00:00",
-     "brands": [
-      {
-       "name": "Linus Tech Tips",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Mrwhosetheboss",
        "recommended": 1,
        "mentioned": 1,
        "first": 0
@@ -14405,7 +17007,7 @@
        "name": "Marques Brownlee",
        "recommended": 2,
        "mentioned": 2,
-       "first": 0
+       "first": 1
       }
      ]
     },
@@ -14923,7 +17525,7 @@
        "name": "Technopat",
        "recommended": 2,
        "mentioned": 2,
-       "first": 1
+       "first": 0
       },
       {
        "name": "Webtekno",
@@ -14962,1596 +17564,12 @@
    ]
   },
   {
-   "slug": "which-smartphone-would-you-recommend-for-taking-videos-for-social-medi",
-   "question": "Which smartphone would you recommend for taking videos for social media?",
-   "lang": "en",
-   "country": "US",
-   "at": "2026-11-13T10:46:51.404438+00:00",
-   "answers": 6,
-   "engines": [
-    {
-     "provider": "claude",
-     "measurement_type": "live_search",
-     "answers": 2,
-     "at": "2026-11-13T10:46:51.404438+00:00",
-     "brands": [
-      {
-       "name": "Apple",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 1
-      },
-      {
-       "name": "Google",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 1
-      },
-      {
-       "name": "Samsung",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      }
-     ]
-    },
-    {
-     "provider": "openai",
-     "measurement_type": "live_search",
-     "answers": 2,
-     "at": "2026-11-13T10:21:41.049703+00:00",
-     "brands": [
-      {
-       "name": "Apple",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 2
-      },
-      {
-       "name": "Samsung",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      }
-     ]
-    },
-    {
-     "provider": "gemini",
-     "measurement_type": "model_knowledge",
-     "answers": 2,
-     "at": "2026-11-13T10:23:35.109186+00:00",
-     "brands": [
-      {
-       "name": "Apple",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 2
-      },
-      {
-       "name": "Google",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Samsung",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      }
-     ]
-    }
-   ]
-  },
-  {
-   "slug": "what-is-the-best-phone-for-gaming",
-   "question": "What is the best phone for gaming?",
-   "lang": "en",
-   "country": "US",
-   "at": "2026-11-13T10:46:33.231005+00:00",
-   "answers": 6,
-   "engines": [
-    {
-     "provider": "claude",
-     "measurement_type": "live_search",
-     "answers": 2,
-     "at": "2026-11-13T10:46:33.231005+00:00",
-     "brands": [
-      {
-       "name": "Apple",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "OnePlus",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Samsung",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Xiaomi",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      }
-     ]
-    },
-    {
-     "provider": "openai",
-     "measurement_type": "live_search",
-     "answers": 2,
-     "at": "2026-11-13T10:21:20.755263+00:00",
-     "brands": [
-      {
-       "name": "Samsung",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Apple",
-       "recommended": 1,
-       "mentioned": 1,
-       "first": 0
-      }
-     ]
-    },
-    {
-     "provider": "gemini",
-     "measurement_type": "model_knowledge",
-     "answers": 2,
-     "at": "2026-11-13T10:23:26.035957+00:00",
-     "brands": [
-      {
-       "name": "Apple",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Samsung",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "OnePlus",
-       "recommended": 1,
-       "mentioned": 1,
-       "first": 0
-      },
-      {
-       "name": "Xiaomi",
-       "recommended": 1,
-       "mentioned": 1,
-       "first": 0
-      }
-     ]
-    }
-   ]
-  },
-  {
-   "slug": "which-phone-brand-is-the-most-reliable-and-gets-the-longest-software-u",
-   "question": "Which phone brand is the most reliable and gets the longest software updates?",
-   "lang": "en",
-   "country": "US",
-   "at": "2026-11-13T10:46:13.852135+00:00",
-   "answers": 6,
-   "engines": [
-    {
-     "provider": "claude",
-     "measurement_type": "live_search",
-     "answers": 2,
-     "at": "2026-11-13T10:46:13.852135+00:00",
-     "brands": [
-      {
-       "name": "Apple",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 1
-      },
-      {
-       "name": "Google",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 1
-      },
-      {
-       "name": "Samsung",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 1
-      },
-      {
-       "name": "Xiaomi",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "OnePlus",
-       "recommended": 0,
-       "mentioned": 1,
-       "first": 0
-      }
-     ]
-    },
-    {
-     "provider": "openai",
-     "measurement_type": "live_search",
-     "answers": 2,
-     "at": "2026-11-13T10:20:59.691916+00:00",
-     "brands": [
-      {
-       "name": "Apple",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 2
-      },
-      {
-       "name": "Google",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Samsung",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      }
-     ]
-    },
-    {
-     "provider": "gemini",
-     "measurement_type": "model_knowledge",
-     "answers": 2,
-     "at": "2026-11-13T10:23:12.739953+00:00",
-     "brands": [
-      {
-       "name": "Google",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Samsung",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Apple",
-       "recommended": 1,
-       "mentioned": 2,
-       "first": 1
-      }
-     ]
-    }
-   ]
-  },
-  {
-   "slug": "what-phone-should-i-buy-for-a-student-on-a-budget",
-   "question": "What phone should I buy for a student on a budget?",
-   "lang": "en",
-   "country": "US",
-   "at": "2026-11-13T10:45:51.744232+00:00",
-   "answers": 6,
-   "engines": [
-    {
-     "provider": "claude",
-     "measurement_type": "live_search",
-     "answers": 2,
-     "at": "2026-11-13T10:45:51.744232+00:00",
-     "brands": [
-      {
-       "name": "Apple",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Google",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 1
-      },
-      {
-       "name": "OnePlus",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Samsung",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 1
-      },
-      {
-       "name": "Xiaomi",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      }
-     ]
-    },
-    {
-     "provider": "openai",
-     "measurement_type": "live_search",
-     "answers": 2,
-     "at": "2026-11-13T10:20:35.548652+00:00",
-     "brands": [
-      {
-       "name": "Google",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 2
-      },
-      {
-       "name": "Apple",
-       "recommended": 1,
-       "mentioned": 2,
-       "first": 0
-      }
-     ]
-    },
-    {
-     "provider": "gemini",
-     "measurement_type": "model_knowledge",
-     "answers": 2,
-     "at": "2026-11-13T10:23:05.324371+00:00",
-     "brands": [
-      {
-       "name": "Apple",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Google",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 2
-      },
-      {
-       "name": "Samsung",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "OnePlus",
-       "recommended": 1,
-       "mentioned": 1,
-       "first": 0
-      }
-     ]
-    }
-   ]
-  },
-  {
-   "slug": "which-smartphone-has-the-longest-battery-life",
-   "question": "Which smartphone has the longest battery life?",
-   "lang": "en",
-   "country": "US",
-   "at": "2026-11-13T10:45:30.73549+00:00",
-   "answers": 6,
-   "engines": [
-    {
-     "provider": "claude",
-     "measurement_type": "live_search",
-     "answers": 2,
-     "at": "2026-11-13T10:45:30.73549+00:00",
-     "brands": [
-      {
-       "name": "Apple",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 1
-      },
-      {
-       "name": "OnePlus",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Google",
-       "recommended": 0,
-       "mentioned": 1,
-       "first": 0
-      }
-     ]
-    },
-    {
-     "provider": "openai",
-     "measurement_type": "live_search",
-     "answers": 2,
-     "at": "2026-11-13T10:20:13.861814+00:00",
-     "brands": [
-      {
-       "name": "Apple",
-       "recommended": 1,
-       "mentioned": 1,
-       "first": 1
-      },
-      {
-       "name": "OnePlus",
-       "recommended": 1,
-       "mentioned": 1,
-       "first": 1
-      },
-      {
-       "name": "Google",
-       "recommended": 0,
-       "mentioned": 1,
-       "first": 0
-      }
-     ]
-    },
-    {
-     "provider": "gemini",
-     "measurement_type": "model_knowledge",
-     "answers": 2,
-     "at": "2026-11-13T10:22:55.660996+00:00",
-     "brands": [
-      {
-       "name": "Apple",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "OnePlus",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Samsung",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Google",
-       "recommended": 1,
-       "mentioned": 1,
-       "first": 0
-      }
-     ]
-    }
-   ]
-  },
-  {
-   "slug": "what-is-the-best-value-for-money-smartphone",
-   "question": "What is the best value-for-money smartphone?",
-   "lang": "en",
-   "country": "US",
-   "at": "2026-11-13T10:45:09.486261+00:00",
-   "answers": 6,
-   "engines": [
-    {
-     "provider": "claude",
-     "measurement_type": "live_search",
-     "answers": 2,
-     "at": "2026-11-13T10:45:09.486261+00:00",
-     "brands": [
-      {
-       "name": "Google",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 2
-      },
-      {
-       "name": "Samsung",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Xiaomi",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "OnePlus",
-       "recommended": 1,
-       "mentioned": 1,
-       "first": 0
-      }
-     ]
-    },
-    {
-     "provider": "openai",
-     "measurement_type": "live_search",
-     "answers": 2,
-     "at": "2026-11-13T10:19:49.492699+00:00",
-     "brands": [
-      {
-       "name": "Google",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 2
-      },
-      {
-       "name": "Apple",
-       "recommended": 1,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Samsung",
-       "recommended": 1,
-       "mentioned": 1,
-       "first": 0
-      }
-     ]
-    },
-    {
-     "provider": "gemini",
-     "measurement_type": "model_knowledge",
-     "answers": 2,
-     "at": "2026-11-13T10:22:49.046758+00:00",
-     "brands": [
-      {
-       "name": "Apple",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Google",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 2
-      },
-      {
-       "name": "OnePlus",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Samsung",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      }
-     ]
-    }
-   ]
-  },
-  {
-   "slug": "which-phone-has-the-best-camera",
-   "question": "Which phone has the best camera?",
-   "lang": "en",
-   "country": "US",
-   "at": "2026-11-13T10:44:50.989492+00:00",
-   "answers": 6,
-   "engines": [
-    {
-     "provider": "claude",
-     "measurement_type": "live_search",
-     "answers": 2,
-     "at": "2026-11-13T10:44:50.989492+00:00",
-     "brands": [
-      {
-       "name": "Apple",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Google",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Samsung",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 1
-      },
-      {
-       "name": "Xiaomi",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      }
-     ]
-    },
-    {
-     "provider": "openai",
-     "measurement_type": "live_search",
-     "answers": 2,
-     "at": "2026-11-13T10:19:16.996906+00:00",
-     "brands": [
-      {
-       "name": "Apple",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 1
-      },
-      {
-       "name": "Samsung",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 2
-      }
-     ]
-    },
-    {
-     "provider": "gemini",
-     "measurement_type": "model_knowledge",
-     "answers": 2,
-     "at": "2026-11-13T10:22:34.85788+00:00",
-     "brands": [
-      {
-       "name": "Apple",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Google",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 1
-      },
-      {
-       "name": "Samsung",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 1
-      },
-      {
-       "name": "Xiaomi",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      }
-     ]
-    }
-   ]
-  },
-  {
-   "slug": "what-is-the-best-smartphone-to-buy-right-now",
-   "question": "What is the best smartphone to buy right now?",
-   "lang": "en",
-   "country": "US",
-   "at": "2026-11-13T10:44:32.916839+00:00",
-   "answers": 6,
-   "engines": [
-    {
-     "provider": "claude",
-     "measurement_type": "live_search",
-     "answers": 2,
-     "at": "2026-11-13T10:44:32.916839+00:00",
-     "brands": [
-      {
-       "name": "Apple",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Google",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Samsung",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 1
-      }
-     ]
-    },
-    {
-     "provider": "openai",
-     "measurement_type": "live_search",
-     "answers": 2,
-     "at": "2026-11-13T10:18:56.842513+00:00",
-     "brands": [
-      {
-       "name": "Apple",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 1
-      },
-      {
-       "name": "Samsung",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 1
-      },
-      {
-       "name": "Google",
-       "recommended": 1,
-       "mentioned": 2,
-       "first": 0
-      }
-     ]
-    },
-    {
-     "provider": "gemini",
-     "measurement_type": "model_knowledge",
-     "answers": 2,
-     "at": "2026-11-13T10:22:24.921034+00:00",
-     "brands": [
-      {
-       "name": "Apple",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "OnePlus",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Google",
-       "recommended": 1,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Samsung",
-       "recommended": 1,
-       "mentioned": 2,
-       "first": 0
-      }
-     ]
-    }
-   ]
-  },
-  {
-   "slug": "sosyal-medya-icin-video-cekmeye-en-uygun-telefon-hangisi",
-   "question": "Sosyal medya için video çekmeye en uygun telefon hangisi?",
-   "lang": "tr",
-   "country": null,
-   "at": "2026-11-13T10:43:14.024045+00:00",
-   "answers": 4,
-   "engines": [
-    {
-     "provider": "claude",
-     "measurement_type": "live_search",
-     "answers": 2,
-     "at": "2026-11-13T10:43:14.024045+00:00",
-     "brands": [
-      {
-       "name": "Apple",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 2
-      },
-      {
-       "name": "Huawei",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Oppo",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Samsung",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Xiaomi",
-       "recommended": 1,
-       "mentioned": 2,
-       "first": 0
-      }
-     ]
-    },
-    {
-     "provider": "openai",
-     "measurement_type": "live_search",
-     "answers": 2,
-     "at": "2026-11-13T10:40:05.033772+00:00",
-     "brands": [
-      {
-       "name": "Apple",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 2
-      },
-      {
-       "name": "Samsung",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      }
-     ]
-    }
-   ]
-  },
-  {
-   "slug": "oyun-icin-en-iyi-telefon-hangisi",
-   "question": "Oyun için en iyi telefon hangisi?",
-   "lang": "tr",
-   "country": null,
-   "at": "2026-11-13T10:42:49.191339+00:00",
-   "answers": 4,
-   "engines": [
-    {
-     "provider": "claude",
-     "measurement_type": "live_search",
-     "answers": 2,
-     "at": "2026-11-13T10:42:49.191339+00:00",
-     "brands": [
-      {
-       "name": "Apple",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 1
-      },
-      {
-       "name": "Samsung",
-       "recommended": 1,
-       "mentioned": 1,
-       "first": 0
-      },
-      {
-       "name": "Xiaomi",
-       "recommended": 0,
-       "mentioned": 2,
-       "first": 0
-      }
-     ]
-    },
-    {
-     "provider": "openai",
-     "measurement_type": "live_search",
-     "answers": 2,
-     "at": "2026-11-13T10:39:32.708937+00:00",
-     "brands": [
-      {
-       "name": "Samsung",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Apple",
-       "recommended": 1,
-       "mentioned": 1,
-       "first": 0
-      }
-     ]
-    }
-   ]
-  },
-  {
-   "slug": "su-an-alinabilecek-en-iyi-akilli-telefon-hangisi",
-   "question": "Şu an alınabilecek en iyi akıllı telefon hangisi?",
-   "lang": "tr",
-   "country": null,
-   "at": "2026-11-13T10:42:00.318317+00:00",
-   "answers": 6,
-   "engines": [
-    {
-     "provider": "claude",
-     "measurement_type": "live_search",
-     "answers": 2,
-     "at": "2026-11-13T10:42:00.318317+00:00",
-     "brands": [
-      {
-       "name": "Apple",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Samsung",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Xiaomi",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      }
-     ]
-    },
-    {
-     "provider": "openai",
-     "measurement_type": "live_search",
-     "answers": 2,
-     "at": "2026-11-13T10:38:55.102597+00:00",
-     "brands": [
-      {
-       "name": "Apple",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 1
-      },
-      {
-       "name": "Samsung",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 1
-      }
-     ]
-    },
-    {
-     "provider": "gemini",
-     "measurement_type": "model_knowledge",
-     "answers": 2,
-     "at": "2026-11-13T06:43:04.036409+00:00",
-     "brands": [
-      {
-       "name": "Apple",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Samsung",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Xiaomi",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      }
-     ]
-    }
-   ]
-  },
-  {
-   "slug": "pil-omru-en-uzun-telefon-markasi-hangisi",
-   "question": "Pil ömrü en uzun telefon markası hangisi?",
-   "lang": "tr",
-   "country": null,
-   "at": "2026-11-13T10:41:38.024918+00:00",
-   "answers": 6,
-   "engines": [
-    {
-     "provider": "claude",
-     "measurement_type": "live_search",
-     "answers": 2,
-     "at": "2026-11-13T10:41:38.024918+00:00",
-     "brands": [
-      {
-       "name": "Apple",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 2
-      },
-      {
-       "name": "Oppo",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Xiaomi",
-       "recommended": 1,
-       "mentioned": 1,
-       "first": 0
-      }
-     ]
-    },
-    {
-     "provider": "openai",
-     "measurement_type": "live_search",
-     "answers": 2,
-     "at": "2026-11-13T10:38:31.038896+00:00",
-     "brands": [
-      {
-       "name": "Apple",
-       "recommended": 1,
-       "mentioned": 1,
-       "first": 1
-      },
-      {
-       "name": "Xiaomi",
-       "recommended": 1,
-       "mentioned": 1,
-       "first": 0
-      }
-     ]
-    },
-    {
-     "provider": "gemini",
-     "measurement_type": "model_knowledge",
-     "answers": 2,
-     "at": "2026-11-13T06:42:56.768332+00:00",
-     "brands": [
-      {
-       "name": "Apple",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Samsung",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Xiaomi",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 1
-      },
-      {
-       "name": "Huawei",
-       "recommended": 1,
-       "mentioned": 1,
-       "first": 0
-      }
-     ]
-    }
-   ]
-  },
-  {
-   "slug": "ogrenci-icin-hangi-telefonu-almaliyim",
-   "question": "Öğrenci için hangi telefonu almalıyım?",
-   "lang": "tr",
-   "country": null,
-   "at": "2026-11-13T10:41:17.910083+00:00",
-   "answers": 6,
-   "engines": [
-    {
-     "provider": "claude",
-     "measurement_type": "live_search",
-     "answers": 2,
-     "at": "2026-11-13T10:41:17.910083+00:00",
-     "brands": [
-      {
-       "name": "Apple",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Samsung",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 1
-      },
-      {
-       "name": "Xiaomi",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      }
-     ]
-    },
-    {
-     "provider": "openai",
-     "measurement_type": "live_search",
-     "answers": 2,
-     "at": "2026-11-13T10:38:14.429614+00:00",
-     "brands": [
-      {
-       "name": "Samsung",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Xiaomi",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 2
-      }
-     ]
-    },
-    {
-     "provider": "gemini",
-     "measurement_type": "model_knowledge",
-     "answers": 2,
-     "at": "2026-11-13T06:42:49.772571+00:00",
-     "brands": [
-      {
-       "name": "Apple",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Samsung",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Xiaomi",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      }
-     ]
-    }
-   ]
-  },
-  {
-   "slug": "kamerasi-en-iyi-telefon-hangisi",
-   "question": "Kamerası en iyi telefon hangisi?",
-   "lang": "tr",
-   "country": null,
-   "at": "2026-11-13T10:40:52.140132+00:00",
-   "answers": 6,
-   "engines": [
-    {
-     "provider": "claude",
-     "measurement_type": "live_search",
-     "answers": 2,
-     "at": "2026-11-13T10:40:52.140132+00:00",
-     "brands": [
-      {
-       "name": "Apple",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 2
-      },
-      {
-       "name": "Huawei",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 1
-      },
-      {
-       "name": "Samsung",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Xiaomi",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Oppo",
-       "recommended": 1,
-       "mentioned": 2,
-       "first": 0
-      }
-     ]
-    },
-    {
-     "provider": "openai",
-     "measurement_type": "live_search",
-     "answers": 2,
-     "at": "2026-11-13T10:37:54.012933+00:00",
-     "brands": [
-      {
-       "name": "Apple",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 1
-      },
-      {
-       "name": "Oppo",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Samsung",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 1
-      }
-     ]
-    },
-    {
-     "provider": "gemini",
-     "measurement_type": "model_knowledge",
-     "answers": 2,
-     "at": "2026-11-13T06:42:40.541228+00:00",
-     "brands": [
-      {
-       "name": "Apple",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 1
-      },
-      {
-       "name": "Samsung",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Xiaomi",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Huawei",
-       "recommended": 1,
-       "mentioned": 1,
-       "first": 0
-      }
-     ]
-    }
-   ]
-  },
-  {
-   "slug": "fiyat-performans-olarak-en-iyi-akilli-telefon-hangisi",
-   "question": "Fiyat performans olarak en iyi akıllı telefon hangisi?",
-   "lang": "tr",
-   "country": null,
-   "at": "2026-11-13T10:40:25.344367+00:00",
-   "answers": 6,
-   "engines": [
-    {
-     "provider": "claude",
-     "measurement_type": "live_search",
-     "answers": 2,
-     "at": "2026-11-13T10:40:25.344367+00:00",
-     "brands": [
-      {
-       "name": "Samsung",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Xiaomi",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 2
-      }
-     ]
-    },
-    {
-     "provider": "openai",
-     "measurement_type": "live_search",
-     "answers": 2,
-     "at": "2026-11-13T10:37:35.423976+00:00",
-     "brands": [
-      {
-       "name": "Xiaomi",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 2
-      },
-      {
-       "name": "Samsung",
-       "recommended": 1,
-       "mentioned": 1,
-       "first": 0
-      }
-     ]
-    },
-    {
-     "provider": "gemini",
-     "measurement_type": "model_knowledge",
-     "answers": 2,
-     "at": "2026-11-13T06:42:32.947187+00:00",
-     "brands": [
-      {
-       "name": "Samsung",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Xiaomi",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Apple",
-       "recommended": 1,
-       "mentioned": 1,
-       "first": 0
-      }
-     ]
-    }
-   ]
-  },
-  {
-   "slug": "pil-omru-en-uzun-gurultu-onleyici-kulaklik-hangisi",
-   "question": "Pil ömrü en uzun gürültü önleyici kulaklık hangisi?",
-   "lang": "tr",
-   "country": "TR",
-   "at": "2026-11-12T14:39:44.879872+00:00",
-   "answers": 4,
-   "engines": [
-    {
-     "provider": "claude",
-     "measurement_type": "live_search",
-     "answers": 2,
-     "at": "2026-11-12T14:16:32.038861+00:00",
-     "brands": [
-      {
-       "name": "Sennheiser",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "JBL",
-       "recommended": 1,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Sony",
-       "recommended": 0,
-       "mentioned": 2,
-       "first": 0
-      }
-     ]
-    },
-    {
-     "provider": "gemini",
-     "measurement_type": "model_knowledge",
-     "answers": 2,
-     "at": "2026-11-12T14:39:44.879872+00:00",
-     "brands": [
-      {
-       "name": "Sennheiser",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Sony",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Apple",
-       "recommended": 1,
-       "mentioned": 1,
-       "first": 0
-      },
-      {
-       "name": "Bose",
-       "recommended": 1,
-       "mentioned": 1,
-       "first": 0
-      }
-     ]
-    }
-   ]
-  },
-  {
-   "slug": "20-bin-tl-civarinda-alinabilecek-en-iyi-kulak-ustu-kulaklik-hangisi",
-   "question": "20 bin TL civarında alınabilecek en iyi kulak üstü kulaklık hangisi?",
-   "lang": "tr",
-   "country": "TR",
-   "at": "2026-11-12T14:39:24.663675+00:00",
-   "answers": 6,
-   "engines": [
-    {
-     "provider": "claude",
-     "measurement_type": "live_search",
-     "answers": 2,
-     "at": "2026-11-12T14:16:09.526781+00:00",
-     "brands": [
-      {
-       "name": "JBL",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Sennheiser",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Sony",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 2
-      },
-      {
-       "name": "Bose",
-       "recommended": 1,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Apple",
-       "recommended": 1,
-       "mentioned": 1,
-       "first": 0
-      }
-     ]
-    },
-    {
-     "provider": "openai",
-     "measurement_type": "live_search",
-     "answers": 2,
-     "at": "2026-11-12T14:14:24.548088+00:00",
-     "brands": [
-      {
-       "name": "Bose",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Sennheiser",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 1
-      },
-      {
-       "name": "Sony",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 1
-      }
-     ]
-    },
-    {
-     "provider": "gemini",
-     "measurement_type": "model_knowledge",
-     "answers": 2,
-     "at": "2026-11-12T14:39:24.663675+00:00",
-     "brands": [
-      {
-       "name": "Bose",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Sennheiser",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Sony",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 1
-      },
-      {
-       "name": "Apple",
-       "recommended": 1,
-       "mentioned": 1,
-       "first": 0
-      }
-     ]
-    }
-   ]
-  },
-  {
-   "slug": "ucakta-ve-yolculukta-kullanmak-icin-hangi-kulak-ustu-kulakligi-onerirs",
-   "question": "Uçakta ve yolculukta kullanmak için hangi kulak üstü kulaklığı önerirsin?",
-   "lang": "tr",
-   "country": "TR",
-   "at": "2026-11-12T14:39:13.858095+00:00",
-   "answers": 6,
-   "engines": [
-    {
-     "provider": "claude",
-     "measurement_type": "live_search",
-     "answers": 2,
-     "at": "2026-11-12T14:15:43.611419+00:00",
-     "brands": [
-      {
-       "name": "Apple",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Bose",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "JBL",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Sennheiser",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Sony",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 2
-      }
-     ]
-    },
-    {
-     "provider": "openai",
-     "measurement_type": "live_search",
-     "answers": 2,
-     "at": "2026-11-12T14:13:54.265373+00:00",
-     "brands": [
-      {
-       "name": "Bose",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 2
-      },
-      {
-       "name": "Sony",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 1
-      }
-     ]
-    },
-    {
-     "provider": "gemini",
-     "measurement_type": "model_knowledge",
-     "answers": 2,
-     "at": "2026-11-12T14:39:13.858095+00:00",
-     "brands": [
-      {
-       "name": "Apple",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Bose",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Sony",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 1
-      }
-     ]
-    }
-   ]
-  },
-  {
    "slug": "en-iyi-gurultu-onleyici-kablosuz-kulaklik-hangisi",
    "question": "En iyi gürültü önleyici kablosuz kulaklık hangisi?",
    "lang": "tr",
    "country": "TR",
-   "at": "2026-11-12T14:38:45.359466+00:00",
-   "answers": 6,
+   "at": "2026-11-12T14:15:15.712823+00:00",
+   "answers": 4,
    "engines": [
     {
      "provider": "claude",
@@ -16602,1060 +17620,6 @@
        "recommended": 2,
        "mentioned": 2,
        "first": 2
-      }
-     ]
-    },
-    {
-     "provider": "gemini",
-     "measurement_type": "model_knowledge",
-     "answers": 2,
-     "at": "2026-11-12T14:38:45.359466+00:00",
-     "brands": [
-      {
-       "name": "Apple",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Bose",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Sony",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      }
-     ]
-    }
-   ]
-  },
-  {
-   "slug": "bagaj-hakki-en-iyi-havayolu-hangisi",
-   "question": "Bagaj hakkı en iyi havayolu hangisi?",
-   "lang": "tr",
-   "country": null,
-   "at": "2026-11-12T08:53:41.860935+00:00",
-   "answers": 6,
-   "engines": [
-    {
-     "provider": "claude",
-     "measurement_type": "live_search",
-     "answers": 2,
-     "at": "2026-11-12T08:53:41.860935+00:00",
-     "brands": [
-      {
-       "name": "Türk Hava Yolları",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 2
-      },
-      {
-       "name": "AJet",
-       "recommended": 0,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Pegasus",
-       "recommended": 0,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "SunExpress",
-       "recommended": 0,
-       "mentioned": 1,
-       "first": 0
-      }
-     ]
-    },
-    {
-     "provider": "openai",
-     "measurement_type": "live_search",
-     "answers": 2,
-     "at": "2026-11-12T08:52:11.417754+00:00",
-     "brands": [
-      {
-       "name": "Türk Hava Yolları",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 2
-      },
-      {
-       "name": "SunExpress",
-       "recommended": 1,
-       "mentioned": 1,
-       "first": 0
-      },
-      {
-       "name": "Pegasus",
-       "recommended": 0,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "AJet",
-       "recommended": 0,
-       "mentioned": 1,
-       "first": 0
-      }
-     ]
-    },
-    {
-     "provider": "gemini",
-     "measurement_type": "model_knowledge",
-     "answers": 2,
-     "at": "2026-11-12T08:50:46.099203+00:00",
-     "brands": [
-      {
-       "name": "AJet",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Pegasus",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Türk Hava Yolları",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "SunExpress",
-       "recommended": 1,
-       "mentioned": 1,
-       "first": 0
-      }
-     ]
-    }
-   ]
-  },
-  {
-   "slug": "ucuz-ucak-bileti-icin-hangi-havayolunu-onerirsin",
-   "question": "Ucuz uçak bileti için hangi havayolunu önerirsin?",
-   "lang": "tr",
-   "country": null,
-   "at": "2026-11-12T08:53:12.749778+00:00",
-   "answers": 6,
-   "engines": [
-    {
-     "provider": "claude",
-     "measurement_type": "live_search",
-     "answers": 2,
-     "at": "2026-11-12T08:53:12.749778+00:00",
-     "brands": [
-      {
-       "name": "Pegasus",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "AJet",
-       "recommended": 1,
-       "mentioned": 1,
-       "first": 0
-      },
-      {
-       "name": "SunExpress",
-       "recommended": 1,
-       "mentioned": 1,
-       "first": 0
-      }
-     ]
-    },
-    {
-     "provider": "openai",
-     "measurement_type": "live_search",
-     "answers": 2,
-     "at": "2026-11-12T08:51:48.594906+00:00",
-     "brands": [
-      {
-       "name": "AJet",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Pegasus",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "SunExpress",
-       "recommended": 1,
-       "mentioned": 1,
-       "first": 0
-      }
-     ]
-    },
-    {
-     "provider": "gemini",
-     "measurement_type": "model_knowledge",
-     "answers": 2,
-     "at": "2026-11-12T08:50:37.378898+00:00",
-     "brands": [
-      {
-       "name": "AJet",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Pegasus",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 1
-      },
-      {
-       "name": "SunExpress",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Türk Hava Yolları",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      }
-     ]
-    }
-   ]
-  },
-  {
-   "slug": "yurt-ici-ucuslarda-en-iyi-havayolu-hangisi",
-   "question": "Yurt içi uçuşlarda en iyi havayolu hangisi?",
-   "lang": "tr",
-   "country": null,
-   "at": "2026-11-12T08:52:48.874208+00:00",
-   "answers": 6,
-   "engines": [
-    {
-     "provider": "claude",
-     "measurement_type": "live_search",
-     "answers": 2,
-     "at": "2026-11-12T08:52:48.874208+00:00",
-     "brands": [
-      {
-       "name": "Pegasus",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 2
-      },
-      {
-       "name": "Türk Hava Yolları",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 1
-      }
-     ]
-    },
-    {
-     "provider": "openai",
-     "measurement_type": "live_search",
-     "answers": 2,
-     "at": "2026-11-12T08:51:33.338593+00:00",
-     "brands": [
-      {
-       "name": "AJet",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Pegasus",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Türk Hava Yolları",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 2
-      }
-     ]
-    },
-    {
-     "provider": "gemini",
-     "measurement_type": "model_knowledge",
-     "answers": 2,
-     "at": "2026-11-12T08:50:30.556597+00:00",
-     "brands": [
-      {
-       "name": "AJet",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Pegasus",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Türk Hava Yolları",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 2
-      }
-     ]
-    }
-   ]
-  },
-  {
-   "slug": "iade-sureci-en-kolay-e-ticaret-sitesi-hangisi",
-   "question": "İade süreci en kolay e-ticaret sitesi hangisi?",
-   "lang": "tr",
-   "country": null,
-   "at": "2026-11-12T08:50:18.584704+00:00",
-   "answers": 6,
-   "engines": [
-    {
-     "provider": "claude",
-     "measurement_type": "live_search",
-     "answers": 2,
-     "at": "2026-11-12T08:50:18.584704+00:00",
-     "brands": [
-      {
-       "name": "Amazon",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 1
-      },
-      {
-       "name": "Trendyol",
-       "recommended": 1,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Hepsiburada",
-       "recommended": 0,
-       "mentioned": 1,
-       "first": 0
-      }
-     ]
-    },
-    {
-     "provider": "openai",
-     "measurement_type": "live_search",
-     "answers": 2,
-     "at": "2026-11-12T08:48:50.082588+00:00",
-     "brands": [
-      {
-       "name": "Amazon",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 2
-      },
-      {
-       "name": "Trendyol",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      }
-     ]
-    },
-    {
-     "provider": "gemini",
-     "measurement_type": "model_knowledge",
-     "answers": 2,
-     "at": "2026-11-12T08:47:38.230086+00:00",
-     "brands": [
-      {
-       "name": "Amazon",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 2
-      },
-      {
-       "name": "Hepsiburada",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Trendyol",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      }
-     ]
-    }
-   ]
-  },
-  {
-   "slug": "kargosu-en-hizli-alisveris-sitesi-hangisi",
-   "question": "Kargosu en hızlı alışveriş sitesi hangisi?",
-   "lang": "tr",
-   "country": null,
-   "at": "2026-11-12T08:49:52.737212+00:00",
-   "answers": 6,
-   "engines": [
-    {
-     "provider": "claude",
-     "measurement_type": "live_search",
-     "answers": 2,
-     "at": "2026-11-12T08:49:52.737212+00:00",
-     "brands": [
-      {
-       "name": "Amazon",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 2
-      },
-      {
-       "name": "Hepsiburada",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Trendyol",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 2
-      }
-     ]
-    },
-    {
-     "provider": "openai",
-     "measurement_type": "live_search",
-     "answers": 2,
-     "at": "2026-11-12T08:48:31.436609+00:00",
-     "brands": [
-      {
-       "name": "Amazon",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 2
-      },
-      {
-       "name": "Trendyol",
-       "recommended": 1,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Hepsiburada",
-       "recommended": 1,
-       "mentioned": 1,
-       "first": 1
-      }
-     ]
-    },
-    {
-     "provider": "gemini",
-     "measurement_type": "model_knowledge",
-     "answers": 2,
-     "at": "2026-11-12T08:47:23.586786+00:00",
-     "brands": [
-      {
-       "name": "Amazon",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 2
-      },
-      {
-       "name": "Hepsiburada",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Trendyol",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      }
-     ]
-    }
-   ]
-  },
-  {
-   "slug": "internetten-elektronik-almak-icin-hangi-siteyi-onerirsin",
-   "question": "İnternetten elektronik almak için hangi siteyi önerirsin?",
-   "lang": "tr",
-   "country": null,
-   "at": "2026-11-12T08:49:32.0643+00:00",
-   "answers": 6,
-   "engines": [
-    {
-     "provider": "claude",
-     "measurement_type": "live_search",
-     "answers": 2,
-     "at": "2026-11-12T08:49:32.0643+00:00",
-     "brands": [
-      {
-       "name": "Hepsiburada",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 1
-      },
-      {
-       "name": "Trendyol",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 1
-      },
-      {
-       "name": "Amazon",
-       "recommended": 1,
-       "mentioned": 2,
-       "first": 0
-      }
-     ]
-    },
-    {
-     "provider": "openai",
-     "measurement_type": "live_search",
-     "answers": 2,
-     "at": "2026-11-12T08:48:11.845052+00:00",
-     "brands": [
-      {
-       "name": "Amazon",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Hepsiburada",
-       "recommended": 1,
-       "mentioned": 1,
-       "first": 0
-      }
-     ]
-    },
-    {
-     "provider": "gemini",
-     "measurement_type": "model_knowledge",
-     "answers": 2,
-     "at": "2026-11-12T08:46:51.902394+00:00",
-     "brands": [
-      {
-       "name": "Amazon",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Hepsiburada",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "n11",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Trendyol",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      }
-     ]
-    }
-   ]
-  },
-  {
-   "slug": "turkiyede-en-guvenilir-online-alisveris-sitesi-hangisi",
-   "question": "Türkiye'de en güvenilir online alışveriş sitesi hangisi?",
-   "lang": "tr",
-   "country": null,
-   "at": "2026-11-12T08:49:11.971626+00:00",
-   "answers": 6,
-   "engines": [
-    {
-     "provider": "claude",
-     "measurement_type": "live_search",
-     "answers": 2,
-     "at": "2026-11-12T08:49:11.971626+00:00",
-     "brands": [
-      {
-       "name": "Amazon",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 2
-      },
-      {
-       "name": "Hepsiburada",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "n11",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Trendyol",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      }
-     ]
-    },
-    {
-     "provider": "openai",
-     "measurement_type": "live_search",
-     "answers": 2,
-     "at": "2026-11-12T08:47:55.265477+00:00",
-     "brands": [
-      {
-       "name": "Amazon",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 2
-      },
-      {
-       "name": "Hepsiburada",
-       "recommended": 1,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Trendyol",
-       "recommended": 1,
-       "mentioned": 2,
-       "first": 0
-      }
-     ]
-    },
-    {
-     "provider": "gemini",
-     "measurement_type": "model_knowledge",
-     "answers": 2,
-     "at": "2026-11-12T08:46:35.961625+00:00",
-     "brands": [
-      {
-       "name": "Amazon",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Hepsiburada",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "n11",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Trendyol",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      }
-     ]
-    }
-   ]
-  },
-  {
-   "slug": "turkiyede-en-guvenilir-bankalar-hangileri",
-   "question": "Türkiye'de en güvenilir bankalar hangileri?",
-   "lang": "tr",
-   "country": null,
-   "at": "2026-11-12T08:43:12.788417+00:00",
-   "answers": 4,
-   "engines": [
-    {
-     "provider": "openai",
-     "measurement_type": "live_search",
-     "answers": 2,
-     "at": "2026-11-06T21:56:55.027013+00:00",
-     "brands": [
-      {
-       "name": "Akbank",
-       "recommended": 0,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Garanti BBVA",
-       "recommended": 0,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "İş Bankası",
-       "recommended": 0,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Yapı Kredi",
-       "recommended": 0,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Ziraat Bankası",
-       "recommended": 0,
-       "mentioned": 2,
-       "first": 0
-      }
-     ]
-    },
-    {
-     "provider": "gemini",
-     "measurement_type": "model_knowledge",
-     "answers": 2,
-     "at": "2026-11-12T08:43:12.788417+00:00",
-     "brands": [
-      {
-       "name": "Akbank",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Garanti BBVA",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "İş Bankası",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Yapı Kredi",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Ziraat Bankası",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      }
-     ]
-    }
-   ]
-  },
-  {
-   "slug": "yeni-hesap-acmak-icin-en-avantajli-banka-hangisi",
-   "question": "Yeni hesap açmak için en avantajlı banka hangisi?",
-   "lang": "tr",
-   "country": null,
-   "at": "2026-11-12T08:42:44.984448+00:00",
-   "answers": 4,
-   "engines": [
-    {
-     "provider": "openai",
-     "measurement_type": "live_search",
-     "answers": 2,
-     "at": "2026-11-06T21:56:37.913561+00:00",
-     "brands": [
-      {
-       "name": "Enpara.com",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 2
-      },
-      {
-       "name": "Akbank",
-       "recommended": 1,
-       "mentioned": 1,
-       "first": 0
-      }
-     ]
-    },
-    {
-     "provider": "gemini",
-     "measurement_type": "model_knowledge",
-     "answers": 2,
-     "at": "2026-11-12T08:42:44.984448+00:00",
-     "brands": [
-      {
-       "name": "Akbank",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Enpara.com",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Garanti BBVA",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "İş Bankası",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Yapı Kredi",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      }
-     ]
-    }
-   ]
-  },
-  {
-   "slug": "turkiyede-musteri-hizmetleri-en-iyi-banka-hangisi",
-   "question": "Türkiye'de müşteri hizmetleri en iyi banka hangisi?",
-   "lang": "tr",
-   "country": null,
-   "at": "2026-11-12T08:42:34.429297+00:00",
-   "answers": 4,
-   "engines": [
-    {
-     "provider": "openai",
-     "measurement_type": "live_search",
-     "answers": 2,
-     "at": "2026-11-06T21:56:14.225947+00:00",
-     "brands": [
-      {
-       "name": "İş Bankası",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 2
-      },
-      {
-       "name": "Ziraat Bankası",
-       "recommended": 0,
-       "mentioned": 1,
-       "first": 0
-      }
-     ]
-    },
-    {
-     "provider": "gemini",
-     "measurement_type": "model_knowledge",
-     "answers": 2,
-     "at": "2026-11-12T08:42:34.429297+00:00",
-     "brands": [
-      {
-       "name": "Enpara.com",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 1
-      },
-      {
-       "name": "İş Bankası",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Garanti BBVA",
-       "recommended": 1,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Yapı Kredi",
-       "recommended": 1,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Akbank",
-       "recommended": 1,
-       "mentioned": 1,
-       "first": 0
-      }
-     ]
-    }
-   ]
-  },
-  {
-   "slug": "kredi-karti-almak-icin-hangi-bankayi-onerirsin",
-   "question": "Kredi kartı almak için hangi bankayı önerirsin?",
-   "lang": "tr",
-   "country": null,
-   "at": "2026-11-12T08:42:26.009499+00:00",
-   "answers": 4,
-   "engines": [
-    {
-     "provider": "openai",
-     "measurement_type": "live_search",
-     "answers": 2,
-     "at": "2026-11-06T21:55:51.503466+00:00",
-     "brands": [
-      {
-       "name": "Akbank",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 2
-      },
-      {
-       "name": "Enpara.com",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 1
-      },
-      {
-       "name": "İş Bankası",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 2
-      },
-      {
-       "name": "Garanti BBVA",
-       "recommended": 1,
-       "mentioned": 1,
-       "first": 1
-      },
-      {
-       "name": "Yapı Kredi",
-       "recommended": 1,
-       "mentioned": 1,
-       "first": 1
-      }
-     ]
-    },
-    {
-     "provider": "gemini",
-     "measurement_type": "model_knowledge",
-     "answers": 2,
-     "at": "2026-11-12T08:42:26.009499+00:00",
-     "brands": [
-      {
-       "name": "Akbank",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Enpara.com",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Garanti BBVA",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "İş Bankası",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Yapı Kredi",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      }
-     ]
-    }
-   ]
-  },
-  {
-   "slug": "turkiyede-en-iyi-mobil-bankacilik-uygulamasi-hangisi",
-   "question": "Türkiye'de en iyi mobil bankacılık uygulaması hangisi?",
-   "lang": "tr",
-   "country": null,
-   "at": "2026-11-12T08:42:16.614201+00:00",
-   "answers": 4,
-   "engines": [
-    {
-     "provider": "openai",
-     "measurement_type": "live_search",
-     "answers": 2,
-     "at": "2026-11-06T21:55:30.20013+00:00",
-     "brands": [
-      {
-       "name": "İş Bankası",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 2
-      },
-      {
-       "name": "Enpara.com",
-       "recommended": 1,
-       "mentioned": 1,
-       "first": 0
-      },
-      {
-       "name": "Garanti BBVA",
-       "recommended": 1,
-       "mentioned": 1,
-       "first": 0
-      },
-      {
-       "name": "Yapı Kredi",
-       "recommended": 1,
-       "mentioned": 1,
-       "first": 0
-      }
-     ]
-    },
-    {
-     "provider": "gemini",
-     "measurement_type": "model_knowledge",
-     "answers": 2,
-     "at": "2026-11-12T08:42:16.614201+00:00",
-     "brands": [
-      {
-       "name": "Akbank",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Enpara.com",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Garanti BBVA",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 2
-      },
-      {
-       "name": "İş Bankası",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
-      },
-      {
-       "name": "Yapı Kredi",
-       "recommended": 2,
-       "mentioned": 2,
-       "first": 0
       }
      ]
     }

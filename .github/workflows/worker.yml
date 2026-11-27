@@ -35,12 +35,16 @@ jobs:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          # Gemini canlı arama: ayrı ücretli proje (önden ödemeli, aylık 5 $ sınır). Yalnız LIVE_ENGINES'te "gemini" varken kullanılır.
+          GEMINI_CANLI_API_KEY: ${{ secrets.GEMINI_CANLI_API_KEY }}
           PLATFORM_ADMIN_EMAIL: ${{ secrets.PLATFORM_ADMIN_EMAIL }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           # Perplexity: anahtar varsa motor hazır olur; canlı sıraya girmesi için LIVE_ENGINES'e eklenmesi gerekir (bağlantı testi geçince).
           PERPLEXITY_API_KEY: ${{ secrets.PERPLEXITY_API_KEY }}
           RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          FCM_SERVICE_ACCOUNT: ${{ secrets.GOOGLE_SERVICE_ACCOUNT }}
+          GOOGLE_PLAY_SERVICE_ACCOUNT: ${{ secrets.GOOGLE_SERVICE_ACCOUNT }}
           # Google Shopping (SerpApi): ücretli alanlarda ürün başına haftada 1 arama; SerpApi'de kalan hak 10'un altına inince durur.
           SERPAPI_KEY: ${{ secrets.SERPAPI_KEY }}
           GEMINI_TIER: free

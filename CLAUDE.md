@@ -18,7 +18,7 @@ Güncel durum: `docs/STATUS.md` · Mimari: `docs/ARCHITECTURE.md` · Fiyat: `doc
 
 ## Değişmez kurallar
 - API anahtarları yalnız GitHub Secrets'ta. Sohbete, koda, commit'e asla yazılmaz.
-- `ALLOW_PAID_API=true` olmadan ücretli API çağrılmaz. Google faturalandırması kapalı kalır.
+- `ALLOW_PAID_API=true` olmadan ücretli API çağrılmaz. Google faturalandırması kapalı kalır; tek istisna (24 Kasım, sahip onayı): ayrı "aisaasavran-canli" projesi, önden ödemeli (250 TL yüklendi), aylık 5 $ harcama sınırı, otomatik yükleme kapalı, anahtar `GEMINI_CANLI_API_KEY`. Canlı aramalı Gemini için kullanılır; 24 Kasım'dan beri varsayılan canlı sırada (müşteri ve Growth Lab ölçümleri dahil; sınır dolarsa Gemini çağrıları düşer, diğer motorlar devam eder); site, ücretsiz kontrol ve ses üretimi ücretsiz `GEMINI_API_KEY` ile kalır.
 - Uydurma veri asla gerçek gibi gösterilmez; simüle sonuç yalnız Demo Lab'de, "SİMÜLASYON" etiketiyle.
 - İletişim adresi `info@aisaasavran.com`. Kişisel e-posta kodda/sitede yer almaz.
 - Şirket kurma, ödeme, başvuru: sahibinin onayı olmadan yapılmaz. Kimlik/banka bilgisi istenmez.
@@ -34,6 +34,12 @@ engine/src/          Ölçüm motoru (pipeline, metrics, usage, report, pricing,
 engine/src/providers Sağlayıcı adaptörleri: gemini, openai, claude, perplexity, simulated, mock
 supabase/migrations  0001–00NN sırayla; yeni değişiklik = yeni dosya, eskisi düzenlenmez
 web/                 Arayüz (Vite + React + Supabase JS), mobil öncelikli; web/site = statik site, blog, eğitimler
+web/src/mobile       Mobil uygulama ekranları (Capacitor, Android: web/android); veri katmanı web/src/lib ile ortak.
+                     Uygulamada Paddle yok (Google Play / App Store ödemesi); uygulama fiyatı sitedekiyle aynı (TL: kurdan, sonu 9),
+                     Elmas yalnız sitede; ek sorgu paketi yalnız hakkını bitiren abonelere. Ana sayfada ve bildirimlerde
+                     rakip dili yok; uygulama müşterinin kendi sonuçlarına odaklanır (23 Kasım kararları)
+                     Mobil ekran tasarımından önce taste-skill okunur (.claude/skills/taste-skill:
+                     SKILL.md + references/copy-tells.md): "yapay zekâ yapmış gibi" görünmesin (23 Kasım)
 functions/api/       Cloudflare Pages Functions (check, report, paddle, mcp, v1 API…)
 scripts/             İşçi, testler, gizli bilgi taraması, smoke testleri, geo-autopilot
 e2e/                 Playwright mobil uçtan uca testler
@@ -98,12 +104,14 @@ PR açıklamasında bu kontrollerden neyin değiştiğini kısaca yaz.
   Eğitim (Eğitim/Tutorial) videoları EN kanalına yüklenmez; TR kanalında liste dışı kalır, yalnız siteden izlenir.
   İstisna (20 Kasım, sahibinin kararı): İngilizce eğitim videoları da TR kanalında liste dışı durur (sitedeki /tutorials/ oynatıcıları için); seri 10 ders.
   Her yüklemede: çocuklara yönelik değil, ücretli tanıtım yok, yapay içerik işareti, video dili, kurala uygun kapak.
-  vidIQ yalnız TR kanalına bağlı (ikinci kanal ücretli): EN yüklemeleri YouTube Studio'dan yapılır.
+  Yükleme (21 Kasım): iki kanal da GitHub Actions `youtube-yukle` ile (iş dosyası `yt/yukle/<ad>-<dil>.json`, ayrıntı `yt/yukle/README.md`); vidIQ yalnız TR kanalı için yedek.
 - **Açıklama yapısı (20 Kasım, yeni videolar):** her YouTube açıklaması kanalın dilinde şu sırayla yazılır: 1–2 cümlelik
   doğrudan cevap (videonun ana bulgusu, gerçek sayıyla) → "Öne çıkanlar" (3–5 madde) → "Bu video hangi sorulara cevap veriyor"
   (2–4 soru + tek cümlelik cevap) → "Bölümler" (zaman damgalı, uzun videolarda) → bağımsızlık satırı ve ölçüm tarihi.
   Yapay zekâ bu yapıyı kolay alıntılıyor (rakip kanallarda da böyle). Uydurma sayı yok; sayılar ölçüm verisinden.
 - Video kurulumu ve şablonlar: `seslendirme` dalında `video/README.md` + `video/sablon/`.
+- **REMOTION STANDARDI (24 Kasım, sahibin kararı, kalıcı):** tüm yeni veri Shorts'ları `seslendirme` dalındaki `video/remotion/` ortak şablonuyla (TR+EN) çizilir: `bash video/remotion/uret.sh <konu> <dil> [kart]` → video, altyazısız kapak, Instagram karuseli. Sahneler seslendirme cümlelerine bağlı, kelime kelime altyazı, söylenen anda vurgu. Ayrıntı: `video/README.md` "REMOTION STANDARDI". Ekran yazımı dosyası `video/yazi-<ad>.txt` (adı `narration-` ile başlamaz; yoksa ses hattı onu da seslendirir). Eski `make.py` yalnız eski videolar için.
+- Dış skill'ler (23 Kasım, güvenlik taraması temiz): `.claude/skills/remotion-*` (Remotion'ın resmi `remotion-dev/skills`, commit 89c8afa; Remotion ile video/animasyon yapılırken önce `remotion-best-practices` okunur; lisans ≤3 çalışanlı şirkete ücretsiz) ve `.claude/skills/taste-skill` (`Leonxlnx/taste-skill`, commit 6c0b5c7, MIT; site/mobil uygulama arayüz tasarımı). Yeni dış skill eklemeden önce aynı tarama yapılır (kurulumda çalışan script, ağ çağrısı/telemetri, gizli talimat, lisans). Kullanılmaz: `anything2explainer` (ticari kullanım yasak lisans); `effectcraft-app/effectcraft` (zararlı sahte kopya, gerçeği `storytold/effectcraft`).
 - Paylaşım kuralları (Instagram 3'lü set: TR Reels → EN Reels → ayrı gönderi; YouTube oynatma listeleri,
   açıklama metinleri): aynı dosyada "PAYLAŞIM KURALLARI" bölümü. Yeni video işinden önce oku.
 - ZORUNLU (19 Kasım): YouTube/Instagram paylaşımından önce README'deki "PAYLAŞMADAN ÖNCE KONTROL LİSTESİ"

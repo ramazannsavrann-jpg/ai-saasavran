@@ -1,14 +1,24 @@
 // Paddle ödeme penceresi ve abonelik yönetimi. Yalnız herkese açık istemci anahtarı kullanılır.
 import { runtimeConfig, sb } from "./supabase";
+import { API_BASE } from "./env";
 import { isEn } from "./i18n";
 
-export type PaidPlan = "starter" | "pro" | "agency";
+export type PaidPlan = "starter" | "altin" | "pro" | "agency";
 export const PLAN_INFO: Record<PaidPlan, { name: string; price: number }> = {
-  starter: { name: "Plus", price: 29 }, pro: { name: "Pro", price: 149 }, agency: { name: "Business", price: 449 },
+  starter: { name: "Gümüş", price: 130 }, altin: { name: "Altın", price: 250 }, pro: { name: "Platin", price: 400 }, agency: { name: "Elmas", price: 1500 },
 };
+/** Türkçe yönelme eki: Gümüş'e, Altın'a, Platin'e, Elmas'a geç. */
+export const PLAN_DATIVE: Record<PaidPlan, string> = { starter: "Gümüş'e", altin: "Altın'a", pro: "Platin'e", agency: "Elmas'a" };
+export const RECOMMENDED_PLAN: PaidPlan = "altin";
 export const planName = (id: string) => (id in PLAN_INFO ? PLAN_INFO[id as PaidPlan].name : id === "free" ? "Free" : id);
 
-interface PaddleCfg { clientToken: string; environment: "production" | "sandbox"; prices: Record<PaidPlan, string> }
+interface PaddleCfg { clientToken: string; environment: "production" | "sandbox"; prices: Partial<Record<PaidPlan, string>> }
+
+/** Yalnız Paddle fiyat kimliği tanımlı paketler satın alınabilir (Altın, Paddle fiyatı eklenene kadar listede görünmez). */
+export const purchasablePlans = (): PaidPlan[] => {
+  const cfgPrices = (runtimeConfig() as unknown as { paddle?: PaddleCfg })?.paddle?.prices ?? {};
+  return (Object.keys(PLAN_INFO) as PaidPlan[]).filter((p) => !!cfgPrices[p]);
+};
 declare global { interface Window { Paddle?: any } }
 
 export const paymentsEnabled = () => !!(runtimeConfig() as unknown as { paddle?: PaddleCfg })?.paddle;
@@ -35,9 +45,11 @@ function loadPaddle(onEvent: (name: string) => void): Promise<any> {
 }
 
 export async function openCheckout(plan: PaidPlan, workspaceId: string, email: string | undefined, onEvent: (name: string) => void, userId?: string) {
+  const priceId = cfg().prices[plan];
+  if (!priceId) throw new Error(isEn() ? "This plan is not available for purchase yet." : "Bu paket henüz satışta değil.");
   const P = await loadPaddle(onEvent);
   P.Checkout.open({
-    items: [{ priceId: cfg().prices[plan], quantity: 1 }],
+    items: [{ priceId, quantity: 1 }],
     customer: email ? { email } : undefined,
     // user_id: sunucu, aboneliği yalnız bu kullanıcı alanın sahibi/editörüyse bağlar (0052)
     customData: { workspace_id: workspaceId, ...(userId ? { user_id: userId } : {}) },
@@ -47,7 +59,7 @@ export async function openCheckout(plan: PaidPlan, workspaceId: string, email: s
 
 export async function openPortal(workspaceId: string): Promise<void> {
   const { data } = await sb().auth.getSession();
-  const res = await fetch("/api/paddle/portal", {
+  const res = await fetch(`${API_BASE}/api/paddle/portal`, {
     method: "POST", headers: { "content-type": "application/json", Authorization: `Bearer ${data.session?.access_token ?? ""}` },
     body: JSON.stringify({ workspace_id: workspaceId }),
   });

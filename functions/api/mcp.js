@@ -1,4 +1,4 @@
-// MCP sunucusu: https://aisaasavran.com/api/mcp  (Authorization: Bearer aisv_… — Pro ve Business)
+// MCP sunucusu: https://aisaasavran.com/api/mcp  (Authorization: Bearer aisv_… — Platin ve Elmas)
 import { UUID, authenticate, errorText, rpc, summarize } from "./_api-lib.js";
 import { handleMessage } from "./_mcp-lib.js";
 

@@ -1,12 +1,13 @@
-// Paddle katalogunu kurar (tekrar çalıştırmak güvenli): Plus / Pro / Business ürünleri ve aylık USD fiyatları.
-// Fiyatlar migration 0019 ile aynı olmalı. Fiyat değişince yeni fiyat oluşturulur; eski fiyat Paddle'da kalır ama kullanılmaz. Anahtar yazdırılmaz; yalnız ürün/fiyat kimlikleri (gizli değil) yazdırılır.
+// Paddle katalogunu kurar (tekrar çalıştırmak güvenli): Gümüş / Altın / Platin / Elmas ürünleri ve aylık USD fiyatları.
+// Fiyatlar migration 0062 ve 0063 ile aynı olmalı (22 Kasım 2026: 130 / 250 / 400 / 1500 $). Fiyat değişince yeni fiyat oluşturulur; eski fiyat Paddle'da kalır ama kullanılmaz. Anahtar yazdırılmaz; yalnız ürün/fiyat kimlikleri (gizli değil) yazdırılır.
 const KEY = process.env.PADDLE_API_KEY;
 if (!KEY) { console.log("PADDLE_API_KEY yok; atlandı."); process.exit(0); }
 const BASE = KEY.includes("_sdbx_") ? "https://sandbox-api.paddle.com" : "https://api.paddle.com";
 const PLANS = [
-  { plan: "starter", name: "AI SaaSavran Plus", cents: 2900, description: "1 brand, 25 questions, 5 competitors. ChatGPT, Claude and Perplexity with live web search + Gemini, measured weekly." },
-  { plan: "pro", name: "AI SaaSavran Pro", cents: 14900, description: "5 brands, 30 questions each, 8 competitors per brand. ChatGPT, Claude and Perplexity with live web search + Gemini, measured weekly." },
-  { plan: "agency", name: "AI SaaSavran Business", cents: 44900, description: "15 brands, 30 questions each, 10 competitors per brand. For agencies managing client brands." },
+  { plan: "starter", name: "AI SaaSavran Gümüş", cents: 13000, description: "1 brand, 25 questions, 5 competitors. ChatGPT, Claude and Perplexity with live web search + Gemini, measured weekly." },
+  { plan: "altin", name: "AI SaaSavran Altın", cents: 25000, description: "3 brands, 30 questions each, 6 competitors per brand. ChatGPT, Claude and Perplexity with live web search + Gemini, measured weekly." },
+  { plan: "pro", name: "AI SaaSavran Platin", cents: 40000, description: "5 brands, 30 questions each, 8 competitors per brand. ChatGPT, Claude and Perplexity with live web search + Gemini, measured weekly." },
+  { plan: "agency", name: "AI SaaSavran Elmas", cents: 150000, description: "15 brands, 30 questions each, 10 competitors per brand. For agencies managing client brands." },
 ];
 async function api(method, path, body) {
   const r = await fetch(BASE + path, { method, headers: { Authorization: `Bearer ${KEY}`, "Content-Type": "application/json" }, body: body ? JSON.stringify(body) : undefined });
@@ -22,6 +23,12 @@ for (const p of PLANS) {
     prod = (await api("POST", "/products", { name: p.name, tax_category: "saas", description: p.description, custom_data: { plan: p.plan } })).data;
     prod.prices = [];
     console.log(`Ürün oluşturuldu: ${p.name}`);
+  } else if (prod.name !== p.name || prod.description !== p.description) {
+    // Ödeme penceresi ve faturada görünen ad paket adıyla aynı olsun (eski: Plus / Pro / Business)
+    const prices = prod.prices;
+    prod = (await api("PATCH", `/products/${prod.id}`, { name: p.name, description: p.description })).data;
+    prod.prices = prices;
+    console.log(`Ürün adı güncellendi: ${p.name}`);
   }
   let price = (prod.prices ?? []).find((x) => x.status === "active" && x.unit_price?.amount === String(p.cents) && x.unit_price?.currency_code === "USD" && x.billing_cycle?.interval === "month");
   if (!price) {

@@ -1,5 +1,20 @@
 {
   "version": 1,
-  "include": ["/*"],
-  "exclude": ["/assets/*", "/site/*", "/icon.svg", "/og.png", "/favicon.ico", "/*.txt", "/t.js", "/favicon.ico", "/downloads/*"]
+  "include": [
+    "/*"
+  ],
+  "exclude": [
+    "/assets/*",
+    "/site/*",
+    "/icon.svg",
+    "/og.png",
+    "/favicon.ico",
+    "/*.txt",
+    "/t.js",
+    "/favicon.ico",
+    "/downloads/*",
+    "/icons/*",
+    "/sw.js",
+    "/manifest.webmanifest"
+  ]
 }

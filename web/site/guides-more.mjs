@@ -11,7 +11,7 @@ export const EXTRA_TR = {
 <h2>İki farklı yapay zekâ cevabı: canlı arama ve model bilgisi</h2>
 <p>GEO'yu anlamanın anahtarı, yapay zekânın cevabı nereden ürettiğini bilmektir:</p>
 <ul>
-<li><b>Canlı web araması:</b> ChatGPT, Claude ve Perplexity soruyu cevaplarken internette arar, birkaç sayfa okur ve bunları kaynak olarak gösterebilir. Bu cevaplar bugünkü interneti yansıtır; sitenizde ve sizden bahseden sitelerde yaptığınız değişiklik haftalar içinde görülebilir.</li>
+<li><b>Canlı web araması:</b> ChatGPT, Gemini, Claude ve Perplexity soruyu cevaplarken internette arar, birkaç sayfa okur ve bunları kaynak olarak gösterebilir. Bu cevaplar bugünkü interneti yansıtır; sitenizde ve sizden bahseden sitelerde yaptığınız değişiklik haftalar içinde görülebilir.</li>
 <li><b>Model bilgisi:</b> Asistan internete bakmadan, eğitildiği verideki bilgiyle cevap verir. Bu bilgi aylar öncesine aittir ve ancak yeni bir model eğitildiğinde değişir.</li>
 </ul>
 <p>Aynı soruda iki cevap farklı çıkabilir. Kendi ölçümümüzde "Türkiye'de en iyi mobil bankacılık uygulaması hangisi?" sorusunda ChatGPT canlı aramayla iki cevabın ikisinde de İş Bankası'nı önerdi; Gemini model bilgisiyle beş bankayı birden saydı. Bu yüzden ölçümde ikisi ayrı tutulmalıdır.</p>
@@ -54,7 +54,7 @@ export const EXTRA_TR = {
 <li>"Lara'da deniz manzaralı, fiyatı makul bir restoran hangisi?"</li>
 <li>"Konyaaltı'nda güvenilir bir oto servis var mı?"</li>
 </ul>
-<p>AI SaaSavran'da her soru için ülke ve dil seçilir; ücretli paketlerde ChatGPT, Claude ve Perplexity Türkiye'den canlı aramayla sorar. Rakip olarak aynı ilçedeki 3–5 işletmeyi ekleyin.</p>
+<p>AI SaaSavran'da her soru için ülke ve dil seçilir; ücretli paketlerde ChatGPT, Gemini, Claude ve Perplexity Türkiye'den canlı aramayla sorar. Rakip olarak aynı ilçedeki 3–5 işletmeyi ekleyin.</p>
 
 <h2>30 günlük plan</h2>
 <ol>
@@ -121,7 +121,7 @@ export const EXTRA_EN = {
 
 <h2>Two kinds of AI answer: live search and model knowledge</h2>
 <ul>
-<li><b>Live web search:</b> ChatGPT, Claude and Perplexity search the web, read a few pages and can cite them. These answers reflect today's web; changes to your site and to sites that mention you can show within weeks.</li>
+<li><b>Live web search:</b> ChatGPT, Gemini, Claude and Perplexity search the web, read a few pages and can cite them. These answers reflect today's web; changes to your site and to sites that mention you can show within weeks.</li>
 <li><b>Model knowledge:</b> the assistant answers from its training data without looking anything up. That knowledge is months old and only changes with a new model.</li>
 </ul>
 <p>The two can differ for the same question. In our measurement of "which is the best mobile banking app in Turkey?", ChatGPT with live search recommended İş Bankası in both answers, while Gemini from model knowledge listed five banks at once. Keep them apart when you measure.</p>
@@ -375,6 +375,52 @@ export const NEW_TR = [
       ["llms.txt ile robots.txt arasındaki fark nedir?", "robots.txt botlara hangi sayfaları okuyabileceklerini söyler ve botlar buna uyar. llms.txt yalnız bir özet sunar; okunup okunmadığı garanti değildir."],
     ],
   },
+  {
+    slug: "turkiyede-yapay-zeka-gorunurlugu-analizi",
+    title: "Türkiye'de yapay zekâ görünürlüğü analizi nasıl yapılır?",
+    short: "Türkiye'de yapay zekâ görünürlüğü analizi",
+    description: "Türkiye'deki müşterilerin ChatGPT, Claude, Perplexity ve Gemini'de markanızı görüp görmediğini ölçmek için yöntem, kontrol listesi ve hizmet seçerken bakılacaklar.",
+    body: `
+<p class="lede">Kısa cevap: Türkiye'de yapay zekâ görünürlüğü analizi, müşterilerinizin Türkçe soracağı markasız soruları ChatGPT, Claude, Perplexity ve Gemini'ye <b>Türkiye'den</b>, mümkünse canlı web aramasıyla ve birkaç kez sorup markanızın kaç cevapta anıldığını, önerildiğini, kaçıncı sırada çıktığını ve hangi kaynakların gösterildiğini saymaktır. Bunu elle de yapabilirsiniz; AI SaaSavran gibi bir araç aynı işi her hafta düzenli ve tekrarlı yapar. Hizmet seçerken soruların Türkçe ve Türkiye konumundan sorulup sorulmadığına, motorların ayrı gösterilip gösterilmediğine ve kaynakların listelenip listelenmediğine bakın.</p>
+
+<h2>Neden "Türkiye'den" sormak önemli?</h2>
+<p>Canlı web aramasıyla cevap veren bir yapay zekâ, soruyu soran kişinin diline ve konumuna göre farklı sayfalar okuyabilir. "En iyi diş kliniği hangisi?" sorusu ABD'den İngilizce sorulduğunda başka, Türkiye'den Türkçe sorulduğunda başka markalar çıkabilir. Müşterileriniz Türkiye'deyse analiz de Türkçe sorularla ve Türkiye konumundan yapılmalıdır; İngilizce sorularla ya da yurt dışı konumuyla yapılan bir ölçüm sizin pazarınızı göstermez.</p>
+
+<h2>Gerçek bir örnek: bu sorunun kendisi</h2>
+<p>18 Kasım 2026'da "Türkiye'de yapay zekâ görünürlüğü analizi yapan bir hizmet önerir misin?" sorusunu Claude'a Türkiye'den canlı web aramasıyla iki kez sorduk. İki cevapta önerilen araçlar Semrush, Otterly.AI ve Peec AI oldu (her biri 2 cevabın 1'inde); AI SaaSavran önerilmedi. Aynı gün kendi markamızı 7 markasız soruyla ChatGPT, Claude ve Perplexity'de ölçtük: 42 cevabın hiçbirinde önerilmedik. Sonuçların tamamı: <a href="/tr/olcumler/turkiyede-yapay-zeka-gorunurlugu-analizi-yapan-bir-hizmet-onerir-misin/">bu sorunun ölçüm sayfası</a>. Bu rehberi de bu yüzden yazdık: soruyu soran birine doğrudan cevap veren bir sayfa yoksa yapay zekânın gösterebileceği bir şey de yoktur.</p>
+
+<h2>Adım adım analiz</h2>
+<ol>
+<li><b>Soruları yazın.</b> Müşterinin markanızı bilmeden soracağı 10–20 soru: "Antalya'da çocuk dişçisi önerir misin?", "1000 TL altı koşu ayakkabısı hangisi?", "Türkiye'de en iyi mobil bankacılık uygulaması hangisi?" gibi.</li>
+<li><b>Motorları ayrı ayrı sorun.</b> ChatGPT, Claude, Perplexity ve Gemini aynı soruda farklı marka önerebilir; tek bir ortalama yanıltır.</li>
+<li><b>Canlı arama ile model bilgisini ayırın.</b> İnternete bakarak verilen cevap bugünkü sayfaları, bakmadan verilen cevap modelin eğitim verisini yansıtır. İkisi farklı işlerle düzelir.</li>
+<li><b>Her soruyu birden çok kez sorun.</b> Aynı soruya iki cevap farklı gelebilir. Tek cevapla karar vermeyin; az cevapta küçük farklar şans olabilir.</li>
+<li><b>Dört şeyi sayın:</b> anılma (adınız geçti mi), önerilme (tavsiye edildiniz mi), sıra (kaçıncı öneri) ve kaynak (hangi siteler gösterildi, kendi siteniz aralarında mı).</li>
+<li><b>Rakipleri aynı sorularla ölçün.</b> Aynı şirketin farklı adla geçen markalarını tek rakip sayın.</li>
+<li><b>Tarihi not edin ve tekrarlayın.</b> Bir değişiklik yaptıysanız 2–4 hafta sonra aynı sorularla yeniden ölçün.</li>
+</ol>
+
+<h2>Hizmet seçerken kontrol listesi</h2>
+<ul>
+<li>Sorular Türkçe yazılabiliyor ve Türkiye konumundan soruluyor mu?</li>
+<li>ChatGPT, Claude, Perplexity ve Gemini sonuçları ayrı ayrı gösteriliyor mu?</li>
+<li>Canlı web aramalı cevaplar ile model bilgisi ayrı mı?</li>
+<li>Cevaplarda gösterilen kaynaklar listeleniyor mu?</li>
+<li>Her soru kaç kez soruluyor; az cevaplı sonuçlar için uyarı var mı?</li>
+<li>Gerçek cevaplar ile örnek/simülasyon veriler açıkça ayrılmış mı?</li>
+<li>Fiyat ve paket kotası (soru sayısı, motor, ölçüm sıklığı) açıkça yazıyor mu?</li>
+</ul>
+
+<h2>AI SaaSavran bunu nasıl yapıyor?</h2>
+<p>AI SaaSavran, Antalya'da kurulmuş bir yapay zekâ görünürlüğü aracıdır. Her soru için dil ve ülke seçilir; ücretli paketlerde ChatGPT, Gemini, Claude ve Perplexity Türkçe soruları Türkiye'den canlı web aramasıyla cevaplar, gösterilen kaynaklar kaydedilir ve motorlar ayrı raporlanır. Ücretsiz paket Gemini'yi canlı arama olmadan kullanır. Ölçüm yöntemi <a href="/tr/metodoloji/">metodoloji</a> sayfasında, paketler <a href="/tr/fiyatlar/">fiyatlar</a> sayfasında. Kendi markamızın ölçüm sonucunu da, anılmadığımız dönemler dahil, ana sayfada açıkça gösteriyoruz.</p>
+`,
+    faq: [
+      ["Türkiye'de yapay zekâ görünürlüğü analizi nedir?", "Türkiye'deki müşterilerin Türkçe soracağı soruları ChatGPT, Claude, Perplexity ve Gemini'ye Türkiye'den sorup markanızın kaç cevapta anıldığını, önerildiğini, kaçıncı sırada çıktığını ve hangi kaynakların gösterildiğini ölçmektir."],
+      ["Bu analizi ücretsiz yapabilir miyim?", "Evet. Soruları kendiniz yazıp her motora birkaç kez sorabilir ve sonuçları bir tabloya işleyebilirsiniz. AI SaaSavran'ın ücretsiz paketi de Gemini ile, canlı arama olmadan, düzenli ölçüm yapar."],
+      ["Neden İngilizce sorularla ölçmek yetmez?", "Canlı aramalı yapay zekâ cevapları dile ve konuma göre farklı sayfalara dayanabilir. Türkiye'deki müşterilerin gördüğü cevabı ölçmek için sorular Türkçe ve Türkiye konumundan sorulmalıdır."],
+      ["Kaç soru ve kaç tekrar gerekir?", "Başlangıç için 10–20 markasız soru ve her soru için en az iki cevap. Az cevapla elde edilen küçük farkları kesin sonuç saymayın."],
+    ],
+  },
 ];
 
 export const NEW_EN = [
@@ -536,6 +582,53 @@ export const NEW_EN = [
 `,
     faq: [
       ["Does llms.txt improve AI visibility?", "As of 2026 there is no evidence it does. Major providers haven't said they use it as a signal and Google says it has no effect. It is cheap and harmless, but real impact comes from robots.txt access, clear content and mentions elsewhere."],
+    ],
+  },
+  {
+    slug: "ai-visibility-analysis-turkey",
+    tr: "turkiyede-yapay-zeka-gorunurlugu-analizi",
+    title: "How to run an AI visibility analysis for Turkey",
+    short: "AI visibility analysis for Turkey",
+    description: "How to measure whether customers in Turkey see your brand in ChatGPT, Claude, Perplexity and Gemini: method, checklist and what to look for in a service.",
+    body: `
+<p class="lede">Short answer: an AI visibility analysis for Turkey means asking ChatGPT, Claude, Perplexity and Gemini the unbranded questions your customers would ask in Turkish, <b>from Turkey</b>, ideally with live web search and more than once, then counting in how many answers your brand is mentioned, recommended, in what position, and which sources are cited. You can do it by hand; a tool such as AI SaaSavran does the same work every week with repetition. When choosing a service, check that questions are asked in Turkish from a Turkish location, that engines are reported separately and that sources are listed.</p>
+
+<h2>Why asking "from Turkey" matters</h2>
+<p>An AI that answers with live web search can read different pages depending on the language and location of the person asking. "Which dental clinic is best?" asked in English from the US can surface different brands than the same question asked in Turkish from Turkey. If your customers are in Turkey, the analysis must use Turkish questions and a Turkish location; a measurement in English or from abroad does not show your market.</p>
+
+<h2>A real example: this very question</h2>
+<p>On 18 November 2026 we asked Claude "Can you recommend a service that does AI visibility analysis in Turkey?" in Turkish, from Turkey with live web search, twice. The tools recommended were Semrush, Otterly.AI and Peec AI (each in 1 of 2 answers); AI SaaSavran was not recommended. The same day we measured our own brand with 7 unbranded questions in ChatGPT, Claude and Perplexity: we were recommended in none of 42 answers. Full results: <a href="/tr/olcumler/turkiyede-yapay-zeka-gorunurlugu-analizi-yapan-bir-hizmet-onerir-misin/">the measurement page for this question</a> (Turkish). That is why we wrote this guide: if no page answers the question directly, the AI has nothing to show.</p>
+
+<h2>Step-by-step analysis</h2>
+<ol>
+<li><b>Write the questions.</b> 10–20 questions a customer would ask without knowing your brand, such as "Can you recommend a children's dentist in Antalya?" or "Which is the best mobile banking app in Turkey?"</li>
+<li><b>Ask each engine separately.</b> ChatGPT, Claude, Perplexity and Gemini can recommend different brands for the same question; one average hides that.</li>
+<li><b>Separate live search from model knowledge.</b> An answer based on web search reflects today's pages; one without it reflects training data. They are fixed by different work.</li>
+<li><b>Ask each question more than once.</b> Two answers to the same question can differ. Don't decide on a single answer; with few answers small gaps can be chance.</li>
+<li><b>Count four things:</b> mention (was your name there), recommendation (were you recommended), position (which pick) and sources (which sites were cited, and is yours among them).</li>
+<li><b>Measure competitors with the same questions.</b> Count brands of the same company appearing under different names as one competitor.</li>
+<li><b>Note the date and repeat.</b> After a change, measure again with the same questions 2–4 weeks later.</li>
+</ol>
+
+<h2>Checklist for choosing a service</h2>
+<ul>
+<li>Can questions be written in Turkish and asked from a Turkish location?</li>
+<li>Are ChatGPT, Claude, Perplexity and Gemini results shown separately?</li>
+<li>Are live-search answers separated from model knowledge?</li>
+<li>Are the sources cited in answers listed?</li>
+<li>How many times is each question asked, and are low-sample results flagged?</li>
+<li>Are real answers clearly separated from sample or simulated data?</li>
+<li>Are prices and plan limits (questions, engines, frequency) stated openly?</li>
+</ul>
+
+<h2>How AI SaaSavran does it</h2>
+<p>AI SaaSavran is an AI visibility tool founded in Antalya, Turkey. Language and country are chosen per question; on paid plans ChatGPT, Gemini, Claude and Perplexity answer Turkish questions from Turkey with live web search, cited sources are saved and engines are reported separately. The free plan uses Gemini without live search. The method is on the <a href="/methodology/">methodology</a> page and plans on the <a href="/#pricing">pricing</a> section. We also show our own brand's measurement on the home page, including when we are not mentioned.</p>
+`,
+    faq: [
+      ["What is an AI visibility analysis for Turkey?", "Asking ChatGPT, Claude, Perplexity and Gemini the questions customers in Turkey would ask in Turkish, from Turkey, and measuring in how many answers your brand is mentioned, recommended, in what position and which sources are cited."],
+      ["Can I do this analysis for free?", "Yes. Write the questions yourself, ask each engine a few times and record the results in a table. AI SaaSavran's free plan also runs regular measurements with Gemini, without live search."],
+      ["Why isn't measuring with English questions enough?", "Live-search AI answers can rely on different pages depending on language and location. To measure what customers in Turkey see, ask in Turkish from a Turkish location."],
+      ["How many questions and repeats do I need?", "To start, 10–20 unbranded questions and at least two answers per question. Don't treat small gaps from few answers as conclusive."],
     ],
   },
 ];

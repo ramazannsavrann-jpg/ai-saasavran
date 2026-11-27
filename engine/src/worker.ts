@@ -85,7 +85,7 @@ export class DbUsageGate implements UsageGate {
 }
 
 /** Canlı aramada çalışacak motorlar, sırayla. LIVE_ENGINES ile değiştirilebilir (ör. "openai"). */
-export const DEFAULT_LIVE_ENGINES = "openai,claude,perplexity";
+export const DEFAULT_LIVE_ENGINES = "openai,claude,perplexity,gemini";
 
 /**
  * Ölçüm türüne göre motor listesi. Canlı aramada ücretli arama yapan tüm etkin motorlar
@@ -141,10 +141,18 @@ export async function processNextRun(deps: WorkerDeps): Promise<WorkerResult | n
 
     const brands: BrandRef[] = [target, ...comps].map((b) => ({ id: b.id, name: b.name, aliases: b.aliases ?? [], domain: domainOf(b.website) }));
     const day = now().toISOString().slice(0, 10);
-    const all = chooseProviders(run.measurement_type, { ...env, SEARCH_COUNTRY: target.country || env.SEARCH_COUNTRY }, brands.map((b) => b.name), `${run.id}`, deps.fetchFn);
+    // Motor sırası: elle verilen LIVE_ENGINES > çalıştırmada kayıtlı engines (ör. yalnız ["gemini"]) > varsayılan.
+    // 24 Kasım: push ile tetiklenen işçi, yalnız Gemini için açılmış çalıştırmayı varsayılan motorlarla almıştı.
+    const runEngines = run.measurement_type === "live_search" && Array.isArray(run.engines) && run.engines.length ? run.engines.join(",") : undefined;
+    const liveEngines = env.LIVE_ENGINES || runEngines;
+    const all = chooseProviders(run.measurement_type, { ...env, LIVE_ENGINES: liveEngines, SEARCH_COUNTRY: target.country || env.SEARCH_COUNTRY }, brands.map((b) => b.name), `${run.id}`, deps.fetchFn);
     // Canlı aramada tüm etkin motorlar (ChatGPT + Claude + Perplexity). Müşteri paketlerinde Claude ve Perplexity her soruyu 1 kez sorar
     // (paket tavanları buna göre hesaplı: pricing.ts "+ Claude" satırları); Growth Lab'de her motor 2 tekrar.
-    const providers = run.measurement_type === "live_search" ? all : all.slice(0, 1);
+    // Haftalık hafif ölçüm (0072, soru hakkı düzeni): canlı aramada yalnız ChatGPT, her motor 1 kez
+    const light = run.light === true;
+    const providers = run.measurement_type === "live_search"
+      ? (light ? (all.filter((p) => p.config.provider === "openai").length ? all.filter((p) => p.config.provider === "openai") : all.slice(0, 1)) : all)
+      : all.slice(0, 1);
     if (!providers.length) {
       return await finish({ status: "failed", stop: "provider_not_configured", ok: 0, failed: 0 }, undefined,
         run.measurement_type === "live_search" ? "Canlı arama sağlayıcısı etkin değil" : "Gemini anahtarı tanımlı değil");
@@ -165,7 +173,7 @@ export async function processNextRun(deps: WorkerDeps): Promise<WorkerResult | n
     const guard = new BudgetGuard(Number(run.max_cost_usd));
     // "Önerildi mi" LLM kontrolü: ücretli canlı ölçümlerde, OpenAI anahtarıyla ve açıkça etkinleştirildiyse
     const classifyModel = env.OPENAI_MODEL || OPENAI_DEFAULT.model;
-    const repetitions = ws.plan === "free" || run.measurement_type === "simulated" ? 1 : 2;
+    const repetitions = light || ws.plan === "free" || run.measurement_type === "simulated" ? 1 : 2;
     let failed = 0;
     let lastFailKind: ApiErrorClass | undefined;
     let ok = 0;

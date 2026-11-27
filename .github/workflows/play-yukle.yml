@@ -1,0 +1,46 @@
+name: Google Play'e yükle (dahili test)
+# GitHub sürümündeki .aab dosyasını Play'de dahili test kanalına yükler ve yayınlar.
+# Varsayılan: en yeni mobil-android-N sürümü. Üretim kanalına yükleme yapmaz.
+# Normalde mobil-android.yml her yeni sürümde bunu kendisi yapar; bu iş eldeki bir sürümü tekrar yüklemek içindir.
+on:
+  push:
+    branches: [main]
+    paths: [".github/workflows/play-yukle.yml"]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Sürüm etiketi (boş: en yenisi), ör. mobil-android-7"
+        required: false
+permissions:
+  contents: write  # taslak sürümleri görmek için gerekli
+concurrency:
+  group: play-yukle
+  cancel-in-progress: false
+
+jobs:
+  upload:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: .aab dosyasını sürümden indir
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ inputs.tag }}
+        run: |
+          if [ -z "$TAG" ]; then
+            TAG=$(gh api "repos/${{ github.repository }}/releases?per_page=30" --jq '[.[] | select(.tag_name|startswith("mobil-android-"))] | sort_by(.tag_name|ltrimstr("mobil-android-")|tonumber) | last | .tag_name')
+          fi
+          echo "Sürüm: $TAG"
+          ID=$(gh api "repos/${{ github.repository }}/releases?per_page=30" --jq ".[] | select(.tag_name==\"$TAG\") | .assets[] | select(.name|endswith(\".aab\")) | .id")
+          [ -n "$ID" ] || { echo "$TAG içinde .aab yok"; exit 1; }
+          gh api -H "Accept: application/octet-stream" "repos/${{ github.repository }}/releases/assets/$ID" > "$RUNNER_TEMP/app.aab"
+          ls -l "$RUNNER_TEMP/app.aab"
+      - name: Play'e yükle
+        env:
+          GOOGLE_SERVICE_ACCOUNT: ${{ secrets.GOOGLE_SERVICE_ACCOUNT }}
+          RELEASE_NOTES_TR: "Hata düzeltmeleri ve iyileştirmeler."
+        run: node scripts/android/play-upload.mjs "$RUNNER_TEMP/app.aab" internal

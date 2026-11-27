@@ -83,10 +83,10 @@ ${schema.map(ld).join("\n")}
 ${body}
 </main>
 <footer class="foot">
-  ${en ? `<p><b>AI SaaSavran</b> measures whether ChatGPT and Gemini recommend your business. Early access.</p>
-  <p><a href="/pricing/">Pricing</a> · <a href="/guides/">Guides</a> · <a href="/blog/">Blog</a> · <a href="/ai-visibility-index/">AI Visibility Index</a> · <a href="/tutorials/">Tutorials</a> · <a href="/about/">About</a> · <a href="/founder/">Founder</a> · <a href="/methodology/">Methodology</a> · <a href="/terms/">Terms</a> · <a href="/privacy/">Privacy</a> · <a href="/refund/">Refunds</a> · <a href="/tr/">Türkçe</a></p>
+  ${en ? `<p><b>AI SaaSavran</b> measures whether ChatGPT, Gemini, Claude and Perplexity recommend your business. Early access.</p>
+  <p><a href="/pricing/">Pricing</a> · <a href="/guides/">Guides</a> · <a href="/blog/">Blog</a> · <a href="/ai-visibility-index/">AI Visibility Index</a> · <a href="/tutorials/">Tutorials</a> · <a href="/about/">About</a> · <a href="/founder/">Founder</a> · <a href="/methodology/">Methodology</a> · <a href="/terms/">Terms</a> · <a href="/privacy/">Privacy</a> · <a href="/refund/">Refunds</a> · <a href="/delete-account/">Delete account</a> · <a href="/tr/">Türkçe</a></p>
   <p>Contact: <a href="mailto:${SITE.email}">${SITE.email}</a></p>` : `<p><b>AI SaaSavran</b>: markaların yapay zekâ asistanlarındaki görünürlüğünü ölçen araç. Erken erişim.</p>
-  <p><a href="/tr/#fiyatlar">Fiyatlar</a> · <a href="/rehber/">Rehberler</a> · <a href="/tr/blog/">Blog</a> · <a href="/tr/yapay-zeka-gorunurluk-endeksi/">Görünürlük Endeksi</a> · <a href="/tr/egitim/">Eğitim</a> · <a href="/tr/hakkimizda/">Hakkımızda</a> · <a href="/tr/kurucu/">Kurucu</a> · <a href="/tr/metodoloji/">Metodoloji</a> · <a href="/durum">Ürün durumu</a> · <a href="/kosullar">Kullanım koşulları</a> · <a href="/gizlilik">Gizlilik</a> · <a href="/iade/">İade</a> · <a href="/">English</a></p>
+  <p><a href="/tr/#fiyatlar">Fiyatlar</a> · <a href="/rehber/">Rehberler</a> · <a href="/tr/blog/">Blog</a> · <a href="/tr/yapay-zeka-gorunurluk-endeksi/">Görünürlük Endeksi</a> · <a href="/tr/egitim/">Eğitim</a> · <a href="/tr/hakkimizda/">Hakkımızda</a> · <a href="/tr/kurucu/">Kurucu</a> · <a href="/tr/metodoloji/">Metodoloji</a> · <a href="/durum">Ürün durumu</a> · <a href="/kosullar">Kullanım koşulları</a> · <a href="/gizlilik">Gizlilik</a> · <a href="/iade/">İade</a> · <a href="/tr/hesap-silme/">Hesap silme</a> · <a href="/">English</a></p>
   <p>İletişim: <a href="mailto:${SITE.email}">${SITE.email}</a></p>`}
 </footer>
 <script src="/site/site.js" defer></script>
@@ -110,38 +110,43 @@ const WEBSITE = { "@context": "https://schema.org", "@type": "WebSite", name: SI
 const crumbs = (items) => ({ "@context": "https://schema.org", "@type": "BreadcrumbList", itemListElement: items.map(([name, path], i) => ({ "@type": "ListItem", position: i + 1, name, item: SITE.url + path })) });
 const APP = {
   "@context": "https://schema.org", "@type": "SoftwareApplication", name: SITE.name, url: SITE.url, applicationCategory: "BusinessApplication",
-  operatingSystem: "Web", alternateName: "aisaasavran.com", description: `${DEF.en} Plans: Free, Plus $29/month, Pro $149/month, Business $449/month.`,
+  operatingSystem: "Web", alternateName: "aisaasavran.com", description: `${DEF.en} Plans: Free, Silver $130/month, Gold $250/month, Platinum $400/month, Diamond $1500/month.`,
   inLanguage: ["en", "tr"],
-  offers: [["Free", 0], ["Plus", 29], ["Pro", 149], ["Business", 449]].map(([n, p]) => ({ "@type": "Offer", name: n, price: String(p), priceCurrency: "USD" })),
+  offers: [["Free", 0], ["Silver", 130], ["Gold", 250], ["Platinum", 400], ["Diamond", 1500]].map(([n, p]) => ({ "@type": "Offer", name: n, price: String(p), priceCurrency: "USD" })),
 };
 
 
-// Paketler (güncel fiyatlar migration 0019: 29 / 149 / 449 $; satışta, ödeme Paddle ile).
+// Paketler (güncel fiyatlar migration 0060: 29 / 149 / 1500 $; satışta, ödeme Paddle ile).
+// Türkçe belirtme eki: Gümüş'ü, Altın'ı, Platin'i, Elmas'ı
+const SECIM_EKI = { starter: "'ü", altin: "'ı", pro: "'i", agency: "'ı" };
 const PLAN_ROWS = (en) => [
   { name: "Free", price: "$0", per: "", items: en
-      ? ["1 brand, 15 questions, 3 competitors", "4 measurements a month (one a week, automatic)", "Gemini, model knowledge (no live search)", "Website check and recommendations"]
-      : ["1 marka, 15 soru, 3 rakip", "Ayda 4 ölçüm (haftada bir, otomatik)", "Gemini, model bilgisi (canlı arama yok)", "Web sitesi kontrolü ve öneriler"], live: true },
-  { name: "Plus", id: "starter", price: "$29", per: en ? "/month" : "/ay", items: en
-      ? ["1 brand, 25 questions, 5 competitors", "ChatGPT, Claude and Perplexity with live web search + Gemini", "Every week: ChatGPT and Gemini ask each question twice, Claude and Perplexity once", "Which websites the AI cited", "Products: AI accuracy check and weekly Google Shopping position", "Shareable report link and PDF"]
-      : ["1 marka, 25 soru, 5 rakip", "ChatGPT, Claude ve Perplexity canlı web araması + Gemini", "Her hafta: ChatGPT ve Gemini her soruyu 2 kez, Claude ve Perplexity 1 kez sorar", "Yapay zekânın baktığı kaynak siteler", "Ürünler: yapay zekâ doğruluk kontrolü ve haftalık Google Shopping sırası", "Paylaşılabilir rapor bağlantısı ve PDF"] },
-  { name: "Pro", id: "pro", price: "$149", per: en ? "/month" : "/ay", items: en
-      ? ["5 brands, 30 questions each", "8 competitors per brand", "Team of 3", "API and MCP access for AI agents", "Everything in Plus", "For multi-location businesses and freelancers"]
-      : ["5 marka, her biri 30 soru", "Marka başına 8 rakip", "3 kişilik ekip", "Yapay zekâ ajanları için API ve MCP erişimi", "Plus'taki her şey", "Çok şubeli işletmeler ve serbest çalışanlar için"] },
-  { name: "Business", id: "agency", price: "$449", per: en ? "/month" : "/ay", items: en
-      ? ["15 brands, 30 questions each", "10 competitors per brand", "15 team members", "Everything in Pro", "For agencies managing client brands"]
-      : ["15 marka, her biri 30 soru", "Marka başına 10 rakip", "15 kişilik ekip", "Pro'daki her şey", "Müşteri markalarını yöneten ajanslar için"] },
+      ? ["1 brand, 15 questions, 3 competitors", "1 measurement a month (automatic)", "Gemini, model knowledge (no live search)", "Website check and recommendations"]
+      : ["1 marka, 15 soru, 3 rakip", "Ayda 1 ölçüm (otomatik)", "Gemini, model bilgisi (canlı arama yok)", "Web sitesi kontrolü ve öneriler"], live: true },
+  { name: en ? "Silver" : "Gümüş", id: "starter", price: "$130", per: en ? "/month" : "/ay", items: en
+      ? ["1 brand, 25 questions, 5 competitors", "ChatGPT, Gemini, Claude and Perplexity with live web search", "760 queries a month: 30% for a short automatic weekly measurement, 70% as question credits for full measurements any time", "Which websites the AI cited", "Products: AI accuracy check and weekly Google Shopping position", "Shareable report link and PDF"]
+      : ["1 marka, 25 soru, 5 rakip", "ChatGPT, Gemini, Claude ve Perplexity canlı web aramasıyla", "Ayda 760 sorgu: %30'u her hafta otomatik kısa ölçüm, %70'i istediğiniz zaman tam ölçüm için soru hakkı", "Yapay zekânın baktığı kaynak siteler", "Ürünler: yapay zekâ doğruluk kontrolü ve haftalık Google Shopping sırası", "Paylaşılabilir rapor bağlantısı ve PDF"] },
+  { name: en ? "Gold" : "Altın", id: "altin", price: "$250", per: en ? "/month" : "/ay", items: en
+      ? ["3 brands, 30 questions each", "6 competitors per brand", "2,520 queries a month (30% weekly automatic, 70% question credits)", "ChatGPT, Gemini, Claude and Perplexity with live web search", "Single user", "Everything in Silver", "For small businesses with several brands"]
+      : ["3 marka, her biri 30 soru", "Marka başına 6 rakip", "Ayda 2.520 sorgu (%30 haftalık otomatik, %70 soru hakkı)", "ChatGPT, Gemini, Claude ve Perplexity canlı web aramasıyla", "Tek kullanıcı", "Gümüş'teki her şey", "Birden fazla markası olan küçük işletmeler için"] },
+  { name: en ? "Platinum" : "Platin", id: "pro", price: "$400", per: en ? "/month" : "/ay", items: en
+      ? ["5 brands, 30 questions each", "8 competitors per brand", "4,200 queries a month (30% weekly automatic, 70% question credits)", "Team of 3", "API and MCP access for AI agents", "Everything in Gold", "For multi-location businesses and freelancers"]
+      : ["5 marka, her biri 30 soru", "Marka başına 8 rakip", "Ayda 4.200 sorgu (%30 haftalık otomatik, %70 soru hakkı)", "3 kişilik ekip", "Yapay zekâ ajanları için API ve MCP erişimi", "Altın'daki her şey", "Çok şubeli işletmeler ve serbest çalışanlar için"] },
+  { name: en ? "Diamond" : "Elmas", id: "agency", price: "$1500", per: en ? "/month" : "/ay", items: en
+      ? ["15 brands, 30 questions each", "10 competitors per brand", "12,600 queries a month (30% weekly automatic, 70% question credits)", "15 team members", "Everything in Platinum", "For agencies managing client brands"]
+      : ["15 marka, her biri 30 soru", "Marka başına 10 rakip", "Ayda 12.600 sorgu (%30 haftalık otomatik, %70 soru hakkı)", "15 kişilik ekip", "Platin'deki her şey", "Müşteri markalarını yöneten ajanslar için"] },
 ];
 const plansHtml = (en) => `
 <section class="plans" id="${en ? "pricing" : "fiyatlar"}">
   <h2>${en ? "Pricing" : "Fiyatlar"}</h2>
   <div class="plan-grid">${PLAN_ROWS(en).map((p) => `
-    <div class="plan${p.name === "Plus" ? " plan-main" : ""}">
-      ${p.name === "Plus" ? `<span class="badge">${en ? "Recommended" : "Önerilen"}</span>` : ""}<h3>${p.name}</h3>
+    <div class="plan${p.id === "altin" ? " plan-main" : ""}">
+      ${p.id === "altin" ? `<span class="badge">${en ? "Recommended" : "Önerilen"}</span>` : ""}<h3>${p.name}</h3>
       <p class="price"><span>${p.price}</span>${p.per}</p>
       <ul>${p.items.map((i) => `<li>${i}</li>`).join("")}</ul>
       ${p.live
         ? `<a class="btn" href="/kayit">${en ? "Start free" : "Ücretsiz başla"}</a>`
-        : `<a class="btn${p.name === "Plus" ? "" : " ghost"}" href="/hesap?plan=${p.id}">${en ? `Choose ${p.name}` : `${p.name}'ı seç`}</a>`}
+        : `<a class="btn${p.id === "altin" ? "" : " ghost"}" href="/hesap?plan=${p.id}">${en ? `Choose ${p.name}` : `${p.name}${SECIM_EKI[p.id] ?? "'i"} seç`}</a>`}
     </div>`).join("")}
   </div>
   <p class="small">${en
@@ -185,7 +190,7 @@ const home = `
     <h1>Müşteriniz yapay zekâya sorduğunda <em>markanız cevapta mı?</em></h1>
     <p class="lede">Müşterilerinizin soracağı soruları ChatGPT, Claude, Perplexity ve Gemini'ye biz soruyoruz. Markanızın anılıp anılmadığını, önerilip önerilmediğini, yerinize hangi rakibin seçildiğini ve cevabın hangi sitelere dayandığını gösteriyoruz.</p>
     <p class="actions"><a class="btn bright" href="/tr/kontrol/">Markanı ücretsiz kontrol et</a><a class="btn ghost" data-cta href="/kayit">Hesap aç</a></p>
-    <p class="small">Üye olmadan ayda 2 kontrol · Ücretsiz paket: 1 marka, 15 soru, ayda 4 ölçüm · Kart istenmez · <a href="#fiyatlar">Fiyatlar</a></p>
+    <p class="small">Üye olmadan ayda 2 kontrol · Ücretsiz paket: 1 marka, 15 soru, ayda 1 ölçüm · Kart istenmez · <a href="#fiyatlar">Fiyatlar</a></p>
   </div>${heroCard(false)}
 </section>
 
@@ -200,7 +205,7 @@ const home = `
   <h2>Üç adımda nerede durduğunuzu görün</h2>
   <ol>
     <li><h3>Markanızı ve rakiplerinizi ekleyin</h3><p>Sektörünüzü seçin; örnek rakipler ve hazır Türkçe sorular gelsin.</p></li>
-    <li><h3>Ölçümü başlatın</h3><p>Her soru birden fazla kez sorulur; sonuç güven aralığıyla gösterilir.</p></li>
+    <li><h3>Ölçümü başlatın</h3><p>Her soru birden fazla kez sorulur; sonuç güven aralığı ve 0–100 güven puanıyla gösterilir.</p></li>
     <li><h3>Ne yapacağınızı görün</h3><p>Web siteniz kontrol edilir, eksikler önem sırasına göre listelenir. Haftalık ölçümle değişimi izleyin.</p></li>
   </ol>
 </section>
@@ -238,7 +243,7 @@ const enHome = `
     <h1>When customers ask AI for a recommendation, <em>are you in the answer?</em></h1>
     <p class="lede">AI SaaSavran asks ChatGPT, Claude, Perplexity and Gemini the questions your customers ask, then shows whether your business is mentioned, recommended, or passed over for a competitor, and which websites the AI relied on.</p>
     <p class="actions"><a class="btn bright" href="/check/">Check your brand for free</a><a class="btn ghost" data-cta href="/kayit">Create account</a></p>
-    <p class="small">2 checks a month without signing up · Free plan: 1 brand, 15 questions, 4 measurements a month · No card · <a href="#pricing">See pricing</a></p>
+    <p class="small">2 checks a month without signing up · Free plan: 1 brand, 15 questions, 1 measurement a month · No card · <a href="#pricing">See pricing</a></p>
   </div>${heroCard(true)}
 </section>
 
@@ -253,7 +258,7 @@ const enHome = `
   <h2>Built to be honest about the numbers</h2>
   <ol>
     <li><h3>Every question is asked more than once</h3><p>One answer is luck; rates over many answers are signal.</p></li>
-    <li><h3>Ranges, not false precision</h3><p>Results come with a confidence range and a warning when the sample is small.</p></li>
+    <li><h3>Ranges, not false precision</h3><p>Results come with a confidence range, a 0–100 confidence score and a warning when the sample is small.</p></li>
     <li><h3>Live search or not, always labelled</h3><p>Answers from model knowledge and answers from live web search are never mixed.</p></li>
   </ol>
 </section>
@@ -350,7 +355,7 @@ for (const lang of ["en", "tr"]) {
 <section class="article">
   <h1>${en ? "Blog: what AI actually recommends" : "Blog: yapay zekâ gerçekte neyi öneriyor?"}</h1>
   <p class="lede">${en ? "Every week we ask ChatGPT, Claude and Gemini the questions real customers ask, and write up the most interesting findings. Real measurements, small samples, clearly labelled." : "Her hafta ChatGPT, Claude ve Gemini'ye gerçek müşterilerin sorduğu soruları soruyor, en ilginç sonuçları yazıyoruz. Gerçek ölçümler, küçük örneklemler, açıkça etiketli."}</p>
-  <p>${en ? "Each post covers one category, such as phones, online stores, headphones or YouTube channels. We ask the same buyer questions to each engine, count how often each brand is mentioned and recommended, compare the engines, check the AI's product claims against official data and list the sites it cited. Brands are shown as letters in the results and the measured brands are listed at the end, so the focus stays on how AI assistants choose, not on promoting anyone. Each post also has a short video on our YouTube channel." : "Her yazı tek bir kategoriyi ele alıyor: telefonlar, alışveriş siteleri, kulaklıklar, YouTube kanalları gibi. Her motora aynı müşteri sorularını soruyor, her markanın kaç kez anıldığını ve önerildiğini sayıyor, motorları karşılaştırıyor, yapay zekânın ürün iddialarını resmî bilgilerle kontrol ediyor ve gösterdiği kaynakları listeliyoruz. Sonuçlarda markalar harfle gösteriliyor, ölçülen markalar yazının sonunda listeleniyor; amaç kimseyi övmek değil, yapay zekânın nasıl seçtiğini göstermek. Her yazının YouTube kanalımızda kısa bir videosu da var."}</p>
+  <p>${en ? "Each post covers one category, such as phones, online stores, headphones or YouTube channels. We ask the same buyer questions to each engine, count how often each brand is mentioned and recommended, compare the engines, check the AI's product claims against official data and list the sites it cited. Newer posts use the brands' real names (earlier posts showed them as letters); the focus stays on how AI assistants choose, not on promoting anyone. Each post also has a short video on our YouTube channel." : "Her yazı tek bir kategoriyi ele alıyor: telefonlar, alışveriş siteleri, kulaklıklar, YouTube kanalları gibi. Her motora aynı müşteri sorularını soruyor, her markanın kaç kez anıldığını ve önerildiğini sayıyor, motorları karşılaştırıyor, yapay zekânın ürün iddialarını resmî bilgilerle kontrol ediyor ve gösterdiği kaynakları listeliyoruz. Yeni yazılarda markaların gerçek adları yazılıyor (eski yazılarda harfle gösterildi); amaç kimseyi övmek değil, yapay zekânın nasıl seçtiğini göstermek. Her yazının YouTube kanalımızda kısa bir videosu da var."}</p>
   <ul class="guide-list">${mine.map((p) => `<li><a href="${postPath(p)}"><b>${esc(p.title)}</b><span>${fmtDate(p.date, en)} · ${esc(p.description)}</span></a></li>`).join("")}</ul>
   <p>${en ? "Why it matters: when an AI assistant answers a buying question, it rarely lists more than five brands. Our measurements repeatedly show that the brands it picks depend on the engine, the exact question and the review sites it reads, not only on market share. Follow new posts by RSS or on our YouTube channel @aisaasavran, and use the free check to see where your own business stands. Want us to measure a category? Email us; the most requested topics go into upcoming posts." : "Neden önemli: Yapay zekâ bir satın alma sorusuna cevap verirken nadiren beşten fazla marka sayar. Ölçümlerimiz, seçtiği markaların yalnızca pazar payına değil; motora, sorunun tam hâline ve okuduğu inceleme sitelerine bağlı olduğunu tekrar tekrar gösteriyor. Yeni yazıları RSS ile veya YouTube kanalımız @aisaasavran'dan takip edebilir, kendi işletmenizin durumunu ücretsiz kontrolle görebilirsiniz. Bir kategori ölçmemizi isterseniz bize yazın; en çok istenen konuları sıradaki yazılara ekliyoruz."}</p>
   <p><a href="${blogBase(lang)}rss.xml">RSS</a> · <a href="https://www.youtube.com/@aisaasavran">YouTube</a> · <a href="${en ? "/check/" : "/tr/kontrol/"}">${en ? "Free check" : "Ücretsiz kontrol"}</a></p>
@@ -366,7 +371,7 @@ for (const lang of ["en", "tr"]) {
   <p class="meta">${fmtDate(p.date, en)} · AI SaaSavran</p>
   ${p.body}
   ${p.video ? `<p class="video-link"><a href="https://www.youtube.com/shorts/${p.video.id}" rel="noopener"><img src="${p.cover}" alt="${esc(p.video.title)}" width="640" height="360" loading="lazy"><span>▶ ${esc(p.video.title)}</span></a></p>` : ""}
-  <p class="note"><b>${en ? "Note:" : "Not:"}</b> ${en ? `These are the AI's answers on ${fmtDate(p.date, true)}. Small sample; not representative of the whole market. Letters were assigned at random. Brands measured (alphabetical): ${esc(p.names)}. Brand names belong to their owners.` : `Bunlar yapay zekânın ${fmtDate(p.date, false)} tarihli cevaplarıdır. Küçük örneklem, tüm pazarı temsil etmez. Harfler rastgele atanmıştır. Ölçülen markalar (alfabetik): ${esc(p.names)}. Marka adları sahiplerine aittir.`}</p>
+  <p class="note"><b>${en ? "Note:" : "Not:"}</b> ${en ? `These are the AI's answers${p.realNames ? "" : ` on ${fmtDate(p.date, true)}`}. Small sample; not representative of the whole market.${p.names && !p.realNames ? " Letters were assigned at random." : ""}${p.names ? ` Brands measured (alphabetical): ${esc(p.names)}.` : ""} Brand names belong to their owners.` : `Bunlar yapay zekânın${p.realNames ? "" : ` ${fmtDate(p.date, false)} tarihli`} cevaplarıdır. Küçük örneklem, tüm pazarı temsil etmez.${p.names && !p.realNames ? " Harfler rastgele atanmıştır." : ""}${p.names ? ` Ölçülen markalar (alfabetik): ${esc(p.names)}.` : ""} Marka adları sahiplerine aittir.`}</p>
   ${faqHtml(p.faq ?? [], en)}
   <aside class="next"><p><b>${en ? "What does AI say about your brand?" : "Yapay zekâ sizin markanız için ne diyor?"}</b> ${en ? "Measure it across ChatGPT, Gemini, Claude and Perplexity." : "ChatGPT, Gemini, Claude ve Perplexity'de ölçün."}</p><a class="btn" href="${en ? "/check/" : "/tr/kontrol/"}">${en ? "Free check" : "Ücretsiz kontrol"}</a></aside>
   ${others ? `<nav class="related" aria-label="${en ? "More posts" : "Diğer yazılar"}"><h2>${en ? "More posts" : "Diğer yazılar"}</h2><ul>${others}</ul></nav>` : ""}
@@ -391,7 +396,7 @@ const ABOUT = {
   <h2>What it does</h2>
   <ul>
     <li>Asks AI assistants the questions your customers would ask, in Turkish or English, several times.</li>
-    <li>Reports each engine separately: Gemini without live web search on the free plan; ChatGPT, Claude and Perplexity with live web search on paid plans.</li>
+    <li>Reports each engine separately: Gemini without live web search on the free plan; ChatGPT, Gemini, Claude and Perplexity with live web search on paid plans.</li>
     <li>Separates mention, recommendation and citation; shows competitor comparisons, the sites the AI cited and the share of your own site among them.</li>
     <li>Checks product-level facts (price, specifications) and compares them with shopping results.</li>
     <li>Gives a site audit and an action list, and tracks whether changes improved results.</li>
@@ -407,7 +412,7 @@ const ABOUT = {
   <h2>Facts</h2>
   <ul>
     <li>Launched: 2026, early access. Founded by <a href="/founder/">Ramazan Savran</a> in Antalya, Turkey; serves customers in Turkey and worldwide. The name combines SaaS and the founder's surname, Savran.</li>
-    <li>Plans: Free, Plus $29, Pro $149, Business $449 per month (<a href="/pricing/">pricing</a>).</li>
+    <li>Plans: Free, Silver $130, Gold $250, Platinum $400, Diamond $1500 per month (<a href="/pricing/">pricing</a>).</li>
     <li>Not affiliated with other companies or services with a similar name.</li>
     <li>Contact: <a href="mailto:${SITE.email}">${SITE.email}</a> · YouTube: <a href="https://www.youtube.com/@aisaasavran">@aisaasavran</a></li>
   </ul>
@@ -419,7 +424,7 @@ const ABOUT = {
   <h2>Ne yapar?</h2>
   <ul>
     <li>Müşterilerinizin soracağı soruları Türkçe veya İngilizce olarak yapay zekâ asistanlarına birkaç kez sorar.</li>
-    <li>Her motoru ayrı raporlar: ücretsiz pakette canlı aramasız Gemini; ücretli paketlerde canlı web aramalı ChatGPT, Claude ve Perplexity.</li>
+    <li>Her motoru ayrı raporlar: ücretsiz pakette canlı aramasız Gemini; ücretli paketlerde canlı web aramalı ChatGPT, Gemini, Claude ve Perplexity.</li>
     <li>Anılma, önerilme ve kaynak gösterilmeyi ayırır; rakip karşılaştırmasını, yapay zekânın gösterdiği siteleri ve bunlar içinde kendi sitenizin payını gösterir.</li>
     <li>Ürün düzeyinde bilgileri (fiyat, özellik) kontrol eder ve alışveriş sonuçlarıyla karşılaştırır.</li>
     <li>Site denetimi ve aksiyon listesi verir, yapılan değişikliklerin sonucu iyileştirip iyileştirmediğini takip eder.</li>
@@ -435,7 +440,7 @@ const ABOUT = {
   <h2>Bilgiler</h2>
   <ul>
     <li>Kuruluş: 2026, erken erişim. Kurucu: <a href="/tr/kurucu/">Ramazan Savran</a> (Antalya). Türkiye'deki ve dünyadaki müşterilere hizmet verir. Ad, SaaS ile kurucunun soyadı Savran'dan gelir.</li>
-    <li>Paketler: Ücretsiz, Plus 29 $, Pro 149 $, Business 449 $ (aylık) (<a href="/tr/#fiyatlar">fiyatlar</a>).</li>
+    <li>Paketler: Ücretsiz, Gümüş 130 $, Altın 250 $, Platin 400 $, Elmas 1500 $ (aylık) (<a href="/tr/#fiyatlar">fiyatlar</a>).</li>
     <li>Benzer adlı başka şirket veya hizmetlerle bağlantısı yoktur.</li>
     <li>İletişim: <a href="mailto:${SITE.email}">${SITE.email}</a> · YouTube: <a href="https://www.youtube.com/@aisaasavran">@aisaasavran</a></li>
   </ul>
@@ -467,7 +472,7 @@ for (const lang of ["en", "tr"]) {
   const en = lang === "en"; const path = tutorialsPath(lang);
   write(path, page({ lang, alt: tutorialsPath(en ? "tr" : "en"), path,
     title: en ? "Tutorials: how to use AI SaaSavran" : "Eğitim: AI SaaSavran nasıl kullanılır?",
-    description: en ? "Ten short step-by-step lessons: free check, adding a brand, questions and competitors, first measurement, reading the report, sources, recommendations, products, sharing and weekly runs." : "On kısa, adım adım ders: ücretsiz kontrol, marka ekleme, soru ve rakipler, ilk ölçüm, raporu okuma, kaynaklar, öneriler, ürünler, paylaşım ve haftalık ölçüm.",
+    description: en ? "Ten short step-by-step lessons: free check, brand setup, questions and competitors, first measurement, report, sources, recommendations, products, sharing." : "On kısa, adım adım ders: ücretsiz kontrol, marka ekleme, soru ve rakipler, ilk ölçüm, raporu okuma, kaynaklar, öneriler, ürünler, paylaşım ve haftalık ölçüm.",
     body: tutorialsHtml(lang), schema: [tutorialsSchema(lang, SITE.url), crumbs([["AI SaaSavran", en ? "/" : "/tr/"], [en ? "Tutorials" : "Eğitim", path]])] }));
 }
 
@@ -486,6 +491,8 @@ const FOUNDER = {
   <p>Ramazan worked in banking for eight years, in roles that included the bank's call centre and staff training. Before that he worked as an agricultural technician. His interest in artificial intelligence led him to focus on building products that add real value, and in 2026 he started AI SaaSavran.</p>
   <h2>Why AI SaaSavran</h2>
   <p>More and more customers ask AI assistants which product, shop or service to choose. Years of answering customers' questions showed him how much the first answer matters. AI SaaSavran lets businesses see whether they are part of that answer, measured with real questions and real answers, never simulated data shown as real.</p>
+  <h2>What he publishes</h2>
+  <p>Besides the product, Ramazan publishes AI SaaSavran's own measurements openly: weekly <a href="/measurements/">real measurements</a> of which brands AI assistants recommend, the <a href="/ai-visibility-index/">AI Visibility Index</a> summarised by sector, and a written <a href="/methodology/">methodology</a> that explains every metric. AI SaaSavran also measures its own brand every two weeks and shows the result on the home page, including when it is not mentioned yet. Simulated results appear only in the Demo Lab, labelled as simulation.</p>
   <h2>About the name</h2>
   <p>AI SaaSavran = SaaS + Savran, the founder's surname. It is not affiliated with Savran AI (savran.ai) or any other similarly named company.</p>
   <p>Contact: <a href="mailto:${SITE.email}">${SITE.email}</a></p>
@@ -499,6 +506,8 @@ const FOUNDER = {
   <p>Sekiz yıl bankacılık sektöründe çalıştı; bankada çağrı merkezi ve eğitmenlik gibi görevlerde bulundu. Daha önce ziraat teknikeri olarak çalıştı. Yapay zekâya ilgisi onu katma değerli işler üretmeye yöneltti ve 2026'da AI SaaSavran'ı kurdu.</p>
   <h2>Neden AI SaaSavran?</h2>
   <p>Müşteriler artık hangi ürünü, mağazayı veya hizmeti seçeceklerini yapay zekâ asistanlarına soruyor. Yıllarca müşteri sorularını cevaplamak, ilk cevabın ne kadar önemli olduğunu gösterdi. AI SaaSavran, işletmelerin o cevapta yer alıp almadığını gerçek sorular ve gerçek cevaplarla gösterir; simülasyon asla gerçek gibi sunulmaz.</p>
+  <h2>Neler yayımlıyor?</h2>
+  <p>Ürünün yanında AI SaaSavran'ın kendi ölçümlerini de açıkça yayımlıyor: yapay zekâ asistanlarının hangi markaları önerdiğini gösteren haftalık <a href="/tr/olcumler/">gerçek ölçümler</a>, sektör sektör özet veren <a href="/tr/yapay-zeka-gorunurluk-endeksi/">Yapay Zekâ Görünürlük Endeksi</a> ve her metriği açıklayan <a href="/tr/metodoloji/">metodoloji</a> sayfası. AI SaaSavran kendi markasını da iki haftada bir ölçer ve sonucu, henüz anılmadığı dönemler dahil, ana sayfada gösterir. Simüle sonuçlar yalnız Demo Lab'de, "simülasyon" etiketiyle yer alır.</p>
   <h2>Adın hikâyesi</h2>
   <p>AI SaaSavran = SaaS + Savran (kurucunun soyadı). Savran AI (savran.ai) veya benzer adlı başka bir şirketle bağlantısı yoktur.</p>
   <p>İletişim: <a href="mailto:${SITE.email}">${SITE.email}</a></p>
@@ -588,18 +597,20 @@ Contact: ${SITE.email}
 ## About
 - [About AI SaaSavran](${SITE.url}/about/): independent AI visibility measurement tool, launched 2026, founded in 2026 by Ramazan Savran in Antalya, Turkey (the name combines SaaS and his surname); not affiliated with similarly named companies such as Savran AI (savran.ai).
 - [Founder: Ramazan Savran](${SITE.url}/founder/)
-- [AI visibility tools compared](${SITE.url}/guides/ai-visibility-tools-compared/): AI SaaSavran, Peec AI, Otterly.AI, Profound, Semrush and Ahrefs, with our own measurement of which ones AI recommends.
+- [AI visibility tools compared](${SITE.url}/guides/ai-visibility-tools-compared/): AI SaaSavran, Peec AI, Otterly.AI, Profound, AthenaHQ, Semrush and Ahrefs, with our own measurement of which ones AI recommends.
 - [Peec AI alternative](${SITE.url}/guides/peec-ai-alternative/): when AI SaaSavran fits (free plan, Turkish and English questions, Claude included) and when another tool fits better.
+- [AthenaHQ alternative](${SITE.url}/guides/athenahq-alternative/): AthenaHQ vs AI SaaSavran on engines, price and free plan, from AthenaHQ's official pricing page.
+- [Profound alternatives](${SITE.url}/guides/profound-alternative/): affordable alternatives after Profound retired its Starter and Growth plans, with prices from each tool's official page and the date checked.
 
 ## Pricing
-- [Plans](${SITE.url}/pricing/): Free ($0), Plus ($29/month), Pro ($149/month), Business ($449/month). Monthly billing, cancel anytime, 14-day money-back guarantee.
+- [Plans](${SITE.url}/pricing/): Free ($0), Silver ($130/month), Gold ($250/month), Platinum ($400/month), Diamond ($1500/month). Monthly billing, cancel anytime, 14-day money-back guarantee.
 - [Free AI visibility check](${SITE.url}/check/): no signup; checks whether Gemini mentions a business for its category.
 
 ## Official profiles
 ${SITE.sameAs.map((u) => `- ${u}`).join("\n")}
 
 ## For AI agents
-- MCP server (read-only, Pro and Business): ${SITE.url}/api/mcp — Streamable HTTP, header \`Authorization: Bearer aisv_...\`; tools: list_brands, get_brand_report.
+- MCP server (read-only, Platinum and Diamond): ${SITE.url}/api/mcp — Streamable HTTP, header \`Authorization: Bearer aisv_...\`; tools: list_brands, get_brand_report (includes a 0–100 confidence score per measurement type).
 - REST API: ${SITE.url}/api/v1/brands and ${SITE.url}/api/v1/brands/{id} with the same key. Keys are created in the app under Account → API and MCP.
 
 ## Tutorials
@@ -634,8 +645,36 @@ writeFileSync(join(DIST, `${SITE.indexnow}.txt`), SITE.indexnow);
 const APP_ROUTES = ["/giris", "/kayit", "/sifre", "/durum", "/durum-ic", "/gizlilik", "/kosullar", "/panel", "/hesap", "/demo-lab", "/yonetim", "/calisma-alani/*", "/marka/*", "/rapor/*", "/davet/*"];
 write("/check/", page({ lang: "en", alt: "/tr/kontrol/", path: "/check/", title: "Free AI visibility check | AI SaaSavran", description: "Check for free whether Gemini mentions your business when customers ask about your category. No signup.", body: checkHtml(true), schema: [APP, faqLd(CHECK_FAQ_EN)] }));
 write("/tr/kontrol/", page({ lang: "tr", alt: "/check/", path: "/tr/kontrol/", title: "Ücretsiz yapay zekâ görünürlük kontrolü | AI SaaSavran", description: "İşletmeniz Gemini cevaplarında geçiyor mu? Üye olmadan ücretsiz kontrol edin.", body: checkHtml(false), schema: [APP, faqLd(CHECK_FAQ_TR)] }));
-write("/tr/fiyatlar/", page({ lang: "tr", path: "/tr/fiyatlar/", alt: "/pricing/", title: "Fiyatlar: yapay zekâ görünürlük aracı | AI SaaSavran", description: "AI SaaSavran paketleri: Free, Plus aylık 29 $, Pro aylık 149 $, Business aylık 449 $. Aylık ödeme, istediğiniz zaman iptal, 14 gün para iadesi.", body: `<section class="article"><h1>Fiyatlar</h1><p>Ücretsiz başlayın. Ücretli paketler canlı web aramalı ChatGPT, Claude ve Perplexity ölçümü, daha fazla marka ve soru ekler. Aylık ödeme, istediğiniz zaman iptal, 14 gün para iadesi (<a href="/iade/">iade koşulları</a>).</p></section>${plansHtml(false)}`, schema: [APP] }));
-write("/pricing/", page({ lang: "en", path: "/pricing/", alt: "/tr/fiyatlar/", title: "Pricing: AI visibility tracking tool | AI SaaSavran", description: "AI SaaSavran plans: Free, Plus $29/month, Pro $149/month, Business $449/month.", body: `<section class="article"><h1>Pricing</h1><p>Start free. Paid plans add live-search ChatGPT, Claude and Perplexity, more brands and more questions. Monthly billing, cancel anytime, 14-day money-back guarantee (<a href="/refund/">refund policy</a>).</p></section>${plansHtml(true)}`, schema: [APP] }));
+write("/tr/fiyatlar/", page({ lang: "tr", path: "/tr/fiyatlar/", alt: "/pricing/", title: "Fiyatlar: yapay zekâ görünürlük aracı | AI SaaSavran", description: "AI SaaSavran paketleri: Ücretsiz, Gümüş aylık 130 $, Altın aylık 250 $, Platin aylık 400 $, Elmas aylık 1500 $. Aylık ödeme, istediğiniz zaman iptal, 14 gün para iadesi.", body: `<section class="article"><h1>Fiyatlar</h1><p>Ücretsiz başlayın. Ücretli paketler canlı web aramalı ChatGPT, Gemini, Claude ve Perplexity ölçümü, daha fazla marka ve soru ekler. Aylık ödeme, istediğiniz zaman iptal, 14 gün para iadesi (<a href="/iade/">iade koşulları</a>).</p></section>${plansHtml(false)}`, schema: [APP] }));
+write("/pricing/", page({ lang: "en", path: "/pricing/", alt: "/tr/fiyatlar/", title: "Pricing: AI visibility tracking tool | AI SaaSavran", description: "AI SaaSavran plans: Free, Silver $130/month, Gold $250/month, Platinum $400/month, Diamond $1500/month.", body: `<section class="article"><h1>Pricing</h1><p>Start free. Paid plans add live-search ChatGPT, Gemini, Claude and Perplexity, more brands and more questions. Monthly billing, cancel anytime, 14-day money-back guarantee (<a href="/refund/">refund policy</a>).</p></section>${plansHtml(true)}`, schema: [APP] }));
+// Mobil uygulamada Google ile girişten dönüş (24 Kasım). Google girişi telefonun tarayıcısında olur; Supabase buraya
+// ?code=… ile döner (site adresi zaten izinli). Sayfa kodu uygulamaya iletir: com.aisaasavran.app://giris?code=…
+// Kod tek başına işe yaramaz; oturuma çevirmek için uygulamanın sakladığı doğrulayıcı (PKCE) gerekir. Arama motorlarına kapalı.
+// Metin iki dilli; yonlendir.js telefonun diline göre (tr değilse İngilizce) tek dile indirir.
+write("/uygulama-giris/", `<!doctype html><html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><meta name="referrer" content="no-referrer"><title>SaaSavran</title>
+<style>body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;font-family:system-ui,sans-serif;background:#101A17;color:#E8EFEC;text-align:center;padding:24px}a{display:inline-block;margin-top:20px;padding:14px 28px;border-radius:14px;background:#6FD1AE;color:#0B1512;font-weight:700;text-decoration:none}p{color:#9DB0A8;line-height:1.5}</style></head>
+<body><main><h1 id="t" style="font-size:22px">Uygulamaya dönülüyor · Returning to the app</h1><p id="m">Uygulama açılmazsa düğmeye dokunun. · If the app doesn't open, tap the button.</p><a id="b" href="com.aisaasavran.app://giris">SaaSavran'ı aç · Open SaaSavran</a></main>
+<script src="/uygulama-giris/yonlendir.js"></script></body></html>`);
+
+// Hesap silme (Google Play / App Store şartı: uygulama dışından da silme yolu)
+write("/tr/hesap-silme/", page({ lang: "tr", path: "/tr/hesap-silme/", alt: "/delete-account/", title: "Hesabı ve verileri silme | AI SaaSavran", description: "AI SaaSavran hesabınızı ve verilerinizi nasıl silersiniz: sitede veya uygulamada Hesap sayfasından, ya da e-postayla.", body: `<section class="article"><h1>Hesabı ve verileri silme</h1>
+<p>Bu sayfa AI SaaSavran web sitesi ve Google Play'deki <strong>SaaSavran: YZ Görünürlüğü</strong> uygulaması içindir. AI SaaSavran hesabınızı istediğiniz zaman kendiniz silebilirsiniz. Silme işlemi web sitesinde ve mobil uygulamada aynıdır.</p>
+<h2>Kendiniz silin</h2>
+<ol><li><a href="/giris">Giriş yapın</a>.</li><li><a href="/hesap#hesap-sil">Hesap</a> sayfasının en altındaki <strong>Hesabımı sil</strong> düğmesine dokunun.</li><li>Onay için <strong>SİL</strong> yazın ve <strong>Hesabımı kalıcı olarak sil</strong> düğmesine dokunun.</li></ol>
+<p>Sitede aldığınız aktif ücretli aboneliğiniz varsa önce aynı sayfadaki Ödeme bölümünden iptal edin. Aboneliği uygulamada (Google Play) aldıysanız Google Play'de iptal edin (Google Play → Profil → Ödemeler ve abonelikler → Abonelikler). İptal ettiğiniz abonelik silmeye engel olmaz.</p>
+<h2>Neler silinir?</h2>
+<ul><li>Giriş bilgileriniz (e-posta, şifre, Google bağlantısı) ve e-posta tercihleriniz hemen silinir.</li><li>Tek başınıza sahip olduğunuz çalışma alanları ve içindeki markalar, sorular, ölçümler ve raporlar hemen silinir.</li><li>Ekip üyeleri olan bir alanda veriler silinmez; sahiplik en eski ekip üyesine geçer.</li><li>Yasal olarak saklamamız gereken ödeme kayıtları (fatura, Paddle ve Google Play işlemleri) yasal süre boyunca saklanır.</li></ul>
+<h2>Giriş yapamıyorsanız</h2>
+<p>Kayıtlı e-posta adresinizden <a href="mailto:info@aisaasavran.com?subject=Hesap%20silme">info@aisaasavran.com</a> adresine "Hesap silme" konulu bir e-posta gönderin. Hesabınızı 30 gün içinde sileriz. Ayrıntılar: <a href="/gizlilik">Gizlilik politikası</a>.</p></section>` }));
+write("/delete-account/", page({ lang: "en", path: "/delete-account/", alt: "/tr/hesap-silme/", title: "Delete your account and data | AI SaaSavran", description: "How to delete your AI SaaSavran account and data: from the Account page on the website or in the app, or by email.", body: `<section class="article"><h1>Delete your account and data</h1>
+<p>This page covers the AI SaaSavran website and the <strong>SaaSavran: AI Visibility</strong> app on Google Play. You can delete your AI SaaSavran account yourself at any time. It works the same on the website and in the mobile app.</p>
+<h2>Delete it yourself</h2>
+<ol><li><a href="/giris">Sign in</a>.</li><li>On the <a href="/hesap#hesap-sil">Account</a> page, tap <strong>Delete my account</strong> at the bottom.</li><li>Type <strong>DELETE</strong> to confirm and tap <strong>Permanently delete my account</strong>.</li></ol>
+<p>If you have an active paid subscription bought on the website, cancel it first in the Billing section on the same page. If you subscribed in the app (Google Play), cancel it in Google Play (Google Play → Profile → Payments &amp; subscriptions → Subscriptions). A cancelled subscription doesn't block deletion.</p>
+<h2>What is deleted?</h2>
+<ul><li>Your sign-in details (email, password, Google link) and email preferences are deleted immediately.</li><li>Workspaces you own alone, with their brands, questions, measurements and reports, are deleted immediately.</li><li>In a workspace with team members, the data stays and ownership passes to the longest-standing member.</li><li>Payment records we must keep by law (invoices, Paddle and Google Play transactions) are kept for the legal period.</li></ul>
+<h2>If you cannot sign in</h2>
+<p>Email <a href="mailto:info@aisaasavran.com?subject=Account%20deletion">info@aisaasavran.com</a> from your registered address with the subject "Account deletion". We delete the account within 30 days. Details: <a href="/privacy/">Privacy policy</a>.</p></section>` }));
 
 for (const l of Object.values(LEGAL)) write(l.path, page({ lang: l.lang, path: l.path, title: l.title, description: l.description, body: l.body }));
 
