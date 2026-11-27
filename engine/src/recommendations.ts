@@ -183,10 +183,13 @@ export function buildRecommendations(i: RecInput): Recommendation[] {
   }
   if (i.wrongClaims && i.wrongClaims.length > 0) {
     const w = i.wrongClaims[0];
+    // İddia zaten tırnaklı ya da noktalı gelebilir ("“X” görünmüyor."): çift tırnak/nokta olmasın
+    const bare = String(w.claim ?? "").trim().replace(/^"+|"+$/g, "").replace(/[.\s]+$/, "");
+    const claim = /["“”]/.test(bare) ? bare : `"${bare}"`;
     add({
       id: "wrong_claims", priority: "yüksek",
       title: en ? `AI states ${i.wrongClaims.length} wrong product fact${i.wrongClaims.length > 1 ? "s" : ""}` : `Yapay zekâ ürününüz hakkında ${i.wrongClaims.length} yanlış bilgi veriyor`,
-      why: en ? `${w.product}: "${w.claim}". Correct: ${w.fact}` : `${w.product}: "${w.claim}". Doğrusu: ${w.fact}`,
+      why: en ? `${w.product}: ${claim}. Correct: ${w.fact}` : `${w.product}: ${claim}. Doğrusu: ${w.fact}`,
       action: en ? "Fix this fact on your product page, marketplace listings and structured data (Product/Offer). Old reviews and price sites that repeat it also matter."
         : "Bu bilgiyi ürün sayfanızda, pazar yeri ilanlarında ve yapılandırılmış veride (Product/Offer) düzeltin. Eski bilgiyi tekrarlayan inceleme ve fiyat siteleri de önemlidir.",
       check: en ? "Next accuracy check: is the claim now correct?" : "Sonraki doğruluk kontrolü: bu iddia doğru çıkıyor mu?",
