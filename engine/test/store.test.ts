@@ -1,8 +1,12 @@
-import { test } from "node:test";
+import { test, mock } from "node:test";
 import assert from "node:assert/strict";
 import { generateKeyPairSync } from "node:crypto";
 // @ts-ignore — düz JS modülü (Cloudflare Pages Functions)
 import { verifyPurchase, subscriptionFields } from "../../functions/api/store/_google.js";
+
+// Eşitleme hata satırları (Türkçe harf, "…") test çıktısına yazılmasın: Node test çalıştırıcısı alt süreç
+// çıktısındaki çok baytlı karakterlerde ara sıra "Unable to deserialize cloned data" ile düşüyordu (CI, 27 Kasım).
+mock.method(console, "log", () => {});
 
 const { privateKey } = generateKeyPairSync("rsa", { modulusLength: 2048 });
 const SA = JSON.stringify({ client_email: "play@p.iam.gserviceaccount.com", private_key: privateKey.export({ type: "pkcs8", format: "pem" }) });
