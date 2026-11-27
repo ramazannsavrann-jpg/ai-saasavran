@@ -1029,3 +1029,29 @@ test("Gemini canlı: ayrı ücretli anahtarla varsayılan canlı sırada, anahta
   // ALLOW_PAID_API kapalıyken canlı Gemini oluşmaz
   assert.ok(!buildProviders({ ...env, ALLOW_PAID_API: "false" }).providers.some((p) => p.config.provider === "gemini" && p.config.billing === "paid"));
 });
+
+test("Yan bölüm ('Diğer markalar', 'Honorable mention') maddesi tek başına öneri sayılmaz; ana listede de geçen marka önerilir", () => {
+  const b: BrandRef[] = [{ id: "s", name: "Samsung", aliases: [] }, { id: "o", name: "Oppo", aliases: [] }, { id: "x", name: "Xiaomi", aliases: [] }, { id: "f", name: "Fairphone", aliases: [] }];
+  const t = "### 1. Zirve: Google\nGüncellemede lider.\n### 2. En Güçlü Rakip: Samsung\n* 7 yıl güncelleme.\n\n### Diğer Markaların Durumu (Özet):\n\n* **Xiaomi:** 4 yıl Android.\n* **OnePlus / Oppo:** Güvenilirlik konusunda iyiler ancak Google ve Samsung kadar istikrarlı değiller.\n\n**Honorable Mention:** **Fairphone** offers 8+ years of support.";
+  const r = Object.fromEntries(analyzeResponse({ promptId: "1", provider: "x", answerText: t, citedUrls: [] }, b).map((h) => [h.brandId, h]));
+  assert.equal(r.s.recommended, true); assert.equal(r.s.rank, 2);
+  assert.equal(r.o.mentioned, true); assert.equal(r.o.recommended, false); assert.equal(r.o.ambiguous, true);
+  assert.equal(r.x.recommended, false);
+  assert.equal(r.f.recommended, false);
+});
+
+test("Dakikalık oran sınırı (Gemini 429 PerMinute): beklenip aynı çağrı yeniden denenir, günlük kota durdurur", async () => {
+  const { perMinuteRetryMs, ProviderError } = await import("../src/providers/types.ts");
+  const perMin = '{"error":{"code":429,"status":"RESOURCE_EXHAUSTED","details":[{"violations":[{"quotaId":"GenerateRequestsPerMinutePerProjectPerModel-FreeTier","quotaValue":"15"}]},{"@type":"type.googleapis.com/google.rpc.RetryInfo","retryDelay":"37s"}]}}';
+  assert.equal(perMinuteRetryMs(429, perMin), 38_000);
+  assert.equal(perMinuteRetryMs(429, '{"quotaId":"GenerateRequestsPerDayPerProjectPerModel-FreeTier","retryDelay":"20s"}'), null);
+  assert.equal(perMinuteRetryMs(500, perMin), null);
+  let calls = 0; const waits: number[] = [];
+  const provider = { config: { ...MOCK_CONFIG, billing: "free" as const }, async ask(id: string) {
+    calls++;
+    if (calls === 2) throw new ProviderError("Gemini HTTP 429 [quota_exceeded]", { kind: "quota_exceeded", status: 429, retryAfterMs: 38_000 });
+    return { promptId: id, provider: "mock", model: "m", method: "api_no_search", dataOrigin: "live_api", billing: "free", answerText: "ok", citedUrls: [], searchQueries: [], inputTokens: 1, outputTokens: 1, costUsd: 0, paidEquivalentUsd: 0 } as ProviderResult;
+  } };
+  const out = await runPrompts({ workspaceId: "w", provider: provider as never, prompts: [{ id: "a", text: "a" }, { id: "b", text: "b" }], repetitions: 1, guard: new BudgetGuard(1), cache: cache(), gate: gateWith(), env: MOCK_ENV, day: DAY, sleep: async (ms) => { waits.push(ms); } });
+  assert.equal(out.stop, "completed"); assert.equal(out.results.length, 2); assert.deepEqual(waits, [38_000]);
+});

@@ -64,6 +64,10 @@ const NEGATIVE_WORDS = /(^| )(avoid|kacinilmali|kacinilacaklar)( |$)/;
 const isNegative = (normalizedClause: string) => NEGATIVE.some((w) => normalizedClause.includes(w)) || NEGATIVE_WORDS.test(normalizedClause);
 // Olumsuz bölüm başlığı: altındaki liste maddeleri öneri sayılmaz ("Kaçınmanız gerekenler:", "Brands to avoid")
 const NEGATIVE_HEADING = /(kacin|uzak dur|onermedig|tavsiye etmedig|dikkat edilmesi gereken|avoid|not recommend|steer clear|stay away)/;
+// Yan bölüm başlığı: "Diğer markaların durumu", "Other brands", "Honorable mention". Altındaki madde tek başına öneri sayılmaz
+// (27 Kasım Samsung incelemesi: "Google ve Samsung kadar istikrarlı değiller" diyen Oppo maddesi önerildi sayılıyordu).
+// Bu maddeler belirsiz kabul edilir; açık öneri cümlesi varsa yine önerilir.
+const SIDE_HEADING = /(diger markalar|diger marka|diger ureticiler|diger uretici|other brands|other manufacturers|honou?rable mentions?|mansiyon)/;
 // "X yerine Y" / "instead of X" / "rather than X": X önerilmiyor
 const insteadOf = (normalizedSentence: string, needle: string) =>
   normalizedSentence.includes(`${needle} yerine`) || normalizedSentence.includes(`instead of ${needle}`) || normalizedSentence.includes(`rather than ${needle}`);
@@ -177,15 +181,18 @@ export function analyzeResponse(resp: AIResponse, brands: BrandRef[], opts: { qu
     const mentionLines = mentionIdx.map((i) => lines[i]);
     const mentioned = mentionLines.length > 0;
     // Liste maddesi olumsuz bir başlığın altındaysa ("Kaçınmanız gerekenler:") o madde olumsuz sayılır
-    const underNegativeHeading = (i: number) => {
+    const underHeading = (i: number, re: RegExp) => {
       for (let j = i - 1; j >= 0; j--) {
         if (LIST_LINE.test(lines[j]) && !/^\s*(#{2,4}\s|\*\*[^*]+\*\*:?\s*$)/.test(lines[j])) continue; // önceki madde: yukarı devam
-        return NEGATIVE_HEADING.test(normalize(lines[j]));
+        return re.test(normalize(lines[j]));
       }
       return false;
     };
+    const underNegativeHeading = (i: number) => underHeading(i, NEGATIVE_HEADING);
+    // Satırın kendisi "**Honorable Mention:** X" biçimindeyse ya da yan bölüm başlığının altındaysa
+    const sideItem = (i: number) => SIDE_HEADING.test(normalize(lines[i].split(/[:：]/)[0] ?? "")) || underHeading(i, SIDE_HEADING);
     const negative = mentionIdx.some((i) => clauseNegative(lines[i]) || (LIST_LINE.test(lines[i]) && underNegativeHeading(i)));
-    const inList = mentionLines.some((l) => LIST_LINE.test(l));
+    const inList = mentionIdx.some((i) => LIST_LINE.test(lines[i]) && !sideItem(i));
     const cueSentence = mentionLines.some((l) => sentences(l).some((sn) => {
       const n = normalize(sn);
       return containsBrand(sn) && RECOMMEND_CUES.some((c) => n.includes(c)) && !clauseNegative(sn);
@@ -203,7 +210,7 @@ export function analyzeResponse(resp: AIResponse, brands: BrandRef[], opts: { qu
     const askedByName = !!opts.question && containsBrand(opts.question);
     if (mentioned && cueSentence && !(askedByName && negative)) recommended = true;
     else if (mentioned && !negative && inList && !askedByName) recommended = true;
-    else if (mentioned && !negative && !inList) ambiguous = true; // düz metinde geçiyor: öneri mi, bilgi mi?
+    else if (mentioned && !negative && !inList) ambiguous = true; // düz metinde ya da yalnız yan bölümde geçiyor: öneri mi, bilgi mi?
 
     return { brandId: b.id, mentioned, recommended, ambiguous, cited, rank: null };
   });

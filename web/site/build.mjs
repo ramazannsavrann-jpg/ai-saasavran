@@ -220,7 +220,7 @@ ${demoHtml(false)}
     <div>${icon("gap")}<h3>Motor farkı</h3><p>Aynı soruda Claude sizi öneriyor, ChatGPT önermiyor mu? Her motor ayrı gösterilir, büyük farklar işaretlenir.</p></div>
     <div>${icon("why")}<h3>Neden önerilmediniz?</h3><p>Önerilmediğiniz her soru için kanıt kartı: yerinize kim önerildi, cevap hangi sitelere dayandı.</p></div>
     <div>${icon("src")}<h3>Kaynak etkisi</h3><p>Hangi site hangi markanın önerilmesine katkı veriyor? Kendi siteniz kaynak gösterilip yine de rakip önerildiyse ayrıca belirtilir.</p></div>
-    <div>${icon("truth")}<h3>Bilgi doğruluğu (TruthGuard)</h3><p>Yapay zekânın ürünleriniz hakkında söylediklerini sizin girdiğiniz resmî bilgilerle karşılaştırır: doğru, yanlış, doğrulanamadı.</p></div>
+    <div>${icon("truth")}<h3>Bilgi doğruluğu (TruthGuard)</h3><p>Yapay zekânın ürünleriniz hakkında söylediklerini sizin girdiğiniz resmî bilgilerle karşılaştırır: doğru, yanlış, eski bilgi (ör. eski modeli en yeni diye önermek), doğrulanamadı. Kartınızda eksik kalan konuları da gösterir.</p></div>
     <div>${icon("shop")}<h3>Yapay zekâ ↔ Google Shopping</h3><p>Yapay zekânın en çok önerdiği marka ile Google Shopping'de 1. sıradaki aynı mı? Ürünleriniz haftada bir aranır.</p></div>
     <div>${icon("merge")}<h3>Aynı şirket, tek rakip</h3><p>Bir rakibin alt markası ya da sahibi olan şirket cevaplarda ayrı adla geçerse birleştirmeniz önerilir; aynı şirket iki kez sayılmaz.</p></div>
   </div>
@@ -273,7 +273,7 @@ ${demoHtml(true)}
     <div>${icon("gap")}<h3>Engine gaps</h3><p>Does Claude recommend you while ChatGPT doesn't? Every engine is shown separately and large gaps are flagged.</p></div>
     <div>${icon("why")}<h3>Why you weren't recommended</h3><p>An evidence card for each question you lost: who was recommended instead and which sites the answer relied on.</p></div>
     <div>${icon("src")}<h3>Source impact</h3><p>Which site helps which brand get recommended? If your own site was cited and a competitor was still recommended, we point it out.</p></div>
-    <div>${icon("truth")}<h3>Fact check (TruthGuard)</h3><p>Compares what AI says about your products with the official facts you enter: correct, wrong, or can't be verified.</p></div>
+    <div>${icon("truth")}<h3>Fact check (TruthGuard)</h3><p>Compares what AI says about your products with the official facts you enter: correct, wrong, outdated (e.g. an old model presented as the newest), or can't be verified. It also shows which topics your fact card is missing.</p></div>
     <div>${icon("shop")}<h3>AI ↔ Google Shopping</h3><p>Is AI's most recommended brand also #1 on Google Shopping? Your products are searched once a week.</p></div>
     <div>${icon("merge")}<h3>One company, one competitor</h3><p>When a competitor's sub-brand or parent company shows up under another name, you're prompted to merge them, so one company isn't counted twice.</p></div>
   </div>

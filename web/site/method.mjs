@@ -173,7 +173,7 @@ export const METHOD_PAGES = [
 <li>Share of recommendations against the competitors you track, and untracked brands the AI names instead of you.</li>
 <li>Questions where you lose: the competitor named instead, and the reason or source given.</li>
 <li>Sources the AI cited, and the share that is your site, competitors' sites and third-party sites.</li>
-<li>Whether the AI's statements about your brand (address, hours, services, prices) match your fact card.</li>
+<li>Whether the AI's statements about your brand (address, hours, services, prices, current models) match your fact card, and whether it presents outdated information (an old model or price) as current.</li>
 </ul>
 <h2>How to read it</h2>
 <p>Start with recommendation rate per engine, not a total. A low rate with many third-party sources usually means the review and listing sites the AI reads don't cover you well. A brand that is mentioned but not recommended is usually described, not endorsed. Check the confidence range before acting on a change. Definitions and limits are on the <a href="/methodology/">methodology</a> page.</p>
@@ -199,7 +199,7 @@ export const METHOD_PAGES = [
 <li>Takip ettiğiniz rakiplere karşı öneri payı ve yapay zekânın sizin yerinize andığı, takip edilmeyen markalar.</li>
 <li>Kaybettiğiniz sorular: yerinize anılan rakip ve verilen gerekçe ya da kaynak.</li>
 <li>Yapay zekânın gösterdiği kaynaklar ve bunlar içinde sizin sitenizin, rakip sitelerin ve üçüncü taraf sitelerin payı.</li>
-<li>Yapay zekânın markanız hakkında söyledikleri (adres, saatler, hizmetler, fiyatlar) doğru bilgi kartınızla uyuşuyor mu.</li>
+<li>Yapay zekânın markanız hakkında söyledikleri (adres, saatler, hizmetler, fiyatlar, güncel modeller) doğru bilgi kartınızla uyuşuyor mu; eski bilgiyi (eski model, eski fiyat) güncelmiş gibi sunuyor mu.</li>
 </ul>
 <h2>Nasıl okunur?</h2>
 <p>Toplamdan değil, motor bazında önerilme oranından başlayın. Düşük oran ve çok sayıda üçüncü taraf kaynak genellikle yapay zekânın okuduğu inceleme ve listeleme sitelerinin sizi iyi anlatmadığını gösterir. Anılan ama önerilmeyen bir marka genellikle tavsiye edilmiyor, sadece anlatılıyordur. Bir değişikliğe göre hareket etmeden önce güven aralığına bakın. Tanımlar ve sınırlar <a href="/tr/metodoloji/">metodoloji</a> sayfasında.</p>

@@ -1486,6 +1486,14 @@ const SOURCE_LABEL: Record<SourceType, [string, string]> = {
   forum: ["Forum / sözlük", "Forum"], social: ["Sosyal medya / video", "Social / video"], marketplace: ["Pazar yeri", "Marketplace"], other: ["Diğer siteler", "Other sites"],
 };
 /** TruthGuard: bilgi kartıyla doğruluk kontrolü ve kaynak türü dağılımı. Ücretli paketlere özel. */
+function topicLabel(t: string): string {
+  const m: Record<string, [string, string]> = {
+    company: ["şirket bilgisi", "company info"], lineup: ["güncel model listesi", "current lineup"], spec: ["teknik özellikler", "specifications"],
+    support: ["güncelleme, garanti, servis", "updates, warranty, service"], price: ["fiyatlar", "prices"], availability: ["satış yerleri", "availability"], other: ["diğer", "other"],
+  };
+  return L(...(m[t] ?? m.other));
+}
+
 function TruthGuardPanel({ brand, paid, mix, stats }: { brand: Brand; paid: boolean; mix: SourceMix | null; stats: ReturnType<typeof statSummary> | null }) {
   const checks = useLoad(() => (paid && brand.fact_card ? api.truthChecks(brand.id) : Promise.resolve([])), [brand.id, paid, brand.fact_card ?? ""]);
   const confl = useLoad(() => (paid ? api.engineConflicts(brand.id) : Promise.resolve([])), [brand.id, paid]);
@@ -1499,7 +1507,7 @@ function TruthGuardPanel({ brand, paid, mix, stats }: { brand: Brand; paid: bool
     </section>
   );
   const s = truthSummary(checks.data ?? []);
-  const total = s.correct + s.wrong + s.unverifiable;
+  const total = s.correct + s.wrong + s.outdated + s.unverifiable;
   return (
     <section className="panel" id="truthguard">
       <h2>TruthGuard</h2>
@@ -1518,6 +1526,7 @@ function TruthGuardPanel({ brand, paid, mix, stats }: { brand: Brand; paid: bool
           ) : (
           <dl className="metrics">
             <div><dt>{L("Yanlış", "Wrong")}</dt><dd className={`num ${s.wrong ? "truth-bad" : ""}`}>{s.wrong}</dd></div>
+            <div><dt>{L("Eski bilgi", "Outdated")}</dt><dd className={`num ${s.outdated ? "truth-bad" : ""}`}>{s.outdated}</dd><dd className="range">{L("eskiden doğruydu", "was true before")}</dd></div>
             <div><dt>{L("Doğru", "Correct")}</dt><dd className="num">{s.correct}</dd></div>
             <div><dt>{L("Doğrulanamadı", "Can't verify")}</dt><dd className="num">{s.unverifiable}</dd><dd className="range">{L("kartta yok", "not in your card")}</dd></div>
           </dl>
@@ -1534,7 +1543,18 @@ function TruthGuardPanel({ brand, paid, mix, stats }: { brand: Brand; paid: bool
               ))}
             </ul>
           )}
-          {s.unverifiable > 0 && <p className="src-sup muted">{L("\"Doğrulanamadı\" iddiaları azaltmak için bilgi kartınıza o konuları ekleyin.", "Add those topics to your fact card to reduce \"can't verify\" claims.")}</p>}
+          {s.outdatedClaims.length > 0 && (
+            <ul className="src-dom">
+              {s.outdatedClaims.slice(0, 6).map((w) => (
+                <li key={w.claim + w.at} className="truth-item">
+                  <p className="src-head"><strong>{w.claim}</strong> <span className="muted">{L("Eski bilgi", "Outdated")} · {providerLabel(w.provider)}</span></p>
+                  <p className="src-sup">{L("Güncel olan: ", "Current: ")}{w.fact || "–"}</p>
+                  <blockquote className="answer"><p>“{w.quote}”</p></blockquote>
+                </li>
+              ))}
+            </ul>
+          )}
+          {s.unverifiable > 0 && <p className="src-sup muted">{L("\"Doğrulanamadı\" iddiaları azaltmak için bilgi kartınıza o konuları ekleyin", "Add those topics to your fact card to reduce \"can't verify\" claims")}{s.gaps.length ? `${L(". En çok eksik kalan konular: ", ". Most missing topics: ")}${s.gaps.slice(0, 3).map((g) => `${topicLabel(g.topic)} (${g.count})`).join(", ")}` : ""}.</p>}
           <p className="src-sup muted">{L("Karşılaştırmayı küçük bir yapay zekâ modeli yapar ve yanılabilir; her iddia cevaptan birebir alıntıyla gösterilir.", "A small AI model does the comparison and can make mistakes; every claim is shown with an exact quote from the answer.")}</p>
         </>
       )}

@@ -69,10 +69,13 @@ export const RETRYABLE: Record<ApiErrorClass, boolean> = {
 export class ProviderError extends Error {
   readonly kind: ApiErrorClass;
   readonly status?: number;
-  constructor(message: string, opts: { kind: ApiErrorClass; status?: number }) {
+  /** Dakikalık oran sınırı (ör. Gemini ücretsiz katman 15 istek/dk): bu kadar beklenip aynı çağrı yeniden denenebilir. */
+  readonly retryAfterMs?: number;
+  constructor(message: string, opts: { kind: ApiErrorClass; status?: number; retryAfterMs?: number }) {
     super(message);
     this.kind = opts.kind;
     this.status = opts.status;
+    this.retryAfterMs = opts.retryAfterMs;
   }
   get retryable() { return RETRYABLE[this.kind]; }
 }
@@ -98,6 +101,21 @@ export function classifyHttpError(status: number, body: string, ctx: { searchReq
   if (status === 400 && (b.includes("not supported") || b.includes("is not available") || b.includes("unsupported"))) return "unsupported_feature";
   if (status === 408 || status >= 500) return "transient";
   return "invalid_request";
+}
+
+/**
+ * 429 gövdesi DAKİKALIK bir sınır mı? (günlük kota değil). Öyleyse beklenecek süre (ms), değilse null.
+ * Gemini: "quotaId": "...PerMinute..." ve "retryDelay": "37s". 27 Kasım Samsung ölçümünde 13. çağrıda bu sınıra takılıp durmuştu.
+ */
+export function perMinuteRetryMs(status: number, body: string): number | null {
+  if (status !== 429) return null;
+  const b = body.toLowerCase();
+  if (/per ?day|perday/.test(b)) return null;
+  const perMinute = /per ?minute|perminute|rate.?limit/.test(b);
+  const d = b.match(/"retrydelay"\s*:\s*"(\d+(?:\.\d+)?)s"/);
+  if (!perMinute && !d) return null;
+  const sec = d ? Number(d[1]) : 60;
+  return sec > 0 && sec <= 90 ? Math.ceil(sec * 1000) + 1000 : null;
 }
 
 /** fetch'in kendisi patlarsa (ağ, zaman aşımı) → geçici hata. */

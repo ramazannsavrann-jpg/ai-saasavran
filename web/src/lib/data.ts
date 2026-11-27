@@ -130,7 +130,7 @@ export const api = {
   async updateBrand(id: string, patch: Partial<Brand>) {
     must(await sb().from("brands").update(patch).eq("id", id));
   },
-  async truthChecks(brandId: string): Promise<{ provider: string; created_at: string; failed: boolean; claims: { claim: string; status: "correct" | "wrong" | "unverifiable"; fact: string; quote: string }[] }[]> {
+  async truthChecks(brandId: string): Promise<{ provider: string; created_at: string; failed: boolean; claims: { claim: string; status: "correct" | "wrong" | "outdated" | "unverifiable"; fact: string; quote: string; topic?: "company" | "lineup" | "spec" | "support" | "price" | "availability" | "other" }[] }[]> {
     const since = new Date(Date.now() - 30 * 86_400_000).toISOString();
     return must(await sb().from("truth_checks").select("provider,created_at,failed,claims").eq("brand_id", brandId).gte("created_at", since).order("created_at", { ascending: false }).limit(200));
   },

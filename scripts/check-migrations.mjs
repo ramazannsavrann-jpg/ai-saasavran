@@ -588,4 +588,27 @@ console.log("ok tanımsız paket atanamıyor");
   await db.query(`update workspaces set kind=$2, plan=$3, subscription_status=$4, paid_live_allowed=$5, status=$6, billing_source=$7, paddle_subscription_id=$8, current_period_end=$9 where id=$1`, [A, prev.kind, prev.plan, prev.subscription_status, prev.paid_live_allowed, prev.status, prev.billing_source, prev.paddle_subscription_id, prev.current_period_end]);
   console.log("ok 0078: askıdaki abonelik yeniden sorulur ve ikinci aboneliği engeller, süresi geçen hemen sorulur, Paddle mağaza aboneliğini ezmez");
 }
+// 0079: TruthGuard v2 — Growth Lab'de bilgi kartı olan rakip de kontrol sırasına girer; müşteri alanında rakip girmez
+{
+  const G = "79797979-0000-0000-0000-000000000001";
+  await db.query(`insert into workspaces (id,name,kind,plan) values ($1,'GL test','growth_lab','agency')`, [G]);
+  const card = "Güncel amiral gemisi: Galaxy S26 serisi (2026).";
+  const own = (await db.query(`insert into brands (workspace_id,name,fact_card,fact_sources,fact_checked_on) values ($1,'Samsung',$2,'{https://www.samsung.com/}',current_date) returning id`, [G, card])).rows[0].id;
+  const rival = (await db.query(`insert into brands (workspace_id,name,is_competitor,owner_brand_id,fact_card) values ($1,'Apple',true,$2,'iPhone 18 Pro is the current flagship.') returning id`, [G, own])).rows[0].id;
+  const nocard = (await db.query(`insert into brands (workspace_id,name,is_competitor,owner_brand_id) values ($1,'Xiaomi',true,$2) returning id`, [G, own])).rows[0].id;
+  const run = (await db.query(`insert into runs (workspace_id, brand_id, status, data_origin, measurement_type, max_cost_usd) values ($1,$2,'done','live_api','model_knowledge',1) returning id`, [G, own])).rows[0].id;
+  const pid = (await db.query(`insert into prompts (workspace_id, brand_id, text, intent) values ($1,$2,'En iyi telefon?','comparison') returning id`, [G, own])).rows[0].id;
+  const rid = (await db.query(`insert into responses (workspace_id, run_id, prompt_id, provider, model, method, repetition, answer_text, data_origin, measurement_type)
+    values ($1,$2,$3,'gemini','m','api_no_search',1,'Samsung, Apple, Xiaomi','live_api','model_knowledge') returning id`, [G, run, pid])).rows[0].id;
+  for (const b of [own, rival, nocard]) await db.query(`insert into mentions (response_id, workspace_id, brand_id, mentioned, recommended, cited, classifier) values ($1,$2,$3,true,true,false,'rules_v3')`, [rid, G, b]);
+  let names = (await db.query(`select brand_name from pending_truth_checks(50) where workspace_id=$1 order by brand_name`, [G])).rows.map((r) => r.brand_name);
+  assert.deepEqual(names, ["Apple", "Samsung"], "kartı olan rakip girer, kartsız rakip girmez");
+  await db.query(`update workspaces set kind='business' where id=$1`, [G]);
+  names = (await db.query(`select brand_name from pending_truth_checks(50) where workspace_id=$1`, [G])).rows.map((r) => r.brand_name);
+  assert.deepEqual(names, ["Samsung"], "müşteri alanında yalnız kendi markası");
+  await assert.rejects(db.query(`update brands set fact_card=$2 where id=$1`, [own, "x".repeat(5001)]));
+  await db.query(`update brands set fact_card=$2 where id=$1`, [own, "x".repeat(4500)]);
+  await db.query(`delete from workspaces where id=$1`, [G]);
+  console.log("ok 0079: TruthGuard Growth Lab rakip kontrolü, kart kaynağı ve 5000 karakter sınırı");
+}
 console.log("TÜM DB TESTLERİ GEÇTİ");
