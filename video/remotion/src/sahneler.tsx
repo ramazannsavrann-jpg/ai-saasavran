@@ -158,7 +158,7 @@ export const SSiralama: React.FC<P> = ({i}) => {
   const T = v.ayar.t;
   const g = v.gruplar[i];
   const markalar = v.ayar.brands as [string, number][];
-  const maks = Math.max(v.ayar.rm.kanca.n, ...markalar.map((m) => m[1]));
+  const maks = Math.max(v.ayar.rm.toplam ?? v.ayar.rm.kanca.n, ...markalar.map((m) => m[1]));
   const sonC = g[g.length - 1];
   const sonBas = cumleBas(v, sonC);
   // Vurgu: her markanın bu sahnede (son cümleden önce) ilk anıldığı an
@@ -206,7 +206,7 @@ export const SSiralama: React.FC<P> = ({i}) => {
                 }}
               >
                 <Sayac deger={sayi} bas={b} sure={22} frame={frame} />
-                <span style={{fontSize: 22, color: C.muted, fontWeight: 600}}>/{v.ayar.rm.kanca.n}</span>
+                <span style={{fontSize: 22, color: C.muted, fontWeight: 600}}>/{v.ayar.rm.toplam ?? v.ayar.rm.kanca.n}</span>
               </div>
             </div>
           );

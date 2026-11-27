@@ -367,7 +367,8 @@
    "s3",
    "shop",
    "net"
-  ]
+  ],
+  "toplam": 72
  },
  "shop": {
   "rows": [
@@ -402,5 +403,28 @@
     true
    ]
   ]
+ },
+ "yt": {
+  "baslik": "Kasım Fırsatları: Yapay zekâ hangi çamaşır makinesini öneriyor? #shorts",
+  "aciklama": "Türkiye'de çamaşır makinesi sorduğumuzda 72 canlı aramalı yapay zekâ cevabının 54'ünde Bosch'un adı geçti. ChatGPT ise Vestel'i 24 cevabın yalnız 1'inde andı.\n\nÖne çıkanlar\n• Adı geçen cevap (72): Bosch 54, LG 34, Beko 33, Samsung 33, Arçelik 30, Siemens 25, Vestel 18.\n• Vestel: ChatGPT 1/24, Claude 15/24, Perplexity 2/24, Gemini (hafızadan) 5/20.\n• Soru değişince kazanan değişiyor: servis ve yedek parça sorusunda Arçelik ve Beko 6/6, telefondan kontrol edilen akıllı makinede LG 6/6.\n• Google Shopping (Türkiye, \"çamaşır makinesi\"): 1. Bosch, Beko 8., LG 15., Arçelik 20.; Vestel ilk 20 ilanda yok.\n• En çok kaynak gösterilen siteler: eniyilerden.com (15 cevap), indirimist.com (12), bosch-home.com.tr (10).\n\nBu video hangi sorulara cevap veriyor\n• Yapay zekâ hangi çamaşır makinesi markasını öneriyor? En çok Bosch'u.\n• Yapay zekâlar aynı şeyi mi söylüyor? Hayır; Claude Vestel'i 15 kez andı, ChatGPT 1 kez.\n• Google Shopping sırası yapay zekâyla aynı mı? Birinci ikisinde de Bosch; Arçelik Shopping'de 20. sırada.\n• Yapay zekâ nereye bakıyor? En iyiler listesi yayınlayan sitelere ve Bosch'un kendi sitesine.\n\nYöntem: 19–22 Kasım 2026, Türkiye'den Türkçe sorular. ChatGPT, Claude ve Perplexity canlı web aramasıyla 12 soruyu ikişer kez cevapladı (72 cevap); Gemini aramasız, hafızasından cevap verdi (20 cevap). Google Shopping verisi 27 Kasım 2026, Türkiye. Örneklem sınırlıdır, tüm pazarı temsil etmez.\n\nBunlar yapay zekânın cevaplarıdır. Bu video bağımsız bir ölçümdür. Hiçbir markayla reklam veya iş birliğimiz yoktur.\n\nYapay zekâ markanız için ne diyor? Ücretsiz kontrol edin: aisaasavran.com\n\n#çamaşırmakinesi #KasımFırsatları #Bosch #Arçelik #Beko #Vestel #LG #GoogleShopping #ChatGPT #YapayZeka",
+  "etiketler": [
+   "çamaşır makinesi",
+   "en iyi çamaşır makinesi",
+   "Kasım Fırsatları",
+   "Bosch",
+   "Arçelik",
+   "Beko",
+   "Vestel",
+   "LG",
+   "Samsung",
+   "Siemens",
+   "Google Shopping",
+   "ChatGPT",
+   "Claude",
+   "Perplexity",
+   "Gemini",
+   "yapay zeka"
+  ],
+  "listeler": []
  }
 }
