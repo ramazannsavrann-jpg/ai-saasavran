@@ -12,7 +12,7 @@ on:
         description: "Sürüm etiketi (boş: en yenisi), ör. mobil-android-7"
         required: false
 permissions:
-  contents: read
+  contents: write  # taslak sürümleri görmek için gerekli
 concurrency:
   group: play-yukle
   cancel-in-progress: false
