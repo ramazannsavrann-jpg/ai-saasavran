@@ -80,14 +80,18 @@ test("işçi: abonelikler Google'a yeniden sorulur, bulunamayan token süresi do
   } };
   const fetchFn = async (url: string) => {
     if (url.includes("oauth2")) return new Response(JSON.stringify({ access_token: "AT" }));
-    if (url.endsWith("/tokens/a")) return new Response(JSON.stringify(sub({ subscriptionState: "SUBSCRIPTION_STATE_CANCELED" })));
+    if (url.endsWith("/tokens/a")) return new Response(JSON.stringify(sub({ subscriptionState: "SUBSCRIPTION_STATE_CANCELED",
+      lineItems: [{ productId: "gumus", expiryTime: new Date(Date.now() + 10 * 864e5).toISOString(), autoRenewingPlan: { autoRenewEnabled: false } }] })));
+    if (url.includes("tokens/a:acknowledge")) { acked.push(url); return new Response("{}"); }
     return new Response("", { status: 410 });
   };
+  const acked: string[] = [];
   assert.equal(await syncStoreSubscriptions({} as never, undefined), "kapalı");
   assert.deepEqual(await syncStoreSubscriptions(db as never, SA, fetchFn), { checked: 2, changed: 2, failed: 0 });
   assert.equal(applied[0].p_state, "SUBSCRIPTION_STATE_CANCELED");
   assert.equal(applied[1].p_state, "SUBSCRIPTION_STATE_EXPIRED");
   assert.equal(applied[1].p_product, "altin");
+  assert.equal(acked.length, 1, "dönemi süren iptal edilmiş abonelik onaylanır");
 });
 
 test("işçi: uygulamanın onaylayamadığı etkin abonelik işçide onaylanır; bir hata diğerlerini durdurmaz", async () => {
@@ -121,4 +125,15 @@ test("abonelik: ödemesi bekleyen satın alma onaylanmaz; onay 400 dönerse Goog
     return new Response("", { status: 500 });
   };
   await assert.rejects(() => verifyPurchase({ env, user: USER, input: { kind: "sub", product: "gumus", token: "tok-abcdefghij", workspace: WS }, fetchFn: fetch400 }), /google_ack_400/);
+});
+
+test("abonelik: iptal edilmiş ama dönemi süren satın alma onaylanır; süresi geçmiş iptal onaylanmaz", async () => {
+  const future = new Date(Date.now() + 10 * 864e5).toISOString(), past = new Date(Date.now() - 864e5).toISOString();
+  const line = (expiryTime: string) => [{ productId: "gumus", expiryTime, autoRenewingPlan: { autoRenewEnabled: false } }];
+  let f = fake(sub({ subscriptionState: "SUBSCRIPTION_STATE_CANCELED", lineItems: line(future) }), null, "ok");
+  await verifyPurchase({ env, user: USER, input: { kind: "sub", product: "gumus", token: "tok-abcdefghij", workspace: WS }, fetchFn: f.fetchFn });
+  assert.ok(f.calls.some((c) => c.includes(":acknowledge")), "dönemi süren iptal onaylanır");
+  f = fake(sub({ subscriptionState: "SUBSCRIPTION_STATE_CANCELED", lineItems: line(past) }), null, "ok");
+  await verifyPurchase({ env, user: USER, input: { kind: "sub", product: "gumus", token: "tok-abcdefghij", workspace: WS }, fetchFn: f.fetchFn });
+  assert.ok(!f.calls.some((c) => c.includes(":acknowledge")), "süresi geçmiş iptal onaylanmaz");
 });

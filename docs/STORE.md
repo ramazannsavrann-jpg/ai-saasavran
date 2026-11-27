@@ -27,8 +27,8 @@ Elmas uygulamada satılmaz (yalnız site, Paddle).
   e-postası davet edilir; izinler: "Finansal verileri, siparişleri ve iptal anketi yanıtlarını görüntüleme" ve
   "Siparişleri ve abonelikleri yönetme".
 - `GOOGLE_SERVICES_JSON`: Firebase'deki Android uygulamasının `google-services.json` içeriği (bildirimleri derlemede açar).
-- İsteğe bağlı `GOOGLE_PLAY_RTDN_KEY` + Pub/Sub (gerçek zamanlı bildirim). Kurulmazsa işçi etkin abonelikleri 6 saatte
-  bir Google'a sorar (`engine/src/store-sync.ts`); yenileme, iptal ve süre dolması en geç birkaç saat içinde işlenir.
+- İsteğe bağlı `GOOGLE_PLAY_RTDN_KEY` + Pub/Sub (gerçek zamanlı bildirim). Kurulmazsa eşitleme her saat çalışır (gündüz işçi,
+  gece `store-sync.yml`; `engine/src/store-sync.ts`): her abonelik 6 saatte bir, süresi geçen hemen, askıdaki 90 gün sorulur (0078).
 
 ## Akış
 1. Uygulama fiyatları Google'dan okur (ülkenin parası). Satın alma çalışma alanı kimliğiyle işaretlenir (obfuscatedAccountId).

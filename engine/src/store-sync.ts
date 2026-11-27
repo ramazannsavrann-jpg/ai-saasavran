@@ -1,4 +1,5 @@
-// Mağaza aboneliklerini Google'a yeniden sorar (işçide, 6 saatte bir her abonelik): yenileme, iptal, süre dolması, iade.
+// Mağaza aboneliklerini Google'a yeniden sorar (gündüz işçide, gece store-sync.yml ile; her saat): yenileme, iptal, süre dolması, iade.
+// Satır başına 6 saatte bir; süresi geçmiş ve bitişten sonra sorulmamış satır hemen (0078).
 // Gerçek zamanlı bildirim (RTDN) kurulmadan da paket durumu doğru kalır. Hizmet hesabı yoksa kapalı.
 import type { SupabaseClient } from "@supabase/supabase-js";
 // @ts-ignore — düz JS modülü (Cloudflare Pages Functions ile ortak)
