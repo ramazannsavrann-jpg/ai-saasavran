@@ -17,3 +17,4 @@ Kodlar: `EN-S-001` (İngilizce Short), `EN-U-001` (İngilizce uzun), `TR-S-001` 
 | IG-AIRFRYER-SET (TR DgIFrTLisa_, EN DgIF1KjkQaz, karusel DgIGBsckcHx) + REMOTION-STANDART (ortak şablon) | hesap (Opus, bu oturum) | bitti | 2026-11-24 |
 | YT-AIRFRYER-EN (EN kanalı → Eufp0XQzaB8, Remotion, yayın 25 Kas 02:00 TSİ) | hesap (Opus, bu oturum) | bitti | 2026-11-24 |
 | YT-AKSIYON-TR+EN (ABD ölçümü 4 motor canlı + Google Shopping; TR 25 Kas 18:00, EN 26 Kas 02:00) → TR ovep7axvbZI, EN A6VJGo5BN00; IG seti zamanlandı 25 Kas 18:00 TR Reels, 19:00 EN Reels, 20:00 karusel | hesap (Opus, bu oturum) | bitti | 2026-11-25 |
+| TR-U-004 + EN-U-004 (Uzun 4: Soruyu değiştir, kazanan değişsin; özellik Koşullu Görünürlük Haritası) | hesap (Opus, haftalık görev) | devam: kareler hazır, görsel onayı bekleniyor | 2026-11-27 |
