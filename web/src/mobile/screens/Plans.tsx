@@ -27,7 +27,8 @@ export function Plans() {
     if (error) throw new Error(error.message);
     return (data ?? []).length > 0;
   }, [current?.id]);
-  useEffect(() => { void loadPrices().then(setPrices).catch(() => setPrices(null)); }, []);
+  const fetchPrices = () => { setPrices(undefined); void loadPrices().then(setPrices).catch(() => setPrices(null)); };
+  useEffect(fetchPrices, []);
   // Yarım kalmış (sunucuya ulaşmamış) satın almalar sessizce tamamlanır; yoksa Google 3 gün sonra iade eder
   useEffect(() => {
     if (!current || !STORE_AVAILABLE) return;
@@ -89,7 +90,10 @@ export function Plans() {
           <h2 className="label">{onStore ? L("Diğer paketler", "Other plans") : L("Paketler", "Plans")}</h2>
           {lockedByStore && <p className="muted small" style={{ margin: 0 }}>{L("Paket değiştirmek için önce mevcut aboneliğinizi Google Play'de iptal edin. İptalden sonra yeni paketi buradan alabilirsiniz; ikisi aynı anda ücretlendirilmez.", "To switch plans, first cancel your current subscription in Google Play. After that you can buy the new plan here; you won't be charged for both.")}</p>}
           {!STORE_AVAILABLE || prices === null ? (
-            <p className="card" style={{ margin: 0 }}>{L("Paketler şu an yüklenemedi. Biraz sonra tekrar deneyin.", "Plans couldn't be loaded right now. Please try again later.")}</p>
+            <div className="card" style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+              <span>{L("Paketler şu an yüklenemedi. Biraz sonra tekrar deneyin.", "Plans couldn't be loaded right now. Please try again later.")}</span>
+              {STORE_AVAILABLE && <button className="btn btn-ghost" onClick={fetchPrices}>{L("Tekrar dene", "Try again")}</button>}
+            </div>
           ) : prices === undefined ? <Spinner /> : SUBS.map((s) => {
             const pr = prices.subs[s.id], mine = onStore && b.plan === s.plan;
             return (
