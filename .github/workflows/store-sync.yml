@@ -1,0 +1,37 @@
+# Mağaza (Google Play) abonelik eşitlemesi, gece saatleri. Ölçüm yapmaz, ücretli API çağırmaz (~1 dk).
+# Gündüz (UTC 05–20) aynı eşitleme ölçüm işçisinin (worker.yml) içinde çalışır; bu iş UTC 21–04 arası her saati kapatır,
+# böylece eşitleme günün her saatinde en geç ~1 saatte bir yapılır (günde 8 kısa çalıştırma).
+name: Mağaza eşitlemesi
+on:
+  # Yalnızca ana dal ve yalnız ilgili dosyalar değişince (dakika harcamasın)
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/store-sync.yml"
+      - "scripts/store-sync.ts"
+      - "engine/src/store-sync.ts"
+      - "functions/api/store/_google.js"
+  workflow_dispatch:
+  schedule:
+    - cron: "47 0-4,21-23 * * *"
+permissions:
+  contents: read
+concurrency:
+  group: store-sync
+  cancel-in-progress: false
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm ci
+      - name: Abonelikleri Google'a yeniden sor
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          GOOGLE_PLAY_SERVICE_ACCOUNT: ${{ secrets.GOOGLE_SERVICE_ACCOUNT }}
+        run: node scripts/store-sync.ts

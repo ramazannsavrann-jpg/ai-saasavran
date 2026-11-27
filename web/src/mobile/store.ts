@@ -109,15 +109,55 @@ async function restoreOnce(workspace: string, silent: boolean): Promise<number> 
 
 export const manage = () => NativePurchases.manageSubscriptions();
 
+export interface StoreSubRow { purchase_token: string; product_id: string; state: string; active: boolean; auto_renewing: boolean | null; expiry_at: string | null; updated_at: string }
+const HOLD = ["SUBSCRIPTION_STATE_ON_HOLD", "SUBSCRIPTION_STATE_PAUSED"];
+const DAY = 864e5;
+
+/**
+ * Alanın Google Play abonelik durumu (yeni abonelik satışını kapatmak için; asıl kontrol sunucuda).
+ * renewing: etkin ve yenilenecek abonelik var. hold: ödemesi alınamadığı için askıda ("hold") ya da duraklatılmış ("paused")
+ * ama yenilenecek abonelik var: ödeme düzelince Google ücret alır, yanına ikinci abonelik alınmamalı.
+ */
+export async function storeSubState(workspace: string): Promise<{ renewing: boolean; hold: "hold" | "paused" | null; rows: StoreSubRow[] }> {
+  const { data, error } = await sb().from("store_subscriptions")
+    .select("purchase_token, product_id, state, active, auto_renewing, expiry_at, updated_at").eq("workspace_id", workspace);
+  if (error) throw new Error(error.message);
+  const rows = (data ?? []) as StoreSubRow[];
+  const willRenew = (r: StoreSubRow) => r.auto_renewing !== false;
+  const recent = (r: StoreSubRow) => Date.parse(r.expiry_at ?? r.updated_at) > Date.now() - 90 * DAY;
+  const held = rows.find((r) => !r.active && willRenew(r) && HOLD.includes(r.state) && recent(r));
+  return {
+    renewing: rows.some((r) => r.active && willRenew(r)),
+    hold: held ? (held.state === "SUBSCRIPTION_STATE_PAUSED" ? "paused" : "hold") : null,
+    rows,
+  };
+}
+
+/**
+ * Paketler ekranı açılınca mevcut aboneliği Google'a yeniden sorar (Google Play'de yapılan iptal/ödeme düzeltmesi hemen yansısın).
+ * Sırayla (serial) çalışır; hatalar yutulur. Dönen: başarıyla yenilenen abonelik sayısı.
+ */
+export async function refreshStoreSubs(workspace: string, rows: StoreSubRow[]): Promise<number> {
+  if (!STORE_AVAILABLE) return 0;
+  const live = rows.filter((r) => r.active || HOLD.includes(r.state) || r.state === "SUBSCRIPTION_STATE_IN_GRACE_PERIOD")
+    .filter((r) => SUBS.some((s) => s.id === r.product_id));
+  let n = 0;
+  for (const r of live) {
+    try { await serial(() => verify("sub", r.product_id, r.purchase_token, workspace)); n++; } catch { /* sonraki turda işçi sorar */ }
+  }
+  return n;
+}
+
 /** Sunucu sonuç kodunu kullanıcıya anlatır. */
 export function resultText(code: string, L: (tr: string, en: string) => string): string {
   const m: Record<string, [string, string]> = {
     ok: ["Aboneliğiniz açıldı.", "Your subscription is active."],
     pack_ok: ["Ek soru hakkınız eklendi.", "Your extra credits were added."],
+    already_granted: ["Ek soru hakkınız eklendi.", "Your extra credits were added."],
     restored: ["Satın almalarınız geri yüklendi.", "Your purchases were restored."],
     pending: ["Ödemeniz bekleniyor. Ödeme tamamlanınca paketiniz kendiliğinden açılır.", "Your payment is pending. Your plan opens automatically once the payment completes."],
     already_subscribed_web: ["Bu hesabın başka bir platformda etkin aboneliği var. Google ödemeyi birkaç gün içinde iade eder.", "This account already has an active subscription on another platform. Google will refund the payment within a few days."],
-    already_subscribed_store: ["Bu hesabın Google Play'de etkin aboneliği var. Paket değiştirmek için önce mevcut aboneliği Google Play'de iptal edin. Bu ödeme birkaç gün içinde iade edilir.", "This account already has an active Google Play subscription. To switch plans, cancel the current one in Google Play first. This payment will be refunded within a few days."],
+    already_subscribed_store: ["Bu hesabın Google Play'de yenilenen ya da ödemesi bekleyen bir aboneliği var. Paket değiştirmek için önce mevcut aboneliği Google Play'de iptal edin. Bu ödeme birkaç gün içinde iade edilir.", "This account already has a Google Play subscription that renews or is waiting for payment. To switch plans, cancel the current one in Google Play first. This payment will be refunded within a few days."],
     quota_not_exhausted: ["Ek paket, soru hakkınız bitince alınabilir. Ödeme birkaç gün içinde iade edilir.", "Extra packs can be bought once your credits run out. The payment will be refunded within a few days."],
     not_subscriber: ["Ek paket yalnız abonelere açık. Ödeme birkaç gün içinde iade edilir.", "Extra packs are for subscribers only. The payment will be refunded within a few days."],
     not_member: ["Bu hesapta ödeme yapma yetkiniz yok.", "You don't have permission to pay for this account."],

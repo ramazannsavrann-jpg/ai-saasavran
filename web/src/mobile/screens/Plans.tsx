@@ -1,14 +1,13 @@
 // Paketler: uygulamada abonelik ve ek soru paketi (Google Play). Fiyatlar mağazadan, ülkenin parasıyla gelir.
 // Elmas yalnız sitede (uygulamada anılmaz). Sitede (Paddle) aboneliği olan hesap uygulamadan ikinci abonelik almaz.
 // Google Play kuralı: uygulamada başka ödeme yoluna (site) yönlendiren bağlantı/metin yok.
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useApp, useLoad } from "../../lib/app";
 import { api } from "../../lib/data";
-import { sb } from "../../lib/supabase";
 import { L } from "../../lib/i18n";
 import { Err, Head, LoadError, Spinner, goBack, haptic } from "../ui";
-import { PACKS, STORE_AVAILABLE, SUBS, buyPack, buySubscription, loadPrices, manage, restore, resultText, type StorePrices } from "../store";
+import { PACKS, STORE_AVAILABLE, SUBS, buyPack, buySubscription, loadPrices, manage, refreshStoreSubs, restore, resultText, storeSubState, type StorePrices } from "../store";
 
 export function Plans() {
   const nav = useNavigate();
@@ -20,13 +19,17 @@ export function Plans() {
   const [busy, setBusy] = useState<string | null>(null);
   const [err, setErr] = useState<string | null>(null);
   const [msg, setMsg] = useState<string | null>(null);
-  // Yenilenecek Google Play aboneliği varken yeni abonelik alınmaz (çift ücret olur); önce Google Play'de iptal
-  const renewing = useLoad(async () => {
-    if (!current) return false;
-    const { data, error } = await sb().from("store_subscriptions").select("purchase_token").eq("workspace_id", current.id).eq("active", true).neq("auto_renewing", false).limit(1);
-    if (error) throw new Error(error.message);
-    return (data ?? []).length > 0;
-  }, [current?.id]);
+  // Yenilenecek (askıdaki/duraklatılmış dahil) Google Play aboneliği varken yeni abonelik alınmaz (çift ücret olur)
+  const renewing = useLoad(() => (current ? storeSubState(current.id) : Promise.resolve(null)), [current?.id]);
+  // Ekran açılınca mevcut abonelik Google'a yeniden sorulur: Google Play'de yapılan iptal/ödeme düzeltmesi hemen yansır
+  const refreshed = useRef<string | null>(null);
+  useEffect(() => {
+    const rows = renewing.data?.rows;
+    if (!current || !STORE_AVAILABLE || !rows?.length || refreshed.current === current.id) return;
+    refreshed.current = current.id;
+    void refreshStoreSubs(current.id, rows).then((n) => { if (n > 0) { bill.reload(); renewing.reload(); void reloadApp().catch(() => {}); } }).catch(() => {});
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [current?.id, renewing.data]);
   const fetchPrices = () => { setPrices(undefined); void loadPrices().then(setPrices).catch(() => setPrices(null)); };
   useEffect(fetchPrices, []);
   // Yarım kalmış (sunucuya ulaşmamış) satın almalar sessizce tamamlanır; yoksa Google 3 gün sonra iade eder
@@ -44,14 +47,24 @@ export function Plans() {
   const onStore = active && b.billing_source === "google_play";
   const until = b.current_period_end ? new Date(b.current_period_end).toLocaleDateString(L("tr-TR", "en-US"), { day: "numeric", month: "long" }) : null;
   const reload = () => { bill.reload(); quota.reload(); canPack.reload(); renewing.reload(); void reloadApp().catch(() => {}); };
-  const lockedByStore = onStore && renewing.data !== false; // bilinmiyorsa da satış kapalı
+  const st = renewing.data;
+  const hold = st?.hold ?? null;
+  // Bilinmiyorsa (yükleniyor/hata) Google Play ile ödeyen alanda satış kapalı
+  const lockedByStore = st ? st.renewing || !!hold : b.billing_source === "google_play";
 
   async function run(key: string, f: () => Promise<string>) {
     setBusy(key); setErr(null); setMsg(null); haptic.tap();
     try { const r = await f(); setMsg(resultText(r, L)); if (["ok", "pack_ok", "restored", "already_granted"].includes(r)) haptic.done(); reload(); }
     catch (e) {
+      const nativeCode = String((e as { code?: unknown }).code ?? "");
       const code = (e as Error).message ?? "";
-      if (/cancel/i.test(code)) { setBusy(null); return; } // kullanıcı vazgeçti
+      if (nativeCode === "USER_CANCELED" || /cancel/i.test(code)) return; // kullanıcı vazgeçti (eklenti "Purchase is not purchased" + USER_CANCELED döner)
+      if (nativeCode === "ITEM_ALREADY_OWNED") {
+        // Zaten satın alınmış (ör. önceki doğrulama yarım kaldı): geri yükle ve sonucunu göster
+        try { const n = await restore(current!.id); setMsg(resultText(n > 0 ? "restored" : "none", L)); if (n > 0) haptic.done(); reload(); }
+        catch { setErr(resultText("", L)); }
+        return;
+      }
       setErr(resultText(code, L));
     } finally { setBusy(null); }
   }
@@ -71,6 +84,14 @@ export function Plans() {
           <button className="btn btn-ghost" onClick={() => void manage()}>{L("Google Play'de yönet", "Manage in Google Play")}</button>
           <span className="muted small">{L("İptal ederseniz ödediğiniz dönemin sonuna kadar kullanmaya devam edersiniz.", "If you cancel, you keep using it until the end of the period you paid for.")}</span>
         </div>
+      ) : hold ? (
+        <div className="card" style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+          <b>{hold === "paused" ? L("Aboneliğiniz duraklatıldı", "Your subscription is paused") : L("Ödeme alınamadı", "Payment failed")}</b>
+          <span className="muted">{hold === "paused"
+            ? L("Google Play aboneliğiniz duraklatılmış. Devam ettirmek için Google Play'de yönetin; devam edince paketiniz kendiliğinden açılır. Yeni abonelik almayın, iki kez ücretlendirilirsiniz.", "Your Google Play subscription is paused. Resume it in Google Play; your plan reopens automatically. Don't buy a new subscription, or you'll be charged twice.")
+            : L("Google Play aboneliğinizin ödemesi alınamadı. Google Play'de ödeme yönteminizi güncelleyin; ödeme alınınca paketiniz kendiliğinden açılır. Yeni abonelik almayın, iki kez ücretlendirilirsiniz.", "Google Play couldn't charge your subscription. Update your payment method in Google Play; your plan reopens automatically once payment goes through. Don't buy a new subscription, or you'll be charged twice.")}</span>
+          <button className="btn btn-ghost" onClick={() => void manage()}>{L("Google Play'de yönet", "Manage in Google Play")}</button>
+        </div>
       ) : null}
 
       {quota.data?.hybrid && (canPack.data ? (
@@ -88,7 +109,7 @@ export function Plans() {
       {!onWeb && (
         <section style={{ display: "flex", flexDirection: "column", gap: 10 }}>
           <h2 className="label">{onStore ? L("Diğer paketler", "Other plans") : L("Paketler", "Plans")}</h2>
-          {lockedByStore && <p className="muted small" style={{ margin: 0 }}>{L("Paket değiştirmek için önce mevcut aboneliğinizi Google Play'de iptal edin. İptalden sonra yeni paketi buradan alabilirsiniz; ikisi aynı anda ücretlendirilmez.", "To switch plans, first cancel your current subscription in Google Play. After that you can buy the new plan here; you won't be charged for both.")}</p>}
+          {lockedByStore && !hold && <p className="muted small" style={{ margin: 0 }}>{L("Paket değiştirmek için önce mevcut aboneliğinizi Google Play'de iptal edin. İptal ettiğiniz paket dönem sonuna kadar açık kalır. Yeni paketi şimdi alırsanız hemen başlar ve ücreti hemen alınır.", "To switch plans, first cancel your current subscription in Google Play. The canceled plan stays active until its period ends. A new plan bought now starts right away and is charged right away.")}</p>}
           {!STORE_AVAILABLE || prices === null ? (
             <div className="card" style={{ display: "flex", flexDirection: "column", gap: 10 }}>
               <span>{L("Paketler şu an yüklenemedi. Biraz sonra tekrar deneyin.", "Plans couldn't be loaded right now. Please try again later.")}</span>

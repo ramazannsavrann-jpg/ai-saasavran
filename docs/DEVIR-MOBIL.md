@@ -90,4 +90,6 @@ Sahibi yalnız Android telefon kullanıyor: her adımı tek tek, kopyala-yapış
 - Uygulamada siteye ya da Paddle'a yönlendiren ödeme metni ve bağlantısı olmayacak (Play ödeme politikası).
 - Ana sayfada ve bildirimlerde rakip dili yok. Mağaza ekran görüntülerinde rakip adı yok.
 - Ürün kimlikleri ve temel plan kimliği koddaki ile birebir aynı olmalı (`web/src/mobile/store.ts`, `0074_store_billing.sql`). Play'de bu kimlikler sonradan değiştirilemez.
-- RTDN (Pub/Sub) kurulmadı ve isteğe bağlı: işçi her 6 saatte bir abonelikleri Google'dan yeniden sorar. İstenirse secret adı `GOOGLE_PLAY_RTDN_KEY`.
+- RTDN (Pub/Sub) kurulmadı ve isteğe bağlı: eşitleme her saat çalışır (gündüz `worker.yml`, gece `store-sync.yml`); her abonelik 6 saatte bir, süresi geçen hemen yeniden sorulur. İstenirse secret adı `GOOGLE_PLAY_RTDN_KEY`.
+- Askıdaki (ON_HOLD) / duraklatılmış (PAUSED) ama yenilenecek Play aboneliği "etkin" sayılır: yanına ikinci abonelik alınamaz, hesap silinemez; ödeme düzelince paket kendiliğinden açılır (0078).
+- Sitede Paddle aboneliği, yenilenecek Play aboneliği olan alanı Paddle'a çevirmez: `billing_conflicts` tablosuna düşer (sonuç `store_subscription_active`), Paddle ödemesi elle iade edilir.

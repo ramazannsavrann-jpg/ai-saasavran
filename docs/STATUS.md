@@ -1,6 +1,8 @@
 # Gerçek durum raporu
 
-**Son güncelleme:** 2026-11-25 · Haftalık blog yazısı (özel hastaneler)
+**Son güncelleme:** 2026-11-27 · Mağaza ödemesi sağlamlaştırma (0078)
+
+> **27 Kasım (mağaza ödemesi sağlamlaştırma, 0078, `fix-odeme`):** Askıdaki (ödeme alınamadı), duraklatılmış ve ek süredeki Play abonelikleri işçide 90 gün yeniden sorulur; ödeme düzelince paket kendiliğinden açılır. Süresi geçmiş ve bitişten sonra sorulmamış abonelik 6 saat beklemeden sorulur (en fazla 10 dk'da bir); eşitleme gece de çalışır (yeni hafif iş `store-sync.yml`, UTC 21–04 her saat, ~1 dk; gündüz ölçüm işçisi içinde). Askıdaki/duraklatılmış yenilenecek abonelik varken ikinci abonelik alınamaz (sunucu + Paketler ekranı; ekranda "Ödeme alınamadı / duraklatıldı · Google Play'de yönet" kartı) ve hesap silinemez. Paketler açılınca mevcut abonelik Google'a yeniden sorulur (Play'de yapılan iptal hemen yansır). Kullanıcı satın almadan vazgeçince hata gösterilmez; "zaten sahip" hatasında satın almalar kendiliğinden geri yüklenir. "İkisi aynı anda ücretlendirilmez" metni kaldırıldı (doğru değildi): iptal edilen paket dönem sonuna kadar sürer, yeni paket hemen ücretlenir. İptal edilmiş ama dönemi süren abonelik de Google'a onaylanır. Eşzamanlı doğrulama yarışı ve ek paket çift işleme (502) düzeltildi. Sitede (Paddle) abonelik alınırken alanda yenilenecek Play aboneliği varsa ödeme kaynağı Paddle'a geçmez; `billing_conflicts` tablosuna yazılır (`store_subscription_active`), sahibi Paddle ödemesini iade eder.
 
 > **25 Kasım (haftalık blog):** Yeni yazı TR `/tr/blog/yapay-zeka-hangi-ozel-hastaneyi-oneriyor/` + EN `/blog/which-private-hospital-does-ai-recommend-in-turkey/`: 14 Kasım 2026 Growth Lab ölçümü, 8 özel hastane sorusu, 46 cevap (Claude 16 + ChatGPT 14 canlı arama, Gemini 16 aramasız), gerçek adlarla. Blog notu artık gerçek adlı yazılarda (`realNames: true`) "harfler rastgele" demiyor; blog giriş metni de buna göre. Kendi ölçüm kutusu değişmedi (son kendi ölçüm 18 Kasım).
 

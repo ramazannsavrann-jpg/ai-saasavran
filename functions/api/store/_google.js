@@ -67,7 +67,9 @@ export async function ackSubscription(at, product, token, fetchFn = fetch) {
 /** Abonelik veritabanına işlendiyse ve etkinse Google'a onaylanır (3 gün içinde onaylanmazsa Google parayı iade eder). */
 export async function ackIfNeeded(at, f, token, result, fetchFn = fetch) {
   if (result !== "ok" || f.acknowledged) return false;
-  if (!["SUBSCRIPTION_STATE_ACTIVE", "SUBSCRIPTION_STATE_IN_GRACE_PERIOD"].includes(f.state)) return false;
+  // İptal edilmiş ama dönemi süren abonelik de onaylanır (yoksa Google 3 gün sonra iade eder, kullanıcı ödediği dönemi kaybeder)
+  const canceledLive = f.state === "SUBSCRIPTION_STATE_CANCELED" && f.expiry && Date.parse(f.expiry) > Date.now();
+  if (!["SUBSCRIPTION_STATE_ACTIVE", "SUBSCRIPTION_STATE_IN_GRACE_PERIOD"].includes(f.state) && !canceledLive) return false;
   await ackSubscription(at, f.product, token, fetchFn);
   return true;
 }
