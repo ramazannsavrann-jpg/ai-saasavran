@@ -106,9 +106,9 @@ console.log("ok müşteri alanında ücretli çağrı reddedildi (paid_not_allow
   console.log("ok abonelik: aktifken ücretli ölçüm açık, eski aboneliğin iptali yok sayıldı, iptalde Free'ye döndü");
 }
 
-// Ücretli tavan (Plus 9 $) — izinli alan (growth_lab) üzerinde, toplam tavan geniş tutularak
+// Ücretli tavan (Gümüş 45 $, 22 Kasım 2026 onayı) — izinli alan (growth_lab) üzerinde, toplam tavan geniş tutularak
 await db.exec(`update workspaces set kind='growth_lab', paid_live_allowed=true where id='${C}'; update app_settings set paid_total_cap_usd = 1000;`);
-await record("paid", 8.5, 8.5);
+await record("paid", 44.5, 44.5);
 assert.equal(await reserve("paid", 1.0), "monthly_cost_cap");
 const ws = (await db.query(`select status, paused_reason from workspaces where id=$1`, [C])).rows[0];
 assert.deepEqual(ws, { status: "paused", paused_reason: "monthly_cost_cap" });
@@ -198,7 +198,7 @@ console.log("ok tanımsız paket atanamıyor");
   const u = (await db.query(`select count(*) filter (where task='query_engine')::int q, sum(cost_usd)::float c from cost_ledger where workspace_id=$1`, [F])).rows[0];
   assert.deepEqual(u, { q: 0, c: 0.0002 });
   await assert.rejects(db.query(`select record_aux_call($1, null, 'query_engine', 'openai', 'm', 1, 1, 0.1)`, [F]));
-  await db.query(`select record_aux_call($1, null, 'classify', 'openai', 'm', 1, 1, 9.5)`, [F]);
+  await db.query(`select record_aux_call($1, null, 'classify', 'openai', 'm', 1, 1, 45.5)`, [F]);
   assert.equal((await db.query(`select status from workspaces where id=$1`, [F])).rows[0].status, "paused", "tavan aşılınca durur");
   await assert.rejects(as(U1, `select record_aux_call('${A}', null, 'classify', 'openai', 'm', 1, 1, 0.1)`));
   assert.equal((await db.query(`select count(*)::int n from pg_constraint where conrelid = 'prompts'::regclass and pg_get_constraintdef(oid) like '%segment%'`)).rows[0].n, 1);
@@ -311,5 +311,281 @@ console.log("ok tanımsız paket atanamıyor");
   }
   await db.query(`update workspaces set kind=$2, plan=$3, subscription_status=$4, report_brand_name=null, report_logo=null, report_accent=null where id=$1`, [A, prev.kind, prev.plan, prev.subscription_status]);
   console.log("ok 0042: rapor markalama yalnız Business abonesinde; doğrulama ve rapor çıktısı");
+}
+// 0066: güven puanı girdileri — tekrar grupları ve tutarlılık doğru sayılıyor; başka alanın verisi görünmüyor
+{
+  const br = (await db.query(`select id from brands where workspace_id=$1 and not is_competitor limit 1`, [A])).rows[0];
+  if (br) {
+    const run = (await db.query(`insert into runs (workspace_id, brand_id, status, data_origin, measurement_type, max_cost_usd)
+      values ($1, $2, 'done', 'live_api', 'live_search', 1) returning id`, [A, br.id])).rows[0].id;
+    const p = [];
+    for (const t of ["Soru bir", "Soru iki", "Soru üç"]) p.push((await db.query(`insert into prompts (workspace_id, brand_id, text, intent) values ($1, $2, $3, 'informational') returning id`, [A, br.id, t])).rows[0].id);
+    // openai: soru1 2 tekrar (evet, evet) tutarlı; soru2 2 tekrar (evet, hayır) tutarsız; soru3 1 cevap. claude: soru1 1 cevap
+    const plan = [["openai", p[0], 1, true], ["openai", p[0], 2, true], ["openai", p[1], 1, true], ["openai", p[1], 2, false], ["openai", p[2], 1, false], ["claude", p[0], 1, false]];
+    for (const [prov, pid, rep, rec] of plan) {
+      const rid = (await db.query(`insert into responses (workspace_id, run_id, prompt_id, provider, model, method, repetition, answer_text, data_origin, measurement_type)
+        values ($1, $2, $3, $4, 'm', 'api_with_search', $5, 'cevap', 'live_api', 'live_search') returning id`, [A, run, pid, prov, rep])).rows[0].id;
+      await db.query(`insert into mentions (response_id, workspace_id, brand_id, mentioned, recommended, cited, classifier) values ($1, $2, $3, $4, $4, false, 'rules_v1')`, [rid, A, br.id, rec]);
+    }
+    const rows = (await db.query(`select * from run_confidence($1)`, [run])).rows;
+    assert.deepEqual(rows, [
+      { provider: "claude", answers: 1, prompts: 1, repeat_groups: 0, consistent_groups: 0 },
+      { provider: "openai", answers: 5, prompts: 3, repeat_groups: 2, consistent_groups: 1 },
+    ]);
+    assert.equal((await as(U2, `select count(*)::int n from run_confidence('${run}')`)).rows[0].n, 0, "başka alanın kullanıcısı göremez");
+    await db.query(`delete from runs where id=$1`, [run]);
+    await db.query(`delete from prompts where id = any($1)`, [p]);
+  }
+  console.log("ok 0066: güven puanı girdileri doğru; RLS korunuyor" + (br ? "" : " (marka yok, atlandı)"));
+}
+// 0067: müşteri adı — uzunluk sınırı; başka alanın kullanıcısı yazamaz
+{
+  const br = (await db.query(`select id from brands where workspace_id=$1 and not is_competitor limit 1`, [A])).rows[0];
+  if (br) {
+    await as(U1, `update brands set client_name = 'Akdeniz Otel Grubu' where id = '${br.id}'`);
+    assert.equal((await db.query(`select client_name from brands where id=$1`, [br.id])).rows[0].client_name, "Akdeniz Otel Grubu");
+    await assert.rejects(db.query(`update brands set client_name = $2 where id=$1`, [br.id, "x".repeat(81)]), "en fazla 80 karakter");
+    await assert.rejects(db.query(`update brands set client_name = '   ' where id=$1`, [br.id]), "boş ad olmaz");
+    await as(U2, `update brands set client_name = 'Sızma' where id = '${br.id}'`);
+    assert.equal((await db.query(`select client_name from brands where id=$1`, [br.id])).rows[0].client_name, "Akdeniz Otel Grubu", "başka alan yazamaz");
+    await db.query(`update brands set client_name = null where id=$1`, [br.id]);
+  }
+  console.log("ok 0067: müşteri adı doğrulanıyor; başka alan yazamıyor" + (br ? "" : " (marka yok, atlandı)"));
+}
+// 0069: hesap silme — abonelik engeli, ekipte sahiplik devri, tek kişilik alan silinir
+{
+  await db.exec(`create table if not exists auth.users (id uuid primary key, email text)`);
+  const X = "aaaaaaaa-0000-0000-0000-0000000000d1", Y = "aaaaaaaa-0000-0000-0000-0000000000d2";
+  const S = "55555555-5555-5555-5555-555555555501", T = "55555555-5555-5555-5555-555555555502", P = "55555555-5555-5555-5555-555555555503";
+  await db.exec(`insert into auth.users values ('${X}','x@ornek.com'), ('${Y}','y@ornek.com');
+    insert into workspaces (id,name,kind) values ('${S}','Tek Kişi','business'), ('${T}','Ekip','agency'), ('${P}','Abone','business');
+    insert into workspace_members values ('${S}','${X}','owner',now()), ('${T}','${X}','owner',now()), ('${T}','${Y}','editor',now()), ('${P}','${X}','owner',now());
+    insert into brands (workspace_id,name) values ('${S}','Silinecek Marka'), ('${T}','Ekip Markası');
+    update workspaces set subscription_status='active' where id='${P}';`);
+  assert.equal((await as(X, "select delete_my_account() r")).rows[0].r, "active_subscription");
+  assert.equal((await db.query(`select count(*)::int n from auth.users where id=$1`, [X])).rows[0].n, 1, "abonelik varken silinmez");
+  await db.exec(`update workspaces set subscription_status='canceled' where id='${P}'`);
+  assert.equal((await as(X, "select delete_my_account() r")).rows[0].r, "deleted");
+  assert.equal((await db.query(`select count(*)::int n from auth.users where id=$1`, [X])).rows[0].n, 0);
+  assert.equal((await db.query(`select count(*)::int n from workspaces where id in ('${S}','${P}')`)).rows[0].n, 0, "tek kişilik alanlar silindi");
+  assert.equal((await db.query(`select count(*)::int n from brands where name='Silinecek Marka'`)).rows[0].n, 0);
+  assert.equal((await db.query(`select role from workspace_members where workspace_id=$1 and user_id=$2`, [T, Y])).rows[0].role, "owner", "ekip alanı devredildi");
+  assert.equal((await db.query(`select count(*)::int n from brands where name='Ekip Markası'`)).rows[0].n, 1);
+  assert.equal((await db.query(`select count(*)::int n from workspace_members where user_id=$1`, [X])).rows[0].n, 0);
+  await db.exec(`delete from workspaces where id='${T}'; delete from auth.users where id='${Y}'`);
+  console.log("ok 0069: hesap silme — abonelik engeli, ekip devri, tek kişilik alan ve kişisel kayıtlar siliniyor");
+}
+// 0070: marka uyarıları yalnız üyelere
+{
+  const br = (await db.query(`select id from brands where workspace_id=$1 and not is_competitor limit 1`, [A])).rows[0];
+  if (br) {
+    const run = (await db.query(`insert into runs (workspace_id,brand_id,data_origin,max_cost_usd,status,measurement_type) values ($1,$2,'live_api',1,'done','model_knowledge') returning id`, [A, br.id])).rows[0].id;
+    await db.query(`insert into drop_alerts (run_id,brand_id,alerted,detail) values ($1,$2,true,'{"drops":[{"provider":"gemini","lost":1,"lost_items":[{"prompt":"x","instead":"Rakip"}]}]}')`, [run, br.id]);
+    assert.equal((await as(U1, `select count(*)::int n from brand_alerts('${br.id}')`)).rows[0].n, 1, "üye görür");
+    assert.equal((await as(U2, `select count(*)::int n from brand_alerts('${br.id}')`)).rows[0].n, 0, "başka alan göremez");
+    await db.query(`delete from runs where id=$1`, [run]);
+  }
+  console.log("ok 0070: marka uyarıları yalnız üyelere görünüyor" + (br ? "" : " (marka yok, atlandı)"));
+}
+// 0071: telefon bildirimi cihazları yalnız sahibine; bildirilen ölçüm bir kez
+{
+  const tok = "tok_" + "x".repeat(30);
+  await as(U1, `select register_push_device('${tok}', 'android', 'tr')`);
+  assert.equal((await as(U1, `select count(*)::int n from push_devices`)).rows[0].n, 1, "sahibi görür");
+  assert.equal((await as(U2, `select count(*)::int n from push_devices`)).rows[0].n, 0, "başkası göremez");
+  await assert.rejects(as(U1, `select register_push_device('kisa', 'android', 'tr')`), /invalid_token/);
+  await assert.rejects(as(U1, `select pending_run_pushes(10)`), /permission denied/);
+  const br = (await db.query(`select id from brands where workspace_id=$1 and not is_competitor limit 1`, [A])).rows[0];
+  if (br) {
+    const run = (await db.query(`insert into runs (workspace_id,brand_id,data_origin,max_cost_usd,status,measurement_type,finished_at) values ($1,$2,'live_api',1,'done','model_knowledge',now()) returning id`, [A, br.id])).rows[0].id;
+    const rows = (await db.query(`select * from pending_run_pushes(100) where run_id=$1`, [run])).rows;
+    assert.ok(rows.some((r) => r.token === tok), "üyenin cihazı listede");
+    await db.query(`select record_run_push($1, 1)`, [run]);
+    assert.equal((await db.query(`select count(*)::int n from pending_run_pushes(100) where run_id=$1`, [run])).rows[0].n, 0, "ikinci kez listelenmez");
+    await db.query(`delete from runs where id=$1`, [run]);
+  }
+  await as(U1, `select unregister_push_device('${tok}')`);
+  assert.equal((await db.query(`select count(*)::int n from push_devices where token=$1`, [tok])).rows[0].n, 0, "kapatınca silinir");
+  console.log("ok 0071: bildirim cihazları yalnız sahibine, ölçüm bildirimi bir kez");
+}
+// 0072: soru hakkı (karma ölçüm): abonede kota %30 haftalık hafif ölçüm + %70 istek üzerine
+{
+  const own = (await db.query(`select id from brands where workspace_id=$1 and not is_competitor order by created_at limit 1`, [A])).rows[0];
+  if (own) {
+    const prev = (await db.query(`select kind, plan, subscription_status, paid_live_allowed, status from workspaces where id=$1`, [A])).rows[0];
+    const prevAuto = (await db.query(`select auto_weekly, country from brands where id=$1`, [own.id])).rows[0];
+    await db.query(`update workspaces set kind='business', plan='starter', subscription_status='active', paid_live_allowed=true, status='active' where id=$1`, [A]);
+    await db.query(`update brands set auto_weekly=true, country='TR' where id=$1`, [own.id]);
+    await db.query(`delete from runs where workspace_id=$1`, [A]);
+    await db.query(`delete from cost_ledger where workspace_id=$1`, [A]);
+    await db.query(`update prompts set active=false where brand_id=$1`, [own.id]);
+    for (let i = 0; i < 10; i++) await db.query(`insert into prompts (workspace_id, brand_id, text, intent, active) values ($1, $2, $3, 'purchase', true)`, [A, own.id, `soru hakkı testi ${i}`]);
+    let q = (await as(U1, `select * from my_quota('${A}')`)).rows[0];
+    assert.deepEqual([q.hybrid, q.total, q.weekly_cap, q.manual_cap, q.manual_left], [true, 760, 228, 532, 532], "Gümüş: 760 = 228 haftalık + 532 soru hakkı");
+    assert.equal((await as(U2, `select count(*)::int n from my_quota('${A}')`)).rows[0].n, 0, "üye olmayan göremez");
+    // Haftalık: hafif ölçüm (her soru Gemini 1 + ChatGPT 1 = 20 hak)
+    await db.query(`select schedule_weekly_runs(50)`);
+    const wk = (await db.query(`select measurement_type, light, trigger, prompts_total from runs where brand_id=$1 order by measurement_type`, [own.id])).rows;
+    assert.deepEqual(wk.map((r) => [r.measurement_type, r.light, r.trigger, r.prompts_total]), [["live_search", true, "weekly", 10], ["model_knowledge", true, "weekly", 10]], "haftalık hafif ölçüm, tüm sorular");
+    const wkRun = (await db.query(`select id from runs where brand_id=$1 limit 1`, [own.id])).rows[0].id;
+    // Haftalık harcama soru hakkından düşmez
+    await db.query(`insert into cost_ledger (workspace_id, run_id, task, provider, model, cost_usd, billing) select $1, $2, 'query_engine', 'openai', 'm', 0, 'paid' from generate_series(1, 220)`, [A, wkRun]);
+    q = (await as(U1, `select * from my_quota('${A}')`)).rows[0];
+    assert.deepEqual([q.weekly_used, q.manual_left], [220, 532]);
+    // Haftalık pay doldu: yeni haftalık ölçüm açılmaz (220 + 20 > 228)
+    await db.query(`update runs set status='done', created_at = now() - interval '8 days' where brand_id=$1`, [own.id]);
+    await db.query(`select schedule_weekly_runs(50)`);
+    assert.equal((await db.query(`select count(*)::int n from runs where brand_id=$1 and status='queued'`, [own.id])).rows[0].n, 0, "haftalık pay dolunca durur");
+    // İstek üzerine canlı ölçüm: 10 soru × 6 = 60 hak (0077: 4 motor canlı); hak yetmezse başlamaz
+    const r = (await as(U1, `select request_run('${own.id}', true) id`)).rows[0].id;
+    assert.ok(r);
+    const mRun = r;
+    await db.query(`update runs set status='done' where id=$1`, [mRun]);
+    await db.query(`insert into cost_ledger (workspace_id, run_id, task, provider, model, cost_usd, billing) select $1, $2, 'query_engine', 'openai', 'm', 0, 'paid' from generate_series(1, 500)`, [A, mRun]);
+    q = (await as(U1, `select * from my_quota('${A}')`)).rows[0];
+    assert.equal(q.manual_left, 32);
+    await assert.rejects(as(U1, `select request_run('${own.id}', true)`), /Soru hakkınız yetmiyor: bu ölçüm 60 soru hakkı kullanır, bu ay 32/);
+    // Ücretsiz pakette karma düzen yok
+    await db.query(`update workspaces set plan='free', subscription_status=null, paid_live_allowed=false where id=$1`, [A]);
+    q = (await as(U1, `select * from my_quota('${A}')`)).rows[0];
+    assert.equal(q.hybrid, false);
+    // geri al
+    await db.query(`delete from cost_ledger where workspace_id=$1`, [A]);
+    await db.query(`delete from runs where workspace_id=$1`, [A]);
+    await db.query(`delete from prompts where brand_id=$1 and text like 'soru hakkı testi %'`, [own.id]);
+    await db.query(`update prompts set active=true where brand_id=$1`, [own.id]);
+    await db.query(`update brands set auto_weekly=$2, country=$3 where id=$1`, [own.id, prevAuto.auto_weekly, prevAuto.country]);
+    await db.query(`update workspaces set kind=$2, plan=$3, subscription_status=$4, paid_live_allowed=$5, status=$6 where id=$1`, [A, prev.kind, prev.plan, prev.subscription_status, prev.paid_live_allowed, prev.status]);
+    console.log("ok 0072: soru hakkı: %30 haftalık hafif ölçüm, %70 istek üzerine, hak yetmezse ölçüm başlamaz");
+  }
+}
+// 0074: mağaza ödemesi: abonelik paketi açar, iptal dönem sonuna kadar sürer, ek paket yalnız hakkı biten aboneye
+{
+  const prev = (await db.query(`select kind, plan, subscription_status, paid_live_allowed, status, billing_source, paddle_subscription_id, current_period_end from workspaces where id=$1`, [A])).rows[0];
+  await db.query(`update workspaces set kind='business', plan='free', subscription_status=null, paid_live_allowed=false, paddle_subscription_id=null where id=$1`, [A]);
+  const exp = new Date(Date.now() + 20 * 864e5).toISOString();
+  const call = (args) => db.query(`select apply_store_subscription($1,$2,$3,$4,$5,$6,$7,$8,$9,$10) r`, args).then((x) => x.rows[0].r);
+  assert.equal(await call(["google_play", "tok-1", A, U2, "gumus", "SUBSCRIPTION_STATE_ACTIVE", exp, true, "GPA.1", null]), "not_member", "üye olmayan bağlayamaz");
+  assert.equal(await call(["google_play", "tok-1", A, U1, "elmas", "SUBSCRIPTION_STATE_ACTIVE", exp, true, "GPA.1", null]), "unknown_product", "Elmas uygulamada yok");
+  assert.equal(await call(["google_play", "tok-1", A, U1, "gumus", "SUBSCRIPTION_STATE_ACTIVE", exp, true, "GPA.1", null]), "ok");
+  let w = (await db.query(`select plan, subscription_status, billing_source, paid_live_allowed from workspaces where id=$1`, [A])).rows[0];
+  assert.deepEqual([w.plan, w.subscription_status, w.billing_source, w.paid_live_allowed], ["starter", "active", "google_play", true]);
+  assert.equal((await as(U1, `select count(*)::int n from store_subscriptions`)).rows[0].n, 1, "üye kendi aboneliğini görür");
+  assert.equal((await as(U2, `select count(*)::int n from store_subscriptions`)).rows[0].n, 0);
+  // İptal: dönem sonuna kadar kullanır
+  assert.equal(await call(["google_play", "tok-1", A, null, "gumus", "SUBSCRIPTION_STATE_CANCELED", exp, false, null, null]), "ok");
+  assert.equal((await db.query(`select plan from workspaces where id=$1`, [A])).rows[0].plan, "starter", "iptalde dönem sonuna kadar paket sürer");
+  // Ek paket: hak bitmeden alınamaz
+  const pack = (tok, prod) => db.query(`select grant_quota_pack('google_play',$1,$2,$3,$4) r`, [tok, A, U1, prod]).then((x) => x.rows[0].r);
+  assert.equal(await pack("pk-1", "ek_250"), "quota_not_exhausted");
+  assert.equal((await as(U1, `select can_buy_quota_pack('${A}') b`)).rows[0].b, false);
+  const run = (await db.query(`insert into runs (workspace_id,brand_id,data_origin,max_cost_usd,status,measurement_type,trigger) select $1, id, 'live_api', 1, 'done', 'live_search', 'manual' from brands where workspace_id=$1 and not is_competitor limit 1 returning id`, [A])).rows[0].id;
+  await db.query(`insert into cost_ledger (workspace_id, run_id, task, provider, model, cost_usd, billing) select $1, $2, 'query_engine', 'openai', 'm', 0, 'paid' from generate_series(1, 532)`, [A, run]);
+  assert.equal((await as(U1, `select can_buy_quota_pack('${A}') b`)).rows[0].b, true, "hak bitince ek paket alınabilir");
+  assert.equal(await pack("pk-1", "ek_250"), "ok");
+  assert.equal(await pack("pk-1", "ek_250"), "already_granted", "aynı satın alma iki kez işlenmez");
+  const q = (await as(U1, `select * from my_quota('${A}')`)).rows[0];
+  assert.deepEqual([q.manual_cap, q.manual_left], [782, 250], "ek paket soru hakkına eklenir");
+  // Süre doldu: paket düşer
+  assert.equal(await call(["google_play", "tok-1", A, null, "gumus", "SUBSCRIPTION_STATE_EXPIRED", exp, false, null, null]), "ok");
+  w = (await db.query(`select plan, subscription_status, paid_live_allowed from workspaces where id=$1`, [A])).rows[0];
+  assert.deepEqual([w.plan, w.subscription_status, w.paid_live_allowed], ["free", "canceled", false]);
+  // Sitede (Paddle) aboneliği olan alana mağaza aboneliği bağlanmaz
+  await db.query(`update workspaces set plan='starter', subscription_status='active', paid_live_allowed=true, billing_source='paddle', paddle_subscription_id='sub_x' where id=$1`, [A]);
+  assert.equal(await call(["google_play", "tok-2", A, U1, "altin", "SUBSCRIPTION_STATE_ACTIVE", exp, true, "GPA.2", null]), "already_subscribed_web");
+  // geri al
+  for (const t of ["quota_extras", "store_subscriptions", "cost_ledger"]) await db.query(`delete from ${t} where workspace_id=$1`, [A]);
+  await db.query(`delete from runs where id=$1`, [run]);
+  await db.query(`update workspaces set kind=$2, plan=$3, subscription_status=$4, paid_live_allowed=$5, status=$6, billing_source=$7, paddle_subscription_id=$8, current_period_end=$9 where id=$1`, [A, prev.kind, prev.plan, prev.subscription_status, prev.paid_live_allowed, prev.status, prev.billing_source, prev.paddle_subscription_id, prev.current_period_end]);
+  console.log("ok 0074: mağaza aboneliği paket açar/kapatır, iptalde dönem sonuna kadar sürer, ek paket yalnız hakkı biten aboneye ve bir kez");
+}
+// 0076: mağaza ödemesi düzeltmeleri: Paddle/Play birbirini düşürmez, çift abonelik reddedilir, paket en yüksek etkin abonelikten
+{
+  const prev = (await db.query(`select kind, plan, subscription_status, paid_live_allowed, status, billing_source, paddle_subscription_id, current_period_end from workspaces where id=$1`, [A])).rows[0];
+  await db.query(`update workspaces set kind='business', plan='free', subscription_status=null, paid_live_allowed=false, paddle_subscription_id=null, billing_source='paddle' where id=$1`, [A]);
+  const exp = new Date(Date.now() + 20 * 864e5).toISOString();
+  const call = (args) => db.query(`select apply_store_subscription($1,$2,$3,$4,$5,$6,$7,$8,$9,$10) r`, args).then((x) => x.rows[0].r);
+  const ws = () => db.query(`select plan, subscription_status, billing_source, paid_live_allowed from workspaces where id=$1`, [A]).then((x) => x.rows[0]);
+  // Bekleyen ödeme pakete dokunmaz
+  assert.equal(await call(["google_play", "t-p", A, U1, "altin", "SUBSCRIPTION_STATE_PENDING", null, true, null, null]), "pending");
+  assert.equal((await ws()).plan, "free", "bekleyen ödeme paket açmaz");
+  assert.equal((await db.query(`select count(*)::int n from store_subscriptions_due(50) where purchase_token='t-p'`)).rows[0].n, 0, "6 saat dolmadan sorulmaz");
+  await db.query(`update store_subscriptions set updated_at = now() - interval '7 hours' where purchase_token='t-p'`);
+  assert.equal((await db.query(`select count(*)::int n from store_subscriptions_due(50) where purchase_token='t-p'`)).rows[0].n, 1, "bekleyen ödeme işçi tarafından yeniden sorulur");
+  // Tamamlandı
+  assert.equal(await call(["google_play", "t-p", A, null, "altin", "SUBSCRIPTION_STATE_ACTIVE", exp, true, "GPA.p", null]), "ok");
+  assert.equal((await ws()).plan, "altin");
+  // İkinci yenilenen abonelik reddedilir (çift ücret olmasın)
+  assert.equal(await call(["google_play", "t-2", A, U1, "platin", "SUBSCRIPTION_STATE_ACTIVE", exp, true, "GPA.2", null]), "already_subscribed_store");
+  // İptal edilmiş (yenilenmeyecek) aboneliğin yanında yenisi alınabilir; paket en yükseği, eski bitince yenisinde kalır
+  assert.equal(await call(["google_play", "t-p", A, null, "altin", "SUBSCRIPTION_STATE_CANCELED", exp, false, null, null]), "ok");
+  assert.equal(await call(["google_play", "t-3", A, U1, "gumus", "SUBSCRIPTION_STATE_ACTIVE", exp, true, "GPA.3", null]), "ok");
+  assert.equal((await ws()).plan, "altin", "iki etkin abonelikte en yükseği");
+  assert.equal(await call(["google_play", "t-p", A, null, "altin", "SUBSCRIPTION_STATE_EXPIRED", exp, false, null, null]), "ok");
+  assert.equal((await ws()).plan, "starter", "biri bitince kalan aboneliğin paketine iner");
+  // CANCELED + süre yok: hata vermez
+  assert.equal(await call(["google_play", "t-4", A, U1, "gumus", "SUBSCRIPTION_STATE_CANCELED", null, false, null, null]), "ok");
+  // Hesap silme: yenilenecek Play aboneliği varken ayrı sonuç
+  const owner = (await db.query(`select user_id from workspace_members where workspace_id=$1 and role='owner' limit 1`, [A])).rows[0].user_id;
+  assert.equal((await as(owner, `select delete_my_account() r`)).rows[0].r, "active_store_subscription", "yenilenecek Play aboneliği varken önce Google Play'de iptal");
+  // Play biter, sonra sitede (Paddle) abone olur: eski Play token'ının bitişi onu düşürmez
+  assert.equal(await call(["google_play", "t-3", A, null, "gumus", "SUBSCRIPTION_STATE_EXPIRED", exp, false, null, null]), "ok");
+  assert.equal((await ws()).plan, "free");
+  assert.equal((await db.query(`select apply_subscription($1,'pro','active','sub_new','ctm_1',$2) r`, [A, exp])).rows[0].r, "ok");
+  assert.equal((await ws()).billing_source, "paddle", "Paddle etkin olunca ödeme kaynağı Paddle");
+  assert.equal(await call(["google_play", "t-3", A, null, "gumus", "SUBSCRIPTION_STATE_EXPIRED", exp, false, null, null]), "ok_not_billing_source");
+  let w = await ws();
+  assert.deepEqual([w.plan, w.subscription_status, w.paid_live_allowed], ["pro", "active", true], "eski Play olayı Paddle abonesini düşürmez");
+  // Tersi: Play ile öderken eski Paddle aboneliğinin iptal olayı onu düşürmez
+  await db.query(`update workspaces set plan='altin', subscription_status='active', billing_source='google_play', paddle_subscription_id='sub_new' where id=$1`, [A]);
+  assert.equal((await db.query(`select apply_subscription($1,'pro','canceled','sub_new','ctm_1',$2) r`, [A, exp])).rows[0].r, "other_billing_source");
+  assert.equal((await ws()).plan, "altin");
+  for (const t of ["store_subscriptions"]) await db.query(`delete from ${t} where workspace_id=$1`, [A]);
+  await db.query(`update workspaces set kind=$2, plan=$3, subscription_status=$4, paid_live_allowed=$5, status=$6, billing_source=$7, paddle_subscription_id=$8, current_period_end=$9 where id=$1`, [A, prev.kind, prev.plan, prev.subscription_status, prev.paid_live_allowed, prev.status, prev.billing_source, prev.paddle_subscription_id, prev.current_period_end]);
+  console.log("ok 0076: Paddle/Play birbirini düşürmez, bekleyen ödeme paket açmaz, çift abonelik reddedilir, paket en yüksek etkin abonelikten");
+}
+// 0078: askıdaki abonelik yeniden sorulur ve ikinci aboneliği engeller, süresi geçen hemen sorulur, Paddle mağaza aboneliğini ezmez
+{
+  const prev = (await db.query(`select kind, plan, subscription_status, paid_live_allowed, status, billing_source, paddle_subscription_id, current_period_end from workspaces where id=$1`, [A])).rows[0];
+  await db.query(`update workspaces set kind='business', plan='free', subscription_status=null, paid_live_allowed=false, paddle_subscription_id=null, billing_source='paddle' where id=$1`, [A]);
+  const exp = new Date(Date.now() + 20 * 864e5).toISOString(), old = new Date(Date.now() - 20 * 864e5).toISOString();
+  const call = (args) => db.query(`select apply_store_subscription($1,$2,$3,$4,$5,$6,$7,$8,$9,$10) r`, args).then((x) => x.rows[0].r);
+  const ws = () => db.query(`select plan, subscription_status, billing_source, paid_live_allowed from workspaces where id=$1`, [A]).then((x) => x.rows[0]);
+  const due = (tok) => db.query(`select count(*)::int n from store_subscriptions_due(50) where purchase_token=$1`, [tok]).then((x) => x.rows[0].n);
+  assert.equal(await call(["google_play", "h-1", A, U1, "altin", "SUBSCRIPTION_STATE_ACTIVE", exp, true, "GPA.h", null]), "ok");
+  // Ödeme alınamadı: askıya alındı (yenilenecek), paket kapanır
+  assert.equal(await call(["google_play", "h-1", A, null, "altin", "SUBSCRIPTION_STATE_ON_HOLD", old, true, null, null]), "ok");
+  assert.equal((await ws()).plan, "free");
+  assert.equal(await due("h-1"), 0, "6 saat dolmadan sorulmaz");
+  await db.query(`update store_subscriptions set updated_at = now() - interval '7 hours' where purchase_token='h-1'`);
+  assert.equal(await due("h-1"), 1, "askıdaki abonelik 90 gün boyunca yeniden sorulur");
+  // Askıdayken ikinci abonelik alınamaz (ödeme düzelince iki kez ücret), hesap silinemez
+  assert.equal(await call(["google_play", "h-2", A, U1, "gumus", "SUBSCRIPTION_STATE_ACTIVE", exp, true, "GPA.h2", null]), "already_subscribed_store");
+  assert.equal((await as(U1, `select delete_my_account() r`)).rows[0].r, "active_store_subscription", "askıdaki yenilenecek abonelik hesap silmeyi engeller");
+  // Askıdayken sitede (Paddle) abone olursa ödeme kaynağı Paddle'a geçmez, kayda düşer
+  assert.equal((await db.query(`select apply_subscription($1,'pro','active','sub_c','ctm_c',$2) r`, [A, exp])).rows[0].r, "store_subscription_active");
+  assert.equal((await db.query(`select apply_subscription($1,'pro','active','sub_c','ctm_c',$2) r`, [A, exp])).rows[0].r, "store_subscription_active");
+  let w = await ws();
+  assert.deepEqual([w.plan, w.billing_source], ["free", "google_play"], "Paddle olayı paketi açmaz, ödeme kaynağı değişmez");
+  const c = (await db.query(`select hits, source from billing_conflicts where workspace_id=$1 and reference='sub_c'`, [A])).rows[0];
+  assert.deepEqual([c.hits, c.source], [2, "paddle"], "çakışma bir kez kaydedilir, tekrarlar sayılır");
+  assert.equal((await as(U1, `select count(*)::int n from billing_conflicts`)).rows[0].n, 0, "çakışma kaydını yalnız platform yöneticisi görür");
+  // Ödeme düzeldi: işçi yakalar, paket geri açılır
+  assert.equal(await call(["google_play", "h-1", A, null, "altin", "SUBSCRIPTION_STATE_ACTIVE", exp, true, "GPA.h3", null]), "ok");
+  w = await ws();
+  assert.deepEqual([w.plan, w.billing_source, w.paid_live_allowed], ["altin", "google_play", true]);
+  // Süresi geçmiş ve bitişten sonra hiç sorulmamış: 6 saat beklemeden (en fazla 10 dakikada bir) sorulur
+  await db.query(`update store_subscriptions set expiry_at = now() - interval '1 minute', updated_at = now() - interval '20 minutes' where purchase_token='h-1'`);
+  assert.equal(await due("h-1"), 1, "süresi geçen abonelik hemen sorulur");
+  await db.query(`update store_subscriptions set updated_at = now() - interval '5 minutes' where purchase_token='h-1'`);
+  assert.equal(await due("h-1"), 0, "10 dakikadan sık sorulmaz");
+  // İptal edilmiş (yenilenmeyecek) Play aboneliği Paddle'ı engellemez
+  assert.equal(await call(["google_play", "h-1", A, null, "altin", "SUBSCRIPTION_STATE_CANCELED", exp, false, null, null]), "ok");
+  assert.equal((await db.query(`select apply_subscription($1,'pro','active','sub_d','ctm_d',$2) r`, [A, exp])).rows[0].r, "ok");
+  assert.equal((await ws()).billing_source, "paddle");
+  await db.query(`delete from billing_conflicts where workspace_id=$1`, [A]);
+  await db.query(`delete from store_subscriptions where workspace_id=$1`, [A]);
+  await db.query(`update workspaces set kind=$2, plan=$3, subscription_status=$4, paid_live_allowed=$5, status=$6, billing_source=$7, paddle_subscription_id=$8, current_period_end=$9 where id=$1`, [A, prev.kind, prev.plan, prev.subscription_status, prev.paid_live_allowed, prev.status, prev.billing_source, prev.paddle_subscription_id, prev.current_period_end]);
+  console.log("ok 0078: askıdaki abonelik yeniden sorulur ve ikinci aboneliği engeller, süresi geçen hemen sorulur, Paddle mağaza aboneliğini ezmez");
 }
 console.log("TÜM DB TESTLERİ GEÇTİ");

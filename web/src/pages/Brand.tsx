@@ -6,17 +6,18 @@ import { api, INTENT_LABEL, type Brand, type BrandAction, type PromptResult, typ
 import { friendlyError, sb } from "../lib/supabase";
 import { L, isEn } from "../lib/i18n";
 import { ERROR_CLASS_TEXT, STOP_TEXT, runStatusText } from "../lib/messages";
-import { actionImpact, compareProducts, engineComparison, engineScoreChanges, perceptionSummary, rivalTraits, scoreChange, visibilityScore, type ScoreInput, type ScorePartKey, ownedSourceShare, ownCitedRivals, visibilityForecast, sourcesByEngine, rivalReasons, conditionMap, lossCards, productVisibility, promptKind, shoppingSources, sourceDominance, splitByKind, type EngineCompareRow, type LossCard, type SourceRow } from "../../../engine/src/insights.ts";
+import { actionImpact, compareProducts, engineComparison, engineScoreChanges, perceptionSummary, rivalTraits, scoreChange, visibilityScore, type ScoreInput, type ScorePartKey, ownedSourceShare, ownCitedRivals, visibilityForecast, sourcesByEngine, rivalReasons, conditionMap, lossCards, productVisibility, promptKind, shoppingSources, sourceDominance, splitByKind, winRates, fanoutQueries, weeklyTodo, type EngineCompareRow, type LossCard, type SourceRow } from "../../../engine/src/insights.ts";
 import { competitorsInRun, formatDate, formatDateTime, lowSample, MIN_SAMPLE, numLoc, pct, providerLabel, rangeText, series, shareSummary, sourceOpportunities, topDomains, usd } from "../lib/report";
 import { Button, Confirm, DataNotice, Empty, ErrorBox, Field, Loading, Select, TypeBadge } from "../components/ui";
 import { CompareBars, TrendChart } from "../components/Chart";
 import { StartGuide } from "../components/StartGuide";
 import { FactCardInline } from "../components/FactCardInline";
 import { downloadCsv, fileSlug } from "../lib/csv";
-import { buildRecommendations, type RecInput } from "../../../engine/src/recommendations.ts";
 import { relatedBrand, untrackedNames } from "../../../engine/src/metrics.ts";
+import { ConfidenceCard } from "../components/Confidence";
 import { aiVsShopping, type AiShopBrand } from "../../../engine/src/shopping.ts";
 import { campaignFor, taskProgress } from "../../../engine/src/campaign.ts";
+import { useRecommendations } from "../lib/recommend";
 import { guessIntent } from "../../../engine/src/discovery.ts";
 import { sourceNetwork } from "../../../engine/src/network.ts";
 import { botSummary, snippet, SOURCE_PROVIDER, trafficSummary, visibilityVsVisits, workerCode, type AiSource, type BotKind } from "../../../engine/src/traffic.ts";
@@ -118,7 +119,7 @@ async function logoToDataUrl(file: File): Promise<string> {
   throw new Error(L("Logo çok büyük; daha sade ya da küçük bir dosya seçin.", "The logo is too large; choose a simpler or smaller file."));
 }
 
-/** Ajans markalaması (Business): paylaşılan raporda ve PDF'te ajansın adı, logosu ve rengi görünür. */
+/** Ajans markalaması (Elmas): paylaşılan raporda ve PDF'te ajansın adı, logosu ve rengi görünür. */
 function ReportBrandingPanel({ workspaceId, agency }: { workspaceId: string; agency: boolean }) {
   const cur = useLoad(() => api.reportBranding(workspaceId), [workspaceId]);
   const [name, setName] = useState<string | null>(null);
@@ -143,9 +144,9 @@ function ReportBrandingPanel({ workspaceId, agency }: { workspaceId: string; age
   return (
     <section className="panel stack">
       <h2>{L("Rapor markalama (ajans)", "Report branding (agency)")}</h2>
-      <p className="muted">{L("Paylaşılan rapor ve PDF'te AI SaaSavran yerine kendi adınız, logonuz ve renginiz görünür. Business paketinde.", "Shared reports and PDFs show your own name, logo and colour instead of AI SaaSavran. On the Business plan.")}</p>
+      <p className="muted">{L("Paylaşılan rapor ve PDF'te AI SaaSavran yerine kendi adınız, logonuz ve renginiz görünür. Elmas paketinde.", "Shared reports and PDFs show your own name, logo and colour instead of AI SaaSavran. On the Diamond plan.")}</p>
       {!agency ? (
-        <p className="src-sup muted">{L("Bu özellik Business paketinde açılır.", "This feature unlocks on the Business plan.")}</p>
+        <p className="src-sup muted">{L("Bu özellik Elmas paketinde açılır.", "This feature unlocks on the Diamond plan.")}</p>
       ) : (
         <>
           <Field label={L("Ajans adı", "Agency name")} name="brand-name" maxLength={60} value={nm} onChange={(e) => setName(e.target.value)} />
@@ -304,7 +305,7 @@ function ProductVisibilityView({ vis, loading, hasRuns }: { vis: ReturnType<type
       <p className="src-sup"><strong>{L("Görünürlük (son ölçüm)", "Visibility (latest measurement)")}</strong></p>
       {vis.engines.map((e) => (
         <p key={e.provider} className="src-sup"><span className="muted">{providerLabel(e.provider)}: </span>
-          {isEn() ? `mentioned in ${e.mentioned} of ${e.answers} answers, recommended in ${e.recommended} (${pct(e.answers ? e.recommended / e.answers : 0)}, range ${pct(e.low)}–${pct(e.high)})` : `${e.answers} cevabın ${e.mentioned} tanesinde geçti, ${e.recommended} tanesinde önerildi (${pct(e.answers ? e.recommended / e.answers : 0)}, aralık ${pct(e.low)}–${pct(e.high)})`}{e.answers < MIN_SAMPLE && L("; örneklem küçük", "; small sample")}.
+          {isEn() ? `mentioned in ${e.mentioned} of ${e.answers} answers, recommended in ${e.recommended} (${pct(e.answers ? e.recommended / e.answers : 0)}, range ${pct(e.low)}–${pct(e.high)})` : `${e.answers} cevabın ${e.mentioned} tanesinde geçti, ${e.recommended} tanesinde önerildi (${pct(e.answers ? e.recommended / e.answers : 0)}, aralık ${pct(e.low)}–${pct(e.high)})`}{e.recommended > 0 && (isEn() ? `; #1 in ${e.wins}` : `; ${e.wins} tanesinde 1 numara`)}{e.answers < MIN_SAMPLE && L("; örneklem küçük", "; small sample")}.
         </p>
       ))}
       {total === 0 && <p className="src-sup muted">{L("Ürün adı hiçbir cevapta geçmedi. Sorularınız marka düzeyindeyse bu beklenir: Sorular sekmesinden bu ürünün kategorisine dair markasız sorular ekleyin (örn. \"1.000 dolar altı en iyi yol bisikleti hangisi?\").", "The product name did not appear in any answer. That is expected if your questions are brand-level: add unbranded questions about this product's category in the Questions tab (e.g. \"What is the best road bike under $1,000?\").")}</p>}
@@ -490,7 +491,7 @@ function Products({ brand, paidAllowed, manualShopping }: { brand: Brand; paidAl
                     <div className="loss-card">
                       <p className="loss-title">{formatDateTime(last.created_at)}: {last.recognized === false ? L("ChatGPT farklı bir ürünü anlatmış olabilir.", "ChatGPT may have described a different product.")
                         : last.judge === null ? L("Cevap alındı ama karşılaştırma yapılamadı.", "Got the answer, but the comparison couldn't run.")
-                        : wrong > 0 ? (isEn() ? `${wrong} claim${wrong > 1 ? "s" : ""} contradict your facts.` : `${wrong} iddia sizin bilgilerinizle çelişiyor.`)
+                        : wrong > 0 ? (isEn() ? `${wrong} ${wrong > 1 ? "claims contradict" : "claim contradicts"} your facts.` : `${wrong} iddia sizin bilgilerinizle çelişiyor.`)
                         : L("Bilgilerinizle çelişen iddia bulunmadı.", "No claims contradict your facts.")}</p>
                       {claims.length > 0 && <ul>{claims.map((c, i) => <li key={i}><strong>{STATUS[c.status]}:</strong> {c.claim}{c.fact && <span className="muted"> ({L("sizin bilginiz", "your fact")}: {c.fact})</span>}</li>)}</ul>}
                       <button className="link-btn" aria-expanded={open === p.id} onClick={() => setOpen(open === p.id ? null : p.id)}>{open === p.id ? L("Cevabı gizle", "Hide answer") : L("Cevabı göster", "Show answer")}</button>
@@ -533,6 +534,7 @@ function Products({ brand, paidAllowed, manualShopping }: { brand: Brand; paidAl
 const splitAliases = (v: FormDataEntryValue | null) => String(v || "").split(",").map((x) => x.trim()).filter(Boolean);
 
 function BrandEditForm({ brand, onDone }: { brand: Brand; onDone: (changed: boolean) => void }) {
+  const { current } = useApp();
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
   async function save(e: FormEvent<HTMLFormElement>) {
@@ -547,6 +549,7 @@ function BrandEditForm({ brand, onDone }: { brand: Brand; onDone: (changed: bool
         website: String(f.get("website") || "").trim() || null,
         sector: String(f.get("sector") || "") || null,
         offering: String(f.get("offering") || "").trim().slice(0, 120) || null,
+        ...(f.has("client_name") ? { client_name: String(f.get("client_name") || "").trim().slice(0, 80) || null } : {}),
         city: String(f.get("city") || "").trim() || null,
         country: /^[A-Za-z]{2}$/.test(String(f.get("country") || "").trim()) ? String(f.get("country")).trim().toUpperCase() : null,
         ...(brand.data_origin !== "simulated" ? { auto_weekly: f.get("auto_weekly") === "on" } : {}),
@@ -560,7 +563,8 @@ function BrandEditForm({ brand, onDone }: { brand: Brand; onDone: (changed: bool
       <h2>{L("Markayı düzenle", "Edit brand")}</h2>
       <Field label={L("Marka adı", "Brand name")} name="name" defaultValue={brand.name} required maxLength={120} />
       <Field label={L("Diğer yazılışlar", "Other spellings")} name="aliases" defaultValue={brand.aliases.join(", ")} hint={L("Virgülle ayırın", "Comma-separated")} />
-      <Field label="Web sitesi" name="website" defaultValue={brand.website ?? ""} inputMode="url" />
+      <Field label={L("Web sitesi", "Website")} name="website" defaultValue={brand.website ?? ""} inputMode="url" />
+      {current?.kind === "agency" && <Field label={L("Müşteri (ajans)", "Client (agency)")} name="client_name" defaultValue={brand.client_name ?? ""} maxLength={80} placeholder={L("Örn. Akdeniz Otel Grubu", "e.g. Harbor Hotels")} hint={L("Aynı müşterinin markalarını gruplamak için. Erişim vermez; müşteriye rapor bağlantısı gönderin.", "Groups a client's brands. It grants no access; send the client a report link.")} />}
       <Select label={L("Sektör", "Sector")} name="sector" defaultValue={brand.sector ?? ""}>
         <option value="">{L("Seçilmedi", "Not set")}</option>
         {SECTORS.map((x) => <option key={x}>{x}</option>)}
@@ -587,7 +591,7 @@ function BrandEditForm({ brand, onDone }: { brand: Brand; onDone: (changed: bool
       <p className="muted">{L("Ad veya yazılışlar değişirse yeni ölçümler yeni adla yapılır; eski ölçümler olduğu gibi kalır.", "If the name or spellings change, past measurements are recalculated for free with the new details.")}</p>
       <ErrorBox message={err} />
       <div className="form-actions">
-        <Button type="submit" busy={busy}>Kaydet</Button>
+        <Button type="submit" busy={busy}>{L("Kaydet", "Save")}</Button>
         <Button type="button" variant="quiet" onClick={() => onDone(false)}>{L("Vazgeç", "Cancel")}</Button>
       </div>
       <DeleteBrand brand={brand} />
@@ -678,6 +682,7 @@ function RunControl({ brand, runs, onChange, paidAllowed, workspaceId }: { brand
   const [busy, setBusy] = useState<"free" | "live" | null>(null);
   const [err, setErr] = useState<string | null>(null);
   const budget = useLoad(() => (paidAllowed ? api.paidBudget(workspaceId) : Promise.resolve(null)), [paidAllowed, workspaceId, runs.length]);
+  const quota = useLoad(() => api.quota(workspaceId), [workspaceId, runs.length]);
   const pending = runs.find((r) => r.status === "queued" || r.status === "running");
   async function start(live: boolean) {
     setBusy(live ? "live" : "free"); setErr(null);
@@ -701,6 +706,10 @@ function RunControl({ brand, runs, onChange, paidAllowed, workspaceId }: { brand
           {b && <p className="muted paid-note">{isEn()
             ? <>Paid trial budget: {usd(Number(b.spent_usd))} of {usd(Number(b.cap_usd))} used. One measurement costs about {usd(0.019 * 2 * Math.max(runs[0]?.prompts_total ?? 10, 1))}. It stops automatically at the cap.</>
             : <>Ücretli deneme bütçesi: {usd(Number(b.spent_usd))} / {usd(Number(b.cap_usd))} kullanıldı. Bir ölçüm yaklaşık {usd(0.019 * 2 * Math.max(runs[0]?.prompts_total ?? 10, 1))} tutar. Tavana gelince kendiliğinden durur.</>}</p>}
+          {quota.data?.hybrid && <p className="muted paid-note">{(() => {
+            const np = Math.max(runs.find((r) => r.trigger !== "weekly")?.prompts_total ?? runs[0]?.prompts_total ?? 10, 1);
+            return L(`Bu ay ${quota.data.manual_left} soru hakkınız kaldı. Canlı aramalı ölçüm yaklaşık ${np * 6}, aramasız ölçüm ${np * 2} hak kullanır.`, `${quota.data.manual_left} question credits left this month. A live-search measurement uses about ${np * 6}, a no-search one ${np * 2}.`);
+          })()}</p>}
         </div>
       ) : (
         <Button busy={busy === "free"} onClick={() => start(false)}>{L("Ölçüm başlat", "Start measurement")}</Button>
@@ -775,6 +784,7 @@ function Report({ brand, type, onBrandChange, paid = false, runs = [] }: { brand
   const pts = series(rows ?? []);
   const last = pts[pts.length - 1];
   const prompts = useLoad(() => (last ? api.promptResults(last.runId, eng) : Promise.resolve([])), [last?.runId, eng]);
+  const conf = useLoad(() => (last && type !== "simulated" ? api.runConfidence(last.runId) : Promise.resolve([])), [last?.runId, type]);
   const answersAll = useLoad(() => (last ? api.answers(last.runId) : Promise.resolve([])), [last?.runId]);
   // useMemo: süzülmüş dizi her çizimde yeniden oluşmasın (aşağıdaki yüklemeler buna bağlı)
   const answersData = useMemo(() => (answersAll.data && eng ? answersAll.data.filter((x) => x.provider === eng) : answersAll.data), [answersAll.data, eng]);
@@ -856,6 +866,7 @@ function Report({ brand, type, onBrandChange, paid = false, runs = [] }: { brand
                 ? <div><dt>{L("Sitenizin kaynak gösterilmesi", "Your site cited")}</dt><dd className="num">{pct(last.cite.value)}</dd><dd className="range">{last.cite.k}/{last.cite.n} {L("cevapta", "answers")}</dd></div>
                 : <div><dt>{L("Kaynak gösterilme", "Cited")}</dt><dd className="num na">{L("Ölçülmedi", "Not measured")}</dd><dd className="range">{L("yalnızca canlı aramada vardır", "only with live search")}</dd></div>}
             </dl>
+            {conf.data && <ConfidenceCard rows={conf.data} provider={eng} />}
             {lowSample(last.recommend) && (
               <p className="caution">{isEn() ? `Small sample (${last.recommend.n} answers). Don't read these rates as final; the ranges are wide. Add more questions and measure again.` : `Örneklem küçük (${last.recommend.n} cevap). Oranları kesin sonuç gibi okumayın; aralıklar geniştir. Daha fazla soru ekleyip tekrar ölçün.`}</p>
             )}
@@ -867,6 +878,31 @@ function Report({ brand, type, onBrandChange, paid = false, runs = [] }: { brand
               topSources: domains.map((d) => d.domain),
             })} />
           </section>
+
+          {type !== "simulated" && prompts.data && (() => {
+            const todo = weeklyTodo({
+              lang: isEn() ? "en" : "tr",
+              prompts: prompts.data,
+              opportunities: opps,
+              fanout: live && answers.data ? fanoutQueries(answers.data, 5).rows : [],
+              engines: (rows ?? []).filter((r) => r.run_id === last.runId && r.is_target && r.n > 0).map((r) => ({ provider: r.provider, rate: r.recommended / r.n, n: r.n })),
+            });
+            if (!todo.length) return null;
+            return (
+              <section className="panel" id="bu-hafta">
+                <h2>{L("Bu hafta yapılacaklar", "This week's to-do")}</h2>
+                <p className="muted">{L("Son ölçümünüzden çıkan en önemli işler, etkisi büyük olan önce. Her madde ölçümdeki gerçek veriye dayanır.", "The most important jobs from your latest measurement, biggest impact first. Each item comes from the measured data.")}</p>
+                <ol className="src-dom">
+                  {todo.map((t) => (
+                    <li key={t.kind + t.title}>
+                      <p className="src-head"><strong>{t.title}</strong></p>
+                      <p className="muted">{t.detail} <a href={`#${t.anchor}`}>{L("Ayrıntı", "Details")}</a></p>
+                    </li>
+                  ))}
+                </ol>
+              </section>
+            );
+          })()}
 
           <section className="panel">
             <div className="panel-head">
@@ -920,6 +956,8 @@ function Report({ brand, type, onBrandChange, paid = false, runs = [] }: { brand
           {engList.length > 1 && (
             <EngineComparePanel rows={(vis.data ?? []).filter((r) => r.run_id === last.runId)} answers={answersAll.data ?? []} live={live} />
           )}
+          {live && insightsReady && <WinRatePanel answers={answers.data!} mentions={ments.data!} brands={insightBrands} perEngine={!eng} />}
+          {live && answers.data && answers.data.length > 0 && <FanoutPanel answers={answers.data} />}
           <section className="panel" id="kosul-haritasi">
             <h2>{L("Hangi koşulda görünüyorsunuz", "Where you show up, and where you don't")}</h2>
             <p className="muted">{isEn() ? `Recommendation rate by what the customer is doing, over the last ${recentIds.length} measurement${recentIds.length > 1 ? "s" : ""}. Groups under 20 answers are marked; don't draw conclusions from them.` : `Müşterinin ne yaptığına göre önerilme oranı, son ${recentIds.length} ölçümün toplamı. 20 cevabın altındaki gruplar işaretlidir; onlardan sonuç çıkarmayın.`}</p>
@@ -1009,7 +1047,7 @@ function Report({ brand, type, onBrandChange, paid = false, runs = [] }: { brand
             {!live && type !== "simulated" && (
               <section className="panel" id="kendi-site-payi">
                 <h2>{L("Kendi site payı", "Owned-source share")}</h2>
-                <p className="muted">{L("Veri yok: kaynaklar yalnız canlı internet aramalı ölçümde oluşur (ChatGPT, Claude ve Perplexity, ücretli paketler).", "No data: sources only exist in live web-search measurements (ChatGPT, Claude and Perplexity, paid plans).")}</p>
+                <p className="muted">{L("Veri yok: kaynaklar yalnız canlı internet aramalı ölçümde oluşur (ChatGPT, Gemini, Claude ve Perplexity, ücretli paketler).", "No data: sources only exist in live web-search measurements (ChatGPT, Gemini, Claude and Perplexity, paid plans).")}</p>
               </section>
             )}
             {live && (
@@ -1054,7 +1092,7 @@ function Report({ brand, type, onBrandChange, paid = false, runs = [] }: { brand
             </details>
           )}
 
-          <section className="panel">
+          <section className="panel" id="soru-sonuclari">
             <h2>{L("Soru bazında sonuç", "Results by question")}</h2>
             {!prompts.loading && (() => {
               const split = splitByKind(prompts.data ?? [], { name: brand.name, aliases: brand.aliases ?? [] });
@@ -1418,7 +1456,7 @@ function AiTrafficPanel({ brand, paid, vis }: { brand: Brand; paid: boolean; vis
               <VisVsTraffic vis={vis} rows={rows.data ?? []} today={today} />
               <h3>{L("Gelinen sayfalar", "Landing pages")}</h3>
               <ol className="domains">{s.topPages.map((p) => <li key={p.path}><span className="src-url">{p.path}</span><span className="num">{p.visits}</span></li>)}</ol>
-              <p className="src-sup muted">{L("Önerilme oranı yükselirken ziyaretçi de artıyorsa görünürlüğünüz gerçek trafiğe dönüşüyor demektir. Bazı uygulamalar kaynak bilgisi göndermez; gerçek sayı bundan biraz yüksek olabilir.", "If visits grow as your recommendation rate rises, visibility is turning into real traffic. Some apps don't send referral data, so the real number may be a bit higher.")}</p>
+              <p className="src-sup muted">{L("Önerilme oranı yükselirken ziyaretçi de artıyorsa görünürlüğünüz gerçek trafiğe dönüşüyor demektir. Yapay zekâ uygulamalarının çoğu ziyaretçinin nereden geldiğini göndermez; gerçek sayı burada görünenden belirgin şekilde yüksek olabilir.", "If visits grow as your recommendation rate rises, visibility is turning into real traffic. Most AI apps don't send referral data, so the real number can be well above what you see here.")}</p>
             </>
           )}
         </>
@@ -1851,67 +1889,6 @@ function ActionsPanel({ brand }: { brand: Brand }) {
 
 const SEV_LABEL = { high: L("Önemli", "Important"), medium: L("Orta", "Medium"), low: L("Düşük", "Low"), info: L("Bilgi", "Info") } as const;
 
-/** İyileştirme rehberi girdisi ve önerileri: Öneriler sekmesi ve rapordaki "Bu hafta yapılacak iş" kartı aynı hesabı kullanır. */
-function useRecommendations(brand: Brand, type: MeasurementType, runs: Run[]) {
-  const audit = useLoad(() => api.latestAudit(brand.id), [brand.id, brand.audit_requested_at]);
-  const prompts = useLoad(() => api.prompts(brand.id), [brand.id]);
-  const lastRun = runs.find((r) => r.status === "done" && r.measurement_type === type);
-  const results = useLoad(() => (lastRun ? api.promptResults(lastRun.id) : Promise.resolve([])), [lastRun?.id]);
-  // İyileştirme rehberi için kanıtlar (ek API çağrısı yok): önceki ölçüm, motor farkı, kaynak fırsatları, ürün doğruluğu, Shopping
-  const prevRun = runs.filter((r) => r.status === "done")[1];
-  const prevResults = useLoad(() => (prevRun ? api.promptResults(prevRun.id) : Promise.resolve([])), [prevRun?.id]);
-  const evidence = useLoad(async () => {
-    if (!lastRun || brand.data_origin === "simulated") return null;
-    const live = type === "live_search";
-    const [vis, comps, prods] = await Promise.all([api.visibility(brand.id, type), api.competitors(brand.id), api.products(brand.id)]);
-    const rows = vis.filter((r) => r.run_id === lastRun.id);
-    const me = engineComparison(rows).find((c) => c.isTarget);
-    const engineGap = me && me.high ? { ignoredBy: me.ignoredBy, high: me.high, highK: me.byEngine[me.high].k, highN: me.byEngine[me.high].n, level: me.level } : null;
-    let opportunitySites: { domain: string; count: number }[] = [];
-    let ownShare: { own: number; total: number; competitor: number } | null = null;
-    if (live) {
-      const ans = await api.answers(lastRun.id);
-      const ments = ans.length ? await api.mentionsFor(ans.map((a) => a.id)) : [];
-      const host = (w: string | null) => (w ? w.replace(/^https?:\/\//, "").replace(/^www\./, "").split("/")[0].toLowerCase() : "");
-      opportunitySites = sourceOpportunities(ans, ments, brand.id, [brand.website, ...comps.map((c) => c.website)].map(host).filter(Boolean)).filter((d) => !d.own);
-      const o = ownedSourceShare(ans, [{ id: brand.id, name: brand.name, website: brand.website, isTarget: true }, ...comps.map((c) => ({ id: c.id, name: c.name, website: c.website, isTarget: false }))]);
-      ownShare = { own: o.own, total: o.total, competitor: o.competitor };
-    }
-    const own = prods.filter((p) => !p.rival_of);
-    const ids = prods.map((p) => p.id);
-    const [checks, shops] = ids.length ? await Promise.all([api.productChecks(own.map((p) => p.id)), api.shoppingChecks(own.map((p) => p.id))]) : [[], []];
-    const latest = <T extends { product_id: string; created_at: string }>(xs: T[]) => [...new Map([...xs].sort((a, b) => a.created_at.localeCompare(b.created_at)).map((x) => [x.product_id, x])).values()];
-    const name = (id: string) => prods.find((p) => p.id === id)?.name ?? "";
-    const wrongClaims = latest(checks).flatMap((c) => c.claims.filter((x) => x.status === "wrong").map((x) => ({ product: name(c.product_id), claim: x.claim, fact: x.fact })));
-    const shoppingBehind = latest(shops).flatMap((sc) => sc.rivals.filter((r) => sc.own_position == null || r.position < sc.own_position).slice(0, 1)
-      .map((r) => ({ product: name(sc.product_id), ownPos: sc.own_position, rival: name(r.id), rivalPos: r.position })));
-    const tc = brand.fact_card ? await api.truthChecks(brand.id).catch(() => []) : [];
-    const wrongBrandClaims = truthSummary(tc).wrongClaims.slice(0, 5).map((w) => ({ claim: w.claim, fact: w.fact }));
-    return { engineGap, opportunitySites, wrongClaims, shoppingBehind, ownShare, wrongBrandClaims };
-  }, [brand.id, type, lastRun?.id]);
-  const loading = audit.loading || prompts.loading || results.loading || prevResults.loading || evidence.loading;
-  const sim = brand.data_origin === "simulated";
-  const recInput = loading ? null : ({
-    brandName: brand.name, website: brand.website, city: brand.city, sector: brand.sector, aliases: brand.aliases,
-    activePrompts: (prompts.data ?? []).filter((p) => p.active).length,
-    completedRuns: runs.filter((r) => r.status === "done").length,
-    autoWeekly: brand.auto_weekly || sim, measurementType: type,
-    prompts: results.data ?? [],
-    audit: sim ? null : audit.data ? { status: audit.data.status, checks: audit.data.checks } : null,
-    lang: (isEn() ? "en" : "tr") as "en" | "tr",
-    previousPrompts: prevResults.data ?? [],
-    ...(evidence.data ?? {}),
-  } satisfies RecInput as RecInput);
-  const recs = recInput ? buildRecommendations(recInput).filter((r) => !(sim && r.id === "no_website")) : [];
-  // Paylaşılan rapor "en önemli 3 iş"i buradan alır (0054): yalnız değişince yazılır; izin yoksa (izleyici) sessizce geçilir
-  const top3 = JSON.stringify(recs.slice(0, 3).map((r) => ({ title: r.title, action: r.action })));
-  useEffect(() => {
-    if (loading || sim || !recs.length || top3 === JSON.stringify(brand.top_actions ?? null)) return;
-    api.updateBrand(brand.id, { top_actions: JSON.parse(top3), top_actions_at: new Date().toISOString() }).catch(() => {});
-  }, [loading, sim, top3, brand.id]);
-  return { audit, prompts, lastRun, results, prevResults, evidence, loading, recInput, recs };
-}
-
 function Advice({ brand, type, runs, onBrandChange }: { brand: Brand; type: MeasurementType; runs: Run[]; onBrandChange: () => void }) {
   const { audit, results, loading, recInput, recs } = useRecommendations(brand, type, runs);
   const sim = brand.data_origin === "simulated";
@@ -2180,16 +2157,16 @@ function Questions({ brand }: { brand: Brand }) {
 
       {active < limit ? (
         <form className="panel stack" onSubmit={submit} noValidate>
-          <h2>Kendi sorunuzu ekleyin</h2>
+          <h2>{L("Kendi sorunuzu ekleyin", "Add your own question")}</h2>
           <Field label={L("Soru", "Question")} name="text" maxLength={300} placeholder={L("Örn. Antalya'da en iyi döner nerede yenir?", "e.g. Where's the best pizza in Austin?")} />
           <Select label={L("Müşteri ne yapıyor?", "What is the customer doing?")} name="intent" defaultValue="local">
             {(Object.keys(INTENT_LABEL) as Intent[]).map((k) => <option key={k} value={k}>{INTENT_LABEL[k]}</option>)}
           </Select>
           <Field label={L("Etiket (isteğe bağlı)", "Tag (optional)")} name="segment" maxLength={40}  placeholder={L("Örn. ucuz, premium, Almanya", "e.g. budget, premium, Germany")} hint={L("Aynı etiketi taşıyanlar raporda birlikte gösterilir: hangi koşulda görünüp hangisinde kaybolduğunuzu görürsünüz.", "Items sharing a tag are grouped in the report, so you can see where you show up and where you don't.")} />
           <ErrorBox message={err} />
-          <Button type="submit" busy={busy}>Soruyu ekle</Button>
+          <Button type="submit" busy={busy}>{L("Soruyu ekle", "Add question")}</Button>
         </form>
-      ) : <><ErrorBox message={err} /><p className="muted">Paketinizin aktif soru sınırına ulaştınız.</p></>}
+      ) : <><ErrorBox message={err} /><p className="muted">{L("Paketinizin aktif soru sınırına ulaştınız.", "You've reached the active question limit for your plan.")}</p></>}
     </div>
   );
 }
@@ -2348,5 +2325,52 @@ function ShareButton({ text }: { text: () => string }) {
       <Button variant="quiet" className="btn-small" onClick={() => window.print()}>{L("PDF olarak indir", "Download PDF")}</Button>
       {done && <span className="muted" role="status">{done}</span>}
     </div>
+  );
+}
+
+// Kazanma oranı: markanın cevapta 1 numara önerildiği cevapların oranı (mentions.rank = 1 ve önerildi)
+function WinRatePanel({ answers, mentions, brands, perEngine }: { answers: { id: string; provider: string }[]; mentions: { response_id: string; brand_id: string; recommended: boolean; rank?: number | null }[]; brands: { id: string; name: string; isTarget: boolean }[]; perEngine: boolean }) {
+  const w = winRates(answers, mentions, brands);
+  if (!w.brands.length || !w.brands[0].n) return null;
+  const top = w.brands.filter((b) => b.wins > 0 || b.isTarget).slice(0, 6);
+  const n = w.brands[0].n;
+  return (
+    <section className="panel" id="kazanma-orani">
+      <h2>{L("Kazanma oranı: kaç cevapta 1 numara?", "Win rate: how often are you #1?")}</h2>
+      <p className="muted">{L("Yapay zekânın listesinde ilk sırada önerilen marka kazanır. Müşterilerin çoğu ilk öneriye bakar; bu yüzden önerilme oranından ayrı izlenir.", "The brand recommended first in the AI's list wins. Most customers look at the first suggestion, so this is tracked separately from recommendation rate.")}</p>
+      <ul className="src-dom">
+        {top.map((b) => (
+          <li key={b.brandId}>
+            <p className="src-head"><strong>{b.name}{b.isTarget ? L(" (siz)", " (you)") : ""}</strong> <span className="num">{pct(b.rate)}</span></p>
+            <p className="muted">{isEn() ? `#1 in ${b.wins} of ${b.n} answers · range ${pct(b.low)}–${pct(b.high)}` : `${b.wins}/${b.n} cevapta 1 numara · aralık ${pct(b.low)}–${pct(b.high)}`}</p>
+          </li>
+        ))}
+      </ul>
+      {perEngine && w.targetByEngine.length > 1 && (
+        <p className="muted">{L("Sizin motor bazında kazanma oranınız: ", "Your win rate by engine: ")}{w.targetByEngine.map((e) => `${shortEngine(e.provider)} ${e.wins}/${e.n}`).join(" · ")}</p>
+      )}
+      {n < 20 && <p className="caution">{L("20 cevabın altında: sonuç kesin değil, eğilim olarak okuyun.", "Under 20 answers: not conclusive, read it as a trend.")}</p>}
+    </section>
+  );
+}
+
+// Yapay zekânın cevap verirken internette yaptığı aramalar (responses.search_queries); ek API çağrısı yok
+function FanoutPanel({ answers }: { answers: { provider: string; search_queries?: string[] | null }[] }) {
+  const f = fanoutQueries(answers, 15);
+  if (!f.rows.length) return null;
+  return (
+    <section className="panel" id="yapay-zeka-aramalari">
+      <h2>{L("Yapay zekânın yaptığı aramalar", "What the AI searched for")}</h2>
+      <p className="muted">{isEn() ? `Before answering, the AI searched the web with these phrases (${f.searched} of ${f.answers} answers used a search). Pages that rank for these searches are the ones the AI reads, so they are your content and outreach targets.` : `Yapay zekâ cevap vermeden önce internette bu ifadelerle arama yaptı (${f.searched}/${f.answers} cevapta arama yapıldı). Bu aramalarda çıkan sayfalar yapay zekânın okuduğu sayfalardır; içerik ve iletişim hedefleriniz bunlardır.`}</p>
+      <ol className="src-dom">
+        {f.rows.map((r) => (
+          <li key={r.query}>
+            <p className="src-head"><strong>{r.query}</strong> <span className="num">{r.count}</span></p>
+            <p className="muted">{r.engines.map(shortEngine).join(", ")}</p>
+          </li>
+        ))}
+      </ol>
+      {f.byEngine.length > 1 && <p className="muted">{L("Arama yapılan cevap oranı: ", "Share of answers that searched: ")}{f.byEngine.map((e) => `${shortEngine(e.provider)} ${e.searched}/${e.answers}`).join(" · ")}</p>}
+    </section>
   );
 }

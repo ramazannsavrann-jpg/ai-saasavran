@@ -47,4 +47,9 @@ test("API: anahtar biçimi, özet hesaplama", async () => {
   assert.deepEqual(m.brands.map((b: any) => [b.name, b.recommend_rate]), [["Kuzey", 0.75], ["Güney", 0.5]]);
   assert.deepEqual(m.history.map((h: any) => h.recommend_rate), [0.25, 0.75]);
   assert.equal(s.measurements.model_knowledge, undefined);
+  assert.equal(m.confidence, null, "girdi yoksa güven puanı null");
+  const c = summarize({ brand: { name: "Kuzey" }, vis: { live_search: [row("r1", at1, "a", "Kuzey", true, 4, 1)] },
+    confidence: { live_search: [{ provider: "openai", answers: 50, prompts: 25, repeat_groups: 25, consistent_groups: 25 }] } }).measurements.live_search.confidence;
+  // 25 soru×motor (30 puan) + 50 cevap (10 puan) + 25 tekrarın hepsi tutarlı (50 puan) = 90
+  assert.deepEqual([c.score, c.level, c.repeat_consistency, c.reasons], [90, "high", 1, []]);
 });

@@ -1,5 +1,6 @@
 // Veri tipleri ve sorgular. Tüm erişim kullanıcının oturumuyla yapılır; izolasyonu veritabanı (RLS) sağlar.
 import { sb } from "./supabase";
+import { API_BASE } from "./env";
 import { L } from "./i18n";
 
 export type MeasurementType = "live_search" | "model_knowledge" | "simulated";
@@ -11,10 +12,12 @@ export interface Brand {
   sector: string | null; city: string | null; country: string | null; is_competitor: boolean; owner_brand_id: string | null; data_origin: string;
   auto_weekly: boolean; audit_requested_at: string | null; reanalyze_requested_at: string | null;
   /** Paylaşılan rapor için ilk 3 öneri (0054) */
-  top_actions?: { title: string; action: string }[] | null; top_actions_at?: string | null;
+  top_actions?: { title: string; action: string; id?: string; lang?: string }[] | null; top_actions_at?: string | null;
   fact_card?: string | null; fact_card_updated_at?: string | null; track_key?: string;
   /** Ne satıyor / hangi hizmeti veriyor (0059) */
   offering?: string | null;
+  /** Ajans: markanın bağlı olduğu müşteri (0067); yalnız gruplama, yetki vermez */
+  client_name?: string | null;
 }
 export interface Prompt { id: string; brand_id: string; text: string; intent: Intent; segment: string | null; active: boolean; created_at: string }
 export type Intent = "informational" | "comparison" | "purchase" | "local" | "post_purchase";
@@ -27,6 +30,7 @@ export interface Run {
   /** Yöntem kaydı (0051); eski ölçümlerde null */
   method_version?: string | null; prompt_set_hash?: string | null; engines?: string[] | null;
 }
+export interface Quota { hybrid: boolean; total: number; weekly_cap: number; weekly_used: number; manual_cap: number; manual_used: number; manual_left: number }
 export interface Usage {
   plan_id: string; plan_name: string; status: "active" | "paused"; paused_reason: string | null;
   engine_calls: number; engine_call_limit: number; free_calls: number; paid_cost_usd: number; paid_cap_usd: number;
@@ -80,7 +84,7 @@ export const INTENT_LABEL: Record<Intent, string> = {
 };
 
 function must<T>(r: { data: T | null; error: { message: string } | null }): T {
-  if (r.error) throw new Error(r.error.message);
+  if (r.error) throw new Error(r.error.message || "request_failed");
   return r.data as T;
 }
 
@@ -94,6 +98,18 @@ export const api = {
   },
   async createWorkspace(name: string, kind: "business" | "agency"): Promise<string> {
     return must(await sb().rpc("create_workspace", { p_name: name, p_kind: kind }));
+  },
+  /** Abonelik kaynağı ve durumu (0074: sitede Paddle ya da uygulamada mağaza). */
+  async billingState(ws: string): Promise<{ subscription_status: string | null; billing_source: string; current_period_end: string | null; plan: string }> {
+    return must(await sb().from("workspaces").select("subscription_status,billing_source,current_period_end,plan").eq("id", ws).single());
+  },
+  async canBuyQuotaPack(ws: string): Promise<boolean> {
+    return !!must(await sb().rpc("can_buy_quota_pack", { p_workspace: ws }));
+  },
+  /** Soru hakkı (0072): abonede kota %30 haftalık otomatik + %70 istek üzerine. */
+  async quota(ws: string): Promise<Quota | null> {
+    const rows = must(await sb().rpc("my_quota", { p_workspace: ws })) as Quota[];
+    return rows[0] ?? null;
   },
   async usage(ws: string): Promise<Usage | null> {
     const rows = must(await sb().rpc("workspace_usage", { p_workspace: ws })) as Usage[];
@@ -152,13 +168,13 @@ export const api = {
   async setPromptActive(id: string, active: boolean) { must(await sb().from("prompts").update({ active }).eq("id", id)); changed(); },
   async updatePrompt(id: string, patch: { text?: string; intent?: Intent; segment?: string | null }) { must(await sb().from("prompts").update(patch).eq("id", id)); },
   /** Bir ölçümdeki ham yapay zekâ cevapları (soru başına). */
-  async answers(runId: string): Promise<{ id: string; prompt_id: string; repetition: number; answer_text: string; model: string; provider: string; cited_urls: string[] }[]> {
-    return must(await sb().from("responses").select("id,prompt_id,repetition,answer_text,model,provider,cited_urls").eq("run_id", runId).order("repetition"));
+  async answers(runId: string): Promise<{ id: string; prompt_id: string; repetition: number; answer_text: string; model: string; provider: string; cited_urls: string[]; search_queries: string[] | null }[]> {
+    return must(await sb().from("responses").select("id,prompt_id,repetition,answer_text,model,provider,cited_urls,search_queries").eq("run_id", runId).order("repetition"));
   },
   /** Bir ölçümdeki cevap başına marka sonuçları (kaynak fırsatları için). */
-  async mentionsFor(responseIds: string[]): Promise<{ response_id: string; brand_id: string; recommended: boolean; mentioned: boolean; perception?: unknown }[]> {
+  async mentionsFor(responseIds: string[]): Promise<{ response_id: string; brand_id: string; recommended: boolean; mentioned: boolean; rank: number | null; perception?: unknown }[]> {
     if (!responseIds.length) return [];
-    return must(await sb().from("mentions").select("response_id,brand_id,recommended,mentioned,perception").in("response_id", responseIds));
+    return must(await sb().from("mentions").select("response_id,brand_id,recommended,mentioned,rank,perception").in("response_id", responseIds));
   },
   async deletePrompt(id: string) { must(await sb().from("prompts").delete().eq("id", id)); changed(); },
   async runs(brandId: string): Promise<Run[]> {
@@ -170,7 +186,7 @@ export const api = {
     let fast = false;
     try {
       const { data } = await sb().auth.getSession();
-      const r = await fetch("/api/kick", { method: "POST", headers: { Authorization: `Bearer ${data.session?.access_token ?? ""}` } });
+      const r = await fetch(`${API_BASE}/api/kick`, { method: "POST", headers: { Authorization: `Bearer ${data.session?.access_token ?? ""}` } });
       fast = r.ok && (await r.json().catch(() => ({}))).started === true;
     } catch { /* tetikleme başarısızsa ölçüm yine sırada */ }
     try { sessionStorage.setItem("aisv-fast-run", fast ? "1" : "0"); } catch { /* yok say */ }
@@ -183,6 +199,10 @@ export const api = {
   },
   async visibility(brandId: string, type: MeasurementType): Promise<VisRow[]> {
     return must(await sb().rpc("brand_visibility", { p_brand: brandId, p_type: type }));
+  },
+  /** Güven puanı girdileri (0066): motor bazında cevap, soru, tekrar grubu ve tutarlı grup sayısı. */
+  async runConfidence(runId: string): Promise<{ provider: string; answers: number; prompts: number; repeat_groups: number; consistent_groups: number }[]> {
+    return must(await sb().rpc("run_confidence", { p_run: runId }));
   },
   async promptResults(runId: string, provider?: string | null): Promise<PromptResult[]> {
     return must(await sb().rpc("run_prompt_results", provider ? { p_run: runId, p_provider: provider } : { p_run: runId }));

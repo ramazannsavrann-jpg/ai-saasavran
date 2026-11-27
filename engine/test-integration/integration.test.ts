@@ -40,6 +40,8 @@ let wsA: string, brandA: string;
 before(async () => {
   stack = await startStack({ quiet: true });
   svc = createClient(stack.url, stack.serviceKey, opts);
+  // Test düzeneği: birçok testin çoklu ölçüm yapması için Free ayda 4 ölçüm varsayılır. Gerçek Free limiti 1 (migration 0062).
+  stack.sql("update plans set monthly_runs = 4 where id = 'free';");
   A = await user("a@test.local");
   B = await user("b@test.local");
 }, { timeout: 120_000 });

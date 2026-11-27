@@ -149,10 +149,10 @@ export function buildRecommendations(i: RecInput): Recommendation[] {
     add(en
       ? { id: "model_knowledge_note", priority: "düşük", title: "Changes can take time to show",
         why: "These measurements were made without live web search; model knowledge only updates with new training.",
-        action: "Improvements to your site show up first in assistants that search the web. No-search measurement reflects the model's training data; when or whether a change shows up there isn't known in advance." }
+        action: "No-search measurement reflects the model's training data. Whether and when changes to your site show up in it can't be predicted; a live-search measurement reads current web results." }
       : { id: "model_knowledge_note", priority: "düşük", title: "Değişikliklerin etkisi zaman alabilir",
         why: "Bu ölçümler canlı web araması olmadan yapıldı; modelin bilgisi ancak yeni eğitimlerle güncellenir.",
-        action: "Sitenizde yaptığınız iyileştirmeler önce canlı arama yapan asistanlarda etkisini gösterir. Aramasız ölçüm modelin eğitim verisini yansıtır; değişikliğin orada ne zaman ya da yansıyıp yansımayacağı önceden bilinemez." });
+        action: "Aramasız ölçüm modelin eğitim verisini yansıtır. Sitenizdeki değişikliklerin bu ölçümde ne zaman görüneceği önceden bilinemez; canlı aramalı ölçüm ise güncel web sonuçlarını kullanır." });
   }
 
   // --- Kanıta dayalı ek maddeler (iyileştirme rehberi)
@@ -183,10 +183,13 @@ export function buildRecommendations(i: RecInput): Recommendation[] {
   }
   if (i.wrongClaims && i.wrongClaims.length > 0) {
     const w = i.wrongClaims[0];
+    // İddia zaten tırnaklı ya da noktalı gelebilir ("“X” görünmüyor."): çift tırnak/nokta olmasın
+    const bare = String(w.claim ?? "").trim().replace(/^"+|"+$/g, "").replace(/[.\s]+$/, "");
+    const claim = /["“”]/.test(bare) ? bare : `"${bare}"`;
     add({
       id: "wrong_claims", priority: "yüksek",
       title: en ? `AI states ${i.wrongClaims.length} wrong product fact${i.wrongClaims.length > 1 ? "s" : ""}` : `Yapay zekâ ürününüz hakkında ${i.wrongClaims.length} yanlış bilgi veriyor`,
-      why: en ? `${w.product}: "${w.claim}". Correct: ${w.fact}` : `${w.product}: "${w.claim}". Doğrusu: ${w.fact}`,
+      why: en ? `${w.product}: ${claim}. Correct: ${w.fact}` : `${w.product}: ${claim}. Doğrusu: ${w.fact}`,
       action: en ? "Fix this fact on your product page, marketplace listings and structured data (Product/Offer). Old reviews and price sites that repeat it also matter."
         : "Bu bilgiyi ürün sayfanızda, pazar yeri ilanlarında ve yapılandırılmış veride (Product/Offer) düzeltin. Eski bilgiyi tekrarlayan inceleme ve fiyat siteleri de önemlidir.",
       check: en ? "Next accuracy check: is the claim now correct?" : "Sonraki doğruluk kontrolü: bu iddia doğru çıkıyor mu?",
@@ -234,16 +237,22 @@ export function buildRecommendations(i: RecInput): Recommendation[] {
   for (const r of recs) {
     if (r.id === "absent_prompts") {
       r.check = en ? "Next measurement: are you mentioned in these questions?" : "Sonraki ölçüm: bu sorularda anılıyor musunuz?";
-      const before = absent.filter((p) => prev.has(p.prompt_text));
+      // 20 Kasım denetimi: "o zaman da yoktunuz" yalnız önceki ölçümde de anılmayan sorular; kazanılan ve kaybedilen ayrı ayrı yazılır
+      const stillAbsent = absent.filter((p) => { const b = prev.get(p.prompt_text); return b && b.target_mentioned === 0; }).length;
       const wasAbsent = [...prev.values()].filter((p) => p.target_mentioned === 0);
       if (prev.size > 0) {
         const fixed = wasAbsent.filter((p) => measured.some((m) => m.prompt_text === p.prompt_text && m.target_mentioned > 0)).length;
         const newly = absent.filter((p) => { const b = prev.get(p.prompt_text); return b && b.target_mentioned > 0; }).length;
+        const both = fixed > 0 && newly > 0
+          ? (en ? ` (gained ${fixed}, lost ${newly})` : ` (${fixed} soru kazanıldı, ${newly} soru kaybedildi)`)
+          : "";
         r.progress = fixed > newly
-          ? { status: "improved", text: en ? `Since the previous measurement you now appear in ${fixed} more question${fixed > 1 ? "s" : ""}.` : `Önceki ölçüme göre ${fixed} soruda artık anılıyorsunuz.` }
+          ? { status: "improved", text: en ? `Since the previous measurement you appear in ${fixed - newly} more question${fixed - newly > 1 ? "s" : ""}${both}.` : `Önceki ölçüme göre ${fixed - newly} soruda daha anılıyorsunuz${both}.` }
           : newly > fixed
-            ? { status: "worse", text: en ? `You dropped out of ${newly} question${newly > 1 ? "s" : ""} since the previous measurement.` : `Önceki ölçüme göre ${newly} soruda artık anılmıyorsunuz.` }
-            : { status: "same", text: en ? `Same as the previous measurement (${before.length} of these were missing then too).` : `Önceki ölçümle aynı (bunların ${before.length} tanesinde o zaman da yoktunuz).` };
+            ? { status: "worse", text: en ? `You dropped out of ${newly - fixed} more question${newly - fixed > 1 ? "s" : ""} than you gained since the previous measurement${both}.` : `Önceki ölçüme göre ${newly - fixed} soruda daha az anılıyorsunuz${both}.` }
+            : { status: "same", text: fixed > 0
+              ? (en ? `Net unchanged since the previous measurement${both}.` : `Önceki ölçüme göre net değişim yok${both}.`)
+              : (en ? `Same as the previous measurement (${stillAbsent} of these were missing then too).` : `Önceki ölçümle aynı (bunların ${stillAbsent} tanesinde o zaman da yoktunuz).`) };
       }
     } else if (r.id === "mentioned_not_recommended") {
       r.check = en ? "Next measurement: are you on the recommended list in these questions?" : "Sonraki ölçüm: bu sorularda öneri listesine giriyor musunuz?";
@@ -253,4 +262,12 @@ export function buildRecommendations(i: RecInput): Recommendation[] {
   }
 
   return recs.sort((a, b) => ORDER[a.priority] - ORDER[b.priority]);
+}
+
+/**
+ * İlerleme kontrolü için önceki ölçüm: yalnız aynı ölçüm türündeki tamamlanmış ölçümler arasından, mevcut (en son) ölçümden sonraki.
+ * Runs en yeniden en eskiye sıralı beklenir. Tür karıştırılırsa (ör. canlı arama ile aramasız) veya aynı ölçüm kendisiyle kıyaslanırsa ilerleme yanlış çıkar.
+ */
+export function previousSameTypeRun<T extends { status: string; measurement_type: string }>(runs: T[], type: string): T | undefined {
+  return runs.filter((r) => r.status === "done" && r.measurement_type === type)[1];
 }

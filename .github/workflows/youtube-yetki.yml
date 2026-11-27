@@ -1,0 +1,30 @@
+name: youtube-yetki
+on:
+  push:
+    branches: [main]
+    paths: [".github/workflows/youtube-yetki.yml"]
+  workflow_dispatch:
+    inputs:
+      kanal:
+        description: "Kanal: en veya tr"
+        required: true
+        default: "en"
+      kod:
+        description: "Boş bırakın: izin bağlantısı üretilir. İzinden sonra adres çubuğundaki code= değerini yapıştırın."
+        required: false
+        default: ""
+jobs:
+  yetki:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: YouTube izni
+        env:
+          KANAL: ${{ inputs.kanal || 'en' }}
+          KOD: ${{ inputs.kod }}
+          YT_CLIENT_ID: ${{ secrets.YT_CLIENT_ID }}
+          YT_CLIENT_SECRET: ${{ secrets.YT_CLIENT_SECRET }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: python3 yt/yt_yetki.py

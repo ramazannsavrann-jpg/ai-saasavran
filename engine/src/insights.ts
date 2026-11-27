@@ -202,7 +202,7 @@ export interface ProductAnswer { id: string; prompt_id: string; provider: string
 export interface ProductVisibility {
   productId: string;
   /** Motor bazında: ürün adının geçtiği ve önerildiği cevap sayısı (Wilson aralığıyla) */
-  engines: { provider: string; answers: number; mentioned: number; recommended: number; low: number; high: number }[];
+  engines: { provider: string; answers: number; mentioned: number; recommended: number; low: number; high: number; wins: number }[];
   /** Ürünün hiç önerilmediği ve bir rakip markanın önerildiği sorular için kanıt kartları */
   losses: LossCard[];
   /** Ürünün geçtiği soruların kimlikleri */
@@ -228,17 +228,18 @@ export function productVisibility(
     ...competitors.map((c) => ({ id: c.id, name: c.name, aliases: c.aliases ?? [], domain: domainOf(c.website) })),
   ];
   const mentions: InsightMention[] = [];
-  const per = new Map<string, { answers: number; mentioned: number; recommended: number }>();
+  const per = new Map<string, { answers: number; mentioned: number; recommended: number; wins: number }>();
   const promptsMentioned = new Set<string>();
   for (const a of answers) {
     const hits = analyzeResponse({ promptId: a.prompt_id, provider: a.provider, answerText: a.answer_text, citedUrls: a.cited_urls ?? [] }, refs);
-    const e = per.get(a.provider) ?? { answers: 0, mentioned: 0, recommended: 0 };
+    const e = per.get(a.provider) ?? { answers: 0, mentioned: 0, recommended: 0, wins: 0 };
     e.answers++;
     for (const h of hits) {
       mentions.push({ response_id: a.id, brand_id: h.brandId, mentioned: h.mentioned, recommended: h.recommended });
       if (h.brandId === product.id) {
         if (h.mentioned) { e.mentioned++; promptsMentioned.add(a.prompt_id); }
         if (h.recommended) e.recommended++;
+        if (h.recommended && h.rank === 1) e.wins++; // kazanma: listede 1. sırada önerildi
       }
     }
     per.set(a.provider, e);
@@ -715,4 +716,121 @@ export function ownCitedRivals(answers: InsightAnswer[], mentions: InsightMentio
   out.rivals = [...counts].map(([id, count]) => ({ id, name: brands.find((b) => b.id === id)?.name ?? "?", count }))
     .sort((x, y) => y.count - x.count || x.name.localeCompare(y.name));
   return out;
+}
+
+// ---------------- Kazanma oranı (1 numara önerilme) ----------------
+// Bir cevapta markanın 1. sırada ÖNERİLMESİ "kazanma" sayılır. Oran = kazanılan cevap / tüm cevaplar.
+// Ek API çağrısı yok: mentions.rank ve recommended alanlarından hesaplanır.
+export interface WinRow { brandId: string; name: string; isTarget: boolean; wins: number; n: number; rate: number; low: number; high: number }
+export function winRates(
+  answers: { id: string; provider: string }[],
+  mentions: { response_id: string; brand_id: string; recommended: boolean; rank?: number | null }[],
+  brands: { id: string; name: string; isTarget: boolean }[],
+): { brands: WinRow[]; targetByEngine: { provider: string; wins: number; n: number; rate: number }[] } {
+  const ids = new Set(answers.map((a) => a.id));
+  const won = new Map<string, Set<string>>(); // brand -> kazandığı cevaplar
+  for (const m of mentions) {
+    if (!ids.has(m.response_id) || !m.recommended || m.rank !== 1) continue;
+    if (!won.has(m.brand_id)) won.set(m.brand_id, new Set());
+    won.get(m.brand_id)!.add(m.response_id);
+  }
+  const n = ids.size;
+  const rows = brands.map((b) => {
+    const wins = won.get(b.id)?.size ?? 0;
+    const w = wilson(wins, n);
+    return { brandId: b.id, name: b.name, isTarget: b.isTarget, wins, n, rate: n ? wins / n : 0, low: w.low, high: w.high };
+  }).sort((a, b) => b.wins - a.wins || Number(b.isTarget) - Number(a.isTarget));
+  const target = brands.find((b) => b.isTarget);
+  const byEng = new Map<string, { wins: number; n: number }>();
+  for (const a of answers) {
+    const e = byEng.get(a.provider) ?? { wins: 0, n: 0 };
+    e.n++;
+    if (target && won.get(target.id)?.has(a.id)) e.wins++;
+    byEng.set(a.provider, e);
+  }
+  const targetByEngine = [...byEng.entries()].map(([provider, e]) => ({ provider, ...e, rate: e.n ? e.wins / e.n : 0 }));
+  return { brands: rows, targetByEngine };
+}
+
+// ---------------- Yapay zekânın yaptığı aramalar (query fan-out) ----------------
+// Canlı aramalı motorların cevap verirken internette aradığı ifadeler (responses.search_queries).
+// Aynı ifade küçük/büyük harf ve boşluk farkıyla tekrar sayılmaz. searchedShare: arama yapılan cevap oranı.
+export interface FanoutRow { query: string; count: number; engines: string[] }
+export function fanoutQueries(
+  answers: { provider: string; search_queries?: string[] | null }[],
+  limit = 15,
+): { rows: FanoutRow[]; answers: number; searched: number; byEngine: { provider: string; answers: number; searched: number }[] } {
+  const map = new Map<string, { query: string; count: number; engines: Set<string> }>();
+  const eng = new Map<string, { answers: number; searched: number }>();
+  let searched = 0;
+  for (const a of answers) {
+    const qs = (a.search_queries ?? []).map((q) => q.trim()).filter((q) => q.length >= 2);
+    const e = eng.get(a.provider) ?? { answers: 0, searched: 0 };
+    e.answers++;
+    if (qs.length) { e.searched++; searched++; }
+    eng.set(a.provider, e);
+    const seen = new Set<string>();
+    for (const q of qs) {
+      const key = q.toLocaleLowerCase("tr-TR").replace(/\s+/g, " ");
+      if (seen.has(key)) continue; // aynı cevapta tekrar eden ifade bir kez sayılır
+      seen.add(key);
+      const row = map.get(key) ?? { query: q.replace(/\s+/g, " "), count: 0, engines: new Set<string>() };
+      row.count++;
+      row.engines.add(a.provider);
+      map.set(key, row);
+    }
+  }
+  const rows = [...map.values()].sort((a, b) => b.count - a.count || a.query.localeCompare(b.query))
+    .slice(0, limit).map((r) => ({ query: r.query, count: r.count, engines: [...r.engines].sort() }));
+  return { rows, answers: answers.length, searched, byEngine: [...eng.entries()].map(([provider, e]) => ({ provider, ...e })) };
+}
+
+// ---------------- Bu hafta yapılacaklar (öncelikli kısa liste) ----------------
+// Ölçümdeki gerçek veriden en fazla 5 iş: (1) kaybedilen soru → sayfa, (2) bizi anmayan kaynak → yer alma,
+// (3) yapay zekânın aradığı ifade → içerik, (4) anılıp önerilmeyen soru → kanıt, (5) motor farkı.
+// Yapay zekâ çağrısı yok; her iş verinin kendisini gösterir. Sıra: etkisi büyük olan önce.
+export interface TodoItem { kind: "lost_question" | "source" | "search_phrase" | "not_recommended" | "engine_gap"; title: string; detail: string; anchor: string }
+export function weeklyTodo(i: {
+  lang?: "tr" | "en";
+  prompts: { prompt_text: string; answers: number; target_mentioned: number; target_recommended: number; top_competitor: string | null; top_competitor_recs: number }[];
+  opportunities: { domain: string; count: number; own: boolean }[];
+  fanout?: { query: string; count: number }[];
+  engines?: { provider: string; rate: number; n: number }[]; // hedef markanın motor bazında önerilme oranı
+}, max = 5): TodoItem[] {
+  const en = i.lang === "en";
+  const out: TodoItem[] = [];
+  const measured = i.prompts.filter((p) => p.answers > 0);
+  const lost = measured.filter((p) => p.target_mentioned === 0).sort((a, b) => b.top_competitor_recs - a.top_competitor_recs);
+  if (lost[0]) {
+    const p = lost[0];
+    out.push({ kind: "lost_question", anchor: "soru-sonuclari",
+      title: en ? `Answer "${p.prompt_text}" on your site` : `"${p.prompt_text}" sorusunu sitenizde cevaplayın`,
+      detail: en ? `You weren't mentioned in any of ${p.answers} answers${p.top_competitor ? `; ${p.top_competitor} was recommended ${p.top_competitor_recs} times` : ""}. Publish a page or FAQ with a clear answer in the first paragraph.`
+        : `${p.answers} cevabın hiçbirinde anılmadınız${p.top_competitor ? `; ${p.top_competitor} ${p.top_competitor_recs} kez önerildi` : ""}. İlk paragrafta net cevap veren bir sayfa veya SSS yayınlayın.` });
+  }
+  const src = i.opportunities.filter((o) => !o.own)[0];
+  if (src) out.push({ kind: "source", anchor: "kaynaklar",
+    title: en ? `Get featured on ${src.domain}` : `${src.domain} sitesinde yer alın`,
+    detail: en ? `The AI cited this site ${src.count} times in answers that recommended a competitor but not you. Ask for inclusion in its list or review, or get a mention there.`
+      : `Yapay zekâ bu siteyi, rakibin önerilip sizin önerilmediğiniz cevaplarda ${src.count} kez kaynak gösterdi. Listesine veya incelemesine girmeyi deneyin.` });
+  const phrase = (i.fanout ?? [])[0];
+  if (phrase) out.push({ kind: "search_phrase", anchor: "yapay-zeka-aramalari",
+    title: en ? `Target the search "${phrase.query}"` : `"${phrase.query}" aramasını hedefleyin`,
+    detail: en ? `The AI searched this ${phrase.count} times before answering. Pages that rank for it are what it reads: write content for it or get listed on those pages.`
+      : `Yapay zekâ cevap vermeden önce bunu ${phrase.count} kez aradı. Bu aramada çıkan sayfaları okuyor: bu konuda içerik yazın ya da o sayfalarda yer alın.` });
+  const weak = measured.filter((p) => p.target_mentioned > 0 && p.target_recommended === 0).sort((a, b) => b.target_mentioned - a.target_mentioned)[0];
+  if (weak) out.push({ kind: "not_recommended", anchor: "soru-sonuclari",
+    title: en ? `Turn mentions into recommendations for "${weak.prompt_text}"` : `"${weak.prompt_text}" sorusunda anılmayı öneriye çevirin`,
+    detail: en ? `You were mentioned ${weak.target_mentioned} times but never recommended. Put the concrete reason to choose you (price, specialty, proof) on your site and profiles.`
+      : `${weak.target_mentioned} kez anıldınız ama hiç önerilmediniz. Sizi seçmek için somut nedeni (fiyat, uzmanlık, kanıt) sitenize ve profillerinize yazın.` });
+  const eng = (i.engines ?? []).filter((e) => e.n >= 5).sort((a, b) => a.rate - b.rate);
+  if (eng.length >= 2 && eng[eng.length - 1].rate - eng[0].rate >= 0.2) {
+    const lo = eng[0], hi = eng[eng.length - 1];
+    const name = (p: string) => (p === "openai" ? "ChatGPT" : p === "claude" ? "Claude" : p === "perplexity" ? "Perplexity" : p === "gemini" ? "Gemini" : p);
+    out.push({ kind: "engine_gap", anchor: "motor-karsilastirma",
+      title: en ? `Close the gap in ${name(lo.provider)}` : `${name(lo.provider)}'deki açığı kapatın`,
+      detail: en ? `${name(hi.provider)} recommends you in ${Math.round(hi.rate * 100)}% of answers, ${name(lo.provider)} in ${Math.round(lo.rate * 100)}%. Check which sources ${name(lo.provider)} cites instead.`
+        : `${name(hi.provider)} sizi cevapların %${Math.round(hi.rate * 100)}'inde öneriyor, ${name(lo.provider)} %${Math.round(lo.rate * 100)}'inde. ${name(lo.provider)}'nin bunun yerine hangi kaynaklara baktığına bakın.` });
+  }
+  return out.slice(0, max);
 }

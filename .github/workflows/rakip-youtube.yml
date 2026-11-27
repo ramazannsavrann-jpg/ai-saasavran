@@ -1,0 +1,37 @@
+# Rakip YouTube araştırması: rakip araçların videolarının açıklamalarını toplar, "rakip-veri" dalına yazar.
+# Yalnız okur; vidIQ kredisi harcamaz (kendi YouTube Data API yetkimiz). Haftalık piyasa raporu bu dosyayı okur.
+name: Rakip YouTube araştırması
+on:
+  push:
+    branches: [main]
+    paths: ["scripts/rakip-youtube.py", ".github/workflows/rakip-youtube.yml"]
+  schedule:
+    - cron: "17 3 * * 2"   # her salı 06:17 (Türkiye); piyasa raporu çarşamba
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency: rakip-youtube
+jobs:
+  topla:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Veri dalını hazırla (rakip-veri)
+        run: |
+          if git fetch --depth=1 origin rakip-veri:rakip-veri 2>/dev/null; then git worktree add rakip-data rakip-veri;
+          else git worktree add --orphan -b rakip-veri rakip-data; fi
+      - name: Videoları topla
+        env:
+          YT_CLIENT_ID: ${{ secrets.YT_CLIENT_ID }}
+          YT_CLIENT_SECRET: ${{ secrets.YT_CLIENT_SECRET }}
+          YT_REFRESH_TOKEN: ${{ secrets.YT_REFRESH_TOKEN }}
+          OUT_DIR: rakip-data
+        run: python3 scripts/rakip-youtube.py
+      - name: Kaydet
+        run: |
+          cd rakip-data
+          git add -A
+          if git -c user.name="rakip-arastirma" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" commit -q -m "Rakip YouTube $(date -u +%F) [skip ci]"; then
+            git push -q origin rakip-veri
+          fi

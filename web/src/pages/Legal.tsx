@@ -3,20 +3,20 @@ import { Link } from "react-router-dom";
 import { isEn } from "../lib/i18n";
 
 export const CONTACT_EMAIL = "info@aisaasavran.com";
-const UPDATED = "7 Kasım 2026";
-const UPDATED_EN = "7 November 2026";
+const UPDATED = "24 Kasım 2026";
+const UPDATED_EN = "24 November 2026";
 
 function DraftNotice() {
   if (isEn()) return (
     <aside className="notice notice-sim" role="note">
       <strong>Draft</strong>
-      <p>This text was written while the product is in early access and has not yet been reviewed by a lawyer. It will be reviewed before paid plans launch.</p>
+      <p>This text was written by the founder and has not yet been reviewed by a lawyer. If anything is unclear, email us and we will answer.</p>
     </aside>
   );
   return (
     <aside className="notice notice-sim" role="note">
       <strong>Taslak metin</strong>
-      <p>Bu metin ürün test aşamasındayken hazırlanmıştır ve henüz bir hukukçu tarafından incelenmemiştir. Ücretli hizmete geçmeden önce KVKK ve ilgili mevzuata göre gözden geçirilecektir.</p>
+      <p>Bu metin kurucu tarafından hazırlanmıştır ve henüz bir hukukçu tarafından incelenmemiştir. Anlaşılmayan bir yer olursa bize yazın, cevaplarız.</p>
     </aside>
   );
 }
@@ -43,7 +43,7 @@ export function Privacy() {
   return (
     <LegalShell title="Gizlilik politikası ve aydınlatma metni">
       <h2>Biz kimiz</h2>
-      <p>AI SaaSavran, markaların yapay zekâ asistanlarının cevaplarında ne kadar görünür olduğunu ölçen bir web uygulamasıdır. Bu metin, 6698 sayılı Kişisel Verilerin Korunması Kanunu (KVKK) kapsamında hangi verileri neden işlediğimizi açıklar. Sorularınız ve talepleriniz için: <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a></p>
+      <p>AI SaaSavran, markaların yapay zekâ asistanlarının cevaplarında ne kadar görünür olduğunu ölçen bir web ve mobil (Android) uygulamasıdır. Bu metin, 6698 sayılı Kişisel Verilerin Korunması Kanunu (KVKK) kapsamında hangi verileri neden işlediğimizi açıklar. Sorularınız ve talepleriniz için: <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a></p>
 
       <h2>Hangi verileri işliyoruz</h2>
       <ul className="plain">
@@ -68,9 +68,13 @@ export function Privacy() {
       <ul className="plain">
         <li><strong>Supabase</strong> (veritabanı ve giriş sistemi; sunucu: Frankfurt, Almanya).</li>
         <li><strong>Cloudflare</strong> (web sitesinin barındırılması, alan adı ve çerezsiz ziyaret sayımı).</li>
-        <li><strong>Google</strong> (Gemini yapay zekâ servisi ve Google ile giriş). Ölçüm yaparken yazdığınız sorular Gemini'ye gönderilir. Ücretsiz katmanı kullandığımız için <strong>Google bu içerikleri kendi ürünlerini geliştirmek için kullanabilir</strong>. Bu nedenle sorulara kişisel veri (ad, telefon, adres vb.) yazmayın.</li>
+        <li><strong>Google</strong> (Gemini yapay zekâ servisi ve Google ile giriş). Ölçüm yaparken yazdığınız sorular Gemini'ye gönderilir. Ücretsiz pakette ve ücretsiz kontrolde Gemini'nin ücretsiz katmanını kullandığımız için <strong>Google bu içerikleri kendi ürünlerini geliştirmek için kullanabilir</strong>. Ücretli paketlerdeki canlı aramalı Gemini ölçümleri Gemini'nin ücretli API'siyle yapılır ve Google'ın ücretli hizmet koşulları geçerlidir. Her durumda sorulara kişisel veri (ad, telefon, adres vb.) yazmayın.</li>
         <li><strong>OpenAI</strong> (ücretli paketlerde ChatGPT ile canlı web aramalı ölçüm).</li>
-        <li><strong>Paddle</strong> (ücretli paketlerde ödeme, fatura ve vergi; kart bilginizi biz görmeyiz).</li>
+        <li><strong>Anthropic</strong> (ücretli paketlerde Claude ile canlı web aramalı ölçüm).</li>
+        <li><strong>Perplexity</strong> (ücretli paketlerde Perplexity ile canlı web aramalı ölçüm).</li>
+        <li><strong>Paddle</strong> (sitede ücretli paketlerde ödeme, fatura ve vergi; kart bilginizi biz görmeyiz).</li>
+        <li><strong>Google Play</strong> (mobil uygulamada abonelik ve ek paket ödemesi; ödeme bilginizi biz görmeyiz, yalnız satın almanın geçerli olup olmadığını Google'dan doğrularız).</li>
+        <li><strong>Firebase Cloud Messaging</strong> (mobil uygulamada, izin verirseniz ölçüm bitince telefon bildirimi; telefonunuzun bildirim anahtarını saklarız, bildirimleri kapatınca ya da çıkış yapınca sileriz).</li>
         <li><strong>Resend</strong> (haftalık özet e-postasının gönderimi; hesap sayfanızdan ya da e-postadaki bağlantıyla kapatabilirsiniz).</li>
         <li><strong>GitHub</strong> (ölçümleri çalıştıran otomasyon altyapısı).</li>
       </ul>
@@ -114,7 +118,7 @@ export function Terms() {
       </ul>
 
       <h2>Ücretler, iptal ve iade</h2>
-      <p>Paketler ve fiyatlar ana sayfadaki fiyat bölümünde yazar: Free (0 $), Plus (aylık 29 $), Pro (aylık 149 $), Business (aylık 449 $).</p>
+      <p>Paketler ve fiyatlar ana sayfadaki fiyat bölümünde yazar: Free (0 $), Gümüş (aylık 130 $), Altın (aylık 250 $), Platin (aylık 400 $), Elmas (aylık 1500 $).</p>
       <ul className="plain">
         <li>Ücretli paketler aylık yenilenir. Siparişler, tüm siparişlerimizde yetkili satıcı (merchant of record) olan çevrim içi satıcımız Paddle.com üzerinden alınır; faturayı, vergileri ve ödeme sorularını Paddle düzenler.</li>
         <li>Aboneliğinizi istediğiniz zaman iptal edebilirsiniz; iptal, ödenmiş dönemin sonunda geçerli olur.</li>
@@ -125,7 +129,7 @@ export function Terms() {
       <p>Hizmet "olduğu gibi" sunulur. Ölçüm sonuçlarına dayanarak verdiğiniz iş kararlarından doğan dolaylı zararlardan, yürürlükteki mevzuatın izin verdiği ölçüde sorumlu değiliz.</p>
 
       <h2>Hesabın kapatılması</h2>
-      <p>Hesabınızı istediğiniz zaman kapatabilirsiniz (<a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>). Bu koşulları ağır şekilde ihlal eden hesapları kapatabiliriz.</p>
+      <p>Hesabınızı istediğiniz zaman Hesap sayfasındaki "Hesabı sil" ile ya da <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a> adresine yazarak kapatabilirsiniz (<a href="/tr/hesap-silme/">ayrıntılar</a>). Bu koşulları ağır şekilde ihlal eden hesapları kapatabiliriz.</p>
 
       <h2>Uygulanacak hukuk</h2>
       <p>Bu koşullar Türkiye Cumhuriyeti hukukuna tabidir.</p>
@@ -162,9 +166,13 @@ function PrivacyEn() {
       <ul className="plain">
         <li><strong>Supabase</strong>: database and sign-in (servers in Frankfurt, Germany).</li>
         <li><strong>Cloudflare</strong>: website hosting, domain and cookieless visit counting.</li>
-        <li><strong>Google</strong>: the Gemini AI service and Google sign-in. Your questions are sent to Gemini when measuring. Because we use Gemini's free tier, <strong>Google may use this content to improve its products</strong>, so don't put personal data (names, phone numbers, addresses) in your questions.</li>
+        <li><strong>Google</strong>: the Gemini AI service and Google sign-in. Your questions are sent to Gemini when measuring. The free plan and the free check use Gemini's free tier, so <strong>Google may use this content to improve its products</strong>. Live-search Gemini measurements on paid plans use Gemini's paid API under Google's paid-service terms. In all cases, don't put personal data (names, phone numbers, addresses) in your questions.</li>
         <li><strong>OpenAI</strong>: ChatGPT live web-search measurement on paid plans.</li>
-        <li><strong>Paddle</strong>: payments, invoicing and tax for paid plans. We never see your card details.</li>
+        <li><strong>Anthropic</strong>: Claude live web-search measurement on paid plans.</li>
+        <li><strong>Perplexity</strong>: Perplexity live web-search measurement on paid plans.</li>
+        <li><strong>Paddle</strong>: payments, invoicing and tax for paid plans on the website. We never see your card details.</li>
+        <li><strong>Google Play</strong>: subscription and extra-pack payments in the mobile app. We never see your payment details; we only verify with Google that the purchase is valid.</li>
+        <li><strong>Firebase Cloud Messaging</strong>: phone notifications in the mobile app when a measurement is done, if you allow them. We store your phone's notification token and delete it when you turn notifications off or sign out.</li>
         <li><strong>Resend</strong>: sending the weekly summary email (turn it off from your account page or with one click in the email).</li>
         <li><strong>GitHub</strong>: the automation that runs measurements.</li>
       </ul>
@@ -207,7 +215,7 @@ function TermsEn() {
       </ul>
 
       <h2>Fees, cancellation and refunds</h2>
-      <p>Plans and prices are listed in the pricing section of our home page: Free ($0), Plus ($29/month), Pro ($149/month), Business ($449/month).</p>
+      <p>Plans and prices are listed in the pricing section of our home page: Free ($0), Silver ($130/month), Gold ($250/month), Platinum ($400/month), Diamond ($1500/month).</p>
       <ul className="plain">
         <li>Paid plans renew monthly. Our order process is conducted by our online reseller Paddle.com, the merchant of record for all our orders, which handles invoices, sales tax and billing enquiries.</li>
         <li>You can cancel at any time; cancellation takes effect at the end of the period you've paid for.</li>
@@ -218,7 +226,7 @@ function TermsEn() {
       <p>The service is provided "as is". To the extent the law allows, we are not liable for indirect losses from business decisions based on measurement results.</p>
 
       <h2>Closing your account</h2>
-      <p>You can close your account at any time by emailing {CONTACT_EMAIL}. We may close accounts that seriously breach these terms.</p>
+      <p>You can close your account at any time with "Delete account" on the Account page or by emailing {CONTACT_EMAIL} (<a href="/delete-account/">details</a>). We may close accounts that seriously breach these terms.</p>
 
       <h2>Governing law</h2>
       <p>These terms are governed by the laws of the Republic of Turkey.</p>

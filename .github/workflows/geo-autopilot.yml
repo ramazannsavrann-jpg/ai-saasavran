@@ -1,5 +1,6 @@
 # GEO Otopilot: aisaasavran.com'un yapay zekâdaki (ChatGPT, Claude, Gemini) görünürlüğünü ölçer ve artırır.
-#  - Ayın 1, 11 ve 21'i (10 günde bir) + elle: TAM ölçüm (ücretli, çalıştırma başına en fazla 0,40 $)
+#  - Ücretli ölçüm KAPALI (20 Kasım 2026): kendi markamızı scripts/self-measure.ts ölçüyor (web/site/data/self.json).
+#    Ayın 1, 11 ve 21'i ve elle çalıştırma da ücretsiz kontrol yapar.
 #  - Site her yayınlandığında (CI bitince) ve bu dosya değişince: ÜCRETSİZ kontrol + değişen sayfaları Bing/Yandex'e bildirme (IndexNow)
 # Sonuçlar: "geo-veri" dalı (geçmiş), tam ölçümde bir GitHub Issue (rapor + yapılacaklar), çalıştırma Summary sayfası.
 name: GEO Otopilot
@@ -19,7 +20,7 @@ on:
     inputs:
       mode:
         description: "full = ölçüm dahil (ücretli), light = yalnız ücretsiz kontrol"
-        default: full
+        default: light
         type: choice
         options: [full, light]
 permissions:
@@ -43,7 +44,7 @@ jobs:
         run: |
           if [ "${{ github.event_name }}" = "workflow_run" ] || [ "${{ github.event_name }}" = "push" ]; then echo "mode=light" >> "$GITHUB_OUTPUT";
           elif [ "${{ github.event_name }}" = "workflow_dispatch" ]; then echo "mode=${{ inputs.mode }}" >> "$GITHUB_OUTPUT";
-          else echo "mode=full" >> "$GITHUB_OUTPUT"; fi
+          else echo "mode=light" >> "$GITHUB_OUTPUT"; fi  # ücretli ölçüm kapalı (20 Kasım 2026): self-measure.ts ölçüyor
           echo "date=$(date -u +%F)" >> "$GITHUB_OUTPUT"
       - name: Veri dalını hazırla (geo-veri)
         run: |
@@ -57,7 +58,8 @@ jobs:
           GEO_DETAIL_DIR: geo-detail
           GEO_CAP_USD: "0.40"
           # Ücretli API anahtarı: depo değişkeni ALLOW_PAID_API=false yapılırsa tüm ücretli çağrılar durur (tanımsızsa açık).
-          ALLOW_PAID_API: ${{ vars.ALLOW_PAID_API || 'true' }}
+          # 20 Kasım 2026: otopilotun ücretli ölçümü kapalı; kendi markamızı scripts/self-measure.ts ölçüyor (self.json)
+          ALLOW_PAID_API: "false"
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}

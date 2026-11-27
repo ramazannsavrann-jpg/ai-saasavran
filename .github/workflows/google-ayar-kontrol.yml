@@ -1,0 +1,21 @@
+name: Google ayar kontrolü (Firebase / Google Play)
+# Gizli değerleri yazdırmadan denetler: dosyalar doğru mu, erişim anahtarı alınabiliyor mu.
+on:
+  push:
+    paths: ["scripts/android/google-check.mjs", ".github/workflows/google-ayar-kontrol.yml"]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node scripts/android/google-check.mjs
+        env:
+          GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
+          GOOGLE_SERVICE_ACCOUNT: ${{ secrets.GOOGLE_SERVICE_ACCOUNT }}

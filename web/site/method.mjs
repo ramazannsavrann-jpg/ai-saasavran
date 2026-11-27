@@ -5,8 +5,8 @@
 
 // Her yerde aynı kullanılan tanım cümlesi
 export const DEF = {
-  en: "AI SaaSavran measures how often ChatGPT, Gemini, Claude and Perplexity mention and recommend brands and products, in what position they appear, and which sources they rely on.",
-  tr: "AI SaaSavran, markaların ve ürünlerin ChatGPT, Gemini, Claude ve Perplexity'de ne sıklıkla anıldığını, önerildiğini, kaçıncı sırada çıktığını ve hangi kaynaklara dayandığını ölçer.",
+  en: "AI SaaSavran measures how often ChatGPT, Gemini, Claude and Perplexity mention and recommend brands and products, their position, and which sources they rely on.",
+  tr: "AI SaaSavran, markaların ve ürünlerin ChatGPT, Gemini, Claude ve Perplexity'de ne sıklıkla anılıp önerildiğini, kaçıncı sırada çıktığını ve kaynaklarını ölçer.",
 };
 
 export const METHOD_PAGES = [
@@ -14,7 +14,7 @@ export const METHOD_PAGES = [
     key: "method", lang: "en", path: "/methodology/", alt: "/tr/metodoloji/",
     title: "Methodology: how AI SaaSavran measures AI visibility",
     short: "Methodology",
-    description: "How AI SaaSavran measures mention, recommendation, position and citation in ChatGPT, Gemini, Claude and Perplexity: questions, repetition, live search, confidence ranges, limits.",
+    description: "How AI SaaSavran measures mention, recommendation, position and citation in ChatGPT, Gemini, Claude and Perplexity: questions, repetition, live search, limits.",
     body: `
 <p class="lede">${DEF.en} This page explains exactly how: which questions are asked, how often, how each metric is calculated and where the limits are.</p>
 
@@ -24,26 +24,28 @@ export const METHOD_PAGES = [
 <h2>Question set</h2>
 <ul>
 <li>Questions are the ones your customers would ask: you write them or pick from suggestions. Each brand has its own set in Turkish or English, for a chosen country.</li>
-<li>Set size by plan: Free 15 questions, Plus 25, Pro and Business 30 per brand.</li>
+<li>Set size by plan: Free 15 questions, Silver 25, Gold, Platinum and Diamond 30 per brand.</li>
 <li>The set stays fixed between runs so results are comparable week to week. If you change questions, the trend restarts from that point.</li>
 </ul>
 
 <h2>Run model</h2>
 <ul>
-<li>Measurements run automatically once a week.</li>
+<li>Measurements run automatically once a week. On paid plans you can also start a full measurement any time with "Measure now".</li>
 <li>Free plan: Gemini, each question once, without live web search (4 runs a month).</li>
-<li>Paid plans: ChatGPT and Gemini ask each question twice per run, Claude and Perplexity once. ChatGPT, Claude and Perplexity use live web search.</li>
+<li>On paid plans the monthly query quota is split (question credits): 30% goes to a short automatic weekly measurement, 70% to full measurements you start. The short weekly measurement asks every question once to ChatGPT (with live web search). A full measurement has ChatGPT and Gemini ask each question twice, Claude and Perplexity once, all with live web search. All four engines use live web search. One credit is one question asked to one AI once.</li>
 <li>Answers are requested through the official APIs, without a logged-in user, so there is no personal history or personalisation.</li>
 </ul>
 
 <h2>Live web search vs. model knowledge</h2>
 <p>An answer with live web search reflects pages on the web today and comes with the sources used. An answer from model knowledge reflects the model's training data and has no sources. Both are useful, but they answer different questions, so every result is labelled with its type and they are never mixed in one number.</p>
+<p>For live-search answers we also record the search phrases the AI used before answering. The pages that rank for those phrases are the ones the AI reads.</p>
 
 <h2>Metric definitions</h2>
 <table><thead><tr><th>Metric</th><th>Definition</th></tr></thead><tbody>
 <tr><td>Mention rate</td><td>Share of answers in which the brand's name appears at least once. Whole-word matching only: Turkish suffixes ("Garanti'nin") and the brand's domain count; the start of another word ("Ada" in "Adalet") does not.</td></tr>
-<tr><td>Recommendation rate</td><td>Share of answers that recommend the brand. Counted when the brand appears in a list (numbered, bulleted or heading) without negative wording, or in the same sentence as a recommendation phrase. Plain-text mentions that could be either are sent to a small AI classifier.</td></tr>
-<tr><td>Position</td><td>In answers that recommend the brand, its place in the answer's list, counting untracked brands too. Reports show the best position per question.</td></tr>
+<tr><td>Recommendation rate</td><td>Share of answers that recommend the brand. Counted when the brand appears in a list (numbered, bulleted or heading) without negative wording, or in the same sentence as a recommendation phrase. Negative wording counts only in the part of the sentence that names the brand; items listed under a heading such as "brands to avoid", and the brand in "X instead of Y" (X), are not counted. Plain-text mentions that could be either are sent to a small AI classifier.</td></tr>
+<tr><td>Position</td><td>In answers that recommend the brand, its place in the answer's list, counting untracked brands too. If the answer has separate lists (e.g. "Budget" and "Premium"), the position is counted within the brand's own list. Reports show the best position per question.</td></tr>
+<tr><td>Win rate</td><td>Share of answers in which the brand is recommended in first place. Most people look at the first suggestion, so it is reported separately from recommendation rate.</td></tr>
 <tr><td>Citation rate</td><td>Share of answers whose source list includes the brand's own domain. Only meaningful with live web search. A source is a site the answer itself shows (citation or link); sites the engine searched but did not show are not counted. Perplexity answers usually show none, so they rarely add sources.</td></tr>
 <tr><td>Share of recommendations</td><td>The brand's recommendations divided by all recommendations of the tracked brands (you plus competitors).</td></tr>
 <tr><td>Owned-source share</td><td>Of all sources cited, the share that is your site, competitors' sites and third-party sites.</td></tr>
@@ -52,6 +54,8 @@ export const METHOD_PAGES = [
 <h2>Confidence ranges and sample size</h2>
 <p>AI assistants can answer the same question differently each time. Every rate comes with a 95% confidence range (Wilson interval), so 3 of 5 shows as roughly 23–88%, not as a precise 60%. Repeats of the same question tend to give the same answer, so they are not counted as independent: the range is widened according to the number of different questions behind it (in our own data, two repeats of a question agree about 85% of the time). When a result rests on fewer than 20 answers or fewer than 10 different questions, the report marks it as low confidence.</p>
 <p>When two brands are less than 10 points apart, or their ranges overlap, we call it a tie and do not rank one above the other.</p>
+<h2>Confidence score</h2>
+<p>Each report also shows a confidence score from 0 to 100. It tells you how solid the result is, not whether the brand is doing well. Half of it (up to 50 points) comes from sample size: how many different question × engine pairs were measured (full at 20) and how many answers were collected (full at 100). The other half (up to 50 points) comes from repeat consistency: when the same question is asked to the same engine more than once, how often the "recommended / not recommended" result stays the same. With fewer than 5 repeated questions this part is scaled down; with no repeats (the free plan asks each question once) it is 0. 70 and above is high, 40–69 medium, below 40 low. The report lists what lowered the score.</p>
 
 <h2>Product-level checks</h2>
 <ul>
@@ -76,8 +80,8 @@ export const METHOD_PAGES = [
 `,
     faq: [
       ["How does AI SaaSavran calculate recommendation rate?", "Recommendation rate is the share of answers that recommend the brand: it appears in a list without negative wording, or next to a recommendation phrase. Ambiguous plain-text mentions are checked by a small AI classifier."],
-      ["Does AI SaaSavran use live web search?", "Yes on paid plans: ChatGPT, Claude and Perplexity answer with live web search and their sources are recorded. The free plan uses Gemini without live search, labelled as model knowledge."],
-      ["How many times is each question asked?", "Once a week. On paid plans ChatGPT and Gemini ask each question twice per run, Claude and Perplexity once; on the free plan Gemini asks once."],
+      ["Does AI SaaSavran use live web search?", "Yes on paid plans: ChatGPT, Gemini, Claude and Perplexity answer with live web search and their sources are recorded. The free plan uses Gemini without live search, labelled as model knowledge."],
+      ["How many times is each question asked?", "On paid plans a short automatic measurement runs every week: each question is asked once to ChatGPT (with live web search). You also start full measurements any time with your question credits: ChatGPT and Gemini ask each question twice, Claude and Perplexity once, all with live web search. 30% of the monthly quota goes to the weekly measurement, 70% to question credits. On the free plan there is one measurement a month and Gemini asks each question once."],
     ],
   },
   {
@@ -94,26 +98,28 @@ export const METHOD_PAGES = [
 <h2>Soru seti</h2>
 <ul>
 <li>Sorular, müşterilerinizin soracağı sorulardır: siz yazarsınız ya da önerilerden seçersiniz. Her markanın seçilen ülke için Türkçe veya İngilizce kendi soru seti vardır.</li>
-<li>Paket başına soru sayısı: Ücretsiz 15, Plus 25, Pro ve Business marka başına 30.</li>
+<li>Paket başına soru sayısı: Ücretsiz 15, Gümüş 25, Altın, Platin ve Elmas marka başına 30.</li>
 <li>Sonuçlar haftadan haftaya karşılaştırılabilsin diye soru seti ölçümler arasında sabit kalır. Soruları değiştirirseniz eğilim o noktadan yeniden başlar.</li>
 </ul>
 
 <h2>Çalıştırma modeli</h2>
 <ul>
-<li>Ölçümler haftada bir otomatik çalışır.</li>
-<li>Ücretsiz paket: Gemini, her soru bir kez, canlı web araması olmadan (ayda 4 ölçüm).</li>
-<li>Ücretli paketler: her ölçümde ChatGPT ve Gemini her soruyu iki kez, Claude ve Perplexity bir kez sorar. ChatGPT, Claude ve Perplexity canlı web aramasıyla cevap verir.</li>
+<li>Ölçümler haftada bir otomatik çalışır. Ücretli paketlerde ayrıca istediğiniz zaman "Şimdi ölç" ile tam ölçüm başlatabilirsiniz.</li>
+<li>Ücretsiz paket: Gemini, her soru bir kez, canlı web araması olmadan (ayda 1 ölçüm).</li>
+<li>Ücretli paketlerde aylık sorgu kotası ikiye ayrılır (soru hakkı): %30'u haftalık otomatik kısa ölçüme, %70'i sizin başlattığınız tam ölçümlere. Haftalık kısa ölçümde tüm sorular ChatGPT'ye (canlı web aramasıyla) birer kez sorulur. Tam ölçümde ChatGPT ve Gemini her soruyu iki kez, Claude ve Perplexity bir kez sorar. Dört motor da canlı web aramasıyla cevap verir. 1 soru hakkı, bir sorunun bir yapay zekâya bir kez sorulmasıdır.</li>
 <li>Cevaplar resmî API'ler üzerinden, oturum açmış bir kullanıcı olmadan alınır; kişisel geçmiş veya kişiselleştirme yoktur.</li>
 </ul>
 
 <h2>Canlı web araması ve model bilgisi</h2>
 <p>Canlı web aramalı cevap bugünkü internet sayfalarını yansıtır ve kullanılan kaynaklarla gelir. Model bilgisine dayalı cevap modelin eğitim verisini yansıtır ve kaynak içermez. İkisi de faydalıdır ama farklı sorulara cevap verir; bu yüzden her sonuç türüyle etiketlenir ve ikisi asla tek bir sayıda karıştırılmaz.</p>
+<p>Canlı aramalı cevaplarda yapay zekânın cevap vermeden önce internette kullandığı arama ifadelerini de kaydederiz. Bu ifadelerde çıkan sayfalar yapay zekânın okuduğu sayfalardır.</p>
 
 <h2>Metrik tanımları</h2>
 <table><thead><tr><th>Metrik</th><th>Tanım</th></tr></thead><tbody>
 <tr><td>Anılma oranı</td><td>Markanın adının en az bir kez geçtiği cevapların oranı. Yalnız tam kelime eşleşmesi sayılır: Türkçe ekli hâli ("Garanti'nin") ve markanın alan adı sayılır; başka bir kelimenin başı ("Adalet" içindeki "Ada") sayılmaz.</td></tr>
-<tr><td>Önerilme oranı</td><td>Markayı öneren cevapların oranı. Marka olumsuz bir ifade olmadan bir listede (numaralı, madde işaretli veya başlık) geçiyorsa ya da bir öneri ifadesiyle aynı cümlede geçiyorsa sayılır. Öneri mi bilgi mi olduğu belirsiz düz metin anılmaları küçük bir yapay zekâ sınıflandırıcısına gider.</td></tr>
-<tr><td>Sıra</td><td>Markayı öneren cevaplarda, cevaptaki listede kaçıncı madde olduğu; takip edilmeyen markalar da sayılır. Raporda soru başına en iyi sıra gösterilir.</td></tr>
+<tr><td>Önerilme oranı</td><td>Markayı öneren cevapların oranı. Marka olumsuz bir ifade olmadan bir listede (numaralı, madde işaretli veya başlık) geçiyorsa ya da bir öneri ifadesiyle aynı cümlede geçiyorsa sayılır. Olumsuz ifade yalnız markanın geçtiği cümle parçasında dikkate alınır; "kaçınmanız gerekenler" gibi bir başlığın altındaki maddeler ve "X yerine Y" cümlesindeki X önerilmiş sayılmaz. Öneri mi bilgi mi olduğu belirsiz düz metin anılmaları küçük bir yapay zekâ sınıflandırıcısına gider.</td></tr>
+<tr><td>Sıra</td><td>Markayı öneren cevaplarda, cevaptaki listede kaçıncı madde olduğu; takip edilmeyen markalar da sayılır. Cevapta ayrı listeler varsa (ör. "Bütçe dostu" ve "Premium") sıra markanın kendi listesinde sayılır. Raporda soru başına en iyi sıra gösterilir.</td></tr>
+<tr><td>Kazanma oranı</td><td>Markanın ilk sırada önerildiği cevapların oranı. Çoğu kişi ilk öneriye baktığı için önerilme oranından ayrı raporlanır.</td></tr>
 <tr><td>Kaynak gösterilme oranı</td><td>Kaynak listesinde markanın kendi alan adının bulunduğu cevapların oranı. Yalnız canlı web aramasında anlamlıdır. Kaynak, cevabın kendisinin gösterdiği sitedir (alıntı ya da bağlantı); motorun aramada bulup cevapta göstermediği siteler sayılmaz. Perplexity cevapları çoğu zaman site göstermez, bu yüzden kaynak sayımına nadiren girer.</td></tr>
 <tr><td>Öneri payı</td><td>Markanın önerilerinin, takip edilen tüm markaların (siz + rakipler) önerilerine oranı.</td></tr>
 <tr><td>Kendi site payı</td><td>Kaynak gösterilen tüm siteler içinde sizin sitenizin, rakip sitelerin ve üçüncü taraf sitelerin payı.</td></tr>
@@ -122,6 +128,8 @@ export const METHOD_PAGES = [
 <h2>Güven aralığı ve örneklem</h2>
 <p>Yapay zekâ aynı soruya her seferinde farklı cevap verebilir. Her oran %95 güven aralığıyla (Wilson aralığı) gösterilir; yani 5'te 3, kesin bir %60 olarak değil, yaklaşık %23–88 olarak görünür. Aynı sorunun tekrarları çoğu zaman aynı cevabı verdiği için bağımsız sayılmaz: aralık, arkasındaki farklı soru sayısına göre genişletilir (kendi verimizde bir sorunun iki tekrarı yaklaşık %85 oranında aynı sonucu veriyor). Bir sonuç 20'den az cevaba ya da 10'dan az farklı soruya dayanıyorsa raporda düşük güven olarak işaretlenir.</p>
 <p>İki marka arasındaki fark 10 puandan azsa ya da aralıkları çakışıyorsa bunu "başa baş" sayarız ve birini diğerinin önüne koymayız.</p>
+<h2>Güven puanı</h2>
+<p>Her raporda 0–100 arası bir güven puanı da gösterilir. Puan, sonucun ne kadar sağlam olduğunu anlatır; markanın iyi ya da kötü olduğunu değil. Yarısı (en çok 50 puan) örneklemden gelir: kaç farklı soru × motor ölçüldüğü (20'de tam puan) ve kaç cevap toplandığı (100'de tam puan). Diğer yarısı (en çok 50 puan) tekrar tutarlılığıdır: aynı soru aynı motora birden çok kez sorulduğunda "önerildi / önerilmedi" sonucunun ne sıklıkla aynı kaldığı. 5'ten az soru tekrarlandıysa bu kısım orantılı azalır; hiç tekrar yoksa (ücretsiz paket her soruyu bir kez sorar) 0'dır. 70 ve üstü yüksek, 40–69 orta, altı düşük sayılır. Rapor, puanı neyin düşürdüğünü de yazar.</p>
 
 <h2>Ürün düzeyindeki kontroller</h2>
 <ul>
@@ -146,8 +154,8 @@ export const METHOD_PAGES = [
 `,
     faq: [
       ["AI SaaSavran önerilme oranını nasıl hesaplar?", "Önerilme oranı, markayı öneren cevapların oranıdır: marka olumsuz ifade olmadan bir listede veya bir öneri ifadesinin yanında geçer. Belirsiz düz metin anılmaları küçük bir yapay zekâ sınıflandırıcısıyla kontrol edilir."],
-      ["AI SaaSavran canlı web araması kullanıyor mu?", "Ücretli paketlerde evet: ChatGPT, Claude ve Perplexity canlı web aramasıyla cevap verir ve kaynakları kaydedilir. Ücretsiz paket Gemini'yi canlı arama olmadan kullanır ve bu model bilgisi olarak etiketlenir."],
-      ["Her soru kaç kez soruluyor?", "Haftada bir ölçüm yapılır. Ücretli paketlerde her ölçümde ChatGPT ve Gemini her soruyu iki kez, Claude ve Perplexity bir kez sorar; ücretsiz pakette Gemini bir kez sorar."],
+      ["AI SaaSavran canlı web araması kullanıyor mu?", "Ücretli paketlerde evet: ChatGPT, Gemini, Claude ve Perplexity canlı web aramasıyla cevap verir ve kaynakları kaydedilir. Ücretsiz paket Gemini'yi canlı arama olmadan kullanır ve bu model bilgisi olarak etiketlenir."],
+      ["Her soru kaç kez soruluyor?", "Ücretli paketlerde her hafta otomatik kısa ölçüm yapılır: her soru ChatGPT'ye (canlı web aramasıyla) birer kez sorulur. Ayrıca soru hakkınızla istediğiniz zaman tam ölçüm başlatırsınız: ChatGPT ve Gemini her soruyu iki kez, Claude ve Perplexity bir kez sorar. Aylık kotanın %30'u haftalık ölçüme, %70'i soru hakkına ayrılır. Ücretsiz pakette ayda bir ölçüm yapılır ve Gemini her soruyu bir kez sorar."],
     ],
   },
   {

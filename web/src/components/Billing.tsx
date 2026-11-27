@@ -1,12 +1,14 @@
 import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useApp } from "../lib/app";
+import { api } from "../lib/data";
 import { Button, ErrorBox } from "./ui";
 import { L, isEn } from "../lib/i18n";
-import { PLAN_INFO, billingSummary, openCheckout, openPortal, paymentsEnabled, planName, type BillingSummary, type PaidPlan } from "../lib/billing";
+import { PLAN_INFO, billingSummary, openCheckout, openPortal, paymentsEnabled, planName, purchasablePlans, PLAN_DATIVE, RECOMMENDED_PLAN, type BillingSummary, type PaidPlan } from "../lib/billing";
 
 const FEATURES: Record<PaidPlan, () => string> = {
-  starter: () => L("1 marka, 25 soru, 5 rakip. ChatGPT, Claude ve Perplexity canlı web araması + Gemini, her hafta.", "1 brand, 25 questions, 5 competitors. ChatGPT, Claude and Perplexity with live web search + Gemini, every week."),
+  starter: () => L("1 marka, 25 soru, 5 rakip. ChatGPT, Gemini, Claude ve Perplexity canlı web aramasıyla. Ayda 760 sorgu: %30 haftalık otomatik ölçüm, %70 istediğiniz zaman soru hakkı.", "1 brand, 25 questions, 5 competitors. ChatGPT, Gemini, Claude and Perplexity with live web search. 760 queries a month: 30% weekly automatic, 70% question credits any time."),
+  altin: () => L("3 marka, her biri 30 soru, marka başına 6 rakip. ChatGPT, Gemini, Claude ve Perplexity canlı web aramasıyla. Ayda 2.520 sorgu: %30 haftalık otomatik, %70 soru hakkı. Önerilen paket.", "3 brands, 30 questions each, 6 competitors per brand. ChatGPT, Gemini, Claude and Perplexity with live web search. 2,520 queries a month: 30% weekly automatic, 70% question credits. Recommended plan."),
   pro: () => L("5 marka, her biri 30 soru, marka başına 8 rakip.", "5 brands, 30 questions each, 8 competitors per brand."),
   agency: () => L("15 marka, her biri 30 soru, marka başına 10 rakip. Ajanslar için.", "15 brands, 30 questions each, 10 competitors per brand. For agencies."),
 };
@@ -22,7 +24,8 @@ export function BillingPanel() {
   const [notice, setNotice] = useState<string | null>(params.get("paid") ? L("Ödemeniz alındı. Paketiniz birkaç saniye içinde güncellenir.", "Payment received. Your plan updates within a few seconds.") : null);
   const autoOpened = useRef(false);
 
-  const refresh = async () => { if (current) setSum(await billingSummary(current.id)); };
+  const [source, setSource] = useState<string>("paddle");
+  const refresh = async () => { if (current) { setSum(await billingSummary(current.id)); setSource((await api.billingState(current.id).catch(() => null))?.billing_source ?? "paddle"); } };
   useEffect(() => { refresh(); }, [current?.id]);
 
   // Ödeme sonrası: bildirim gelene kadar kısa aralıklarla yenile
@@ -78,7 +81,7 @@ export function BillingPanel() {
         <h2>{L("Paketler", "Plans")}</h2>
         <div className="plan-pick">
           {(Object.keys(PLAN_INFO) as PaidPlan[]).map((p) => (
-            <div key={p} className={`plan-opt${p === "starter" ? " plan-opt-main" : ""}`}>
+            <div key={p} className={`plan-opt${p === RECOMMENDED_PLAN ? " plan-opt-main" : ""}`}>
               <h3>{PLAN_INFO[p].name} <span className="muted">${PLAN_INFO[p].price}{L("/ay", "/month")}</span></h3>
               <p className="muted">{FEATURES[p]()}</p>
             </div>
@@ -98,7 +101,12 @@ export function BillingPanel() {
       </p>
       {notice && <p className="success-box">{notice}</p>}
       <ErrorBox message={err} />
-      {subscribed ? (
+      {subscribed && source === "google_play" ? (
+        <div className="stack">
+          <p className="muted">{L("Aboneliğiniz mobil uygulamadan, Google Play üzerinden alındı. Paket değiştirmek ya da iptal etmek için uygulamada Hesap → Paketler ve ödeme bölümünü ya da Google Play'deki abonelikler sayfasını kullanın. İptal, ödenmiş dönemin sonunda geçerli olur.", "Your subscription was bought in the mobile app through Google Play. To change or cancel it, use Account → Plans and payment in the app or the subscriptions page in Google Play. Cancellation takes effect at the end of the paid period.")}</p>
+          <a className="btn btn-quiet" href="https://play.google.com/store/account/subscriptions?package=com.aisaasavran.app" target="_blank" rel="noreferrer">{L("Google Play aboneliklerini aç", "Open Google Play subscriptions")}</a>
+        </div>
+      ) : subscribed ? (
         <div className="stack">
           <p className="muted">{L("Paket değiştirmek, kart bilgisini güncellemek, fatura indirmek ya da iptal etmek için abonelik sayfasını açın. İptal, ödenmiş dönemin sonunda geçerli olur.", "Open the subscription page to change plans, update your card, download invoices or cancel. Cancellation takes effect at the end of the paid period.")}</p>
           <Button variant="quiet" busy={busy === "portal"} onClick={manage}>{L("Aboneliği yönet", "Manage subscription")}</Button>
@@ -107,11 +115,11 @@ export function BillingPanel() {
         <p className="muted">{L("Ücretli paketler yakında açılacak.", "Paid plans open soon.")}</p>
       ) : (
         <div className="plan-pick">
-          {(Object.keys(PLAN_INFO) as PaidPlan[]).map((p) => (
-            <div key={p} className={`plan-opt${p === "starter" ? " plan-opt-main" : ""}`}>
+          {purchasablePlans().map((p) => (
+            <div key={p} className={`plan-opt${p === RECOMMENDED_PLAN ? " plan-opt-main" : ""}`}>
               <h3>{PLAN_INFO[p].name} <span className="muted">${PLAN_INFO[p].price}{L("/ay", "/month")}</span></h3>
               <p className="muted">{FEATURES[p]()}</p>
-              <Button variant={p === "starter" ? "primary" : "quiet"} busy={busy === p} onClick={() => upgrade(p)}>{L(`${PLAN_INFO[p].name}'a geç`, `Upgrade to ${PLAN_INFO[p].name}`)}</Button>
+              <Button variant={p === RECOMMENDED_PLAN ? "primary" : "quiet"} busy={busy === p} onClick={() => upgrade(p)}>{L(`${PLAN_DATIVE[p]} geç`, `Upgrade to ${PLAN_INFO[p].name}`)}</Button>
             </div>
           ))}
           <p className="small muted">{L("Aylık ödeme, istediğiniz zaman iptal. İlk ödemeden sonraki 14 gün içinde tam iade. Ödemeler yetkili satıcımız Paddle üzerinden alınır.", "Monthly billing, cancel anytime. Full refund within 14 days of your first payment. Payments are processed by our reseller, Paddle.")}</p>

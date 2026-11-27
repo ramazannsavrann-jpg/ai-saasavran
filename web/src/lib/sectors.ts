@@ -7,6 +7,7 @@
 import type { Intent } from "./data";
 import { isEn } from "./i18n";
 import { QUESTION_POOL } from "./question-pool";
+import { EXTRA_POOL } from "./sector-pool-extra";
 
 export interface SectorDef {
   label: string;           // veritabanında saklanan değer (eski kayıtlarla uyumlu)
@@ -642,6 +643,13 @@ export const SECTOR_DEFS_EN: SectorDef[] = [
   { label: "Other", local: false, competitors: [], questions: [] },
 ];
 
+// Genişletilmiş soru havuzu (22 Kasım): ek sorular mevcut sorulardan sonra eklenir, aynı metin iki kez girmez.
+for (const def of [...SECTOR_DEFS, ...SECTOR_DEFS_EN]) {
+  const extra = EXTRA_POOL[def.label];
+  if (!extra) continue;
+  for (const q of extra) if (!def.questions.some((x) => x.text === q.text)) def.questions.push(q);
+}
+
 /** Seçim listesi arayüz diline göre; kayıtlı eski değerler iki listede de aranır. */
 /** Seçim listesi alfabetik (19 Kasım); "Diğer" türü genel seçenekler en sonda. */
 export const SECTORS = (isEn() ? SECTOR_DEFS_EN : SECTOR_DEFS).map((s) => s.label)
@@ -735,9 +743,28 @@ export function competitorSuggestions(sector: string | null, brandName: string, 
   return def.competitors.filter((c) => !taken.has(norm(c)) && !norm(brandName).includes(norm(c)) && !norm(c).includes(norm(brandName)));
 }
 
+// 20 Kasım denetimi: Google sorularının bir kısmı marka ölçümüne yaramaz (meslek, iş kurma, tanım, maaş).
+// Bu sorularda yapay zekâ hiçbir markayı önermez; ölçüm hakkı boşa gider. Fikir listesinden de çıkarılır.
+const OFF_TOPIC = /(nasıl olunur|nasil olunur|açmak|acmak|açılır|acilir|kim denetler|maaş|maas|ne kadar kazanır|kaç para kazan|bayilik|franchise|iş ilanı|ne iş yapar|hangi belgeler|ne demek|nedir\?$|arasındaki fark|podcast|how to (open|start|become)|salary|what does .* do|what is an? |difference between)/i;
+// Öneri isteyen kalıp: "en iyi / en kaliteli / hangisi / öner / tavsiye / best / recommend" → karşılaştırma sorusu sayılır
+// (kelime başında aranır: "Döner" içindeki "öner" öneri değildir)
+const RECOMMEND_ASK = /(^|[\s'"(])(en iyi|en kaliteli|en güvenilir|en uygun|hangisi|hangi marka|hangi firma|öner|tavsiye|best|top \d|recommend|which (brand|company)|vs\.?\s|mi daha iyi|mı daha iyi)/iu;
+/** Havuz sorusu marka görünürlüğü ölçmeye uygun mu; uygunsa amacı ("en iyi" içeren "bilgi" etiketli soru karşılaştırmadır). */
+export function classifyPoolQuestion(text: string, intent: string): Intent | null {
+  // "nedir?" tek başına tanım sorusudur; "en iyi ... nedir?" öneri sorusudur
+  if (RECOMMEND_ASK.test(text)) return intent === "purchase" || intent === "local" ? (intent as Intent) : "comparison";
+  if (OFF_TOPIC.test(text)) return null;
+  return intent as Intent;
+}
+
 /** Soru havuzu (19 Kasım): sektör için Google'da sorulan gerçek sorular (scripts/question-pool.ts ile toplanır). */
 export function poolQuestions(sector: string | null | undefined): { text: string; intent: Intent }[] {
-  return (sector ? QUESTION_POOL[sector] ?? [] : []).map((q) => ({ text: q.t, intent: q.i as Intent }));
+  const out: { text: string; intent: Intent }[] = [];
+  for (const q of sector ? QUESTION_POOL[sector] ?? [] : []) {
+    const intent = classifyPoolQuestion(q.t, q.i);
+    if (intent) out.push({ text: q.t, intent });
+  }
+  return out;
 }
 
 /** Marka sayfasındaki tüm hazır soru fikirleri: sektör + Google havuzu + genel + satın alma sonrası (tekrarsız). */

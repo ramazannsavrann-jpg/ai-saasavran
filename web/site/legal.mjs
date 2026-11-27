@@ -1,9 +1,9 @@
 // Statik yasal sayfalar (JavaScript'siz okunabilir; ödeme sağlayıcısı incelemesi için). Uygulamadaki Legal.tsx ile aynı içerik.
 const E = "info@aisaasavran.com";
 const mail = `<a href="mailto:${E}">${E}</a>`;
-const UPDATED_EN = "7 November 2026", UPDATED_TR = "7 Kasım 2026";
-const draftEn = `<p class="small"><b>Draft:</b> written during early access and not yet reviewed by a lawyer. It will be reviewed before paid plans launch.</p>`;
-const draftTr = `<p class="small"><b>Taslak:</b> erken erişim döneminde yazıldı, henüz bir avukat tarafından incelenmedi. Ücretli paketler açılmadan önce incelenecek.</p>`;
+const UPDATED_EN = "24 November 2026", UPDATED_TR = "24 Kasım 2026";
+const draftEn = `<p class="small"><b>Draft:</b> written by the founder and not yet reviewed by a lawyer. If anything is unclear, email us and we will answer.</p>`;
+const draftTr = `<p class="small"><b>Taslak:</b> kurucu tarafından yazıldı, henüz bir avukat tarafından incelenmedi. Anlaşılmayan bir yer olursa bize yazın, cevaplarız.</p>`;
 const wrap = (h1, updated, draft, body) => `<section class="article legal"><h1>${h1}</h1><p class="small">${updated}</p>${draft}${body}</section>`;
 
 export const LEGAL = {
@@ -18,19 +18,19 @@ export const LEGAL = {
 <ul><li>You are responsible for keeping your account secure.</li>
 <li>Don't put other people's personal data, illegal content or infringing content in your questions.</li>
 <li>Don't overload the service with automated tools, try to bypass security, or access other users' data.</li>
-<li>Measurements stop automatically when plan quotas are reached. The free plan includes 4 measurements a month.</li></ul>
+<li>Measurements stop automatically when plan quotas are reached. The free plan includes 1 measurement a month.</li></ul>
 <h2>Plans, payment and cancellation</h2>
-<p>Plans and prices are listed on our <a href="/#pricing">pricing section</a>: Free ($0), Plus ($29/month), Pro ($149/month), Business ($449/month). Paid plans renew monthly until cancelled. Our order process is conducted by our online reseller Paddle.com, which is the merchant of record for all our orders and handles invoices, sales tax, billing enquiries and returns. You can cancel at any time; cancellation takes effect at the end of the period you've paid for. See our <a href="/refund/">refund policy</a>.</p>
+<p>Plans and prices are listed on our <a href="/#pricing">pricing section</a>: Free ($0), Silver ($130/month), Gold ($250/month), Platinum ($400/month), Diamond ($1500/month). Paid plans renew monthly until cancelled. Our order process is conducted by our online reseller Paddle.com, which is the merchant of record for all our orders and handles invoices, sales tax, billing enquiries and returns. You can cancel at any time; cancellation takes effect at the end of the period you've paid for. See our <a href="/refund/">refund policy</a>.</p>
 <h2>Limitation of liability</h2>
 <p>The service is provided "as is". To the extent the law allows, we are not liable for indirect losses from business decisions based on measurement results.</p>
 <h2>Closing your account</h2>
-<p>You can close your account at any time by emailing ${mail}. We may close accounts that seriously breach these terms.</p>
+<p>You can close your account at any time with "Delete account" on the Account page or by emailing ${mail} (<a href="/delete-account/">details</a>). We may close accounts that seriously breach these terms.</p>
 <h2>Governing law</h2>
 <p>These terms are governed by the laws of the Republic of Turkey. Nothing in these terms limits the rights you have as a consumer under the law of your country.</p>`) },
 
   privacy: { lang: "en", path: "/privacy/", title: "Privacy policy | AI SaaSavran", description: "How AI SaaSavran processes your data.", body: wrap("Privacy policy", `Last updated: ${UPDATED_EN}`, draftEn, `
 <h2>Who we are</h2>
-<p>AI SaaSavran is a web app that measures how visible brands are in AI assistants' answers, operated by an individual founder based in Turkey. Questions and requests: ${mail}</p>
+<p>AI SaaSavran is a web app and mobile app (Android) that measures how visible brands are in AI assistants' answers, operated by an individual founder based in Turkey. Questions and requests: ${mail}</p>
 <h2>What we process</h2>
 <ul><li><b>Account data:</b> your email address and a hashed password; with Google sign-in, the name, email and picture link Google shares.</li>
 <li><b>Workspace content:</b> brand and competitor names, websites, sector, city and the questions you write.</li>
@@ -44,9 +44,13 @@ export const LEGAL = {
 <h2>Who we share it with</h2>
 <ul><li><b>Supabase</b>: database and sign-in (Frankfurt, Germany).</li>
 <li><b>Cloudflare</b>: hosting, domain, cookieless visit counting.</li>
-<li><b>Google</b>: Gemini AI and Google sign-in. Because we use Gemini's free tier for free-plan measurements, Google may use this content to improve its products, so don't put personal data in your questions.</li>
+<li><b>Google</b>: Gemini AI and Google sign-in. Because we use Gemini's free tier for free-plan measurements and the free check, Google may use this content to improve its products. Live-search Gemini measurements on paid plans use Gemini's paid API under Google's paid-service terms. Don't put personal data in your questions.</li>
 <li><b>OpenAI</b>: ChatGPT live web-search measurement.</li>
-<li><b>Paddle</b>: payments, invoicing and tax for paid plans.</li>
+<li><b>Anthropic</b>: Claude live web-search measurement on paid plans.</li>
+<li><b>Perplexity</b>: Perplexity live web-search measurement on paid plans.</li>
+<li><b>Paddle</b>: payments, invoicing and tax for paid plans on the website.</li>
+<li><b>Google Play</b>: subscription and extra-pack payments in the mobile app. We never see your payment details; we only verify with Google that the purchase is valid.</li>
+<li><b>Firebase Cloud Messaging</b>: phone notifications in the mobile app when a measurement is done, if you allow them. We store your phone's notification token and delete it when you turn notifications off or sign out.</li>
 <li><b>Resend</b>: sending the weekly summary email (you can turn it off from your account page or with one click in the email).</li>
 <li><b>GitHub</b>: the automation that runs measurements.</li></ul>
 <p>We don't sell your data or share it for advertising.</p>

@@ -11,7 +11,7 @@ export const TOOLS = [
   {
     name: "get_brand_report",
     title: "Get AI visibility report",
-    description: "Get the latest AI visibility report for one brand: how often ChatGPT, Claude and Gemini mention and recommend it versus competitors, trend over time, per-question results and the websites the AI cited.",
+    description: "Get the latest AI visibility report for one brand: how often ChatGPT, Claude, Perplexity and Gemini mention and recommend it versus competitors, trend over time, a 0–100 confidence score, per-question results and the websites the AI cited.",
     inputSchema: { type: "object", properties: { brand_id: { type: "string", description: "Brand id from list_brands" } }, required: ["brand_id"], additionalProperties: false },
     annotations: { readOnlyHint: true },
   },

@@ -1,4 +1,6 @@
 // Geliştirici API'si ve MCP için ortak yardımcılar: anahtar doğrulama ve veri çağrıları (service role, sunucu tarafı).
+import { confidenceScore } from "../../engine/src/metrics.ts";
+
 export const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 export const KEY = /^aisv_[0-9a-f]{64}$/;
 
@@ -31,12 +33,19 @@ export async function authenticate(request, env) {
 
 const ERR_TEXT = {
   invalid_key: "Invalid or revoked API key. Create one in AI SaaSavran → Account → API & MCP.",
-  plan: "API and MCP access needs the Pro or Business plan.",
+  plan: "API and MCP access needs the Platinum or Diamond plan.",
   rate_limit: "Daily limit reached (1000 requests per key).",
   unavailable: "Service unavailable.",
   not_found: "Brand not found in this workspace.",
 };
 export const errorText = (e) => ERR_TEXT[e] ?? e;
+
+/** Güven puanı çıktısı: girdiler yoksa null. reasons: few_questions, few_answers, no_repeats, few_repeats, inconsistent */
+function confidenceOut(rows) {
+  const c = Array.isArray(rows) && rows.length ? confidenceScore(rows) : null;
+  return c ? { score: c.score, level: c.level, answers: c.answers, question_engine_pairs: c.clusters, repeat_groups: c.repeatGroups,
+    repeat_consistency: c.consistency == null ? null : +c.consistency.toFixed(3), reasons: c.reasons } : null;
+}
 
 /** Rapor verisinden kısa özet (ajanların okuması kolay olsun diye). */
 export function summarize(rep) {
@@ -56,6 +65,8 @@ export function summarize(rep) {
       .sort((a, b) => b.recommend_rate - a.recommend_rate);
     out.measurements[t] = {
       latest_at: last[0].run_at, engines: [...new Set(last.map((r) => r.provider))], runs_available: runs.length,
+      // Güven puanı (0–100): örneklem + tekrar tutarlılığı; panel ve paylaşılan raporla aynı formül
+      confidence: confidenceOut(rep.confidence?.[t]),
       brands,
       history: runs.map((id) => {
         const rs = rows.filter((r) => r.run_id === id && r.is_target);
@@ -66,6 +77,6 @@ export function summarize(rep) {
   }
   out.questions = rep.questions ?? [];
   out.sources = rep.sources ?? [];
-  out.note = "Measured through the AI platforms' official APIs; consumer app answers can differ. Rates are counts over answers; small samples are uncertain.";
+  out.note = "Measured through the AI platforms' official APIs; consumer app answers can differ. Rates are counts over answers; small samples are uncertain. confidence.score (0–100) says how solid the result is (sample size + repeat consistency), not how well the brand is doing.";
   return out;
 }

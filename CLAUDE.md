@@ -18,7 +18,7 @@ Güncel durum: `docs/STATUS.md` · Mimari: `docs/ARCHITECTURE.md` · Fiyat: `doc
 
 ## Değişmez kurallar
 - API anahtarları yalnız GitHub Secrets'ta. Sohbete, koda, commit'e asla yazılmaz.
-- `ALLOW_PAID_API=true` olmadan ücretli API çağrılmaz. Google faturalandırması kapalı kalır.
+- `ALLOW_PAID_API=true` olmadan ücretli API çağrılmaz. Google faturalandırması kapalı kalır; tek istisna (24 Kasım, sahip onayı): ayrı "aisaasavran-canli" projesi, önden ödemeli (250 TL yüklendi), aylık 5 $ harcama sınırı, otomatik yükleme kapalı, anahtar `GEMINI_CANLI_API_KEY`. Canlı aramalı Gemini için kullanılır; 24 Kasım'dan beri varsayılan canlı sırada (müşteri ve Growth Lab ölçümleri dahil; sınır dolarsa Gemini çağrıları düşer, diğer motorlar devam eder); site, ücretsiz kontrol ve ses üretimi ücretsiz `GEMINI_API_KEY` ile kalır.
 - Uydurma veri asla gerçek gibi gösterilmez; simüle sonuç yalnız Demo Lab'de, "SİMÜLASYON" etiketiyle.
 - İletişim adresi `info@aisaasavran.com`. Kişisel e-posta kodda/sitede yer almaz.
 - Şirket kurma, ödeme, başvuru: sahibinin onayı olmadan yapılmaz. Kimlik/banka bilgisi istenmez.
@@ -34,6 +34,12 @@ engine/src/          Ölçüm motoru (pipeline, metrics, usage, report, pricing,
 engine/src/providers Sağlayıcı adaptörleri: gemini, openai, claude, perplexity, simulated, mock
 supabase/migrations  0001–00NN sırayla; yeni değişiklik = yeni dosya, eskisi düzenlenmez
 web/                 Arayüz (Vite + React + Supabase JS), mobil öncelikli; web/site = statik site, blog, eğitimler
+web/src/mobile       Mobil uygulama ekranları (Capacitor, Android: web/android); veri katmanı web/src/lib ile ortak.
+                     Uygulamada Paddle yok (Google Play / App Store ödemesi); uygulama fiyatı sitedekiyle aynı (TL: kurdan, sonu 9),
+                     Elmas yalnız sitede; ek sorgu paketi yalnız hakkını bitiren abonelere. Ana sayfada ve bildirimlerde
+                     rakip dili yok; uygulama müşterinin kendi sonuçlarına odaklanır (23 Kasım kararları)
+                     Mobil ekran tasarımından önce taste-skill okunur (.claude/skills/taste-skill:
+                     SKILL.md + references/copy-tells.md): "yapay zekâ yapmış gibi" görünmesin (23 Kasım)
 functions/api/       Cloudflare Pages Functions (check, report, paddle, mcp, v1 API…)
 scripts/             İşçi, testler, gizli bilgi taraması, smoke testleri, geo-autopilot
 e2e/                 Playwright mobil uçtan uca testler
@@ -53,6 +59,16 @@ npm run pricing         # paket maliyet tablosu
 - Her iş ayrı dalda, test geçince PR. Sonunda gerçek durum raporu ver (ne çalıştı, ne denenmedi).
 - Veritabanı değişikliklerini sahibine yaptırma; migration veya araçla kendin uygula.
 - Önemli değişiklikte `docs/STATUS.md`'yi güncelle.
+
+## İki Claude hesabı çalışma kuralı (20 Kasım)
+Aynı işi iki hesap yapar; biri limite takılınca diğeri kaldığı yerden devam eder. Çıktı tek kalem görünmeli.
+- Her hesap işe başlamadan bu dosyayı ve `video/README.md`'yi okur. Kural değişirse önce bu dosya güncellenir.
+- İş kaydı: `docs/KAYIT.md`. İşe başlamadan tek satır yazılır: `kod | hesap | durum | tarih` (ör. `EN-S-001 | hesap-A | devam | 2026-11-20`). Satır yoksa iş alınmamıştır; aynı kod iki hesapta aynı anda açık olmaz.
+- Limit dolan hesap satırı "devam" durumunda bırakır; diğer hesap aynı kodu o satırdan alır, durumunu günceller.
+- Şablon ve ayar dosyaları (`video/sablon/`, ses ayarı, `make.py`, müzik) tek sürümdür. Değişiklik PR ile yapılır; diğer hesap yalnız okur.
+- Yayın tek sırayla yapılır. Instagram 3'lü set sırası (TR Reels → EN Reels → ayrı gönderi) korunur. Yüklemeyi kaydı yazan hesap yapar.
+- "Bitti" denmesi için dosya teslim edilmiş ve `docs/KAYIT.md`'de işlenmiş olmalı. Yarım iş bitmiş sayılmaz.
+- Yayın, ücretli API ve veritabanı veya ayar değişiklikleri sahibin onayıyla yapılır.
 
 ## Her özellik / karar / düzeltmeden sonra kontrol listesi (sorulmasa da yapılır)
 Bir özellik eklenince, değişince, kaldırılınca ya da yeni bir karar alınınca PR'dan önce:
@@ -80,10 +96,28 @@ PR açıklamasında bu kontrollerden neyin değiştiğini kısaca yaz.
 - Görünürlük Endeksi (`web/site/visibility-index.mjs`) aynı veriden üretilir; yeni sektörde soru eklenince `SECTORS` listesine anahtar kelime ekle (sektörsüz soru endekse girmez).
 
 ## Video ve sosyal medya
+- **KANAL KURALI (20 Kasım, her oturum/hesap/sohbet için zorunlu; eski "iki dilli YouTube" kurallarının yerine geçer):**
+  İngilizce video/Shorts YALNIZ **AI SaaSavran EN** kanalına (@AISaaSavranEN, `UCJ3mA2nPzsinfO9MgccFtdA`);
+  Türkçe video/Shorts YALNIZ **AI SaaSavran** kanalına (@AISaaSavran, `UCHL4sdkEenxkpuP4_Hq1RZw`) yüklenir.
+  Başlık, açıklama, etiket ve hashtag her kanalda yalnız o kanalın dilinde (iki dilli metin yok); oynatma
+  listeleri de kendi kanalında ve kendi dilinde. EN kanalında Türkiye/Türkçe adlı liste açılmaz.
+  Eğitim (Eğitim/Tutorial) videoları EN kanalına yüklenmez; TR kanalında liste dışı kalır, yalnız siteden izlenir.
+  İstisna (20 Kasım, sahibinin kararı): İngilizce eğitim videoları da TR kanalında liste dışı durur (sitedeki /tutorials/ oynatıcıları için); seri 10 ders.
+  Her yüklemede: çocuklara yönelik değil, ücretli tanıtım yok, yapay içerik işareti, video dili, kurala uygun kapak.
+  Yükleme (21 Kasım): iki kanal da GitHub Actions `youtube-yukle` ile (iş dosyası `yt/yukle/<ad>-<dil>.json`, ayrıntı `yt/yukle/README.md`); vidIQ yalnız TR kanalı için yedek.
+- **Açıklama yapısı (20 Kasım, yeni videolar):** her YouTube açıklaması kanalın dilinde şu sırayla yazılır: 1–2 cümlelik
+  doğrudan cevap (videonun ana bulgusu, gerçek sayıyla) → "Öne çıkanlar" (3–5 madde) → "Bu video hangi sorulara cevap veriyor"
+  (2–4 soru + tek cümlelik cevap) → "Bölümler" (zaman damgalı, uzun videolarda) → bağımsızlık satırı ve ölçüm tarihi.
+  Yapay zekâ bu yapıyı kolay alıntılıyor (rakip kanallarda da böyle). Uydurma sayı yok; sayılar ölçüm verisinden.
 - **KESİN KURAL (19 Kasım):** Seslendirmede site adresi/adı hiç söylenmez ("Site adresimiz…", "Ey Ay Saa Savran nokta com", "aisaasavran.com" yok). Ekranda yazıyor. Kapanış "Ücretsiz kontrol edin." / "Check it free." ile biter.
 - Video kurulumu ve şablonlar: `seslendirme` dalında `video/README.md` + `video/sablon/`.
+- **REMOTION STANDARDI (24 Kasım, sahibin kararı, kalıcı):** tüm yeni veri Shorts'ları `seslendirme` dalındaki `video/remotion/` ortak şablonuyla (TR+EN) çizilir: `bash video/remotion/uret.sh <konu> <dil> [kart]` → video, altyazısız kapak, Instagram karuseli. Sahneler seslendirme cümlelerine bağlı, kelime kelime altyazı, söylenen anda vurgu. Ayrıntı: `video/README.md` "REMOTION STANDARDI". Ekran yazımı dosyası `video/yazi-<ad>.txt` (adı `narration-` ile başlamaz; yoksa ses hattı onu da seslendirir). Eski `make.py` yalnız eski videolar için.
+- Dış skill'ler (23 Kasım, güvenlik taraması temiz): `.claude/skills/remotion-*` (Remotion'ın resmi `remotion-dev/skills`, commit 89c8afa; Remotion ile video/animasyon yapılırken önce `remotion-best-practices` okunur; lisans ≤3 çalışanlı şirkete ücretsiz) ve `.claude/skills/taste-skill` (`Leonxlnx/taste-skill`, commit 6c0b5c7, MIT; site/mobil uygulama arayüz tasarımı). Yeni dış skill eklemeden önce aynı tarama yapılır (kurulumda çalışan script, ağ çağrısı/telemetri, gizli talimat, lisans). Kullanılmaz: `anything2explainer` (ticari kullanım yasak lisans); `effectcraft-app/effectcraft` (zararlı sahte kopya, gerçeği `storytold/effectcraft`).
 - Paylaşım kuralları (Instagram 3'lü set: TR Reels → EN Reels → ayrı gönderi; YouTube oynatma listeleri,
   açıklama metinleri): aynı dosyada "PAYLAŞIM KURALLARI" bölümü. Yeni video işinden önce oku.
+- ZORUNLU (19 Kasım): YouTube/Instagram paylaşımından önce README'deki "PAYLAŞMADAN ÖNCE KONTROL LİSTESİ"
+  uygulanır ve "PAYLAŞIM KAYDI"na bakılır; paylaşımdan sonra kayıt güncellenir. "Eksik/yok" demeden önce
+  gerçek profil/kanal dahil iki kaynakla doğrulanır.
 - Shorts/Reels düzeni (15 Kasım, bundan sonraki videolar): kanca → **marka kartı** (ölçülen gerçek adlar
   ortada, büyük etiketler) → sonuçlar. Shorts arayüzünün kapattığı yerlere (üst 160 px, y>1400, y>1000 iken
   x>900) hiçbir sahnede yazı/grafik konmaz. Ayrıntı: README'de "MARKA KARTI + GÜVENLİ ALAN".
