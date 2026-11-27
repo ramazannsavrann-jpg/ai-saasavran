@@ -126,3 +126,28 @@ test("Yeni yanlış bilgi: daha önce görülmüş (büyük/küçük harf farkı
   assert.ok(m.html.includes("Kafe &lt;Mavi&gt;"));
   assert.match(buildWrongInfoEmail("en", { id: "B", name: "X" }, [{ ...nw[0], provider: "claude" }], "https://a", "t").subject, /new wrong information/);
 });
+
+test("TruthGuard v2: eski bilgi durumu, konu etiketi; öznel yorum istemde dışarıda", async () => {
+  const { buildTruthPrompt, parseTruth, truthSummary, truthByBrand } = await import("../src/truth.ts");
+  const p = buildTruthPrompt({ brand: "Samsung", factCard: "Güncel amiral gemisi: Galaxy S26 serisi.", answer: "x" });
+  assert.ok(p.includes('"outdated"') && p.includes('"topic"') && p.includes("Ignore opinions"));
+  const ans = "Şu an en yeni Samsung telefon Galaxy S24 Ultra. Samsung 7 yıl güncelleme veriyor.";
+  const out = parseTruth(JSON.stringify({ claims: [
+    { claim: "En yeni model S24 Ultra", status: "outdated", topic: "lineup", fact: "Güncel: Galaxy S26 serisi", quote: "en yeni Samsung telefon Galaxy S24 Ultra" },
+    { claim: "7 yıl güncelleme", status: "unverifiable", topic: "support", fact: "bir şey", quote: "Samsung 7 yıl güncelleme veriyor" },
+    { claim: "Kamera iyi", status: "correct", topic: "uydurma-konu", fact: "x", quote: "Galaxy S24 Ultra" },
+  ] }), ans)!;
+  assert.deepEqual(out.map((c) => [c.status, c.topic]), [["outdated", "lineup"], ["unverifiable", "support"], ["correct", "other"]]);
+  assert.equal(out[1].fact, "", "doğrulanamayan iddiada 'doğrusu' gösterilmez");
+  const row = (brand: string, claims: typeof out) => ({ brand, provider: "gemini", created_at: "2026-11-27", failed: false, claims });
+  const s = truthSummary([row("Samsung", out)]);
+  assert.deepEqual([s.outdated, s.correct, s.unverifiable, s.outdatedClaims.length], [1, 1, 1, 1]);
+  assert.deepEqual(s.gaps, [{ topic: "support", count: 1 }]);
+  // Eski kayıtlar (konu etiketi yok) "other" sayılır; bilinmeyen durum sayımı bozmaz
+  const old = truthSummary([row("X", [{ claim: "a", status: "unverifiable", fact: "", quote: "q" }, { claim: "b", status: "maybe" as never, fact: "", quote: "q" }])]);
+  assert.deepEqual([old.unverifiable, old.gaps[0].topic], [1, "other"]);
+  // Marka karşılaştırması: 5'ten az kontrol edilebilir iddiada oran yok; en çok yanlış/eski olan üstte
+  const c = (status: "correct" | "wrong" | "outdated") => ({ claim: status + Math.random(), status, fact: "f", quote: "q" });
+  const res = truthByBrand([row("Apple", [c("correct"), c("correct"), c("correct"), c("correct"), c("wrong")]), row("Samsung", [c("outdated"), c("outdated"), c("correct")])]);
+  assert.deepEqual(res.map((r) => [r.brand, r.accuracy]), [["Samsung", null], ["Apple", 0.8]]);
+});

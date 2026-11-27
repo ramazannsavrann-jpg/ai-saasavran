@@ -84,7 +84,7 @@ function AccuracyBody({ brand }: { brand: Brand }) {
   if (checks.error || confl.error || live.error) return <LoadError retry={() => { checks.reload(); confl.reload(); live.retry(); }} />;
   if (!checks.data || !confl.data || live.loading) return <Spinner />;
   const s = truthSummary(checks.data ?? []);
-  const total = s.correct + s.wrong + s.unverifiable;
+  const total = s.correct + s.wrong + s.outdated + s.unverifiable;
   const okConfl = (confl.data ?? []).filter((c) => !c.failed);
   const conflicts = okConfl.flatMap((c) => c.conflicts).slice(0, 6);
   const per = live.answers.length ? perceptionSummary(live.answers, live.ments, brand.id) : null;
@@ -108,7 +108,7 @@ function AccuracyBody({ brand }: { brand: Brand }) {
               <Note>{L(`Son 30 gün: ${s.checks} cevap karşılaştırıldı, işletmeniz hakkında ${total} iddia bulundu.`, `Last 30 days: ${s.checks} answers checked, ${total} claims about your business.`)}</Note>
               {total > 0 && (
                 <div className="stats3">
-                  <div><b className={s.wrong ? "bad" : ""}>{s.wrong}</b><span>{L("Yanlış", "Wrong")}</span></div>
+                  <div><b className={s.wrong + s.outdated ? "bad" : ""}>{s.wrong + s.outdated}</b><span>{L("Yanlış / eski", "Wrong / outdated")}</span></div>
                   <div><b>{s.correct}</b><span>{L("Doğru", "Correct")}</span></div>
                   <div><b>{s.unverifiable}</b><span>{L("Bilgilerinizde yok", "Not in your facts")}</span></div>
                 </div>
@@ -117,6 +117,13 @@ function AccuracyBody({ brand }: { brand: Brand }) {
                 <article key={w.claim + w.at} className="card" style={{ display: "flex", flexDirection: "column", gap: 8 }}>
                   <div style={{ display: "flex", justifyContent: "space-between", gap: 8 }}><b>{w.claim}</b><span className="muted small">{providerLabel(w.provider)}</span></div>
                   <span className="small">{L("Doğrusu: ", "Correct: ")}{w.fact || "–"}</span>
+                  <Quote text={w.quote} />
+                </article>
+              ))}
+              {s.outdatedClaims.slice(0, 6).map((w) => (
+                <article key={"o" + w.claim + w.at} className="card" style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", gap: 8 }}><b>{w.claim}</b><span className="muted small">{L("Eski bilgi", "Outdated")} · {providerLabel(w.provider)}</span></div>
+                  <span className="small">{L("Güncel olan: ", "Current: ")}{w.fact || "–"}</span>
                   <Quote text={w.quote} />
                 </article>
               ))}

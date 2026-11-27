@@ -4,7 +4,8 @@
 //
 // Hata sınıfına göre davranış:
 //   transient            → en fazla 2 tekrar; yine olmazsa o soru atlanır. Arka arkaya 3 soru düşerse durulur.
-//   quota_exceeded       → durulur (ücretsiz katmanda ücretliye GEÇİLMEZ)
+//   quota_exceeded       → durulur (ücretsiz katmanda ücretliye GEÇİLMEZ). İstisna: dakikalık oran sınırı (retryAfterMs)
+//                          → söylenen süre beklenip aynı çağrı tekrar denenir; görev başına en fazla 4 bekleme.
 //   unsupported_feature  → durulur (ör. ücretsiz katmanda arama)
 //   auth_error           → durulur
 //   model_not_found      → durulur
@@ -82,6 +83,7 @@ export async function runPrompts(opts: {
 
   let done = 0;
   let consecutiveFailures = 0;
+  let rateWaits = 0; // dakikalık sınır beklemeleri (görev başına sabit üst sınır)
   for (const p of prompts) {
     for (let r = 1; r <= repetitions; r++, done++) {
       const key = ResponseCache.key(cfg.provider, cfg.model, p.text, r, day);
@@ -106,6 +108,11 @@ export async function runPrompts(opts: {
           break;
         } catch (e) {
           const err = e instanceof ProviderError ? e : new ProviderError(String(e), { kind: "invalid_request" });
+          if (err.kind === "quota_exceeded" && err.retryAfterMs && rateWaits < 4) {
+            rateWaits++;
+            await sleep(err.retryAfterMs);
+            continue;
+          }
           if (err.kind === "transient" && attempt < maxRetries) {
             attempt++;
             await sleep(1000 * 2 ** attempt);

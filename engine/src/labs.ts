@@ -96,6 +96,10 @@ export const VIDEO_TOPICS: { brand: { name: string; aliases: string[]; website: 
       { name: "Xiaomi", aliases: ["Redmi", "Poco"], website: "mi.com" },
       { name: "Huawei", aliases: [], website: "huawei.com" },
       { name: "Oppo", aliases: [], website: "oppo.com" },
+      // 27 Kasım: cevaplarda sık 1. sırada çıkıp takip edilmeyenler (Google güncelleme sorusunda, Asus ROG oyun/pil sorularında)
+      { name: "Google", aliases: ["Google Pixel", "Pixel"], website: "store.google.com" },
+      { name: "Vivo", aliases: [], website: "vivo.com" },
+      { name: "Asus", aliases: ["ASUS", "ROG Phone", "Zenfone"], website: "asus.com" },
     ],
     prompts: [
       ["Fiyat performans olarak en iyi akıllı telefon hangisi?", "comparison"],
@@ -166,10 +170,15 @@ type Comp = string | { name: string; aliases?: string[]; website?: string };
 const compOf = (c: Comp) => (typeof c === "string" ? { name: c, aliases: [] as string[], website: undefined as string | undefined } : { name: c.name, aliases: c.aliases ?? [], website: c.website });
 
 async function ensureBrand(db: SupabaseClient, ws: string, b: { name: string; sector?: string; city?: string; website?: string; aliases?: string[] }, origin: "simulated" | "live_api", competitors: Comp[], prompts: [string, Intent][]) {
-  const existing = must(await db.from("brands").select("id").eq("workspace_id", ws).eq("name", b.name).eq("is_competitor", false).limit(1), "marka ara") as { id: string }[];
+  // Aynı alanda aynı adlı iki marka olabilir (ör. Growth Lab'de TR "Samsung" ve US "Samsung"): önce sektörle eşleşen alınır
+  const byName = must(await db.from("brands").select("id,sector").eq("workspace_id", ws).eq("name", b.name).eq("is_competitor", false), "marka ara") as { id: string; sector: string | null }[];
+  const existing = byName.filter((x) => !b.sector || x.sector === b.sector).concat(byName.filter((x) => b.sector && x.sector !== b.sector));
   if (existing[0]) {
-    // Var olan markada takma adları ve rakip bilgilerini (takma ad, web sitesi) güncelle
+    // Var olan markada takma adları ve rakip bilgilerini (takma ad, web sitesi) güncelle; listeye sonradan eklenen rakibi ekle
     if (b.aliases?.length) must(await db.from("brands").update({ aliases: b.aliases }).eq("id", existing[0].id), "takma ad");
+    const have = new Set((must(await db.from("brands").select("name").eq("owner_brand_id", existing[0].id).eq("is_competitor", true), "rakipler") as { name: string }[]).map((x) => x.name.toLocaleLowerCase("tr-TR")));
+    const missing = competitors.map(compOf).filter((c) => !have.has(c.name.toLocaleLowerCase("tr-TR")));
+    if (missing.length) must(await db.from("brands").insert(missing.map((c) => ({ workspace_id: ws, name: c.name, aliases: c.aliases, website: c.website ?? null, is_competitor: true, owner_brand_id: existing[0].id, data_origin: origin }))), "rakip ekle");
     for (const c of competitors.map(compOf)) {
       if (!c.aliases.length && !c.website) continue;
       must(await db.from("brands").update({ aliases: c.aliases, website: c.website ?? null }).eq("owner_brand_id", existing[0].id).eq("name", c.name), "rakip güncelle");

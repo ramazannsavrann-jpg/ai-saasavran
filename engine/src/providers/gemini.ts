@@ -7,7 +7,7 @@
 
 import {
   type FetchLike, type Provider, type ProviderConfig, type ProviderResult,
-  ProviderError, estimateCost, classifyHttpError, networkError,
+  ProviderError, estimateCost, classifyHttpError, networkError, perMinuteRetryMs,
 } from "./types.ts";
 
 const BASE = "https://generativelanguage.googleapis.com/v1beta/models";
@@ -124,7 +124,8 @@ export class GeminiProvider implements Provider {
     if (!res.ok) {
       const raw = (await res.text()).split(this.apiKey).join("***");
       const kind = classifyHttpError(res.status, raw, { searchRequested: this.config.useSearch, freeTier: this.config.billing === "free" });
-      throw new ProviderError(`Gemini HTTP ${res.status} [${kind}]: ${raw.slice(0, 600)}`, { kind, status: res.status });
+      const retryAfterMs = kind === "quota_exceeded" ? perMinuteRetryMs(res.status, raw) ?? undefined : undefined;
+      throw new ProviderError(`Gemini HTTP ${res.status} [${kind}]: ${raw.slice(0, 600)}`, { kind, status: res.status, retryAfterMs });
     }
     return parseGeminiResponse((await res.json()) as GeminiResponse, promptId, this.config);
   }
