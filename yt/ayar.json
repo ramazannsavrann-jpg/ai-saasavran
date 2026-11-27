@@ -263,6 +263,14 @@
         "AI SaaSavran | Tutorials & User Guide",
         "AI SaaSavran – English Content"
       ]
+    },
+    "h6U4zKfqCg8": {
+      "lang": "tr",
+      "lists": [
+        "Kasım Fırsatları",
+        "Yapay Zekâ Marka Karşılaştırmaları",
+        "AI SaaSavran – Türkçe İçerikler"
+      ]
     }
   },
   "delete": [],
@@ -291,7 +299,8 @@
     "beRz2exSg90": "egitim9-tr.jpg",
     "jzWe2ZejO_w": "egitim9-en.jpg",
     "Y9LNvWFlF6E": "egitim10-tr.jpg",
-    "NgsNPe2PpOA": "egitim10-en.jpg"
+    "NgsNPe2PpOA": "egitim10-en.jpg",
+    "h6U4zKfqCg8": "camasir-tr.jpg"
   },
   "tutorials_private": false,
   "descriptions": {
