@@ -1,0 +1,41 @@
+# Yapay zekâ tartışma masası: ChatGPT + Perplexity + Gemini bir ürün konusunu tartışır, Gemini şartname yazar.
+# Tetik: `tartisma` dalında tartisma/konu.md değişince (ya da elle). Sonuç aynı dala [skip ci] ile yazılır.
+# Tavan: tartışma başına 0,15 $ (scripts/tartisma.ts). Ayrıntı: tartisma/README.md
+name: Yapay zekâ tartışma masası
+on:
+  push:
+    branches: [tartisma]
+    paths:
+      - tartisma/konu.md
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: tartisma
+  cancel-in-progress: false
+jobs:
+  tartis:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: tartisma
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Tartışmayı çalıştır
+        env:
+          ALLOW_PAID_API: ${{ vars.ALLOW_PAID_API || 'true' }}
+          TARTISMA_TAVAN_USD: "0.15"
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          PERPLEXITY_API_KEY: ${{ secrets.PERPLEXITY_API_KEY }}
+          GEMINI_CANLI_API_KEY: ${{ secrets.GEMINI_CANLI_API_KEY }}
+        run: node scripts/tartisma.ts
+      - name: Sonucu dala yaz
+        run: |
+          git config user.name "tartisma-bot"
+          git config user.email "info@aisaasavran.com"
+          git add tartisma/sonuc
+          git diff --cached --quiet || git commit -m "Tartışma sonucu [skip ci]"
+          git push origin HEAD:tartisma
