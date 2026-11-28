@@ -421,6 +421,52 @@ export const NEW_TR = [
       ["Kaç soru ve kaç tekrar gerekir?", "Başlangıç için 10–20 markasız soru ve her soru için en az iki cevap. Az cevapla elde edilen küçük farkları kesin sonuç saymayın."],
     ],
   },
+  {
+    slug: "gemini-marka-gorunurlugu",
+    title: "Gemini'de markanızın görünürlüğü nasıl ölçülür?",
+    short: "Gemini'de marka görünürlüğü",
+    description: "Google Gemini markanızı öneriyor mu? Canlı aramalı ve aramasız cevapları ayırarak Gemini'de marka görünürlüğünü ölçme yöntemi, gerçek örnek ve kontrol listesi.",
+    body: `
+<p class="lede">Kısa cevap: Gemini'de marka görünürlüğünü ölçmek için müşterilerinizin markanızı bilmeden soracağı soruları Gemini'ye <b>birkaç kez</b> sorar, markanızın kaç cevapta anıldığını ve önerildiğini sayarsınız. Önemli olan, Gemini'nin <b>Google Arama ile internete bakarak</b> verdiği cevaplarla <b>bakmadan, yalnız model bilgisiyle</b> verdiği cevapları ayrı saymaktır; ikisi farklı markaları öne çıkarabilir ve farklı işlerle düzelir. Aynı soruları ChatGPT, Claude ve Perplexity'ye de sorup Gemini sonucunu onların yanında görün.</p>
+
+<h2>Gemini'nin iki tür cevabı</h2>
+<ul>
+<li><b>Google Arama ile (canlı arama):</b> Gemini soruyu cevaplarken Google Arama'yı kullanıp bugünkü sayfalara dayanabilir ve kaynak gösterebilir. Bu cevapta görünmek için Google'ın bulup okuyabildiği, soruya doğrudan cevap veren sayfalarda yer almanız gerekir.</li>
+<li><b>Aramasız (model bilgisi):</b> Gemini internete bakmadan, eğitim verisinden öğrendiklerine göre cevap verir. Bu cevap yavaş değişir; markanızın yıllar içinde ne kadar ve nerede yazıldığını yansıtır.</li>
+</ul>
+<p>Bir ölçüm raporu bu ikisini karıştırmamalı. "Gemini bizi önermiyor" sonucunun canlı aramadan mı, model bilgisinden mi geldiğini bilmeden ne yapacağınıza karar veremezsiniz.</p>
+
+<h2>Gerçek bir örnek: Gemini başka markaları önerebilir</h2>
+<p>"Bagaj hakkı en iyi havayolu hangisi?" sorusunu Claude ve ChatGPT'ye 12 Kasım 2026'da canlı aramayla, Gemini'ye 19 Kasım 2026'da aramasız (model bilgisiyle) ikişer kez sorduk. Claude ve ChatGPT dört cevabın dördünde de Türk Hava Yolları'nı önerdi; AJet ve Pegasus'un adını geçirdi ama önermedi. Gemini ise iki cevabın ikisinde de Türk Hava Yolları, AJet ve Pegasus'u önerdi. Tarihler ve cevap türleri farklı olduğu için bu, bir motorun "doğru" olduğunu göstermez; aynı soruda motorların farklı markalara yöneldiğini gösterir. Sonuçların tamamı: <a href="/tr/olcumler/bagaj-hakki-en-iyi-havayolu-hangisi/">bu sorunun ölçüm sayfası</a>.</p>
+
+<h2>Adım adım ölçüm</h2>
+<ol>
+<li><b>Markasız sorular yazın.</b> "En iyi …", "… önerir misin?", "… hangisi?" gibi müşterinin gerçekten soracağı 10–20 soru. Markanızın adını içeren sorular hep sizi konuşturur, görünürlüğü göstermez.</li>
+<li><b>Dili ve ülkeyi müşterinize göre seçin.</b> Müşterileriniz Türkiye'deyse soruları Türkçe ve Türkiye'den sorun.</li>
+<li><b>Her soruyu en az iki kez sorun.</b> Gemini aynı soruya farklı cevap verebilir. Az cevapta küçük farkları kesin sonuç saymayın.</li>
+<li><b>Canlı aramalı ve aramasız cevabı ayrı kaydedin.</b> Canlı aramalı cevapta gösterilen kaynakları da not edin: kendi siteniz aralarında mı, rakibiniz hangi sitelerde geçiyor?</li>
+<li><b>Dört şeyi sayın:</b> anılma, önerilme, sıra (kaçıncı öneri) ve kaynak.</li>
+<li><b>Aynı soruları diğer motorlara da sorun.</b> ChatGPT, Claude ve Perplexity sonucu yanında yoksa Gemini sonucunun iyi mi kötü mü olduğunu anlayamazsınız.</li>
+<li><b>Tarih yazın ve 2–4 haftada bir tekrarlayın.</b> Sayfa eklediyseniz ya da bir listeye girdiyseniz, değişikliği sonraki ölçümle karşılaştırın.</li>
+</ol>
+
+<h2>Gemini'de görünmemek ne anlama gelir?</h2>
+<ul>
+<li><b>Canlı aramada yoksanız:</b> soruya doğrudan cevap veren bir sayfanız olmayabilir, ya da Gemini'nin okuduğu karşılaştırma ve liste sitelerinde geçmiyor olabilirsiniz. Gösterilen kaynaklara bakıp bu sitelerde nasıl yer alabileceğinizi inceleyin.</li>
+<li><b>Model bilgisinde yoksanız:</b> markanız hakkında internette yeterince ve tutarlı yazılmamış olabilir. Bu daha yavaş değişir; düzenli, doğru ve aynı adla yazılmış içerik zamanla etkili olur.</li>
+<li><b>Yanlış anlatılıyorsanız:</b> fiyat, özellik veya adres gibi bilgilerin resmî sitenizde açık ve güncel olduğundan emin olun.</li>
+</ul>
+
+<h2>AI SaaSavran Gemini'yi nasıl ölçüyor?</h2>
+<p>AI SaaSavran her soruyu seçtiğiniz dil ve ülkeyle sorar ve motorları ayrı raporlar. Ücretsiz paket Gemini'yi canlı arama olmadan kullanır (Avrupa Ekonomik Alanı, İsviçre ve Birleşik Krallık'ta kullanılamaz) ve raporda bunu açıkça yazar. Ücretli paketlerde Gemini, ChatGPT, Claude ve Perplexity canlı web aramasıyla cevap verir; gösterilen kaynaklar kaydedilir. Yöntem: <a href="/tr/metodoloji/">metodoloji</a>, paketler: <a href="/tr/fiyatlar/">fiyatlar</a>.</p>
+`,
+    faq: [
+      ["Gemini'de markamın görünürlüğünü nasıl ölçerim?", "Müşterilerinizin markanızı bilmeden soracağı soruları Gemini'ye birkaç kez sorun; markanızın kaç cevapta anıldığını, önerildiğini, kaçıncı sırada çıktığını ve hangi kaynakların gösterildiğini sayın. Canlı aramalı ve aramasız cevapları ayrı tutun."],
+      ["Gemini ile ChatGPT aynı markaları mı önerir?", "Her zaman değil. Bizim ölçümümüzde 'Bagaj hakkı en iyi havayolu hangisi?' sorusunda Claude ve ChatGPT yalnız Türk Hava Yolları'nı önerirken Gemini AJet ve Pegasus'u da önerdi. Bu yüzden motorlar ayrı ölçülmelidir."],
+      ["Gemini cevabı ile Google AI Overviews aynı şey mi?", "Hayır. Gemini uygulaması ile Google arama sonuçlarındaki yapay zekâ özetleri ayrı ürünlerdir; aynı soruda farklı cevap verebilirler. Bu rehber Gemini'yi anlatır."],
+      ["Gemini'yi ücretsiz ölçebilir miyim?", "Evet. Soruları kendiniz sorup sonuçları bir tabloya yazabilirsiniz. AI SaaSavran'ın ücretsiz paketi de Gemini'yi canlı arama olmadan, ayda bir ölçer."],
+    ],
+  },
 ];
 
 export const NEW_EN = [
@@ -629,6 +675,53 @@ export const NEW_EN = [
       ["Can I do this analysis for free?", "Yes. Write the questions yourself, ask each engine a few times and record the results in a table. AI SaaSavran's free plan also runs regular measurements with Gemini, without live search."],
       ["Why isn't measuring with English questions enough?", "Live-search AI answers can rely on different pages depending on language and location. To measure what customers in Turkey see, ask in Turkish from a Turkish location."],
       ["How many questions and repeats do I need?", "To start, 10–20 unbranded questions and at least two answers per question. Don't treat small gaps from few answers as conclusive."],
+    ],
+  },
+  {
+    slug: "brand-visibility-in-gemini",
+    tr: "gemini-marka-gorunurlugu",
+    title: "How to measure your brand's visibility in Gemini",
+    short: "Brand visibility in Gemini",
+    description: "Does Google Gemini recommend your brand? How to measure it, separating live-search and model-knowledge answers, with a real example and a checklist.",
+    body: `
+<p class="lede">Short answer: to measure your brand's visibility in Gemini, ask Gemini the questions your customers would ask without knowing your brand, <b>several times</b>, and count how many answers mention and recommend you. The key is to count answers Gemini gives <b>with Google Search</b> separately from answers it gives <b>without searching, from model knowledge</b>; the two can favour different brands and are fixed in different ways. Ask ChatGPT, Claude and Perplexity the same questions so you can see Gemini's result next to theirs.</p>
+
+<h2>Gemini's two kinds of answer</h2>
+<ul>
+<li><b>With Google Search (live search):</b> Gemini can use Google Search while answering, rely on today's pages and show sources. To appear here you need to be on pages Google can find and read that answer the question directly.</li>
+<li><b>Without search (model knowledge):</b> Gemini answers from what it learned in training, without looking anything up. This changes slowly and reflects how much, and where, your brand has been written about over the years.</li>
+</ul>
+<p>A measurement report should not mix the two. If you don't know whether "Gemini doesn't recommend us" comes from live search or from model knowledge, you can't decide what to do.</p>
+
+<h2>A real example: Gemini can favour other brands</h2>
+<p>We asked "Which airline has the best baggage allowance?" in Turkish, twice per engine: Claude and ChatGPT with live search on 12 November 2026, Gemini without search (model knowledge) on 19 November 2026. Claude and ChatGPT recommended Turkish Airlines in all four answers and mentioned AJet and Pegasus without recommending them. Gemini recommended Turkish Airlines, AJet and Pegasus in both of its answers. Because the dates and answer types differ, this does not show that one engine is "right"; it shows that engines can lean towards different brands for the same question. Full results: <a href="/tr/olcumler/bagaj-hakki-en-iyi-havayolu-hangisi/">the measurement page for this question</a> (in Turkish).</p>
+
+<h2>Step by step</h2>
+<ol>
+<li><b>Write unbranded questions.</b> 10–20 questions a customer would really ask: "best …", "can you recommend …?", "which … ?". Questions that contain your brand name always make the AI talk about you and say nothing about visibility.</li>
+<li><b>Match language and country to your customers.</b> If your customers are in Turkey, ask in Turkish from Turkey.</li>
+<li><b>Ask each question at least twice.</b> Gemini can answer the same question differently. Don't treat small differences across a few answers as a result.</li>
+<li><b>Record live-search and no-search answers separately.</b> For live-search answers, note the sources shown: is your own site among them, and on which sites does your competitor appear?</li>
+<li><b>Count four things:</b> mention, recommendation, position (which recommendation you were) and source.</li>
+<li><b>Ask the other engines the same questions.</b> Without ChatGPT, Claude and Perplexity next to it, you can't tell whether a Gemini result is good or bad.</li>
+<li><b>Date it and repeat every 2–4 weeks.</b> If you added a page or got listed somewhere, compare against the next measurement.</li>
+</ol>
+
+<h2>What not showing up in Gemini means</h2>
+<ul>
+<li><b>Missing from live-search answers:</b> you may lack a page that answers the question directly, or you may not appear on the comparison and list sites Gemini reads. Look at the sources shown and see how you could appear on them.</li>
+<li><b>Missing from model knowledge:</b> not enough consistent writing about your brand may exist online. This changes slowly; regular, accurate content under one consistent name helps over time.</li>
+<li><b>Described incorrectly:</b> make sure details such as price, features or address are clear and current on your official site.</li>
+</ul>
+
+<h2>How AI SaaSavran measures Gemini</h2>
+<p>AI SaaSavran asks each question in the language and country you choose and reports each engine separately. The free plan uses Gemini without live search (not available in the EEA, Switzerland and the UK) and says so in the report. On paid plans, Gemini, ChatGPT, Claude and Perplexity answer with live web search and the sources they show are saved. Method: <a href="/methodology/">methodology</a>, plans: <a href="/pricing/">pricing</a>.</p>
+`,
+    faq: [
+      ["How do I measure my brand's visibility in Gemini?", "Ask Gemini the questions your customers would ask without knowing your brand, several times, and count how many answers mention or recommend you, in what position, and which sources are shown. Keep live-search and no-search answers separate."],
+      ["Do Gemini and ChatGPT recommend the same brands?", "Not always. In our measurement of 'Which airline has the best baggage allowance?', Claude and ChatGPT recommended only Turkish Airlines, while Gemini also recommended AJet and Pegasus. That is why each engine should be measured separately."],
+      ["Is a Gemini answer the same as Google AI Overviews?", "No. The Gemini app and the AI summaries in Google search results are separate products and can answer the same question differently. This guide covers Gemini."],
+      ["Can I measure Gemini for free?", "Yes. You can ask the questions yourself and record the results in a table. AI SaaSavran's free plan also measures Gemini without live search once a month."],
     ],
   },
 ];
