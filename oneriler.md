@@ -8,3 +8,5 @@
 - 2026-11-22: SaaSworthy (saasworthy.com, "List Your Product / Get Listed": "list it on SaaSworthy for FREE")
 - 2026-11-22 sonuç: SaaSworthy'ye gönderildi; onay e-postası henüz gelmedi (bekleniyor).
 - 2026-11-22 sonuç: SaaSHub onaylandı (saashub.com, AI/SEO; fiyat 60 $ olarak düzeltildi; ad hâlâ bitişik "AISaaSavran", düzeltme bekleniyor).
+- 2026-11-28: Crunchbase (crunchbase.com, ücretsiz hesap + Google/LinkedIn bağlantısı, Resources → Create Profile; destek sayfası: support.crunchbase.com/hc/en-us/articles/115011823988)
+- 2026-11-28 atlandı: AI Tools Directory (aitoolsdirectory.com gönderim sayfası yine doğrulanamadı). Sabit listede başka dizin kalmadı; sonraki turlarda yalnız gerçekten ücretsiz olduğu doğrulanan yeni dizin önerilecek.
