@@ -14,6 +14,10 @@ Güncel durum: `docs/STATUS.md` · Mimari: `docs/ARCHITECTURE.md` · Fiyat: `doc
   ayrı satırda kopyala-yapıştır hazır ver.
 - Birleştirme için izin istenmez (18 Kasım kararı): testler geçince Claude dalı `main`'e kendisi birleştirir ve
   sonucu bildirir. Panel/secret gibi elle işleri akşama topla.
+- **GÖREV VERME (28 Kasım, sahibin kararı):** "Bana görev verme, sen kendin yapabildiklerini yap." Zamanlanmış
+  işler sahibe akşam işi, dizin kaydı, form doldurma gibi görev listesi göndermez. Claude yapabildiğini yapar;
+  hesap açma/ödeme gibi yapamadığı işleri (ör. dizin kayıtları) atlar, öneri olarak da göndermez. Yalnız gerçekten
+  sahibin dışında yapılamayan ve işi durduran bir engel varsa tek cümleyle bildirir.
 - Uzun işlerde kısa ara durum mesajı ver.
 
 ## Değişmez kurallar
