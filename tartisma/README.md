@@ -17,3 +17,8 @@
 - Tavan: tartışma başına 0,15 $. Her çağrıdan önce en kötü maliyet hesaplanır, tavanı aşacaksa durur.
 - Modeller (en ucuzlar): ChatGPT `gpt-6-luna` (aramasız), Perplexity `sonar` (web aramalı), Gemini `gemini-3.5-flash-lite` (aramasız, `GEMINI_CANLI_API_KEY`).
 - Bu araç AI SaaSavran ölçüm motoruna dokunmaz; harcama aynı API hesaplarından düşer ve deneme bütçesine sayılır.
+
+## Ar-Ge modu (çip projesi)
+`tartisma/konu.md` ilk satırı `MOD: arge` ise turlar Ar-Ge için değişir: baş mimar (ChatGPT) → literatür (Perplexity) → denetçi (Gemini) → deney planı → literatür kontrolü → Ar-Ge yol haritası.
+Kural (28 Kasım, sahibin isteği): çip işinde takılınca, hangi sohbette olunursa olunsun bu masaya sorulur. Dış yapay zekâlara kod gönderilmez, yalnız özet ve ölçümler.
+Günlük tavan: 0,50 $ (aynı UTC günündeki sonuç dosyalarının toplamı; kodda kontrol edilir).

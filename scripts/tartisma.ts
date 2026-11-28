@@ -6,9 +6,20 @@
 // Harcama tavanı: TARTISMA_TAVAN_USD (varsayılan 0,15 $). Her çağrıdan ÖNCE "harcanan + bu çağrının en kötü
 // maliyeti" tavanı aşarsa tartışma durur ve o ana kadarki metin kaydedilir.
 
-import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
+import { readFileSync, writeFileSync, mkdirSync, readdirSync, existsSync } from "node:fs";
 
-const TAVAN = Number(process.env.TARTISMA_TAVAN_USD ?? "0.15");
+// Günlük tavan (28 Kasım, sahibin isteği: "günlük fazla para harcamayın"): aynı UTC gününde yapılan
+// tartışmaların toplamı GUNLUK_TAVAN_USD'yi geçemez. Toplamlar sonuç dosyalarındaki maliyet tablosundan okunur.
+const GUNLUK_TAVAN = Number(process.env.TARTISMA_GUNLUK_TAVAN_USD ?? "0.50");
+const bugun = new Date().toISOString().slice(0, 10);
+const bugunHarcanan = existsSync("tartisma/sonuc")
+  ? readdirSync("tartisma/sonuc").filter((f) => f.startsWith(bugun)).reduce((t, f) => {
+    const m = readFileSync(`tartisma/sonuc/${f}`, "utf8").match(/\*\*Toplam\*\* \| \| \*\*([0-9.]+)\*\*/);
+    return t + (m ? Number(m[1]) : 0);
+  }, 0)
+  : 0;
+const TAVAN = Math.min(Number(process.env.TARTISMA_TAVAN_USD ?? "0.15"), Math.max(0, GUNLUK_TAVAN - bugunHarcanan));
+console.log(`Bugün harcanan ${bugunHarcanan.toFixed(4)} $ · günlük tavan ${GUNLUK_TAVAN} $ · bu tartışmanın tavanı ${TAVAN.toFixed(4)} $`);
 if (process.env.ALLOW_PAID_API !== "true") {
   console.log("ALLOW_PAID_API=true değil → tartışma atlandı.");
   process.exit(0);
@@ -61,7 +72,7 @@ async function perplexity(prompt: string): Promise<Cevap> {
     method: "POST",
     headers: { "content-type": "application/json", authorization: `Bearer ${process.env.PERPLEXITY_API_KEY}` },
     body: JSON.stringify({ model: f.model, input: prompt, max_output_tokens: f.maxCikti, tools: [{ type: "web_search" }] }),
-    signal: AbortSignal.timeout(120_000),
+    signal: AbortSignal.timeout(180_000),
   });
   if (!res.ok) throw new Error(`Perplexity HTTP ${res.status}: ${gizle(await res.text())}`);
   type Part = { type?: string; text?: string; annotations?: { url?: string }[] };
@@ -100,7 +111,9 @@ async function gemini(prompt: string): Promise<Cevap> {
 const SESLER: Record<Ses, (p: string) => Promise<Cevap>> = { ChatGPT: chatgpt, Perplexity: perplexity, Gemini: gemini };
 
 // --- Konu ---
-const konu = readFileSync("tartisma/konu.md", "utf8").trim();
+const ham = readFileSync("tartisma/konu.md", "utf8").trim();
+const ARGE = /^MOD:\s*arge\b/i.test(ham);
+const konu = ham.replace(/^MOD:.*\n?/i, "").trim();
 if (!konu) { console.log("tartisma/konu.md boş → atlandı."); process.exit(0); }
 
 const KOSULLAR = `Kurallar (herkes için):
@@ -109,7 +122,32 @@ const KOSULLAR = `Kurallar (herkes için):
 - Gerçekçi ol: uydurma rakam, uydurma rakip, uydurma kaynak yok. Emin değilsen "emin değilim" de.
 - Kısa ve net yaz (en fazla ~350 kelime). Madde işaretleri kullan. Türkçe yaz.`;
 
-const TURLAR: { ses: Ses; gorev: string }[] = [
+const KOSULLAR_ARGE = `Kurallar (herkes için, Ar-Ge modu):
+- Bu bir çip tasarımı Ar-Ge tartışması. Sahibi yazılımda yeni; işi Claude (yazılımcı/donanım tasarımcısı) yürütüyor.
+- Araçlar yalnız açık kaynak: Yosys, OpenROAD, Verilator, SkyWater sky130 (130 nm). Bütçe çok düşük; bulut sunucu saatlik birkaç kuruş olabilir.
+- Kanıt etiketleri: SIM, SYNTH:sky130, PNR:sky130, FPGA, SILICON. Sentez sayısını fiziksel performans gibi sunma.
+- Gerçekçi ol: uydurma makale, uydurma rakam yok. Bir tekniği önerirken kaynağını (makale/patent adı) yaz; emin değilsen "emin değilim" de.
+- Somut ol: her öneride beklenen etki (yüzde aralığı), nasıl ölçüleceği ve kabul ölçütü olsun.
+- En fazla ~400 kelime. Madde işaretleri. Türkçe yaz.`;
+
+const TURLAR_ARGE: { ses: Ses; gorev: string }[] = [
+  { ses: "ChatGPT", gorev: "Sen baş mimarsın. Mevcut sonuçlara bakarak hash başına enerjiyi (nJ/hash) ve alan başına hızı (MH/s/mm²) iyileştirecek en umut verici 5 araştırma yönünü öner. Listedeki planı kopyalama; eksik ya da yanlış önceliklendirilmiş bir şey görüyorsan söyle. Ayrıca kurucuya sorulması gereken en önemli 3 soruyu yaz." },
+  { ses: "Perplexity", gorev: "Sen literatür araştırmacısısın. Canlı web aramasıyla önerilen yönler için gerçek kaynakları bul: SHA-256/Bitcoin ASIC makaleleri (ISSCC, JSSC, arXiv), patentler, açık kaynak sky130 tasarımları. Her yön için: kaynakta ölçülmüş gerçek kazanç ne, bizim sky130 ortamına taşınabilir mi. Kaynak göster; bulamadığını açıkça yaz." },
+  { ses: "Gemini", gorev: "Sen bağımsız denetçisin. Önerileri sert ama adil eleştir: hangisi sky130 + açık araçlarla ölçülemez, hangisi alan/enerji ölçüsünü yanıltır (ör. sentez-PNR farkı, aktivite varsayımı), hangisi düşük getirili. Her yöne 10 üzerinden puan ver. 'Dünyanın en gelişmiş çipi' hedefine giden gerçekçi bir ölçüt öner." },
+  { ses: "ChatGPT", gorev: "Eleştirileri dikkate alarak öncelikli DENEY PLANI yaz: en fazla 6 deney, sırayla. Her biri: hipotez, değiştirilecek şey, ölçüm seviyesi (SIM/SYNTH/PNR), kabul ölçütü, tahmini emek (saat) ve bulut maliyeti." },
+  { ses: "Perplexity", gorev: "Plandaki ilk 3 deney için canlı web aramasıyla son kontrol: aynı şeyi deneyen var mı, ne buldular, hangi tuzaklar bildirildi. Ayrıca sky130'da ölçülmüş açık bir SHA-256 madenci tasarımı var mı (rakip/referans). Kaynak göster." },
+  { ses: "Gemini", gorev: `Sen hakemsin. Tartışmanın tamamını oku ve Claude için AR-GE YOL HARİTASI yaz. Başlıklar:
+1. Gerçekçi hedef ve ölçüt (ne zaman "en iyi" diyebiliriz, kime karşı)
+2. Öncelikli deneyler (en fazla 6, sırayla; hipotez + kabul ölçütü)
+3. Altyapı/araç eksikleri (otomatik arama motoru, formal doğrulama, PNR otomasyonu vb.)
+4. Riskler (ölçüm hataları, yanıltıcı karşılaştırma)
+5. Fiziksel kanıta giden yol (FPGA, Tiny Tapeout vb.) ve kabaca maliyeti
+6. Kurucuya sorulacak sorular (en fazla 5)
+7. Tartışmada uzlaşılamayan noktalar
+Bu turda kelime sınırı 700.` },
+];
+
+const TURLAR_URUN: { ses: Ses; gorev: string }[] = [
   { ses: "ChatGPT", gorev: "Sen ürün fikircisisin. Bu konu için birbirinden farklı 3 ürün fikri öner. Her biri: kime, hangi sorunu çözer, nasıl para kazanır, neden küçük bir ekip yapabilir." },
   { ses: "Perplexity", gorev: "Sen pazar araştırmacısısın. Canlı web aramasıyla her fikir için gerçek rakipleri, talebi ve boşluğu bul. Kaynak göster. Hangi fikrin pazarda gerçekten şansı var, açıkça söyle." },
   { ses: "Gemini", gorev: "Sen şeytanın avukatısın. Önceki iki görüşü sert ama adil eleştir: teknik risk, Google Play kuralları, gizlilik/yasal risk, para kazanma zorluğu, 0 $ bütçeyle yapılabilirlik. Her fikre 10 üzerinden puan ver." },
@@ -132,9 +170,11 @@ const toplamlar: Record<Ses, number> = { ChatGPT: 0, Perplexity: 0, Gemini: 0 };
 let harcanan = 0;
 let durdu = "";
 
+const TURLAR = ARGE ? TURLAR_ARGE : TURLAR_URUN;
+const KURAL = ARGE ? KOSULLAR_ARGE : KOSULLAR;
 for (const [i, t] of TURLAR.entries()) {
   const gecmis = tutanak.length ? `\n\nŞimdiye kadarki tartışma:\n${tutanak.join("\n\n")}` : "";
-  const prompt = `${KOSULLAR}\n\nKONU:\n${konu}${gecmis}\n\nSENİN GÖREVİN (${t.ses}, tur ${i + 1}/${TURLAR.length}):\n${t.gorev}`;
+  const prompt = `${KURAL}\n\nKONU:\n${konu}${gecmis}\n\nSENİN GÖREVİN (${t.ses}, tur ${i + 1}/${TURLAR.length}):\n${t.gorev}`;
   const tahmin = enKotu(t.ses, prompt.length);
   if (harcanan + tahmin > TAVAN) {
     durdu = `Tur ${i + 1} (${t.ses}) çalıştırılmadı: harcanan ${harcanan.toFixed(4)} $ + en kötü ${tahmin.toFixed(4)} $ > tavan ${TAVAN} $.`;

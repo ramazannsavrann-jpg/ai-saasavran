@@ -28,6 +28,7 @@ jobs:
         env:
           ALLOW_PAID_API: ${{ vars.ALLOW_PAID_API || 'true' }}
           TARTISMA_TAVAN_USD: "0.15"
+          TARTISMA_GUNLUK_TAVAN_USD: "0.50"
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           PERPLEXITY_API_KEY: ${{ secrets.PERPLEXITY_API_KEY }}
           GEMINI_CANLI_API_KEY: ${{ secrets.GEMINI_CANLI_API_KEY }}
