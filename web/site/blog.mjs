@@ -115,7 +115,7 @@ export const POSTS = [
     date: "2026-11-22",
     title: "Kendi markamızı yapay zekâya sorduk: 42 cevabın hiçbirinde önerilmedik",
     short: "Kendi markamızı yapay zekâya sorduk",
-    description: "18 Kasım 2026'da AI SaaSavran'ı markasız 7 müşteri sorusuyla ChatGPT, Claude ve Perplexity'ye sorduk. Hiçbir cevapta önerilmedik. Sonucu nasıl okuduğumuzu ve iki hafta sonraki yeniden ölçümü anlatıyoruz.",
+    description: "18 Kasım 2026'da 7 markasız müşteri sorusunu ChatGPT, Claude ve Perplexity'ye sorduk; AI SaaSavran hiçbir cevapta önerilmedi. Sonucu ve sonraki ölçümü anlatıyoruz.",
     cover: "/og.png",
     names: "",
     body: `
@@ -145,7 +145,7 @@ export const POSTS = [
     date: "2026-11-22",
     title: "We asked AI about our own brand: recommended in 0 of 42 answers",
     short: "We asked AI about our own brand",
-    description: "On 18 November 2026 we asked ChatGPT, Claude and Perplexity 7 unbranded customer questions about AI SaaSavran. We were recommended in none of the answers. Here is how we read it and what we measure next.",
+    description: "On 18 November 2026 we asked ChatGPT, Claude and Perplexity 7 unbranded customer questions. AI SaaSavran was recommended in none. How we read it and what's next.",
     cover: "/og.png",
     names: "",
     body: `
@@ -176,7 +176,7 @@ export const POSTS = [
     realNames: true,
     title: "Yapay zekâ Türkiye'de hangi özel hastaneyi öneriyor? 46 cevabın sonucu",
     short: "Yapay zekâ hangi özel hastaneyi öneriyor?",
-    description: "14 Kasım 2026'da 8 özel hastane sorusunu ChatGPT, Claude ve Gemini'ye sorduk. Canlı aramalı 30 cevapta Acıbadem 22, Memorial 17, Medical Park 14 cevapta önerildi; motorlar arasında büyük farklar var.",
+    description: "14 Kasım 2026'da 8 özel hastane sorusunu ChatGPT, Claude ve Gemini'ye sorduk. 30 canlı aramalı cevapta Acıbadem 22, Memorial 17, Medical Park 14 kez önerildi.",
     cover: "/og.png",
     names: "Acıbadem, Florence Nightingale, Liv Hospital, Medical Park, Medicana, Medipol, Memorial",
     body: `
@@ -225,7 +225,7 @@ export const POSTS = [
     realNames: true,
     title: "Which private hospital in Turkey does AI recommend? Results from 46 answers",
     short: "Which private hospital does AI recommend?",
-    description: "On 14 November 2026 we asked ChatGPT, Claude and Gemini 8 questions about private hospitals in Turkey. In 30 live-search answers, Acıbadem was recommended in 22, Memorial in 17 and Medical Park in 14, with big gaps between engines.",
+    description: "We asked ChatGPT, Claude and Gemini 8 questions on private hospitals in Turkey (14 Nov 2026). In 30 answers: Acıbadem 22, Memorial 17, Medical Park 14.",
     cover: "/og.png",
     names: "Acıbadem, Florence Nightingale, Liv Hospital, Medical Park, Medicana, Medipol, Memorial",
     body: `

@@ -271,7 +271,7 @@ export const COMPARE_EN = [
     tr: "peec-ai-alternatifi",
     title: "A Peec AI, Otterly.AI and Profound alternative for Turkish and English questions: AI SaaSavran",
     short: "Peec AI alternative",
-    description: "An alternative to Peec AI, Otterly.AI and Profound: a free plan, live-search ChatGPT, Gemini, Claude and Perplexity from $130 a month, and questions in Turkish or English.",
+    description: "An alternative to Peec AI, Otterly.AI and Profound: free plan, live-search ChatGPT, Gemini, Claude and Perplexity from $130 a month, Turkish or English questions.",
     body: `
 <p class="lede">Short answer: if you want to measure your brand in ChatGPT, Claude, Perplexity and Gemini on a small budget, or need questions asked <b>in Turkish from Turkey</b>, AI SaaSavran is an alternative to Peec AI, Otterly.AI and Profound. You can start on a free plan; live-search ChatGPT, Gemini, Claude and Perplexity start at $130 a month.</p>
 
